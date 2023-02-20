@@ -39,7 +39,7 @@ class AuthController extends Controller
             $token = Auth::guard('user-api')->attempt(['code' => $request->code , 'password' => '123456','user_status' => 'active']);
 
             if (!$token) {
-                return self::returnResponseDataApi( null,"الطالب غير مفعل برجاء التواصل مع السيكرتاريه", 200);
+                return self::returnResponseDataApi( null,"الطالب غير مفعل برجاء التواصل مع السيكرتاريه", 408);
             }
             $user = Auth::guard('user-api')->user();
             $user['token'] = $token;
