@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 
 <head>
-    @include('layouts_admin.head')
+    @include('Admin.layouts_admin.head')
 
     <style>
 
@@ -13,22 +13,22 @@
 <body class="app sidebar-mini">
 
 <!-- Start Switcher -->
-@include('layouts_admin.switcher')
+@include('Admin.layouts_admin.switcher')
 <!-- End Switcher -->
 
 <!-- GLOBAL-LOADER -->
-@include('layouts_admin.loader')
+@include('Admin.layouts_admin.loader')
 <!-- /GLOBAL-LOADER -->
 
 <!-- PAGE -->
 <div class="page">
     <div class="page-main">
         <!--APP-SIDEBAR-->
-    @include('layouts_admin.main-sidebar')
+    @include('Admin.layouts_admin.main-sidebar')
     <!--/APP-SIDEBAR-->
 
         <!-- Header -->
-    @include('layouts_admin.main-header')
+    @include('Admin.layouts_admin.main-header')
     <!-- Header -->
         <!--Content-area open-->
         <div class="app-content">
@@ -54,14 +54,15 @@
     <!-- SIDE-BAR -->
 
     <!-- FOOTER -->
-@include('layouts_admin.footer')
+@include('Admin.layouts_admin.footer')
 <!-- FOOTER END -->
 </div>
 <!-- BACK-TO-TOP -->
 <a href="#top" id="back-to-top"><i class="fa fa-angle-up mt-4"></i></a>
 
-@include('layouts_admin.scripts')
+@include('Admin.layouts_admin.scripts')
 @yield('ajaxCalls')
-
+@toastr_js
+@toastr_render
 </body>
 </html>
