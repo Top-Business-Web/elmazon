@@ -42,7 +42,7 @@
 
 <!-- COLOR SKIN CSS --><link id="theme" rel="stylesheet" type="text/css" media="all" href="{{asset('assets/admin/colors/color1.css')}}" />
 
-
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
 <!-- TOASTR CSS -->
 @toastr_css
