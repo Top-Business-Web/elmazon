@@ -12,7 +12,7 @@ class AuthController extends Controller {
         if (Auth::guard('admin')->check()){
             return redirect()->route('adminHome');
         }
-        return view('Admin.auth.login');
+        return view('admin.auth.login');
     }
 
     public function login(Request $request): \Illuminate\Http\JsonResponse

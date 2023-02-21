@@ -52,6 +52,7 @@
 
 <!-- SIDEBAR JS -->
 <script src="{{asset('assets/admin')}}/plugins/sidebar/sidebar.js"></script>
+<script src="{{asset('assets/admin/js/toastr.js')}}"></script>
 
 <!-- CUSTOM JS -->
 <script src="{{asset('assets/admin')}}/js/custom.js"></script>
