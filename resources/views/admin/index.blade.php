@@ -1,233 +1,171 @@
-@extends('layouts_admin.master')
-
-@section('title')  Supervisors @endsection
-@section('page_name') Supervisors @endsection
-@section('css')
-    @include('layouts_admin.loader.formLoader.loaderCss')
+@extends('Admin.layouts_admin.master')
+@section('title')
+    {{($setting->title) ?? 'الصفحة الرئيسية'}} | لوحة التحكم
+@endsection
+@section('page_name')
+    الرئـيسية
 @endsection
 @section('content')
 
-    <div class="row">
-        <div class="col-md-12 col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title"> Supervisors</h3>
-                    <div class="">
-                        <button class="btn btn-secondary btn-icon text-white addBtn">
-									<span>
-										<i class="fe fe-plus"></i>
-									</span> Add Supervisor
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <!--begin::Table-->
-                        <table class="table table-striped table-bordered text-nowrap w-100" id="dataTable">
-                            <thead>
-                            <tr class="fw-bolder text-muted bg-light">
-                                <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">Photo</th>
-                                <th class="min-w-50px">Name</th>
-                                <th class="min-w-125px">Email</th>
-                                <th class="min-w-125px">Register</th>
-                                <th class="min-w-125px">Supervisor type</th>
-                                <th class="min-w-50px rounded-end">Actions</th>
-                            </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+{{--    <div class="row">--}}
+{{--        <div class="col-lg-4 col-md-4 col-sm-12 col-xl-4">--}}
+{{--            <div class="card">--}}
+{{--                <div class="card-body">--}}
+{{--                    <div class="row">--}}
+{{--                        <div class="col">--}}
+{{--                            <h6 class="bold font-weight-bolder">عدد المشاريع</h6>--}}
+{{--                            <h3 class="mb-2 number-font">{{ $projects->count() }}</h3>--}}
+{{--                            <div class="progress h-2">--}}
+{{--                                <div class="progress-bar bg-orange--}}
+{{--                                    @if($projects->count() > 5 )--}}
+{{--                                 w-10--}}
+{{--                                @elseif($projects->count() > 15)--}}
+{{--                                    w-25--}}
+{{--                                @elseif($projects->count() > 45)--}}
+{{--                                    w-50--}}
+{{--                                @elseif($projects->count() > 70)--}}
+{{--                                    w-75--}}
+{{--                                @elseif($projects->count() > 90)--}}
+{{--                                    w-100--}}
+{{--                                @elseif($projects->count() > 150)--}}
+{{--                                    w-260--}}
+{{--                                @elseif($projects->count() > 200)--}}
+{{--                                    w-337--}}
+{{--                                 @endif--}}
+{{--                                " role="progressbar"></div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div class="col-lg-4 col-md-4 col-sm-12 col-xl-4">--}}
+{{--            <div class="card">--}}
+{{--                <div class="card-body">--}}
+{{--                    <div class="row">--}}
+{{--                        <div class="col">--}}
+{{--                            <h6 class="bold font-weight-bolder">عدد الاقسام</h6>--}}
+{{--                            <h3 class="mb-2 number-font">{{ $category->count() }}</h3>--}}
+{{--                            <div class="progress h-2">--}}
+{{--                                <div class="progress-bar bg-secondary--}}
+{{--                                @if($category->count() > 5 )--}}
+{{--                                 w-10--}}
+{{--                                @elseif($category->count() > 15)--}}
+{{--                                    w-25--}}
+{{--                                @elseif($category->count() > 45)--}}
+{{--                                    w-50--}}
+{{--                                @elseif($category->count() > 70)--}}
+{{--                                    w-75--}}
+{{--                                @elseif($category->count() > 90)--}}
+{{--                                    w-100--}}
+{{--                                @elseif($category->count() > 150)--}}
+{{--                                    w-260--}}
+{{--                                @elseif($category->count() > 200)--}}
+{{--                                    w-337--}}
+{{--                                 @endif--}}
+{{--                                " role="progressbar"></div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div class="col-lg-4 col-md-4 col-sm-12 col-xl-4">--}}
+{{--            <div class="card">--}}
+{{--                <div class="card-body">--}}
+{{--                    <div class="row">--}}
+{{--                        <div class="col">--}}
+{{--                            <h6 class="">عدد العملاء</h6>--}}
+{{--                            <h3 class="mb-2 number-font">{{ $users->count() }}</h3>--}}
+{{--                            <div class="progress h-2">--}}
+{{--                                <div class="progress-bar bg-secondary1--}}
+{{--                                @if($users->count() > 5 )--}}
+{{--                                 w-10--}}
+{{--                                @elseif($users->count() > 15)--}}
+{{--                                    w-25--}}
+{{--                                @elseif($users->count() > 45)--}}
+{{--                                    w-50--}}
+{{--                                @elseif($users->count() > 70)--}}
+{{--                                    w-75--}}
+{{--                                @elseif($users->count() > 90)--}}
+{{--                                    w-100--}}
+{{--                                @elseif($users->count() > 150)--}}
+{{--                                    w-260--}}
+{{--                                @elseif($users->count() > 200)--}}
+{{--                                    w-337--}}
+{{--                                 @endif"--}}
+{{--                                     role="progressbar"></div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
-        <!--Delete MODAL -->
-        <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Delete Data</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input id="delete_id" name="id" type="hidden">
-                        <p>Are You Sure Of Deleting This Row <span id="title" class="text-danger"></span>?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_delete_modal">
-                            Back
-                        </button>
-                        <button type="button" class="btn btn-danger" id="delete_btn">Delete !</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- MODAL CLOSED -->
+{{--    <div class="row">--}}
+{{--        <div class="col-lg-8 col-sm-12 col-xl-8">--}}
+{{--            <div class="card">--}}
+{{--                <div class="card-header">--}}
+{{--                    <h3 class="card-title">الرسائل</h3>--}}
+{{--                        <a class="btn btn-sm btn-danger" href="{{ route('contact_us.index') }}">--}}
+{{--                        {{ $contact_total->count() }}--}}
+{{--                            <i class="fe fe-message-circle"></i>--}}
+{{--                            الذهاب الى الرسائل--}}
+{{--                        </a>--}}
+{{--                </div>--}}
+{{--                <div class="card-body">--}}
+{{--                    <div class="table-responsive">--}}
+{{--                        <table class="table table-bordered table-hover  mb-0 text-nowrap">--}}
+{{--                            <thead>--}}
+{{--                            <tr>--}}
+{{--                                <th>الاسم</th>--}}
+{{--                                <th>الموضوع</th>--}}
+{{--                                <th>الرسالة</th>--}}
+{{--                            </tr>--}}
+{{--                            </thead>--}}
+{{--                            <tbody>--}}
+{{--                                @foreach($contactus as $contact)--}}
+{{--                            <tr>--}}
+{{--                                    <td>{{ $contact->name }}</td>--}}
+{{--                                    <td>{{ $contact->subject }}</td>--}}
+{{--                                    <td>{{ $contact->message }}</td>--}}
+{{--                            </tr>--}}
+{{--                                @endforeach--}}
+{{--                            </tbody>--}}
+{{--                        </table>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div><!-- COL END -->--}}
+{{--        <div class="col-lg-4 col-md-12 col-xl-4">--}}
+{{--            <div class="card overflow-hidden">--}}
+{{--                <div class="card-header">--}}
+{{--                    <h3 class="card-title">Orders</h3>--}}
+{{--                </div>--}}
+{{--                <div class="card-body">--}}
+{{--                    <div class="row">--}}
+{{--                        <div class="col-12">--}}
+{{--                            <div class="card shadow-none">--}}
+{{--                                <div class="card-body p-4">--}}
+{{--                                    <div class="text-center">--}}
+{{--                                        <i style="font-size: 100px; color: #1d357e !important;" class="bx bxs-cart fs-40 text-primary"></i>--}}
+{{--                                        <h4 class="mt-3 mb-0 number-font fs-20">{{ $order->count() }}</h4>--}}
+{{--                                        <p class="text-muted mb-0">Orders Count</p>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
-        <!-- Edit MODAL -->
-        <div class="modal fade" id="editOrCreate" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content" id="modalContent">
 
-                </div>
-            </div>
-        </div>
-        <!-- Edit MODAL CLOSED -->
-    </div>
-    @include('layouts_admin.myAjaxHelper')
+
 @endsection
-@section('ajaxCalls')
-    <script>
-        var loader = ` <div class="linear-background">
-                            <div class="inter-crop"></div>
-                            <div class="inter-right--top"></div>
-                            <div class="inter-right--bottom"></div>
-                        </div>
-        `;
+@section('js')
 
-        // var columns = [
-        //     {data: 'id', name: 'id'},
-        //     {data: 'photo', name: 'photo'},
-        //     {data: 'name', name: 'name'},
-        //     {data: 'email', name: 'email'},
-        //     {data: 'created_at', name: 'created_at'},
-        //     {data: 'supervisor_type', name: 'supervisor_type'},
-        //     {data: 'action', name: 'action', orderable: false, searchable: false},
-        // ]
-        // showData('', columns);
-        // deleteScript('');
-
-        // Get Edit View
-        $(document).on('click', '.editBtn', function () {
-            var id = $(this).data('id')
-            var url = "";
-            url = url.replace(':id', id)
-            $('#modalContent').html(loader)
-            $('#editOrCreate').modal('show')
-
-            setTimeout(function () {
-                $('#modalContent').load(url)
-            }, 250)
-            setTimeout(function () {
-            }, 500)
-        })
-
-
-        // Get Add View
-        $(document).on('click', '.addBtn', function () {
-            $('#modalContent').html(loader)
-            $('#editOrCreate').modal('show')
-            setTimeout(function () {
-                {{--$('#modalContent').load('{{route('admin.create')}}')--}}
-            }, 50)
-        });
-
-        // Add By Ajax
-        $(document).on('submit','Form#addForm',function(e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            var url = $('#addForm').attr('action');
-            $.ajax({
-
-                url: url,
-                type: 'POST',
-                data: formData,
-                beforeSend: function () {
-                    $('#addButton').html('<span class="spinner-border spinner-border-sm mr-2" ' +
-                        ' ></span> <span style="margin-left: 4px;">working</span>').attr('disabled', true);
-                },
-
-                success: function (data) {
-                    if (data.status == 200) {
-                        $('#dataTable').DataTable().ajax.reload();
-                        toastr.success('Supervisor added successfully');
-                    }
-                    else
-                        toastr.error('There is an error');
-                    $('#addButton').html(`Create`).attr('disabled', false);
-                    $('#editOrCreate').modal('hide')
-                },
-
-                error: function (data) {
-                    if (data.status === 500) {
-                        toastr.error('There is an error');
-                    } else if (data.status === 422) {
-
-                        var errors = $.parseJSON(data.responseText);
-                        $.each(errors, function (key, value) {
-                            if ($.isPlainObject(value)) {
-                                $.each(value, function (key, value){
-                                    toastr.error(value, key);
-                                });
-                            }
-                        });
-                    } else
-                        toastr.error('there in an error');
-                    $('#addButton').html(`Create`).attr('disabled', false);
-                },//end error method
-                cache: false,
-                contentType: false,
-                processData: false
-            });
-        });
-
-
-
-        // Update By Ajax
-        $(document).on('submit','Form#updateForm',function(e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            var url = $('#updateForm').attr('action');
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: formData,
-                beforeSend: function () {
-                    $('#updateButton').html('<span class="spinner-border spinner-border-sm mr-2" ' +
-                        ' ></span> <span style="margin-left: 4px;">working</span>').attr('disabled', true);
-                },
-
-                success: function (data) {
-                    $('#updateButton').html(`Update`).attr('disabled', false);
-                    if (data.status == 200){
-                        $('#dataTable').DataTable().ajax.reload();
-                        toastr.success('Supervisor updated successfully');
-                    }
-                    else
-                        toastr.error('There is an error');
-
-                    $('#editOrCreate').modal('hide')
-                },
-                error: function (data) {
-
-                    if (data.status === 500) {
-                        toastr.error('There is an error');
-
-                    } else if (data.status === 422) {
-
-                        var errors = $.parseJSON(data.responseText);
-                        $.each(errors, function (key, value) {
-                            if ($.isPlainObject(value)) {
-                                $.each(value, function (key, value){
-                                    toastr.error(value, key);
-                                });
-                            }
-                        });
-                    } else
-                        toastr.error('there in an error');
-                    $('#updateButton').html(`Update`).attr('disabled', false);
-                },//end error method
-
-                cache: false,
-                contentType: false,
-                processData: false
-            });
-        });
-
-    </script>
 @endsection
-
 
