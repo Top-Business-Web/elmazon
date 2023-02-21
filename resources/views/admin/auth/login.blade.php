@@ -27,7 +27,7 @@
         </form>
     </main>
     <div class="welcome-container">
-        <h1 class="heading-secondary">مرحبا بعودتك <span class="lg">{{($setting->title) ?? 'ازدهار'}}</span></h1>
+        <h1 class="heading-secondary"> <span class="lg">{{($setting->title) ?? 'مرحبا بعودتك'}}</span></h1>
         <img src="{{asset('assets/admin/images/Banner-Big-min.gif')}}" alt="login" style="max-height: 400px; max-width: 400px; mix-blend-mode: multiply">
     </div>
 </div>
