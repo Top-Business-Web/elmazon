@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,4 +19,16 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth'], function (){
 
     Route::post('login',[AuthController::class,'login']);
+    Route::post('logout',[AuthController::class,'logout'])->middleware('jwt');
+    Route::get('getProfile',[AuthController::class,'getProfile'])->middleware('jwt');
+
+});
+
+
+Route::group(['prefix' => 'classes','middleware' => ['jwt']], function (){
+
+    Route::get('all',[SubjectClassController::class,'allClasses']);
+    Route::get('lessonsByClassId/{id}',[SubjectClassController::class,'lessonsByClassId']);
+
+
 });

@@ -20,7 +20,10 @@ class CreateSubjectClassesTable extends Migration
                 $table->string('note')->nullable();
                 $table->longText('image')->nullable();
                 $table->unsignedBigInteger('term_id')->nullable();
+                $table->unsignedBigInteger('season_id')->nullable();
                 $table->foreign('term_id')->references('id')->on('terms')->cascadeOnUpdate()->cascadeOnDelete();
+                $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
