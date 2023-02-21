@@ -24,7 +24,7 @@ Route::group(['prefix' => 'admin'], function () {
 
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
-    Route::get('/admin', [MainController::class,'index'])->name('adminHome');
+    Route::get('/', [MainController::class,'index'])->name('adminHome');
 
 });
 
