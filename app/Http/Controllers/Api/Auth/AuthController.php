@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CommunicationResource;
 use App\Http\Resources\UserResource;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -49,6 +51,22 @@ class AuthController extends Controller
 
             return self::returnResponseDataApi(null,$exception->getMessage(),500);
         }
+    }
+
+    public function communication(){
+
+        try {
+
+            $setting = Setting::first();
+
+            return self::returnResponseDataApi(new CommunicationResource($setting),"تم الحصول علي بيانات التواصل مع السكيرتاريه",200);
+
+        }catch (\Exception $exception) {
+
+            return self::returnResponseDataApi(null,$exception->getMessage(),500);
+        }
+
+
     }
 
     public function getProfile(Request $request){
