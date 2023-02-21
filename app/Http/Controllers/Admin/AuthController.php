@@ -26,14 +26,16 @@ class AuthController extends Controller {
             'password.required' => 'يرجي ادخال كلمة المرور',
         ]);
         if (Auth::guard('admin')->attempt($data)){
+//            toastr()->success(null,'مرحبا بعودتك');
             return response()->json(200);
         }
+//        toastr()->error(null,'بيانات دخول خاطئة');
         return response()->json(405);
     }
 
     public function logout(){
         Auth::guard('admin')->logout();
-//        toastr()->info('تم تسجيل الخروج');
+        toastr()->info(null,'تم تسجيل الخروج');
         return redirect('admin/login');
     }
 

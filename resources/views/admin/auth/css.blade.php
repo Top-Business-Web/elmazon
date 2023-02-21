@@ -1,7 +1,9 @@
 <title>
     {{($setting->title) ?? 'لوحة التحكم'}} | تسجيل الدخول
 </title>
+{{--@toastr_css--}}
 <link rel="shortcut icon" type="image/x-icon" href="{{asset('fav.png')}}">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700&display=swap');
     * {
@@ -230,4 +232,4 @@
         }
     }
 </style>
-@toastr_css
+

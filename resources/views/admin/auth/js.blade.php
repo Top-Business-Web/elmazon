@@ -1,8 +1,26 @@
 <script src="{{asset('assets/admin/assets/js/jquery-3.4.1.min.js')}}"></script>
-<script src="{{asset('assets/admin/js/toastr.js')}}"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+</script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js">
+</script>
 @toastr_js
 @toastr_render
 <script>
+    function playAudio() {
+        var x = new Audio('{{ asset('sound/eventually-590.ogg') }}');
+        // Show loading animation.
+        var playPromise = x.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                x.play();
+            })
+                .catch(error => {
+                });
+
+        }
+    }
+
     function expand(lbl) {
         var elemId = lbl.getAttribute("for");
         document.getElementById(elemId).style.height = "45px";
@@ -33,6 +51,7 @@
                     window.setTimeout(function () {
                         window.location.href = '/admin';
                     }, 1000);
+                    playAudio();
                 } else {
                     toastr.error('بيانات دخول خاطئة');
                     $('#loginButton').html(`<i id="lockId" class="fa fa-lock" style="margin-left: 6px"></i> تسجيل الدخول`).attr('disabled', false);
