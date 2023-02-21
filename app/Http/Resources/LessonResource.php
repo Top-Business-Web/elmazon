@@ -17,9 +17,9 @@ class LessonResource extends JsonResource
         return [
 
             'id' => $this->id,
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
+            'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
              'note' => $this->note,
+            'type' => $this->type,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
 

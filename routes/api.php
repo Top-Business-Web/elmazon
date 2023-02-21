@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group(['middleware' => 'lang'], function (){
 
 Route::group(['prefix' => 'auth'], function (){
 
@@ -33,3 +34,5 @@ Route::group(['prefix' => 'classes','middleware' => ['jwt']], function (){
 
 
 });
+});
+
