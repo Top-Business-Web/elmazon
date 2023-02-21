@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth'], function (){
 
     Route::post('login',[AuthController::class,'login']);
+    Route::get('communication',[AuthController::class,'communication']);
     Route::post('logout',[AuthController::class,'logout'])->middleware('jwt');
     Route::get('getProfile',[AuthController::class,'getProfile'])->middleware('jwt');
 
