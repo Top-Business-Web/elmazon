@@ -70,4 +70,38 @@
 {{--    @endif--}}
 {{--    $('.header-brand-img').attr("src","{{asset($setting->logo)}}")--}}
 {{--</script>--}}
+
+<script>
+
+    function playAudio() {
+        var x = new Audio('{{ asset('sound/eventually-590.ogg') }}');
+        // Show loading animation.
+        var playPromise = x.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                x.play();
+            })
+                .catch(error => {
+                });
+
+        }
+    }
+
+
+    $('.logoutAdmin').on('click', function(){
+        $.ajax({
+            url: '{{ route('admin.logout')}}',
+            success: function(data){
+                if(data === 200){
+                    toastr.info('تم تسجيل الخروج بنجاح');
+                    window.setTimeout(function () {
+                        window.location.href = '/admin';
+                    }, 1000);
+                    playAudio();
+                }
+            }
+        })
+    })
+</script>
 @yield('js')
