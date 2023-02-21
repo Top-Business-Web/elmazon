@@ -13,7 +13,7 @@
                         <h4>Quick Access</h4>
                         <div class="pl-3 pr-3">
                             <a class="btn btn-info btn-block" href="">
-                                Show Admin
+                                Show admin
                             </a>
                             <a class="btn btn-danger btn-block" href="">
                                 Client Messages
