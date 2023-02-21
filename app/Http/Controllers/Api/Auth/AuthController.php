@@ -51,4 +51,35 @@ class AuthController extends Controller
         }
     }
 
+    public function getProfile(Request $request){
+
+        try {
+
+            $user = Auth::guard('user-api')->user();
+            $user['token'] = $request->bearerToken();
+
+            return self::returnResponseDataApi(new UserResource($user), "تم الحصول علي بيانات الطالب بنجاح", 200);
+
+        }catch (\Exception $exception) {
+
+            return self::returnResponseDataApi(null,$exception->getMessage(),500);
+        }
+    }
+
+
+    public function logout(){
+
+        try {
+
+            auth()->guard('user-api')->logout();
+
+            return self::returnResponseDataApi(null, "تم تسجيل الخروج بنجاح", 200);
+
+        }catch (\Exception $exception) {
+
+            return self::returnResponseDataApi(null,$exception->getMessage(),500);
+        }
+    }
+
+
 }
