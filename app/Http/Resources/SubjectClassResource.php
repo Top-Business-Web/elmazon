@@ -17,8 +17,7 @@ class SubjectClassResource extends JsonResource
         return [
 
             'id' => $this->id,
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
+            'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'image' => $this->image == null ? asset('classes/default/p.png') : asset('classes/' . $this->image),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
