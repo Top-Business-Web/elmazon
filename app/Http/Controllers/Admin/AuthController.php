@@ -33,7 +33,7 @@ class AuthController extends Controller {
 
     public function logout(){
         Auth::guard('admin')->logout();
-        toastr()->info('تم تسجيل الخروج');
+//        toastr()->info('تم تسجيل الخروج');
         return redirect('admin/login');
     }
 
