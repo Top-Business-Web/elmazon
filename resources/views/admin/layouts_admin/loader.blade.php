@@ -1,3 +1,3 @@
 <div id="global-loader">
-    <img src="{{asset('assets/uploads')}}/load.gif" class="loader-img" alt="Loader">
+    <img style="width: 250px;" src="{{asset('assets/uploads/book-red-bull.gif')}}" class="loader-img" alt="Loader">
 </div>
