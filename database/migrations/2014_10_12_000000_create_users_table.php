@@ -18,7 +18,6 @@ class CreateUsersTable extends Migration
             $table->string('name_ar');
             $table->string('name_en');
             $table->unsignedBigInteger('season_id');
-            $table->unsignedBigInteger('group_id');
             $table->unsignedBigInteger('country_id');
             $table->string('phone');
             $table->string('father_phone');
@@ -33,7 +32,6 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreign('group_id')->references('id')->on('groups')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('country_id')->references('id')->on('countries')->cascadeOnUpdate()->cascadeOnDelete();
 
         });
