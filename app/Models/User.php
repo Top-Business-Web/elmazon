@@ -47,10 +47,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Country::class,'country_id','id');
     }
 
-    public function group(){
 
-        return $this->belongsTo(Group::class,'group_id','id');
-    }
     /**
      * The attributes that should be hidden for serialization.
      *

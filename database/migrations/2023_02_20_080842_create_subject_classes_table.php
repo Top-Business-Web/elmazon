@@ -23,7 +23,6 @@ class CreateSubjectClassesTable extends Migration
                 $table->unsignedBigInteger('season_id')->nullable();
                 $table->foreign('term_id')->references('id')->on('terms')->cascadeOnUpdate()->cascadeOnDelete();
                 $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
-
                $table->timestamps();
         });
     }
