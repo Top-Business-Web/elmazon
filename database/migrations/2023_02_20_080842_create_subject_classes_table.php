@@ -24,7 +24,7 @@ class CreateSubjectClassesTable extends Migration
                 $table->foreign('term_id')->references('id')->on('terms')->cascadeOnUpdate()->cascadeOnDelete();
                 $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
 
-            $table->timestamps();
+               $table->timestamps();
         });
     }
 
