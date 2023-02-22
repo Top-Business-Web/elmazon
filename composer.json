@@ -12,6 +12,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "tymon/jwt-auth": "^1.0",
+        "yajra/laravel-datatables-oracle": "*",
         "yoeunes/toastr": "^2.3"
     },
     "require-dev": {

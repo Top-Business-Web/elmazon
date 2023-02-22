@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\MainController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\country\CountryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('/', [MainController::class,'index'])->name('adminHome');
 
 
+    #### Country ####
+    Route::resource('countries', CountryController::class);
 
 
 
