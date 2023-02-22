@@ -11,4 +11,6 @@ class Season extends Model
 
     protected $guarded = [];
 
+
+
 }

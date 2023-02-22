@@ -42,6 +42,13 @@
         </li>
 
         <li class="slide">
+            <a class="side-menu__item" href="{{ route('groups.index') }}">
+                <i class="fe fe-git-commit side-menu__icon"></i>
+                <span class="side-menu__label">{{ trans('admin.groups') }}</span>
+            </a>
+        </li>
+
+        <li class="slide">
             <a class="side-menu__item" href="#">
                 <i class="fe fe-git-commit side-menu__icon"></i>
                 <span class="side-menu__label">الدروس</span>
