@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\FullExams\FullExamController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,5 +35,13 @@ Route::group(['prefix' => 'classes','middleware' => ['jwt']], function (){
 
 
 });
+
+    Route::group(['prefix' => 'fullExams','middleware' => ['jwt']], function (){
+
+        Route::get('all',[FullExamController::class,'fullExams']);
+        Route::get('instructionByFullExamId/{id}',[FullExamController::class,'instructionByFullExamId']);
+
+
+    });
 });
 

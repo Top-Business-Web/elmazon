@@ -24,7 +24,7 @@ class CreateCommentReplaysTable extends Migration
             $table->unsignedBigInteger('comment_id');
             $table->timestamps();
             $table->foreign('student_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreign('teacher_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('teacher_id')->references('id')->on('admins')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('comment_id')->references('id')->on('comments')->cascadeOnUpdate()->cascadeOnDelete();
 
 

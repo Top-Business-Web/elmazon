@@ -28,9 +28,7 @@ class User extends Authenticatable implements JWTSubject
         'country_id',
         'phone',
         'father_phone',
-        'user_type',
         'image',
-        'login_status',
         'user_status',
         'code',
         'date_start_code',
@@ -38,7 +36,21 @@ class User extends Authenticatable implements JWTSubject
     ];
 
 
+    public function season(){
 
+        return $this->belongsTo(Season::class,'season_id','id');
+    }
+
+
+    public function country(){
+
+        return $this->belongsTo(Country::class,'country_id','id');
+    }
+
+    public function group(){
+
+        return $this->belongsTo(Group::class,'group_id','id');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

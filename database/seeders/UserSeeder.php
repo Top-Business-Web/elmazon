@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AllExam;
 use App\Models\Country;
 use App\Models\Group;
 use App\Models\Lesson;
@@ -61,9 +62,7 @@ class UserSeeder extends Seeder
             'password' =>  Hash::make('123456'),
             'phone' => '01062933188',
             'father_phone' => '1005717155',
-            'user_type' => 'student',
             'image' => 'avatar.jpg',
-            'login_status' => 'logout',
             'user_status' => 'active',
             'code' => rand(1,3000),
             'date_start_code' => '2022-02-20',
@@ -126,6 +125,9 @@ class UserSeeder extends Seeder
             'youtube_link' => 'https://www.youtube.com/'
 
         ]);
+
+
+
 
     }
 }
