@@ -1,16 +1,16 @@
 <?php
 
 return [
-    //Side Bar
+    // Side Bar
     'country' => 'Country',
     'countries' => 'Countries',
 
-    //globale
+    // globale
     'name_ar' => 'Name Ar',
     'name_en' => 'Name En',
     'actions' => 'Actions',
 
-    //Operations
+    // Operations
     'add' => 'Add',
     'edit' => 'Edit',
     'update' => 'Update',
@@ -18,10 +18,14 @@ return [
     'delete' => 'Delete',
     'close' => 'Close',
 
-    //Sentince Modal
+    // Sentince Modal
     'sure_delete' => 'Are you sure you want to delete this record?',
 
-    //Country
+    // Country
     'data_country' => 'Data Country',
+
+    // Season
+    'season' => 'Season',
+    'seasons' => 'Seasons',
 ];
 

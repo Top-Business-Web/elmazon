@@ -28,9 +28,9 @@
 
 
         <li class="slide">
-            <a class="side-menu__item" href="#">
+            <a class="side-menu__item" href="{{ route('seasons.index') }}">
                 <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">الفصول</span>
+                <span class="side-menu__label">{{ trans('admin.seasons') }}</span>
             </a>
         </li>
 

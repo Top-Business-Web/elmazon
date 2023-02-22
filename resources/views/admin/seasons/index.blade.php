@@ -1,10 +1,10 @@
 @extends('Admin/layouts_admin/master')
 
 @section('title')
-    {{ trans('admin.countries') }}
+    {{ trans('admin.seasons') }}
 @endsection
 @section('page_name')
-    {{ trans('admin.country') }}
+    {{ trans('admin.season') }}
 @endsection
 @section('content')
 
@@ -57,7 +57,8 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_delete_modal">
                             {{ trans('admin.close') }}
                         </button>
-                        <button type="button" class="btn btn-danger" id="delete_btn">{{ trans('admin.delete') }}</button>
+                        <button type="button" class="btn btn-danger"
+                                id="delete_btn">{{ trans('admin.delete') }}</button>
                     </div>
                 </div>
             </div>
@@ -69,7 +70,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">{{ trans('admin.country') }}</h5>
+                        <h5 class="modal-title" id="example-Modal3">{{ trans('admin.season') }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -91,14 +92,14 @@
             {data: 'name_en', name: 'name_en'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
-        showData('{{route('countries.index')}}', columns);
+        showData('{{route('seasons.index')}}', columns);
         // Delete Using Ajax
-        destroyScript('{{route('countries.destroy',':id')}}');
+        destroyScript('{{route('seasons.destroy',':id')}}');
         // Add Using Ajax
-        showAddModal('{{route('countries.create')}}');
+        showAddModal('{{route('seasons.create')}}');
         addScript();
         // Add Using Ajax
-        showEditModal('{{route('countries.edit',':id')}}');
+        showEditModal('{{route('seasons.edit',':id')}}');
         editScript();
     </script>
 @endsection

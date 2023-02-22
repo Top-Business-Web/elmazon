@@ -1,25 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\Admin\country;
+namespace App\Http\Controllers\Admin\season;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreCountry;
+use App\Http\Requests\StoreSeason;
+use App\Models\Season;
 use Illuminate\Http\Request;
-use App\Models\Country;
 use Yajra\DataTables\DataTables;
 
-class CountryController extends Controller
+class SeasonController extends Controller
 {
     public function index(request $request)
     {
         if ($request->ajax()) {
-            $countries = Country::get();
-            return Datatables::of($countries)
-                ->addColumn('action', function ($countries) {
+            $seasons = Season::get();
+            return Datatables::of($seasons)
+                ->addColumn('action', function ($seasons) {
                     return '
-                            <button type="button" data-id="' . $countries->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                            <button type="button" data-id="' . $seasons->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
-                                    data-id="' . $countries->id . '" data-title="' . $countries->name_en . '">
+                                    data-id="' . $seasons->id . '" data-title="' . $seasons->name_en . '">
                                     <i class="fas fa-trash"></i>
                             </button>
                        ';
@@ -27,34 +27,33 @@ class CountryController extends Controller
                 ->escapeColumns([])
                 ->make(true);
         } else {
-            return view('admin.countries.index');
+            return view('admin.seasons.index');
         }
     }
 
     public function create()
     {
-        return view('admin.countries.parts.create');
+        return view('admin.seasons.parts.create');
     }
 
-    public function store(StoreCountry $request)
+    public function store(StoreSeason $request)
     {
         $inputs = $request->all();
-
-        if (Country::create($inputs)) {
+        if (Season::create($inputs)) {
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
         }
     }
 
-    public function edit(Country $country)
+    public function edit(Season $season)
     {
-        return view('admin.countries.parts.edit', compact('country'));
+        return view('admin.seasons.parts.edit', compact('season'));
     }
 
-    public function update(StoreCountry $request, Country $country)
+    public function update(StoreSeason $request, Season $season)
     {
-        if ($country->update($request->all())) {
+        if ($season->update($request->all())) {
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -63,8 +62,8 @@ class CountryController extends Controller
 
     public function destroy(Request $request)
     {
-        $countries = Country::where('id', $request->id)->firstOrFail();
-        $countries->delete();
+        $seasons = Season::where('id', $request->id)->firstOrFail();
+        $seasons->delete();
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 }
