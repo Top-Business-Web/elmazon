@@ -22,9 +22,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('country_id');
             $table->string('phone');
             $table->string('father_phone');
-            $table->enum('user_type',['student','teacher'])->default('student');
             $table->longText('image')->nullable();
-            $table->enum('login_status',['login','logout'])->default('login');
             $table->enum('user_status',['active','not_active'])->default('active');
             $table->string('code')->unique();
             $table->date('date_start_code')->comment('تاريخ بدايه الاشتراك');
