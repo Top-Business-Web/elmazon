@@ -30,5 +30,10 @@ return [
     'season' => 'فصل',
     'seasons' => 'فصول',
 
+    //Term
+    'term' => 'ترم',
+    'terms' => 'أترام',
+    'note' => 'ملاحظة',
+
 ];
 

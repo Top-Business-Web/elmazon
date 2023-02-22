@@ -35,6 +35,13 @@
         </li>
 
         <li class="slide">
+            <a class="side-menu__item" href="{{ route('terms.index') }}">
+                <i class="fe fe-git-commit side-menu__icon"></i>
+                <span class="side-menu__label">{{ trans('admin.terms') }}</span>
+            </a>
+        </li>
+
+        <li class="slide">
             <a class="side-menu__item" href="#">
                 <i class="fe fe-git-commit side-menu__icon"></i>
                 <span class="side-menu__label">الدروس</span>

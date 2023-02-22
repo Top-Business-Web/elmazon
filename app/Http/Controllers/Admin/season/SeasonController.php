@@ -10,6 +10,8 @@ use Yajra\DataTables\DataTables;
 
 class SeasonController extends Controller
 {
+
+    // Index START
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -31,10 +33,18 @@ class SeasonController extends Controller
         }
     }
 
+    // End Index
+
+    // Create START
+
     public function create()
     {
         return view('admin.seasons.parts.create');
     }
+
+    // Create END
+
+    // Store START
 
     public function store(StoreSeason $request)
     {
@@ -46,10 +56,17 @@ class SeasonController extends Controller
         }
     }
 
+    // Store END
+
+    // Edit START
+
     public function edit(Season $season)
     {
         return view('admin.seasons.parts.edit', compact('season'));
     }
+    // Edit END
+
+    // Update START
 
     public function update(StoreSeason $request, Season $season)
     {
@@ -60,10 +77,16 @@ class SeasonController extends Controller
         }
     }
 
+    // Update END
+
+    // Delete START
+
     public function destroy(Request $request)
     {
         $seasons = Season::where('id', $request->id)->firstOrFail();
         $seasons->delete();
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
+
+    // Delete END
 }
