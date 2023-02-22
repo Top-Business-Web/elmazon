@@ -1,26 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Admin\country;
+namespace App\Http\Controllers\Admin\group;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreCountry;
+use App\Http\Requests\StoreGroup;
+use App\Models\Group;
 use Illuminate\Http\Request;
-use App\Models\Country;
 use Yajra\DataTables\DataTables;
+use App\Models\Season;
 
-class CountryController extends Controller
+class GroupController extends Controller
 {
     // Index Start
     public function index(request $request)
     {
         if ($request->ajax()) {
-            $countries = Country::get();
-            return Datatables::of($countries)
-                ->addColumn('action', function ($countries) {
+            $groups = Group::get();
+            return Datatables::of($groups)
+                ->addColumn('action', function ($groups) {
                     return '
-                            <button type="button" data-id="' . $countries->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                            <button type="button" data-id="' . $groups->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
-                                    data-id="' . $countries->id . '" data-title="' . $countries->name_en . '">
+                                    data-id="' . $groups->id . '" data-title="' . $groups->name_en . '">
                                     <i class="fas fa-trash"></i>
                             </button>
                        ';
@@ -28,25 +29,28 @@ class CountryController extends Controller
                 ->escapeColumns([])
                 ->make(true);
         } else {
-            return view('admin.countries.index');
+            return view('admin.groups.index');
         }
     }
+
     // Index End
 
     // Create Start
+
     public function create()
     {
-        return view('admin.countries.parts.create');
+        $season_id = Season::get();
+        return view('admin.groups.parts.create', compact('season_id'));
     }
+
     // Create End
 
     // Store Start
 
-    public function store(StoreCountry $request)
+    public function store(StoreGroup $request)
     {
         $inputs = $request->all();
-
-        if (Country::create($inputs)) {
+        if (Group::create($inputs)) {
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -55,33 +59,35 @@ class CountryController extends Controller
 
     // Store End
 
-
     // Edit Start
-    public function edit(Country $country)
+
+    public function edit(Group $group)
     {
-        return view('admin.countries.parts.edit', compact('country'));
+        $seasons = Season::get();
+        return view('admin.groups.parts.edit', compact('group', 'seasons'));
     }
+
     // Edit End
 
-    // Update Start
+    //Update Start
 
-    public function update(StoreCountry $request, Country $country)
+    public function update(Group $group, StoreGroup $request)
     {
-        if ($country->update($request->all())) {
+        if ($group->update($request->all())) {
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
         }
     }
 
-    // Edit End
+    // Update End
 
     // Destroy Start
 
     public function destroy(Request $request)
     {
-        $countries = Country::where('id', $request->id)->firstOrFail();
-        $countries->delete();
+        $groups = Group::where('id', $request->id)->firstOrFail();
+        $groups->delete();
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

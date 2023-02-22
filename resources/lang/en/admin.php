@@ -27,5 +27,15 @@ return [
     // Season
     'season' => 'Season',
     'seasons' => 'Seasons',
+
+    //Term
+    'term' => 'Term',
+    'terms' => 'Terms',
+    'note' => 'Note',
+
+
+    // Group
+    'group' => 'Group',
+    'groups' => 'Groups',
 ];
 

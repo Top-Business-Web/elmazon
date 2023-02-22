@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\country\CountryController;
 use App\Http\Controllers\Admin\season\SeasonController;
+use App\Http\Controllers\Admin\term\TermController;
+use App\Http\Controllers\Admin\group\GroupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +35,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Season ####
     Route::resource('seasons', SeasonController::class);
+
+    #### Term ####
+    Route::resource('terms', TermController::class);
+
+    #### Group ####
+    Route::resource('groups', GroupController::class);
 
     #### Auth ####
     Route::get('logout', [AuthController::class,'logout'])->name('admin.logout');

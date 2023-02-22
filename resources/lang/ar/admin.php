@@ -30,5 +30,14 @@ return [
     'season' => 'فصل',
     'seasons' => 'فصول',
 
+    //Term
+    'term' => 'ترم',
+    'terms' => 'أترام',
+    'note' => 'ملاحظة',
+
+    // Group
+    'group' => 'مجموعة',
+    'groups' => 'مجموعات',
+
 ];
 
