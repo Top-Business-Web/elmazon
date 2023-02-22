@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\Admin\MainController;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\country\CountryController;
+use App\Http\Controllers\Admin\season\SeasonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +31,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Country ####
     Route::resource('countries', CountryController::class);
 
-
+    #### Season ####
+    Route::resource('seasons', SeasonController::class);
 
     #### Auth ####
     Route::get('logout', [AuthController::class,'logout'])->name('admin.logout');
