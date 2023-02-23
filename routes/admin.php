@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CountryController;
+
+use App\Http\Controllers\Admin\LessonController;
+
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\SeasonController;
 use App\Http\Controllers\Admin\SubjectClassController;
@@ -41,6 +44,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Subject Class ####
     Route::resource('subjectsClasses', SubjectClassController::class);
+
+    #### Lesson ####
+    Route::resource('lessons', LessonController::class);
 
     #### Auth ####
     Route::get('logout', [AuthController::class,'logout'])->name('admin.logout');

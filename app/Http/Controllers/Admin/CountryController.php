@@ -59,6 +59,7 @@ class CountryController extends Controller
     // Edit Start
     public function edit(Country $country)
     {
+
         return view('admin.countries.parts.edit', compact('country'));
     }
     // Edit End

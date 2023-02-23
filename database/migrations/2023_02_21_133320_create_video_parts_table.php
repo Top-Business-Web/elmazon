@@ -20,6 +20,7 @@ class CreateVideoPartsTable extends Migration
             $table->text('note')->nullable();
             $table->unsignedBigInteger('lesson_id');
             $table->longText('video_link');
+            $table->string('video_time');
             $table->timestamps();
             $table->foreign('lesson_id')->references('id')->on('lessons')->cascadeOnUpdate()->cascadeOnDelete();
         });
