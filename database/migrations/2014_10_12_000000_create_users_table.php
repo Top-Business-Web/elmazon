@@ -18,13 +18,10 @@ class CreateUsersTable extends Migration
             $table->string('name_ar');
             $table->string('name_en');
             $table->unsignedBigInteger('season_id');
-            $table->unsignedBigInteger('group_id');
             $table->unsignedBigInteger('country_id');
             $table->string('phone');
             $table->string('father_phone');
-            $table->enum('user_type',['student','teacher'])->default('student');
             $table->longText('image')->nullable();
-            $table->enum('login_status',['login','logout'])->default('login');
             $table->enum('user_status',['active','not_active'])->default('active');
             $table->string('code')->unique();
             $table->date('date_start_code')->comment('تاريخ بدايه الاشتراك');
@@ -35,7 +32,6 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreign('group_id')->references('id')->on('groups')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('country_id')->references('id')->on('countries')->cascadeOnUpdate()->cascadeOnDelete();
 
         });

@@ -28,15 +28,24 @@ class User extends Authenticatable implements JWTSubject
         'country_id',
         'phone',
         'father_phone',
-        'user_type',
         'image',
-        'login_status',
         'user_status',
         'code',
         'date_start_code',
         'date_end_code',
     ];
 
+
+    public function season(){
+
+        return $this->belongsTo(Season::class,'season_id','id');
+    }
+
+
+    public function country(){
+
+        return $this->belongsTo(Country::class,'country_id','id');
+    }
 
 
     /**
