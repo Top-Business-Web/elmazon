@@ -92,7 +92,6 @@ class UserSeeder extends Seeder
                 'name_ar' => $i .'الدرس ',
                 'name_en' => 'Lesson ' . $i,
                 'subject_class_id' => $subject_class->first()->id,
-                'type' => 'lesson',
                 'note' => 'شرح تفصيلي لليزر والمقاومه',
 
             ]);
