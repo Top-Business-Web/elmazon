@@ -30,7 +30,7 @@ return [
     'season' => 'Season',
     'seasons' => 'Seasons',
 
-    //Term
+    // Term
     'term' => 'Term',
     'terms' => 'Terms',
     'note' => 'Note',
@@ -38,5 +38,9 @@ return [
     // Subject Classes
     'subject_class' => 'فئة الموضوع',
     'subjects_classes' => 'فئات الموضوع',
+
+    // Lesson
+    'lesson' => 'Lesson',
+    'lessons' => 'Lessons',
 ];
 
