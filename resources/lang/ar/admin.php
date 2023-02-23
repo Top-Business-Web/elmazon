@@ -41,5 +41,9 @@ return [
     'subject_class' => 'فئة الموضوع',
     'subjects_classes' => 'فئات الموضوع',
 
+    // Lesson
+    'lesson' => 'درس',
+    'lessons' => 'دروس',
+
 ];
 
