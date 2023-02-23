@@ -23,7 +23,7 @@ class LessonResource extends JsonResource
              'videos_time' => 120,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
-            
+
         ];
     }
 }
