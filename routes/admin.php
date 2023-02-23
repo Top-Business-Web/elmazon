@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admin\MainController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\country\CountryController;
-use App\Http\Controllers\Admin\season\SeasonController;
-use App\Http\Controllers\Admin\term\TermController;
-use App\Http\Controllers\Admin\group\GroupController;
+use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\GroupController;
+use App\Http\Controllers\Admin\MainController;
+use App\Http\Controllers\Admin\SeasonController;
+use App\Http\Controllers\Admin\SubjectClassController;
+use App\Http\Controllers\Admin\TermController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Group ####
     Route::resource('groups', GroupController::class);
+
+    #### Subject Class ####
+    Route::resource('subjectsClasses', SubjectClassController::class);
 
     #### Auth ####
     Route::get('logout', [AuthController::class,'logout'])->name('admin.logout');

@@ -9,6 +9,8 @@ return [
     'name_ar' => 'Name Ar',
     'name_en' => 'Name En',
     'actions' => 'Actions',
+    'image' => 'Image',
+    'images' => 'Images',
 
     // Operations
     'add' => 'Add',
@@ -33,9 +35,8 @@ return [
     'terms' => 'Terms',
     'note' => 'Note',
 
-
-    // Group
-    'group' => 'Group',
-    'groups' => 'Groups',
+    // Subject Classes
+    'subject_class' => 'فئة الموضوع',
+    'subjects_classes' => 'فئات الموضوع',
 ];
 
