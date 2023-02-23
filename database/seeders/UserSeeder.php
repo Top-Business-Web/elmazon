@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AllExam;
 use App\Models\Country;
 use App\Models\Group;
 use App\Models\Lesson;
@@ -36,14 +37,6 @@ class UserSeeder extends Seeder
         }
 
 
-       for ($i=1;$i<=20;$i++){
-
-           $group = Group::create([
-               'name_ar' => "المجموعه رقم " . $i,
-               'name_en' => "Group number " . $i,
-               'season_id' => $season->first()->id,
-           ]);
-       }
 
        $country = Country::create([
 
@@ -56,14 +49,11 @@ class UserSeeder extends Seeder
             'name_ar' => 'اسلام محمد',
             'name_en' => 'Islam Mohamed',
             'season_id' => $season->first()->id,
-            'group_id' => $group->first()->id,
             'country_id' => $country->first()->id,
             'password' =>  Hash::make('123456'),
             'phone' => '01062933188',
             'father_phone' => '1005717155',
-            'user_type' => 'student',
             'image' => 'avatar.jpg',
-            'login_status' => 'logout',
             'user_status' => 'active',
             'code' => rand(1,3000),
             'date_start_code' => '2022-02-20',
@@ -126,6 +116,9 @@ class UserSeeder extends Seeder
             'youtube_link' => 'https://www.youtube.com/'
 
         ]);
+
+
+
 
     }
 }
