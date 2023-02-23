@@ -35,16 +35,16 @@
         </li>
 
         <li class="slide">
-            <a class="side-menu__item" href="{{ route('terms.index') }}">
+            <a class="side-menu__item" href="{{ route('subjectsClasses.index') }}">
                 <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">{{ trans('admin.terms') }}</span>
+                <span class="side-menu__label">{{ trans('admin.subject_class') }}</span>
             </a>
         </li>
 
         <li class="slide">
-            <a class="side-menu__item" href="{{ route('groups.index') }}">
+            <a class="side-menu__item" href="{{ route('terms.index') }}">
                 <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">{{ trans('admin.groups') }}</span>
+                <span class="side-menu__label">{{ trans('admin.term') }}</span>
             </a>
         </li>
 

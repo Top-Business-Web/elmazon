@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\season;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSeason;

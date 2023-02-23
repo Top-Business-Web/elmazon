@@ -10,6 +10,8 @@ return [
     'name_ar' => 'الأسم بالعربي',
     'name_en' => 'الأسم بالانجليزي',
     'actions' => 'العمليات',
+    'image' => 'ةصور',
+    'images' => 'صور',
 
     // Operations
     'add' => 'أضافة',
@@ -35,9 +37,9 @@ return [
     'terms' => 'أترام',
     'note' => 'ملاحظة',
 
-    // Group
-    'group' => 'مجموعة',
-    'groups' => 'مجموعات',
+    // Subject Classes
+    'subject_class' => 'فئة الموضوع',
+    'subjects_classes' => 'فئات الموضوع',
 
 ];
 

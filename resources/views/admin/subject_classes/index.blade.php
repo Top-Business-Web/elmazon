@@ -1,10 +1,10 @@
 @extends('Admin/layouts_admin/master')
 
 @section('title')
-    {{ trans('admin.groups') }}
+    {{ trans('admin.subjects_classes') }}
 @endsection
 @section('page_name')
-    {{ trans('admin.group') }}
+    {{ trans('admin.subject_class') }}
 @endsection
 @section('content')
 
@@ -28,8 +28,10 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">{{ trans('admin.season') }}</th>
                                 <th class="min-w-50px">{{ trans('admin.name_en') }}</th>
+                                <th class="min-w-50px">{{ trans('admin.note') }}</th>
+                                <th class="min-w-50px">{{ trans('admin.image') }}</th>
+                                <th class="min-w-50px">{{ trans('admin.term') }}</th>
                                 <th class="min-w-50px rounded-end">{{ trans('admin.actions') }}</th>
                             </tr>
                             </thead>
@@ -58,8 +60,7 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_delete_modal">
                             {{ trans('admin.close') }}
                         </button>
-                        <button type="button" class="btn btn-danger"
-                                id="delete_btn">{{ trans('admin.delete') }}</button>
+                        <button type="button" class="btn btn-danger" id="delete_btn">{{ trans('admin.delete') }}</button>
                     </div>
                 </div>
             </div>
@@ -71,7 +72,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">{{ trans('admin.group') }}</h5>
+                        <h5 class="modal-title" id="example-Modal3">{{ trans('admin.subject_class') }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -90,18 +91,20 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'season_id', name: 'season_id'},
             {data: 'name_en', name: 'name_en'},
+            {data: 'note', name: 'note'},
+            {data: 'image', name: 'image'},
+            {data: 'term_id', name: 'term_id'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
-        showData('{{route('groups.index')}}', columns);
+        showData('{{route('subjectsClasses.index')}}', columns);
         // Delete Using Ajax
-        destroyScript('{{route('groups.destroy',':id')}}');
+        destroyScript('{{route('subjectsClasses.destroy',':id')}}');
         // Add Using Ajax
-        showAddModal('{{route('groups.create')}}');
+        showAddModal('{{route('subjectsClasses.create')}}');
         addScript();
         // Add Using Ajax
-        showEditModal('{{route('groups.edit',':id')}}');
+        showEditModal('{{route('subjectsClasses.edit',':id')}}');
         editScript();
     </script>
 @endsection
