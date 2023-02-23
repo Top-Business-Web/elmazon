@@ -17,7 +17,7 @@ class UserResource extends JsonResource
         return [
 
             'id' => $this->id,
-            'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
+            'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
             'father_phone' => $this->father_phone,
