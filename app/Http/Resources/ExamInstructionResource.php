@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use App\Models\AllExam;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LessonInstructionResource extends JsonResource
+class ExamInstructionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
