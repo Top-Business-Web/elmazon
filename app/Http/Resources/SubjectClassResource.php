@@ -20,7 +20,7 @@ class SubjectClassResource extends JsonResource
             'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'image' => $this->image == null ? asset('classes/default/p.png') : asset('classes/' . $this->image),
             'lessons' => LessonResource::collection($this->lessons),
-            'exams' => $this->exams,
+            'exams' => OnlineExamResource::collection($this->exams),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
         ];
