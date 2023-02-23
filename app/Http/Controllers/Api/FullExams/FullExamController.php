@@ -7,7 +7,7 @@ use App\Http\Resources\AllExamResource;
 use App\Http\Resources\LessonInstructionResource;
 use App\Http\Resources\SubjectClassResource;
 use App\Models\AllExam;
-use App\Models\LessonInstruction;
+use App\Models\ExamInstruction;
 use App\Models\SubjectClass;
 
 class FullExamController extends Controller{
@@ -40,7 +40,7 @@ class FullExamController extends Controller{
 
             }
 
-            $lessonInstruction = LessonInstruction::where('all_exam_id','=',$id)->first();
+            $lessonInstruction = ExamInstruction::where('all_exam_id','=',$id)->first();
             return self::returnResponseDataApi(new LessonInstructionResource($lessonInstruction),"تم ارسال الارشاد التابع لهذا الامتحان الشامل بنجاح",200);
 
 

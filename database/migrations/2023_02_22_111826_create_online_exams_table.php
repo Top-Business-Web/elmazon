@@ -19,15 +19,10 @@ class CreateOnlineExamsTable extends Migration
             $table->string('name_en');
             $table->unsignedBigInteger('season_id')->nullable();
             $table->unsignedBigInteger('term_id')->nullable();
-            $table->unsignedBigInteger('video_part_id')->nullable();
-            $table->unsignedBigInteger('lesson_id')->nullable();
-            $table->unsignedBigInteger('subject_class_id')->nullable();
+            $table->morphs('examable');
             $table->text('note')->nullable();
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('term_id')->references('id')->on('terms')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreign('video_part_id')->references('id')->on('video_parts')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreign('lesson_id')->references('id')->on('lessons')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreign('subject_class_id')->references('id')->on('subject_classes')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
 
         });
