@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CountryController;
-use App\Http\Controllers\Admin\GroupController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\SeasonController;
 use App\Http\Controllers\Admin\SubjectClassController;
@@ -39,9 +38,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Term ####
     Route::resource('terms', TermController::class);
-
-    #### Group ####
-    Route::resource('groups', GroupController::class);
 
     #### Subject Class ####
     Route::resource('subjectsClasses', SubjectClassController::class);
