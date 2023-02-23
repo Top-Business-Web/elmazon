@@ -46,8 +46,7 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'name_ar' => 'اسلام محمد',
-            'name_en' => 'Islam Mohamed',
+            'name' => 'اسلام محمد',
             'season_id' => $season->first()->id,
             'country_id' => $country->first()->id,
             'password' =>  Hash::make('123456'),
