@@ -2,13 +2,12 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CountryController;
-
 use App\Http\Controllers\Admin\LessonController;
-
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\SeasonController;
 use App\Http\Controllers\Admin\SubjectClassController;
 use App\Http\Controllers\Admin\TermController;
+use App\Http\Controllers\Admin\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,6 +46,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Lesson ####
     Route::resource('lessons', LessonController::class);
+
+    #### Notification ####
+    Route::resource('notifications', NotificationController::class);
 
     #### Auth ####
     Route::get('logout', [AuthController::class,'logout'])->name('admin.logout');
