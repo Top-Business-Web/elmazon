@@ -40,7 +40,7 @@ class FullExamController extends Controller{
 
             }
 
-            $lessonInstruction = ExamInstruction::where('all_exam_id','=',$id)->first();
+            $lessonInstruction = ExamInstruction::where('examable_id','=',$id)->first();
             return self::returnResponseDataApi(new ExamInstructionResource($lessonInstruction),"تم ارسال الارشاد التابع لهذا الامتحان الشامل بنجاح",200);
 
 
