@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\AllExam;
 use App\Models\Country;
-use App\Models\Group;
 use App\Models\Lesson;
 use App\Models\PhoneCommunication;
 use App\Models\Season;
@@ -111,7 +110,6 @@ class UserSeeder extends Seeder
         }
 
         Setting::create([
-
             'facebook_link' => 'https://www.facebook.com/',
             'youtube_link' => 'https://www.youtube.com/'
 
