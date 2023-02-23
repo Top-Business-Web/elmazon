@@ -19,6 +19,8 @@ class FullExamController extends Controller{
 
             $term->where('status','=','active');
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+
+
         if($fullExams->count() > 0){
 
             return self::returnResponseDataApi(AllExamResource::collection($fullExams),"تم ارسال جميع الامتحانات الشامله بنجاح الماده",200);
@@ -40,8 +42,7 @@ class FullExamController extends Controller{
 
             }
 
-            $lessonInstruction = ExamInstruction::where('examable_id','=',$id)->first();
-            return self::returnResponseDataApi(new ExamInstructionResource($lessonInstruction),"تم ارسال الارشاد التابع لهذا الامتحان الشامل بنجاح",200);
+            return self::returnResponseDataApi(new AllExamResource($fullExam),"تم ارسال الارشاد التابع لهذا الامتحان الشامل بنجاح",200);
 
 
         }catch (\Exception $exception) {

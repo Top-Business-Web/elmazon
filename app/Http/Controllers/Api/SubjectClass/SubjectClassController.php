@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\SubjectClass;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AllExamResource;
 use App\Http\Resources\LessonResource;
 use App\Http\Resources\OnlineExamResource;
 use App\Http\Resources\SubjectClassResource;
+use App\Models\AllExam;
 use App\Models\Lesson;
 use App\Models\OnlineExam;
 use App\Models\SubjectClass;
@@ -21,14 +23,22 @@ class SubjectClassController extends Controller
 
                 $term->where('status','=','active');
             })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
-            if($classes->count() > 0){
 
-                return self::returnResponseDataApi(SubjectClassResource::collection($classes),"تم ارسال جميع فصول الماده",200);
+            $fullExams = AllExam::whereHas('term', function ($term){
 
-            }else{
+                $term->where('status','=','active');
+            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
 
-                return self::returnResponseDataApi(null,"لا يوجد فصول دراسيه",405);
-            }
+            return response()->json([
+
+                'data' => [
+                    'classes' => SubjectClassResource::collection($classes),
+                     'fullExams' => AllExamResource::collection($fullExams),
+                    'code' => 200,
+                    'message' => "تم الحصول علي جميع الدروس التابعه لهذا الفصل",
+                ]
+            ]);
+
 
         }catch (\Exception $exception) {
 
@@ -53,12 +63,9 @@ class SubjectClassController extends Controller
                     'class' => new SubjectClassResource($class),
                     'code' => 200,
                     'message' => "تم الحصول علي جميع الدروس التابعه لهذا الفصل",
-
                 ]
-
             ]);
 
-//            return self::returnResponseDataApi(LessonResource::collection($lessons),"تم الحصول علي جميع الدروس التابعه لهذا الفصل",200);
 
         }catch (\Exception $exception) {
 

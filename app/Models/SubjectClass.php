@@ -33,4 +33,14 @@ class SubjectClass extends Model
     }
 
 
+
+    //start instruction for exams
+    public function instruction()
+    {
+        return $this->morphOne(ExamInstruction::class, 'examable');
+    }
+
+
+
+
 }

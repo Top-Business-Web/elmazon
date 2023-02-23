@@ -21,4 +21,12 @@ class AllExam extends Model
 
         return $this->belongsTo(Term::class,'term_id','id');
     }
+
+
+    //start instruction for exams
+    public function instruction()
+    {
+        return $this->morphOne(ExamInstruction::class, 'examable');
+    }
+
 }
