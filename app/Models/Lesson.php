@@ -11,4 +11,9 @@ class Lesson extends Model
 
     protected $guarded = [];
 
+    public function exams()
+    {
+        return $this->morphMany(OnlineExam::class, 'examable');
+    }
+
 }

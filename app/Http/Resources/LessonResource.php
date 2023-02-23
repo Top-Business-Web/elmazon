@@ -20,7 +20,9 @@ class LessonResource extends JsonResource
             'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
              'note' => $this->note,
             'created_at' => $this->created_at->format('Y-m-d'),
-            'updated_at' => $this->created_at->format('Y-m-d')
+            'updated_at' => $this->created_at->format('Y-m-d'),
+            'exams' => OnlineExamResource::collection($this->exams)
+
 
         ];
     }

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\SubjectClass;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LessonResource;
+use App\Http\Resources\OnlineExamResource;
 use App\Http\Resources\SubjectClassResource;
 use App\Models\Lesson;
+use App\Models\OnlineExam;
 use App\Models\SubjectClass;
 
 class SubjectClassController extends Controller
@@ -45,9 +47,18 @@ class SubjectClassController extends Controller
 
             }
 
-            $lessons = Lesson::where('subject_class_id','=',$id)->get();
+            return response()->json([
 
-            return self::returnResponseDataApi(LessonResource::collection($lessons),"تم الحصول علي جميع الدروس التابعه لهذا الفصل",200);
+                'data' => [
+                    'class' => new SubjectClassResource($class),
+                    'code' => 200,
+                    'message' => "تم الحصول علي جميع الدروس التابعه لهذا الفصل",
+
+                ]
+
+            ]);
+
+//            return self::returnResponseDataApi(LessonResource::collection($lessons),"تم الحصول علي جميع الدروس التابعه لهذا الفصل",200);
 
         }catch (\Exception $exception) {
 

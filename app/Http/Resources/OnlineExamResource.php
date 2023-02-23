@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SubjectClassResource extends JsonResource
+class OnlineExamResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,14 +15,12 @@ class SubjectClassResource extends JsonResource
     public function toArray($request)
     {
         return [
-
-            'id' => $this->id,
-            'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
-            'image' => $this->image == null ? asset('classes/default/p.png') : asset('classes/' . $this->image),
-            'lessons' => $this->lessons,
-            'exams' => $this->exams,
+           'id' => $this->id,
+           'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
+            'note' => $this->note,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
+
         ];
     }
 }

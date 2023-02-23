@@ -16,9 +16,20 @@ class SubjectClass extends Model
     }
 
 
+    public function lessons(){
+
+        return $this->hasMany(Lesson::class,'subject_class_id','id');
+    }
+
     public function season(){
 
         return $this->belongsTo(Season::class,'season_id','id');
+    }
+
+
+    public function exams()
+    {
+        return $this->morphMany(OnlineExam::class, 'examable');
     }
 
 
