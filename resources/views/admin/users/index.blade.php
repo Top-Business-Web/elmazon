@@ -1,10 +1,10 @@
 @extends('Admin/layouts_admin/master')
 
 @section('title')
-    {{ trans('admin.countries') }}
+    الطلاب
 @endsection
 @section('page_name')
-    {{ trans('admin.country') }}
+    الطلاب
 @endsection
 @section('content')
 
@@ -17,7 +17,7 @@
                         <button class="btn btn-secondary btn-icon text-white addBtn">
 									<span>
 										<i class="fe fe-plus"></i>
-									</span> {{ trans('admin.add') }}
+									</span> اضافة طالب
                         </button>
                     </div>
                 </div>
@@ -28,8 +28,10 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">{{ trans('admin.name_en') }}</th>
-                                <th class="min-w-50px rounded-end">{{ trans('admin.actions') }}</th>
+                                <th class="min-w-50px">الاسم</th>
+                                <th class="min-w-50px">الكود</th>
+                                <th class="min-w-50px">الهاتف</th>
+                                <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
                         </table>
@@ -44,20 +46,20 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">{{ trans('admin.delete') }}</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">حذف طالب</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <input id="delete_id" name="id" type="hidden">
-                        <p>{{ trans('admin.sure_delete') }}<span id="title" class="text-danger"></span></p>
+                        <p>هل متاكد من حذف<span id="title" class="text-danger"></span></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_delete_modal">
-                            {{ trans('admin.close') }}
+                            اغلاق
                         </button>
-                        <button type="button" class="btn btn-danger" id="delete_btn">{{ trans('admin.delete') }}</button>
+                        <button type="button" class="btn btn-danger" id="delete_btn">حذف</button>
                     </div>
                 </div>
             </div>
@@ -66,10 +68,10 @@
 
         <!-- Create Or Edit Modal -->
         <div class="modal fade" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content ">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">{{ trans('admin.country') }}</h5>
+                        <h5 class="modal-title" id="example-Modal3">الطلاب</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -88,17 +90,19 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'name_en', name: 'name_en'},
+            {data: 'name', name: 'name'},
+            {data: 'code', name: 'code'},
+            {data: 'phone', name: 'phone'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
-        showData('{{route('countries.index')}}', columns);
+        showData('{{route('users.index')}}', columns);
         // Delete Using Ajax
-        destroyScript('{{route('countries.destroy',':id')}}');
+        destroyScript('{{route('users.destroy',':id')}}');
         // Add Using Ajax
-        showAddModal('{{route('countries.create')}}');
+        showAddModal('{{route('users.create')}}');
         addScript();
         // Add Using Ajax
-        showEditModal('{{route('countries.edit',':id')}}');
+        showEditModal('{{route('users.edit',':id')}}');
         editScript();
     </script>
 @endsection
