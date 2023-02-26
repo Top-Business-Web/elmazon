@@ -25,4 +25,5 @@ Trait  PhotoTrait
         }
         return $file_name;
     }
+
 }

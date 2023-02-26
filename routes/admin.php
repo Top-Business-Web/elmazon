@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\SeasonController;
 use App\Http\Controllers\Admin\SubjectClassController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\VideoPartController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,7 +30,7 @@ Route::group(['prefix' => 'admin'], function () {
 
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
-    Route::get('/', [MainController::class,'index'])->name('adminHome');
+    Route::get('/', [MainController::class, 'index'])->name('adminHome');
 
 
     #### Country ####
@@ -50,8 +51,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Notification ####
     Route::resource('notifications', NotificationController::class);
 
+    ##### Video Parts #####
+    Route::resource('videosParts', VideoPartController::class);
+
     #### Auth ####
-    Route::get('logout', [AuthController::class,'logout'])->name('admin.logout');
+    Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
 });
 
 
