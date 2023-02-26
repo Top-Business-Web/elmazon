@@ -80,9 +80,10 @@ class LessonController extends Controller{
             return self::returnResponseDataApi(null,"هذا الفيديو غير موجود",404,404);
         }
 
-        $comments = Comment::where('video_part_id','=',$id)->latest()->paginate(5);
+        $comments = Comment::where('video_part_id','=',$id)->latest()->paginate(4);
+        $comments = CommentResource::collection($comments)->response()->getData(true);
 
-        return self::returnResponseDataApi(CommentResource::collection($comments),"تم ارسال جميع التعليقات المتعلقه بالفيديو",200);
+        return response()->json(['comments' => $comments, 'message' => "تم ارسال جميع التعليقات المتعلقه بالفيديو", 'code' => 200],200);
 
     }
 }
