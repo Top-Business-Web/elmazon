@@ -53,4 +53,5 @@
 <script>
     $('.dropify').dropify()
 </script>
+<!-- fix -->
 <?php /**PATH C:\laragon\www\students\resources\views/admin/videopart/parts/edit.blade.php ENDPATH**/ ?>

@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\SeasonController;
 use App\Http\Controllers\Admin\SubjectClassController;
 use App\Http\Controllers\Admin\TermController;
-
+use App\Http\Controllers\Admin\AudioController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\VideoPartController;
 
@@ -60,6 +60,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     ##### Video Parts #####
     Route::resource('videosParts', VideoPartController::class);
+
+    #### Audio ####
+    Route::resource('audio', AudioController::class);
 
     #### Auth ####
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
