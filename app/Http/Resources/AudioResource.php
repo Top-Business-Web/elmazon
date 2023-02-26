@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OnlineExamResource extends JsonResource
+class AudioResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,13 +15,9 @@ class OnlineExamResource extends JsonResource
     public function toArray($request)
     {
         return [
-             'id' => $this->id,
-             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
-            'note' => $this->note,
-            'season_id' => $this->season_id,
-            'term_id' => $this->term_id,
-            'examable_type' => 	$this->examable_type,
-            'examable_id' => $this->examable_id,
+
+           'id' => $this->id,
+            'audio' => asset('audios/'. $this->audio),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
 
