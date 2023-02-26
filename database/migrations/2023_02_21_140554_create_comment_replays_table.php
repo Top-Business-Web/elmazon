@@ -19,8 +19,8 @@ class CreateCommentReplaysTable extends Migration
             $table->longText('audio')->nullable();
             $table->longText('image')->nullable();
             $table->enum('type',['text','audio','file']);
-            $table->unsignedBigInteger('student_id');
-            $table->unsignedBigInteger('teacher_id');
+            $table->unsignedBigInteger('student_id')->nullable();
+            $table->unsignedBigInteger('teacher_id')->nullable();
             $table->unsignedBigInteger('comment_id');
             $table->enum('user_type',['student','teacher'])->default('student');
             $table->timestamps();
