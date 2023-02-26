@@ -52,3 +52,4 @@
 <script>
     $('.dropify').dropify()
 </script>
+<!-- fix -->

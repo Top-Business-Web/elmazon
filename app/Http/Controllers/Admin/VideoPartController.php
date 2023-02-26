@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
+// fix
 class VideoPartController extends Controller
 {
     use PhotoTrait;
