@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\AudioController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\VideoPartController;
-
+use App\Http\Controllers\Admin\PdfFileUploadController;
 use App\Http\Controllers\Admin\UserController;
 
 use Illuminate\Support\Facades\Route;
@@ -64,6 +64,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Audio ####
     Route::resource('audio', AudioController::class);
 
+    #### Pdf ####
+    Route::resource('pdf', PdfFileUploadController::class);
     #### Auth ####
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
 });

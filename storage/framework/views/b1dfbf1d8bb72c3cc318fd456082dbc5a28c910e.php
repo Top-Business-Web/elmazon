@@ -1,11 +1,11 @@
 <div class="modal-body">
-    <form id="addForm" class="addForm" method="POST" action="<?php echo e(route('audio.store')); ?>">
+    <form id="addForm" class="addForm" method="POST" action="<?php echo e(route('pdf.store')); ?>" enctype="multipart/form-data">
         <?php echo csrf_field(); ?>
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم</label>
-                    <input type="file" class="form-control" name="audio">
+                    <input type="file" class="form-control" name="pdf">
                 </div>
                 <div class="col-md-6">
                     <label for="lesson" class="form-control-label">الدرس</label>
@@ -29,4 +29,4 @@
 <script>
     $('.dropify').dropify()
 </script>
-<?php /**PATH C:\laragon\www\students\resources\views/admin/audios/parts/create.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\students\resources\views/admin/pdf_file_uploads/parts/create.blade.php ENDPATH**/ ?>

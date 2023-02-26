@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم</label>
-                    <input type="text" class="form-control"value="<?php echo e($audio->audio); ?>" name="audio">
+                    <input type="file" class="form-control"value="<?php echo e($audio->audio); ?>" name="audio">
                 </div>
                 <div class="col-md-6">
                     <label for="lesson" class="form-control-label">الدرس</label>

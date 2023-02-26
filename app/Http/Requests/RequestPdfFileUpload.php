@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RequestAudio extends FormRequest
+class RequestPdfFileUpload extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,8 @@ class RequestAudio extends FormRequest
     public function rules()
     {
         return [
-            'audio' => 'required|mimes:mp3',
-            'lesson_id' => 'required',
+            'pdf' => 'required|',
+            'lesson_id' => 'required|mimes:pdf',
         ];
     }
 }

@@ -48,8 +48,16 @@ class AudioController extends Controller
 
     public function store(RequestAudio $request)
     {
-        $inputs = $request->all();
-        if(Audio::create($inputs)) {
+        $file = $request->file('audio');
+        $file->move('uploads/audios', $file->getClientOriginalName());
+        $file_name = $file->getClientOriginalName();
+
+        $insert = new Audio();
+        $insert->audio = $file_name;
+        $insert->lesson_id = $request->lesson_id;
+        $insert->save();
+
+        if($insert->save() == true ) {
             return response()->json(["status" => 200]);
         }
         else
@@ -74,12 +82,26 @@ class AudioController extends Controller
 
     public function update(Request $request, Audio $audio)
     {
-        if($audio->update($request->all())) {
-            return response()->json(["status" => 200]);
+        $audios = Audio::findOrFail($request->id);
+        if($request->has('audio')) {
+            if (file_exists('uploads/audio/' . $audios->audio)) {
+                unlink('uploads/audio/' . $audios->audio);
+            }
+            $file = $request->file('audio');
+            $file->move('uploads/audios', $file->getClientOriginalName());
+            $file_name = $file->getClientOriginalName();
+            $audios->audio = $file_name;
+        }
+
+        $audios->lesson_id = $request->lesson_id;
+        $audios->save();
+
+        if($audios->save() == true) {
+            return response()->json(['status' => 200]);
         }
         else
         {
-            return response()->json(["status" => 405]);
+            return response()->json(['status' => 405]);
         }
     }
 

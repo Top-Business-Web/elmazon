@@ -1,20 +1,20 @@
 <div class="modal-body">
-    <form id="addForm" class="addForm" method="POST" action="<?php echo e(route('audio.store')); ?>">
-        <?php echo csrf_field(); ?>
+    <form id="addForm" class="addForm" method="POST" action="{{ route('pdf.store') }}" enctype="multipart/form-data">
+        @csrf
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم</label>
-                    <input type="file" class="form-control" name="audio">
+                    <input type="file" class="form-control" name="pdf">
                 </div>
                 <div class="col-md-6">
                     <label for="lesson" class="form-control-label">الدرس</label>
                     <Select name="lesson_id" class="form-control user_choose">
                         <option selected disabled style="text-align: center">اختار درس</option>
-                        <?php $__currentLoopData = $lessons; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lesson): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($lesson->id); ?>"
-                                    style="text-align: center"><?php echo e($lesson->name_ar); ?></option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        @foreach($lessons as $lesson)
+                            <option value="{{ $lesson->id }}"
+                                    style="text-align: center">{{ $lesson->name_ar }}</option>
+                        @endforeach
                     </Select>
                 </div>
             </div>
@@ -29,4 +29,3 @@
 <script>
     $('.dropify').dropify()
 </script>
-<?php /**PATH C:\laragon\www\students\resources\views/admin/audios/parts/create.blade.php ENDPATH**/ ?>
