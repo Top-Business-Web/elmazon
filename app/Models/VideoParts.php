@@ -9,6 +9,9 @@ class VideoParts extends Model
 {
     use HasFactory;
 
+
+protected $guarded = [];
+
     public function exams()
     {
         return $this->morphMany(OnlineExam::class, 'examable');
