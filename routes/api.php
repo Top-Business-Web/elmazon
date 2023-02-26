@@ -43,5 +43,22 @@ Route::group(['prefix' => 'classes','middleware' => ['jwt']], function (){
 
 
     });
+
+    Route::group(['prefix' => 'lesson','middleware' => ['jwt']], function (){
+
+        Route::get('videos/{id}',[\App\Http\Controllers\Api\LessonController::class,'allVideos']);
+        Route::get('pdf/{id}',[\App\Http\Controllers\Api\LessonController::class,'allPdf']);
+        Route::get('audios/{id}',[\App\Http\Controllers\Api\LessonController::class,'allAudios']);
+
+        //video details
+        Route::get('video/details/{id}',[\App\Http\Controllers\Api\LessonController::class,'videoDetails']);
+        Route::get('video/comments/{id}',[\App\Http\Controllers\Api\LessonController::class,'videoComments']);
+        Route::post('video/add-comment/{id}',[\App\Http\Controllers\Api\Comment\CommentController::class,'videoAddComment']);
+        Route::post('comment/add-replay/{id}',[\App\Http\Controllers\Api\Comment\CommentController::class,'commentAddReplay']);
+
+
+    });
+
+
 });
 
