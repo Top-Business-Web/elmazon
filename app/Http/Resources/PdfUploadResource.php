@@ -17,6 +17,7 @@ class PdfUploadResource extends JsonResource
         return [
 
             'id' => $this->id,
+            'title' => lang() == 'ar' ? $this->title_ar : $this->title_en,
             'pdf' =>  asset('pdf/'. $this->pdf),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')

@@ -15,6 +15,8 @@ class CreatePdfFileUploadsTable extends Migration
     {
         Schema::create('pdf_file_uploads', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('title_ar');
+            $table->string('title_en');
             $table->longText('pdf');
             $table->unsignedBigInteger('lesson_id');
             $table->foreign('lesson_id')->references('id')->on('lessons')->cascadeOnUpdate()->cascadeOnDelete();
