@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreVideoPart;
-use App\Models\VideoPart;
+use App\Models\VideoParts;
 use App\Models\Lesson;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class VideoPartController extends Controller
     public function index(request $request)
     {
         if ($request->ajax()) {
-            $videoParts = VideoPart::get();
+            $videoParts = VideoParts::get();
             return Datatables::of($videoParts)
                 ->addColumn('action', function ($videoParts) {
                     return '
@@ -56,7 +56,7 @@ class VideoPartController extends Controller
         $file->move('uploads/videos', $file->getClientOriginalName());
         $file_name = $file->getClientOriginalName();
 
-        $insert = new VideoPart();
+        $insert = new VideoParts();
         $insert->video_link = $file_name;
         $insert->name_ar = $request->name_ar;
         $insert->name_en = $request->name_en;
@@ -78,7 +78,7 @@ class VideoPartController extends Controller
 
     // Edit start
 
-    public function edit(VideoPart $videosPart)
+    public function edit(VideoParts $videosPart)
     {
         $lessons = Lesson::get();
         return view('admin.videopart.parts.edit', compact('videosPart', 'lessons'));
@@ -88,9 +88,9 @@ class VideoPartController extends Controller
 
     // Update start
 
-    public function update(VideoPart $videoParts, StoreVideoPart $request)
+    public function update(VideoParts $videoParts, StoreVideoPart $request)
     {
-        $videoParts = VideoPart::findOrFail($request->id);
+        $videoParts = VideoParts::findOrFail($request->id);
         if($request->has('video_link')){
             if(file_exists('uploads/videos/'. $videoParts->video_link)){
                 unlink('uploads/videos/'. $videoParts->video_link);
@@ -125,7 +125,7 @@ class VideoPartController extends Controller
 
     public function destroy(Request $request)
     {
-        $videoParts = VideoPart::where('id' ,$request->id)->firstOrFail();
+        $videoParts = VideoParts::where('id' ,$request->id)->firstOrFail();
         $videoParts->delete();
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }

@@ -26,7 +26,7 @@ class ExamInstruction extends Model
 
     public function video_part(){
 
-        return $this->belongsTo(VideoPart::class,'video_part_id','id');
+        return $this->belongsTo(VideoParts::class,'video_part_id','id');
     }
 
     public function subject_class(){
