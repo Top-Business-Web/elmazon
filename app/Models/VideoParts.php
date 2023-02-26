@@ -9,14 +9,19 @@ class VideoParts extends Model
 {
     use HasFactory;
 
-//    protected $guarded = [];
 
-    protected $fillable = [
-        'name_ar',
-        'name_en',
-        'note',
-        'lesson_id',
-        'video_link',
-        'video_time'
-    ];
+protected $guarded = [];
+
+    public function exams()
+    {
+        return $this->morphMany(OnlineExam::class, 'examable');
+    }
+
+    //start instruction for exams
+    public function instruction()
+    {
+        return $this->morphOne(ExamInstruction::class, 'examable');
+    }
+
+
 }

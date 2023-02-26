@@ -19,8 +19,10 @@ class LessonResource extends JsonResource
             'id' => $this->id,
             'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
              'note' => $this->note,
+             'videos_count' => 4,
+             'videos_time' => 120,
             'created_at' => $this->created_at->format('Y-m-d'),
-            'updated_at' => $this->created_at->format('Y-m-d')
+            'updated_at' => $this->created_at->format('Y-m-d'),
 
         ];
     }

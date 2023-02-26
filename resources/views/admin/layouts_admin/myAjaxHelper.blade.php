@@ -248,7 +248,7 @@
                     if (data.status === 200) {
                         $("#dismiss_delete_modal")[0].click();
                         $('#dataTable').DataTable().ajax.reload();
-                        toastr.success('Deleted Successfully')
+                        toastr.success('تم الحذف بنجاح')
                     } else {
                         $("#dismiss_delete_modal")[0].click();
                         toastr.error('Something went wrong ..');

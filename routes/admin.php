@@ -7,8 +7,12 @@ use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\SeasonController;
 use App\Http\Controllers\Admin\SubjectClassController;
 use App\Http\Controllers\Admin\TermController;
+
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\VideoPartController;
+
+use App\Http\Controllers\Admin\UserController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,6 +39,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Country ####
     Route::resource('countries', CountryController::class);
+
+    #### Users ####
+    Route::resource('users', UserController::class);
 
     #### Season ####
     Route::resource('seasons', SeasonController::class);
