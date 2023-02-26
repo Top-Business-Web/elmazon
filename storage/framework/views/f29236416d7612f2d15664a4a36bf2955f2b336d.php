@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 <!-- FAVICON -->
-<link rel="shortcut icon" type="image/x-icon" href="" />
+<link rel="shortcut icon" type="image/x-icon" href="<?php echo e(asset('assets/admin/images/logo-mazon.png')); ?>" />
 
 <!-- TITLE -->
 <title><?php echo $__env->yieldContent('title'); ?></title>

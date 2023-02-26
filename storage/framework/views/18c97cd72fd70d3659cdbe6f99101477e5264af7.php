@@ -1,8 +1,10 @@
+
+
 <?php $__env->startSection('title'); ?>
-    اقسام الفيديو
+    الطلاب
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('page_name'); ?>
-    قسم الفيديو
+    الطلاب
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
 
@@ -15,7 +17,7 @@
                         <button class="btn btn-secondary btn-icon text-white addBtn">
 									<span>
 										<i class="fe fe-plus"></i>
-									</span> أضافة
+									</span> اضافة طالب
                         </button>
                     </div>
                 </div>
@@ -27,10 +29,8 @@
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">الاسم</th>
-                                <th class="min-w-50px">ملاحظة</th>
-                                <th class="min-w-50px">الدرس</th>
-                                <th class="min-w-50px">لينك الفيديو</th>
-                                <th class="min-w-50px">وقت الفيديو</th>
+                                <th class="min-w-50px">الكود</th>
+                                <th class="min-w-50px">الهاتف</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -46,21 +46,20 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">حذف</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">حذف طالب</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <input id="delete_id" name="id" type="hidden">
-                        <p>هل أنت متأكد من عملية الحذف<span id="title" class="text-danger"></span></p>
+                        <p>هل متاكد من حذف<span id="title" class="text-danger"></span></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_delete_modal">
-                            أغلاق
+                            اغلاق
                         </button>
-                        <button type="button" class="btn btn-danger"
-                                id="delete_btn">حذف</button>
+                        <button type="button" class="btn btn-danger" id="delete_btn">حذف</button>
                     </div>
                 </div>
             </div>
@@ -68,11 +67,11 @@
         <!-- MODAL CLOSED -->
 
         <!-- Create Or Edit Modal -->
-        <div class="modal fade bd-example-modal-lg" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
+                <div class="modal-content ">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">اقسام الفيديو</h5>
+                        <h5 class="modal-title" id="example-Modal3">الطلاب</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -91,26 +90,22 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'name_ar', name: 'name_ar'},
-            {data: 'note', name: 'note'},
-            {data: 'lesson_id', name: 'lesson_id'},
-            {data: 'video_link', name: 'video_link'},
-            {data: 'video_time', name: 'video_time'},
+            {data: 'name', name: 'name'},
+            {data: 'code', name: 'code'},
+            {data: 'phone', name: 'phone'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
-        showData('<?php echo e(route('videosParts.index')); ?>', columns);
+        showData('<?php echo e(route('users.index')); ?>', columns);
         // Delete Using Ajax
-        destroyScript('<?php echo e(route('videosParts.destroy',':id')); ?>');
+        destroyScript('<?php echo e(route('users.destroy',':id')); ?>');
         // Add Using Ajax
-        showAddModal('<?php echo e(route('videosParts.create')); ?>');
+        showAddModal('<?php echo e(route('users.create')); ?>');
         addScript();
         // Add Using Ajax
-        showEditModal('<?php echo e(route('videosParts.edit',':id')); ?>');
+        showEditModal('<?php echo e(route('users.edit',':id')); ?>');
         editScript();
     </script>
 <?php $__env->stopSection(); ?>
 
-<!-- fix -->
 
-
-<?php echo $__env->make('Admin/layouts_admin/master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\students\resources\views/admin/videopart/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('Admin/layouts_admin/master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\students\resources\views/admin/users/index.blade.php ENDPATH**/ ?>
