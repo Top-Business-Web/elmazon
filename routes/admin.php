@@ -2,13 +2,17 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CountryController;
-
 use App\Http\Controllers\Admin\LessonController;
-
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\SeasonController;
 use App\Http\Controllers\Admin\SubjectClassController;
 use App\Http\Controllers\Admin\TermController;
+
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\VideoPartController;
+
+use App\Http\Controllers\Admin\UserController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,11 +34,14 @@ Route::group(['prefix' => 'admin'], function () {
 
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
-    Route::get('/', [MainController::class,'index'])->name('adminHome');
+    Route::get('/', [MainController::class, 'index'])->name('adminHome');
 
 
     #### Country ####
     Route::resource('countries', CountryController::class);
+
+    #### Users ####
+    Route::resource('users', UserController::class);
 
     #### Season ####
     Route::resource('seasons', SeasonController::class);
@@ -48,8 +55,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Lesson ####
     Route::resource('lessons', LessonController::class);
 
+    #### Notification ####
+    Route::resource('notifications', NotificationController::class);
+
+    ##### Video Parts #####
+    Route::resource('videosParts', VideoPartController::class);
+
     #### Auth ####
-    Route::get('logout', [AuthController::class,'logout'])->name('admin.logout');
+    Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
 });
 
 

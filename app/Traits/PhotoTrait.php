@@ -2,12 +2,21 @@
 
 namespace App\Traits;
 
+use Buglinjo\LaravelWebp\Exceptions\CwebpShellExecutionFailed;
+use Buglinjo\LaravelWebp\Exceptions\DriverIsNotSupportedException;
+use Buglinjo\LaravelWebp\Exceptions\ImageMimeNotSupportedException;
 use Buglinjo\LaravelWebp\Webp;
 use Illuminate\Support\Facades\File;
 
 Trait  PhotoTrait
 {
-    function saveImage($photo,$folder,$type = 'image',$quality_ratio = 90){
+    /**
+     * @throws CwebpShellExecutionFailed
+     * @throws ImageMimeNotSupportedException
+     * @throws DriverIsNotSupportedException
+     */
+    function saveImage($photo, $folder, $type = 'image', $quality_ratio = 90): string
+    {
 
         // to save photos
         if ($type == 'image' || $type == null){
@@ -25,4 +34,5 @@ Trait  PhotoTrait
         }
         return $file_name;
     }
+
 }

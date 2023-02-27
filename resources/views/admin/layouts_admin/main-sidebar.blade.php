@@ -2,10 +2,10 @@
 <aside class="app-sidebar">
     <div class="side-header">
         <a class="header-brand1" href="#">
-            <img src="" class="header-brand-img desktop-logo" alt="logo">
-            <img src="" class="header-brand-img toggle-logo" alt="logo">
-            <img src="" class="header-brand-img light-logo" alt="logo">
-            <img src="" class="header-brand-img light-logo1" alt="logo">
+            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img desktop-logo" alt="logo">
+            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img toggle-logo" alt="logo">
+            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img light-logo" alt="logo">
+            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img light-logo1" alt="logo">
         </a>
         <!-- LOGO -->
     </div>
@@ -73,7 +73,7 @@
         </li>
 
         <li class="slide">
-            <a class="side-menu__item" href="#">
+            <a class="side-menu__item" href="{{ route('users.index') }}">
                 <i class="fe fe-zap side-menu__icon"></i>
                 <span class="side-menu__label">الطلاب</span>
             </a>
@@ -95,9 +95,16 @@
         </li>
 
         <li class="slide">
-            <a class="side-menu__item" href="#">
+            <a class="side-menu__item" href="{{ route('notifications.index') }}">
                 <i class="icon icon-handbag side-menu__icon"></i>
                 <span class="side-menu__label">الاشعارات</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('videosParts.index') }}">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">اقسام الفيديوهات</span>
             </a>
         </li>
 
