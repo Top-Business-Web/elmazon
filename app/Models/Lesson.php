@@ -16,10 +16,6 @@ class Lesson extends Model
         return $this->morphMany(OnlineExam::class, 'examable');
     }
 
-    //start instruction for exams
-    public function instruction()
-    {
-        return $this->morphOne(ExamInstruction::class, 'examable');
-    }
+
 
 }

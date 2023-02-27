@@ -19,7 +19,10 @@ class CreateExamInstructionsTable extends Migration
             $table->integer('trying_number');
             $table->integer('number_of_question');
             $table->string('quiz_minute');
-            $table->morphs('examable');
+            $table->unsignedBigInteger('all_exam_id')->nullable();
+            $table->unsignedBigInteger('online_exam_id')->nullable();
+            $table->foreign('all_exams')->references('id')->on('all_exam_id')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('online_exam_id')->references('id')->on('online_exams')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

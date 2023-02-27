@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AudioResource;
 use App\Http\Resources\CommentResource;
+use App\Http\Resources\OnlineExamResource;
 use App\Http\Resources\PdfUploadResource;
 use App\Http\Resources\VideoPartResource;
 use App\Models\Audio;
@@ -26,8 +27,9 @@ class LessonController extends Controller{
         }
 
         $videos = VideoParts::where('lesson_id','=',$id)->get();
-
-        return self::returnResponseDataApi(VideoPartResource::collection($videos),"تم ارسال جميع الفيديوهات التابعه للدرس بنجاح ",200);
+        $videos = VideoPartResource::collection($videos);
+        $exams =  OnlineExamResource::collection($lesson->exams);
+        return self::returnResponseDataApi(compact('videos','exams'),"تم ارسال جميع الفيديوهات التابعه للدرس بنجاح ",200);
 
     }
 
