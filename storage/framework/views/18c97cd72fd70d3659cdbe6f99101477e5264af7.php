@@ -1,4 +1,4 @@
-
+    
 
 <?php $__env->startSection('title'); ?>
     الطلاب
@@ -104,6 +104,11 @@
         // Add Using Ajax
         showEditModal('<?php echo e(route('users.edit',':id')); ?>');
         editScript();
+
+
+        // Add Using Ajax
+        showEdit('<?php echo e(route('users.show',':id')); ?>');
+        edit2();
     </script>
 <?php $__env->stopSection(); ?>
 

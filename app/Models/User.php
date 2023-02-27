@@ -35,6 +35,8 @@ class User extends Authenticatable implements JWTSubject
     ];
 
 
+
+
     public function season(){
 
         return $this->belongsTo(Season::class,'season_id','id');

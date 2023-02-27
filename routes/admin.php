@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\VideoPartController;
 use App\Http\Controllers\Admin\PdfFileUploadController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\QuestionController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Users ####
     Route::resource('users', UserController::class);
+    Route::post('subscr_renew', [UserController::class, 'subscr_renew'])->name('subscr_renew');
 
     #### Season ####
     Route::resource('seasons', SeasonController::class);
@@ -66,6 +68,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Pdf ####
     Route::resource('pdf', PdfFileUploadController::class);
+
+    #### Question ####
+    Route::resource('questions', QuestionController::class);
+    Route::get('examble_type', [QuestionController::class, 'examble_type'])->name('examble_type');
+
     #### Auth ####
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
 });
