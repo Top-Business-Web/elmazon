@@ -23,10 +23,9 @@ class AllExam extends Model
     }
 
 
-    //start instruction for exams
-    public function instruction()
-    {
-        return $this->morphOne(ExamInstruction::class, 'examable');
+    public function instruction(){
+
+        return $this->hasOne(ExamInstruction::class,'all_exam_id', 'id');
     }
 
 }
