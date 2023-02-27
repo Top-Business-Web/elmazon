@@ -24,6 +24,8 @@ Route::group(['prefix' => 'auth'], function (){
     Route::get('communication',[AuthController::class,'communication']);
     Route::post('logout',[AuthController::class,'logout'])->middleware('jwt');
     Route::get('getProfile',[AuthController::class,'getProfile'])->middleware('jwt');
+    Route::post('add-suggest',[App\Http\Controllers\Api\Auth\AuthController::class,'addSuggest'])->middleware('jwt');
+    Route::get('all-notifications',[App\Http\Controllers\Api\Auth\AuthController::class,'allNotifications'])->middleware('jwt');
 
 });
 

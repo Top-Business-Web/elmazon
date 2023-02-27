@@ -17,8 +17,10 @@ class CreatePapelSheetExamsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name_ar');
             $table->string('name_en');
+            $table->date('from');
+            $table->date('to');
+            $table->enum('status',['open','closed'])->default('open');
             $table->longText('description')->nullable();
-            $table->date('date_exam');
             $table->unsignedBigInteger('season_id');
             $table->unsignedBigInteger('term_id');
             $table->timestamps();
