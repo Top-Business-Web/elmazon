@@ -14,12 +14,22 @@ class VideoPartResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        if($this->type == "video"){
+            $link = asset('videos/'. $this->link);
+        }elseif ($this->type == "audio"){
+
+            $link = asset('audios/'. $this->link);
+        }else{
+            $link = asset('pdf/'. $this->link);
+        }
         return [
 
             'id' => $this->id,
             'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'note' => $this->note ?? 'No notes',
-            'video_link' => asset('videos/'. $this->video_link),
+            'link' => $link,
+            'type' => $this->type,
             'video_time' => (int)$this->video_time,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
