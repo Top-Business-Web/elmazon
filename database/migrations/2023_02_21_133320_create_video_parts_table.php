@@ -15,12 +15,13 @@ class CreateVideoPartsTable extends Migration
     {
         Schema::create('video_parts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name_ar');
-            $table->string('name_en');
+            $table->string('name_ar')->nullable();
+            $table->string('name_en')->nullable();
             $table->text('note')->nullable();
             $table->unsignedBigInteger('lesson_id');
-            $table->longText('video_link');
-            $table->string('video_time');
+            $table->longText('link');
+            $table->enum('type',['video', 'pdf','audio']);
+            $table->string('video_time')->nullable();
             $table->timestamps();
             $table->foreign('lesson_id')->references('id')->on('lessons')->cascadeOnUpdate()->cascadeOnDelete();
         });
