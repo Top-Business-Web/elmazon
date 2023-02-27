@@ -17,10 +17,15 @@ class CreateNotificationsTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->text('body');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('season_id');
+            $table->unsignedBigInteger('term_id');
+            $table->unsignedBigInteger('papel_sheet_exam_id')->nullable();
+            $table->longText('image')->nullable();
+            $table->enum('type',['exam','papelSheet','notification'])->default('notification');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('term_id')->references('id')->on('terms')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('papel_sheet_exam_id')->references('id')->on('papel_sheet_exams')->cascadeOnUpdate()->cascadeOnDelete();
 
         });
     }

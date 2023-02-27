@@ -24,6 +24,8 @@ Route::group(['prefix' => 'auth'], function (){
     Route::get('communication',[AuthController::class,'communication']);
     Route::post('logout',[AuthController::class,'logout'])->middleware('jwt');
     Route::get('getProfile',[AuthController::class,'getProfile'])->middleware('jwt');
+    Route::post('add-suggest',[App\Http\Controllers\Api\Auth\AuthController::class,'addSuggest'])->middleware('jwt');
+    Route::get('all-notifications',[App\Http\Controllers\Api\Auth\AuthController::class,'allNotifications'])->middleware('jwt');
 
 });
 
@@ -43,5 +45,22 @@ Route::group(['prefix' => 'classes','middleware' => ['jwt']], function (){
 
 
     });
+
+    Route::group(['prefix' => 'lesson','middleware' => ['jwt']], function (){
+
+        Route::get('videos/{id}',[\App\Http\Controllers\Api\LessonController::class,'allVideos']);
+        Route::get('pdf/{id}',[\App\Http\Controllers\Api\LessonController::class,'allPdf']);
+        Route::get('audios/{id}',[\App\Http\Controllers\Api\LessonController::class,'allAudios']);
+
+        //video details
+        Route::get('video/details/{id}',[\App\Http\Controllers\Api\LessonController::class,'videoDetails']);
+        Route::get('video/comments/{id}',[\App\Http\Controllers\Api\LessonController::class,'videoComments']);
+        Route::post('video/add-comment/{id}',[\App\Http\Controllers\Api\Comment\CommentController::class,'videoAddComment']);
+        Route::post('comment/add-replay/{id}',[\App\Http\Controllers\Api\Comment\CommentController::class,'commentAddReplay']);
+
+
+    });
+
+
 });
 

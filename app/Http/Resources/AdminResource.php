@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class AdminResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,18 +19,9 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'phone' => $this->phone,
-            'father_phone' => $this->father_phone,
             'image' => $this->image != null ? asset('/users/'.$this->image) : asset('/default/avatar.jpg'),
-            'user_status' => $this->user_status,
-            'code' => $this->code,
-            'date_start_code' => $this->date_start_code,
-            'date_end_code' => $this->date_end_code,
-            'country' => new CountryResource($this->country),
-            'token' => 'Bearer ' . $this->token,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
-
         ];
     }
 }

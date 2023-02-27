@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAudioTable extends Migration
+class CreateSuggestionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateAudioTable extends Migration
      */
     public function up()
     {
-        Schema::create('audio', function (Blueprint $table) {
+        Schema::create('suggestions', function (Blueprint $table) {
+
             $table->bigIncrements('id');
-            $table->longText('audio');
-            $table->unsignedBigInteger('lesson_id');
-            $table->foreign('lesson_id')->references('id')->on('lessons')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('suggestion');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+
         });
     }
 
@@ -29,6 +31,6 @@ class CreateAudioTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('audio');
+        Schema::dropIfExists('suggestions');
     }
 }

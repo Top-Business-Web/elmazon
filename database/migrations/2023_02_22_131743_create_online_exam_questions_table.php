@@ -19,7 +19,6 @@ class CreateOnlineExamQuestionsTable extends Migration
             $table->unsignedBigInteger('all_exam_id')->nullable();
             $table->unsignedBigInteger('question_id');
             $table->timestamps();
-
             $table->foreign('all_exam_id')->references('id')->on('all_exams')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('online_exam_id')->references('id')->on('online_exams')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('question_id')->references('id')->on('questions')->cascadeOnUpdate()->cascadeOnDelete();
