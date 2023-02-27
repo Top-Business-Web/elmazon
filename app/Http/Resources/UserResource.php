@@ -26,6 +26,7 @@ class UserResource extends JsonResource
             'code' => $this->code,
             'date_start_code' => $this->date_start_code,
             'date_end_code' => $this->date_end_code,
+            'country' => new CountryResource($this->country),
             'token' => 'Bearer ' . $this->token,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
