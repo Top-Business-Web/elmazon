@@ -11,7 +11,6 @@ class Notification extends Model
 
     protected $guarded = [];
 
-
     public function term(){
 
         return $this->belongsTo(Term::class,'term_id','id');
@@ -26,4 +25,5 @@ class Notification extends Model
 
         return $this->belongsTo(PapelSheetExam::class,'papel_sheet_exam_id','id');
     }
+
 }
