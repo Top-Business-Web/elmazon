@@ -27,7 +27,9 @@ class VideoPartResource extends JsonResource
         }
 
         if($this->watch){
-           $watched =  $this->watch->status == 'opened' || 'watched' ? 'opened' : 'closed';
+            if($this->watch->status == 'opened' || 'watched'){
+                $watched = 'opened';
+            }
         }else{
             $watched = 'lock';
         }
