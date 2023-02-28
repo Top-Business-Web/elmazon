@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Models\VideoWatch;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class VideoPartResource extends JsonResource
 {
@@ -30,6 +32,9 @@ class VideoPartResource extends JsonResource
             'note' => $this->note ?? 'No notes',
             'link' => $link,
             'type' => $this->type,
+            'ordered' => $this->ordered,
+            'status' => VideoWatch::where('user_id','=',Auth::guard('user-api')->id())->where('video_part_id','=',$this->id)
+                ->where('status','=','watched')->orWhere('status','=','opened') ? 'opened' : 'closed',
             'video_time' => (int)$this->video_time,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),

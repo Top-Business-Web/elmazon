@@ -17,9 +17,8 @@ class CreateVideoWatchesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('video_part_id');
-            $table->enum('status',['watched','un_watched']);
+            $table->enum('status',['opened','watched']);
             $table->timestamps();
-
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('video_part_id')->references('id')->on('video_parts')->cascadeOnUpdate()->cascadeOnDelete();
 

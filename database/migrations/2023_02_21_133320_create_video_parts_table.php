@@ -17,6 +17,7 @@ class CreateVideoPartsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name_ar')->nullable();
             $table->string('name_en')->nullable();
+            $table->integer('ordered');
             $table->text('note')->nullable();
             $table->unsignedBigInteger('lesson_id');
             $table->longText('link');
