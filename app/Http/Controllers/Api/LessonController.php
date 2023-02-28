@@ -146,10 +146,13 @@ class LessonController extends Controller{
 
         $watched = VideoWatch::where('user_id','=',Auth::guard('user-api')->id())->where('video_part_id','=',$video->id)->first();
          $watched->update(['status' => $request->status]);
-       
 
 
-        $all_video_watches = VideoParts::select("id")->orderBy('ordered','ASC')->whereHas('watches')->get();
+
+        $all_video_watches = VideoParts::select("id")->orderBy('ordered','ASC')->whereHas('watches', function ($watches){
+            $watches->where('user_id','=',Auth::guard('user-api')->id());
+        })->get();
+
         $ids = [];
         foreach ($all_video_watches as $all_video_watch){
 
