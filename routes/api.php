@@ -58,6 +58,11 @@ Route::group(['prefix' => 'classes','middleware' => ['jwt']], function (){
         Route::post('video/add-comment/{id}',[\App\Http\Controllers\Api\Comment\CommentController::class,'videoAddComment']);
         Route::post('comment/add-replay/{id}',[\App\Http\Controllers\Api\Comment\CommentController::class,'commentAddReplay']);
 
+        //access videos
+        Route::post('{id}',[\App\Http\Controllers\Api\LessonController::class,'accessFirstVideo']);
+        Route::post('access-next-video/{id}',[\App\Http\Controllers\Api\LessonController::class,'accessNextVideo']);
+
+
 
     });
 

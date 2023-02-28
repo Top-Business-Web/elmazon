@@ -24,4 +24,11 @@ protected $guarded = [];
     }
 
 
+
+    public function watches()
+    {
+        return $this->hasMany(VideoWatch::class, 'video_part_id','id');
+    }
+
+
 }
