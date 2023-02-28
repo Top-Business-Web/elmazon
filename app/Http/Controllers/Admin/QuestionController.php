@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestQuestion;
+use App\Models\Answer;
 use App\Models\Lesson;
 use App\Models\Question;
 use App\Models\SubjectClass;
@@ -28,6 +29,7 @@ class QuestionController extends Controller
                                     data-id="' . $questions->id . '" data-title="' . $questions->question . '">
                                     <i class="fas fa-trash"></i>
                             </button>
+                            <button type="button" data-id="' . $questions->id . '" class="btn btn-pill btn-success-light editBtnAnswer">الاجابة</button>
                        ';
                 })
                 ->escapeColumns([])
@@ -92,6 +94,34 @@ class QuestionController extends Controller
     }
 
     // Store End
+
+    // Show Start
+
+    public function answer(Question $question)
+    {
+        return view('admin.questions.parts.answers', compact('question'));
+    }
+
+    // Show End
+
+    // Add Answer Start
+
+    public function addAnswer(Request $request, Answer $answer)
+    {
+        $inputs = $request->all();
+
+
+
+        if($answer->create($inputs)) {
+            return response()->json(['status' => 200]);
+        }
+        else
+        {
+            return response()->json(['status' => 405]);
+        }
+    }
+
+    // Add Answer End
 
     // Edit Start
 

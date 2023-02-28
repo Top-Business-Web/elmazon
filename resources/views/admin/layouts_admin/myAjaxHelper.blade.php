@@ -103,6 +103,8 @@
     }
 
 
+
+
     // show Add Modal
     function showAddModal(routeOfShow){
         $(document).on('click', '.addBtn', function () {
@@ -164,7 +166,7 @@
     }
 
     function showEdit(routeOfEdit){
-        $(document).on('click', '.editBtn1', function () {
+        $(document).on('click', '.editBtnAnswer', function () {
             var id = $(this).data('id')
             var url = routeOfEdit;
             url = url.replace(':id', id)

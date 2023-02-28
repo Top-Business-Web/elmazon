@@ -87,11 +87,45 @@
             </div>
         </div>
         <!-- Create Or Edit Modal -->
+
+        <!-- Create Or Edit Modal -->
+        <div class="modal fade bd-example-modal-lg" id="answerModal" data-backdrop="static" tabindex="-1" role="dialog"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="example-Modal3">جواب</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="answerModal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Create Or Edit Modal -->
     </div>
     <?php echo $__env->make('Admin/layouts_admin/myAjaxHelper', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('ajaxCalls'); ?>
     <script>
+
+        function showEdit(routeOfEdit){
+            $(document).on('click', '.editBtnAnswer', function () {
+                var id = $(this).data('id')
+                var url = routeOfEdit;
+                url = url.replace(':id', id)
+                $('#answerModal-body').html(loader)
+                $('#answerModal').modal('show')
+
+                setTimeout(function () {
+                    $('#answerModal-body').load(url)
+                }, 500)
+            })
+        }
+
         var columns = [
             {data: 'id', name: 'id'},
             {data: 'question', name: 'question'},
@@ -111,6 +145,10 @@
         // Add Using Ajax
         showEditModal('<?php echo e(route('questions.edit',':id')); ?>');
         editScript();
+
+        showEdit('<?php echo e(route('answer',':id')); ?>');
+        addScript();
+
     </script>
 <?php $__env->stopSection(); ?>
 
