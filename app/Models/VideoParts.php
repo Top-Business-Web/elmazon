@@ -31,4 +31,10 @@ protected $guarded = [];
     }
 
 
+    public function watch()
+    {
+        return $this->hasOne(VideoWatch::class, 'video_part_id','id');
+    }
+
+
 }
