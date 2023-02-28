@@ -111,7 +111,6 @@ class LessonController extends Controller{
             ]);
 
             return response()->json(['data' => $watch,'message' => 'Video opened now  ' . Auth::guard('user-api')->user()->name,'code' => 200]);
-
         }
 
     }
@@ -145,7 +144,13 @@ class LessonController extends Controller{
         }
 
         $watched = VideoWatch::where('user_id','=',Auth::guard('user-api')->id())->where('video_part_id','=',$video->id)->first();
-         $watched->update(['status' => $request->status]);
+        if($watched){
+            $watched->update(['status' => $request->status]);
+        }else{
+
+            return self::returnResponseDataApi(null,"يجب مشاهده الفيديو السابق اولا",500);
+
+        }
 
 
 
