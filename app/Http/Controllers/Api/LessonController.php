@@ -42,7 +42,6 @@ class LessonController extends Controller{
 
         $lesson = Lesson::where('id','=',$id)->first();
         if(!$lesson){
-
             return self::returnResponseDataApi(null,"هذا الدرس غير موجود",404,404);
         }
 
@@ -55,7 +54,6 @@ class LessonController extends Controller{
     public function allAudios($id){
         $lesson = Lesson::where('id','=',$id)->first();
         if(!$lesson){
-
             return self::returnResponseDataApi(null,"هذا الدرس غير موجود",404,404);
         }
 
@@ -70,10 +68,8 @@ class LessonController extends Controller{
 
         $video = VideoParts::where('id','=',$id)->first();
         if(!$video){
-
             return self::returnResponseDataApi(null,"هذا الفيديو غير موجود",404,404);
         }
-
         return self::returnResponseDataApi(new VideoPartResource($video),"تم ارسال تفاصيل الفيديو بنجاح",200);
 
     }
@@ -149,13 +145,19 @@ class LessonController extends Controller{
         }
 
         $watched = VideoWatch::where('user_id','=',Auth::guard('user-api')->id())->where('video_part_id','=',$video->id)->first();
-        $watched->update([
-         'status' => $request->status
-        ]);
+         $watched->update(['status' => $request->status]);
+       
 
+
+        $all_video_watches = VideoParts::select("id")->orderBy('ordered','ASC')->whereHas('watches')->get();
+        $ids = [];
+        foreach ($all_video_watches as $all_video_watch){
+
+            $ids[] = $all_video_watch->id;
+        }
         if(isset($watched)){
 
-            $next_video = VideoParts::where('lesson_id','=',$video->lesson_id)->where('id','<>',$id)->orderBy('ordered','ASC')->first();
+            $next_video = VideoParts::where('lesson_id','=',$video->lesson_id)->orderBy('ordered','ASC')->whereNotIn('id', $ids)->first();
             $next_video_watched = VideoWatch::where('user_id','=',Auth::guard('user-api')->id())->where('video_part_id','=',$next_video->id)->first();
             if(!$next_video_watched){
                 VideoWatch::create([
@@ -164,7 +166,6 @@ class LessonController extends Controller{
                 ]);
             }
         }else{
-
             return self::returnResponseDataApi(null,"Error in update",500);
         }
         return self::returnResponseDataApi(new VideoPartResource($next_video),"تم الوصول الي الفيديو التالي",200);
