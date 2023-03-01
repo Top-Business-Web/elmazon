@@ -164,13 +164,19 @@ class LessonController extends Controller{
         }
         if(isset($watched)){
             $next_video = VideoParts::where('lesson_id','=',$video->lesson_id)->orderBy('ordered','ASC')->whereNotIn('id',$ids)->first();
-            $next_video_watched = VideoWatch::where('user_id','=',Auth::guard('user-api')->id())->where('video_part_id','=',$next_video->id)->first();
-            if(!$next_video_watched){
-                VideoWatch::create([
-                    'user_id' => Auth::guard('user-api')->id(),
-                    'video_part_id' => $next_video->id,
-                ]);
+            if($next_video){
+                $next_video_watched = VideoWatch::where('user_id','=',Auth::guard('user-api')->id())->where('video_part_id','=',$next_video->id)->first();
+                if(!$next_video_watched){
+                    VideoWatch::create([
+                        'user_id' => Auth::guard('user-api')->id(),
+                        'video_part_id' => $next_video->id,
+                    ]);
+                }
+            }else{
+
+                return self::returnResponseDataApi(null,"تم الوصول للملف الاخير ولا يوجد اي ملفات اخري لفتحها",500);
             }
+
         }else{
             return self::returnResponseDataApi(null,"Error in update",500);
         }
