@@ -21,7 +21,7 @@ class Comment extends Model
         return $this->belongsTo(VideoParts::class,'video_part_id','id');
     }
 
-    public function replies(){
+    public function replays(){
 
         return $this->hasMany(CommentReplay::class,'comment_id','id');
     }
