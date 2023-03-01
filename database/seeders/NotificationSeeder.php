@@ -22,7 +22,6 @@ class NotificationSeeder extends Seeder
 
                 'title' => 'اشعار جديد',
                 'body' => 'يرجي متابعه الاجزاء القادمه من جزء الليزر',
-                'type' => 'notification',
                 'season_id' => Season::first()->id,
                 'term_id' => Term::first()->id,
             ]);
