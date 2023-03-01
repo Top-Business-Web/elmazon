@@ -147,7 +147,7 @@
         editScript();
 
         showEdit('<?php echo e(route('answer',':id')); ?>');
-        addScript();
+        addAnswer();
 
     </script>
 <?php $__env->stopSection(); ?>

@@ -73,7 +73,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::resource('questions', QuestionController::class);
     Route::get('examble_type', [QuestionController::class, 'examble_type'])->name('examble_type');
     Route::get('answer/{id}', [QuestionController::class, 'answer'])->name('answer');
-    Route::post('addAnswer', [QuestionController::class, 'addAnswer'])->name('addAnswer');
+    Route::post('addAnswer/{id}', [QuestionController::class, 'addAnswer'])->name('addAnswer');
 
     #### Auth ####
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');

@@ -11,8 +11,9 @@ class OnlineExam extends Model
 
     protected $guarded = [];
 
-    public function examable()
-    {
-        return $this->morphTo();
+
+    public function instruction(){
+
+        return $this->hasOne(ExamInstruction::class,'online_exam_id', 'id');
     }
 }

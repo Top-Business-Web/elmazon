@@ -97,8 +97,9 @@ class QuestionController extends Controller
 
     // Show Start
 
-    public function answer(Question $question)
+    public function answer($id)
     {
+        $question = Question::findOrFail($id);
         return view('admin.questions.parts.answers', compact('question'));
     }
 
@@ -106,19 +107,22 @@ class QuestionController extends Controller
 
     // Add Answer Start
 
-    public function addAnswer(Request $request, Answer $answer)
+    public function addAnswer(Request $request)
     {
-        $inputs = $request->all();
+        $answers = $request->answer;
 
+        foreach ($answers as $key=>$value) {
+            Answer::create([
+                'answer' => $value,
+                'question_id' => $request->question_id,
+                'answer_status' => ($request->answer_status == $key) ?'correct':'un_correct',
+                'answer_number' => $key
+            ]);
 
+        }
 
-        if($answer->create($inputs)) {
             return response()->json(['status' => 200]);
-        }
-        else
-        {
-            return response()->json(['status' => 405]);
-        }
+
     }
 
     // Add Answer End

@@ -149,7 +149,7 @@
         editScript();
 
         showEdit('{{ route('answer',':id') }}');
-        addScript();
+        addAnswer();
 
     </script>
 @endsection
