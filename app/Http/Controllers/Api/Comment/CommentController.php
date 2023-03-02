@@ -149,7 +149,7 @@ class CommentController extends Controller{
 
         $comment_replay = CommentReplay::create([
 
-            'comment' => $replay,
+            'comment' => $replay ?? null,
             'audio' => $audioUpload ?? null,
             'image' => $file ?? null,
             'type' => $request->type,
