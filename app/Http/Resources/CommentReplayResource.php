@@ -15,9 +15,8 @@ class CommentReplayResource extends JsonResource
     public function toArray($request)
     {
         return [
-
             'id' => $this->id,
-            'replay' => $this->comment,
+            'comment' => $this->comment,
             'audio' => $this->audio != null ? asset('comment_upload_file/'. $this->audio) : 'No audio',
             'image' => $this->image != null ? asset('comment_upload_file/'. $this->image) : 'No image',
             'user' => $this->student_id !== null ? new UserResource($this->student) : new AdminResource($this->teacher),
