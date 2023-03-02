@@ -21,7 +21,7 @@ class SectionSeeder extends Seeder
                 'section_name_ar' => $i . 'قاعه رقم ',
                 'section_name_en' => 'Section number ' . $i,
                 'address' => 'Address ' . $i,
-                'capacity' => 30,
+                'capacity' => 2,
             ]);
         }
 

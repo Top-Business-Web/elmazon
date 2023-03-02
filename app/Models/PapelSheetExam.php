@@ -28,4 +28,10 @@ class PapelSheetExam extends Model
 
         return $this->belongsTo(Term::class,'term_id','id');
     }
+
+
+    public function times(){
+
+        return $this->hasMany(PapelSheetExamTime::class,'papel_sheet_exam_id','id');
+    }
 }
