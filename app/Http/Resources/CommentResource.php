@@ -19,8 +19,8 @@ class CommentResource extends JsonResource
 
             'id' => $this->id,
             'comment' => $this->comment ?? 'No comment',
-            'audio' => $this->audio != null ? asset('comment_upload_file/'. $this->audio) : 'No audio',
-            'image' => $this->image != null ? asset('comment_upload_file/'. $this->image) : 'No image',
+            'audio' => $this->audio != null ? asset('comments_upload_file/'. $this->audio) : 'No audio',
+            'image' => $this->image != null ? asset('comments_upload_file/'. $this->image) : 'No image',
             'type' => $this->type,
             'user' => new UserResource($this->user),
             'replies' => CommentReplayResource::collection($this->replays),
