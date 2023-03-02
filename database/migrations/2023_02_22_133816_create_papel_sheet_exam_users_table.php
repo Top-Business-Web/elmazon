@@ -15,13 +15,15 @@ class CreatePapelSheetExamUsersTable extends Migration
     {
         Schema::create('papel_sheet_exam_users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->date('exam_date');
-            $table->time('exam_time');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('section_id');
             $table->unsignedBigInteger('papel_sheet_exam_id');
+            $table->unsignedBigInteger('papel_sheet_exam_time_id');
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('section_id')->references('id')->on('sections')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('papel_sheet_exam_id')->references('id')->on('papel_sheet_exams')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('papel_sheet_exam_time_id')->references('id')->on('papel_sheet_exam_times')->cascadeOnUpdate()->cascadeOnDelete();
 
         });
     }

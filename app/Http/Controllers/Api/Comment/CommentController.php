@@ -74,7 +74,7 @@ class CommentController extends Controller{
 
         $add_comment = Comment::create([
 
-            'comment' => $comment,
+            'comment' => $comment ?? null,
             'audio' => $audioUpload ?? null,
             'image' => $file ?? null,
             'type' => $request->type,
