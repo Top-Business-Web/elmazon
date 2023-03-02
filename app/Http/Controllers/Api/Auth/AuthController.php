@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\Auth;
+
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CommunicationResource;
 use App\Http\Resources\NotificationResource;
@@ -45,15 +46,15 @@ class AuthController extends Controller
                     ];
 
                     $code = collect($validator->errors())->flatten(1)[0];
-                    return self::returnResponseDataApi( null,isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+                    return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
                 }
-                return self::returnResponseDataApi(null,$validator->errors()->first(),422);
+                return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
 
-            $token = Auth::guard('user-api')->attempt(['code' => $request->code , 'password' => '123456','user_status' => 'active']);
+            $token = Auth::guard('user-api')->attempt(['code' => $request->code, 'password' => '123456', 'user_status' => 'active']);
 
             if (!$token) {
-                return self::returnResponseDataApi( null,"الطالب غير مفعل برجاء التواصل مع السيكرتاريه", 408);
+                return self::returnResponseDataApi(null, "الطالب غير مفعل برجاء التواصل مع السيكرتاريه", 408);
             }
             $user = Auth::guard('user-api')->user();
             $user['token'] = $token;
@@ -61,7 +62,7 @@ class AuthController extends Controller
 
         } catch (\Exception $exception) {
 
-            return self::returnResponseDataApi(null,$exception->getMessage(),500);
+            return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
     }
 
@@ -97,9 +98,9 @@ class AuthController extends Controller
                 'suggestion' => $request->suggestion,
             ]);
 
-            if(isset($suggestion)){
+            if (isset($suggestion)) {
 
-                return self::returnResponseDataApi(new SuggestResource($suggestion),"تم تسجيل الاقتراح بنجاح", 200);
+                return self::returnResponseDataApi(new SuggestResource($suggestion), "تم تسجيل الاقتراح بنجاح", 200);
 
             }
         } catch (\Exception $exception) {
@@ -109,41 +110,44 @@ class AuthController extends Controller
     }
 
 
-    public function allNotifications(){
+    public function allNotifications()
+    {
 
         try {
 
-            $allNotification = Notification::whereHas('term', function ($term){
+            $allNotification = Notification::whereHas('term', function ($term) {
 
-                $term->where('status','=','active');
-            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+                $term->where('status', '=', 'active');
+            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
 
             return self::returnResponseDataApi(NotificationResource::collection($allNotification), "تم ارسال اشعارات المستخدم بنجاح", 200);
 
 
-        }catch (\Exception $exception) {
+        } catch (\Exception $exception) {
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
 
     }
 
-    public function communication(){
+    public function communication()
+    {
 
         try {
 
             $setting = Setting::first();
 
-            return self::returnResponseDataApi(new CommunicationResource($setting),"تم الحصول علي بيانات التواصل مع السكيرتاريه",200);
+            return self::returnResponseDataApi(new CommunicationResource($setting), "تم الحصول علي بيانات التواصل مع السكيرتاريه", 200);
 
-        }catch (\Exception $exception) {
+        } catch (\Exception $exception) {
 
-            return self::returnResponseDataApi(null,$exception->getMessage(),500);
+            return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
 
     }
 
-    public function getProfile(Request $request){
+    public function getProfile(Request $request)
+    {
 
         try {
 
@@ -152,14 +156,15 @@ class AuthController extends Controller
 
             return self::returnResponseDataApi(new UserResource($user), "تم الحصول علي بيانات الطالب بنجاح", 200);
 
-        }catch (\Exception $exception) {
+        } catch (\Exception $exception) {
 
-            return self::returnResponseDataApi(null,$exception->getMessage(),500);
+            return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
     }
 
 
-    public function papel_sheet_exam(Request $request,$id){
+    public function papel_sheet_exam(Request $request, $id)
+    {
 
         $rules = [
             'papel_sheet_exam_time_id' => 'required|exists:papel_sheet_exam_times,id',
@@ -183,95 +188,104 @@ class AuthController extends Controller
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
-        $papelSheetExam = PapelSheetExam::where('status','=','open')->whereHas('season', function ($season){
-            $season->where('season_id','=',auth()->guard('user-api')->user()->season_id);
-        })->whereHas('term', function ($term){$term->where('status','=','active');})->where('id','=',$id)->first();
+        $papelSheetExam = PapelSheetExam::whereHas('season', function ($season) {
+            $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
+        })->whereHas('term', function ($term) {
+            $term->where('status', '=', 'active');
+        })->where('id', '=', $id)->first();
 
-        if(!$papelSheetExam){
-            return self::returnResponseDataApi(null,"لا يوجد اي امتحان ورقي متاح لك",404);
+        if (!$papelSheetExam) {
+            return self::returnResponseDataApi(null, "لا يوجد اي امتحان ورقي متاح لك", 404);
         }
 
-        $ids = Section::query()->orderBy('id','ASC')->pluck('id')->toArray();;
-        foreach ($ids as $id){
-            $sectionCheck = Section::query()->where('id','=',$id)->first();
-            $CheckCountSectionExam = PapelSheetExamUser::where('section_id','=',$sectionCheck->id)
-                ->where('papel_sheet_exam_id','=',$papelSheetExam->id)->count();
+        $ids = Section::query()->orderBy('id', 'ASC')->pluck('id')->toArray();;
+        foreach ($ids as $id) {
+            $sectionCheck = Section::query()->where('id', '=', $id)->first();
+            $CheckCountSectionExam = PapelSheetExamUser::where('section_id', '=', $sectionCheck->id)
+                ->where('papel_sheet_exam_id', '=', $papelSheetExam->id)->count();
 
-            $userRegisterExamBefore = PapelSheetExamUser::where('papel_sheet_exam_id','=',$papelSheetExam->id)
-                ->where('user_id','=',Auth::guard('user-api')->id())->count();
+            $userRegisterExamBefore = PapelSheetExamUser::where('papel_sheet_exam_id', '=', $papelSheetExam->id)
+                ->where('user_id', '=', Auth::guard('user-api')->id())->count();
 
             $sumCapacityOfSection = Section::sum('capacity');
-            $countExamId = PapelSheetExamUser::where('papel_sheet_exam_id','=',$papelSheetExam->id)->count();
+            $countExamId = PapelSheetExamUser::where('papel_sheet_exam_id', '=', $papelSheetExam->id)->count();
 
-           if((int) $countExamId < (int) $sumCapacityOfSection){
-               if($CheckCountSectionExam < $sectionCheck->capacity){
-                   $section = Section::query()->where('id','=',$id)->first();
-                   if($CheckCountSectionExam == $sectionCheck->capacity){
-                       $section = Section::query()->skip($section->id)->first();//to get empty section after complete check
-                   }
-                   if(Auth::guard('user-api')->user()->center == 'out'){
-                       return self::returnResponseDataApi(null,"لا يمكنك التسجيل في الامتحان الورقي لانك خارج السنتر",407);
-                   }else{
+            if ((int)$countExamId < (int)$sumCapacityOfSection) {
+                if ($CheckCountSectionExam < $sectionCheck->capacity) {
+                    $section = Section::query()->where('id', '=', $id)->first();
+                    if ($CheckCountSectionExam == $sectionCheck->capacity) {
+                        $section = Section::query()->skip($section->id)->first();//to get empty section after complete check
+                    }
+                    if (Auth::guard('user-api')->user()->center == 'out') {
+                        return self::returnResponseDataApi(null, "لا يمكنك التسجيل في الامتحان الورقي لانك خارج السنتر", 407);
+                    } else {
 
-                       if ($userRegisterExamBefore > 0){
+                        if ($userRegisterExamBefore > 0) {
 
-                           return self::returnResponseDataApi(null,"تم التسجيل في الامتحان الورقي من قبل",408);
-                       }else{
+                            return self::returnResponseDataApi(null, "تم التسجيل في الامتحان الورقي من قبل", 408);
+                        } else {
 
-                           if(Carbon::now()->format('Y-m-d') <= $papelSheetExam->to){
-                               $papelSheetUser = PapelSheetExamUser::create([
-                                   'user_id' => Auth::guard('user-api')->id(),
-                                   'section_id' => $section->id,
-                                   'papel_sheet_exam_id' => $papelSheetExam->id,
-                                   'papel_sheet_exam_time_id' => $request->papel_sheet_exam_time_id,
-                               ]);
-                               return response()->json([
-                                   'data' => [
-                                       'exam' => new PapelSheetResource($papelSheetExam),
-                                       'message' => 'تم تسجيل بياناتك فى الامتحان',
-                                       'code' => 200
-                                   ],
-                                   'date_exam' => $papelSheetExam->date_exam,
-                                   'address' => $section->address,
-                                   'section_name' => lang() == 'ar' ?$section->section_name_ar : $section->section_name_en,
-                               ]);
-                           }else{
+                            if (Carbon::now()->format('Y-m-d') <= $papelSheetExam->to) {
+                                $papelSheetUser = PapelSheetExamUser::create([
+                                    'user_id' => Auth::guard('user-api')->id(),
+                                    'section_id' => $section->id,
+                                    'papel_sheet_exam_id' => $papelSheetExam->id,
+                                    'papel_sheet_exam_time_id' => $request->papel_sheet_exam_time_id,
+                                ]);
+                                return response()->json([
+                                    'data' => [
+                                        'exam' => new PapelSheetResource($papelSheetExam),
+                                        'message' => 'تم تسجيل بياناتك فى الامتحان',
+                                        'code' => 200
+                                    ],
+                                    'date_exam' => $papelSheetExam->date_exam,
+                                    'address' => $section->address,
+                                    'section_name' => lang() == 'ar' ? $section->section_name_ar : $section->section_name_en,
+                                ]);
+                            } else {
 
-                               return self::returnResponseDataApi(null,"!لقد تعديت اخر موعد لتسجيل الامتحان",412);
-                           }
-                       }
-                   }
-                   break;
-               }
-           }else{
-               return self::returnResponseDataApi(null,"تم امتلاء القاعات لهذا الامتحان برجاء التواصل مع السيكرتاريه",411);
-           }
+                                return self::returnResponseDataApi(null, "!لقد تعديت اخر موعد لتسجيل الامتحان", 412);
+                            }
+                        }
+                    }
+                    break;
+                }
+            } else {
+                return self::returnResponseDataApi(null, "تم امتلاء القاعات لهذا الامتحان برجاء التواصل مع السيكرتاريه", 411);
+            }
         }
 
     }
 
-    public function papel_sheet_exam_times($id){
+    public function papel_sheet_exam_show(){
 
-        $papelSheetExam = PapelSheetExam::where('id','=',$id)->first();
+        $papelSheetExam = PapelSheetExam::whereHas('season', function ($season) {
+            $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
+        })->whereHas('term', function ($term) {
+            $term->where('status', '=', 'active');
+        })->first();
 
-        if(!$papelSheetExam){
-            return self::returnResponseDataApi(null,"الامتحان الورقي غير موجود",404);
+        if (!$papelSheetExam) {
+            return self::returnResponseDataApi(null, "لا يوجد امتحان ورقي", 404);
         }
-        $times = PapelSheetExamTime::where('papel_sheet_exam_id','=',$papelSheetExam->id)->get();
-        $times = PapelSheetExamTimeResource::collection($times);
-        return self::returnResponseDataApi(compact('times'),"تم الحصول علي مواعيد الامتحان الورقي بنجاح",200);
+        if (Carbon::now()->format('Y-m-d') <= $papelSheetExam->to) {
+            return self::returnResponseDataApi(new PapelSheetResource($papelSheetExam), "اهلا بك في الامتحان الورقي", 200);
+
+        } else {
+            return self::returnResponseDataApi(null, "تم انتهاء هذا الامتحان", 405);
+        }
 
     }
-    public function logout(){
 
+    public function logout()
+    {
         try {
-
             auth()->guard('user-api')->logout();
             return self::returnResponseDataApi(null, "تم تسجيل الخروج بنجاح", 200);
 
-        }catch (\Exception $exception) {
+        } catch (\Exception $exception) {
 
-            return self::returnResponseDataApi(null,$exception->getMessage(),500);
+            return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
     }
 

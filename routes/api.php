@@ -28,7 +28,7 @@ Route::group(['prefix' => 'auth'], function (){
         Route::post('add-suggest',[App\Http\Controllers\Api\Auth\AuthController::class,'addSuggest']);
         Route::get('all-notifications',[App\Http\Controllers\Api\Auth\AuthController::class,'allNotifications']);
         Route::post('papel-sheet-exam/user/{id}',[App\Http\Controllers\Api\Auth\AuthController::class,'papel_sheet_exam']);
-        Route::get('papel-sheet-exam/times/{id}',[App\Http\Controllers\Api\Auth\AuthController::class,'papel_sheet_exam_times']);
+        Route::get('papel-sheet-exam/show',[App\Http\Controllers\Api\Auth\AuthController::class,'papel_sheet_exam_show']);
 
 
     });
