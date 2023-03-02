@@ -1,13 +1,15 @@
 <?php
 
 namespace App\Http\Controllers\Api\Auth;
-
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CommunicationResource;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\SuggestResource;
 use App\Http\Resources\UserResource;
 use App\Models\Notification;
+use App\Models\PapelSheetExam;
+use App\Models\PapelSheetExamUser;
+use App\Models\Section;
 use App\Models\Setting;
 use App\Models\SubjectClass;
 use App\Models\Suggestion;
@@ -15,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -134,7 +137,6 @@ class AuthController extends Controller
             return self::returnResponseDataApi(null,$exception->getMessage(),500);
         }
 
-
     }
 
     public function getProfile(Request $request){
@@ -150,6 +152,83 @@ class AuthController extends Controller
 
             return self::returnResponseDataApi(null,$exception->getMessage(),500);
         }
+    }
+
+
+    public function papel_sheet_exam(Request $request,$id){
+
+        $rules = [
+            'papel_sheet_exam_time_id' => 'required|exists:papel_sheet_exam_times,id',
+        ];
+        $validator = Validator::make($request->all(), $rules, [
+            'papel_sheet_exam_time_id.exists' => 405,
+        ]);
+
+        if ($validator->fails()) {
+
+            $errors = collect($validator->errors())->flatten(1)[0];
+            if (is_numeric($errors)) {
+
+                $errors_arr = [
+                    405 => 'Failed,papel_sheet_exam_time_id does not exist',
+                ];
+
+                $code = collect($validator->errors())->flatten(1)[0];
+                return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+            }
+            return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
+        }
+
+        $papelSheetExam = PapelSheetExam::where('status','=','open')->whereHas('season', function ($season){
+            $season->where('season_id','=',auth()->guard('user-api')->user()->season_id);
+        })->whereHas('term', function ($term){$term->where('status','=','active');})->where('id','=',$id)->first();
+
+        if(!$papelSheetExam){
+            return self::returnResponseDataApi(null,"لا يوجد اي امتحان ورقي متاح لك",404);
+        }
+
+        $ids = Section::query()->orderBy('id','ASC')->pluck('id')->toArray();;
+        foreach ($ids as $id){
+            $sectionCheck = Section::query()->where('id','=',$id)->first();
+            $CheckCountSectionExam = PapelSheetExamUser::where('section_id','=',$sectionCheck->id)
+                ->where('papel_sheet_exam_id','=',$papelSheetExam->id)->count();
+
+            $userRegisterExamBefore = PapelSheetExamUser::where('papel_sheet_exam_id','=',$papelSheetExam->id)
+                ->where('user_id','=',Auth::guard('user-api')->id())->count();
+
+            $sumCapacityOfSection = Section::sum('capacity');
+            $countExamId = PapelSheetExamUser::where('papel_sheet_exam_id','=',$papelSheetExam->id)->count();
+
+//            return $sumCapacityOfSection . " Count";
+            if($CheckCountSectionExam < $sectionCheck->capacity){
+                $section = Section::query()->where('id','=',$id)->first();
+                if($CheckCountSectionExam == $sectionCheck->capacity){
+                    $section = Section::query()->skip($section->id)->first();//to get empty section after complete check
+                }
+
+                if(Auth::guard('user-api')->user()->center == 'out'){
+                    return self::returnResponseDataApi(null,"لا يمكنك التسجيل في الامتحان الورقي لانك خارج السنتر",407);
+                }else{
+
+                    if($userRegisterExamBefore > 0){
+                        return self::returnResponseDataApi(null,"تم التسجيل في الامتحان الورقي من قبل",500);
+                    }elseif ($countExamId == $sumCapacityOfSection){
+
+                        return self::returnResponseDataApi(null,"تم امتلاء القاعات لهذا الامتحان الورقي برجاء التواصل مع السيكرتاريه",408);
+                    }else{
+                        $papelSheetUser = PapelSheetExamUser::create([
+                            'user_id' => Auth::guard('user-api')->id(),
+                            'section_id' => $section->id,
+                            'papel_sheet_exam_id' => $papelSheetExam->id,
+                            'papel_sheet_exam_time_id' => $request->papel_sheet_exam_time_id,
+                        ]);
+                        return self::returnResponseDataApi($papelSheetUser,"تم التسجيل في الامتحان الورقي بنجاح",200);
+                    }
+                }
+                break;
+            }
+        }
+
     }
 
 

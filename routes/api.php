@@ -22,12 +22,16 @@ Route::group(['prefix' => 'auth'], function (){
 
     Route::post('login',[AuthController::class,'login']);
     Route::get('communication',[AuthController::class,'communication']);
-    Route::post('logout',[AuthController::class,'logout'])->middleware('jwt');
-    Route::get('getProfile',[AuthController::class,'getProfile'])->middleware('jwt');
-    Route::post('add-suggest',[App\Http\Controllers\Api\Auth\AuthController::class,'addSuggest'])->middleware('jwt');
-    Route::get('all-notifications',[App\Http\Controllers\Api\Auth\AuthController::class,'allNotifications'])->middleware('jwt');
+    Route::middleware('jwt')->group(function (){
+        Route::post('logout',[AuthController::class,'logout']);
+        Route::get('getProfile',[AuthController::class,'getProfile']);
+        Route::post('add-suggest',[App\Http\Controllers\Api\Auth\AuthController::class,'addSuggest']);
+        Route::get('all-notifications',[App\Http\Controllers\Api\Auth\AuthController::class,'allNotifications']);
+        Route::post('papel-sheet-exam/user/{id}',[App\Http\Controllers\Api\Auth\AuthController::class,'papel_sheet_exam']);
 
-});
+    });
+
+  });
 
 
 Route::group(['prefix' => 'classes','middleware' => ['jwt']], function (){
