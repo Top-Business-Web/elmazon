@@ -19,7 +19,7 @@ class AdminResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'image' => $this->image != null ? asset('/users/'.$this->image) : asset('/default/avatar.jpg'),
+            'image' => $this->image != null ? asset('/users/'.$this->image) : asset('users/default/avatar.jpg'),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
         ];
