@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Api\Auth;
-
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CommunicationResource;
 use App\Http\Resources\NotificationResource;
@@ -132,9 +131,7 @@ class AuthController extends Controller
 
     public function communication()
     {
-
         try {
-
             $setting = Setting::first();
 
             return self::returnResponseDataApi(new CommunicationResource($setting), "تم الحصول علي بيانات التواصل مع السكيرتاريه", 200);
@@ -143,7 +140,6 @@ class AuthController extends Controller
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
-
     }
 
     public function getProfile(Request $request)
@@ -257,23 +253,20 @@ class AuthController extends Controller
 
     }
 
-    public function papel_sheet_exam_show(){
+    public function papel_sheet_exam_show()
+    {
 
         $papelSheetExam = PapelSheetExam::whereHas('season', function ($season) {
             $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
         })->whereHas('term', function ($term) {
             $term->where('status', '=', 'active');
-        })->first();
+        })->whereDate('to','>=',Carbon::now()->format('Y-m-d'))->first();
 
         if (!$papelSheetExam) {
             return self::returnResponseDataApi(null, "لا يوجد امتحان ورقي", 404);
         }
-        if (Carbon::now()->format('Y-m-d') <= $papelSheetExam->to) {
-            return self::returnResponseDataApi(new PapelSheetResource($papelSheetExam), "اهلا بك في الامتحان الورقي", 200);
 
-        } else {
-            return self::returnResponseDataApi(null, "تم انتهاء هذا الامتحان", 405);
-        }
+        return self::returnResponseDataApi(new PapelSheetResource($papelSheetExam), "اهلا بك في الامتحان الورقي", 200);
 
     }
 
