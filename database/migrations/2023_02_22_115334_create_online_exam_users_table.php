@@ -20,14 +20,13 @@ class CreateOnlineExamUsersTable extends Migration
             $table->unsignedBigInteger('answer_id');
             $table->unsignedBigInteger('online_exam_id')->nullable();
             $table->unsignedBigInteger('all_exam_id')->nullable();
-            $table->enum('status',['solved','delay','un_correct']);
+            $table->enum('status',['solved','leave','un_correct']);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('question_id')->references('id')->on('questions')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('answer_id')->references('id')->on('answers')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('all_exam_id')->references('id')->on('all_exams')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('online_exam_id')->references('id')->on('online_exams')->cascadeOnUpdate()->cascadeOnDelete();
-
         });
     }
 

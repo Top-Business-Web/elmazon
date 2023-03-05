@@ -64,5 +64,14 @@ Route::group(['prefix' => 'auth'], function (){
     });
 
 
+
+    Route::group(['prefix' => 'plans','middleware' => ['jwt']], function (){
+        Route::get('all',[\App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController::class,'all_plans']);
+        Route::get('oneDay',[\App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController::class,'plan_today']);
+
+
+    });
+
+
 });
 
