@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\MonthlyPlan;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\GetPlansByDayResource;
 use App\Http\Resources\MonthlyPlanResource;
 use App\Models\MonthlyPlan;
 use Illuminate\Http\Request;
@@ -50,7 +51,7 @@ class MonthlyPlanController extends Controller{
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
             $plans = MonthlyPlan::where('start','=',$request->date)->get();
-            return self::returnResponseDataApi(MonthlyPlanResource::collection($plans), "تم الحصول علي خطه هذا التاريخ بنجاح", 500);
+            return self::returnResponseDataApi(GetPlansByDayResource::collection($plans), "تم الحصول علي خطط هذا التاريخ بنجاح", 500);
         } catch (\Exception $exception) {
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
