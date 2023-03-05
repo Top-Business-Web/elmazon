@@ -17,8 +17,6 @@ class NotificationResource extends JsonResource{
             'id' => $this->id,
             'title' => $this->title,
             'body' => $this->body,
-            'papel_sheet' => new PapelSheetResource($this->papel_sheet),
-            'type' => $this->type,
             'image' => $this->image != null ? asset('/notification_image/'.$this->image) : 'No image',
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),

@@ -21,9 +21,5 @@ class Notification extends Model
         return $this->belongsTo(Season::class,'season_id','id');
     }
 
-    public function papel_sheet(){
-
-        return $this->belongsTo(PapelSheetExam::class,'papel_sheet_exam_id','id');
-    }
 
 }

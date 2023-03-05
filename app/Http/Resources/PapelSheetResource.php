@@ -21,7 +21,7 @@ class PapelSheetResource extends JsonResource
             'description' => $this->description,
             'from' => $this->from,
             'to' => $this->to,
-            'status' => $this->status,
+            'times' => PapelSheetExamTimeResource::collection($this->times),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
 

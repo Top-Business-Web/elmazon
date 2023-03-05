@@ -35,10 +35,7 @@ class UserSeeder extends Seeder
 
         }
 
-
-
        $country = Country::create([
-
            'name_ar' => 'الجيزه',
            'name_en' => 'Elgeza'
 
@@ -53,6 +50,7 @@ class UserSeeder extends Seeder
             'father_phone' => '1005717155',
             'image' => 'avatar.jpg',
             'user_status' => 'active',
+            'center' => 'in',
             'code' => rand(1,3000),
             'date_start_code' => '2022-02-20',
             'date_end_code' => '2022-07-20',
@@ -112,9 +110,6 @@ class UserSeeder extends Seeder
             'youtube_link' => 'https://www.youtube.com/'
 
         ]);
-
-
-
 
     }
 }
