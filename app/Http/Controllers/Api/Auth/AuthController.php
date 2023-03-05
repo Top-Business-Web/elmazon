@@ -267,7 +267,6 @@ class AuthController extends Controller
         }
 
         return self::returnResponseDataApi(new PapelSheetResource($papelSheetExam), "اهلا بك في الامتحان الورقي", 200);
-
     }
 
     public function logout()
