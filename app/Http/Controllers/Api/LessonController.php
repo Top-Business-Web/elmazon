@@ -94,14 +94,17 @@ class LessonController extends Controller{
 
         $lesson = Lesson::where('id','=',$id)->first();
         $video = VideoParts::where('lesson_id','=',$id)->orderBy('ordered','ASC')->first();
-        if(!$lesson){
 
+        if(!$lesson){
             return self::returnResponseDataApi(null,"هذا الدرس غير موجود",404,404);
         }
+        if(!$video){
+            return self::returnResponseDataApi(null,"لا يوجد قائمه فيديوهات لفتح اول فيديو",404,404);
 
+        }
         $watched = VideoWatch::where('user_id','=',Auth::guard('user-api')->id())->where('video_part_id','=',$video->id);
         if($watched->exists()){
-            return response()->json(['data' => null,'message' => 'Video watched with ' . Auth::guard('user-api')->user()->name . ' before','code' => 405]);
+            return response()->json(['data' => null,'message' => 'Video watched with ' . Auth::guard('user-api')->user()->name . ' before','code' => 200]);
 
         }else{
 

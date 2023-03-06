@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class OnlineExamQuestion extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function question(){
+
+        return $this->belongsTo(Question::class,'question_id','id');
+    }
+
+    public function online_exam(){
+
+        return $this->belongsTo(OnlineExam::class,'online_exam_id','id');
+    }
 }

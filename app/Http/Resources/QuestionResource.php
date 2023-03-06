@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OnlineExamResource extends JsonResource
+class QuestionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,14 +16,13 @@ class OnlineExamResource extends JsonResource
     {
         return [
 
-             'id' => $this->id,
-             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
-             'note' => $this->note,
-             'season_id' => $this->season_id,
-             'term_id' => $this->term_id,
+            'id' => $this->id,
+            'question' => $this->question,
+            'note' => $this->note ?? 'note',
+            'answers' => AnswerResource::collection($this->answers),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
-            'instruction' => new ExamInstructionResource($this->instruction),
+
         ];
     }
 }
