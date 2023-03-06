@@ -27,7 +27,7 @@ class CommentController extends Controller{
             'comment' => 'nullable',
             'type' => 'required|in:file,text,audio',
             'audio' => 'nullable',
-            'image' => 'nullable|mimes:jpg,png,jpeg|max:2048'
+            'image' => 'nullable|mimes:jpg,png,jpeg'
         ];
         $validator = Validator::make($request->all(), $rules, [
             'image.mimes' => 407,
@@ -102,7 +102,7 @@ class CommentController extends Controller{
             'replay' => 'nullable',
             'type' => 'required|in:file,text,audio',
             'audio' => 'nullable',
-            'image' => 'nullable|mimes:jpg,png,jpeg|max:2048',
+            'image' => 'nullable|mimes:jpg,png,jpeg',
         ];
         $validator = Validator::make($request->all(), $rules, [
             'image.mimes' => 407,
