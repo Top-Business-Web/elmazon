@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\MonthlyPlanController;
 use App\Http\Controllers\Admin\SuggestionController;
+use App\Http\Controllers\Admin\OnlineExamController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -73,6 +74,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Suggestion ####
     Route::resource('suggestions', SuggestionController::class);
+
+    #### Online Exam ####
+    Route::resource('onlineExam', OnlineExamController::class);
+    Route::get('examble_type', [OnlineExamController::class, 'examble_type'])->name('examble_type');
 
     #### Pdf ####
     Route::resource('pdf', PdfFileUploadController::class);

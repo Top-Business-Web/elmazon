@@ -16,4 +16,6 @@ class OnlineExam extends Model
 
         return $this->hasOne(ExamInstruction::class,'online_exam_id', 'id');
     }
+
+
 }

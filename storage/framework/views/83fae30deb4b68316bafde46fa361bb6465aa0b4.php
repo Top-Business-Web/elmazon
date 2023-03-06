@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title'); ?>
     اقسام الفيديو
 <?php $__env->stopSection(); ?>

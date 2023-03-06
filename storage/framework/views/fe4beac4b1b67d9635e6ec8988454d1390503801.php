@@ -10,15 +10,6 @@
         <div class="col-md-12 col-lg-12">
             <div class="card">
                 <div class="card-header">
-
-
-
-
-
-
-
-
-
                 <div class="card-body">
                     <div class="table-responsive">
                         <!--begin::Table-->
@@ -95,12 +86,6 @@
         showData('<?php echo e(route('suggestions.index')); ?>', columns);
         // Delete Using Ajax
         destroyScript('<?php echo e(route('suggestions.destroy',':id')); ?>');
-        // Add Using Ajax
-        showAddModal('<?php echo e(route('suggestions.create')); ?>');
-        addScript();
-        // Add Using Ajax
-        showEditModal('<?php echo e(route('suggestions.edit',':id')); ?>');
-        editScript();
     </script>
 <?php $__env->stopSection(); ?>
 
