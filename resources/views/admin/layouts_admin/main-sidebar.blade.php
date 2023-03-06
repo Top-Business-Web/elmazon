@@ -109,9 +109,9 @@
         </li>
 
         <li class="slide">
-            <a class="side-menu__item" href="{{ route('audio.index') }}">
+            <a class="side-menu__item" href="{{ route('monthlyPlans.index') }}">
                 <i class="icon icon-handbag side-menu__icon"></i>
-                <span class="side-menu__label">الصوتيات</span>
+                <span class="side-menu__label">الخطة الشهرية</span>
             </a>
         </li>
 

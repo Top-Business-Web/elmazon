@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\VideoPartController;
 use App\Http\Controllers\Admin\PdfFileUploadController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\MonthlyPlanController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -65,6 +66,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Audio ####
     Route::resource('audio', AudioController::class);
+
+    #### Monthly Plans ####
+    Route::resource('monthlyPlans', MonthlyPlanController::class);
 
     #### Pdf ####
     Route::resource('pdf', PdfFileUploadController::class);
