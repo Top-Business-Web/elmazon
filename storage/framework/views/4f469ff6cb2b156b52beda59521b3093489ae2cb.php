@@ -129,6 +129,13 @@
             </a>
         </li>
 
+        <li class="slide">
+            <a class="side-menu__item" href="<?php echo e(route('phoneCommunications.index')); ?>">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">الاتصالات الهاتفية</span>
+            </a>
+        </li>
+
 
         <li class="slide">
             <a class="side-menu__item" href="<?php echo e(route('pdf.index')); ?>">
