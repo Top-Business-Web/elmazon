@@ -21,8 +21,6 @@ class OnlineExamResource extends JsonResource
              'note' => $this->note,
              'season_id' => $this->season_id,
              'term_id' => $this->term_id,
-//           'examable_type' => 	$this->examable_type,
-//           'examable_id' => $this->examable_id,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
             'instruction' => new ExamInstructionResource($this->instruction),

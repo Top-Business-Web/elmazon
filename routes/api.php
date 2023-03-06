@@ -69,9 +69,14 @@ Route::group(['prefix' => 'auth'], function (){
         Route::get('all',[\App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController::class,'all_plans']);
         Route::get('oneDay',[\App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController::class,'plan_today']);
 
-
     });
 
+
+    Route::group(['prefix' => 'video','middleware' => ['jwt']], function (){
+        Route::get('onlineExam/{id}/questions',[\App\Http\Controllers\Api\Question\QuestionController::class,'all_questions_by_online_exam']);
+        Route::post('onlineExam/{id}/exam',[\App\Http\Controllers\Api\Question\QuestionController::class,'online_exam_by_user']);
+
+    });
 
 });
 

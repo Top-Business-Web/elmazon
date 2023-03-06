@@ -269,8 +269,8 @@ class AuthController extends Controller
         return self::returnResponseDataApi(new PapelSheetResource($papelSheetExam), "اهلا بك في الامتحان الورقي", 200);
     }
 
-    public function logout()
-    {
+    public function logout(){
+
         try {
             auth()->guard('user-api')->logout();
             return self::returnResponseDataApi(null, "تم تسجيل الخروج بنجاح", 200);
@@ -280,6 +280,4 @@ class AuthController extends Controller
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
     }
-
-
 }
