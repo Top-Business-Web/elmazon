@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\MonthlyPlanController;
 use App\Http\Controllers\Admin\SuggestionController;
 use App\Http\Controllers\Admin\OnlineExamController;
 use App\Http\Controllers\Admin\PhoneCommunicationController;
+use App\Http\Controllers\Admin\SliderController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -82,6 +83,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Phone Communications ####
     Route::resource('phoneCommunications', PhoneCommunicationController::class);
+
+    #### Slider ####
+    Route::resource('slider', SliderController::class);
 
     #### Pdf ####
     Route::resource('pdf', PdfFileUploadController::class);

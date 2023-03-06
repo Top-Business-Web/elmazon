@@ -30,14 +30,14 @@
         <li class="slide">
             <a class="side-menu__item" href="{{ route('seasons.index') }}">
                 <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">{{ trans('admin.seasons') }}</span>
+                <span class="side-menu__label">الفصول</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('subjectsClasses.index') }}">
                 <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">{{ trans('admin.subject_class') }}</span>
+                <span class="side-menu__label">فئة الموضوغ</span>
             </a>
         </li>
 
@@ -46,14 +46,14 @@
         <li class="slide">
             <a class="side-menu__item" href="{{ route('terms.index') }}">
                 <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">{{ trans('admin.term') }}</span>
+                <span class="side-menu__label">الترم</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('lessons.index') }}">
                 <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">{{ trans('admin.lesson') }}</span>
+                <span class="side-menu__label">الدرس</span>
             </a>
         </li>
 
@@ -135,6 +135,13 @@
                 <span class="side-menu__label">الاتصالات الهاتفية</span>
             </a>
         </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('slider.index') }}">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">سلايدر</span>
+            </a>
+            </li>
 
 
         <li class="slide">
