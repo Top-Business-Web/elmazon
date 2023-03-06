@@ -35,6 +35,8 @@ class User extends Authenticatable implements JWTSubject
     ];
 
 
+
+
     public function season(){
 
         return $this->belongsTo(Season::class,'season_id','id');
@@ -44,6 +46,11 @@ class User extends Authenticatable implements JWTSubject
     public function country(){
 
         return $this->belongsTo(Country::class,'country_id','id');
+    }
+
+    public function suggestion()
+    {
+        return $this->hasMany(Suggestion::class, 'user_id', 'id');
     }
 
 

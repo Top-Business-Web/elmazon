@@ -32,6 +32,7 @@ class UserController extends Controller
                                     data-id="' . $users->id . '" data-title="' . $users->name . '">
                                     <i class="fas fa-trash"></i>
                             </button>
+                            <button type="button" data-id="' . $users->id . '" class="btn btn-pill btn-success-light editBtn1    ">تجديد الاشتراك</i></button>
                        ';
                 })
                 ->escapeColumns([])
@@ -81,6 +82,15 @@ class UserController extends Controller
     }
     // Edit End
 
+    // Show Start
+
+    public function show(User $user)
+    {
+        return view('admin.users.parts.subscription_renewal', compact('user'));
+    }
+
+    // Show End
+
     // Update Start
 
     /**
@@ -109,6 +119,27 @@ class UserController extends Controller
     }
 
     // Edit End
+
+    // Subscripition Renewal Start
+
+    public function subscr_renew(Request $request, User $user)
+    {
+        $renewals = User::findOrFail($request->id);
+        $renewals->date_start_code = $request->date_start_code;
+        $renewals->date_end_code = $request->date_end_code;
+        $renewals->save();
+
+
+        if($renewals->save() == true) {
+            return response()->json(['status' => 200]);
+        }
+        else
+        {
+            return response()->json(['status' => 405]);
+        }
+}
+
+    // Subscripition Renewal End
 
     // Destroy Start
 

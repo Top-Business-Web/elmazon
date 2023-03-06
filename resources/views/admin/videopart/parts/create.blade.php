@@ -15,6 +15,7 @@
                     <label for="lesson_id" class="form-control-label">درس</label>
                     <Select name="lesson_id" class="form-control user_choose">
                         <option selected disabled style="text-align: center">اختار درس</option>
+                        <option value="" style="text-align: center">فيديوهات عامة</option>
                         @foreach($lessons as $lesson)
                             <option value="{{ $lesson->id }}"
                                     style="text-align: center">{{ $lesson->name_ar }}</option>

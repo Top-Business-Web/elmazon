@@ -7,11 +7,16 @@ use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\SeasonController;
 use App\Http\Controllers\Admin\SubjectClassController;
 use App\Http\Controllers\Admin\TermController;
-
+use App\Http\Controllers\Admin\AudioController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\VideoPartController;
-
+use App\Http\Controllers\Admin\PdfFileUploadController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\MonthlyPlanController;
+use App\Http\Controllers\Admin\SuggestionController;
+use App\Http\Controllers\Admin\OnlineExamController;
+use App\Http\Controllers\Admin\PhoneCommunicationController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +47,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Users ####
     Route::resource('users', UserController::class);
+    Route::post('subscr_renew', [UserController::class, 'subscr_renew'])->name('subscr_renew');
 
     #### Season ####
     Route::resource('seasons', SeasonController::class);
@@ -60,6 +66,31 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     ##### Video Parts #####
     Route::resource('videosParts', VideoPartController::class);
+
+    #### Audio ####
+    Route::resource('audio', AudioController::class);
+
+    #### Monthly Plans ####
+    Route::resource('monthlyPlans', MonthlyPlanController::class);
+
+    #### Suggestion ####
+    Route::resource('suggestions', SuggestionController::class);
+
+    #### Online Exam ####
+    Route::resource('onlineExam', OnlineExamController::class);
+    Route::get('examble_type', [OnlineExamController::class, 'examble_type'])->name('examble_type');
+
+    #### Phone Communications ####
+    Route::resource('phoneCommunications', PhoneCommunicationController::class);
+
+    #### Pdf ####
+    Route::resource('pdf', PdfFileUploadController::class);
+
+    #### Question ####
+    Route::resource('questions', QuestionController::class);
+    Route::get('examble_type', [QuestionController::class, 'examble_type'])->name('examble_type');
+    Route::get('answer/{id}', [QuestionController::class, 'answer'])->name('answer');
+    Route::post('addAnswer/{id}', [QuestionController::class, 'addAnswer'])->name('addAnswer');
 
     #### Auth ####
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');

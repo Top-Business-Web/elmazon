@@ -109,6 +109,49 @@
         </li>
 
         <li class="slide">
+            <a class="side-menu__item" href="{{ route('monthlyPlans.index') }}">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">الخطة الشهرية</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('suggestions.index') }}">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">الاقتراحات</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('onlineExam.index') }}">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">امتحانات الاونلاين</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('phoneCommunications.index') }}">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">الاتصالات الهاتفية</span>
+            </a>
+        </li>
+
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('pdf.index') }}">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">Pdf</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('questions.index') }}">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">بنك الأسئلة</span>
+            </a>
+        </li>
+
+        <li class="slide">
             <a class="side-menu__item" href="#">
                 <i class="ti-face-smile side-menu__icon"></i>
                 <span class="side-menu__label">ارقام التواصل</span>
