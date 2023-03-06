@@ -2,10 +2,10 @@
 <aside class="app-sidebar">
     <div class="side-header">
         <a class="header-brand1" href="#">
-            <img src="" class="header-brand-img desktop-logo" alt="logo">
-            <img src="" class="header-brand-img toggle-logo" alt="logo">
-            <img src="" class="header-brand-img light-logo" alt="logo">
-            <img src="" class="header-brand-img light-logo1" alt="logo">
+            <img src="<?php echo e(asset('assets/admin/images/logo-mazon.png')); ?>" class="header-brand-img desktop-logo" alt="logo">
+            <img src="<?php echo e(asset('assets/admin/images/logo-mazon.png')); ?>" class="header-brand-img toggle-logo" alt="logo">
+            <img src="<?php echo e(asset('assets/admin/images/logo-mazon.png')); ?>" class="header-brand-img light-logo" alt="logo">
+            <img src="<?php echo e(asset('assets/admin/images/logo-mazon.png')); ?>" class="header-brand-img light-logo1" alt="logo">
         </a>
         <!-- LOGO -->
     </div>
@@ -73,7 +73,7 @@
         </li>
 
         <li class="slide">
-            <a class="side-menu__item" href="#">
+            <a class="side-menu__item" href="<?php echo e(route('users.index')); ?>">
                 <i class="fe fe-zap side-menu__icon"></i>
                 <span class="side-menu__label">الطلاب</span>
             </a>
@@ -105,6 +105,49 @@
             <a class="side-menu__item" href="<?php echo e(route('videosParts.index')); ?>">
                 <i class="icon icon-handbag side-menu__icon"></i>
                 <span class="side-menu__label">اقسام الفيديوهات</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="<?php echo e(route('monthlyPlans.index')); ?>">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">الخطة الشهرية</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="<?php echo e(route('suggestions.index')); ?>">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">الاقتراحات</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="<?php echo e(route('onlineExam.index')); ?>">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">امتحانات الاونلاين</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="<?php echo e(route('phoneCommunications.index')); ?>">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">الاتصالات الهاتفية</span>
+            </a>
+        </li>
+
+
+        <li class="slide">
+            <a class="side-menu__item" href="<?php echo e(route('pdf.index')); ?>">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">Pdf</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="<?php echo e(route('questions.index')); ?>">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">بنك الأسئلة</span>
             </a>
         </li>
 

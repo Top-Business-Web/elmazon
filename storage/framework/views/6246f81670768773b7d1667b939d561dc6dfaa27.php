@@ -15,6 +15,7 @@
                     <label for="lesson_id" class="form-control-label">درس</label>
                     <Select name="lesson_id" class="form-control user_choose">
                         <option selected disabled style="text-align: center">اختار درس</option>
+                        <option value="" style="text-align: center">فيديوهات عامة</option>
                         <?php $__currentLoopData = $lessons; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lesson): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($lesson->id); ?>"
                                     style="text-align: center"><?php echo e($lesson->name_ar); ?></option>
@@ -57,5 +58,6 @@
 
 
 </script>
+<!-- fix -->
 
 <?php /**PATH C:\laragon\www\students\resources\views/admin/videopart/parts/create.blade.php ENDPATH**/ ?>

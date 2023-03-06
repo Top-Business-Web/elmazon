@@ -27,7 +27,8 @@ class StoreVideoPart extends FormRequest
             'name_ar' => 'required',
             'name_en' => 'required',
             'note' => 'required',
-            'lesson_id' => 'required',
+            'lesson_id' => 'nullable',
+            'video_link' => 'nullable|mimes:mp4',
             'video_time' => 'required',
         ];
     }

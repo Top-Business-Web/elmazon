@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title'); ?>
     اقسام الفيديو
 <?php $__env->stopSection(); ?>
@@ -109,6 +111,8 @@
         editScript();
     </script>
 <?php $__env->stopSection(); ?>
+
+<!-- fix -->
 
 
 <?php echo $__env->make('Admin/layouts_admin/master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\students\resources\views/admin/videopart/index.blade.php ENDPATH**/ ?>

@@ -3,13 +3,20 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 <!-- FAVICON -->
-<link rel="shortcut icon" type="image/x-icon" href="" />
+<link rel="shortcut icon" type="image/x-icon" href="<?php echo e(asset('assets/admin/images/logo-mazon.png')); ?>" />
 
 <!-- TITLE -->
 <title><?php echo $__env->yieldContent('title'); ?></title>
 
 <!-- BOOTSTRAP CSS -->
 <link href="<?php echo e(asset('assets/admin/plugins/bootstrap/css/bootstrap.min.css')); ?>" rel="stylesheet" />
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
+
 
 <!-- STYLE CSS -->
 

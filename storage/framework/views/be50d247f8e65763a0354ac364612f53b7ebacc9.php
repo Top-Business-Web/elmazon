@@ -37,9 +37,9 @@
                 <!-- PAGE-HEADER -->
                 <div class="page-header">
                     <div>
-                        <h1 class="page-title">Welcome Back <i class="fas fa-heart text-danger"></i></h1>
+                        <h1 class="page-title">مرحبا بعودتك <i class="fas fa-heart text-danger"></i></h1>
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="<?php echo e(route('adminHome')); ?>">الرئيسية</a></li>
                             <li class="breadcrumb-item active" aria-current="page"><?php echo $__env->yieldContent('page_name'); ?></li>
                         </ol>
                     </div>

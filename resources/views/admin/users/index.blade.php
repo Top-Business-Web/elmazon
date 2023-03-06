@@ -1,4 +1,4 @@
-@extends('Admin/layouts_admin/master')
+    @extends('Admin/layouts_admin/master')
 
 @section('title')
     الطلاب
@@ -104,6 +104,11 @@
         // Add Using Ajax
         showEditModal('{{route('users.edit',':id')}}');
         editScript();
+
+
+        // Add Using Ajax
+        showEdit('{{route('users.show',':id')}}');
+        edit2();
     </script>
 @endsection
 
