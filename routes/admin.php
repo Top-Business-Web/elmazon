@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\PdfFileUploadController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\MonthlyPlanController;
+use App\Http\Controllers\Admin\SuggestionController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -69,6 +70,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Monthly Plans ####
     Route::resource('monthlyPlans', MonthlyPlanController::class);
+
+    #### Suggestion ####
+    Route::resource('suggestions', SuggestionController::class);
 
     #### Pdf ####
     Route::resource('pdf', PdfFileUploadController::class);
