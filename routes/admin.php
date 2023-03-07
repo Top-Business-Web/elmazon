@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\SuggestionController;
 use App\Http\Controllers\Admin\OnlineExamController;
 use App\Http\Controllers\Admin\PhoneCommunicationController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\SectionController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -89,6 +90,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Pdf ####
     Route::resource('pdf', PdfFileUploadController::class);
+
+    #### Section ####
+    Route::resource('section', SectionController::class);
 
     #### Question ####
     Route::resource('questions', QuestionController::class);

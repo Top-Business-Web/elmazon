@@ -2,15 +2,21 @@
 <aside class="app-sidebar">
     <div class="side-header">
         <a class="header-brand1" href="#">
-            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img desktop-logo" alt="logo">
-            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img toggle-logo" alt="logo">
-            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img light-logo" alt="logo">
-            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img light-logo1" alt="logo">
+            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img desktop-logo"
+                alt="logo">
+            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img toggle-logo"
+                alt="logo">
+            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img light-logo"
+                alt="logo">
+            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img light-logo1"
+                alt="logo">
         </a>
         <!-- LOGO -->
     </div>
     <ul class="side-menu">
-        <li><h3>Elements</h3></li>
+        <li>
+            <h3>Elements</h3>
+        </li>
         <li class="slide">
             <a class="side-menu__item" href="#">
                 <i class="icon icon-home side-menu__icon"></i>
@@ -141,7 +147,14 @@
                 <i class="icon icon-handbag side-menu__icon"></i>
                 <span class="side-menu__label">سلايدر</span>
             </a>
-            </li>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('section.index') }}">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">الاقسام</span>
+            </a>
+        </li>
 
 
         <li class="slide">
