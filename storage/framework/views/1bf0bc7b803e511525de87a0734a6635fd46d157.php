@@ -1,13 +1,12 @@
 
 
 <?php $__env->startSection('title'); ?>
-     الاقسام
+    الاقسام
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('page_name'); ?>
-     القسم
+    القسم
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
-
     <div class="row">
         <div class="col-md-12 col-lg-12">
             <div class="card">
@@ -15,9 +14,9 @@
                     <h3 class="card-title"></h3>
                     <div class="">
                         <button class="btn btn-secondary btn-icon text-white addBtn">
-									<span>
-										<i class="fe fe-plus"></i>
-									</span> اضافة
+                            <span>
+                                <i class="fe fe-plus"></i>
+                            </span> اضافة
                         </button>
                     </div>
                 </div>
@@ -26,13 +25,13 @@
                         <!--begin::Table-->
                         <table class="table table-striped table-bordered text-nowrap w-100" id="dataTable">
                             <thead>
-                            <tr class="fw-bolder text-muted bg-light">
-                                <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">الاسم</th>
-                                <th class="min-w-50px">العنوان</th>
-                                <th class="min-w-50px">السعة</th>
-                                <th class="min-w-50px rounded-end">العمليات</th>
-                            </tr>
+                                <tr class="fw-bolder text-muted bg-light">
+                                    <th class="min-w-25px">#</th>
+                                    <th class="min-w-50px">الاسم</th>
+                                    <th class="min-w-50px">العنوان</th>
+                                    <th class="min-w-50px">السعة</th>
+                                    <th class="min-w-50px rounded-end">العمليات</th>
+                                </tr>
                             </thead>
                         </table>
                     </div>
@@ -42,7 +41,7 @@
 
         <!--Delete MODAL -->
         <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+            aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -88,24 +87,39 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('ajaxCalls'); ?>
     <script>
-        var columns = [
-            {data: 'id', name: 'id'},
-            {data: 'section_name_ar', name: 'section_name_ar'},
-            {data: 'address', name: 'address'},
-            {data: 'capacity', name: 'capacity'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
+        var columns = [{
+                data: 'id',
+                name: 'id'
+            },
+            {
+                data: 'section_name_ar',
+                name: 'section_name_ar'
+            },
+            {
+                data: 'address',
+                name: 'address'
+            },
+            {
+                data: 'capacity',
+                name: 'capacity'
+            },
+            {
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false
+            },
         ]
         showData('<?php echo e(route('section.index')); ?>', columns);
         // Delete Using Ajax
-        destroyScript('<?php echo e(route('section.destroy',':id')); ?>');
+        destroyScript('<?php echo e(route('section.destroy', ':id')); ?>');
         // Add Using Ajax
         showAddModal('<?php echo e(route('section.create')); ?>');
         addScript();
         // Add Using Ajax
-        showEditModal('<?php echo e(route('section.edit',':id')); ?>');
+        showEditModal('<?php echo e(route('section.edit', ':id')); ?>');
         editScript();
     </script>
 <?php $__env->stopSection(); ?>
-
 
 <?php echo $__env->make('Admin/layouts_admin/master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\elmazon\resources\views/admin/sections/index.blade.php ENDPATH**/ ?>

@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\OnlineExamController;
 use App\Http\Controllers\Admin\PhoneCommunicationController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SectionController;
+use App\Http\Controllers\Admin\SettingController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -93,6 +94,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Section ####
     Route::resource('section', SectionController::class);
+
+    #### Setting ####
+    Route::resource('setting', SettingController::class);
 
     #### Question ####
     Route::resource('questions', QuestionController::class);
