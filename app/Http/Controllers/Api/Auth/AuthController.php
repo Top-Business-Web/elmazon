@@ -231,9 +231,9 @@ class AuthController extends Controller
                                 return response()->json([
                                     'data' => [
                                         'exam' => new PapelSheetResource($papelSheetExam),
-                                        'message' => 'تم تسجيل بياناتك فى الامتحان',
-                                        'code' => 200
                                     ],
+                                    'message' => 'تم تسجيل بياناتك فى الامتحان',
+                                    'code' => 200,
                                     'date_exam' => $papelSheetExam->date_exam,
                                     'address' => $section->address,
                                     'section_name' => lang() == 'ar' ? $section->section_name_ar : $section->section_name_en,
