@@ -43,13 +43,11 @@ class QuestionController extends Controller{
 
             $rules = [
                 'question_id' => 'required|exists:questions,id',
-                'answer_id' => 'required|exists:answers,id',
-                'status' => 'nullable|in:leave'
+                'answer_id' => 'nullable|exists:answers,id',
             ];
             $validator = Validator::make($request->all(), $rules, [
                 'question_id.exists' => 407,
                 'answer_id.exists' => 408,
-                'status.in' => 409
 
             ]);
 
@@ -59,7 +57,6 @@ class QuestionController extends Controller{
                     $errors_arr = [
                         407 => 'Failed,Question not exists.',
                         408 => 'Failed,Answer not exists.',
-                        409 => 'Failed,Status must be an  leave  in the request.',
                     ];
                     $code = collect($validator->errors())->flatten(1)[0];
                     return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
@@ -69,29 +66,49 @@ class QuestionController extends Controller{
 
             $question = Question::where('id', $request->question_id)->first();
 
+            $online_exam_user = OnlineExamUser::where('user_id','=',Auth::guard('user-api')->id())
+                ->where('question_id','=',$request->question_id)->where('online_exam_id','=',$id);
+
+
 //            return $question->answers;
+
+            if($online_exam_user->exists()){
+                return self::returnResponseDataApi(null, "تم حل هذا السؤال من قبل", 410);
+            }
             foreach ($question->answers as $answer) {
-                if($answer->id == $request->answer_id) {
-                    $online_exam_user = OnlineExamUser::create([
+                if($answer->id == $request->answer_id && $answer->answer_status == "correct") {
+                    OnlineExamUser::create([
                         'user_id' => Auth::id(),
                         'question_id' => $request->question_id,
                         'answer_id' => $request->answer_id,
                         'online_exam_id' => $exam->id,
-                        'status' => $answer->status == 'correct' ? 'solved' : 'un_correct',
+                        'status' =>  "solved",
                     ]);
                     return self::returnResponseDataApi(null,"تم حل السؤال واجابتك صحيحه",200);
                     break;
-                   }else{
-                    $online_exam_user = OnlineExamUser::create([
+                }elseif ($answer->id == $request->answer_id && $answer->answer_status == "un_correct"){
+
+                    OnlineExamUser::create([
                         'user_id' => Auth::id(),
                         'question_id' => $request->question_id,
                         'answer_id' => $request->answer_id,
                         'online_exam_id' => $exam->id,
-                        'status' => $request->status,
+                        'status' =>  "un_correct",
                     ]);
-
-                    return self::returnResponseDataApi(null,"تم مغادره السؤال وعدم حله",200);
+                    return self::returnResponseDataApi(null,"تم حل السؤال واجابتك خاطئه",201);
                     break;
+                }else{
+                    if($request->answer_id == null){
+                        OnlineExamUser::create([
+                            'user_id' => Auth::id(),
+                            'question_id' => $request->question_id,
+                            'online_exam_id' => $exam->id,
+                            'status' => "leave",
+                        ]);
+
+                        return self::returnResponseDataApi(null,"تم مغادره السؤال وعدم حله",202);
+                        break;
+                    }
                 }
             }
 
