@@ -117,7 +117,8 @@ class LessonController extends Controller{
 
     }
 
-    public function accessNextVideo(Request $request,$id){
+    public function accessNextVideo(Request $request,$id)
+    {
 
         $rules = [
             'status' => 'required|in:watched',
@@ -135,69 +136,75 @@ class LessonController extends Controller{
                 ];
 
                 $code = collect($validator->errors())->flatten(1)[0];
-                return self::returnResponseDataApi( null,isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+                return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
             }
-            return self::returnResponseDataApi(null,$validator->errors()->first(),422);
-        }
-        $video = VideoParts::where('id','=',$id)->first();
-        if(!$video){
-            return self::returnResponseDataApi(null,"هذا الفيديو او المرفق غير موجود",404,404);
+            return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
+
+
+        $video = VideoParts::where('id', '=', $id)->first();
+        if (!$video) {
+            return self::returnResponseDataApi(null, "هذا الفيديو او المرفق غير موجود", 404, 404);
+        }
+
+
+
+
         //update first video to watched
-        $watched = VideoWatch::where('user_id','=',Auth::guard('user-api')->id())->where('video_part_id','=',$video->id)->first();
-        if($watched){
+        $watched = VideoWatch::where('user_id', '=', Auth::guard('user-api')->id())->where('video_part_id', '=',$video->id)->first();
+        if ($watched) {
             $watched->update(['status' => $request->status]);
-        }else{
-            return self::returnResponseDataApi(null,"يجب مشاهده الفيديو السابق اولا",500);
+        } else {
+            return self::returnResponseDataApi(null, "يجب مشاهده الفيديو السابق اولا", 500);
         }
 
         //access next video and show second file or video or audio
-        $all_video_watches = VideoParts::select("id")->orderBy('ordered','ASC')->whereHas('watches', function ($watches){
-            $watches->where('user_id','=',Auth::guard('user-api')->id())->where('status','=','watched');
+        $all_video_watches = VideoParts::select("id")->orderBy('ordered', 'ASC')->whereHas('watches', function ($watches) {
+            $watches->where('user_id', '=', Auth::guard('user-api')->id())->where('status', '=', 'watched');
         })->get();
 
 
+
+
         $ids = [];
-        foreach ($all_video_watches as $all_video_watch){
+        foreach ($all_video_watches as $all_video_watch) {
             $ids[] = $all_video_watch->id;
         }
-            if(isset($watched)){
-                if($watched->status === 'opened'){
-                    return self::returnResponseDataApi(null,"تم فتح الفيديو من قبل",500);
+            if (isset($watched)) {
 
-                }
-                $next_videos = VideoParts::where('lesson_id','=',$video->lesson_id)->orderBy('ordered','ASC')->whereNotIn('id',$ids)->get();
-
-                foreach ($next_videos as $next_video){
-                    $next_video_watched = VideoWatch::where('user_id','=',Auth::guard('user-api')->id())->where('video_part_id','=',$next_video->id)->first();
-                    if(!$next_video_watched){
-
-                        if($next_video->type == 'pdf' || $next_video->type == 'audio'){
+                $next_videos = VideoParts::where('lesson_id', '=', $video->lesson_id)->orderBy('ordered', 'ASC')->whereNotIn('id', $ids)->get();
+                foreach ($next_videos as $next_video) {
+                    $next_video_watched = VideoWatch::where('user_id', '=', Auth::guard('user-api')->id())->where('video_part_id', '=', $next_video->id)->first();
+                    if (!$next_video_watched) {
+                        if ($next_video->type == 'pdf' || $next_video->type == 'audio') {
                             VideoWatch::create([
                                 'user_id' => Auth::guard('user-api')->id(),
                                 'video_part_id' => $next_video->id,
                                 'status' => 'watched'
                             ]);
 
-                        }else{
+                        } else {
                             VideoWatch::create([
                                 'user_id' => Auth::guard('user-api')->id(),
                                 'video_part_id' => $next_video->id,
                             ]);
                             break;
                         }
+                    }else{
+                        return self::returnResponseDataApi(null, "تم فتح الفيديو الذي يلي هذا الفيديو من قبل برجي الانتهاء منه اولا للدخول للفيديو التالي", 200);
+
                     }
 
                 }
 
-            } else{
-                return self::returnResponseDataApi(null,"Error in update",500);
+            } else {
+                return self::returnResponseDataApi(null, "Error in update", 500);
             }
+
             if(isset($next_video))
             return self::returnResponseDataApi(new VideoPartResource($next_video),"تم الوصول الي الفيديو التالي",200);
             else
             return self::returnResponseDataApi(null,"تم الوصول للملف الاخير ولا يوجد اي ملفات اخري لفتحها",500);
-
     }
 }
