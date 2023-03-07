@@ -57,6 +57,7 @@ Route::group(['prefix' => 'auth'], function (){
         Route::post('video/add-comment/{id}',[CommentController::class,'videoAddComment']);
         Route::post('comment/add-replay/{id}',[CommentController::class,'commentAddReplay']);
 
+
         //access videos
         Route::post('{id}',[LessonController::class,'accessFirstVideo']);
         Route::post('access-next-video/{id}',[LessonController::class,'accessNextVideo']);
@@ -68,6 +69,17 @@ Route::group(['prefix' => 'auth'], function (){
     Route::group(['prefix' => 'plans','middleware' => ['jwt']], function (){
         Route::get('all',[\App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController::class,'all_plans']);
         Route::get('oneDay',[\App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController::class,'plan_today']);
+
+    });
+
+    Route::group(['prefix' => 'video','middleware' => 'jwt'], function (){
+
+        //update and delete comment and replay
+        Route::put('comment/update/{id}',[CommentController::class,'updateComment']);
+        Route::delete('comment/delete/{id}',[CommentController::class,'deleteComment']);
+        Route::put('replay/update/{id}',[CommentController::class,'updateReplay']);
+        Route::delete('replay/delete/{id}',[CommentController::class,'deleteReplay']);
+
 
     });
 
