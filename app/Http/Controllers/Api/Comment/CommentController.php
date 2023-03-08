@@ -206,9 +206,7 @@ class CommentController extends Controller{
             $image->move($destinationPath, $file);
             $request['image'] = "$file";
 
-            if(file_exists(public_path('comments_upload_file/' . $comment->image))){
-                unlink(public_path('comments_upload_file/' . $comment->image));
-            }
+
 
         }elseif( $audio = $request->file('audio')){
             $audioPath = 'comments_upload_file/';
@@ -216,11 +214,9 @@ class CommentController extends Controller{
             $audio->move($audioPath, $audioUpload);
             $request['audio'] = "$audioUpload";
 
-            if(file_exists(public_path('comments_upload_file/' . $comment->audio))){
-                unlink(public_path('comments_upload_file/' . $comment->audio));
-            }
+
         }else{
-            $comment = $request->comment;
+            $comment_add = $request->comment;
         }
 
 
@@ -228,25 +224,39 @@ class CommentController extends Controller{
             return self::returnResponseDataApi(null,"يجب كتابه كومنت او ارفاق صوره او رفع ملف صوتي",422);
         }
 
-        $comment->update([
+        if ($comment->user_id == Auth::guard('user-api')->id()){
+            $comment->update([
 
-            'comment' => $comment ?? null,
-            'audio' => $audioUpload ?? null,
-            'image' => $file ?? null,
-            'type' => $request->type,
-            'user_id' => Auth::guard('user-api')->id()
-        ]);
+                'comment' => $comment_add ?? null,
+                'audio' => $audioUpload ?? null,
+                'image' => $file ?? null,
+                'type' => $request->type,
+            ]);
 
+        }else{
+            return self::returnResponseDataApi(null,"ليس لديك صلاحيه لتعديل هذا التعليق",403);
+        }
 
         if(isset($comment)){
             return self::returnResponseDataApi(new CommentResource($comment),"تم تعديل التعليق بنجاح",200);
-
         }
 
     }
 
-    public function deleteComment(Request $request,$id){
+    public function deleteComment($id){
 
+        $comment = Comment::where('id','=',$id)->first();
+        if(!$comment){
+
+            return self::returnResponseDataApi(null,"هذا التعليق غير موجود",404,404);
+        }
+        if ($comment->user_id == Auth::guard('user-api')->id()){
+            $comment->delete();
+
+        }else{
+            return self::returnResponseDataApi(null,"ليس لديك صلاحيه لمسح هذا التعليق",403);
+        }
+            return self::returnResponseDataApi(null,"تم حذف التعليق بنجاح",200);
 
     }
 
@@ -254,10 +264,96 @@ class CommentController extends Controller{
     public function updateReplay(Request $request,$id){
 
 
+        $replay = CommentReplay::where('id','=',$id)->first();
+        if(!$replay){
+
+            return self::returnResponseDataApi(null,"هذا الرد غير موجود",404,404);
+        }
+
+        $rules = [
+            'comment' => 'nullable',
+            'type' => 'required|in:file,text,audio',
+            'audio' => 'nullable',
+            'image' => 'nullable|mimes:jpg,png,jpeg'
+        ];
+        $validator = Validator::make($request->all(), $rules, [
+            'image.mimes' => 407,
+            'type.in' => 408
+        ]);
+
+        if ($validator->fails()) {
+
+            $errors = collect($validator->errors())->flatten(1)[0];
+            if (is_numeric($errors)) {
+
+                $errors_arr = [
+                    407 => 'Failed,The image type must be an jpg or jpeg or png.',
+                    408 => 'Failed,The type of comment replay must be an file or text or audio',
+
+                ];
+
+                $code = collect($validator->errors())->flatten(1)[0];
+                return self::returnResponseDataApi( null,isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+            }
+            return self::returnResponseDataApi(null,$validator->errors()->first(),422);
+        }
+
+        if($image = $request->file('image')){
+            $destinationPath = 'comments_upload_file/';
+            $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $file);
+            $request['image'] = "$file";
+
+
+
+        }elseif( $audio = $request->file('audio')){
+            $audioPath = 'comments_upload_file/';
+            $audioUpload = date('YmdHis') . "." . $audio->getClientOriginalExtension();
+            $audio->move($audioPath, $audioUpload);
+            $request['audio'] = "$audioUpload";
+
+
+        }else{
+            $comment_add = $request->comment;
+        }
+
+
+        if($request->comment && $request->audio && $request->image){
+            return self::returnResponseDataApi(null,"يجب كتابه كومنت او ارفاق صوره او رفع ملف صوتي",422);
+        }
+
+        if ($replay->student_id == Auth::guard('user-api')->id()){
+            $replay->update([
+
+                'comment' => $comment_add ?? null,
+                'audio' => $audioUpload ?? null,
+                'image' => $file ?? null,
+                'type' => $request->type,
+            ]);
+
+        }else{
+            return self::returnResponseDataApi(null,"ليس لديك صلاحيه لتعديل هذا الرد",403);
+        }
+
+        if(isset($replay)){
+            return self::returnResponseDataApi(new CommentReplayResource($replay),"تم تعديل الرد بنجاح",200);
+        }
     }
 
-    public function deleteReplay(Request $request,$id){
+    public function deleteReplay($id){
 
+        $replay = CommentReplay::where('id','=',$id)->first();
+        if(!$replay){
+            return self::returnResponseDataApi(null,"هذا الرد غير موجود",404,404);
+        }
+        if ($replay->student_id == Auth::guard('user-api')->id()){
+            $replay->delete();
+
+        }else{
+            return self::returnResponseDataApi(null,"ليس لديك صلاحيه لمسح هذا الرد",403);
+        }
+
+        return self::returnResponseDataApi(null,"تم حذف الرد بنجاح",200);
 
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\ExamInstruction;
 use App\Models\OnlineExamQuestion;
 use App\Models\Question;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -21,6 +22,7 @@ class OnlineExamQuestionResource extends JsonResource
             'id' => $this->id,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'note' => $this->note,
+            'quiz_minute' => $this->quiz_minute,
             'questions' => QuestionResource::collection($this->questions),
         ];
     }
