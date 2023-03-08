@@ -57,7 +57,6 @@ class QuestionController extends Controller{
                 ]);
 
             }
-
             return self::returnResponseDataApi(null,"تم حل جميع الاسئله",200);
 
         }catch (\Exception $exception) {

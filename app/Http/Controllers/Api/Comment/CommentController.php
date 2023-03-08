@@ -19,7 +19,6 @@ class CommentController extends Controller{
 
         $video = VideoParts::where('id','=',$id)->first();
         if(!$video){
-
             return self::returnResponseDataApi(null,"هذا الفيديو غير موجود",404,404);
         }
 
