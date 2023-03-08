@@ -24,6 +24,7 @@ Route::group(['prefix' => 'auth'], function (){
 
     Route::post('login',[AuthController::class,'login']);
     Route::get('communication',[AuthController::class,'communication']);
+
     Route::middleware('jwt')->group(function (){
         Route::post('logout',[AuthController::class,'logout']);
         Route::get('getProfile',[AuthController::class,'getProfile']);
@@ -31,9 +32,7 @@ Route::group(['prefix' => 'auth'], function (){
         Route::get('all-notifications',[AuthController::class,'allNotifications']);
         Route::post('papel-sheet-exam/user/{id}',[AuthController::class,'papel_sheet_exam']);
         Route::get('papel-sheet-exam/show',[AuthController::class,'papel_sheet_exam_show']);
-
     });
-
   });
 
     Route::group(['prefix' => 'classes','middleware' => ['jwt']], function (){
@@ -75,14 +74,13 @@ Route::group(['prefix' => 'auth'], function (){
     Route::group(['prefix' => 'video','middleware' => 'jwt'], function (){
 
         //update and delete comment and replay
-        Route::put('comment/update/{id}',[CommentController::class,'updateComment']);
+        Route::post('comment/update/{id}',[CommentController::class,'updateComment']);
         Route::delete('comment/delete/{id}',[CommentController::class,'deleteComment']);
-        Route::put('replay/update/{id}',[CommentController::class,'updateReplay']);
+        Route::post('replay/update/{id}',[CommentController::class,'updateReplay']);
         Route::delete('replay/delete/{id}',[CommentController::class,'deleteReplay']);
 
 
     });
-
 
     Route::group(['prefix' => 'video','middleware' => ['jwt']], function (){
         Route::get('onlineExam/{id}/questions',[\App\Http\Controllers\Api\Question\QuestionController::class,'all_questions_by_online_exam']);

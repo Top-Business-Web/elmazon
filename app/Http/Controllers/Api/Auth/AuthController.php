@@ -229,12 +229,10 @@ class AuthController extends Controller
                                     'papel_sheet_exam_id' => $papelSheetExam->id,
                                     'papel_sheet_exam_time_id' => $request->papel_sheet_exam_time_id,
                                 ]);
-//                                return $papelSheetExam->time;
                                 return response()->json([
                                     'data' => [
                                         'exam' => new PapelSheetExamTimeUserResource($papelSheetExam),
                                     ],
-
                                     'message' => 'تم تسجيل بياناتك فى الامتحان',
                                     'code' => 200,
                                     'date_exam' => $papelSheetExam->date_exam,
