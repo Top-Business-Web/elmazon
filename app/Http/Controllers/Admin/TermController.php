@@ -23,6 +23,11 @@ class TermController extends Controller
                                     data-id="' . $terms->id . '" data-title="' . $terms->name_en . '">
                                     <i class="fas fa-trash"></i>
                             </button>
+                            @if('.$terms->status == "active".')
+                                <button type="button" data-id="' . $terms->id . '" class="btn btn-pill btn-success-light checkBtn"><i class="fa fa-check"></i></button>
+                            @else
+                                <button type="button" data-id="' . $terms->id . '" class="btn btn-pill btn-danger-light checkBtn"><i class="fa fa-check"></i></button>
+                            @endif
                        ';
                 })
                 ->escapeColumns([])
@@ -55,6 +60,15 @@ class TermController extends Controller
     }
 
     // Store End
+
+    // Activate
+
+    public function activate(Request $request)
+    {
+        
+    }
+
+    // Activate
 
     // Edit Start
 

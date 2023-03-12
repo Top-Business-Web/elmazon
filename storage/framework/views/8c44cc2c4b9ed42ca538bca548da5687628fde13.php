@@ -13,14 +13,20 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <label for="name_ar" class="form-control-label">فصل</label>
-                    <Select name="subject_class_id" class="form-control">
-                        <option selected disabled style="text-align: center">اختار فصل</option>
-                        <?php $__currentLoopData = $subjects_classes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subject_class): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($subject_class->id); ?>"
-                                    style="text-align: center"><?php echo e($subject_class->name_en); ?></option>
+                <div class="col-md-6">
+                    <label for="name_ar" class="form-control-label">الصف</label>
+                    <Select name="" id="season_choose" class="form-control season">
+                        <option selected disabled style="text-align: center">اختار الصف</option>
+                        <?php $__currentLoopData = $seasons; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $season): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($season->id); ?>"
+                                    style="text-align: center"><?php echo e($season->name_ar); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </Select>
+                </div>
+                <div class="col-md-6">
+                    <label for="name_ar" class="form-control-label">الوحدة</label>
+                    <Select name="subject_class_id" class="form-control type_ajax_choose">
+                    
                     </Select>
                 </div>
             </div>
@@ -38,7 +44,22 @@
     </form>
 </div>
 <script>
-    $('.dropify').dropify();
+    
+    $(".season").on('change', function() {
+        var element = document.getElementById("season_choose");
+        var value = $(element).find('option:selected').val();
+        
+        $.ajax({
+            url: '<?php echo e(route('showUnit')); ?>',
+            data: {
+                'id': value,
+            },
+            success: function (data) {
+                $('.type_ajax_choose').html(data);
+            }
+        })
+    })
+
 </script>
 
 <?php /**PATH C:\laragon\www\elmazon\resources\views/admin/lessons/parts/create.blade.php ENDPATH**/ ?>

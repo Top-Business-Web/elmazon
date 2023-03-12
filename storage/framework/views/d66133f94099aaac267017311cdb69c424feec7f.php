@@ -29,8 +29,8 @@
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">الأسم</th>
+                                <th class="min-w-50px">الوحدة</th>
                                 <th class="min-w-50px">ملاحظة</th>
-                                <th class="min-w-50px">فئة الموضوع</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -91,9 +91,9 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'name_en', name: 'name_en'},
-            {data: 'note', name: 'note'},
+            {data: 'name_ar', name: 'name_ar'},
             {data: 'subject_class_id', name: 'subject_class_id'},
+            {data: 'note', name: 'note'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('<?php echo e(route('lessons.index')); ?>', columns);

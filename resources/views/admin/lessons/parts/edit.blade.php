@@ -11,29 +11,35 @@
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم باللغة الانجليزية</label>
-                    <input type="text" class="form-control" value="{{ $lesson->name_ar }}" name="name_en">
+                    <input type="text" class="form-control" value="{{ $lesson->name_en }}"  name="name_en">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <label for="name_ar" class="form-control-label">فصل</label>
-                    <Select name="subject_class_id" class="form-control">
-                        <option selected disabled style="text-align: center">اختار فصل</option>
-                        @foreach($subjects_classes as $subject_class)
-                            <option value="{{ $subject_class->id }}"
-                                    {{ $lesson->subject_class_id == $subject_class->id? 'selected' : '' }}
-                                    style="text-align: center">{{ $subject_class->name_en }}</option>
+                <div class="col-md-6">
+                    <label for="name_ar" class="form-control-label">الصف</label>
+                    <Select name="" id="season_choose" class="form-control season">
+                        <option selected disabled style="text-align: center">اختار الصف</option>
+                        @foreach($seasons as $season)
+                            <option value="{{ $season->id }}"
+                                {{ ($lesson->subject_class->season_id == $season->id? 'selected' : '') }}
+                                    style="text-align: center">{{ $season->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <label for="note" class="form-control-label">ملاحظة</label>
-                    <textarea class="form-control" name="note" rows="10">{{ $lesson->note }}</textarea>
+                <div class="col-md-6">
+                    <label for="name_ar" class="form-control-label">الوحدة</label>
+                    <Select name="subject_class_id" class="form-control type_ajax_choose">
+                    
+                    </Select>
                 </div>
             </div>
-        </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="note" class="form-control-label">ملاحظة</label>
+                        <textarea class="form-control" name="note" rows="10">{{ $lesson->note }}</textarea>
+                    </div>
+                </div>
+            </div>  
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
             <button type="submit" class="btn btn-success" id="updateButton">تحديث</button>

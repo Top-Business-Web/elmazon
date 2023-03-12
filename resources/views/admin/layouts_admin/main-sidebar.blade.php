@@ -36,14 +36,14 @@
         <li class="slide">
             <a class="side-menu__item" href="{{ route('seasons.index') }}">
                 <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">الفصول</span>
+                <span class="side-menu__label">الصفوف</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('subjectsClasses.index') }}">
                 <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">فئة الموضوغ</span>
+                <span class="side-menu__label">الوحدات</span>
             </a>
         </li>
 
@@ -59,7 +59,7 @@
         <li class="slide">
             <a class="side-menu__item" href="{{ route('lessons.index') }}">
                 <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">الدرس</span>
+                <span class="side-menu__label">الدروس</span>
             </a>
         </li>
 
@@ -210,7 +210,7 @@
         <li class="slide">
             <a class="side-menu__item" href="{{ route('countries.index') }}">
                 <i class="fe fe-tag side-menu__icon"></i>
-                <span class="side-menu__label">{{ trans('admin.countries') }}</span>
+                <span class="side-menu__label">المدن</span>
             </a>
         </li>
 

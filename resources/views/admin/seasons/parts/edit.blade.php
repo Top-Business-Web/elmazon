@@ -6,18 +6,18 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
-                    <label for="name_ar" class="form-control-label">{{ trans('admin.name_ar') }}</label>
+                    <label for="name_ar" class="form-control-label">الاسم بالعربية</label>
                     <input type="text" class="form-control" value="{{ $season->name_ar }}" name="name_ar">
                 </div>
                 <div class="col-md-6">
-                    <label for="name_en" class="form-control-label">{{ trans('admin.name_en') }}</label>
+                    <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
                     <input type="text" class="form-control" value="{{ $season->name_en }}" name="name_en">
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ trans('admin.close') }}</button>
-            <button type="submit" class="btn btn-success" id="updateButton">{{ trans('admin.update') }}</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+            <button type="submit" class="btn btn-success" id="updateButton">تحديث</button>
         </div>
     </form>
 </div>

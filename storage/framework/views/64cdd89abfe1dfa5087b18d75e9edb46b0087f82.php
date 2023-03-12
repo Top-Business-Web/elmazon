@@ -5,7 +5,7 @@
 			</div>
         `;
     // Show Data Using YAJRA
-    async function showData(routeOfShow,columns) {
+    async function showData(routeOfShow, columns) {
         $('#dataTable').DataTable({
             processing: true,
             serverSide: true,
@@ -36,8 +36,7 @@
             },
 
             dom: 'Bfrtip',
-            buttons: [
-                {
+            buttons: [{
                     extend: 'copy',
                     text: 'نسخ',
                     className: 'btn-primary'
@@ -68,9 +67,9 @@
 
     // Delete Using Ajax
     function deleteScript(routeOfDelete) {
-        $(document).ready(function () {
+        $(document).ready(function() {
             //Show data in the delete form
-            $('#delete_modal').on('show.bs.modal', function (event) {
+            $('#delete_modal').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget)
                 var id = button.data('id')
                 var title = button.data('title')
@@ -79,7 +78,7 @@
                 modal.find('.modal-body #title').text(title);
             });
         });
-        $(document).on('click', '#delete_btn', function (event) {
+        $(document).on('click', '#delete_btn', function(event) {
             var id = $("#delete_id").val();
             $.ajax({
                 type: 'POST',
@@ -88,7 +87,7 @@
                     '_token': "<?php echo e(csrf_token()); ?>",
                     'id': id,
                 },
-                success: function (data) {
+                success: function(data) {
                     if (data.status === 200) {
                         $("#dismiss_delete_modal")[0].click();
                         $('#dataTable').DataTable().ajax.reload();
@@ -102,22 +101,37 @@
         });
     }
 
+    // show Add Question
+    function showAddQuestion(routeOfEdit) {
+        $(document).on('click', '.questionBtn', function() {
+            var id = $(this).data('id')
+            var url = routeOfEdit;
+            url = url.replace(':id', id)
+            $('#questionModal').html(loader)
+            $('#question_modal').modal('show')
+
+            setTimeout(function() {
+                $('#question_modal').load(url)
+            }, 500)
+        })
+    }
+
 
 
 
     // show Add Modal
-    function showAddModal(routeOfShow){
-        $(document).on('click', '.addBtn', function () {
+    function showAddModal(routeOfShow) {
+        $(document).on('click', '.addBtn', function() {
             $('#modal-body').html(loader)
             $('#editOrCreate').modal('show')
-            setTimeout(function () {
+            setTimeout(function() {
                 $('#modal-body').load(routeOfShow)
             }, 250)
         });
     }
 
-    function addAnswer(){
-        $(document).on('buttonAnswer', 'Form#addForm', function (e) {
+    function addAnswer() {
+        $(document).on('buttonAnswer', 'Form#addForm', function(e) {
             e.preventDefault();
             var formData = new FormData(this);
             var url = $('#addForm').attr('action');
@@ -125,30 +139,30 @@
                 url: url,
                 type: 'POST',
                 data: formData,
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#addButton').html('<span class="spinner-border spinner-border-sm mr-2" ' +
-                        ' ></span> <span style="margin-left: 4px;">انتظر ..</span>').attr('disabled', true);
+                        ' ></span> <span style="margin-left: 4px;">انتظر ..</span>').attr(
+                        'disabled', true);
                 },
-                success: function (data) {
+                success: function(data) {
                     if (data.status == 200) {
                         $('#dataTable').DataTable().ajax.reload();
                         toastr.success('تم الاضافة بنجاح');
-                    } else if(data.status == 405){
+                    } else if (data.status == 405) {
                         toastr.error(data.mymessage);
-                    }
-                    else
+                    } else
                         toastr.error('هناك خطأ ما ..');
                     $('#addButton').html(`اضافة`).attr('disabled', false);
                     $('#editOrCreate').modal('hide')
                 },
-                error: function (data) {
+                error: function(data) {
                     if (data.status === 500) {
                         toastr.error('هناك خطأ ما ..');
                     } else if (data.status === 422) {
                         var errors = $.parseJSON(data.responseText);
-                        $.each(errors, function (key, value) {
+                        $.each(errors, function(key, value) {
                             if ($.isPlainObject(value)) {
-                                $.each(value, function (key, value) {
+                                $.each(value, function(key, value) {
                                     toastr.error(value, 'خطأ');
                                 });
                             }
@@ -156,7 +170,7 @@
                     } else
                         toastr.error('هناك خطأ ما ..');
                     $('#addButton').html(`اضافة`).attr('disabled', false);
-                },//end error method
+                }, //end error method
 
                 cache: false,
                 contentType: false,
@@ -165,8 +179,8 @@
         });
     }
 
-    function addScript(){
-        $(document).on('submit', 'Form#addForm', function (e) {
+    function addScript() {
+        $(document).on('submit', 'Form#addForm', function(e) {
             e.preventDefault();
             var formData = new FormData(this);
             var url = $('#addForm').attr('action');
@@ -174,30 +188,30 @@
                 url: url,
                 type: 'POST',
                 data: formData,
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#addButton').html('<span class="spinner-border spinner-border-sm mr-2" ' +
-                        ' ></span> <span style="margin-left: 4px;">انتظر ..</span>').attr('disabled', true);
+                        ' ></span> <span style="margin-left: 4px;">انتظر ..</span>').attr(
+                        'disabled', true);
                 },
-                success: function (data) {
+                success: function(data) {
                     if (data.status == 200) {
                         $('#dataTable').DataTable().ajax.reload();
                         toastr.success('تم الاضافة بنجاح');
-                    } else if(data.status == 405){
+                    } else if (data.status == 405) {
                         toastr.error(data.mymessage);
-                    }
-                    else
+                    } else
                         toastr.error('هناك خطأ ما ..');
                     $('#addButton').html(`اضافة`).attr('disabled', false);
                     $('#editOrCreate').modal('hide')
                 },
-                error: function (data) {
+                error: function(data) {
                     if (data.status === 500) {
                         toastr.error('هناك خطأ ما ..');
                     } else if (data.status === 422) {
                         var errors = $.parseJSON(data.responseText);
-                        $.each(errors, function (key, value) {
+                        $.each(errors, function(key, value) {
                             if ($.isPlainObject(value)) {
-                                $.each(value, function (key, value) {
+                                $.each(value, function(key, value) {
                                     toastr.error(value, 'خطأ');
                                 });
                             }
@@ -205,7 +219,7 @@
                     } else
                         toastr.error('هناك خطأ ما ..');
                     $('#addButton').html(`اضافة`).attr('disabled', false);
-                },//end error method
+                }, //end error method
 
                 cache: false,
                 contentType: false,
@@ -214,22 +228,22 @@
         });
     }
 
-    function showEdit(routeOfEdit){
-        $(document).on('click', '.editBtnAnswer', function () {
+    function showEdit(routeOfEdit) {
+        $(document).on('click', '.editBtnAnswer', function() {
             var id = $(this).data('id')
             var url = routeOfEdit;
             url = url.replace(':id', id)
             $('#modal-body').html(loader)
             $('#editOrCreate').modal('show')
 
-            setTimeout(function () {
+            setTimeout(function() {
                 $('#modal-body').load(url)
             }, 500)
         })
     }
 
-    function edit2(){
-        $(document).on('submit', 'Form#update_renwal', function (e) {
+    function edit2() {
+        $(document).on('submit', 'Form#update_renwal', function(e) {
             e.preventDefault();
             var formData = new FormData(this);
             var url = $('#update_renwal').attr('action');
@@ -237,11 +251,12 @@
                 url: url,
                 type: 'POST',
                 data: formData,
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#update2').html('<span class="spinner-border spinner-border-sm mr-2" ' +
-                        ' ></span> <span style="margin-left: 4px;">انتظر ..</span>').attr('disabled', true);
+                        ' ></span> <span style="margin-left: 4px;">انتظر ..</span>').attr(
+                        'disabled', true);
                 },
-                success: function (data) {
+                success: function(data) {
                     $('#update2').html(`تعديل`).attr('disabled', false);
                     if (data.status == 200) {
                         $('#dataTable').DataTable().ajax.reload();
@@ -251,14 +266,14 @@
 
                     $('#editOrCreate').modal('hide')
                 },
-                error: function (data) {
+                error: function(data) {
                     if (data.status === 500) {
                         toastr.error('هناك خطأ ما ..');
                     } else if (data.status === 422) {
                         var errors = $.parseJSON(data.responseText);
-                        $.each(errors, function (key, value) {
+                        $.each(errors, function(key, value) {
                             if ($.isPlainObject(value)) {
-                                $.each(value, function (key, value) {
+                                $.each(value, function(key, value) {
                                     toastr.error(value, 'خطأ');
                                 });
                             }
@@ -266,7 +281,7 @@
                     } else
                         toastr.error('هناك خطأ ما ..');
                     $('#update2').html(`تعديل`).attr('disabled', false);
-                },//end error method
+                }, //end error method
 
                 cache: false,
                 contentType: false,
@@ -275,22 +290,22 @@
         });
     }
 
-    function showEditModal(routeOfEdit){
-        $(document).on('click', '.editBtn', function () {
+    function showEditModal(routeOfEdit) {
+        $(document).on('click', '.editBtn', function() {
             var id = $(this).data('id')
             var url = routeOfEdit;
             url = url.replace(':id', id)
             $('#modal-body').html(loader)
             $('#editOrCreate').modal('show')
 
-            setTimeout(function () {
+            setTimeout(function() {
                 $('#modal-body').load(url)
             }, 500)
         })
     }
 
-    function editScript(){
-        $(document).on('submit', 'Form#updateForm', function (e) {
+    function editScript() {
+        $(document).on('submit', 'Form#updateForm', function(e) {
             e.preventDefault();
             var formData = new FormData(this);
             var url = $('#updateForm').attr('action');
@@ -298,11 +313,12 @@
                 url: url,
                 type: 'POST',
                 data: formData,
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#updateButton').html('<span class="spinner-border spinner-border-sm mr-2" ' +
-                        ' ></span> <span style="margin-left: 4px;">انتظر ..</span>').attr('disabled', true);
+                        ' ></span> <span style="margin-left: 4px;">انتظر ..</span>').attr(
+                        'disabled', true);
                 },
-                success: function (data) {
+                success: function(data) {
                     $('#updateButton').html(`تعديل`).attr('disabled', false);
                     if (data.status == 200) {
                         $('#dataTable').DataTable().ajax.reload();
@@ -312,14 +328,14 @@
 
                     $('#editOrCreate').modal('hide')
                 },
-                error: function (data) {
+                error: function(data) {
                     if (data.status === 500) {
                         toastr.error('هناك خطأ ما ..');
                     } else if (data.status === 422) {
                         var errors = $.parseJSON(data.responseText);
-                        $.each(errors, function (key, value) {
+                        $.each(errors, function(key, value) {
                             if ($.isPlainObject(value)) {
-                                $.each(value, function (key, value) {
+                                $.each(value, function(key, value) {
                                     toastr.error(value, 'خطأ');
                                 });
                             }
@@ -327,7 +343,7 @@
                     } else
                         toastr.error('هناك خطأ ما ..');
                     $('#updateButton').html(`تعديل`).attr('disabled', false);
-                },//end error method
+                }, //end error method
 
                 cache: false,
                 contentType: false,
@@ -337,9 +353,9 @@
     }
 
     function destroyScript(routeOfDelete) {
-        $(document).ready(function () {
+        $(document).ready(function() {
             //Show data in the delete form
-            $('#delete_modal').on('show.bs.modal', function (event) {
+            $('#delete_modal').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget)
                 var id = button.data('id')
                 var title = button.data('title')
@@ -348,7 +364,7 @@
                 modal.find('.modal-body #title').text(title);
             });
         });
-        $(document).on('click', '#delete_btn', function (event) {
+        $(document).on('click', '#delete_btn', function(event) {
             var id = $("#delete_id").val();
             $.ajax({
                 type: 'DELETE',
@@ -357,7 +373,7 @@
                     '_token': "<?php echo e(csrf_token()); ?>",
                     'id': id,
                 },
-                success: function (data) {
+                success: function(data) {
                     if (data.status === 200) {
                         $("#dismiss_delete_modal")[0].click();
                         $('#dataTable').DataTable().ajax.reload();

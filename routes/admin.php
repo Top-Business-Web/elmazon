@@ -57,12 +57,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Term ####
     Route::resource('terms', TermController::class);
+    Route::get('activate', [TermController::class, 'activate'])->name('activate');
 
     #### Subject Class ####
     Route::resource('subjectsClasses', SubjectClassController::class);
 
     #### Lesson ####
     Route::resource('lessons', LessonController::class);
+    Route::get('showUnit', [LessonController::class, 'showUnit'])->name('showUnit');
 
     #### Notification ####
     Route::resource('notifications', NotificationController::class);
@@ -82,6 +84,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Online Exam ####
     Route::resource('onlineExam', OnlineExamController::class);
     Route::get('examble_type', [OnlineExamController::class, 'examble_type'])->name('examble_type');
+    Route::get('indexQuestion/{id}', [OnlineExamController::class, 'indexQuestion'])->name('indexQuestion');
+    Route::post('addQuestion', [OnlineExamController::class, 'addQuestion'])->name('addQuestion');
+    Route::post('deleteQuestion', [OnlineExamController::class, 'deleteQuestion'])->name('deleteQuestion');
 
     #### Phone Communications ####
     Route::resource('phoneCommunications', PhoneCommunicationController::class);

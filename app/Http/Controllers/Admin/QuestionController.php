@@ -49,17 +49,27 @@ class QuestionController extends Controller
             if ($request->id == 'App\Models\Lesson') {
                 $data = Lesson::get();
                 foreach ($data as $value) {
-                    $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
+                    if($value->subject_class->term->status == 'active')
+                    {
+                        $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
+                    }
                 }
-            } else if ($request->id == 'App\Models\Season') {
-                $data = SubjectClass::where('season_id', $request->season_id)->get();
+            } else if ($request->id == 'App\Models\SubjectClass') {
+                $data = SubjectClass::where('id', $request->season_id)->get();
+                dd($data);
                 foreach ($data as $value) {
-                    $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
+                    if($value->term->status == 'activate')
+                    {
+                        $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
+                    }
                 }
             } else if ($request->id == 'App\Models\VideoParts') {
                 $data = videoParts::get();
                 foreach ($data as $value) {
-                    $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
+                    if($value->term->status == 'activate')
+                    {
+                        $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
+                    }
                 }
             }
 

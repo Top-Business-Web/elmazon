@@ -4,34 +4,44 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
-                    <label for="name_ar" class="form-control-label"><?php echo e(trans('admin.name_ar')); ?></label>
+                    <label for="name_ar" class="form-control-label">الاسم بالعربية</label>
                     <input type="text" class="form-control" name="name_ar">
                 </div>
                 <div class="col-md-6">
-                    <label for="name_en" class="form-control-label"><?php echo e(trans('admin.name_en')); ?></label>
+                    <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
                     <input type="text" class="form-control" name="name_en">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <label for="name_ar" class="form-control-label"><?php echo e(trans('admin.season')); ?></label>
+                    <label for="name_ar" class="form-control-label">الترم</label>
                     <Select name="term_id" class="form-control">
-                        <option selected disabled style="text-align: center">Select Season</option>
+                        <option selected disabled style="text-align: center">اختار ترم</option>
                         <?php $__currentLoopData = $terms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $term): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($term->id); ?>"
-                                    style="text-align: center"><?php echo e($term->name_en); ?></option>
+                                    style="text-align: center"><?php echo e($term->name_ar); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </Select>
                 </div>
                 <div class="col-md-6">
-                    <label for="note" class="form-control-label"><?php echo e(trans('admin.note')); ?></label>
-                    <input type="text" class="form-control" name="note">
+                    <label for="name_ar" class="form-control-label">الصف</label>
+                    <Select name="season_id" class="form-control">
+                        <option selected disabled style="text-align: center">اختار الصف</option>
+                        <?php $__currentLoopData = $seasons; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $season): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($season->id); ?>"
+                                    style="text-align: center"><?php echo e($season->name_ar); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </Select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
+                        <label for="note" class="form-control-label">ملاحظة</label>
+                        <textarea class="form-control" name="note" rows="8"></textarea>
+                    </div>
+                <div class="col-md-6">
                     <div class="form-group">
-                        <label for="">Image :</label>
+                        <label for="">الصورة :</label>
                         <input type="file" name="image" class="dropify"
                                data-default-file=""/>
 
@@ -43,8 +53,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo e(trans('admin.close')); ?></button>
-            <button type="submit" class="btn btn-primary" id="addButton"><?php echo e(trans('admin.add')); ?></button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+            <button type="submit" class="btn btn-primary" id="addButton">اضافة</button>
         </div>
     </form>
 </div>

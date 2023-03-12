@@ -34,7 +34,7 @@
                     <Select name="examable_type" id="type" class="form-control type_choose" required="required">
                         <option selected disabled style="text-align: center">اختار النوع</option>
                         <option value="App\Models\Lesson" style="text-align: center">درس</option>
-                        <option value="App\Models\Season" style="text-align: center">فصل</option>
+                        <option value="App\Models\SubjectClass" style="text-align: center">الوحدة</option>
                         <option value="App\Models\VideoParts" style="text-align: center">الفيديو</option>
                     </Select>
                 </div>
@@ -62,7 +62,7 @@
 
 <script>
 
-    $(".type_choose").click(function () {
+    $(".type_choose").change(function () {
         var element = document.getElementById("type");
         var value = $(element).find("option:selected").val();
         var season = $('.seasonChoose').find("option:selected").val();

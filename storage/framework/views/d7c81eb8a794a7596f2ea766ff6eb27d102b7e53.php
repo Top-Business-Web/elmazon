@@ -85,7 +85,6 @@
                 </div>
             </div>
         </div>
-        <!-- Create Or Edit Modal -->
     </div>
     <?php echo $__env->make('Admin/layouts_admin/myAjaxHelper', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php $__env->stopSection(); ?>
@@ -106,6 +105,7 @@
         // Add Using Ajax
         showAddModal('<?php echo e(route('onlineExam.create')); ?>');
         addScript();
+        showAddQuestion('<?php echo e(route('indexQuestion',':id')); ?>')
         // Add Using Ajax
         showEditModal('<?php echo e(route('onlineExam.edit',':id')); ?>');
         editScript();

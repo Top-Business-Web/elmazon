@@ -8,6 +8,7 @@ use App\Models\lesson;
 use App\Models\SubjectClass;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Models\Season;
 
 class LessonController extends Controller
 {
@@ -30,7 +31,6 @@ class LessonController extends Controller
                 ->make(true);
         }
         return view('admin.lessons.index');
-
     }
     // Index End
 
@@ -38,9 +38,48 @@ class LessonController extends Controller
 
     public function create()
     {
+        $seasons = Season::get();
         $subjects_classes = SubjectClass::get();
-        return view('admin.lessons.parts.create', compact('subjects_classes'));
+        return view('admin.lessons.parts.create', compact('subjects_classes', 'seasons'));
     }
+    // Create End
+
+    // Show Unit 
+
+    public function showUnit(Request $request)
+    {
+        if ($request->ajax()) {
+            $output = '<option value="" style="text-align: center">اختار</option>';
+            if ($request->id == 1) {
+                $first_levels = SubjectClass::where('season_id', $request->id)->get();
+                foreach ($first_levels as $first_level) {
+                    if ($first_level->term->status == 'active') {
+                        $output .= '<option value="' . $first_level->id . '" style="text-align: center">' . $first_level->name_ar . '</option>';
+                    }
+                }
+            } else if ($request->id == 2) {
+                $second_levels = SubjectClass::where('season_id', $request->id)->get();
+                foreach ($second_levels as $second_level) {
+                    if ($second_level->term->status == 'active') {
+                        $output .= '<option value="' . $second_level->id . '" style="text-align: center">' . $second_level->name_ar . '</option>';
+                    }
+                }
+            } else if ($request->id == 3) {
+                $third_levels = SubjectClass::where('season_id', $request->id)->get();
+                foreach ($third_levels as $third_level) {
+                    if ($third_level->term->status == 'active') {
+                        $output .= '<option value="' . $third_level->id . '" style="text-align: center">' . $third_level->name_ar . '</option>';
+                    }
+                }
+            }
+
+            return $output;
+        }
+    }
+
+    // Show Unit
+
+    // Store Start
 
     public function store(StoreLesson $request)
     {
@@ -52,14 +91,17 @@ class LessonController extends Controller
         }
     }
 
-    // Create End
+    // Store Start
+
+
 
     // Edit Start
 
     public function edit(Lesson $lesson)
     {
+        $seasons = Season::get();
         $subjects_classes = SubjectClass::get();
-        return view('admin.lessons.parts.edit', compact('lesson', 'subjects_classes'));
+        return view('admin.lessons.parts.edit', compact('lesson', 'subjects_classes', 'seasons'));
     }
 
     // Edit End

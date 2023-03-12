@@ -1,10 +1,10 @@
 @extends('Admin/layouts_admin/master')
 
 @section('title')
-    {{ trans('admin.terms') }}
+    الترمات
 @endsection
 @section('page_name')
-    {{ trans('admin.term') }}
+    الترم
 @endsection
 @section('content')
 
@@ -17,7 +17,7 @@
                         <button class="btn btn-secondary btn-icon text-white addBtn">
 									<span>
 										<i class="fe fe-plus"></i>
-									</span> {{ trans('admin.add') }}
+									</span> اضافة
                         </button>
                     </div>
                 </div>
@@ -28,9 +28,9 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">{{ trans('admin.name_en') }}</th>
-                                <th class="min-w-50px">{{ trans('admin.note') }}</th>
-                                <th class="min-w-50px rounded-end">{{ trans('admin.actions') }}</th>
+                                <th class="min-w-50px">الاسم</th>
+                                <th class="min-w-50px">ملاحظة</th>
+                                <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
                         </table>
@@ -45,21 +45,21 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">{{ trans('admin.delete') }}</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">حذف</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <input id="delete_id" name="id" type="hidden">
-                        <p>{{ trans('admin.sure_delete') }}<span id="title" class="text-danger"></span></p>
+                        <p>هل انت متاكد من عملية الحذف<span id="title" class="text-danger"></span></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_delete_modal">
-                            {{ trans('admin.close') }}
+                            اغلاق
                         </button>
                         <button type="button" class="btn btn-danger"
-                                id="delete_btn">{{ trans('admin.delete') }}</button>
+                                id="delete_btn">حذف</button>
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">{{ trans('admin.term') }}</h5>
+                        <h5 class="modal-title" id="example-Modal3">ترم</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -87,10 +87,11 @@
     @include('Admin/layouts_admin/myAjaxHelper')
 @endsection
 @section('ajaxCalls')
+
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'name_en', name: 'name_en'},
+            {data: 'name_ar', name: 'name_ar'},
             {data: 'note', name: 'note'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
@@ -103,6 +104,23 @@
         // Add Using Ajax
         showEditModal('{{route('terms.edit',':id')}}');
         editScript();
+
+    
+        function showEdit(routeOfEdit){
+            $(document).on('click', '.checkBtn', function () {
+                alert('hello')
+                // var id = $(this).data('id')
+                // var url = routeOfEdit;
+                // url = url.replace(':id', id)
+                // $('#answerModal-body').html(loader)
+                // $('#answerModal').modal('show')
+
+                // setTimeout(function () {
+                //     $('#answerModal-body').load(url)
+                // }, 500)
+            })
+        }
+
     </script>
 @endsection
 
