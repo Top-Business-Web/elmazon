@@ -27,9 +27,6 @@ class QuestionController extends Controller{
             if(!$exam){
                 return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
             }
-            $timer = ExamInstruction::where('online_exam_id','=',$id)->first()->quiz_minute;
-            $exam->quiz_minute = (int)$timer;
-
             if(isset($exam)){
                 return self::returnResponseDataApi(new OnlineExamQuestionResource($exam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
             }
