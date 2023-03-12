@@ -79,7 +79,6 @@ Route::group(['prefix' => 'auth'], function (){
         Route::delete('comment/delete/{id}',[CommentController::class,'deleteComment']);
         Route::post('replay/update/{id}',[CommentController::class,'updateReplay']);
         Route::delete('replay/delete/{id}',[CommentController::class,'deleteReplay']);
-
     });
 
     Route::group(['prefix' => 'video','middleware' => ['jwt']], function (){
