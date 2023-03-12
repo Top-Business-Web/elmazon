@@ -90,7 +90,6 @@
 
                 });
             } else {
-                alert(question)
                 $.ajax({
                     type: 'POST',
                     url: '{{ route('deleteQuestion') }}',

@@ -57,7 +57,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Term ####
     Route::resource('terms', TermController::class);
-    Route::get('activate', [TermController::class, 'activate'])->name('activate');
+    Route::get('activate/{id}', [TermController::class, 'activate'])->name('activate');
 
     #### Subject Class ####
     Route::resource('subjectsClasses', SubjectClassController::class);

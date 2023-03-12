@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title'); ?>
     الترمات
 <?php $__env->stopSection(); ?>
@@ -7,6 +5,7 @@
     الترم
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
+
 
     <div class="row">
         <div class="col-md-12 col-lg-12">
@@ -105,21 +104,10 @@
         showEditModal('<?php echo e(route('terms.edit',':id')); ?>');
         editScript();
 
-    
-        function showEdit(routeOfEdit){
-            $(document).on('click', '.checkBtn', function () {
-                alert('hello')
-                // var id = $(this).data('id')
-                // var url = routeOfEdit;
-                // url = url.replace(':id', id)
-                // $('#answerModal-body').html(loader)
-                // $('#answerModal').modal('show')
 
-                // setTimeout(function () {
-                //     $('#answerModal-body').load(url)
-                // }, 500)
-            })
-        }
+      $(".checkBtn").on('click', function() {
+        alert('hehj')
+      })
 
     </script>
 <?php $__env->stopSection(); ?>

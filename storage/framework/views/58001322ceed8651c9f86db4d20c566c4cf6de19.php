@@ -91,7 +91,6 @@
 
                 });
             } else {
-                alert(question)
                 $.ajax({
                     type: 'POST',
                     url: '<?php echo e(route('deleteQuestion')); ?>',

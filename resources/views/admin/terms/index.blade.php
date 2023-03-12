@@ -8,6 +8,7 @@
 @endsection
 @section('content')
 
+
     <div class="row">
         <div class="col-md-12 col-lg-12">
             <div class="card">
@@ -87,7 +88,7 @@
     @include('Admin/layouts_admin/myAjaxHelper')
 @endsection
 @section('ajaxCalls')
-
+{{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script> --}}
     <script>
         var columns = [
             {data: 'id', name: 'id'},
@@ -105,21 +106,10 @@
         showEditModal('{{route('terms.edit',':id')}}');
         editScript();
 
-    
-        function showEdit(routeOfEdit){
-            $(document).on('click', '.checkBtn', function () {
-                alert('hello')
-                // var id = $(this).data('id')
-                // var url = routeOfEdit;
-                // url = url.replace(':id', id)
-                // $('#answerModal-body').html(loader)
-                // $('#answerModal').modal('show')
 
-                // setTimeout(function () {
-                //     $('#answerModal-body').load(url)
-                // }, 500)
-            })
-        }
+      $(".checkBtn").on('click', function() {
+        alert('hehj')
+      })
 
     </script>
 @endsection

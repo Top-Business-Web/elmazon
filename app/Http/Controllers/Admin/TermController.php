@@ -23,11 +23,8 @@ class TermController extends Controller
                                     data-id="' . $terms->id . '" data-title="' . $terms->name_en . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                            @if('.$terms->status == "active".')
-                                <button type="button" data-id="' . $terms->id . '" class="btn btn-pill btn-success-light checkBtn"><i class="fa fa-check"></i></button>
-                            @else
-                                <button type="button" data-id="' . $terms->id . '" class="btn btn-pill btn-danger-light checkBtn"><i class="fa fa-check"></i></button>
-                            @endif
+                            <a href="' . route('activate', $terms->id) . '" class="btn btn-pill btn-success-light checkBtn">'. ($terms->status == 'active' ? 'مفعل' : 'غير مفعل') .'</a>
+
                        ';
                 })
                 ->escapeColumns([])
@@ -63,9 +60,19 @@ class TermController extends Controller
 
     // Activate
 
-    public function activate(Request $request)
+    public function activate($id)
     {
-        
+        $term = Term::where('id', $id)->first();
+
+        if ($term->update([
+            'status' => $term->status == 'active' ? 'not_active' : 'active'
+        ])) {
+            toastr('تم التفعيل');
+            return view('admin.terms.index');
+        } else {
+
+        }
+
     }
 
     // Activate

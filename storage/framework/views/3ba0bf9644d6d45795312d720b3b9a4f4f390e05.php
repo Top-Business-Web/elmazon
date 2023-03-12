@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">السؤال</label>
-                    <input type="text" class="form-control" name="question">
+                    <textarea class="form-control" rows="3" name="question"></textarea>
                 </div>
                 <div class="col-md-6">
                     <label for="season" class="form-control-label">الصف</label>
