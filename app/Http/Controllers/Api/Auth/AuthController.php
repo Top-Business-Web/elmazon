@@ -117,7 +117,6 @@ class AuthController extends Controller
         try {
 
             $allNotification = Notification::whereHas('term', function ($term) {
-
                 $term->where('status', '=', 'active');
             })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
 
