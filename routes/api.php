@@ -32,6 +32,8 @@ Route::group(['prefix' => 'auth'], function (){
         Route::get('all-notifications',[AuthController::class,'allNotifications']);
         Route::post('papel-sheet-exam/user/{id}',[AuthController::class,'papel_sheet_exam']);
         Route::get('papel-sheet-exam/show',[AuthController::class,'papel_sheet_exam_show']);
+        Route::post('update-profile',[AuthController::class,'updateProfile']);
+
     });
   });
 

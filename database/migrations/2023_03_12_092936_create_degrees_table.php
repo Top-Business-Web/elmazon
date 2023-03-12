@@ -17,13 +17,13 @@ class CreateDegreesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('text_exam_user_id')->nullable();
-            $table->unsignedBigInteger('online_exam__user_id')->nullable();
+            $table->unsignedBigInteger('online_exam_user_id')->nullable();
             $table->enum('type',['text','choice']);
             $table->integer('degree');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('text_exam_user_id')->references('id')->on('text_exam_users')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreign('online_exam__user_id')->references('id')->on('online_exam__users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('online_exam_user_id')->references('id')->on('online_exam_users')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 
