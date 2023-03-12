@@ -15,7 +15,11 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->longText('question');
+            $table->longText('question')->nullable();
+            $table->longText('image')->nullable();
+            $table->enum('file_type',['image','text']);
+            $table->enum('question_type',['choice','text']);
+            $table->integer('degree');
             $table->text('note')->nullable();
             $table->unsignedBigInteger('season_id');
             $table->unsignedBigInteger('term_id');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Term;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -20,6 +21,8 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
+            'season' => $this->season,
+            'term' => Term::where('status','=','active')->first(),
             'father_phone' => $this->father_phone,
             'image' => $this->image != null ? asset('/users/'.$this->image) : asset('/default/avatar.jpg'),
             'user_status' => $this->user_status,

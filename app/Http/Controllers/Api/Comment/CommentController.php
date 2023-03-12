@@ -41,7 +41,6 @@ class CommentController extends Controller{
                 $errors_arr = [
                     407 => 'Failed,The image type must be an jpg or jpeg or png.',
                     408 => 'Failed,The type of comment must be an file or text or audio',
-
                 ];
 
                 $code = collect($validator->errors())->flatten(1)[0];
@@ -72,7 +71,6 @@ class CommentController extends Controller{
         }
 
         $add_comment = Comment::create([
-
             'comment' => $comment ?? null,
             'audio' => $audioUpload ?? null,
             'image' => $file ?? null,
@@ -147,7 +145,6 @@ class CommentController extends Controller{
         }
 
         $comment_replay = CommentReplay::create([
-
             'comment' => $replay ?? null,
             'audio' => $audioUpload ?? null,
             'image' => $file ?? null,
@@ -225,7 +222,6 @@ class CommentController extends Controller{
 
         if ($comment->user_id == Auth::guard('user-api')->id()){
             $comment->update([
-
                 'comment' => $comment_add ?? null,
                 'audio' => $audioUpload ?? null,
                 'image' => $file ?? null,
