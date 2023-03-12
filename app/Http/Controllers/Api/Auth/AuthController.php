@@ -312,13 +312,13 @@ class AuthController extends Controller
             if(file_exists(public_path('users/'. $user->image)) && $user->image != null){
                 unlink(public_path('users/'. $user->image));
             }
-
         }
 
         $user->update([
             'image' => $file ?? $user->image
         ]);
 
+        $user['token'] = $request->bearerToken();
         return self::returnResponseDataApi(new UserResource($user),"تم تعديل صوره الطالب بنجاح",200);
 
     }
@@ -337,7 +337,6 @@ class AuthController extends Controller
             })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->first();
 
             return response()->json([
-
                 'data' => [
                      'sliders' => SliderResource::collection($sliders),
                     'notification' => new NotificationResource($notification),
@@ -346,8 +345,6 @@ class AuthController extends Controller
                     'message' => "تم ارسال جميع بيانات الصفحه الرئيسيه",
                 ]
             ]);
-
-
         }catch (\Exception $exception) {
 
             return self::returnResponseDataApi(null,$exception->getMessage(),500);
