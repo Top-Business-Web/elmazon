@@ -16,7 +16,8 @@ class SeasonResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
+            'name_ar'  => $this->name_ar,
+            'name_en'  => $this->name_en,
         ];
     }
 }
