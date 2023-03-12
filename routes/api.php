@@ -35,7 +35,6 @@ Route::group(['prefix' => 'auth'], function (){
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
 
-
     });
   });
 
@@ -67,8 +66,6 @@ Route::group(['prefix' => 'auth'], function (){
 
     });
 
-
-
     Route::group(['prefix' => 'plans','middleware' => ['jwt']], function (){
         Route::get('all',[\App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController::class,'all_plans']);
         Route::get('oneDay',[\App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController::class,'plan_today']);
@@ -82,7 +79,6 @@ Route::group(['prefix' => 'auth'], function (){
         Route::delete('comment/delete/{id}',[CommentController::class,'deleteComment']);
         Route::post('replay/update/{id}',[CommentController::class,'updateReplay']);
         Route::delete('replay/delete/{id}',[CommentController::class,'deleteReplay']);
-
 
     });
 
