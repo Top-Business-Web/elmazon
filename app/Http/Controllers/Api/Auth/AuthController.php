@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AllExamResource;
 use App\Http\Resources\CommunicationResource;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\PapelSheetExamTimeResource;
 use App\Http\Resources\PapelSheetExamTimeUserResource;
 use App\Http\Resources\PapelSheetResource;
+use App\Http\Resources\SliderResource;
+use App\Http\Resources\SubjectClassResource;
 use App\Http\Resources\SuggestResource;
 use App\Http\Resources\UserResource;
+use App\Models\AllExam;
 use App\Models\Notification;
 use App\Models\PapelSheetExam;
 use App\Models\PapelSheetExamTime;
 use App\Models\PapelSheetExamUser;
 use App\Models\Section;
 use App\Models\Setting;
+use App\Models\Slider;
 use App\Models\SubjectClass;
 use App\Models\Suggestion;
 use App\Models\User;
@@ -315,6 +320,39 @@ class AuthController extends Controller
         ]);
 
         return self::returnResponseDataApi(new UserResource($user),"تم تعديل صوره الطالب بنجاح",200);
+
+    }
+
+    public function home_page(){
+
+        try {
+
+            $classes = SubjectClass::whereHas('term', function ($term){
+                $term->where('status','=','active');
+            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+
+            $sliders = Slider::get();
+            $notification = Notification::whereHas('term', function ($term) {
+                $term->where('status', '=', 'active');
+            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->first();
+
+            return response()->json([
+
+                'data' => [
+                     'sliders' => SliderResource::collection($sliders),
+                    'notification' => new NotificationResource($notification),
+                    'classes' => SubjectClassResource::collection($classes),
+                    'code' => 200,
+                    'message' => "تم ارسال جميع بيانات الصفحه الرئيسيه",
+                ]
+            ]);
+
+
+        }catch (\Exception $exception) {
+
+            return self::returnResponseDataApi(null,$exception->getMessage(),500);
+        }
+
 
     }
     public function logout(){
