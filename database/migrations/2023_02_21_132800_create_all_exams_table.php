@@ -17,6 +17,7 @@ class CreateAllExamsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name_ar');
             $table->string('name_en');
+            $table->integer('quize_minute');
             $table->text('note')->nullable();
             $table->timestamps();
         });
