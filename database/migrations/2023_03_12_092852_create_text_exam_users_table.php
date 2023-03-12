@@ -20,11 +20,11 @@ class CreateTextExamUsersTable extends Migration
             $table->unsignedBigInteger('question_id');
             $table->unsignedBigInteger('online_exam_id')->nullable();
             $table->unsignedBigInteger('all_exam_id')->nullable();
-            $table->longText('answer');
-            $table->longText('image');
-            $table->text('audio');
+            $table->longText('answer')->nullable();
+            $table->longText('image')->nullable();
+            $table->text('audio')->nullable();
             $table->enum('answer_type',['text','file','audio']);
-            $table->enum('status',['solved','leave','un_correct']);
+            $table->enum('status',['solved','leave']);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('question_id')->references('id')->on('questions')->cascadeOnUpdate()->cascadeOnDelete();

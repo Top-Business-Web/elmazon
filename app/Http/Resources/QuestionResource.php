@@ -17,9 +17,12 @@ class QuestionResource extends JsonResource
         return [
 
             'id' => $this->id,
-            'question' => $this->question,
+            'question' => $this->file_type == 'text' ? $this->question : asset('/question_images/'.$this->image),
+            'question_type' => $this->question_type,
+            'file_type' => $this->file_type,
+            'degree' => $this->degree,
             'note' => $this->note ?? 'note',
-            'answers' => AnswerResource::collection($this->answers),
+            'answers' =>  $this->question_type == 'choice' ? AnswerResource::collection($this->answers) : 'No answer',
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
 

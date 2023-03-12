@@ -6,8 +6,8 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="">Image :</label>
-                        <input type="file" name="image" class="dropify" value="{{ asset('users/default/avatar.jpg') }}"
-                               data-default-file="{{ asset('users/default/avatar.jpg') }}"/>
+                        <input type="file" name="image" class="dropify" value="{{ asset('users/default/avatar3.jpg') }}"
+                               data-default-file="{{ asset('users/default/avatar3.jpg') }}"/>
                     </div>
                     <span class="form-text text-danger text-center">
                         Recomended : 2048 X 1200 to up Px <br>

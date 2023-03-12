@@ -17,6 +17,7 @@ use App\Models\Section;
 use App\Models\Setting;
 use App\Models\SubjectClass;
 use App\Models\Suggestion;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -270,6 +271,53 @@ class AuthController extends Controller
         return self::returnResponseDataApi(new PapelSheetResource($papelSheetExam), "اهلا بك في الامتحان الورقي", 200);
     }
 
+
+    public function updateProfile(Request $request){
+
+        $rules = [
+            'image' => 'nullable|image|mimes:jpg,png,jpeg',
+        ];
+        $validator = Validator::make($request->all(), $rules, [
+            'image.mimes' => 407,
+            'images.image' => 408
+        ]);
+
+        if ($validator->fails()) {
+
+            $errors = collect($validator->errors())->flatten(1)[0];
+            if (is_numeric($errors)) {
+
+                $errors_arr = [
+                    407 => 'Failed,The image type must be an jpg or png or jpeg.',
+                    408 => 'Failed,The file uploaded must be an image'
+                ];
+
+                $code = collect($validator->errors())->flatten(1)[0];
+                return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+            }
+            return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
+        }
+        $user = Auth::guard('user-api')->user();
+
+        if($image = $request->file('image')){
+            $destinationPath = 'users/';
+            $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $file);
+            $request['image'] = "$file";
+
+            if(file_exists(public_path('users/'. $user->image)) && $user->image != null){
+                unlink(public_path('users/'. $user->image));
+            }
+
+        }
+
+        $user->update([
+            'image' => $file ?? $user->image
+        ]);
+
+        return self::returnResponseDataApi(new UserResource($user),"تم تعديل صوره الطالب بنجاح",200);
+
+    }
     public function logout(){
 
         try {
