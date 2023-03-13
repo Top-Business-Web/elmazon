@@ -45,7 +45,6 @@ class VideoPartResource extends JsonResource
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
             'exams' => OnlineExamResource::collection($this->exams),
-
         ];
     }
 }
