@@ -417,7 +417,7 @@ class AuthController extends Controller
                 }
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
-            PhoneToken::where('token','=',$request->token)->delete();
+            PhoneToken::where('token','=',$request->token)->where('user_id','=',auth('user-api')->id())->delete();
             auth()->guard('user-api')->logout();
             return self::returnResponseDataApi(null, "تم تسجيل الخروج بنجاح", 200);
 
