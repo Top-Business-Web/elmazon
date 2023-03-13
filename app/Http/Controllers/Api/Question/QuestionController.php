@@ -65,21 +65,22 @@ class QuestionController extends Controller{
                     ]);
                 }else{
 
-                if($image = $request->file('image')){
-                    $destinationPath = 'text_user_exam_files/images/';
-                    $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
-                    $image->move($destinationPath, $file);
-                    $request['details'][$i]['image'] = "$file";
-                }
+                    if($image = $request->details[$i]['image']){
+                        $destinationPath = 'text_user_exam_files/images/';
+                        $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                        $image->move($destinationPath, $file);
+                        $request->details[$i]['image'] = "$file";
+                    }
 
-                if($audio = $request->file('audio')){
-                    $audioPath = 'text_user_exam_files/audios/';
-                    $fileAudio = date('YmdHis') . "." . $audio->getClientOriginalExtension();
-                    $audio->move($audioPath,$fileAudio);
-                    $request['details'][$i]['audio'] = "$fileAudio";
-                }
 
-                return  $request['details'][$i]['image'];
+                    if($audio =  $request->details[$i]['audio']){
+                        $audioPath = 'text_user_exam_files/audios/';
+                        $fileAudio = date('YmdHis') . "." . $audio->getClientOriginalExtension();
+                        $audio->move($audioPath,$fileAudio);
+                        $request->details[$i]['audio'] = "$fileAudio";
+                    }
+
+//                return  $request['details'][$i]['image'];
                $textExamUser = TextExamUser::create([
                    'user_id' => auth()->id(),
                    'question_id' => $request->details[$i]['question'],
@@ -91,12 +92,12 @@ class QuestionController extends Controller{
                    'status' =>  ($request->details[$i]['answer'] != null || $file != null || $audio != null) ? 'solved' : 'leave',
                ]);
 
-//                Degree::create([
-//                    'user_id' => auth()->id(),
-//                    'text_exam_user_id' => $textExamUser->id,
-//                    'type' => 'text',
-//                    'degree' => 0,
-//                ]);
+                Degree::create([
+                    'user_id' => auth()->id(),
+                    'text_exam_user_id' => $textExamUser->id,
+                    'type' => 'text',
+                    'degree' => 0,
+                ]);
                 }
 
             }
