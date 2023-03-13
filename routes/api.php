@@ -82,8 +82,8 @@ Route::group(['prefix' => 'auth'], function (){
         Route::delete('replay/delete/{id}',[CommentController::class,'deleteReplay']);
     });
 
-    Route::group(['prefix' => 'video','middleware' => ['jwt']], function (){
-        Route::get('onlineExam/questions/{id}',[\App\Http\Controllers\Api\Question\QuestionController::class,'all_questions_by_online_exam']);
+    Route::group(['prefix' => 'show_exam','middleware' => ['jwt']], function (){
+        Route::get('questions/{id}',[\App\Http\Controllers\Api\Question\QuestionController::class,'all_questions_by_online_exam']);
         Route::post('onlineExam/exam/{id}',[\App\Http\Controllers\Api\Question\QuestionController::class,'online_exam_by_user']);
 
     });
