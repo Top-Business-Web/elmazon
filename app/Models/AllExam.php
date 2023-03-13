@@ -28,4 +28,9 @@ class AllExam extends Model
         return $this->hasOne(ExamInstruction::class,'all_exam_id', 'id');
     }
 
+
+    public function questions(){
+
+        return $this->belongsToMany(Question::class,'online_exam_questions', 'all_exam_id','question_id','id','id');
+    }
 }
