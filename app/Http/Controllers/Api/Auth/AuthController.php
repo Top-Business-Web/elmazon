@@ -343,9 +343,10 @@ class AuthController extends Controller
                      'sliders' => SliderResource::collection($sliders),
                     'notification' => new NotificationResource($notification),
                     'classes' => SubjectClassResource::collection($classes),
-                    'code' => 200,
-                    'message' => "تم ارسال جميع بيانات الصفحه الرئيسيه",
-                ]
+
+                ],
+                'code' => 200,
+                'message' => "تم ارسال جميع بيانات الصفحه الرئيسيه",
             ]);
         }catch (\Exception $exception) {
 
