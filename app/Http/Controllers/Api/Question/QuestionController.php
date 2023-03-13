@@ -69,33 +69,34 @@ class QuestionController extends Controller{
                     $destinationPath = 'text_user_exam_files/images/';
                     $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
                     $image->move($destinationPath, $file);
-                    $request['image'] = "$file";
-
+                    $request['details'][$i]['image'] = "$file";
                 }
 
                 if($audio = $request->file('audio')){
                     $audioPath = 'text_user_exam_files/audios/';
                     $fileAudio = date('YmdHis') . "." . $audio->getClientOriginalExtension();
                     $audio->move($audioPath,$fileAudio);
-                    $request['audio'] = "$fileAudio";
+                    $request['details'][$i]['audio'] = "$fileAudio";
                 }
+
+                return  $request['details'][$i]['image'];
                $textExamUser = TextExamUser::create([
                    'user_id' => auth()->id(),
                    'question_id' => $request->details[$i]['question'],
                    'online_exam_id' => $exam->id,
-                   'answer' => $request->details[$i]['answer'],
+                   'answer' => $request->details[$i]['answer'] ?? null,
                    'image' => $file ?? null,
                    'audio' => $fileAudio ?? null,
                    'answer_type' => 'text',
                    'status' =>  ($request->details[$i]['answer'] != null || $file != null || $audio != null) ? 'solved' : 'leave',
                ]);
 
-                Degree::create([
-                    'user_id' => auth()->id(),
-                    'text_exam_user_id' => $textExamUser->id,
-                    'type' => 'text',
-                    'degree' => 0,
-                ]);
+//                Degree::create([
+//                    'user_id' => auth()->id(),
+//                    'text_exam_user_id' => $textExamUser->id,
+//                    'type' => 'text',
+//                    'degree' => 0,
+//                ]);
                 }
 
             }
