@@ -17,5 +17,11 @@ class Lesson extends Model
     }
 
 
+    public function subject_class(){
+
+        return $this->belongsTo(SubjectClass::class,'subject_class_id','id');
+    }
+
+
 
 }

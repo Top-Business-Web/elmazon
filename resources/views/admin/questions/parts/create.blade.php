@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">السؤال</label>
-                    <input type="text" class="form-control" name="question">
+                    <textarea class="form-control" rows="3" name="question"></textarea>
                 </div>
                 <div class="col-md-6">
                     <label for="season" class="form-control-label">الصف</label>
@@ -34,7 +34,7 @@
                     <Select name="examable_type" id="type" class="form-control type_choose" required="required">
                         <option selected disabled style="text-align: center">اختار النوع</option>
                         <option value="App\Models\Lesson" style="text-align: center">درس</option>
-                        <option value="App\Models\Season" style="text-align: center">فصل</option>
+                        <option value="App\Models\SubjectClass" style="text-align: center">الوحدة</option>
                         <option value="App\Models\VideoParts" style="text-align: center">الفيديو</option>
                     </Select>
                 </div>
@@ -62,7 +62,7 @@
 
 <script>
 
-    $(".type_choose").click(function () {
+    $(".type_choose").change(function () {
         var element = document.getElementById("type");
         var value = $(element).find("option:selected").val();
         var season = $('.seasonChoose').find("option:selected").val();
