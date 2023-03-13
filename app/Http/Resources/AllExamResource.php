@@ -22,6 +22,7 @@ class AllExamResource extends JsonResource
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
             'instruction' => new AllExamInstructionResource($this->instruction),
+            'questions' => QuestionResource::collection($this->questions),
         ];
     }
 }

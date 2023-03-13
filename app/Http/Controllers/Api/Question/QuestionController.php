@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\Question;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AllExamResource;
 use App\Http\Resources\OnlineExamQuestionResource;
 use App\Http\Resources\QuestionResource;
+use App\Models\AllExam;
 use App\Models\Answer;
 use App\Models\Degree;
 use App\Models\ExamInstruction;
@@ -19,17 +21,50 @@ use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller{
 
-    public function all_questions_by_online_exam($id){
+    public function all_questions_by_online_exam(Request $request,$id){
 
         try {
 
-            $exam = OnlineExam::where('id', $id)->first();
-            if(!$exam){
-                return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
+            $rules = [
+                'exam_type' => 'required|in:online_exam,full_exam',
+            ];
+            $validator = Validator::make($request->all(), $rules, [
+                'exam_type.in' => 407,
+            ]);
+
+            if ($validator->fails()) {
+
+                $errors = collect($validator->errors())->flatten(1)[0];
+                if (is_numeric($errors)) {
+
+                    $errors_arr = [
+                        407 => 'Failed,The exam type must be an online_exam or full_exam.',
+                    ];
+
+                    $code = collect($validator->errors())->flatten(1)[0];
+                    return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+                }
+                return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
-            if(isset($exam)){
-                return self::returnResponseDataApi(new OnlineExamQuestionResource($exam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
+            if($request->exam_type == 'online_exam'){
+                $onlineExam = OnlineExam::where('id',$id)->first();
+                if(!$onlineExam){
+                    return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
+                }
+                if(isset($onlineExam)){
+                    return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
+                }
+            }elseif ($request->exam_type == 'full_exam'){
+
+                $full_exam = AllExam::where('id',$id)->first();
+                if(!$full_exam){
+                    return self::returnResponseDataApi(null,"الامتحان الشامل غير موجود",404);
+                }
+                if(isset($full_exam)){
+                    return self::returnResponseDataApi(new OnlineExamQuestionResource($full_exam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
+                }
             }
+
         }catch (\Exception $exception) {
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
@@ -38,11 +73,13 @@ class QuestionController extends Controller{
 
     public function online_exam_by_user(Request $request,$id){
 
+//        return $request->details;
         try {
             $exam = OnlineExam::where('id', $id)->first();
             if(!$exam){
                 return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
             }
+
 
             for ($i = 0; $i < count($request->details);$i++){
 
@@ -65,20 +102,19 @@ class QuestionController extends Controller{
                     ]);
                 }else{
 
-                    if($image = $request->details[$i]['image']){
-                        $destinationPath = 'text_user_exam_files/images/';
-                        $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
-                        $image->move($destinationPath, $file);
-                        $request->details[$i]['image'] = "$file";
-                    }
+                    $image = $request->details[$i]['image'];
+                    $destinationPath = 'text_user_exam_files/images/';
+                    $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                    $image->move($destinationPath, $file);
+                    $request->details[$i]['image'] = "$file";
 
 
-                    if($audio =  $request->details[$i]['audio']){
-                        $audioPath = 'text_user_exam_files/audios/';
-                        $fileAudio = date('YmdHis') . "." . $audio->getClientOriginalExtension();
-                        $audio->move($audioPath,$fileAudio);
-                        $request->details[$i]['audio'] = "$fileAudio";
-                    }
+                    $audio = $request->details[$i]['audio'];
+                    $audioPath = 'text_user_exam_files/audios/';
+                    $fileAudio = date('YmdHis') . "." . $audio->getClientOriginalExtension();
+                    $audio->move($audioPath, $fileAudio);
+                    $request->details[$i]['audio'] = "$fileAudio";
+
 
 //                return  $request['details'][$i]['image'];
                $textExamUser = TextExamUser::create([
@@ -101,6 +137,8 @@ class QuestionController extends Controller{
                 }
 
             }
+
+
             return self::returnResponseDataApi(null,"تم حل جميع الاسئله",200);
 
         }catch (\Exception $exception) {

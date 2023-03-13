@@ -22,5 +22,4 @@ class TextExamUser extends Model
         'status',
     ];
 
-    protected $appends = ["image", "audio"];
 }
