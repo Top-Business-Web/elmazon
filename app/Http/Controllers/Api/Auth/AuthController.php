@@ -392,9 +392,32 @@ class AuthController extends Controller
         }
     }
 
-    public function logout(){
+    public function logout(Request $request){
 
         try {
+
+            $rules = [
+                'token' => 'required|exists:phone_tokens,token',
+            ];
+            $validator = Validator::make($request->all(), $rules, [
+                'token.exists' => 407,
+            ]);
+
+            if ($validator->fails()) {
+
+                $errors = collect($validator->errors())->flatten(1)[0];
+                if (is_numeric($errors)) {
+
+                    $errors_arr = [
+                        407 => 'Failed,The token does not exists.',
+                    ];
+
+                    $code = collect($validator->errors())->flatten(1)[0];
+                    return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+                }
+                return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
+            }
+            PhoneToken::where('token','=',$request->token)->delete();
             auth()->guard('user-api')->logout();
             return self::returnResponseDataApi(null, "تم تسجيل الخروج بنجاح", 200);
 
