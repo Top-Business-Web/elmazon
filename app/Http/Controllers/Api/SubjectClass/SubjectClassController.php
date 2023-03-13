@@ -32,7 +32,7 @@ class SubjectClassController extends Controller
             return response()->json([
 
                 'data' => [
-                    'classes' => SubjectClassResource::collection($classes),
+                     'classes' => SubjectClassResource::collection($classes),
                      'fullExams' => AllExamResource::collection($fullExams),
                     'code' => 200,
                     'message' => "تم الحصول علي جميع الدروس التابعه لهذا الفصل",
