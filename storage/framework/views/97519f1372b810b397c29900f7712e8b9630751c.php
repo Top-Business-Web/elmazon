@@ -1,1 +1,0 @@
-<?php /**PATH C:\laragon\www\students\resources\views/admin/monthly_plans/fullcalendar.blade.php ENDPATH**/ ?>

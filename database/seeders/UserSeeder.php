@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
             'password' =>  Hash::make('123456'),
             'phone' => '01062933188',
             'father_phone' => '1005717155',
-            'image' => 'avatar.jpg',
+            'image' => 'avatar3.jpg',
             'user_status' => 'active',
             'center' => 'in',
             'code' => rand(1,3000),

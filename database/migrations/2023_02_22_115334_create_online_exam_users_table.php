@@ -17,7 +17,7 @@ class CreateOnlineExamUsersTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('question_id');
-            $table->unsignedBigInteger('answer_id');
+            $table->unsignedBigInteger('answer_id')->nullable();
             $table->unsignedBigInteger('online_exam_id')->nullable();
             $table->unsignedBigInteger('all_exam_id')->nullable();
             $table->enum('status',['solved','leave','un_correct']);

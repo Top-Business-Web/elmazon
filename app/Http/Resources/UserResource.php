@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Term;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -15,11 +16,12 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
+            'season' => new SeasonResource($this->season),
+            'term' => new TermResource(Term::where('status','=','active')->first()),
             'father_phone' => $this->father_phone,
             'image' => $this->image != null ? asset('/users/'.$this->image) : asset('/default/avatar.jpg'),
             'user_status' => $this->user_status,
@@ -29,8 +31,7 @@ class UserResource extends JsonResource
             'country' => new CountryResource($this->country),
             'token' => 'Bearer ' . $this->token,
             'created_at' => $this->created_at->format('Y-m-d'),
-            'updated_at' => $this->created_at->format('Y-m-d')
-
+            'updated_at' => $this->created_at->format('Y-m-d'),
         ];
     }
 }

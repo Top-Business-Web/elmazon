@@ -17,7 +17,7 @@ class MonthlyPlanController extends Controller{
         try {
 
             $plans = MonthlyPlan::get();
-            return self::returnResponseDataApi(MonthlyPlanResource::collection($plans), "تم الحصول علي بيانات الخطه الشهريه بنجاح", 500);
+            return self::returnResponseDataApi(MonthlyPlanResource::collection($plans), "تم الحصول علي بيانات الخطه الشهريه بنجاح", 200);
         } catch (\Exception $exception) {
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);

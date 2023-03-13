@@ -2,20 +2,27 @@
 
 namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AllExamResource;
 use App\Http\Resources\CommunicationResource;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\PapelSheetExamTimeResource;
+use App\Http\Resources\PapelSheetExamTimeUserResource;
 use App\Http\Resources\PapelSheetResource;
+use App\Http\Resources\SliderResource;
+use App\Http\Resources\SubjectClassResource;
 use App\Http\Resources\SuggestResource;
 use App\Http\Resources\UserResource;
+use App\Models\AllExam;
 use App\Models\Notification;
 use App\Models\PapelSheetExam;
 use App\Models\PapelSheetExamTime;
 use App\Models\PapelSheetExamUser;
 use App\Models\Section;
 use App\Models\Setting;
+use App\Models\Slider;
 use App\Models\SubjectClass;
 use App\Models\Suggestion;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -115,7 +122,6 @@ class AuthController extends Controller
         try {
 
             $allNotification = Notification::whereHas('term', function ($term) {
-
                 $term->where('status', '=', 'active');
             })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
 
@@ -230,10 +236,10 @@ class AuthController extends Controller
                                 ]);
                                 return response()->json([
                                     'data' => [
-                                        'exam' => new PapelSheetResource($papelSheetExam),
-                                        'message' => 'تم تسجيل بياناتك فى الامتحان',
-                                        'code' => 200
+                                        'exam' => new PapelSheetExamTimeUserResource($papelSheetExam),
                                     ],
+                                    'message' => 'تم تسجيل بياناتك فى الامتحان',
+                                    'code' => 200,
                                     'date_exam' => $papelSheetExam->date_exam,
                                     'address' => $section->address,
                                     'section_name' => lang() == 'ar' ? $section->section_name_ar : $section->section_name_en,
@@ -269,8 +275,85 @@ class AuthController extends Controller
         return self::returnResponseDataApi(new PapelSheetResource($papelSheetExam), "اهلا بك في الامتحان الورقي", 200);
     }
 
-    public function logout()
-    {
+
+    public function updateProfile(Request $request){
+
+        $rules = [
+            'image' => 'nullable|image|mimes:jpg,png,jpeg',
+        ];
+        $validator = Validator::make($request->all(), $rules, [
+            'image.mimes' => 407,
+            'images.image' => 408
+        ]);
+
+        if ($validator->fails()) {
+
+            $errors = collect($validator->errors())->flatten(1)[0];
+            if (is_numeric($errors)) {
+
+                $errors_arr = [
+                    407 => 'Failed,The image type must be an jpg or png or jpeg.',
+                    408 => 'Failed,The file uploaded must be an image'
+                ];
+
+                $code = collect($validator->errors())->flatten(1)[0];
+                return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+            }
+            return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
+        }
+        $user = Auth::guard('user-api')->user();
+
+        if($image = $request->file('image')){
+            $destinationPath = 'users/';
+            $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $file);
+            $request['image'] = "$file";
+
+            if(file_exists(public_path('users/'. $user->image)) && $user->image != null){
+                unlink(public_path('users/'. $user->image));
+            }
+        }
+
+        $user->update([
+            'image' => $file ?? $user->image
+        ]);
+
+        $user['token'] = $request->bearerToken();
+        return self::returnResponseDataApi(new UserResource($user),"تم تعديل صوره الطالب بنجاح",200);
+
+    }
+
+    public function home_page(){
+
+        try {
+
+            $classes = SubjectClass::whereHas('term', function ($term){
+                $term->where('status','=','active');
+            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+
+            $sliders = Slider::get();
+            $notification = Notification::whereHas('term', function ($term) {
+                $term->where('status', '=', 'active');
+            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->first();
+
+            return response()->json([
+                'data' => [
+                     'sliders' => SliderResource::collection($sliders),
+                    'notification' => new NotificationResource($notification),
+                    'classes' => SubjectClassResource::collection($classes),
+                    'code' => 200,
+                    'message' => "تم ارسال جميع بيانات الصفحه الرئيسيه",
+                ]
+            ]);
+        }catch (\Exception $exception) {
+
+            return self::returnResponseDataApi(null,$exception->getMessage(),500);
+        }
+
+
+    }
+    public function logout(){
+
         try {
             auth()->guard('user-api')->logout();
             return self::returnResponseDataApi(null, "تم تسجيل الخروج بنجاح", 200);
@@ -280,6 +363,4 @@ class AuthController extends Controller
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
     }
-
-
 }

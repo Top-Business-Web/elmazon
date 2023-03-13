@@ -10,11 +10,6 @@ class SubjectClass extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function term(){
-
-        return $this->belongsTo(Term::class,'term_id','id');
-    }
-
 
     public function lessons(){
 
@@ -26,6 +21,11 @@ class SubjectClass extends Model
         return $this->belongsTo(Season::class,'season_id','id');
     }
 
+
+    public function term(){
+
+        return $this->belongsTo(Term::class,'term_id','id');
+    }
 
     public function exams()
     {

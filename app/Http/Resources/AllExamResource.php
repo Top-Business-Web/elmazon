@@ -21,7 +21,7 @@ class AllExamResource extends JsonResource
             'note' => $this->note,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
-            'instruction' => $this->instruction,
+            'instruction' => new AllExamInstructionResource($this->instruction),
         ];
     }
 }
