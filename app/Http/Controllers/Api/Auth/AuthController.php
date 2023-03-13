@@ -8,6 +8,7 @@ use App\Http\Resources\NotificationResource;
 use App\Http\Resources\PapelSheetExamTimeResource;
 use App\Http\Resources\PapelSheetExamTimeUserResource;
 use App\Http\Resources\PapelSheetResource;
+use App\Http\Resources\PhoneTokenResource;
 use App\Http\Resources\SliderResource;
 use App\Http\Resources\SubjectClassResource;
 use App\Http\Resources\SuggestResource;
@@ -17,6 +18,7 @@ use App\Models\Notification;
 use App\Models\PapelSheetExam;
 use App\Models\PapelSheetExamTime;
 use App\Models\PapelSheetExamUser;
+use App\Models\PhoneToken;
 use App\Models\Section;
 use App\Models\Setting;
 use App\Models\Slider;
@@ -352,6 +354,44 @@ class AuthController extends Controller
 
 
     }
+
+    public function add_device_token(Request $request){
+
+        $rules = [
+            'token' => 'required',
+            'phone_type' => 'required|in:android,ios'
+        ];
+        $validator = Validator::make($request->all(), $rules, [
+            'phone_type.in' => 407,
+        ]);
+
+        if ($validator->fails()) {
+
+            $errors = collect($validator->errors())->flatten(1)[0];
+            if (is_numeric($errors)) {
+
+                $errors_arr = [
+                    407 => 'Failed,The phone type must be an android or ios.',
+                ];
+
+                $code = collect($validator->errors())->flatten(1)[0];
+                return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+            }
+            return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
+        }
+
+        $phoneToken = PhoneToken::create([
+            'user_id' => auth()->guard('user-api')->id(),
+            'token' => $request->token,
+            'phone_type' => $request->phone_type
+        ]);
+
+        $phoneToken->user->token = $request->bearerToken();
+        if(isset($phoneToken)){
+            return self::returnResponseDataApi(new PhoneTokenResource($phoneToken),"Token insert successfully", 200);
+        }
+    }
+
     public function logout(){
 
         try {
