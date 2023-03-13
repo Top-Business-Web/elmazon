@@ -26,7 +26,7 @@ class QuestionController extends Controller{
         try {
 
             $rules = [
-                'exam_type' => 'required|in:online_exam,full_exam',
+                'exam_type' => 'required|in:video,subject_class,lesson,full_exam',
             ];
             $validator = Validator::make($request->all(), $rules, [
                 'exam_type.in' => 407,
@@ -38,7 +38,7 @@ class QuestionController extends Controller{
                 if (is_numeric($errors)) {
 
                     $errors_arr = [
-                        407 => 'Failed,The exam type must be an online_exam or full_exam.',
+                        407 => 'Failed,The exam type must be an video or lesson or subject_class or full_exam.',
                     ];
 
                     $code = collect($validator->errors())->flatten(1)[0];
@@ -46,16 +46,34 @@ class QuestionController extends Controller{
                 }
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
-            if($request->exam_type == 'online_exam'){
-                $onlineExam = OnlineExam::where('id',$id)->first();
+
+            if($request->exam_type == 'video'){
+                $onlineExam = OnlineExam::where('id',$id)->where('type','=','video')->first();
                 if(!$onlineExam){
                     return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
                 }
                 if(isset($onlineExam)){
                     return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
                 }
-            }elseif ($request->exam_type == 'full_exam'){
+            }elseif ($request->exam_type == 'subject_class'){
+                $onlineExam = OnlineExam::where('id',$id)->where('type','=','subject_class')->first();
+                if(!$onlineExam){
+                    return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
+                }
+                if(isset($onlineExam)){
+                    return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
+                }
+            }elseif ($request->exam_type == 'lesson'){
+                $onlineExam = OnlineExam::where('id',$id)->where('type','=','lesson')->first();
+                if(!$onlineExam){
+                    return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
+                }
+                if(isset($onlineExam)){
+                    return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
+                }
+            } else{
 
+                if($request->exam_type == 'full_exam')
                 $full_exam = AllExam::where('id',$id)->first();
                 if(!$full_exam){
                     return self::returnResponseDataApi(null,"الامتحان الشامل غير موجود",404);
