@@ -21,6 +21,7 @@ class AllExamInstructionResource extends JsonResource
             'trying_number' => $this->trying_number,
             'number_of_question' => $this->number_of_question,
             'quiz_minute' => $this->all_exam->quize_minute,
+            'all_exam_id' => $this->all_exam_id,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
         ];
