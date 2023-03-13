@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\Season;
 use App\Models\Term;
+use App\Models\OnlineExamQuestion;
+use App\Models\Question;
+
 
 class OnlineExamController extends Controller
 {
@@ -28,6 +31,7 @@ class OnlineExamController extends Controller
                                     data-id="' . $online_exams->id . '" data-title="' . $online_exams->name_ar . '">
                                     <i class="fas fa-trash"></i>
                             </button>
+                            <a class="btn btn-pill btn-success-light questionBtn" data-id="' . $online_exams->id . '" data-target="#question_modal" href="'. route('indexQuestion', $online_exams->id) .'"><i class="fa fa-question"></i></a>
                        ';
                 })
                 ->escapeColumns([])
@@ -47,6 +51,49 @@ class OnlineExamController extends Controller
         $terms = Term::all();
         return view('admin.online_exam.parts.create', compact('seasons', 'terms'));
     }
+
+    // Store End
+
+    // Question Start
+
+    public function indexQuestion(Request $request)
+    {
+        $exam = OnlineExam::find($request->id);
+        $questions = Question::where('season_id',$exam->season_id )
+        ->where('term_id', $exam->term_id)
+        ->get();
+        $online_questions_ids = OnlineExamQuestion::where(['online_exam_id'=>$request->id])->pluck('question_id')->toArray();
+        return view('admin.online_exam.parts.questions', compact('questions', 'exam','online_questions_ids'));
+    }
+
+    // Question End
+
+    // Add Question
+
+    public function addQuestion(Request $request, OnlineExamQuestion $onlineExamQuestion)
+    {
+        $inputs = $request->all();
+        if($onlineExamQuestion->create($inputs))
+        {
+            return response()->json(['status' => 200]);
+        }
+        else
+        {
+            return response()->json(['status' => 405]);
+        }
+    }
+
+    // End Add Question
+
+    // Delete Question
+
+    public function deleteQuestion(Request $request)
+    {
+        $questions = OnlineExamQuestion::where(['question_id'=> $request->question_id,'online_exam_id'=>$request->online_exam_id]);
+        $questions->delete();
+    }
+
+    // Delete Question
 
     // Examble Type Start
 

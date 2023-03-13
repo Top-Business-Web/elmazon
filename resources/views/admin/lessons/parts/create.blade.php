@@ -13,14 +13,20 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <label for="name_ar" class="form-control-label">فصل</label>
-                    <Select name="subject_class_id" class="form-control">
-                        <option selected disabled style="text-align: center">اختار فصل</option>
-                        @foreach($subjects_classes as $subject_class)
-                            <option value="{{ $subject_class->id }}"
-                                    style="text-align: center">{{ $subject_class->name_en }}</option>
+                <div class="col-md-6">
+                    <label for="name_ar" class="form-control-label">الصف</label>
+                    <Select name="" id="season_choose" class="form-control season">
+                        <option selected disabled style="text-align: center">اختار الصف</option>
+                        @foreach($seasons as $season)
+                            <option value="{{ $season->id }}"
+                                    style="text-align: center">{{ $season->name_ar }}</option>
                         @endforeach
+                    </Select>
+                </div>
+                <div class="col-md-6">
+                    <label for="name_ar" class="form-control-label">الوحدة</label>
+                    <Select name="subject_class_id" class="form-control type_ajax_choose">
+                    
                     </Select>
                 </div>
             </div>
@@ -38,6 +44,21 @@
     </form>
 </div>
 <script>
-    $('.dropify').dropify();
+    
+    $(".season").on('change', function() {
+        var element = document.getElementById("season_choose");
+        var value = $(element).find('option:selected').val();
+        
+        $.ajax({
+            url: '{{ route('showUnit') }}',
+            data: {
+                'id': value,
+            },
+            success: function (data) {
+                $('.type_ajax_choose').html(data);
+            }
+        })
+    })
+
 </script>
 

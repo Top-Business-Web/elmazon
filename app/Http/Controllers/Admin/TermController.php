@@ -23,6 +23,8 @@ class TermController extends Controller
                                     data-id="' . $terms->id . '" data-title="' . $terms->name_en . '">
                                     <i class="fas fa-trash"></i>
                             </button>
+                            <a href="' . route('activate', $terms->id) . '" class="btn btn-pill btn-success-light checkBtn">'. ($terms->status == 'active' ? 'مفعل' : 'غير مفعل') .'</a>
+
                        ';
                 })
                 ->escapeColumns([])
@@ -55,6 +57,25 @@ class TermController extends Controller
     }
 
     // Store End
+
+    // Activate
+
+    public function activate($id)
+    {
+        $term = Term::where('id', $id)->first();
+
+        if ($term->update([
+            'status' => $term->status == 'active' ? 'not_active' : 'active'
+        ])) {
+            toastr('تم التفعيل');
+            return view('admin.terms.index');
+        } else {
+
+        }
+
+    }
+
+    // Activate
 
     // Edit Start
 

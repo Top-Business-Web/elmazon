@@ -1,10 +1,10 @@
 @extends('Admin/layouts_admin/master')
 
 @section('title')
-    {{ trans('admin.subjects_classes') }}
+    الوحدات
 @endsection
 @section('page_name')
-    {{ trans('admin.subject_class') }}
+    الوحدة
 @endsection
 @section('content')
 
@@ -17,7 +17,7 @@
                         <button class="btn btn-secondary btn-icon text-white addBtn">
 									<span>
 										<i class="fe fe-plus"></i>
-									</span> {{ trans('admin.add') }}
+									</span> اضافة
                         </button>
                     </div>
                 </div>
@@ -28,11 +28,12 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">{{ trans('admin.name_en') }}</th>
-                                <th class="min-w-50px">{{ trans('admin.note') }}</th>
-                                <th class="min-w-50px">{{ trans('admin.image') }}</th>
-                                <th class="min-w-50px">{{ trans('admin.term') }}</th>
-                                <th class="min-w-50px rounded-end">{{ trans('admin.actions') }}</th>
+                                <th class="min-w-50px">الاسم</th>
+                                <th class="min-w-50px">الترم</th>
+                                <th class="min-w-50px">الصف</th>
+                                <th class="min-w-50px">ملاحظة</th>
+                                <th class="min-w-50px">الصورة</th>
+                                <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
                         </table>
@@ -54,13 +55,13 @@
                     </div>
                     <div class="modal-body">
                         <input id="delete_id" name="id" type="hidden">
-                        <p>{{ trans('admin.sure_delete') }}<span id="title" class="text-danger"></span></p>
+                        <p>هل انت متاكد من عملية الحذف<span id="title" class="text-danger"></span></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_delete_modal">
-                            {{ trans('admin.close') }}
+                            اغلاق
                         </button>
-                        <button type="button" class="btn btn-danger" id="delete_btn">{{ trans('admin.delete') }}</button>
+                        <button type="button" class="btn btn-danger" id="delete_btn">حدف</button>
                     </div>
                 </div>
             </div>
@@ -68,11 +69,11 @@
         <!-- MODAL CLOSED -->
 
         <!-- Create Or Edit Modal -->
-        <div class="modal fade" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <div class="modal fade bd-example-modal-lg" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">{{ trans('admin.subject_class') }}</h5>
+                        <h5 class="modal-title" id="example-Modal3">الوحدة</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -91,10 +92,11 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'name_en', name: 'name_en'},
+            {data: 'name_ar', name: 'name_ar'},
+            {data: 'term_id', name: 'term_id'},
+            {data: 'season_id', name: 'season_id'},
             {data: 'note', name: 'note'},
             {data: 'image', name: 'image'},
-            {data: 'term_id', name: 'term_id'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('subjectsClasses.index')}}', columns);

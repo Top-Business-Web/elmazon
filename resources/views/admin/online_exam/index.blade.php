@@ -85,7 +85,6 @@
                 </div>
             </div>
         </div>
-        <!-- Create Or Edit Modal -->
     </div>
     @include('Admin/layouts_admin/myAjaxHelper')
 @endsection
@@ -106,6 +105,7 @@
         // Add Using Ajax
         showAddModal('{{route('onlineExam.create')}}');
         addScript();
+        showAddQuestion('{{ route('indexQuestion',':id') }}')
         // Add Using Ajax
         showEditModal('{{route('onlineExam.edit',':id')}}');
         editScript();

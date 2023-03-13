@@ -9,6 +9,7 @@ use App\Models\Term;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Models\Season;
 
 class SubjectClassController extends Controller
 {
@@ -46,7 +47,8 @@ class SubjectClassController extends Controller
     public function create()
     {
         $terms = Term::get();
-        return view('admin.subject_classes.parts.create', compact('terms'));
+        $seasons = Season::get();
+        return view('admin.subject_classes.parts.create', compact('terms', 'seasons'));
     }
 
     // Create End
@@ -74,8 +76,9 @@ class SubjectClassController extends Controller
 
     public function edit(SubjectClass $subjectsClass)
     {
+        $seasons = Season::get();
         $terms = Term::get();
-        return view('admin.subject_classes.parts.edit', compact('subjectsClass', 'terms'));
+        return view('admin.subject_classes.parts.edit', compact('subjectsClass', 'terms', 'seasons'));
     }
 
     // Edit End

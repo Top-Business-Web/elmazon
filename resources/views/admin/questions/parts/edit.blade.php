@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">السؤال</label>
-                    <input type="text" class="form-control" value="{{ $question->question }}" name="question">
+                    <textarea class="form-control" rows="3" name="question">{{ $question->question }}</textarea>
                 </div>
                 <div class="col-md-6">
                     <label for="season" class="form-control-label">الصف</label>

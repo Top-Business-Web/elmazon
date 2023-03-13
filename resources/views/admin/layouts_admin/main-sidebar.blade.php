@@ -2,15 +2,21 @@
 <aside class="app-sidebar">
     <div class="side-header">
         <a class="header-brand1" href="#">
-            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img desktop-logo" alt="logo">
-            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img toggle-logo" alt="logo">
-            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img light-logo" alt="logo">
-            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img light-logo1" alt="logo">
+            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img desktop-logo"
+                alt="logo">
+            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img toggle-logo"
+                alt="logo">
+            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img light-logo"
+                alt="logo">
+            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img light-logo1"
+                alt="logo">
         </a>
         <!-- LOGO -->
     </div>
     <ul class="side-menu">
-        <li><h3>Elements</h3></li>
+        <li>
+            <h3>Elements</h3>
+        </li>
         <li class="slide">
             <a class="side-menu__item" href="#">
                 <i class="icon icon-home side-menu__icon"></i>
@@ -30,14 +36,14 @@
         <li class="slide">
             <a class="side-menu__item" href="{{ route('seasons.index') }}">
                 <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">الفصول</span>
+                <span class="side-menu__label">الصفوف</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('subjectsClasses.index') }}">
                 <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">فئة الموضوغ</span>
+                <span class="side-menu__label">الوحدات</span>
             </a>
         </li>
 
@@ -53,7 +59,7 @@
         <li class="slide">
             <a class="side-menu__item" href="{{ route('lessons.index') }}">
                 <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">الدرس</span>
+                <span class="side-menu__label">الدروس</span>
             </a>
         </li>
 
@@ -141,7 +147,21 @@
                 <i class="icon icon-handbag side-menu__icon"></i>
                 <span class="side-menu__label">سلايدر</span>
             </a>
-            </li>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('section.index') }}">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">الاقسام</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('setting.index') }}">
+                <i class="icon icon-handbag side-menu__icon"></i>
+                <span class="side-menu__label">الاعدادات</span>
+            </a>
+        </li>
 
 
         <li class="slide">
@@ -190,7 +210,7 @@
         <li class="slide">
             <a class="side-menu__item" href="{{ route('countries.index') }}">
                 <i class="fe fe-tag side-menu__icon"></i>
-                <span class="side-menu__label">{{ trans('admin.countries') }}</span>
+                <span class="side-menu__label">المدن</span>
             </a>
         </li>
 
