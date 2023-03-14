@@ -16,4 +16,21 @@ class OnlineExamUser extends Model
 
         return $this->belongsTo(Question::class,'question_id','id');
     }
+
+    public function user(){
+
+        return $this->belongsTo(User::class,'user_id','id');
+    }
+
+
+    public function online_exam(){
+
+        return $this->belongsTo(OnlineExam::class,'online_exam_id','id');
+    }
+
+
+    public function all_exam(){
+
+        return $this->belongsTo(AllExam::class,'all_exam_id','id');
+    }
 }
