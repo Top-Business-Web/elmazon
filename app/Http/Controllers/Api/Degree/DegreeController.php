@@ -23,36 +23,42 @@ class DegreeController extends Controller{
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)
             ->where('type','=','video')->get();
 
-//        $degrees = Degree::whereIn('online_exam_id',$examVideos)->get();
-//        foreach ($degrees as $degree){
-//            if($degree->status == 'not_completed'){
-//                $examVideos = [];
-//            }
-//        }
+        $exam_videos_ids = $examVideos->pluck('id')->toArray();
+
+        $degrees = Degree::whereIn('online_exam_id',$exam_videos_ids)->get();
+        foreach ($degrees as $degree){
+            if($degree->status == 'not_completed'){
+                $examVideos = [];
+            }
+        }
 
         $lessons_or_subject_classes = OnlineExam::with(['term'])->whereHas('term', function ($term){
             $term->where('status','=','active');
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('type','=','subject_class')
             ->orWhere('type','=','lesson')->get();
 
-//        $degrees_lessons = Degree::whereIn('online_exam_id',$lessons_or_subject_classes)->get();
-//        foreach ($degrees_lessons as $degrees_lesson){
-//            if($degrees_lesson->status == 'not_completed'){
-//                $lessons_or_subject_classes = [];
-//            }
-//        }
+
+        $lessons_or_subject_classes_ids = $lessons_or_subject_classes->pluck('id')->toArray();
+        $degrees_lessons = Degree::whereIn('online_exam_id',$lessons_or_subject_classes_ids)->get();
+        foreach ($degrees_lessons as $degrees_lesson){
+            if($degrees_lesson->status == 'not_completed'){
+                $lessons_or_subject_classes = [];
+            }
+        }
 
        $all_exams = AllExam::whereHas('term', function ($term){
 
            $term->where('status','=','active');
        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
 
-//        $degrees_all_exams = Degree::whereIn('all_exam_id',$all_exams)->get();
-//        foreach ($degrees_all_exams as $degree_all_exam){
-//            if($degree_all_exam->status == 'not_completed'){
-//                $all_exams = [];
-//            }
-//        }
+
+        $all_exams_ids = $all_exams->pluck('id')->toArray();
+        $degrees_all_exams = Degree::whereIn('all_exam_id',$all_exams_ids)->get();
+        foreach ($degrees_all_exams as $degree_all_exam){
+            if($degree_all_exam->status == 'not_completed'){
+                $all_exams = [];
+            }
+        }
 
         return response()->json([
 
