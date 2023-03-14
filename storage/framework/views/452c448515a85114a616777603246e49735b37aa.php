@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title'); ?>
     بنك الاسئلة
 <?php $__env->stopSection(); ?>
@@ -13,6 +11,13 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
+                    <div class="">
+                        <label><strong>فلتر :</strong></label>
+                        <select id='approved' class="form-control" style="width: 200px">
+                            <option value="1">التيرم</option>
+                            <option value="0">الصف</option>
+                        </select>
+                    </div>
                     <div class="">
                         <button class="btn btn-secondary btn-icon text-white addBtn">
 									<span>
@@ -114,7 +119,7 @@
 <?php $__env->startSection('ajaxCalls'); ?>
     <script>
 
-        function showEdit(routeOfEdit){
+        function showEdit(routeOfEdit) {
             $(document).on('click', '.editBtnAnswer', function () {
                 var id = $(this).data('id')
                 var url = routeOfEdit;

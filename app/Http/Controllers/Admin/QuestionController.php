@@ -8,6 +8,7 @@ use App\Models\Answer;
 use App\Models\Lesson;
 use App\Models\Question;
 use App\Models\SubjectClass;
+use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use App\Models\Season;
 use App\Models\Term;
@@ -16,6 +17,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class QuestionController extends Controller
 {
+    use PhotoTrait;
+
     // Index Start
     public function index(request $request)
     {
@@ -32,6 +35,26 @@ class QuestionController extends Controller
                             <button type="button" data-id="' . $questions->id . '" class="btn btn-pill btn-success-light editBtnAnswer">الاجابة</button>
                        ';
                 })
+                ->addColumn('approved', function($row){
+                    if($row->approved){
+                        return '<span class="badge badge-primary">Yes</span>';
+                    }else{
+                        return '<span class="badge badge-danger">No</span>';
+                    }
+                })
+                ->filter(function ($instance) use ($request) {
+                    if ($request->get('approved') == '0' || $request->get('approved') == '1') {
+                        $instance->where('approved', $request->get('approved'));
+                    }
+                    if (!empty($request->get('search'))) {
+                        $instance->where(function($w) use($request){
+                            $search = $request->get('search');
+                            $w->orWhere('name', 'LIKE', "%$search%")
+                                ->orWhere('email', 'LIKE', "%$search%");
+                        });
+                    }
+                })
+                ->rawColumns(['approved'])
                 ->escapeColumns([])
                 ->make(true);
         } else {
@@ -49,8 +72,7 @@ class QuestionController extends Controller
             if ($request->id == 'App\Models\Lesson') {
                 $data = Lesson::get();
                 foreach ($data as $value) {
-                    if($value->subject_class->term->status == 'active')
-                    {
+                    if ($value->subject_class->term->status == 'active') {
                         $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
                     }
                 }
@@ -58,16 +80,14 @@ class QuestionController extends Controller
                 $data = SubjectClass::where('id', $request->season_id)->get();
                 dd($data);
                 foreach ($data as $value) {
-                    if($value->term->status == 'activate')
-                    {
+                    if ($value->term->status == 'activate') {
                         $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
                     }
                 }
             } else if ($request->id == 'App\Models\VideoParts') {
                 $data = videoParts::get();
                 foreach ($data as $value) {
-                    if($value->term->status == 'activate')
-                    {
+                    if ($value->term->status == 'activate') {
                         $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
                     }
                 }
@@ -96,6 +116,17 @@ class QuestionController extends Controller
     public function store(Request $request, Question $question)
     {
         $inputs = $request->all();
+
+        if ($request->has('image')) {
+            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/questions', 'photo');
+            $inputs['question'] = null;
+            $inputs['file_type'] = 'image';
+            $inputs['question_type'] = 'choice';
+        } else {
+            $inputs['question_type'] = 'text';
+            $inputs['file_type'] = 'text';
+        }
+
         if ($question->create($inputs)) {
             return response()->json(['status' => 200]);
         } else {
@@ -121,17 +152,17 @@ class QuestionController extends Controller
     {
         $answers = $request->answer;
 
-        foreach ($answers as $key=>$value) {
+        foreach ($answers as $key => $value) {
             Answer::create([
                 'answer' => $value,
                 'question_id' => $request->question_id,
-                'answer_status' => ($request->answer_status == $key) ?'correct':'un_correct',
+                'answer_status' => ($request->answer_status == $key) ? 'correct' : 'un_correct',
                 'answer_number' => $key
             ]);
 
         }
 
-            return response()->json(['status' => 200]);
+        return response()->json(['status' => 200]);
 
     }
 
@@ -152,7 +183,23 @@ class QuestionController extends Controller
 
     public function update(Request $request, Question $question)
     {
-        if ($question->update($request->all())) {
+
+        $inputs = $request->all();
+
+        if ($request->has('image')) {
+            if (file_exists($question->image)) {
+                unlink($question->image);
+            }
+            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/question', 'photo');
+            $inputs['question'] = null;
+            $inputs['file_type'] = 'image';
+            $inputs['question_type'] = 'choice';
+        } else {
+            $inputs['question_type'] = 'text';
+            $inputs['file_type'] = 'text';
+        }
+
+        if ($question->update($inputs)) {
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);

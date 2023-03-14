@@ -4,6 +4,10 @@
         <?php echo method_field('PUT'); ?>
         <input type="hidden" value="<?php echo e($question->id); ?>" name="id">
         <div class="form-group">
+            <div class="col-md-2">
+                <label class="">الدرجة</label>
+                <input class="form-control" name="degree" value="<?php echo e($question->degree); ?>" type="number"/>
+            </div>
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">السؤال</label>
@@ -80,19 +84,26 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <label for="lesson" class="form-control-label">ملاحظة</label>
-                    <textarea class="form-control" rows="10" name="note"><?php echo e($question->note); ?></textarea>
+                    <textarea class="form-control" rows="8" name="note"><?php echo e($question->note); ?></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label for="">الصورة :</label>
+                    <input type="file" name="image" class="dropify"
+                           data-default-file="<?php echo e(asset($question->image)); ?>"/>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo e(trans('admin.close')); ?></button>
-            <button type="submit" class="btn btn-success" id="updateButton"><?php echo e(trans('admin.update')); ?></button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+            <button type="submit" class="btn btn-success" id="updateButton">تحديث</button>
         </div>
     </form>
 </div>
 <script>
+
+    $('.dropify').dropify();
 
     $(".type_choose").change(function () {
         var element = document.getElementById("type");

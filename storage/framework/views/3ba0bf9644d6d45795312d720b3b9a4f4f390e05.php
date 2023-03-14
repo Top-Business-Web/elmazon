@@ -2,6 +2,10 @@
     <form id="addForm" class="addForm" method="POST" action="<?php echo e(route('questions.store')); ?>">
         <?php echo csrf_field(); ?>
         <div class="form-group">
+            <div class="col-md-2">
+                <label class="">الدرجة</label>
+                <input class="form-control" name="degree" type="number"/>
+            </div>
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">السؤال</label>
@@ -47,9 +51,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <label for="lesson" class="form-control-label">ملاحظة</label>
-                    <textarea class="form-control" rows="10" name="note"></textarea>
+                    <textarea class="form-control" rows="8" name="note"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label for="">الصورة :</label>
+                    <input type="file" name="image" class="dropify"
+                           data-default-file=""/>
                 </div>
             </div>
         </div>
@@ -61,6 +70,9 @@
 </div>
 
 <script>
+
+    $('.dropify').dropify();
+
 
     $(".type_choose").change(function () {
         var element = document.getElementById("type");
