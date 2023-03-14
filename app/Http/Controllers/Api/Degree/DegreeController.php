@@ -20,7 +20,8 @@ class DegreeController extends Controller{
 
         $examVideos =  OnlineExam::with(['term'])->whereHas('term', function ($term){
             $term->where('status','=','active');
-        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('type','=','video')->get();
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)
+            ->where('type','=','video')->get();
 
         $degrees = Degree::whereIn('online_exam_id',$examVideos)->get();
         foreach ($degrees as $degree){
@@ -41,23 +42,23 @@ class DegreeController extends Controller{
             }
         }
 
-       $all_exams = AllExam::whereHas('term', function ($term){
-
-           $term->where('status','=','active');
-       })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
-
-        $degrees_all_exams = Degree::whereIn('all_exam_id',$all_exams)->get();
-        foreach ($degrees_all_exams as $degree_all_exam){
-            if($degree_all_exam->status == 'not_completed'){
-                $all_exams = [];
-            }
-        }
+//       $all_exams = AllExam::whereHas('term', function ($term){
+//
+//           $term->where('status','=','active');
+//       })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+//
+//        $degrees_all_exams = Degree::whereIn('all_exam_id',$all_exams)->get();
+//        foreach ($degrees_all_exams as $degree_all_exam){
+//            if($degree_all_exam->status == 'not_completed'){
+//                $all_exams = [];
+//            }
+//        }
 
         return response()->json([
 
            "data" => [
                "videos" => OnlineExamDegreeResource::collection($examVideos),
-               "all_exams" => AllExamDegreeResource::collection($all_exams),
+//               "all_exams" => AllExamDegreeResource::collection($all_exams),
                "subject_classes" => OnlineExamDegreeResource::collection($lessons_or_subject_classes),
            ],
            "message" => "تم الحصول علي جميع درجات الامتحانات التابعه لهذا الطالب بنجاح",
