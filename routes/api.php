@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Comment\CommentController;
 use App\Http\Controllers\Api\FullExams\FullExamController;
+use App\Http\Controllers\Api\Guides\GuideController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
 use Illuminate\Http\Request;
@@ -70,6 +71,11 @@ Route::group(['prefix' => 'auth'], function (){
     Route::group(['prefix' => 'plans','middleware' => ['jwt']], function (){
         Route::get('all',[\App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController::class,'all_plans']);
         Route::get('oneDay',[\App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController::class,'plan_today']);
+
+    });
+
+    Route::group(['prefix' => 'guide','middleware' => ['jwt']], function (){
+        Route::get('all',[GuideController::class,'index']);
 
     });
 
