@@ -47,8 +47,16 @@ class QuestionController extends Controller{
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
 
+
+            $onlineExam = OnlineExam::whereHas('term', function ($term){
+
+                $term->where('status','=','active');
+            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id',$id);
+
+
+
             if($request->exam_type == 'video'){
-                $onlineExam = OnlineExam::where('id',$id)->where('type','=','video')->first();
+             $onlineExam->where('type','=','video')->first();
                 if(!$onlineExam){
                     return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
                 }
@@ -56,7 +64,7 @@ class QuestionController extends Controller{
                     return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
                 }
             }elseif ($request->exam_type == 'subject_class'){
-                $onlineExam = OnlineExam::where('id',$id)->where('type','=','subject_class')->first();
+              $onlineExam->where('type','=','subject_class')->first();
                 if(!$onlineExam){
                     return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
                 }
@@ -64,7 +72,7 @@ class QuestionController extends Controller{
                     return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
                 }
             }elseif ($request->exam_type == 'lesson'){
-                $onlineExam = OnlineExam::where('id',$id)->where('type','=','lesson')->first();
+               $onlineExam->where('type','=','lesson')->first();
                 if(!$onlineExam){
                     return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
                 }
@@ -72,15 +80,18 @@ class QuestionController extends Controller{
                     return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
                 }
             } else{
+                if($request->exam_type == 'full_exam'){
+                    $full_exam = AllExam::whereHas('term', function ($term){
+                        $term->where('status','=','active');
+                    })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id',$id)->first();
+                    if(!$full_exam){
+                        return self::returnResponseDataApi(null,"الامتحان الشامل غير موجود",404);
+                    }
+                    if(isset($full_exam)){
+                        return self::returnResponseDataApi(new OnlineExamQuestionResource($full_exam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
+                    }
+                }
 
-                if($request->exam_type == 'full_exam')
-                $full_exam = AllExam::where('id',$id)->first();
-                if(!$full_exam){
-                    return self::returnResponseDataApi(null,"الامتحان الشامل غير موجود",404);
-                }
-                if(isset($full_exam)){
-                    return self::returnResponseDataApi(new OnlineExamQuestionResource($full_exam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
-                }
             }
 
         }catch (\Exception $exception) {
@@ -114,24 +125,25 @@ class QuestionController extends Controller{
                     ]);
                     Degree::create([
                         'user_id' => auth()->id(),
-                        'online_exam_user_id' => $onlineExamUser->id,
+                        'question_id' => $request->details[$i]['question'],
+                        'online_exam_id' => $exam->id,
                         'type' => 'choice',
                         'degree' => $onlineExamUser->status == "solved" ?  $onlineExamUser->question->degree : 0,
                     ]);
                 }else{
 
-                    $image = $request->details[$i]['image'];
-                    $destinationPath = 'text_user_exam_files/images/';
-                    $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
-                    $image->move($destinationPath, $file);
-                    $request->details[$i]['image'] = "$file";
-
-
-                    $audio = $request->details[$i]['audio'];
-                    $audioPath = 'text_user_exam_files/audios/';
-                    $fileAudio = date('YmdHis') . "." . $audio->getClientOriginalExtension();
-                    $audio->move($audioPath, $fileAudio);
-                    $request->details[$i]['audio'] = "$fileAudio";
+//                    $image = $request->details[$i]['image'];
+//                    $destinationPath = 'text_user_exam_files/images/';
+//                    $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
+//                    $image->move($destinationPath, $file);
+//                    $request->details[$i]['image'] = "$file";
+//
+//
+//                    $audio = $request->details[$i]['audio'];
+//                    $audioPath = 'text_user_exam_files/audios/';
+//                    $fileAudio = date('YmdHis') . "." . $audio->getClientOriginalExtension();
+//                    $audio->move($audioPath, $fileAudio);
+//                    $request->details[$i]['audio'] = "$fileAudio";
 
 
 //                return  $request['details'][$i]['image'];
@@ -140,16 +152,16 @@ class QuestionController extends Controller{
                    'question_id' => $request->details[$i]['question'],
                    'online_exam_id' => $exam->id,
                    'answer' => $request->details[$i]['answer'] ?? null,
-                   'image' => $file ?? null,
-                   'audio' => $fileAudio ?? null,
                    'answer_type' => 'text',
-                   'status' =>  ($request->details[$i]['answer'] != null || $file != null || $audio != null) ? 'solved' : 'leave',
+                   'status' =>  ($request->details[$i]['answer']) != null  ? 'solved' : 'leave',
                ]);
 
                 Degree::create([
                     'user_id' => auth()->id(),
-                    'text_exam_user_id' => $textExamUser->id,
+                    'question_id' => $request->details[$i]['question'],
+                    'online_exam_id' => $exam->id,
                     'type' => 'text',
+                    'status' => 'not_completed',
                     'degree' => 0,
                 ]);
                 }

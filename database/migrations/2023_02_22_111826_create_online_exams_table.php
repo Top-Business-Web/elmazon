@@ -18,6 +18,7 @@ class CreateOnlineExamsTable extends Migration
             $table->string('name_ar');
             $table->string('name_en');
             $table->integer('quize_minute');
+            $table->integer('degree');
             $table->unsignedBigInteger('season_id')->nullable();
             $table->unsignedBigInteger('term_id')->nullable();
             $table->morphs('examable');
