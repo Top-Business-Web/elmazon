@@ -1,4 +1,4 @@
-@extends('admin/layouts/master')
+@extends('admin.layouts_admin.master')
 
 @section('title')
     {{($setting->title) ?? ''}} | المشرفين
@@ -82,7 +82,7 @@
         </div>
         <!-- Create Or Edit Modal -->
     </div>
-    @include('admin/layouts/myAjaxHelper')
+    @include('admin.layouts_admin.myAjaxHelper')
 @endsection
 @section('ajaxCalls')
     <script>

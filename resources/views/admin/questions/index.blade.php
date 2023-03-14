@@ -1,4 +1,4 @@
-@extends('Admin/layouts_admin/master')
+@extends('admin.layouts_admin.master')
 
 @section('title')
     بنك الاسئلة
@@ -116,7 +116,7 @@
         </div>
         <!-- Create Or Edit Modal -->
     </div>
-    @include('Admin/layouts_admin/myAjaxHelper')
+    @include('admin.layouts_admin.myAjaxHelper')
 @endsection
 @section('ajaxCalls')
     <script>

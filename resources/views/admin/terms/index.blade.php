@@ -1,4 +1,4 @@
-@extends('Admin/layouts_admin/master')
+@extends('admin.layouts_admin.master')
 
 @section('title')
     الترمات
@@ -85,7 +85,7 @@
         </div>
         <!-- Create Or Edit Modal -->
     </div>
-    @include('Admin/layouts_admin/myAjaxHelper')
+    @include('admin.layouts_admin.myAjaxHelper')
 @endsection
 @section('ajaxCalls')
 {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script> --}}
