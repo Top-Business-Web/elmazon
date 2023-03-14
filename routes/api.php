@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Comment\CommentController;
+use App\Http\Controllers\Api\Degree\DegreeController;
 use App\Http\Controllers\Api\FullExams\FullExamController;
 use App\Http\Controllers\Api\Guides\GuideController;
 use App\Http\Controllers\Api\LessonController;
+use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
+use App\Http\Controllers\Api\Question\QuestionController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -69,8 +72,8 @@ Route::group(['prefix' => 'auth'], function (){
     });
 
     Route::group(['prefix' => 'plans','middleware' => ['jwt']], function (){
-        Route::get('all',[\App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController::class,'all_plans']);
-        Route::get('oneDay',[\App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController::class,'plan_today']);
+        Route::get('all',[MonthlyPlanController::class,'all_plans']);
+        Route::get('oneDay',[MonthlyPlanController::class,'plan_today']);
 
     });
 
@@ -89,9 +92,14 @@ Route::group(['prefix' => 'auth'], function (){
     });
 
     Route::group(['prefix' => 'show_exam','middleware' => ['jwt']], function (){
-        Route::get('questions/{id}',[\App\Http\Controllers\Api\Question\QuestionController::class,'all_questions_by_online_exam']);
-        Route::post('onlineExam/exam/{id}',[\App\Http\Controllers\Api\Question\QuestionController::class,'online_exam_by_user']);
+        Route::get('questions/{id}',[QuestionController::class,'all_questions_by_online_exam']);
 
+    });
+
+    Route::post('onlineExam/exam/{id}',[QuestionController::class,'online_exam_by_user'])->middleware('jwt');
+
+    Route::group(['prefix' => 'degrees','middleware' => ['jwt']], function (){
+        Route::get('all-exams-degrees',[DegreeController::class,'degrees']);
     });
 
 });

@@ -33,4 +33,9 @@ class AllExam extends Model
 
         return $this->belongsToMany(Question::class,'online_exam_questions', 'all_exam_id','question_id','id','id');
     }
+
+    public function degrees(){
+
+        return $this->hasMany(Degree::class,'online_exam_id','id');
+    }
 }
