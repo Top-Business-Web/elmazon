@@ -28,6 +28,8 @@
                                 <tr class="fw-bolder text-muted bg-light">
                                     <th class="min-w-25px">#</th>
                                     <th class="min-w-50px">العنوان</th>
+                                    <th class="min-w-50px">التيرم</th>
+                                    <th class="min-w-50px">الصف</th>
                                     <th class="min-w-50px">الوصف</th>
                                     <th class="min-w-50px rounded-end">العمليات</th>
                                 </tr>
@@ -93,6 +95,14 @@
             {
                 data: 'title_ar',
                 name: 'title_ar'
+            },
+            {
+                data: 'term_id',
+                name: 'term_id'
+            },
+            {
+                data: 'season_id',
+                name: 'season_id'
             },
             {
                 data: 'description_ar',

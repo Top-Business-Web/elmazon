@@ -8,6 +8,8 @@ use App\Models\Guide;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Models\Term;
+use App\Models\Season;
 
 class GuideController extends Controller
 {
@@ -41,7 +43,9 @@ class GuideController extends Controller
 
     public function create()
     {
-        return view('admin.guides.parts.create');
+        $terms = Term::all();
+        $seasons = Season::all();
+        return view('admin.guides.parts.create', compact('terms', 'seasons'));
     }
 
     // Create End
