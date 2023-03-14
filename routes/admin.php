@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\PhoneCommunicationController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\GuideController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -102,6 +103,15 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Setting ####
     Route::resource('setting', SettingController::class);
+
+    #### guide ####
+    Route::resource('guide', GuideController::class);
+    Route::get('item', [GuideController::class, 'item'])->name('item');
+    Route::get('indexItem/{id}', [GuideController::class, 'indexItem'])->name('indexItem');
+    Route::post('addItem', [GuideController::class, 'addItem'])->name('addItem');
+    Route::post('updateItem/{id}', [GuideController::class, 'updateItem'])->name('updateItem');
+    Route::post('destroyItem/{id}', [GuideController::class, 'destroyItem'])->name('destroyItem');
+
 
     #### Question ####
     Route::resource('questions', QuestionController::class);
