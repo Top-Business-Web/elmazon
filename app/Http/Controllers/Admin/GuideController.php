@@ -113,11 +113,6 @@ class GuideController extends Controller
     {
         $inputs = $request->all();
 
-        if($request->has('file'))
-        {
-            $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/file', 'photo');
-        }
-
         $guide = Guide::create($inputs);
         if($guide->save()) {
             toastr('تم الاضافة بنجاح');

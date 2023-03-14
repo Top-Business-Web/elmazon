@@ -148,9 +148,6 @@ class LessonController extends Controller{
             return self::returnResponseDataApi(null, "هذا الفيديو او المرفق غير موجود", 404, 404);
         }
 
-
-
-
         //update first video to watched
         $watched = VideoWatch::where('user_id', '=', Auth::guard('user-api')->id())->where('video_part_id', '=',$video->id)->first();
         if ($watched) {
