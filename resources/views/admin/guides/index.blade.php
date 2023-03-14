@@ -84,7 +84,7 @@
         </div>
         <!-- Create Or Edit Modal -->
     </div>
-    @include('Admin/layouts_admin_myAjaxHelper')
+    @include('admin.layouts_admin.myAjaxHelper')
 @endsection
 @section('ajaxCalls')
     <script>
