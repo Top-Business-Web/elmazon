@@ -49,9 +49,8 @@ class QuestionController extends Controller{
 
 
             $onlineExam = OnlineExam::whereHas('term', function ($term){
-
                 $term->where('status','=','active');
-            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id',$id);
+            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id','=',$id);
 
 
 
