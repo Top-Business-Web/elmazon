@@ -17,7 +17,7 @@ class GuideItemsResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => lang() == 'ar' ?$this->title_ar : $this->title_en,
-            'file_path' => $this->file != null ? asset('/pdf/'.$this->file) : '',
+            'file_path' => $this->file != null ? asset('/guide/'.$this->file) : '',
             'created_at' => $this->created_at->format('Y-m-d')
         ];
     }
