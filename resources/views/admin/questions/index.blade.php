@@ -14,6 +14,13 @@
                 <div class="card-header">
                     <h3 class="card-title"></h3>
                     <div class="">
+                        <label><strong>فلتر :</strong></label>
+                        <select id='approved' class="form-control" style="width: 200px">
+                            <option value="1">التيرم</option>
+                            <option value="0">الصف</option>
+                        </select>
+                    </div>
+                    <div class="">
                         <button class="btn btn-secondary btn-icon text-white addBtn">
 									<span>
 										<i class="fe fe-plus"></i>
@@ -114,7 +121,7 @@
 @section('ajaxCalls')
     <script>
 
-        function showEdit(routeOfEdit){
+        function showEdit(routeOfEdit) {
             $(document).on('click', '.editBtnAnswer', function () {
                 var id = $(this).data('id')
                 var url = routeOfEdit;
