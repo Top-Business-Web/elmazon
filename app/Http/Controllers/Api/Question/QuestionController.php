@@ -55,7 +55,9 @@ class QuestionController extends Controller{
 
 
             if($request->exam_type == 'video'){
-             $onlineExam->where('type','=','video')->first();
+                $onlineExam = OnlineExam::whereHas('term', function ($term){
+                    $term->where('status','=','active');
+                })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id','=',$id)->where('type','=','video')->first();
                 if(!$onlineExam){
                     return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
                 }
@@ -63,7 +65,9 @@ class QuestionController extends Controller{
                     return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
                 }
             }elseif ($request->exam_type == 'subject_class'){
-              $onlineExam->where('type','=','subject_class')->first();
+                $onlineExam = OnlineExam::whereHas('term', function ($term){
+                    $term->where('status','=','active');
+                })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id','=',$id)->where('type','=','subject_class')->first();
                 if(!$onlineExam){
                     return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
                 }
@@ -71,7 +75,9 @@ class QuestionController extends Controller{
                     return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam),"تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان",200);
                 }
             }elseif ($request->exam_type == 'lesson'){
-               $onlineExam->where('type','=','lesson')->first();
+                $onlineExam = OnlineExam::whereHas('term', function ($term){
+                    $term->where('status','=','active');
+                })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id','=',$id)->where('type','=','lesson')->first();
                 if(!$onlineExam){
                     return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
                 }
@@ -82,7 +88,7 @@ class QuestionController extends Controller{
                 if($request->exam_type == 'full_exam'){
                     $full_exam = AllExam::whereHas('term', function ($term){
                         $term->where('status','=','active');
-                    })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id',$id)->first();
+                    })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id','=',$id)->first();
                     if(!$full_exam){
                         return self::returnResponseDataApi(null,"الامتحان الشامل غير موجود",404);
                     }
