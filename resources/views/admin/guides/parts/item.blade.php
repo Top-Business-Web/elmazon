@@ -43,7 +43,7 @@
                                     <td class="min-w-25px">{{ $item->title_ar }}</td>
                                     <td class="min-w-25px">{{ $item->description_ar }}</td>
                                     <td class="min-w-25px">{{ $item->from_id }}</td>
-                                    <td class="min-w-25px">{{ $item->file }}</td>
+                                    <td class="min-w-25px">{{ $item->file }}<button class="btn btn-pill btn-warning-light"><li class="fas fa-eye"></li></button></td>
                                     <td class="min-w-25px">{{ $item->icon }}</td>
                                     <td>
                                         <button type="button" data-target="#editOrCreate{{ $item->id }}"
