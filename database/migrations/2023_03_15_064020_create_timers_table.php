@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateExamInstructionsTable extends Migration
+class CreateTimersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,17 @@ class CreateExamInstructionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('exam_instructions', function (Blueprint $table) {
+        Schema::create('timers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->longText('instruction');
-            $table->integer('number_of_question');
-            $table->string('quiz_minute');
-            $table->unsignedBigInteger('all_exam_id')->nullable();
             $table->unsignedBigInteger('online_exam_id')->nullable();
-            $table->foreign('all_exams')->references('id')->on('all_exam_id')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unsignedBigInteger('all_exam_id')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->string("timer");
+            $table->integer("number_of_mistake");
+            $table->integer("full_degree");
             $table->foreign('online_exam_id')->references('id')->on('online_exams')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('all_exam_id')->references('id')->on('all_exams')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -33,6 +35,6 @@ class CreateExamInstructionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('exam_instructions');
+        Schema::dropIfExists('timers');
     }
 }

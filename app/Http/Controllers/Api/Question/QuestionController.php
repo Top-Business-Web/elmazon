@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Question;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllExamResource;
 use App\Http\Resources\OnlineExamQuestionResource;
+use App\Http\Resources\OnlineExamResource;
 use App\Http\Resources\QuestionResource;
 use App\Models\AllExam;
 use App\Models\Answer;
@@ -46,12 +47,6 @@ class QuestionController extends Controller{
                 }
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
-
-
-            $onlineExam = OnlineExam::whereHas('term', function ($term){
-                $term->where('status','=','active');
-            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id','=',$id);
-
 
 
             if($request->exam_type == 'video'){
@@ -109,6 +104,30 @@ class QuestionController extends Controller{
 
 //        return $request->details;
         try {
+
+                $rules = [
+                    'exam_type' => 'required|in:video,subject_class,lesson,full_exam',
+                ];
+                $validator = Validator::make($request->all(), $rules, [
+                    'exam_type.in' => 407,
+                ]);
+
+                if ($validator->fails()) {
+
+                    $errors = collect($validator->errors())->flatten(1)[0];
+                    if (is_numeric($errors)) {
+
+                        $errors_arr = [
+                            407 => 'Failed,The exam type must be an video or lesson or subject_class or full_exam.',
+                        ];
+
+                        $code = collect($validator->errors())->flatten(1)[0];
+                        return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+                    }
+                    return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
+                }
+
+
             $exam = OnlineExam::where('id', $id)->first();
             if(!$exam){
                 return self::returnResponseDataApi(null,"الامتحان غير موجود",404);
@@ -137,44 +156,45 @@ class QuestionController extends Controller{
                     ]);
                 }else{
 
-//                    $image = $request->details[$i]['image'];
-//                    $destinationPath = 'text_user_exam_files/images/';
-//                    $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
-//                    $image->move($destinationPath, $file);
-//                    $request->details[$i]['image'] = "$file";
-//
-//
-//                    $audio = $request->details[$i]['audio'];
-//                    $audioPath = 'text_user_exam_files/audios/';
-//                    $fileAudio = date('YmdHis') . "." . $audio->getClientOriginalExtension();
-//                    $audio->move($audioPath, $fileAudio);
-//                    $request->details[$i]['audio'] = "$fileAudio";
+                    if( $image = $request->details[$i]['image']){
+                        $destinationPath = 'text_user_exam_files/images/';
+                        $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                        $image->move($destinationPath, $file);
+                    }
 
 
-//                return  $request['details'][$i]['image'];
-               $textExamUser = TextExamUser::create([
-                   'user_id' => auth()->id(),
-                   'question_id' => $request->details[$i]['question'],
-                   'online_exam_id' => $exam->id,
-                   'answer' => $request->details[$i]['answer'] ?? null,
-                   'answer_type' => 'text',
-                   'status' =>  ($request->details[$i]['answer']) != null  ? 'solved' : 'leave',
-               ]);
+                    if($audio = $request->details[$i]['audio']){
+                        $audioPath = 'text_user_exam_files/audios/';
+                        $fileAudio = date('YmdHis') . "." . $audio->getClientOriginalExtension();
+                        $audio->move($audioPath, $fileAudio);
+                    }
 
-                Degree::create([
-                    'user_id' => auth()->id(),
-                    'question_id' => $request->details[$i]['question'],
-                    'online_exam_id' => $exam->id,
-                    'type' => 'text',
-                    'status' => 'not_completed',
-                    'degree' => 0,
-                ]);
-                }
+
+                   $textExamUser = TextExamUser::create([
+                       'user_id' => auth()->id(),
+                       'question_id' => $request->details[$i]['question'],
+                       'online_exam_id' => $exam->id,
+                       'answer' => isset($request->details[$i]['answer']) ? $request->details[$i]['answer'] : null,
+                       'image' => isset($file) ? $file : null,
+                       'audio' => isset($fileAudio) ? $fileAudio : null,
+                       'answer_type' => 'text',
+                       'status' =>  (isset($request->details[$i]['answer']) ||  isset($request->details[$i]['image']) || isset($request->details[$i]['audio'])) ? 'solved' : 'leave',
+                   ]);
+
+                    Degree::create([
+                        'user_id' => auth()->id(),
+                        'question_id' => $request->details[$i]['question'],
+                        'online_exam_id' => $exam->id,
+                        'type' => 'text',
+                        'status' => 'not_completed',
+                        'degree' => 0,
+                    ]);
+                    }
 
             }
 
 
-            return self::returnResponseDataApi(null,"تم حل جميع الاسئله",200);
+            return self::returnResponseDataApi(new OnlineExamResource($exam),"تم حل جميع الاسئله",200);
 
         }catch (\Exception $exception) {
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);

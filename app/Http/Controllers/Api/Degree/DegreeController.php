@@ -24,7 +24,6 @@ class DegreeController extends Controller{
             ->where('type','=','video')->get();
 
         $exam_videos_ids = $examVideos->pluck('id')->toArray();
-
         $degrees = Degree::whereIn('online_exam_id',$exam_videos_ids)->get();
         foreach ($degrees as $degree){
             if($degree->status == 'not_completed'){
@@ -47,7 +46,6 @@ class DegreeController extends Controller{
         }
 
        $all_exams = AllExam::whereHas('term', function ($term){
-
            $term->where('status','=','active');
        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
 
