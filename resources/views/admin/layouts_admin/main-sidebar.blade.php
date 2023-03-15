@@ -18,154 +18,111 @@
             <h3>Elements</h3>
         </li>
         <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="icon icon-home side-menu__icon"></i>
+            <a class="side-menu__item" href="{{ route('seasons.index') }}">
+                <i class="fa fa-scree side-menu__icon"></i>
                 <span class="side-menu__label">الصفوف الدراسيه</span>
             </a>
         </li>
 
 
         <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="icon icon-home side-menu__icon"></i>
-                <span class="side-menu__label">المواد</span>
-            </a>
-        </li>
-
-
-        <li class="slide">
-            <a class="side-menu__item" href="{{ route('seasons.index') }}">
-                <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">الصفوف</span>
-            </a>
-        </li>
-
-        <li class="slide">
             <a class="side-menu__item" href="{{ route('subjectsClasses.index') }}">
-                <i class="fe fe-git-commit side-menu__icon"></i>
+                <i class="fa fa-book-reader side-menu__icon"></i>
                 <span class="side-menu__label">الوحدات</span>
             </a>
         </li>
 
 
-
         <li class="slide">
             <a class="side-menu__item" href="{{ route('terms.index') }}">
-                <i class="fe fe-git-commit side-menu__icon"></i>
+                <i class="fa fa-list-ol side-menu__icon"></i>
                 <span class="side-menu__label">الترم</span>
             </a>
         </li>
 
+
         <li class="slide">
             <a class="side-menu__item" href="{{ route('lessons.index') }}">
-                <i class="fe fe-git-commit side-menu__icon"></i>
+                <i class="fe fe-book side-menu__icon"></i>
                 <span class="side-menu__label">الدروس</span>
             </a>
         </li>
 
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-git-commit side-menu__icon"></i>
-                <span class="side-menu__label">محاضرات الدروس</span>
-            </a>
-        </li>
-
-
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-zap side-menu__icon"></i>
-                <span class="side-menu__label">اكواد الطلاب</span>
-            </a>
-        </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('users.index') }}">
-                <i class="fe fe-zap side-menu__icon"></i>
+                <i class="icon icon-screen-users side-menu__icon"></i>
                 <span class="side-menu__label">الطلاب</span>
             </a>
         </li>
 
 
         <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-users side-menu__icon"></i>
-                <span class="side-menu__label">قسم قاعات الامتحانات</span>
-            </a>
-        </li>
-
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="icon icon-menu side-menu__icon"></i>
-                <span class="side-menu__label">تنبيهات الامتحانات الورقيه</span>
-            </a>
-        </li>
-
-        <li class="slide">
             <a class="side-menu__item" href="{{ route('notifications.index') }}">
-                <i class="icon icon-handbag side-menu__icon"></i>
+                <i class="icon icon-bell side-menu__icon"></i>
                 <span class="side-menu__label">الاشعارات</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('videosParts.index') }}">
-                <i class="icon icon-handbag side-menu__icon"></i>
+                <i class="icon icon-control-play side-menu__icon"></i>
                 <span class="side-menu__label">اقسام الفيديوهات</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('monthlyPlans.index') }}">
-                <i class="icon icon-handbag side-menu__icon"></i>
+                <i class="icon icon-calendar side-menu__icon"></i>
                 <span class="side-menu__label">الخطة الشهرية</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('suggestions.index') }}">
-                <i class="icon icon-handbag side-menu__icon"></i>
+                <i class="fe fe-message-circle side-menu__icon"></i>
                 <span class="side-menu__label">الاقتراحات</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('onlineExam.index') }}">
-                <i class="icon icon-handbag side-menu__icon"></i>
+                <i class="fa fa-scroll side-menu__icon"></i>
                 <span class="side-menu__label">امتحانات الاونلاين</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('phoneCommunications.index') }}">
-                <i class="icon icon-handbag side-menu__icon"></i>
+                <i class="icon icon-phone side-menu__icon"></i>
                 <span class="side-menu__label">الاتصالات الهاتفية</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('slider.index') }}">
-                <i class="icon icon-handbag side-menu__icon"></i>
+                <i class="fa fa-images side-menu__icon"></i>
                 <span class="side-menu__label">سلايدر</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('section.index') }}">
-                <i class="icon icon-handbag side-menu__icon"></i>
-                <span class="side-menu__label">الاقسام</span>
+                <i class="fa fa-place-of-worship side-menu__icon"></i>
+                <span class="side-menu__label">القاعات</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('setting.index') }}">
-                <i class="icon icon-handbag side-menu__icon"></i>
+                <i class="fa fa-wrench side-menu__icon"></i>
                 <span class="side-menu__label">الاعدادات</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('guide.index') }}">
-                <i class="icon icon-handbag side-menu__icon"></i>
+                <i class="icon icon-note side-menu__icon"></i>
                 <span class="side-menu__label">الدليل</span>
             </a>
         </li>
@@ -173,170 +130,24 @@
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('pdf.index') }}">
-                <i class="icon icon-handbag side-menu__icon"></i>
-                <span class="side-menu__label">Pdf</span>
+                <i class="fa fa-file-pdf side-menu__icon"></i>
+                <span class="side-menu__label">ملفات ورقية</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('questions.index') }}">
-                <i class="icon icon-handbag side-menu__icon"></i>
+                <i class="icon icon-question side-menu__icon"></i>
                 <span class="side-menu__label">بنك الأسئلة</span>
-            </a>
-        </li>
-
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="ti-face-smile side-menu__icon"></i>
-                <span class="side-menu__label">ارقام التواصل</span>
-            </a>
-        </li>
-
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-watch side-menu__icon"></i>
-                <span class="side-menu__label">الاعدادات</span>
-            </a>
-        </li>
-
-
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-arrow-down-left side-menu__icon"></i>
-                <span class="side-menu__label">الاعلانات</span>
-            </a>
-        </li>
-
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-tag side-menu__icon"></i>
-                <span class="side-menu__label">فيديوهات المحاضرات</span>
             </a>
         </li>
 
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('countries.index') }}">
-                <i class="fe fe-tag side-menu__icon"></i>
+                <i class="fa fa-globe side-menu__icon"></i>
                 <span class="side-menu__label">المدن</span>
             </a>
-        </li>
-
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-paperclip side-menu__icon"></i>
-                <span class="side-menu__label">Corporations</span>
-            </a>
-        </li>
-
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-calendar side-menu__icon"></i>
-                <span class="side-menu__label">Days Capacity</span>
-            </a>
-        </li>
-
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-users side-menu__icon"></i>
-                <span class="side-menu__label">Clients</span>
-            </a>
-        </li>
-
-        <li class="slide">
-            <a class="side-menu__item" data-toggle="slide" href="#">
-                <i class="fe fe-hash side-menu__icon"></i>
-                <span class="side-menu__label">Offers</span><i class="angle fa fa-angle-right"></i>
-            </a>
-            <ul class="slide-menu">
-                <li><a href="#" class="slide-item">Show Offers</a></li>
-                <li><a href="#" class="slide-item">Offers Items</a></li>
-            </ul>
-        </li>
-
-
-        <li class="slide">
-            <a class="side-menu__item" data-toggle="slide" href="#">
-                <i class="fe fe-user-plus side-menu__icon"></i>
-                <span class="side-menu__label">Employees</span><i class="angle fa fa-angle-right"></i>
-            </a>
-            <ul class="slide-menu">
-                <li><a href="#" class="slide-item" style="font-size: 14px">Employees List</a>
-                </li>
-                <li><a href="#" class="slide-item" style="font-size: 14px">Roles</a></li>
-            </ul>
-        </li>
-
-
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-mail side-menu__icon"></i>
-                <span class="side-menu__label">Contact Us
-                    <span id="contact-span">
-
-                    </span>
-                </span>
-            </a>
-        </li>
-
-
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-settings side-menu__icon"></i>
-                <span class="side-menu__label">Setting</span>
-            </a>
-        </li>
-
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-camera side-menu__icon"></i>
-                <span class="side-menu__label">Sliders</span>
-            </a>
-        </li>
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-camera side-menu__icon"></i>
-                <span class="side-menu__label">Prices & Opening hours</span>
-            </a>
-        </li>
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-camera side-menu__icon"></i>
-                <span class="side-menu__label">Obstacle Courses</span>
-            </a>
-        </li>
-
-        <li class="slide">
-            <a class="side-menu__item" href="#">
-                <i class="fe fe-info side-menu__icon"></i>
-                <span class="side-menu__label">About Page</span>
-            </a>
-        </li>
-
-
-        <li class="slide">
-            <a class="side-menu__item" data-toggle="slide" href="#">
-                <i class="fe fe-file-text side-menu__icon"></i>
-                <span class="side-menu__label">جزء الامتحانات</span><i class="angle fa fa-angle-right"></i>
-            </a>
-            <ul class="slide-menu">
-                <li><a href="#" class="slide-item">امتحان شامل علي الفصل</a></li>
-                <li><a href="#" class="slide-item">امتحان شامل جميع الفصول</a></li>
-                <li><a href="#" class="slide-item">امتحان جزئي</a></li>
-                <li><a href="#" class="slide-item">اختبار</a></li>
-
-            </ul>
-        </li>
-
-        <li class="slide">
-            <a class="side-menu__item" data-toggle="slide" href="#">
-                <i class="fe fe-file-text side-menu__icon"></i>
-                <span class="side-menu__label">جزء الارشادات</span><i class="angle fa fa-angle-right"></i>
-            </a>
-            <ul class="slide-menu">
-                <li><a href="#" class="slide-item">ارشادات الامتحانات</a></li>
-
-            </ul>
         </li>
 
 
