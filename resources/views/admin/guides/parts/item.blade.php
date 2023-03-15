@@ -1,4 +1,4 @@
-@extends('Admin/layouts_admin/master')
+@extends('admin.layouts_admin.master')
 
 @section('title')
     عناصر
@@ -233,7 +233,7 @@
         </div>
         <!-- Create Modal -->
     </div>
-    @include('Admin/layouts_admin/myAjaxHelper')
+    @include('admin.layouts_admin.myAjaxHelper')
     <script>
         var myState = {
             pdf: null,
