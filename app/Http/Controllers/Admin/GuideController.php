@@ -119,7 +119,7 @@ class GuideController extends Controller
 
         if($request->has('file')){
             $file = $request->file;
-            $path = public_path('assets/uploads/pdfs/');
+            $path = public_path('assets/uploads/guide/');
             $file_name = $file->getClientOriginalName();
             $file->move($path, $file_name);
             $inputs['file']=$file_name;

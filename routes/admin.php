@@ -72,6 +72,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     ##### Video Parts #####
     Route::resource('videosParts', VideoPartController::class);
+    Route::get('/itemView', array('as'=> 'front.home', 'uses' => [VideoPartController::class, 'itemView']))->name('itemView');
+    Route::post('/update-items', array('as'=> 'update.items', 'uses' => [VideoPartController::class, 'updateItems']))->name('updateItems');
 
     #### Audio ####
     Route::resource('audio', AudioController::class);
