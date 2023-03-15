@@ -24,7 +24,7 @@ class ExamInstructionResource extends JsonResource
             $type  = 'video';
         }
 
-        $trying = Timer::where('all_exam_id',$this->online_exam_id)->where('user_id','=',auth('user-api')->id())->count();
+        $trying = Timer::where('online_exam_id',$this->online_exam_id)->where('user_id','=',auth('user-api')->id())->count();
         $total_trying = AllExam::where('id','=',$this->online_exam_id)->first();
         return [
 
