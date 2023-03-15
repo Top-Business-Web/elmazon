@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\AllExam;
+use App\Models\Timer;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AllExamInstructionResource extends JsonResource
@@ -15,10 +17,12 @@ class AllExamInstructionResource extends JsonResource
     public function toArray($request)
     {
 
+        $trying = Timer::where('all_exam_id',$this->all_exam_id)->where('user_id','=',auth('user-api')->id())->count();
+        $total_trying = AllExam::where('id','=',$this->all_exam_id)->first();
         return [
             'id' => $this->id,
             'instruction' => $this->instruction,
-            'trying_number' => $this->trying_number,
+            'trying_number' => (int)$total_trying->trying_number - (int)$trying,
             'number_of_question' => $this->number_of_question,
             'quiz_minute' => $this->all_exam->quize_minute,
             'all_exam_id' => $this->all_exam_id,

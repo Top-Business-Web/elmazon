@@ -147,7 +147,7 @@ class QuestionController extends Controller{
                     return self::returnResponseDataApi(null, "الامتحان الشامل غير موجود", 404);
                 }
             }
-            
+
             $trying = $exam->trying_number;
             if($count_trying < $trying ){
 
