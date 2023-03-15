@@ -19,8 +19,6 @@ class CreateTimersTable extends Migration
             $table->unsignedBigInteger('all_exam_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->string("timer");
-            $table->integer("number_of_mistake");
-            $table->integer("full_degree");
             $table->foreign('online_exam_id')->references('id')->on('online_exams')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('all_exam_id')->references('id')->on('all_exams')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
