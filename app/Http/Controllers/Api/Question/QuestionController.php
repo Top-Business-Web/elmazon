@@ -279,4 +279,62 @@ class QuestionController extends Controller{
         }
 
     }
+
+
+    public function access_end_time_for_exam(Request $request,$id){
+
+        $rules = [
+            'type' => 'required|in:video,subject_class,lesson,full_exam',
+        ];
+        $validator = Validator::make($request->all(), $rules, [
+            'type.in' => 407,
+        ]);
+
+        if ($validator->fails()) {
+            $errors = collect($validator->errors())->flatten(1)[0];
+            if (is_numeric($errors)) {
+
+                $errors_arr = [
+                    407 => 'Failed,The exam type must be an video or lesson or subject_class or full_exam.',
+                ];
+
+                $code = collect($validator->errors())->flatten(1)[0];
+                return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+            }
+            return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
+        }
+
+        if ($request->type == 'video' || $request->type == 'subject_class' || $request->type == 'lesson') {
+            $exam = OnlineExam::where('id', $id)->where('type', '=', $request->type)->first();
+            if (!$exam) {
+                return self::returnResponseDataApi(null, "الامتحان غير موجود", 404);
+            }
+
+            Timer::create([
+                'online_exam_id' => $exam->id,
+                'user_id' => Auth::guard('user-api')->id(),
+                'timer' => $request->timer,
+
+            ]);
+            return self::returnResponseDataApi(null, "تم اضافه محاوله جديده", 200);
+
+        }else{
+            if($request->type == 'full_exam'){
+                $exam = AllExam::where('id', $id)->first();
+                if (!$exam) {
+                    return self::returnResponseDataApi(null, "الامتحان ال موجود", 404);
+                }
+
+                Timer::create([
+                    'all_exam_id' => $exam->id,
+                    'user_id' => Auth::guard('user-api')->id(),
+                    'timer' => $request->timer,
+
+                ]);
+                return self::returnResponseDataApi(null, "تم اضافه محاوله جديده للامتحان الشامل", 200);
+
+            }
+        }
+
+    }
 }
