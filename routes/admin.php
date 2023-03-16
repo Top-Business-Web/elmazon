@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\GuideController;
+use App\Http\Controllers\Admin\AllExamController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -114,6 +115,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::post('updateItem/{id}', [GuideController::class, 'updateItem'])->name('updateItem');
     Route::post('destroyItem/{id}', [GuideController::class, 'destroyItem'])->name('destroyItem');
 
+    #### All Exam ####
+    Route::resource('allExam', AllExamController::class);
 
     #### Question ####
     Route::resource('questions', QuestionController::class);

@@ -93,6 +93,13 @@
         </li>
 
         <li class="slide">
+            <a class="side-menu__item" href="{{ route('allExam.index') }}">
+                <i class="fa fa-scroll side-menu__icon"></i>
+                <span class="side-menu__label">كل الامتحانات</span>
+            </a>
+        </li>
+
+        <li class="slide">
             <a class="side-menu__item" href="{{ route('phoneCommunications.index') }}">
                 <i class="icon icon-phone side-menu__icon"></i>
                 <span class="side-menu__label">الاتصالات الهاتفية</span>
