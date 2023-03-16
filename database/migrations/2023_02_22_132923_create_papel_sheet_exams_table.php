@@ -17,12 +17,13 @@ class CreatePapelSheetExamsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name_ar');
             $table->string('name_en');
+            $table->integer('degree');
             $table->date('from');
             $table->date('to');
             $table->date('date_exam');
             $table->longText('description')->nullable();
             $table->unsignedBigInteger('season_id');
-            $table->unsignedBigInteger('term_id');
+            $table->unsignedBigInteger('term_id')->nullable();
             $table->timestamps();
 
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
