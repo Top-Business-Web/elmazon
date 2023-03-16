@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class OnlineExam extends Model
 {
@@ -38,4 +39,13 @@ class OnlineExam extends Model
 
         return $this->hasMany(Degree::class,'online_exam_id','id');
     }
+
+
+    public function exam_degree_depends(){
+
+        return $this->hasMany(ExamDegreeDepends::class,'online_exam_id','id');
+    }
+
+
+
 }
