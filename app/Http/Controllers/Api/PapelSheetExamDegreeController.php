@@ -31,7 +31,7 @@ class PapelSheetExamDegreeController extends Controller{
         return response()->json([
             'data' => [
                 'users' => PapelSheetExamUserDegreeResource::collection($users),
-                'ordered' => $users[4]->id,
+                'ordered' => 5,
                 'degree' => PapelSheetExamDegree::where('papel_sheet_exam_id','=',$papel_sheet->id)
                     ->where('user_id','=',auth('user-api')->id())->first()->degree,
             ]
