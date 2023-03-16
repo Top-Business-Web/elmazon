@@ -110,5 +110,7 @@ Route::group(['prefix' => 'auth'], function (){
     //exam details
 
     Route::get('papelsheet/details',[PapelSheetExamDegreeController::class,'papelsheet_details'])->middleware('jwt');
+    Route::post('access-end-time/exam/{id}',[QuestionController::class,'access_end_time_for_exam'])->middleware('jwt');
+
 });
 
