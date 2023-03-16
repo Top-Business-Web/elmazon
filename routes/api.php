@@ -101,6 +101,7 @@ Route::group(['prefix' => 'auth'], function (){
 
     Route::group(['prefix' => 'degrees','middleware' => ['jwt']], function (){
         Route::get('all-exams-degrees',[DegreeController::class,'degrees']);
+        Route::get('depends/exam/{id}',[DegreeController::class,'degrees_depends']);
     });
 
 
