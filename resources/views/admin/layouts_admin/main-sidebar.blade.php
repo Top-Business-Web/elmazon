@@ -149,11 +149,24 @@
             </a>
         </li>
 
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('subscribe.index') }}">
+                <i class="icon icon-question side-menu__icon"></i>
+                <span class="side-menu__label">الباقات</span>
+            </a>
+        </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('countries.index') }}">
                 <i class="fa fa-globe side-menu__icon"></i>
                 <span class="side-menu__label">المدن</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('contactUs.index') }}">
+                <i class="fa fa-globe side-menu__icon"></i>
+                <span class="side-menu__label">تواصل معنا</span>
             </a>
         </li>
 

@@ -9,5 +9,5 @@ class Subscribe extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['price_in_center','price_out_center','month','free'];
+    protected $guarded = [];
 }

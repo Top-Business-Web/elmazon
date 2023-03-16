@@ -22,6 +22,8 @@ use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\GuideController;
 use App\Http\Controllers\Admin\AllExamController;
+use App\Http\Controllers\Admin\ContactUsController;
+use App\Http\Controllers\Admin\SubscribeController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -117,6 +119,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### All Exam ####
     Route::resource('allExam', AllExamController::class);
+
+    #### Contact Us ####
+    Route::resource('contactUs', ContactUsController::class);
+
+    #### Subscribe ####
+    Route::resource('subscribe', SubscribeController::class);
 
     #### Question ####
     Route::resource('questions', QuestionController::class);
