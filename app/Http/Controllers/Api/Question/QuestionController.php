@@ -10,6 +10,7 @@ use App\Http\Resources\QuestionResource;
 use App\Models\AllExam;
 use App\Models\Answer;
 use App\Models\Degree;
+use App\Models\ExamDegreeDepends;
 use App\Models\ExamInstruction;
 use App\Models\OnlineExam;
 use App\Models\OnlineExamQuestion;
@@ -184,6 +185,7 @@ class QuestionController extends Controller{
                             'type' => 'choice',
                             'degree' => $onlineExamUser->status == "solved" ? $onlineExamUser->question->degree : 0,
                         ]);
+
                     } else {
 
                         if ($image = $request->details[$i]['image']) {
@@ -229,12 +231,27 @@ class QuestionController extends Controller{
                         'timer' => $request->timer,
 
                     ]);
+                    $degrees_sum = Degree::where('all_exam_id','=',$exam->id)->where('user_id','=',auth('user-api')->id())
+                        ->sum('degree');
+                    ExamDegreeDepends::create([
+                        'user_id' => auth('user-api')->id(),
+                        'all_exam_id' => $exam->id,
+                        'full_degree' => $degrees_sum,
+                    ]);
                 }else{
+
                     Timer::create([
                         'online_exam_id' => $exam->id,
                         'user_id' => Auth::guard('user-api')->id(),
                         'timer' => $request->timer,
 
+                    ]);
+                    $degrees_sum = Degree::where('online_exam_id','=',$exam->id)->where('user_id','=',auth('user-api')->id())
+                        ->sum('degree');
+                    ExamDegreeDepends::create([
+                        'user_id' => auth('user-api')->id(),
+                        'online_exam_id' => $exam->id,
+                        'full_degree' => $degrees_sum,
                     ]);
                 }
 
