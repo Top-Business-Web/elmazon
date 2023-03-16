@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\FullExams\FullExamController;
 use App\Http\Controllers\Api\Guides\GuideController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
+use App\Http\Controllers\Api\PapelSheetExamDegreeController;
 use App\Http\Controllers\Api\Question\QuestionController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
 use Illuminate\Http\Request;
@@ -102,5 +103,9 @@ Route::group(['prefix' => 'auth'], function (){
         Route::get('all-exams-degrees',[DegreeController::class,'degrees']);
     });
 
+
+    //exam details
+
+    Route::get('papelsheet/details',[PapelSheetExamDegreeController::class,'papelsheet_details'])->middleware('jwt');
 });
 

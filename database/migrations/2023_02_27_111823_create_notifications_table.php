@@ -18,7 +18,7 @@ class CreateNotificationsTable extends Migration
             $table->string('title');
             $table->text('body');
             $table->unsignedBigInteger('season_id');
-            $table->unsignedBigInteger('term_id');
+            $table->unsignedBigInteger('term_id')->nullable();
             $table->longText('image')->nullable();
             $table->timestamps();
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();

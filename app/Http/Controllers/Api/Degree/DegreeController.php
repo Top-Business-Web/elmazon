@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Api\Degree;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllExamDegreeResource;
 use App\Http\Resources\OnlineExamDegreeResource;
+use App\Http\Resources\PapelSheetExamDegreeResource;
+use App\Http\Resources\PapelSheetResource;
 use App\Models\AllExam;
 use App\Models\Degree;
 use App\Models\OnlineExam;
 use App\Models\OnlineExamQuestion;
+use App\Models\PapelSheetExam;
 use App\Models\SubjectClass;
 use Illuminate\Http\Request;
 
@@ -58,12 +61,17 @@ class DegreeController extends Controller{
             }
         }
 
+        $papelSheetExam = PapelSheetExam::where('season_id','=',auth()->guard('user-api')->id())->whereHas('term', function ($term){
+            $term->where('status','=','active');
+        })->get();
+
         return response()->json([
 
            "data" => [
                "videos" => OnlineExamDegreeResource::collection($examVideos),
                "all_exams" => AllExamDegreeResource::collection($all_exams),
                "subject_classes" => OnlineExamDegreeResource::collection($lessons_or_subject_classes),
+               "papel_sheet" => PapelSheetExamDegreeResource::collection($papelSheetExam),
            ],
            "message" => "تم الحصول علي جميع درجات الامتحانات التابعه لهذا الطالب بنجاح",
            "code" => 200
