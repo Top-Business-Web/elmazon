@@ -1,4 +1,4 @@
-@extends('admin/layouts/master')
+@extends('admin.layouts_admin.master')
 @section('title') {{$setting->title ?? ''}} | Profile @endsection
 
 @section('page_name')

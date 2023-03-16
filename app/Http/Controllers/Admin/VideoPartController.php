@@ -132,4 +132,25 @@ class VideoPartController extends Controller
     }
 
     // Destroy End
+
+    // Drag Start
+
+    public function updateItems(Request $request)
+    {
+        $input = $request->all();
+
+        foreach ($input['panddingArr'] as $key => $value) {
+            $key = $key+1;
+            Item::where('id',$value)->update(['status'=>0,'order'=>$key]);
+        }
+
+        foreach ($input['completeArr'] as $key => $value) {
+            $key = $key+1;
+            Item::where('id',$value)->update(['status'=>1,'order'=>$key]);
+        }
+
+        return response()->json(['status'=>'success']);
+    }
+
+    // Drag End
 }

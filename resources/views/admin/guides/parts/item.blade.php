@@ -1,4 +1,4 @@
-@extends('Admin/layouts_admin/master')
+@extends('admin.layouts_admin.master')
 
 @section('title')
     عناصر
@@ -32,7 +32,6 @@
                                 <th class="min-w-50px">الوصف</th>
                                 <th class="min-w-50px">من</th>
                                 <th class="min-w-50px">ملف</th>
-                                <th class="min-w-50px">أيقونة</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -43,8 +42,11 @@
                                     <td class="min-w-25px">{{ $item->title_ar }}</td>
                                     <td class="min-w-25px">{{ $item->description_ar }}</td>
                                     <td class="min-w-25px">{{ $item->from_id }}</td>
-                                    <td class="min-w-25px">{{ $item->file }}<button class="btn btn-pill btn-warning-light"><li class="fas fa-eye"></li></button></td>
-                                    <td class="min-w-25px">{{ $item->icon }}</td>
+                                    <td class="min-w-25px">{{ $item->file }}
+                                        <a href="{{ asset('assets/uploads/pdfs/'.$item->file) }}" target="-_blank" onclick="window.open(this.href)"><button class="btn btn-pill btn-warning-light pdf_renderer1">
+                                            <li class="fas fa-eye"></li>
+                                        </button></a>
+                                    </td>
                                     <td>
                                         <button type="button" data-target="#editOrCreate{{ $item->id }}"
                                                 data-toggle="modal" class="btn btn-pill btn-info-light editBtn"><i
@@ -63,40 +65,46 @@
                 </div>
             </div>
         </div>
+        <div id="my_pdf_viewer">
+            <div id="canvas_container">
+                <canvas id="pdf_renderer"></canvas>
+            </div>
+        </div>
 
         <!--Delete MODAL -->
         @foreach($guide as $item)
-        <div class="modal fade" id="delete_modal{{ $item->id }}" tabindex="-1" role="dialog"
+            <div class="modal fade" id="delete_modal{{ $item->id }}" tabindex="-1" role="dialog"
 
-             aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">حذف</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addForm" class="addForm" method="POST" action="{{ route('destroyItem', $item->id) }}">
-                            @csrf
-                            <input id="delete_id" name="id" type="hidden">
-                            <p>حذف<span id="title" class="text-danger">{{ $item->title_ar }}</span></p>
+                 aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">حذف</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addForm" class="addForm" method="POST"
+                                  action="{{ route('destroyItem', $item->id) }}">
+                                @csrf
+                                <input id="delete_id" name="id" type="hidden">
+                                <p>حذف<span id="title" class="text-danger">{{ $item->title_ar }}</span></p>
 
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal"
-                                        id="dismiss_delete_modal">
-                                    اغلاق
-                                </button>
-                                <button type="submit" class="btn btn-danger">حذف</button>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal"
+                                            id="dismiss_delete_modal">
+                                        اغلاق
+                                    </button>
+                                    <button type="submit" class="btn btn-danger">حذف</button>
 
-                            </div>
-                        </form>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         @endforeach
         <!-- MODAL CLOSED -->
 
@@ -115,7 +123,7 @@
                         </div>
                         <div class="modal-body" id="modal-body">
                             <form id="addForm" class="addForm" method="POST"
-                                  action="{{ route('updateItem', $item->id) }}">
+                                  action="{{ route('updateItem', $item->id) }}" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <input type="hidden" name="from_id" value="{{ $item->from_id }}"/>
@@ -134,15 +142,10 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="file">File</label>
+                                        <div class="col-md-12">
+                                            <label for="file">ملف</label>
                                             <input type="file" class="form-control" value="{{ asset($item->file) }}"
                                                    name="file" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="file">icon</label>
-                                            <input type="file" class="form-control" value="{{ asset($item->icon) }}"
-                                                   name="icon">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -184,7 +187,7 @@
                         </button>
                     </div>
                     <div class="modal-body" id="modal-body">
-                        <form id="addForm" class="addForm" method="POST" action="{{ route('addItem') }}">
+                        <form id="addForm" class="addForm" method="POST" action="{{ route('addItem') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <input type="hidden" name="from_id" value="{{ $id }}"/>
@@ -200,13 +203,9 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="file">File</label>
+                                    <div class="col-md-12">
+                                        <label for="file">ملف</label>
                                         <input type="file" class="form-control" name="file" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="file">icon</label>
-                                        <input type="file" class="form-control" name="icon">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -234,6 +233,36 @@
         </div>
         <!-- Create Modal -->
     </div>
-    @include('Admin/layouts_admin/myAjaxHelper')
+    @include('admin.layouts_admin.myAjaxHelper')
+    <script>
+        var myState = {
+            pdf: null,
+        }
+
+        pdfjsLib.getDocument('./my_document.pdf').then((pdf) => {
+
+            myState.pdf = pdf;
+            render();
+        });
+        $(document).on('click', '#pdf_renderer1', function () {
+            alert('Click')
+            function render() {
+                myState.pdf.getPage(myState.currentPage).then((page) => {
+
+                    var canvas = document.getElementById("pdf_renderer");
+                    var ctx = canvas.getContext('2d');
+
+                    var viewport = page.getViewport(myState.zoom);
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+
+                    page.render({
+                        canvasContext: ctx,
+                        viewport: viewport
+                    });
+                });
+            }
+        })
+    </script>
 @endsection
 

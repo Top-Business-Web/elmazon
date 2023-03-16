@@ -117,6 +117,22 @@ class GuideController extends Controller
     {
         $inputs = $request->all();
 
+        if($request->has('file')){
+            $file = $request->file;
+            $path = public_path('assets/uploads/guide/');
+            $file_name = $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $inputs['file']=$file_name;
+        }
+
+        if($request->has('icon')){
+            $file = $request->icon;
+            $path = public_path('assets/uploads/icon/');
+            $file_name = $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $inputs['icon']=$file_name;
+        }
+
         $guide = Guide::create($inputs);
         if($guide->save()) {
             toastr('تم الاضافة بنجاح');
