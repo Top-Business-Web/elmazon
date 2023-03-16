@@ -27,43 +27,22 @@ class DegreeController extends Controller{
 
         $examVideos =  OnlineExam::with(['term'])->whereHas('term', function ($term){
             $term->where('status','=','active');
-        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)
+        })->whereHas('exam_degree_depends')->where('season_id','=',auth()->guard('user-api')->user()->season_id)
             ->where('type','=','video')->get();
 
-        $exam_videos_ids = $examVideos->pluck('id')->toArray();
-        $degrees = Degree::whereIn('online_exam_id',$exam_videos_ids)->get();
-        foreach ($degrees as $degree){
-            if($degree->status == 'not_completed'){
-                $examVideos = [];
-            }
-        }
 
         $lessons_or_subject_classes = OnlineExam::with(['term'])->whereHas('term', function ($term){
             $term->where('status','=','active');
-        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('type','=','subject_class')
-            ->orWhere('type','=','lesson')->get();
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)
+            ->whereNotIn('type',['video','all_exam'])
+            ->whereHas('exam_degree_depends')
+            ->get();
 
-
-        $lessons_or_subject_classes_ids = $lessons_or_subject_classes->pluck('id')->toArray();
-        $degrees_lessons = Degree::whereIn('online_exam_id',$lessons_or_subject_classes_ids)->get();
-        foreach ($degrees_lessons as $degrees_lesson){
-            if($degrees_lesson->status == 'not_completed'){
-                $lessons_or_subject_classes = [];
-            }
-        }
 
        $all_exams = AllExam::whereHas('term', function ($term){
            $term->where('status','=','active');
-       })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+       })->whereHas('exam_degree_depends')->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
 
-
-        $all_exams_ids = $all_exams->pluck('id')->toArray();
-        $degrees_all_exams = Degree::whereIn('all_exam_id',$all_exams_ids)->get();
-        foreach ($degrees_all_exams as $degree_all_exam){
-            if($degree_all_exam->status == 'not_completed'){
-                $all_exams = [];
-            }
-        }
 
         $papelSheetExam = PapelSheetExam::where('season_id','=',auth()->guard('user-api')->id())->whereHas('term', function ($term){
             $term->where('status','=','active');
