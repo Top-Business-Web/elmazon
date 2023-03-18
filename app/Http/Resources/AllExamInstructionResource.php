@@ -16,9 +16,7 @@ class AllExamInstructionResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
-    public function toArray($request)
-    {
-
+    public function toArray($request){
         $depends = ExamDegreeDepends::where('all_exam_id', '=',$this->all_exam_id)->where('user_id', '=', Auth::guard('user-api')->id())
             ->where('exam_depends', '=', 'yes')->first();
         $trying = Timer::where('all_exam_id',$this->all_exam_id)->where('user_id','=',auth('user-api')->id())->count();

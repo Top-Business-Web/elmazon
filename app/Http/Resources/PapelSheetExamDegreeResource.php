@@ -21,6 +21,7 @@ class PapelSheetExamDegreeResource extends JsonResource
             'id' => $this->id,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'type' => "papel_sheet",
+            'status' => "approve",
             'degree' =>  $papel_sheet_degree->degree . "/" . $this->degree,
         ];
     }
