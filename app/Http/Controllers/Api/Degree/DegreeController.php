@@ -7,7 +7,7 @@ use App\Http\Resources\AllExamDegreeResource;
 use App\Http\Resources\AllExamResource;
 use App\Http\Resources\OnlineExamDegreeResource;
 use App\Http\Resources\OnlineExamResource;
-use App\Http\Resources\PapelSheetExamDegreeResource;
+use App\Http\Resources\PapelSheetExamDegreeUserResource;
 use App\Http\Resources\PapelSheetResource;
 use App\Models\AllExam;
 use App\Models\Degree;
@@ -54,7 +54,7 @@ class DegreeController extends Controller{
                "videos" => OnlineExamDegreeResource::collection($examVideos),
                "all_exams" => AllExamDegreeResource::collection($all_exams),
                "subject_classes" => OnlineExamDegreeResource::collection($lessons_or_subject_classes),
-               "papel_sheet" => PapelSheetExamDegreeResource::collection($papelSheetExam),
+               "papel_sheet" => PapelSheetExamDegreeUserResource::collection($papelSheetExam),
            ],
            "message" => "تم الحصول علي جميع درجات الامتحانات التابعه لهذا الطالب بنجاح",
            "code" => 200
