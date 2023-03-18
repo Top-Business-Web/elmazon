@@ -67,7 +67,7 @@ class AllExamsUsersDegreeController extends Controller{
 
             $degree_user = ExamDegreeDepends::where('online_exam_id','=',$exam->id)
                 ->where('exam_depends','=','yes')
-                ->where('user_id','=',auth('user-api')->id())->first()->full_degree;
+                ->where('user_id','=',auth('user-api')->id())->first()->full_degree ?? 0;
 
 
 
@@ -135,7 +135,7 @@ class AllExamsUsersDegreeController extends Controller{
 
             $degree_user = ExamDegreeDepends::where('all_exam_id','=',$exam->id)
                 ->where('exam_depends','=','yes')
-                ->where('user_id','=',auth('user-api')->id())->first()->full_degree;
+                ->where('user_id','=',auth('user-api')->id())->first()->full_degree ?? 0;
 
 
             //start details of timer and mistake
@@ -169,11 +169,9 @@ class AllExamsUsersDegreeController extends Controller{
 
         ]);
 
-
     }//end method
 
     public function all_exams_heroes(){
-
 
         $users = User::whereHas('exam_degree_depends')->whereHas('season', function ($season) {
             $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
