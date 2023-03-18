@@ -19,9 +19,10 @@ class CommentController extends Controller
                 ->addColumn('action', function ($comments) {
                     return '
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
-                                    data-id="' . $comments->id . '" data-title="' . $comments->name_ar . '">
+                                    data-id="' . $comments->id . '" data-title="' . $comments->comment . '">
                                     <i class="fas fa-trash"></i>
                             </button>
+                            <a href="" class="btn btn-pill btn-success-light"><li class="fa fa-comment"></li></a>
                        ';
                 })
                 ->escapeColumns([])
@@ -32,4 +33,15 @@ class CommentController extends Controller
     }
 
     // End Index
+
+    // Destroy Start
+
+    public function destroy(Request $request)
+    {
+        $comments = Comment::where('id', $request->id)->firstOrFail();
+        $comments->delete();
+        return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
+    }
+
+    // Destroy End
 }

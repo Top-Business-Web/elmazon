@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\AllExamController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\SubscribeController;
 use App\Http\Controllers\Admin\AdsController;
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
 use Illuminate\Support\Facades\Route;
@@ -138,6 +139,15 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Ads ####
     Route::resource('ads', adsController::class);
     Route::get('activateAds/{id}', [adsController::class, 'activateAds'])->name('activateAds');
+
+    #### Comment ####
+    Route::resource('comment', CommentController::class);
+    Route::get('replyComment/{id}', [CommentController::class, 'replyComment'])->name('replyComment');
+
+    #### Feedback ####
+    Route::resource('feedback', FeedbackController::class);
+    Route::get('indexFeedback/{id}', [FeedbackController::class, 'indexFeedback'])->name('indexFeedback');
+    Route::post('addFeedback', [FeedbackController::class, 'addFeedback'])->name('addFeedback');
 
 
     #### Auth ####

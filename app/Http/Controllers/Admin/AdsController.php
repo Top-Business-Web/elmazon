@@ -87,17 +87,18 @@ class AdsController extends Controller
     {
         $inputs = $request->all();
         if($request->hasFile('file')){
-            $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Ads/image', 'photo');
             if($request->type == '0')
             {
+                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Ads/image', 'photo');
                 $inputs['type'] = 'image';
             }
             else
             {
+                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Ads/video', 'video');
                 $inputs['type'] = 'video';
             }
-        }
 
+        }
         if(Ads::create($inputs)) {
             return response()->json(['status' => 200]);
         }
@@ -108,7 +109,6 @@ class AdsController extends Controller
     }
 
     // Store End
-
     // Edit Start
 
     public function edit(Ads $ad)

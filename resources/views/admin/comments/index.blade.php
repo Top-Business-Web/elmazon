@@ -103,13 +103,7 @@
         ]
         showData('{{route('comment.index')}}', columns);
         // Delete Using Ajax
-        destroyScript('{{route('ads.destroy',':id')}}');
-        // Add Using Ajax
-        showAddModal('{{route('ads.create')}}');
-        addScript();
-        // Add Using Ajax
-        showEditModal('{{route('ads.edit',':id')}}');
-        editScript();
+        destroyScript('{{route('comment.destroy',':id')}}');
     </script>
 @endsection
 

@@ -27,8 +27,8 @@ class SliderController extends Controller
                             </button>
                        ';
                 })
-                ->editColumn('image', function ($sliders) {
-                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset($sliders->image) . '"/>';
+                ->editColumn('file', function ($sliders) {
+                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset($sliders->file) . '"/>';
                 })
                 ->escapeColumns([])
                 ->make(true);
@@ -52,8 +52,18 @@ class SliderController extends Controller
     public function store(RequestSlider $request)
     {
         $inputs = $request->all();
-        if($request->hasFile('image')){
-            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/slider/product', 'photo');
+        if($request->hasFile('file')){
+            if($request->type == '0')
+            {
+                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Slider/image', 'photo');
+                $inputs['type'] = 'image';
+            }
+            else
+            {
+                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Slider/video', 'video');
+                $inputs['type'] = 'video';
+            }
+
         }
         if(Slider::create($inputs)) {
             return response()->json(['status' => 200]);
@@ -82,13 +92,24 @@ class SliderController extends Controller
 
         $inputs = $request->all();
 
-        if ($request->has('image')) {
-            if (file_exists($slider->image)) {
-                unlink($slider->image);
+        if ($request->has('file')) {
+            if($request->type == '0')
+            {
+                if (file_exists($slider->file)) {
+                    unlink($slider->file);
+                }
+                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Ads/image', 'photo');
+                $inputs['type'] = 'image';
             }
-            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/sliders', 'photo');
+            else
+            {
+                if (file_exists($slider->file)) {
+                    unlink($slider->file);
+                }
+                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Ads/video', 'photo');
+                $inputs['type'] = 'video';
+            }
         }
-
         if($slider->update($inputs)){
             return response()->json(['status' => 200]);
         }
