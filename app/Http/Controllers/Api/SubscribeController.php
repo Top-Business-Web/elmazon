@@ -12,9 +12,7 @@ class SubscribeController extends Controller
 
         try {
 
-            $subscribes = Subscribe::whereHas('term', function ($term){
-                $term->where('status','=','active');
-            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+            $subscribes = Subscribe::where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
 
             return self::returnResponseDataApi(SubscribeResource::collection($subscribes), "تم الحصول علي بيانات الاشتراكات بنجاح", 200);
         } catch (\Exception $exception) {

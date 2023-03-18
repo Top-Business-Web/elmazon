@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdsController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Comment\CommentController;
 use App\Http\Controllers\Api\Degree\DegreeController;
@@ -106,7 +107,7 @@ Route::group(['prefix' => 'auth'], function (){
         Route::get('depends/exam/{id}',[DegreeController::class,'degrees_depends']);
     });
 
-
+    Route::get('ads',[AdsController::class,'index']);
     //exam details
 
     Route::get('exam-degree/details',[AllExamsUsersDegreeController::class,'all_exams_details'])->middleware('jwt');

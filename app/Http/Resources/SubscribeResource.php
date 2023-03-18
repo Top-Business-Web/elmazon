@@ -34,8 +34,8 @@ class SubscribeResource extends JsonResource
             'price' => (auth()->guard('user-api')->user()->center == 'in') ? $this->price_in_center :$this->price_out_center,
             'is_free' => $this->free,
             'month' => $this->month,
-            'month_name_ar' => date("F", mktime(0, 0, 0, $this->month, 10)),
-            'month_name_en' => $months[date("M", mktime(0, 0, 0, $this->month, 10))],
+            'month_name_en' => date("F", mktime(0, 0, 0, $this->month, 10)),
+            'month_name_ar' => $months[date("M", mktime(0, 0, 0, $this->month, 10))],
             'created_at' => $this->created_at->format('Y-m-d')
         ];
     }
