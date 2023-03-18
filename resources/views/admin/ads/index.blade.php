@@ -30,6 +30,8 @@
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">اللينك</th>
                                 <th class="min-w-50px">الصورة</th>
+                                <th class="min-w-50px">النوع</th>
+                                <th class="min-w-50px">الحالة</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -91,6 +93,8 @@
             {data: 'id', name: 'id'},
             {data: 'link', name: 'link'},
             {data: 'image', name: 'image'},
+            {data: 'type', name: 'type'},
+            {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('ads.index')}}', columns);

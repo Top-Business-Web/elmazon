@@ -56,7 +56,14 @@ class AdsController extends Controller
         $inputs = $request->all();
         if($request->hasFile('image')){
             $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/Ads/', 'photo');
+            $inputs['type'] = 'image';
         }
+
+        if($request->hasFile('vi')){
+            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/Ads/', 'photo');
+            $inputs['type'] = 'image';
+        }
+
         if(Ads::create($inputs)) {
             return response()->json(['status' => 200]);
         }
