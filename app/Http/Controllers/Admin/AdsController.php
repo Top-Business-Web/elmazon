@@ -28,6 +28,9 @@ class AdsController extends Controller
                             </button>
                        ';
                 })
+                ->editColumn('image', function ($sliders) {
+                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset($sliders->image) . '"/>';
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {
