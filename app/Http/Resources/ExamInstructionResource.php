@@ -26,6 +26,7 @@ class ExamInstructionResource extends JsonResource
         }else{
             $type  = 'video';
         }
+
         $depends = ExamDegreeDepends::where('online_exam_id', '=',$this->online_exam_id)->where('user_id', '=', Auth::guard('user-api')->id())
             ->where('exam_depends', '=', 'yes')->first();
         $trying = Timer::where('online_exam_id',$this->online_exam_id)->where('user_id','=',auth('user-api')->id())->count();

@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\FullExams\FullExamController;
 use App\Http\Controllers\Api\Guides\GuideController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
-use App\Http\Controllers\Api\PapelSheetExamDegreeController;
+use App\Http\Controllers\Api\AllExamsUsersDegreeController;
 use App\Http\Controllers\Api\Question\QuestionController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
 use App\Http\Controllers\Api\SubscribeController;
@@ -110,7 +110,9 @@ Route::group(['prefix' => 'auth'], function (){
     Route::get('ads',[AdsController::class,'index']);
     //exam details
 
-    Route::get('exam-degree/details',[PapelSheetExamDegreeController::class,'papelsheet_details'])->middleware('jwt');
+    Route::get('exam-degree/details',[AllExamsUsersDegreeController::class,'all_exams_details'])->middleware('jwt');
+    Route::get('exam-degree/heroes',[AllExamsUsersDegreeController::class,'all_exams_heroes'])->middleware('jwt');
+
     Route::post('access-end-time/exam/{id}',[QuestionController::class,'access_end_time_for_exam'])->middleware('jwt');
 
 });
