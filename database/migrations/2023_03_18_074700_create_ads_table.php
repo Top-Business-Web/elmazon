@@ -16,7 +16,7 @@ class CreateAdsTable extends Migration
         Schema::create('ads', function (Blueprint $table) {
             $table->id();
             $table->string('link')->nullable();
-            $table->text('image');
+            $table->text('file');
             $table->enum('statsu', array('true', 'false'))->default('true');
             $table->enum('type', array('image', 'video'))->default('image');
             $table->timestamps();
