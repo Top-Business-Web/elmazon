@@ -165,6 +165,13 @@
         </li>
 
         <li class="slide">
+            <a class="side-menu__item" href="{{ route('comment.index') }}">
+                <i class="fa fa-globe side-menu__icon"></i>
+                <span class="side-menu__label">التعليقات</span>
+            </a>
+        </li>
+
+        <li class="slide">
             <a class="side-menu__item" href="{{ route('ads.index') }}">
                 <i class="fa fa-globe side-menu__icon"></i>
                 <span class="side-menu__label">الاعلانات</span>
