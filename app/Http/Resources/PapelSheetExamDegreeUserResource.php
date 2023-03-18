@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use App\Models\PapelSheetExamDegree;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PapelSheetExamDegreeResource extends JsonResource
+class PapelSheetExamDegreeUserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
