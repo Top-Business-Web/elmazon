@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AllExamResource;
 use App\Http\Resources\AllExamsDegreeResource;
+use App\Http\Resources\HeroesExamResource;
+use App\Http\Resources\OnlineExamResource;
+use App\Http\Resources\PapelSheetResource;
 use App\Models\AllExam;
 use App\Models\ExamDegreeDepends;
 use App\Models\OnlineExam;
@@ -19,7 +23,7 @@ use Illuminate\Support\Facades\Validator;
 class AllExamsUsersDegreeController extends Controller{
 
 
-    public function papelsheet_details(Request $request){
+    public function all_exams_details(Request $request){
 
         $rules = [
             'exam_type' => 'required|in:full_exam,lesson,subject_class,video,papel_sheet'
@@ -47,6 +51,8 @@ class AllExamsUsersDegreeController extends Controller{
             if (!$exam) {
                 return self::returnResponseDataApi(null, "هذا الامتحان غير موجود", 404, 404);
             }
+
+            $details = new OnlineExamResource($exam);
 
             $users = User::whereHas('exam_degree_depends',function ($degree)use($exam){
                 $degree->where('online_exam_id','=',$exam->id);
@@ -90,6 +96,7 @@ class AllExamsUsersDegreeController extends Controller{
                 return self::returnResponseDataApi(null,"الامتحان الورقي غير موجود",404,404);
             }
 
+            $details = new PapelSheetResource($exam);
 
             $users = User::whereHas('papel_sheet_exam_degree',function ($degree)use($exam){
                 $degree->where('papel_sheet_exam_id','=',$exam->id);
@@ -111,6 +118,9 @@ class AllExamsUsersDegreeController extends Controller{
             if(!$exam){
                 return self::returnResponseDataApi(null,"الامتحان الشامل غير موجود",404,404);
             }
+
+            $details = new AllExamResource($exam);
+
 
             $users = User::whereHas('exam_degree_depends',function ($degree)use($exam){
                 $degree->where('all_exam_id','=',$exam->id);
@@ -147,10 +157,12 @@ class AllExamsUsersDegreeController extends Controller{
 
 
 
+
         return response()->json([
             'data' => [
                 'users' => AllExamsDegreeResource::collection($users),
             ],
+            'details' => $details,
             'ordered' => ($key = array_search(auth('user-api')->id(),$users->pluck('id')->toArray()))+1,
             'degree' => $degree_user,
             'timer' => $timer->timer ?? 0,
@@ -159,6 +171,26 @@ class AllExamsUsersDegreeController extends Controller{
 
         ]);
 
+
+    }//end method
+
+
+
+    public function all_exams_heroes(Request $request){
+
+
+        $users = User::whereHas('exam_degree_depends')->whereHas('season', function ($season) {
+            $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
+        })->orderBy(
+            ExamDegreeDepends::select('full_degree')
+                ->where('exam_depends','=','yes')
+                // This can vary depending on the relationship
+                ->whereColumn('user_id', 'users.id')
+                ->orderBy('full_degree','desc')
+            ,'desc')->take(10)->get();
+
+
+        return self::returnResponseDataApi(HeroesExamResource::collection($users),"تم الحصول علي ابطال الامتحانات بنجاح",200);
 
     }
 

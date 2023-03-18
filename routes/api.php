@@ -110,7 +110,9 @@ Route::group(['prefix' => 'auth'], function (){
     Route::get('ads',[AdsController::class,'index']);
     //exam details
 
-    Route::get('exam-degree/details',[AllExamsUsersDegreeController::class,'papelsheet_details'])->middleware('jwt');
+    Route::get('exam-degree/details',[AllExamsUsersDegreeController::class,'all_exams_details'])->middleware('jwt');
+    Route::get('exam-degree/heroes',[AllExamsUsersDegreeController::class,'all_exams_heroes'])->middleware('jwt');
+
     Route::post('access-end-time/exam/{id}',[QuestionController::class,'access_end_time_for_exam'])->middleware('jwt');
 
 });
