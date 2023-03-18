@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Lesson;
 use App\Models\OnlineExam;
+use App\Models\OnlineExamUser;
 use App\Models\SubjectClass;
 use App\Models\VideoParts;
 use Illuminate\Http\Request;
@@ -32,6 +33,7 @@ class OnlineExamController extends Controller
                                     <i class="fas fa-trash"></i>
                             </button>
                             <a class="btn btn-pill btn-success-light questionBtn" data-id="' . $online_exams->id . '" data-target="#question_modal" href="'. route('indexQuestion', $online_exams->id) .'"><i class="fa fa-question"></i></a>
+                            <a class="btn btn-pill btn-warning-light questionBtn" data-id="' . $online_exams->id . '" data-target="#question_modal" href="'. route('usersExam', $online_exams->id) .'"><i class="fa fa-user"></i></a>
                        ';
                 })
                 ->escapeColumns([])
@@ -67,6 +69,20 @@ class OnlineExamController extends Controller
     }
 
     // Question End
+
+    // User Exam Start
+
+    public function usersExam(Request $request)
+    {
+        $exam = OnlineExam::find($request->id);
+        $online_exams = OnlineExamUser::where('online_exam_id', $exam->id)->get()->select('user_id')->groupBy('user_id');
+//        $user = OnlineExamUser::select('user_id')->groupBy('user_id')->get();
+        return $online_exams;
+        return view('admin.online_exam.parts.text_exam_users', compact('online_exams'));
+//        dd($online_exams);
+    }
+
+    // User Exam End
 
     // Add Question
 

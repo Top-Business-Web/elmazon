@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
 use App\Http\Controllers\Api\PapelSheetExamDegreeController;
 use App\Http\Controllers\Api\Question\QuestionController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
+use App\Http\Controllers\Api\SubscribeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,7 @@ Route::group(['prefix' => 'auth'], function (){
         Route::get('papel-sheet-exam/show',[AuthController::class,'papel_sheet_exam_show']);
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
+        Route::get('all-subscribes',[SubscribeController::class,'all']);
 
     });
   });

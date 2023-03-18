@@ -21,6 +21,11 @@ use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\GuideController;
+use App\Http\Controllers\Admin\AllExamController;
+use App\Http\Controllers\Admin\ContactUsController;
+use App\Http\Controllers\Admin\SubscribeController;
+use App\Http\Controllers\Admin\AdsController;
+use App\Http\Controllers\Admin\TextExamUserController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -88,6 +93,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::resource('onlineExam', OnlineExamController::class);
     Route::get('examble_type', [OnlineExamController::class, 'examble_type'])->name('examble_type');
     Route::get('indexQuestion/{id}', [OnlineExamController::class, 'indexQuestion'])->name('indexQuestion');
+    Route::get('usersExam/{id}', [OnlineExamController::class, 'usersExam'])->name('usersExam');
     Route::post('addQuestion', [OnlineExamController::class, 'addQuestion'])->name('addQuestion');
     Route::post('deleteQuestion', [OnlineExamController::class, 'deleteQuestion'])->name('deleteQuestion');
 
@@ -114,12 +120,23 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::post('updateItem/{id}', [GuideController::class, 'updateItem'])->name('updateItem');
     Route::post('destroyItem/{id}', [GuideController::class, 'destroyItem'])->name('destroyItem');
 
+    #### All Exam ####
+    Route::resource('allExam', AllExamController::class);
+
+    #### Contact Us ####
+    Route::resource('contactUs', ContactUsController::class);
+
+    #### Subscribe ####
+    Route::resource('subscribe', SubscribeController::class);
 
     #### Question ####
     Route::resource('questions', QuestionController::class);
     Route::get('examble_type', [QuestionController::class, 'examble_type'])->name('examble_type');
     Route::get('answer/{id}', [QuestionController::class, 'answer'])->name('answer');
     Route::post('addAnswer/{id}', [QuestionController::class, 'addAnswer'])->name('addAnswer');
+
+    #### Ads ####
+    Route::resource('ads', adsController::class);
 
     #### Auth ####
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
