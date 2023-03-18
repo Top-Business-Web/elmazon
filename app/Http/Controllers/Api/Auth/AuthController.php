@@ -319,7 +319,6 @@ class AuthController extends Controller
         $user->update([
             'image' => $file ?? $user->image
         ]);
-
         $user['token'] = $request->bearerToken();
         return self::returnResponseDataApi(new UserResource($user),"تم تعديل صوره الطالب بنجاح",200);
 

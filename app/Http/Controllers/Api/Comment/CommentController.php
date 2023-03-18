@@ -347,7 +347,6 @@ class CommentController extends Controller{
         }else{
             return self::returnResponseDataApi(null,"ليس لديك صلاحيه لمسح هذا الرد",403);
         }
-
         return self::returnResponseDataApi(null,"تم حذف الرد بنجاح",200);
 
     }
