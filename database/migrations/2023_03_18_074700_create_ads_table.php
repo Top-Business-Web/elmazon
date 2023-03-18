@@ -17,7 +17,7 @@ class CreateAdsTable extends Migration
             $table->id();
             $table->string('link')->nullable();
             $table->text('image');
-            $table->string('status');
+            $table->enum('statsu', array('true', 'false'))->default('true');
             $table->enum('type', array('image', 'video'))->default('image');
             $table->timestamps();
         });
