@@ -30,6 +30,7 @@
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">الاسم</th>
+                                <th class="min-w-50px">الحالة</th>
                                 <th class="min-w-50px">ملاحظة</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
@@ -93,6 +94,7 @@
         var columns = [
             {data: 'id', name: 'id'},
             {data: 'name_ar', name: 'name_ar'},
+            {data: 'status', name: 'status'},
             {data: 'note', name: 'note'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]

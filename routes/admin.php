@@ -137,6 +137,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Ads ####
     Route::resource('ads', adsController::class);
+    Route::get('activateAds/{id}', [adsController::class, 'activateAds'])->name('activateAds');
+
 
     #### Auth ####
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
