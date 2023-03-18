@@ -7,8 +7,10 @@ use App\Http\Controllers\Api\FullExams\FullExamController;
 use App\Http\Controllers\Api\Guides\GuideController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
+use App\Http\Controllers\Api\PapelSheetExamDegreeController;
 use App\Http\Controllers\Api\Question\QuestionController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
+use App\Http\Controllers\Api\SubscribeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +41,7 @@ Route::group(['prefix' => 'auth'], function (){
         Route::get('papel-sheet-exam/show',[AuthController::class,'papel_sheet_exam_show']);
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
+        Route::get('all-subscribes',[SubscribeController::class,'all']);
 
     });
   });
@@ -100,7 +103,14 @@ Route::group(['prefix' => 'auth'], function (){
 
     Route::group(['prefix' => 'degrees','middleware' => ['jwt']], function (){
         Route::get('all-exams-degrees',[DegreeController::class,'degrees']);
+        Route::get('depends/exam/{id}',[DegreeController::class,'degrees_depends']);
     });
+
+
+    //exam details
+
+    Route::get('papelsheet/details',[PapelSheetExamDegreeController::class,'papelsheet_details'])->middleware('jwt');
+    Route::post('access-end-time/exam/{id}',[QuestionController::class,'access_end_time_for_exam'])->middleware('jwt');
 
 });
 

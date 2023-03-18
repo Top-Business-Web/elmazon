@@ -17,8 +17,7 @@ class AddSeasonAndTermToAllExamsTable extends Migration
 
 
             $table->unsignedBigInteger('season_id');
-            $table->unsignedBigInteger('term_id');
-
+            $table->unsignedBigInteger('term_id')->nullable();
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('term_id')->references('id')->on('terms')->cascadeOnUpdate()->cascadeOnDelete();
 

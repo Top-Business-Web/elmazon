@@ -23,7 +23,7 @@ class CreateQuestionsTable extends Migration
             $table->integer('degree');
             $table->text('note')->nullable();
             $table->unsignedBigInteger('season_id');
-            $table->unsignedBigInteger('term_id');
+            $table->unsignedBigInteger('term_id')->nullable();
             $table->morphs('examable');
             $table->timestamps();
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();

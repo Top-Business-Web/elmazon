@@ -38,4 +38,9 @@ class AllExam extends Model
 
         return $this->hasMany(Degree::class,'online_exam_id','id');
     }
+
+    public function exam_degree_depends(){
+
+        return $this->hasMany(ExamDegreeDepends::class,'all_exam_id','id');
+    }
 }

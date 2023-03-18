@@ -3,7 +3,11 @@
 namespace App\Http\Resources;
 
 use App\Models\AllExam;
+use App\Models\ExamDegreeDepends;
+use App\Models\OnlineExam;
+use App\Models\Timer;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class ExamInstructionResource extends JsonResource
 {
@@ -22,12 +26,14 @@ class ExamInstructionResource extends JsonResource
         }else{
             $type  = 'video';
         }
-
+        $depends = ExamDegreeDepends::where('online_exam_id', '=',$this->online_exam_id)->where('user_id', '=', Auth::guard('user-api')->id())
+            ->where('exam_depends', '=', 'yes')->first();
+        $trying = Timer::where('online_exam_id',$this->online_exam_id)->where('user_id','=',auth('user-api')->id())->count();
         return [
 
             'id' => $this->id,
             'instruction' => $this->instruction,
-            'trying_number' => $this->trying_number,
+            'trying_number' =>  !$depends?((int)$this->online_exam->trying_number - (int)$trying) : 0,
             'number_of_question' => $this->number_of_question,
             'quiz_minute' => $this->online_exam->quize_minute,
             'online_exam_id' => $this->online_exam_id,
