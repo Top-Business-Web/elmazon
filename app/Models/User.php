@@ -53,6 +53,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Suggestion::class, 'user_id', 'id');
     }
 
+    public function onlineExam()
+    {
+        return $this->belongsToMany(OnlineExam::class, 'online_exam_users');
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

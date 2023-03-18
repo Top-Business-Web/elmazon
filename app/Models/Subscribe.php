@@ -9,7 +9,9 @@ class Subscribe extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['price_in_center','price_out_center','month','term_id','season_id','free'];
+
+    protected $guarded = [];
+
 
 
     public function season(){

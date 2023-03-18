@@ -41,11 +41,10 @@ class OnlineExam extends Model
     }
 
 
+
     public function exam_degree_depends(){
 
         return $this->hasMany(ExamDegreeDepends::class,'online_exam_id','id');
     }
-
-
 
 }
