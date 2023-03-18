@@ -7,10 +7,13 @@ use App\Http\Resources\AllExamsDegreeResource;
 use App\Models\AllExam;
 use App\Models\ExamDegreeDepends;
 use App\Models\OnlineExam;
+use App\Models\OnlineExamUser;
 use App\Models\PapelSheetExam;
 use App\Models\PapelSheetExamDegree;
+use App\Models\Timer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AllExamsUsersDegreeController extends Controller{
@@ -60,6 +63,26 @@ class AllExamsUsersDegreeController extends Controller{
                 ->where('exam_depends','=','yes')
                 ->where('user_id','=',auth('user-api')->id())->first()->full_degree;
 
+
+
+            //start details of timer and mistake
+            $timer = Timer::where('user_id','=',auth('user-api')->id())
+                ->where('online_exam_id','=',$request->id)->latest()->first();
+
+            $number_mistake = OnlineExamUser::where('user_id','=',auth('user-api')->id())
+                ->where('online_exam_id','=',$request->id)
+                ->where('status','=','un_correct')
+                ->groupBy('online_exam_id')
+                ->count();
+
+            $depends = ExamDegreeDepends::where('online_exam_id', '=',$request->id)->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('exam_depends', '=', 'yes')->first();
+
+            $trying = Timer::where('online_exam_id',$request->id)->where('user_id','=',auth('user-api')->id())->count();
+            //end details of timer and mistake
+
+
+
         }elseif ($request->exam_type == 'papel_sheet'){
 
             $exam = PapelSheetExam::where('id','=',$request->id)->first();
@@ -79,13 +102,15 @@ class AllExamsUsersDegreeController extends Controller{
 
             $degree_user = PapelSheetExamDegree::where('papel_sheet_exam_id','=',$exam->id)
                 ->where('user_id','=',auth('user-api')->id())->first()->degree;
+
+            $trying = 0;
+            $depends = "";
         }else{
 
             $exam = AllExam::where('id','=',$request->id)->first();
             if(!$exam){
                 return self::returnResponseDataApi(null,"الامتحان الشامل غير موجود",404,404);
             }
-
 
             $users = User::whereHas('exam_degree_depends',function ($degree)use($exam){
                 $degree->where('all_exam_id','=',$exam->id);
@@ -102,6 +127,22 @@ class AllExamsUsersDegreeController extends Controller{
                 ->where('exam_depends','=','yes')
                 ->where('user_id','=',auth('user-api')->id())->first()->full_degree;
 
+
+            //start details of timer and mistake
+            $timer = Timer::where('user_id','=',auth('user-api')->id())
+                ->where('all_exam_id','=',$request->id)->latest()->first();
+
+            $number_mistake = OnlineExamUser::where('user_id','=',auth('user-api')->id())
+                ->where('all_exam_id','=',$request->id)
+                ->where('status','=','un_correct')
+                ->groupBy('all_exam_id')
+                ->count();
+
+            $depends = ExamDegreeDepends::where('all_exam_id', '=',$request->id)->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('exam_depends', '=', 'yes')->first();
+            $trying = Timer::where('all_exam_id',$request->id)->where('user_id','=',auth('user-api')->id())->count();
+
+            //end details of timer and mistake
         }
 
 
@@ -109,9 +150,12 @@ class AllExamsUsersDegreeController extends Controller{
         return response()->json([
             'data' => [
                 'users' => AllExamsDegreeResource::collection($users),
-                'ordered' => ($key = array_search(auth('user-api')->id(),$users->pluck('id')->toArray()))+1,
-                'degree' => $degree_user,
-            ]
+            ],
+            'ordered' => ($key = array_search(auth('user-api')->id(),$users->pluck('id')->toArray()))+1,
+            'degree' => $degree_user,
+            'timer' => $timer->timer ?? 0,
+            'number_mistake' => $number_mistake ?? 0,
+            'trying_number_again' => !$depends?((int)$exam->trying_number - (int)$trying) : 0,
 
         ]);
 

@@ -29,8 +29,7 @@ class AllExamsDegreeResource extends JsonResource
             $degree = PapelSheetExamDegree::where('user_id','=',$this->id)->where('papel_sheet_exam_id','=',$request->id)->first();
             $degree = $degree->degree;
 
-            $trying = 0;
-            $depends = "";
+
 
         }elseif ($request->exam_type == 'video' || $request->exam_type == 'subject_class' || $request->exam_type == 'lesson'){
             $exam = OnlineExam::where('id','=',$request->id)->first();
@@ -38,20 +37,6 @@ class AllExamsDegreeResource extends JsonResource
                 ->where('exam_depends','=','yes')
                 ->where('online_exam_id','=',$request->id)->first();
             $degree = $degree->full_degree;
-
-            $timer = Timer::where('user_id','=',$this->id)
-                ->where('online_exam_id','=',$request->id)->latest()->first();
-
-            $number_mistake = OnlineExamUser::where('user_id','=',$this->id)
-                ->where('online_exam_id','=',$request->id)
-                ->where('status','=','un_correct')
-                ->groupBy('online_exam_id')
-                ->count();
-
-            $depends = ExamDegreeDepends::where('online_exam_id', '=',$request->id)->where('user_id', '=', Auth::guard('user-api')->id())
-                ->where('exam_depends', '=', 'yes')->first();
-
-            $trying = Timer::where('online_exam_id',$request->id)->where('user_id','=',auth('user-api')->id())->count();
 
 
         }else{
@@ -61,27 +46,13 @@ class AllExamsDegreeResource extends JsonResource
                 ->where('all_exam_id','=',$request->id)->first();
 
             $degree = $degree->full_degree;
-            $timer = Timer::where('user_id','=',$this->id)
-                ->where('all_exam_id','=',$request->id)->latest()->first();
 
-            $number_mistake = OnlineExamUser::where('user_id','=',$this->id)
-                ->where('all_exam_id','=',$request->id)
-                ->where('status','=','un_correct')
-                ->groupBy('all_exam_id')
-                ->count();
-
-            $depends = ExamDegreeDepends::where('all_exam_id', '=',$request->id)->where('user_id', '=', Auth::guard('user-api')->id())
-                ->where('exam_depends', '=', 'yes')->first();
-            $trying = Timer::where('all_exam_id',$request->id)->where('user_id','=',auth('user-api')->id())->count();
 
         }
 
         return  [
             'id' => $this->id,
             'name' => $this->name,
-            'timer' => $timer->timer ?? 0,
-            'number_mistake' => $number_mistake ?? 0,
-            'trying_number_again' => !$depends?((int)$exam->trying_number - (int)$trying) : 0,
             'image' => $this->image != null ? asset('/users/'.$this->image) : asset('/default/avatar.jpg'),
             'percentage' => ((int)$degree / (int)$exam->degree) * 100 . "%",
         ];
