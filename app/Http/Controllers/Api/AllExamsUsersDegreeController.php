@@ -156,8 +156,6 @@ class AllExamsUsersDegreeController extends Controller{
         }
 
 
-
-
         return response()->json([
             'data' => [
                 'users' => AllExamsDegreeResource::collection($users),
@@ -174,9 +172,7 @@ class AllExamsUsersDegreeController extends Controller{
 
     }//end method
 
-
-
-    public function all_exams_heroes(Request $request){
+    public function all_exams_heroes(){
 
 
         $users = User::whereHas('exam_degree_depends')->whereHas('season', function ($season) {
@@ -189,8 +185,19 @@ class AllExamsUsersDegreeController extends Controller{
                 ->orderBy('full_degree','desc')
             ,'desc')->take(10)->get();
 
+        foreach ($users as $user){
+         $user->ordered = ($key = array_search($user->id,$users->pluck('id')->toArray()))+1;
+        }
 
-        return self::returnResponseDataApi(HeroesExamResource::collection($users),"تم الحصول علي ابطال الامتحانات بنجاح",200);
+        return response()->json([
+            "data" => [
+                "day" => HeroesExamResource::collection($users),
+                "week" => HeroesExamResource::collection($users),
+                "month" => HeroesExamResource::collection($users),
+            ],
+            "message" => "تم الحصول علي ابطال الامتحانات بنجاح",
+            "code" => 200
+        ]);
 
     }
 

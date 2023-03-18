@@ -19,33 +19,46 @@ class HeroesExamResource extends JsonResource
      */
     public function toArray($request){
 
-            $online_exams = OnlineExam::whereHas('season', function ($season) {
-                $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
-            })->whereHas('term', function ($term) {
-                $term->where('status', '=', 'active');
-            })->pluck('id')->toArray();
+        $online_exams = OnlineExam::whereHas('season', function ($season) {
+        $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
+        })->whereHas('term', function ($term) {
+        $term->where('status', '=', 'active');
+        })->pluck('id')->toArray();
 
-            $all_exams = AllExam::whereHas('season', function ($season) {
-                $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
-            })->whereHas('term', function ($term) {
-                $term->where('status', '=', 'active');
-            })->pluck('id')->toArray();
+        $all_exams = AllExam::whereHas('season', function ($season) {
+        $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
+        })->whereHas('term', function ($term) {
+        $term->where('status', '=', 'active');
+        })->pluck('id')->toArray();
 
-            $degrees = ExamDegreeDepends::whereIn('online_exam_id',$online_exams)
-                ->orWhereIn('all_exam_id',$all_exams)
-                 ->get();
+        $degrees = ExamDegreeDepends::whereIn('online_exam_id',$online_exams)
+        ->orWhereIn('all_exam_id',$all_exams)
+        ->get();
 
-           $total = 0;
-            foreach ($degrees as $degree){
-                $total = $degree->where('user_id','=',$this->id)->where('exam_depends','=','yes')->sum('full_degree');
+       $total = 0;
+       $exam = "";
+        foreach ($degrees as $degree){
+            if($degree->online_exam_id != null){
+                $exam = OnlineExam::where('id', '=',$degree->online_exam_id)->first();
+                $total = $degree->where('user_id','=',$this->id)->where('exam_depends','=','yes')
+                ->where('online_exam_id','=',$degree->online_exam_id)
+                ->first()->full_degree;
+
+            } else{
+                $exam = AllExam::where('id','=', $degree->all_exam_id)->first();
+                $total = $degree->where('user_id','=',$this->id)->where('exam_depends','=','yes')
+                    ->where('all_exam_id','=',$degree->all_exam_id)
+                    ->first()->full_degree;
             }
-
+        }
 
         return  [
             'id' => $this->id,
             'name' => $this->name,
+            'country' => lang() == 'ar'?$this->country->name_ar : $this->country->name_en,
+            'ordered' => $this->ordered,
             'image' => $this->image != null ? asset('/users/'.$this->image) : asset('/default/avatar.jpg'),
-            'percentage' => (int)$total,
+            'percentage' =>((int)$total / (int)$exam->degree) * 100 . "%"
         ];
     }
 }
