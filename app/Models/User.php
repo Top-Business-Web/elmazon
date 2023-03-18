@@ -87,4 +87,10 @@ class User extends Authenticatable implements JWTSubject
 
         return $this->hasOne(PapelSheetExamDegree::class,'user_id','id');
     }
+
+
+    public function exam_degree_depends(){
+
+        return $this->hasOne(ExamDegreeDepends::class,'user_id','id')->where('exam_depends','=','yes');
+    }
 }
