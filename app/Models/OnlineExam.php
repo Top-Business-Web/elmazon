@@ -38,4 +38,9 @@ class OnlineExam extends Model
 
         return $this->hasMany(Degree::class,'online_exam_id','id');
     }
+
+    public function user(){
+
+        return $this->belongsToMany(User::class, 'online_exam_users');
+    }
 }

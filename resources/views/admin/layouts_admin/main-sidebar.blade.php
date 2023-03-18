@@ -149,6 +149,7 @@
             </a>
         </li>
 
+
         <li class="slide">
             <a class="side-menu__item" href="{{ route('subscribe.index') }}">
                 <i class="icon icon-question side-menu__icon"></i>
@@ -160,6 +161,13 @@
             <a class="side-menu__item" href="{{ route('countries.index') }}">
                 <i class="fa fa-globe side-menu__icon"></i>
                 <span class="side-menu__label">المدن</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('ads.index') }}">
+                <i class="fa fa-globe side-menu__icon"></i>
+                <span class="side-menu__label">الاعلانات</span>
             </a>
         </li>
 
