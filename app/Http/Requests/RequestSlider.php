@@ -25,7 +25,8 @@ class RequestSlider extends FormRequest
     {
         return [
             'file' => 'nullable',
-            'type' => 'required'
+            'type' => 'required',
+            'link' => 'required',
         ];
     }
 }

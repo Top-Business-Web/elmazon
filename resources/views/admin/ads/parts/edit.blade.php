@@ -14,10 +14,10 @@
                     <select class="form-control" name="type" style="text-align: center">
                             <option style="text-align: center"
                                     {{ $ad->type == 'image' ? 'selected' : '' }}
-                                    value="0">صورة</option>
+                                    value="image">صورة</option>
                         <option style="text-align: center"
                                 {{ $ad->type == 'video' ? 'selected' : '' }}
-                                value="1">فيديو</option>
+                                value="video">فيديو</option>
                     </select>
                 </div>
             </div>

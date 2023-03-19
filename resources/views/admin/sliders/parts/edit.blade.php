@@ -5,16 +5,20 @@
         <input type="hidden" value="{{ $slider->id }}" name="id">
         <div class="form-group">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <label for="type" class="form-control-label">النوع</label>
                     <select class="form-control" name="type" style="text-align: center">
                         <option style="text-align: center"
                                 {{ $slider->type == 'image' ? 'selected' : '' }}
-                                value="0">صورة</option>
+                                value="image">صورة</option>
                         <option style="text-align: center"
                                 {{ $slider->type == 'video' ? 'selected' : '' }}
-                                value="1">فيديو</option>
+                                value="video">فيديو</option>
                     </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="type" class="form-control-label">اللينك</label>
+                    <input class="form-control" name="link" value="{{ $slider->link }}" />
                 </div>
             </div>
             <div class="row">

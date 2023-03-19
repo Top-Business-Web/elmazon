@@ -125,8 +125,8 @@ class AdsController extends Controller
 
         $inputs = $request->all();
 
-        if ($request->has('file')) {
-            if($request->type == '0')
+        if ($request->hasFile('file')) {
+            if($request->type == 'image')
             {
                 if (file_exists($ad->file)) {
                     unlink($ad->file);
@@ -139,10 +139,11 @@ class AdsController extends Controller
                 if (file_exists($ad->file)) {
                     unlink($ad->file);
                 }
-                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Ads/video', 'photo');
+                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Ads/video', 'video');
                 $inputs['type'] = 'video';
             }
         }
+
 
         if($ad->update($inputs)){
             return response()->json(['status' => 200]);

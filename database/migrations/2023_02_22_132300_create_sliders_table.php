@@ -16,6 +16,7 @@ class CreateSlidersTable extends Migration
         Schema::create('sliders', function (Blueprint $table) {
             $table->increments('id');
             $table->text('file');
+            $table->text('link');
             $table->enum('type', array('image', 'video'))->default('image');
             $table->timestamps();
         });

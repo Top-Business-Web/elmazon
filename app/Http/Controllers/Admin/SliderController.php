@@ -92,13 +92,13 @@ class SliderController extends Controller
 
         $inputs = $request->all();
 
-        if ($request->has('file')) {
-            if($request->type == '0')
+        if ($request->hasFile('file')) {
+            if($request->type == 'image')
             {
                 if (file_exists($slider->file)) {
                     unlink($slider->file);
                 }
-                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Ads/image', 'photo');
+                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Slider/image', 'photo');
                 $inputs['type'] = 'image';
             }
             else
@@ -106,10 +106,12 @@ class SliderController extends Controller
                 if (file_exists($slider->file)) {
                     unlink($slider->file);
                 }
-                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Ads/video', 'photo');
+                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Slider/video', 'video');
                 $inputs['type'] = 'video';
             }
         }
+
+
         if($slider->update($inputs)){
             return response()->json(['status' => 200]);
         }

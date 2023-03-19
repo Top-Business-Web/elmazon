@@ -3,12 +3,16 @@
         @csrf
         <div class="form-group">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <label for="type" class="form-control-label">النوع</label>
                     <select class="form-control" name="type" style="text-align: center">
                         <option style="text-align: center" value="0">صورة</option>
                         <option style="text-align: center" value="1">فيديو</option>
                     </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="type" class="form-control-label">اللينك</label>
+                   <input class="form-control" name="link" />
                 </div>
             </div>
             <div class="row">
