@@ -152,7 +152,7 @@
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('subscribe.index') }}">
-                <i class="icon icon-question side-menu__icon"></i>
+                <i class="fa fa-box side-menu__icon"></i>
                 <span class="side-menu__label">الباقات</span>
             </a>
         </li>
@@ -166,14 +166,14 @@
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('comment.index') }}">
-                <i class="fa fa-globe side-menu__icon"></i>
+                <i class="fa fa-comments side-menu__icon"></i>
                 <span class="side-menu__label">التعليقات</span>
             </a>
         </li>
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('ads.index') }}">
-                <i class="fa fa-globe side-menu__icon"></i>
+                <i class="fa fa-ad side-menu__icon"></i>
                 <span class="side-menu__label">الاعلانات</span>
             </a>
         </li>

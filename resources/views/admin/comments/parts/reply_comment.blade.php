@@ -13,13 +13,6 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
-                    <div class="">
-                        <button class="btn btn-secondary btn-icon text-white addBtn">
-									<span>
-										<i class="fe fe-plus"></i>
-									</span> اضافة
-                        </button>
-                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -37,6 +30,26 @@
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
+                            <tbody>
+                            @foreach($replyComments as $data)
+                                <tr>
+                                    <td class="min-w-25px">{{ $data->id }}</td>
+                                    <td class="min-w-25px">{{ $data->comment }}</td>
+                                    <td class="min-w-25px">{{ $data->audio }}</td>
+                                    <td class="min-w-25px">{{ $data->image }}</td>
+                                    <td class="min-w-25px">{{ $data->type }}</td>
+                                    <td class="min-w-25px">{{ $data->video }}</td>
+                                    <td class="min-w-25px">{{ $data->user_id }}</td>
+                                    <td class="min-w-25px">
+                                        <button class="btn btn-pill btn-danger-light" data-toggle="modal"
+                                                data-target="#delete_modal{{ $data->id }}"
+                                                data-id="" data-title="">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -44,66 +57,50 @@
         </div>
 
         <!--Delete MODAL -->
-        <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">حذف</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input id="delete_id" name="id" type="hidden">
-                        <p>هل أنت متأكد من عملية الحذف<span id="title" class="text-danger"></span></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_delete_modal">
-                            اغلاق
-                        </button>
-                        <button type="button" class="btn btn-danger" id="delete_btn">حذف</button>
+        @foreach($replyComments as $item)
+            <div class="modal fade" id="delete_modal{{ $item->id }}" tabindex="-1" role="dialog"
+
+                 aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">حذف</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addForm" class="addForm" method="POST"
+                                  action="{{ route('replyCommentDelete', $item->id) }}">
+                                @csrf
+                                <input id="delete_id" name="id" type="hidden">
+                                <p>حذف<span id="title" class="text-danger">{{ $item->comment }}</span></p>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal"
+                                            id="dismiss_delete_modal">
+                                        اغلاق
+                                    </button>
+                                    <button type="submit" class="btn btn-danger">حذف</button>
+
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endforeach
         <!-- MODAL CLOSED -->
 
-        <!-- Create Or Edit Modal -->
-        <div class="modal fade" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">اعلان</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" id="modal-body">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Create Or Edit Modal -->
     </div>
-    @include('admin.layouts_admin.myAjaxHelper')
+
 @endsection
 @section('ajaxCalls')
     <script>
-        var columns = [
-            {data: 'id', name: 'id'},
-            {data: 'comment', name: 'comment'},
-            {data: 'audio', name: 'audio'},
-            {data: 'image', name: 'image'},
-            {data: 'type', name: 'type'},
-            {data: 'video_part', name: 'video_part'},
-            {data: 'user_id', name: 'user_id'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
-        showData('{{route('comment.index')}}', columns);
         // Delete Using Ajax
-        destroyScript('{{route('comment.destroy',':id')}}');
+        destroyScript('{{ route('replyCommentDelete', ':id') }}');
     </script>
 @endsection
+
 

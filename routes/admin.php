@@ -143,6 +143,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Comment ####
     Route::resource('comment', CommentController::class);
     Route::get('replyComment/{id}', [CommentController::class, 'replyComment'])->name('replyComment');
+    Route::post('replyCommentDelete/{id}', [CommentController::class, 'replyCommentDelete'])->name('replyCommentDelete');
 
     #### Feedback ####
     Route::resource('feedback', FeedbackController::class);
