@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Guides\GuideController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
 use App\Http\Controllers\Api\AllExamsUsersDegreeController;
+use App\Http\Controllers\Api\Payment;
 use App\Http\Controllers\Api\Question\QuestionController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
 use App\Http\Controllers\Api\SubscribeController;
@@ -117,3 +118,7 @@ Route::group(['prefix' => 'auth'], function (){
 
 });
 
+
+Route::post('/payments/pay',[Payment::class,'pay']);
+Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
+Route::get('/checkout',[Payment::class,'checkout']);
