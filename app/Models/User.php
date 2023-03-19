@@ -96,6 +96,12 @@ class User extends Authenticatable implements JWTSubject
 
     public function exam_degree_depends(){
 
-        return $this->hasOne(ExamDegreeDepends::class,'user_id','id')->where('exam_depends','=','yes');
+        return $this->hasMany(ExamDegreeDepends::class,'user_id','id');
+    }
+
+
+    public function exam_degree_depends_user(){
+
+        return $this->hasOne(ExamDegreeDepends::class,'user_id','id');
     }
 }
