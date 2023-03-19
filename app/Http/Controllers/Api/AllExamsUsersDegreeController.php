@@ -173,29 +173,101 @@ class AllExamsUsersDegreeController extends Controller{
 
     public function all_exams_heroes(){
 
-        $users = User::whereHas('exam_degree_depends')->whereHas('season', function ($season) {
-            $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
-        })->orderBy(
-            ExamDegreeDepends::select('full_degree')
-                ->where('exam_depends','=','yes')
-                // This can vary depending on the relationship
-                ->whereColumn('user_id', 'users.id')
-                ->orderBy('full_degree','desc')
-            ,'desc')->take(10)->get();
 
-        foreach ($users as $user){
-         $user->ordered = ($key = array_search($user->id,$users->pluck('id')->toArray()))+1;
-        }
 
-        return response()->json([
-            "data" => [
-                "day" => HeroesExamResource::collection($users),
+//        $online_exam_count = OnlineExam::whereHas('season', function ($season) {
+//            $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
+//        })->whereHas('term', function ($term) {
+//            $term->where('status', '=', 'active');
+//        })->whereHas('exam_degree_depends')->count();
+//
+//
+//        $all_exam_count = AllExam::whereHas('season', function ($season) {
+//            $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
+//        })->whereHas('term', function ($term) {
+//            $term->where('status', '=', 'active');
+//        })->whereHas('exam_degree_depends')->count();
+//
+//
+//
+//        $online_exams = OnlineExam::whereHas('season', function ($season) {
+//            $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
+//        })->whereHas('term', function ($term) {
+//            $term->where('status', '=', 'active');
+//        })->pluck('id')->toArray();
+//
+//
+//        $all_exams = AllExam::whereHas('season', function ($season) {
+//            $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
+//        })->whereHas('term', function ($term) {
+//            $term->where('status', '=', 'active');
+//        })->pluck('id')->toArray();
+////        return $online_exam_count;
+//
+//
+//
+//         $user_total_online_exam_count = ExamDegreeDepends::whereIn('online_exam_id',$online_exams)
+//             ->where('exam_depends','=','yes')
+//             ->where('user_id', '=', auth()->guard('user-api')->id())->count();
+//
+//        $user_total_all_exam_count = ExamDegreeDepends::whereIn('all_exam_id',$all_exams)
+//            ->where('exam_depends','=','yes')
+//            ->where('user_id', '=', auth()->guard('user-api')->id())->count();
+//
+//
+//
+//
+//        $total = $online_exam_count + $all_exam_count;
+//        $total_user_exams = $user_total_online_exam_count + $user_total_all_exam_count;
+
+
+//        if($total == $total_user_exams){
+            $users = User::whereHas('exam_degree_depends')->whereHas('season', function ($season) {
+                $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
+            })->orderBy(
+                ExamDegreeDepends::select('full_degree')
+                    ->where('exam_depends','=','yes')
+                    // This can vary depending on the relationship
+                    ->whereColumn('user_id', 'users.id')
+                    ->orderBy('full_degree','desc')
+                ,'desc')->take(10)->get();
+
+            foreach ($users as $user){
+                $user->ordered = ($key = array_search($user->id,$users->pluck('id')->toArray()))+1;
+            }
+
+            return response()->json([
+                "data" => [
+                    "day" => HeroesExamResource::collection($users),
                 "week" => HeroesExamResource::collection($users),
                 "month" => HeroesExamResource::collection($users),
-            ],
-            "message" => "تم الحصول علي ابطال الامتحانات بنجاح",
-            "code" => 200
-        ]);
+                ],
+                "message" => "تم الحصول علي ابطال الامتحانات بنجاح",
+                "code" => 200
+            ]);
+//        }else{
+//
+//            return response()->json([
+//                "data" => [
+//                    "day" => [],
+////                "week" => HeroesExamResource::collection($users),
+////                "month" => HeroesExamResource::collection($users),
+//                ],
+//                "message" => "تم الحصول علي ابطال الامتحانات بنجاح",
+//                "code" => 200
+//            ]);
+//        }
+
+
+
+
+//         return $user_total_exam_count;
+
+//         return $total;
+
+
+
+
 
     }
 
