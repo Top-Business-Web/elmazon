@@ -46,8 +46,6 @@ class AllExamsDegreeResource extends JsonResource
                 ->where('all_exam_id','=',$request->id)->first();
 
             $degree = $degree->full_degree;
-
-
         }
 
         return  [

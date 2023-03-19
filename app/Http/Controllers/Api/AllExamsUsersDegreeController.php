@@ -18,6 +18,7 @@ use App\Models\Timer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AllExamsUsersDegreeController extends Controller{
@@ -54,21 +55,32 @@ class AllExamsUsersDegreeController extends Controller{
 
             $details = new OnlineExamResource($exam);
 
-            $users = User::whereHas('exam_degree_depends',function ($degree)use($exam){
-                $degree->where('online_exam_id','=',$exam->id);
-            })->orderBy(
-                ExamDegreeDepends::select('full_degree')
+
+            //start user details
+
+            $users = User::with(['exam_degree_depends_user' => function ($query) use($exam){
+                $query->where('exam_depends','=','yes')
+                    ->where('online_exam_id','=',$exam->id);
+
+            }])->whereHas('exam_degree_depends_user', function ($q) use($exam){
+                    $q->where('exam_depends','=','yes')
+                        ->where('online_exam_id','=',$exam->id);
+                })->whereHas('season', function ($season) {
+                    $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
+                })->orderByDesc(ExamDegreeDepends::select('full_degree')
                     ->where('exam_depends','=','yes')
-                    // This can vary depending on the relationship
-                    ->whereColumn('user_id', 'users.id')
-                    ->orderBy('full_degree','desc')
-                ,'desc')->take(10)->get();
+                    ->whereColumn('user_id','users.id')
+                    ->take(1)
+                )
+                ->take(10)->get();
+
+//            return $users;
+
+            //end user details
 
 
             $degree_user = ExamDegreeDepends::where('online_exam_id','=',$exam->id)
-                ->where('exam_depends','=','yes')
-                ->where('user_id','=',auth('user-api')->id())->first()->full_degree ?? 0;
-
+                ->where('user_id','=',auth('user-api')->id())->latest()->first()->full_degree;
 
 
             //start details of timer and mistake
@@ -122,20 +134,24 @@ class AllExamsUsersDegreeController extends Controller{
             $details = new AllExamResource($exam);
 
 
-            $users = User::whereHas('exam_degree_depends',function ($degree)use($exam){
-                $degree->where('all_exam_id','=',$exam->id);
-            })->orderBy(
-                ExamDegreeDepends::select('full_degree')
-                    ->where('exam_depends','=','yes')
-                    // This can vary depending on the relationship
-                    ->whereColumn('user_id', 'users.id')
-                    ->orderBy('full_degree','desc')
-                ,'desc')->take(10)->get();
+            $users = User::with(['exam_degree_depends_user' => function ($query) use($exam){
+                $query->where('exam_depends','=','yes')
+                    ->where('all_exam_id','=',$exam->id);
 
+            }])->whereHas('exam_degree_depends_user', function ($q) use($exam){
+                $q->where('exam_depends','=','yes')
+                    ->where('all_exam_id','=',$exam->id);
+            })->whereHas('season', function ($season) {
+                $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
+            })->orderByDesc(ExamDegreeDepends::select('full_degree')
+                ->where('exam_depends','=','yes')
+                ->whereColumn('user_id', 'users.id')
+                ->take(1)
+            )
+                ->take(10)->get();
 
             $degree_user = ExamDegreeDepends::where('all_exam_id','=',$exam->id)
-                ->where('exam_depends','=','yes')
-                ->where('user_id','=',auth('user-api')->id())->first()->full_degree ?? 0;
+                ->where('user_id','=',auth('user-api')->id())->latest()->first()->full_degree;
 
 
             //start details of timer and mistake
@@ -173,29 +189,55 @@ class AllExamsUsersDegreeController extends Controller{
 
     public function all_exams_heroes(){
 
-        $users = User::whereHas('exam_degree_depends')->whereHas('season', function ($season) {
-            $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
-        })->orderBy(
-            ExamDegreeDepends::select('full_degree')
-                ->where('exam_depends','=','yes')
-                // This can vary depending on the relationship
-                ->whereColumn('user_id', 'users.id')
-                ->orderBy('full_degree','desc')
-            ,'desc')->take(10)->get();
 
-        foreach ($users as $user){
-         $user->ordered = ($key = array_search($user->id,$users->pluck('id')->toArray()))+1;
-        }
+           /*
+            * ->orderBy(
+                ExamDegreeDepends::select('full_degree')
+                    ->where('exam_depends','=','yes')
+                    // This can vary depending on the relationship
+                    ->whereColumn('user_id', 'users.id')
+                    ->orderBy('full_degree','desc')
+                ,'desc')
 
-        return response()->json([
-            "data" => [
-                "day" => HeroesExamResource::collection($users),
+           ->orderByDesc(ExamDegreeDepends::select('full_degree')
+                    ->where('exam_depends','=','yes')
+                    ->whereColumn('user_id', 'users.id')
+                    ->take(1)
+                )
+            */
+
+            $users = User::with(['exam_degree_depends' => function ($query){
+                $query->where('exam_depends','=','yes')
+                    ->orderBy('exam_degree_depends.full_degree','desc');
+
+            }])
+                ->withSum(
+                    ['exam_degree_depends' => function($query) {
+                        $query->where('exam_depends','=','yes');
+                    }],
+                    'full_degree'
+                )
+
+                ->whereHas('exam_degree_depends')->whereHas('season', function ($season) {
+                $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
+            })->orderBy('exam_degree_depends_sum_full_degree','desc')
+                ->take(10)->get();
+
+//            return $users;
+
+            foreach ($users as $user){
+                $user->ordered = ($key = array_search($user->id,$users->pluck('id')->toArray()))+1;
+            }
+
+            return response()->json([
+                "data" => [
+                    "day" => HeroesExamResource::collection($users),
                 "week" => HeroesExamResource::collection($users),
                 "month" => HeroesExamResource::collection($users),
-            ],
-            "message" => "تم الحصول علي ابطال الامتحانات بنجاح",
-            "code" => 200
-        ]);
+                ],
+                "message" => "تم الحصول علي ابطال الامتحانات بنجاح",
+                "code" => 200
+            ]);
 
     }
 
