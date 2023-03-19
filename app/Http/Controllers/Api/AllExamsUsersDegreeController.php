@@ -79,8 +79,8 @@ class AllExamsUsersDegreeController extends Controller{
             //end user details
 
 
-            $degree_user = ExamDegreeDepends::where('online_exam_id','=',$exam->id)->where('exam_depends','=','yes')
-                ->where('user_id','=',auth('user-api')->id())->first()->full_degree;
+            $degree_user = ExamDegreeDepends::where('online_exam_id','=',$exam->id)
+                ->where('user_id','=',auth('user-api')->id())->latest()->first()->full_degree;
 
 
             //start details of timer and mistake
@@ -151,8 +151,7 @@ class AllExamsUsersDegreeController extends Controller{
                 ->take(10)->get();
 
             $degree_user = ExamDegreeDepends::where('all_exam_id','=',$exam->id)
-                ->where('exam_depends','=','yes')
-                ->where('user_id','=',auth('user-api')->id())->first()->full_degree;
+                ->where('user_id','=',auth('user-api')->id())->latest()->first()->full_degree;
 
 
             //start details of timer and mistake
