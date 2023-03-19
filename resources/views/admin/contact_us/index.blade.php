@@ -7,8 +7,6 @@
     تواصل معنا
 @endsection
 @section('content')
-
-
     <div class="row">
         <div class="col-md-12 col-lg-12">
             <div class="card">
@@ -29,9 +27,9 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">الاسم</th>
+                                <th class="min-w-50px">اسم</th>
                                 <th class="min-w-50px">موضوع</th>
-                                <th class="min-w-50px">رسالة</th>
+                                <th class="min-w-50px">الرسالة</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -54,14 +52,13 @@
                     </div>
                     <div class="modal-body">
                         <input id="delete_id" name="id" type="hidden">
-                        <p>هل انت متاكد من عملية الحذف<span id="title" class="text-danger"></span></p>
+                        <p>هل أنت متأكد من عملية <الحذف></الحذف><span id="title" class="text-danger"></span></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_delete_modal">
                             اغلاق
                         </button>
-                        <button type="button" class="btn btn-danger"
-                                id="delete_btn">حذف</button>
+                        <button type="button" class="btn btn-danger" id="delete_btn">حذف</button>
                     </div>
                 </div>
             </div>
@@ -73,7 +70,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">تواصل معنا عبر</h5>
+                        <h5 class="modal-title" id="example-Modal3">تواصل معنا</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -89,7 +86,6 @@
     @include('admin.layouts_admin.myAjaxHelper')
 @endsection
 @section('ajaxCalls')
-{{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script> --}}
     <script>
         var columns = [
             {data: 'id', name: 'id'},
@@ -107,12 +103,6 @@
         // Add Using Ajax
         showEditModal('{{route('contactUs.edit',':id')}}');
         editScript();
-
-
-      $(".checkBtn").on('click', function() {
-        alert('hehj')
-      })
-
     </script>
 @endsection
 

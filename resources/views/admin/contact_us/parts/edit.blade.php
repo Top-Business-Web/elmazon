@@ -1,21 +1,23 @@
 <div class="modal-body">
-    <form id="updateForm" class="updateForm" method="POST" action="{{ route('terms.update', $term->id) }}">
+    <form id="updateForm" class="updateForm" method="POST" action="{{ route('contactUs.update', $contactU->id) }}">
         @csrf
         @method('PUT')
-        <input type="hidden" value="{{ $term->id }}" name="id">
+        <input type="hidden" value="{{ $contactU->id }}" name="id">
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
-                    <label for="name_ar" class="form-control-label">الاسم بالعربية</label>
-                    <input type="text" class="form-control" value="{{ $term->name_ar }}" name="name_ar">
+                    <label for="type" class="form-control-label">اسم</label>
+                    <input class="form-control" name="name" value="{{ $contactU->name }}" />
                 </div>
                 <div class="col-md-6">
-                    <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
-                    <input type="text" class="form-control" value="{{ $term->name_en }}" name="name_en">
+                    <label for="type" class="form-control-label">الموضوع</label>
+                    <input class="form-control" name="subject" value="{{ $contactU->subject }}" />
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-12">
-                    <label for="note" class="form-control-label">ملاحظة</label>
-                    <textarea class="form-control" name="note" rows="10">{{ $term->note }}</textarea>
+                    <label for="message" class="form-control-label">رسالة</label>
+                    <textarea class="form-control" name="message" rows="10">{{ $contactU->message }}</textarea>
                 </div>
             </div>
         </div>
@@ -25,6 +27,7 @@
         </div>
     </form>
 </div>
+
 <script>
     $('.dropify').dropify()
 </script>
