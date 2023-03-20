@@ -3,20 +3,62 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Subscribe;
+use App\Models\UserSubscribe;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 use function env;
 
 class Payment extends Controller
 {
+
+    private Paymentservice $paymentService;
+
+    /**
+     * @param PaymentService $paymentService
+     */
+    public function __construct(PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
+
     public function pay(Request $request)
     {
+        return $this->paymentService->pay($request);
+    }
+
+    public function stripe()
+    {
+        return view('stripe');
+    }
+
+    public function stripePost(Request $request)
+    {
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        \Stripe\Charge::create([
+
+            'amount' => $request->amount,
+            'currency'=>"usd",
+            'source'=> $request->stripeToken,
+            'description' =>'Test payment from muhammed essa'
+        ]);
+
+        Session::flash('success','Payment has been successfully');
+        return back();
+    }
+    public function pay_(Request $request)
+    {
         $inputs = $request->all();
-        dd($inputs);
+
         $endpoint = "https://accept.paymobsolutions.com/api/auth/tokens";
         $orderEndpoint = "https://accept.paymobsolutions.com/api/ecommerce/orders";
         $payment_keysEndpoint = "https://accept.paymobsolutions.com/api/acceptance/payment_keys";
         $value = env('PAYMOB_API_KEY');
+
+        session()->put('items_posts', $inputs);
+        session()->put('user_type', );
 
         $response = Http::withHeaders(['content-type' => 'application/json'])
             ->post($endpoint, [
@@ -56,6 +98,7 @@ class Payment extends Controller
                       ],
                   "currency"=> "EGP",
                   "integration_id"=>3673470,
+                  "user_id"=>777,
                   "lock_order_when_paid"=> false
             ])->json();
 
@@ -67,7 +110,19 @@ class Payment extends Controller
 
     public function pay_callback()
     {
+//        dd(request()->all());
         $response = request()->query();
+        if($response['success'] == true){
+            dd(Session::get('items_posts'));
+//            foreach (Session::get('items_posts')['subscribes_ids'] as  $item){
+//                $subscribe_item = Subscribe::find($item);
+//                UserSubscribe::create([
+//                    'price' => $subscribe_item->price_in_center,
+//                    'month' => $subscribe_item->price_in_center,
+//                    'student_id' => $subscribe_item->price_in_center,
+//                ]);
+//            }
+        }
         return redirect()->to('api/checkout?status='.$response['success']);
     }
 
@@ -76,4 +131,6 @@ class Payment extends Controller
         $response = request()->query();
         return self::returnResponseDataApi(null,"تد الدفع بنجاح",200);
     }
+
+
 }
