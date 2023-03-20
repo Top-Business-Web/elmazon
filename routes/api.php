@@ -46,7 +46,6 @@ Route::group(['prefix' => 'auth'], function (){
         Route::get('all-subscribes',[SubscribeController::class,'all']);
         Route::post('/payments/pay',[Payment::class,'pay']);
 
-
     });
   });
 
