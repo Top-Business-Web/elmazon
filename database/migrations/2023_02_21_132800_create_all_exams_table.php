@@ -17,6 +17,7 @@ class CreateAllExamsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name_ar');
             $table->string('name_en');
+            $table->string('date_exam');
             $table->integer('quize_minute');
             $table->integer('trying_number');
             $table->integer('degree');

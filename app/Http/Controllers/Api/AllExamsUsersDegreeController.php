@@ -210,8 +210,7 @@ class AllExamsUsersDegreeController extends Controller{
                 $query->where('exam_depends','=','yes')
                     ->orderBy('exam_degree_depends.full_degree','desc');
 
-            }])
-                ->withSum(
+            }])->withSum(
                     ['exam_degree_depends' => function($query) {
                         $query->where('exam_depends','=','yes');
                     }],
@@ -231,7 +230,7 @@ class AllExamsUsersDegreeController extends Controller{
 
             return response()->json([
                 "data" => [
-                    "day" => HeroesExamResource::collection($users),
+                "day" => HeroesExamResource::collection($users),
                 "week" => HeroesExamResource::collection($users),
                 "month" => HeroesExamResource::collection($users),
                 ],

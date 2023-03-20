@@ -22,6 +22,7 @@ class OnlineExamQuestionResource extends JsonResource
             'id' => $this->id,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'note' => $this->note,
+            'date_exam' => $this->date_exam,
             'quiz_minute' => $this->quize_minute,
             'questions' => QuestionResource::collection($this->questions),
         ];

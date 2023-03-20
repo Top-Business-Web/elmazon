@@ -19,6 +19,7 @@ class OnlineExamResource extends JsonResource
              'id' => $this->id,
              'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
              'note' => $this->note,
+             'date_exam' => $this->date_exam,
              'season_id' => $this->season_id,
              'term_id' => $this->term_id,
             'created_at' => $this->created_at->format('Y-m-d'),
