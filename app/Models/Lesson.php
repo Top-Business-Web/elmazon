@@ -23,5 +23,10 @@ class Lesson extends Model
     }
 
 
+    public function open_lessons(){
+
+        return $this->hasMany(OpenLesson::class,'lesson_id','id');
+    }
+
 
 }

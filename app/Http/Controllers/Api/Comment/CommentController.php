@@ -284,7 +284,6 @@ class CommentController extends Controller{
                 $errors_arr = [
                     407 => 'Failed,The image type must be an jpg or jpeg or png.',
                     408 => 'Failed,The type of comment replay must be an file or text or audio',
-
                 ];
 
                 $code = collect($validator->errors())->flatten(1)[0];
