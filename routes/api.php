@@ -44,6 +44,8 @@ Route::group(['prefix' => 'auth'], function (){
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
         Route::get('all-subscribes',[SubscribeController::class,'all']);
+        Route::post('/payments/pay',[Payment::class,'pay']);
+
 
     });
   });
@@ -115,7 +117,6 @@ Route::group(['prefix' => 'auth'], function (){
     Route::get('exam-degree/heroes',[AllExamsUsersDegreeController::class,'all_exams_heroes'])->middleware('jwt');
 
     Route::post('access-end-time/exam/{id}',[QuestionController::class,'access_end_time_for_exam'])->middleware('jwt');
-
 });
 
 
