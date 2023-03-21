@@ -21,8 +21,6 @@ class LifeExam extends Model
         'degree',
         'season_id',
         'term_id'
-
-
     ];
 }
 
