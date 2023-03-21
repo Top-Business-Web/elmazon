@@ -346,7 +346,7 @@ class LessonController extends Controller{
             } else{
                 return self::returnResponseDataApi(null,"تم الوصول للفصل الاخير ولا يوجد اي فصل اخر لفتحه",500);
             }
-        }//end if condition
+        }//end else condition
 
     }
 }

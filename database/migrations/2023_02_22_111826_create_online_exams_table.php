@@ -21,7 +21,7 @@ class CreateOnlineExamsTable extends Migration
             $table->integer('quize_minute');
             $table->integer('trying_number');
             $table->integer('degree');
-            $table->unsignedBigInteger('season_id')->nullable();
+            $table->unsignedBigInteger('season_id');
             $table->unsignedBigInteger('term_id')->nullable();
             $table->morphs('examable');
             $table->enum('type', array('video','subject_class','lesson'));
