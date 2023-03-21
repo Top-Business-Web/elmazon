@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Guides\GuideController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
 use App\Http\Controllers\Api\AllExamsUsersDegreeController;
+use App\Http\Controllers\Api\Payment;
 use App\Http\Controllers\Api\Question\QuestionController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
 use App\Http\Controllers\Api\SubscribeController;
@@ -43,6 +44,9 @@ Route::group(['prefix' => 'auth'], function (){
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
         Route::get('all-subscribes',[SubscribeController::class,'all']);
+
+        Route::post('/payments/pay',[Payment::class,'pay']);
+
     });
   });
 
@@ -114,5 +118,10 @@ Route::group(['prefix' => 'auth'], function (){
     });
 
 
+    Route::post('access-end-time/exam/{id}',[QuestionController::class,'access_end_time_for_exam'])->middleware('jwt');
 });
 
+
+Route::post('/payments/pay',[Payment::class,'pay']);
+Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
+Route::get('/checkout',[Payment::class,'checkout']);
