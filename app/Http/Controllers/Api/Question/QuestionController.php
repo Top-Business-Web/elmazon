@@ -258,11 +258,28 @@ class QuestionController extends Controller{
                     ]);
                     $degrees_sum = Degree::where('online_exam_id', '=', $exam->id)->where('user_id', '=', auth('user-api')->id())
                         ->sum('degree');
-                    ExamDegreeDepends::create([
+
+                   $exam_degree_depends =  ExamDegreeDepends::create([
                         'user_id' => auth('user-api')->id(),
                         'online_exam_id' => $exam->id,
                         'full_degree' => $degrees_sum,
                     ]);
+
+                    //start degree depends --------------------------------------------------
+                    $total_per = ($degrees_sum / $exam->degree) * 100;
+                    $exam->depends  = "not_depends";
+                    if($total_per >= 65){
+                    $exam->depends = "depends";
+                    if($request->exam_type == 'online_exam'){
+                       $exam_degree_depends->update(['exam_depends' => 'yes']);
+
+                    } else{
+                        $exam_degree_depends->update(['exam_depends' => 'yes']);
+                    }
+                }
+                    //end degree depends --------------------------------------------------
+
+
                 }
                 return self::returnResponseDataApi($request->exam_type == 'full_exam' ? new AllExamResource($exam) : new OnlineExamResource($exam), "تم حل جميع الاسئله", 200);
 
