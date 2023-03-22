@@ -29,7 +29,15 @@ class AdsController extends Controller
                        ';
                 })
                 ->editColumn('image', function ($sliders) {
-                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset($sliders->image) . '"/>';
+                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset($sliders->file) . '"/>';
+                })
+                ->editColumn('status', function ($ads) {
+                    if($ads->status == 'true') {
+                        return '<a href="' . route('activateAds', $ads->id) . '" class="btn btn-pill btn-success-light">مفعل</a>';
+                    }
+                    else {
+                        return '<a href="' . route('activateAds', $ads->id) . '" class="btn btn-pill btn-danger-light">غير مفعل</a>';
+                    }
                 })
                 ->escapeColumns([])
                 ->make(true);
@@ -39,6 +47,30 @@ class AdsController extends Controller
     }
 
     // End Index
+
+    // Activate
+
+    public function activateAds($id)
+    {
+        $ads = Ads::where('id', $id)->first();
+
+        if ($ads->update([
+            'status' => $ads->status == 'true' ? 'false' : 'true'
+        ])) {
+            if($ads->status == 'true')
+            {
+                toastr('تم التفعيل');
+            }
+            else
+            {
+                toastr('تم ألغاء التفعيل');
+            }
+
+            return view('admin.ads.index');
+        }
+    }
+
+    // Activate
 
     // Start Create
 
@@ -54,16 +86,19 @@ class AdsController extends Controller
     public function store(RequestAds $request)
     {
         $inputs = $request->all();
-        if($request->hasFile('image')){
-            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/Ads/', 'photo');
-            $inputs['type'] = 'image';
-        }
+        if($request->hasFile('file')){
+            if($request->type == '0')
+            {
+                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Ads/image', 'photo');
+                $inputs['type'] = 'image';
+            }
+            else
+            {
+                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Ads/video', 'video');
+                $inputs['type'] = 'video';
+            }
 
-        if($request->hasFile('vi')){
-            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/Ads/', 'photo');
-            $inputs['type'] = 'image';
         }
-
         if(Ads::create($inputs)) {
             return response()->json(['status' => 200]);
         }
@@ -74,7 +109,6 @@ class AdsController extends Controller
     }
 
     // Store End
-
     // Edit Start
 
     public function edit(Ads $ad)
@@ -91,12 +125,25 @@ class AdsController extends Controller
 
         $inputs = $request->all();
 
-        if ($request->has('image')) {
-            if (file_exists($ad->image)) {
-                unlink($ad->image);
+        if ($request->hasFile('file')) {
+            if($request->type == 'image')
+            {
+                if (file_exists($ad->file)) {
+                    unlink($ad->file);
+                }
+                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Ads/image', 'photo');
+                $inputs['type'] = 'image';
             }
-            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/Ads', 'photo');
+            else
+            {
+                if (file_exists($ad->file)) {
+                    unlink($ad->file);
+                }
+                $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/Ads/video', 'video');
+                $inputs['type'] = 'video';
+            }
         }
+
 
         if($ad->update($inputs)){
             return response()->json(['status' => 200]);

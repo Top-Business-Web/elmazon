@@ -4,17 +4,17 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
-                    <label for="name_ar" class="form-control-label">الاسم</label>
-                    <input type="text" class="form-control" name="name">
+                    <label for="type" class="form-control-label">اسم</label>
+                   <input class="form-control" name="name" />
                 </div>
                 <div class="col-md-6">
-                    <label for="name_en" class="form-control-label">موضوع</label>
-                    <input type="text" class="form-control" name="subject">
+                    <label for="type" class="form-control-label">الموضوع</label>
+                    <input class="form-control" name="subject" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <label for="note" class="form-control-label">رسالة</label>
+                    <label for="message" class="form-control-label">رسالة</label>
                     <textarea class="form-control" name="message" rows="10"></textarea>
                 </div>
             </div>
@@ -26,3 +26,6 @@
     </form>
 </div>
 
+<script>
+    $('.dropify').dropify()
+</script>

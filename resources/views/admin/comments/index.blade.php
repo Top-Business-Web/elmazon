@@ -13,13 +13,6 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
-                    <div class="">
-                        <button class="btn btn-secondary btn-icon text-white addBtn">
-									<span>
-										<i class="fe fe-plus"></i>
-									</span> اضافة
-                        </button>
-                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -103,13 +96,7 @@
         ]
         showData('{{route('comment.index')}}', columns);
         // Delete Using Ajax
-        destroyScript('{{route('ads.destroy',':id')}}');
-        // Add Using Ajax
-        showAddModal('{{route('ads.create')}}');
-        addScript();
-        // Add Using Ajax
-        showEditModal('{{route('ads.edit',':id')}}');
-        editScript();
+        destroyScript('{{route('comment.destroy',':id')}}');
     </script>
 @endsection
 

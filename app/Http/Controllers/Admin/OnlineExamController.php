@@ -7,13 +7,16 @@ use App\Models\Lesson;
 use App\Models\OnlineExam;
 use App\Models\OnlineExamUser;
 use App\Models\SubjectClass;
+use App\Models\TextExamUser;
 use App\Models\VideoParts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\Season;
 use App\Models\Term;
 use App\Models\OnlineExamQuestion;
 use App\Models\Question;
+use App\Models\User;
 
 
 class OnlineExamController extends Controller
@@ -75,14 +78,36 @@ class OnlineExamController extends Controller
     public function usersExam(Request $request)
     {
         $exam = OnlineExam::find($request->id);
-        $online_exams = OnlineExamUser::where('online_exam_id', $exam->id)->get()->select('user_id')->groupBy('user_id');
-//        $user = OnlineExamUser::select('user_id')->groupBy('user_id')->get();
-        return $online_exams;
-        return view('admin.online_exam.parts.text_exam_users', compact('online_exams'));
-//        dd($online_exams);
+        $online_exams = OnlineExamUser::where('online_exam_id', $exam->id)->select('user_id')->groupBy('user_id')->get();
+        $questions = $exam->questions;
+        $answers = TextExamUser::where('online_exam_id', $exam->id)
+            ->whereIn('user_id', $online_exams->pluck('user_id'))
+            ->whereIn('question_id', $questions->pluck('id'))
+            ->get();
+//        return $answers;
+        return view('admin.online_exam.parts.text_exam_users', compact( 'exam', 'online_exams'));
     }
 
     // User Exam End
+
+    // Paper Exam Start
+
+    public function paperExam(Request $request)
+    {
+        $user = OnlineExamUser::where('user_id', $request->id)->select('user_id')->groupBy('user_id')->get();
+        $exam = OnlineExamUser::where('user_id', $request->id)->first('online_exam_id');
+//        $examIds = $exam->pluck('online_exam_id');
+        $questions = OnlineExamQuestion::whereIn('online_exam_id', $exam)->get('question_id');
+        $answers = TextExamUser::where('online_exam_id', $exam->online_exam_id)
+            ->where('user_id', $user->pluck('user_id'))
+            ->whereIn('question_id', $questions->pluck('question_id'))
+            ->get();
+        $question = onlineExamQuestion::where('online_exam_id', $exam->online_exam_id)->get();
+//        return $question;
+        return view('admin.online_exam.parts.exam_paper',compact('answers', 'question'));
+    }
+
+    // Paper Exam End
 
     // Add Question
 

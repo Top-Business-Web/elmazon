@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\AllExamController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\SubscribeController;
 use App\Http\Controllers\Admin\AdsController;
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
 use Illuminate\Support\Facades\Route;
@@ -96,6 +97,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('usersExam/{id}', [OnlineExamController::class, 'usersExam'])->name('usersExam');
     Route::post('addQuestion', [OnlineExamController::class, 'addQuestion'])->name('addQuestion');
     Route::post('deleteQuestion', [OnlineExamController::class, 'deleteQuestion'])->name('deleteQuestion');
+    Route::get('paperExam/{id}', [OnlineExamController::class, 'paperExam'])->name('paperExam');
 
     #### Phone Communications ####
     Route::resource('phoneCommunications', PhoneCommunicationController::class);
@@ -137,6 +139,18 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Ads ####
     Route::resource('ads', adsController::class);
+    Route::get('activateAds/{id}', [adsController::class, 'activateAds'])->name('activateAds');
+
+    #### Comment ####
+    Route::resource('comment', CommentController::class);
+    Route::get('replyComment/{id}', [CommentController::class, 'replyComment'])->name('replyComment');
+    Route::post('replyCommentDelete/{id}', [CommentController::class, 'replyCommentDelete'])->name('replyCommentDelete');
+
+    #### Feedback ####
+    Route::resource('feedback', FeedbackController::class);
+    Route::get('indexFeedback/{id}', [FeedbackController::class, 'indexFeedback'])->name('indexFeedback');
+    Route::post('addFeedback', [FeedbackController::class, 'addFeedback'])->name('addFeedback');
+
 
     #### Auth ####
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');

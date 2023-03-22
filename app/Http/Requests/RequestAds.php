@@ -25,7 +25,9 @@ class RequestAds extends FormRequest
     {
         return [
             'link' => 'required',
-            'image' => 'nullable',
+            'file' => 'nullable',
+            'status' => 'nullable',
+            'type' => 'nullable',
         ];
     }
 }
