@@ -28,7 +28,9 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">الصورة</th>
+                                <th class="min-w-50px">الملف</th>
+                                <th class="min-w-50px">اللينك</th>
+                                <th class="min-w-50px">النوع</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -88,7 +90,9 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'image', name: 'image'},
+            {data: 'file', name: 'file'},
+            {data: 'link', name: 'link'},
+            {data: 'type', name: 'type'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('slider.index')}}', columns);

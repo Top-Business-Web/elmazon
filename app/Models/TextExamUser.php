@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OnlineExam;
 
 class TextExamUser extends Model
 {
@@ -21,5 +22,20 @@ class TextExamUser extends Model
         'answer_type',
         'status',
     ];
+
+    public function onlineExamId()
+    {
+        return $this->belongsTo(OnlineExam::class, 'online_exam_id', 'id');
+    }
+    public function question(){
+
+        return $this->belongsTo(Question::class,'question_id','id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id','id');
+    }
+
 
 }

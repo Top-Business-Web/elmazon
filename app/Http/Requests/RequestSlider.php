@@ -24,7 +24,9 @@ class RequestSlider extends FormRequest
     public function rules()
     {
         return [
-            'image' => 'nullable'
+            'file' => 'nullable',
+            'type' => 'required',
+            'link' => 'required',
         ];
     }
 }
