@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Degree;
 use App\Models\Lesson;
 use App\Models\OnlineExam;
 use App\Models\OnlineExamUser;
@@ -35,8 +36,8 @@ class OnlineExamController extends Controller
                                     data-id="' . $online_exams->id . '" data-title="' . $online_exams->name_ar . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                            <a class="btn btn-pill btn-success-light questionBtn" data-id="' . $online_exams->id . '" data-target="#question_modal" href="'. route('indexQuestion', $online_exams->id) .'"><i class="fa fa-question"></i></a>
-                            <a class="btn btn-pill btn-warning-light questionBtn" data-id="' . $online_exams->id . '" data-target="#question_modal" href="'. route('usersExam', $online_exams->id) .'"><i class="fa fa-user"></i></a>
+                            <a class="btn btn-pill btn-success-light questionBtn" data-id="' . $online_exams->id . '" data-target="#question_modal" href="' . route('indexQuestion', $online_exams->id) . '"><i class="fa fa-question"></i></a>
+                            <a class="btn btn-pill btn-warning-light questionBtn" data-id="' . $online_exams->id . '" data-target="#question_modal" href="' . route('usersExam', $online_exams->id) . '"><i class="fa fa-user"></i></a>
                        ';
                 })
                 ->escapeColumns([])
@@ -64,11 +65,11 @@ class OnlineExamController extends Controller
     public function indexQuestion(Request $request)
     {
         $exam = OnlineExam::find($request->id);
-        $questions = Question::where('season_id',$exam->season_id )
-        ->where('term_id', $exam->term_id)
-        ->get();
-        $online_questions_ids = OnlineExamQuestion::where(['online_exam_id'=>$request->id])->pluck('question_id')->toArray();
-        return view('admin.online_exam.parts.questions', compact('questions', 'exam','online_questions_ids'));
+        $questions = Question::where('season_id', $exam->season_id)
+            ->where('term_id', $exam->term_id)
+            ->get();
+        $online_questions_ids = OnlineExamQuestion::where(['online_exam_id' => $request->id])->pluck('question_id')->toArray();
+        return view('admin.online_exam.parts.questions', compact('questions', 'exam', 'online_questions_ids'));
     }
 
     // Question End
@@ -84,8 +85,8 @@ class OnlineExamController extends Controller
             ->whereIn('user_id', $online_exams->pluck('user_id'))
             ->whereIn('question_id', $questions->pluck('id'))
             ->get();
-//        return $answers;
-        return view('admin.online_exam.parts.text_exam_users', compact( 'exam', 'online_exams'));
+//        return $questions_1;
+        return view('admin.online_exam.parts.text_exam_users', compact('exam', 'online_exams'));
     }
 
     // User Exam End
@@ -96,30 +97,47 @@ class OnlineExamController extends Controller
     {
         $user = OnlineExamUser::where('user_id', $request->id)->select('user_id')->groupBy('user_id')->get();
         $exam = OnlineExamUser::where('user_id', $request->id)->first('online_exam_id');
-//        $examIds = $exam->pluck('online_exam_id');
         $questions = OnlineExamQuestion::whereIn('online_exam_id', $exam)->get('question_id');
         $answers = TextExamUser::where('online_exam_id', $exam->online_exam_id)
             ->where('user_id', $user->pluck('user_id'))
             ->whereIn('question_id', $questions->pluck('question_id'))
             ->get();
         $question = onlineExamQuestion::where('online_exam_id', $exam->online_exam_id)->get();
-//        return $question;
-        return view('admin.online_exam.parts.exam_paper',compact('answers', 'question'));
+//        return $answers;
+        return view('admin.online_exam.parts.exam_paper', compact('answers', 'question'));
     }
 
     // Paper Exam End
+
+    // Store Exam Paper Start
+
+    public function storeExamPaper(Request $request)
+    {
+        foreach ($request->questions as $question) {
+            $text_exam_user = Degree::where('user_id', $request->user_id)
+                ->where('question_id', $question['question_id'])
+                ->first();
+
+            if ($text_exam_user) {
+                $text_exam_user->degree = $question['degree'];
+                $text_exam_user->status = 'completed';
+                $text_exam_user->save();
+            }
+        }
+        return redirect()->back();
+
+    }
+
+    // Store Exam Paper End
 
     // Add Question
 
     public function addQuestion(Request $request, OnlineExamQuestion $onlineExamQuestion)
     {
         $inputs = $request->all();
-        if($onlineExamQuestion->create($inputs))
-        {
+        if ($onlineExamQuestion->create($inputs)) {
             return response()->json(['status' => 200]);
-        }
-        else
-        {
+        } else {
             return response()->json(['status' => 405]);
         }
     }
@@ -130,7 +148,7 @@ class OnlineExamController extends Controller
 
     public function deleteQuestion(Request $request)
     {
-        $questions = OnlineExamQuestion::where(['question_id'=> $request->question_id,'online_exam_id'=>$request->online_exam_id]);
+        $questions = OnlineExamQuestion::where(['question_id' => $request->question_id, 'online_exam_id' => $request->online_exam_id]);
         $questions->delete();
     }
 
@@ -171,12 +189,9 @@ class OnlineExamController extends Controller
     public function store(Request $request, OnlineExam $online_exam)
     {
         $inputs = $request->all();
-        if($online_exam->create($inputs))
-        {
+        if ($online_exam->create($inputs)) {
             return response()->json(['status' => 200]);
-        }
-        else
-        {
+        } else {
             return response()->json(['status' => 405]);
         }
     }

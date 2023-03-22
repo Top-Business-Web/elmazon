@@ -22,7 +22,7 @@ class LessonResource extends JsonResource
              'id' => $this->id,
              'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
              'note' => $this->note,
-            'status' => OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('lesson_id','=',$this->id)->count() > 0 ? 'opened' : 'lock',
+             'status' => OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('lesson_id','=',$this->id)->count() > 0 ? 'opened' : 'lock',
              'videos_count' => 4,
              'videos_time' => 120,
              'created_at' => $this->created_at->format('Y-m-d'),
