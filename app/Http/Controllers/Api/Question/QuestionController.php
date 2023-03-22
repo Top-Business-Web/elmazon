@@ -189,7 +189,7 @@ class QuestionController extends Controller{
                             'status' => isset($answer) ? $answer->answer_status == "correct" ? "solved" : "un_correct" : "leave",
                         ]);
                         Degree::create([
-                            'user_id' => auth()->id(),
+                            'user_id' => auth('user-api')->id(),
                             'question_id' => $request->details[$i]['question'],
                             'online_exam_id' => $exam->id,
                             'type' => 'choice',

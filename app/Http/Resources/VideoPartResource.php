@@ -26,13 +26,15 @@ class VideoPartResource extends JsonResource
             $link = asset('pdf/'. $this->link);
         }
 
-        if($this->watch){
-            if($this->watch->status == 'opened' || 'watched'){
-                $watched = 'opened';
-            }
-        }else{
-            $watched = 'lock';
+        $user_watch_video = VideoWatch::where('video_part_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first();
+
+        $watched = "lock";
+        if($user_watch_video){
+        if($user_watch_video->status == 'opened' || 'watched'){
+            $watched = 'opened';
         }
+        }
+
         return [
             'id' => $this->id,
             'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,

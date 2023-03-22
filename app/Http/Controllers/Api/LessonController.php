@@ -110,7 +110,7 @@ class LessonController extends Controller{
 
                 $errors_arr = [
 
-                    406 => 'Failed,The type must be an video or open_app or subject_class',
+                    406 => 'Failed,The type must be an video or subject_class',
                 ];
 
                 $code = collect($validator->errors())->flatten(1)[0];
