@@ -40,11 +40,6 @@
                                                 data-target=""><i
                                                 class="fa fa-book-open"></i></button></a>
                                     </td>
-{{--                                    <td>--}}
-{{--                                        <a href="{{ route('usersExam', $user->user->id) }}"><button type="button" class="btn btn-pill btn-info-light" data-toggle="modal"--}}
-{{--                                                                                                    data-target=""><i--}}
-{{--                                                    class="fa fa-book-open"></i></button></a>--}}
-{{--                                    </td>--}}
                                 </tr>
                             @endforeach
                             </tbody>
