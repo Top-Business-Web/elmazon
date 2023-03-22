@@ -10,7 +10,6 @@ class LifeExam extends Model
     use HasFactory;
 
     protected $fillable = [
-
        'name_ar',
        'name_en',
        'date_exam',
@@ -22,9 +21,27 @@ class LifeExam extends Model
         'season_id',
         'term_id'
 
-
-
     ];
+
+
+    public function season(){
+
+        return $this->belongsTo(Season::class,'season_id','id');
+    }
+
+
+    public function term(){
+
+        return $this->belongsTo(Term::class,'term_id','id');
+    }
+
+    //start relation many to many life exam has many questions
+
+    public function questions(){
+
+        return $this->belongsToMany(Question::class,'online_exam_questions', 'life_exam_id','question_id','id','id');
+    }
+
 }
 
 

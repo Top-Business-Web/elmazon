@@ -30,8 +30,21 @@ class Question extends Model
     }
 
 
+    //start relations of exams (relation many to many)
+
     public function online_exams(){
 
         return $this->belongsToMany(OnlineExam::class,'online_exam_questions', 'question_id','online_exam_id','id','id');
+    }
+
+    public function all_exams(){
+
+        return $this->belongsToMany(OnlineExam::class,'online_exam_questions', 'question_id','all_exam_id','id','id');
+    }
+
+
+    public function life_exams(){
+
+        return $this->belongsToMany(OnlineExam::class,'online_exam_questions', 'question_id','life_exam_id','id','id');
     }
 }

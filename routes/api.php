@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Degree\DegreeController;
 use App\Http\Controllers\Api\FullExams\FullExamController;
 use App\Http\Controllers\Api\Guides\GuideController;
 use App\Http\Controllers\Api\LessonController;
+use App\Http\Controllers\Api\LifeExam\LifeExamController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
 use App\Http\Controllers\Api\AllExamsUsersDegreeController;
 use App\Http\Controllers\Api\Payment;
@@ -117,8 +118,16 @@ Route::group(['prefix' => 'auth'], function (){
 
     });
 
+    Route::middleware('jwt')->group(function (){
+        Route::get('life-exam/access-first-question/{id}',[LifeExamController::class,'access_first_question']);
+        Route::post('life-exam/add-life-exam/{id}',[LifeExamController::class,'add_life_exam_with_student']);
+
+    });
 
     Route::post('access-end-time/exam/{id}',[QuestionController::class,'access_end_time_for_exam'])->middleware('jwt');
+
+
+
 });
 
 

@@ -19,6 +19,8 @@ class CreateDegreesTable extends Migration
             $table->unsignedBigInteger('question_id');
             $table->unsignedBigInteger('online_exam_id')->nullable();
             $table->unsignedBigInteger('all_exam_id')->nullable();
+            $table->unsignedBigInteger('life_exam_id')->nullable();
+
             $table->enum('type',['text','choice']);
             $table->integer('degree');
             $table->enum('status',['completed','not_completed']);
@@ -27,6 +29,7 @@ class CreateDegreesTable extends Migration
             $table->foreign('question_id')->references('id')->on('questions')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('online_exam_id')->references('id')->on('online_exams')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('all_exam_id')->references('id')->on('all_exams')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('life_exam_id')->references('id')->on('life_exams')->cascadeOnUpdate()->cascadeOnDelete();
 
         });
     }

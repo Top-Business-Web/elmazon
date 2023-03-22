@@ -16,7 +16,7 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->longText('question')->nullable();
-            $table->enum('type',['video','lesson','all_exam','subject_class']);
+            $table->enum('type',['video','lesson','all_exam','subject_class','life_exam']);
             $table->longText('image')->nullable();
             $table->enum('file_type',['image','text']);
             $table->enum('question_type',['choice','text']);

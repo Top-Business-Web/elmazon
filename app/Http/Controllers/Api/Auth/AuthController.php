@@ -14,7 +14,9 @@ use App\Http\Resources\SubjectClassResource;
 use App\Http\Resources\SuggestResource;
 use App\Http\Resources\UserResource;
 use App\Models\AllExam;
+use App\Models\Lesson;
 use App\Models\Notification;
+use App\Models\OpenLesson;
 use App\Models\PapelSheetExam;
 use App\Models\PapelSheetExamTime;
 use App\Models\PapelSheetExamUser;
@@ -328,6 +330,36 @@ class AuthController extends Controller
 
         try {
 
+            //start opened first subject class and first lesson
+            $subject_class = SubjectClass::first();
+            $first_lesson = Lesson::where('subject_class_id','=',$subject_class->id)->first();
+
+            if(!$subject_class){
+                return self::returnResponseDataApi(null,"لا يوجد فصول برجاء ادخال عدد من الفصول لفتح اول فصل من القائمه",404,404);
+            }
+
+            if(!$first_lesson){
+                return self::returnResponseDataApi(null,"لا يوجد قائمه دروس لفتح اول درس",404,404);
+            }
+
+            $subject_class_opened = OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('subject_class_id','=',$subject_class->id);
+            $lesson_opened = OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('lesson_id','=',$first_lesson->id);
+
+            if(!$subject_class_opened->exists() &&  !$lesson_opened->exists()){
+                OpenLesson::create([
+                    'user_id' => Auth::guard('user-api')->id(),
+                    'subject_class_id' =>  $subject_class->id,
+                ]);
+
+                OpenLesson::create([
+                    'user_id' => Auth::guard('user-api')->id(),
+                    'lesson_id' =>  $first_lesson->id,
+                ]);
+
+            }
+
+
+            //end opened first subject class and first lesson
             $classes = SubjectClass::whereHas('term', function ($term){
                 $term->where('status','=','active');
             })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
