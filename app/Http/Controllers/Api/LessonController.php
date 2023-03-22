@@ -97,7 +97,7 @@ class LessonController extends Controller{
     public function accessFirstVideo(Request $request,$id){
 
         $rules = [
-            'type' => 'required|in:video,open_app,subject_class',
+            'type' => 'required|in:video,subject_class',
         ];
         $validator = Validator::make($request->all(), $rules, [
 
@@ -145,49 +145,40 @@ class LessonController extends Controller{
             }
 
             //end access first video
-        }elseif ($request->type == 'subject_class'){
+        }else{
 
-            $subject_class = SubjectClass::where('id','=',$id)->first();
+            $subject_class = SubjectClass::first();
+            $first_lesson = Lesson::where('subject_class_id','=',$subject_class->id)->first();
 
             if(!$subject_class){
-                return self::returnResponseDataApi(null,"هذه الفصل غير موجود",404,404);
+                return self::returnResponseDataApi(null,"لا يوجد فصول برجاء ادخال عدد من الفصول لفتح اول فصل من القائمه",404,404);
             }
-            $first_lesson = Lesson::where('subject_class_id','=',$subject_class->id)->first();
 
             if(!$first_lesson){
                 return self::returnResponseDataApi(null,"لا يوجد قائمه دروس لفتح اول درس",404,404);
             }
-            $lesson_opened = OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('lesson_id','=',$first_lesson->id);
-            if($lesson_opened->exists()){
-                return response()->json(['data' => null,'message' => 'Lesson opened with ' . Auth::guard('user-api')->user()->name . ' before','code' => 200]);
 
-            }else{
-                $lesson_open = VideoWatch::create([
-                    'user_id' => Auth::guard('user-api')->id(),
-                    'lesson_id' =>  $first_lesson->id,
-                ]);
-
-                return response()->json(['data' => $lesson_open,'message' => 'Lesson opened now  ' . Auth::guard('user-api')->user()->name,'code' => 200]);
-            }//end opened first lesson of subject_class
-
-        }else{
-
-            $subject_class = SubjectClass::first();
-            if(!$subject_class){
-                return self::returnResponseDataApi(null,"لا يوجد فصول برجاء ادخال عدد من الفصول لفتح اول فصل من القائمه",404,404);
-            }
             $subject_class_opened = OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('subject_class_id','=',$subject_class->id);
-            if($subject_class_opened->exists()){
-                return response()->json(['data' => null,'message' => 'Subject_class watched with ' . Auth::guard('user-api')->user()->name . ' before','code' => 200]);
+            $lesson_opened = OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('lesson_id','=',$first_lesson->id);
+
+            if($subject_class_opened->exists() &&  $lesson_opened->exists()){
+                return response()->json(['data' => null,'message' => 'تم فتح اول فصل واول درس تابع لهذا الفصل من قبل','code' => 201]);
 
             }else{
-                $subject_class_open = VideoWatch::create([
+                OpenLesson::create([
                     'user_id' => Auth::guard('user-api')->id(),
                     'subject_class_id' =>  $subject_class->id,
                 ]);
 
-                return response()->json(['data' => $subject_class_open,'message' => 'Subject_class opened now  ' . Auth::guard('user-api')->user()->name,'code' => 200]);
+                OpenLesson::create([
+                    'user_id' => Auth::guard('user-api')->id(),
+                    'lesson_id' =>  $first_lesson->id,
+                ]);
+
+                return response()->json(['data' => null,'message' => 'تم فتح اول فصل واول درس تابع لهذا الفصل ','code' => 200]);
             }
+
+            //end open first video =============================================================================================================
 
 
         }

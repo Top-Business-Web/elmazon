@@ -18,12 +18,16 @@ class CreateExamDegreeDependsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('online_exam_id')->nullable();
             $table->unsignedBigInteger('all_exam_id')->nullable();
+            $table->unsignedBigInteger('life_exam_id')->nullable();
+
             $table->integer('full_degree');
             $table->enum('exam_depends',['yes','no'])->default('no');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('online_exam_id')->references('id')->on('online_exams')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('all_exam_id')->references('id')->on('all_exams')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('life_exam_id')->references('id')->on('life_exams')->cascadeOnUpdate()->cascadeOnDelete();
+
         });
     }
 
