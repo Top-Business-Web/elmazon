@@ -98,6 +98,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::post('addQuestion', [OnlineExamController::class, 'addQuestion'])->name('addQuestion');
     Route::post('deleteQuestion', [OnlineExamController::class, 'deleteQuestion'])->name('deleteQuestion');
     Route::get('paperExam/{id}', [OnlineExamController::class, 'paperExam'])->name('paperExam');
+    Route::post('storeExamPaper', [OnlineExamController::class, 'storeExamPaper'])->name('storeExamPaper');
 
     #### Phone Communications ####
     Route::resource('phoneCommunications', PhoneCommunicationController::class);
