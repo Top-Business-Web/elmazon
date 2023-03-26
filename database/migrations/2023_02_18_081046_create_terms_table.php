@@ -18,8 +18,11 @@ class CreateTermsTable extends Migration
             $table->string('name_ar');
             $table->string('name_en');
             $table->string('note')->nullable();
+            $table->unsignedBigInteger('season_id');
             $table->enum('status',['active','not_active'])->default('active');
             $table->timestamps();
+            $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
+
         });
     }
 

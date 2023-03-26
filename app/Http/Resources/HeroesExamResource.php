@@ -22,27 +22,27 @@ class HeroesExamResource extends JsonResource
         $online_exams = OnlineExam::whereHas('season', function ($season) {
         $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
         })->whereHas('term', function ($term) {
-        $term->where('status', '=', 'active');
+        $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->pluck('id')->toArray();
 
         $all_exams = AllExam::whereHas('season', function ($season) {
             $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
         })->whereHas('term', function ($term) {
-            $term->where('status', '=', 'active');
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->pluck('id')->toArray();
 
 
         $exam = OnlineExam::whereHas('season', function ($season) {
             $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
         })->whereHas('term', function ($term) {
-            $term->where('status', '=', 'active');
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->sum('degree');
 
 
 //        $exam = OnlineExam::whereHas('season', function ($season) {
 //            $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
 //        })->whereHas('term', function ($term) {
-//            $term->where('status', '=', 'active');
+//            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
 //        })->whereHas('exam_degree_depends')->sum('degree');
 
 
