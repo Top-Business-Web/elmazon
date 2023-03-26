@@ -128,7 +128,7 @@ class AuthController extends Controller
         try {
 
             $allNotification = Notification::whereHas('term', function ($term) {
-                $term->where('status', '=', 'active');
+                $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
             })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
 
             return self::returnResponseDataApi(NotificationResource::collection($allNotification), "تم ارسال اشعارات المستخدم بنجاح", 200);
@@ -199,7 +199,7 @@ class AuthController extends Controller
         $papelSheetExam = PapelSheetExam::whereHas('season', function ($season) {
             $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
         })->whereHas('term', function ($term) {
-            $term->where('status', '=', 'active');
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->where('id', '=', $id)->first();
 
         if (!$papelSheetExam) {
@@ -271,7 +271,7 @@ class AuthController extends Controller
         $papelSheetExam = PapelSheetExam::whereHas('season', function ($season) {
             $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
         })->whereHas('term', function ($term) {
-            $term->where('status', '=', 'active');
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->whereDate('to','>=',Carbon::now()->format('Y-m-d'))->first();
 
         if (!$papelSheetExam) {
@@ -395,7 +395,7 @@ class AuthController extends Controller
 
             $sliders = Slider::get();
             $notification = Notification::whereHas('term', function ($term) {
-                $term->where('status', '=', 'active');
+                $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
             })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->first();
 
             return response()->json([

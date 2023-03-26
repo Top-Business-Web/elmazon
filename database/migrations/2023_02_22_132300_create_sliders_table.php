@@ -17,7 +17,7 @@ class CreateSlidersTable extends Migration
             $table->increments('id');
             $table->text('file');
             $table->text('link');
-            $table->enum('type', array('image', 'video'))->default('image');
+            $table->enum('type', array('image','video'))->default('image');
             $table->timestamps();
         });
     }

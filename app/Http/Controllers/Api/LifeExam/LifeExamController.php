@@ -143,13 +143,7 @@ class LifeExamController extends Controller{
                        ->where('user_id', '=',auth('user-api')->id())->first()->update(['exam_depends' => 'yes']);
                }
 
-               return response()->json([
-                   "data" => null,
-                   "message" => "تم الوصول الي السؤال الاخير",
-                   "code" => 201,
-                   "degree" => $sum_degree_for_user,
-                   "per" => $per . "%",
-               ]);
+               return response()->json(["data" => null, "message" => "تم الوصول الي السؤال الاخير", "code" => 201, "degree" => $sum_degree_for_user, "per" => $per . "%",]);
             }
         }
 
