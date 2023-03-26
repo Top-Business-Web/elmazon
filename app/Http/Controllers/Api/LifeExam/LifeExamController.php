@@ -83,25 +83,16 @@ class LifeExamController extends Controller{
           dd($totalDuration);
          */
 
-//        $now = Carbon::now();
-//        $start = Carbon::createFromTimeString($life_exam->time_start);
-//        $end =  Carbon::createFromTimeString($life_exam->time_end);
-//
-//
-//
-//        if ($now->isBetween($start,$end)) {
-//            // between 8:00 AM and 8:00 PM
-//            return "Yes";
-//        } else {
-//
-//            return "No";
-//            // not between 8:00 AM and 8:00 PM
-//        }
-
-
-//        $question = Question::where('id','=',$request->question_id)->first();
         $answer = Answer::where('id','=',$request->answer_id)->first();
+        $online_exam_answer = OnlineExamUser::where('user_id','=',Auth::guard('user-api')->id())
+            ->where('question_id','=',$request->question_id)
+            ->where('life_exam_id','=',$id)->first();
 
+
+        if($online_exam_answer){
+            return self::returnResponseDataApi(null,"تم حل هذا السؤال من قبل", 202);
+
+        }else{
 
             $life_exam_user = OnlineExamUser::create([
                 'user_id' => Auth::guard('user-api')->id(),
@@ -120,29 +111,48 @@ class LifeExamController extends Controller{
             ]);
 
             $degrees_depends = ExamDegreeDepends::where('life_exam_id','=',$id)
-                ->where('user_id', '=', auth('user-api')->id())->first();
+                ->where('user_id', '=',auth('user-api')->id());
 
-            if(!$degrees_depends){
+            $depends = ExamDegreeDepends::where('life_exam_id','=',$id)
+                ->where('user_id', '=',auth('user-api')->id())->first();
+
+            if($degrees_depends->exists()){
+                $depends->update([
+                    'full_degree' =>  $life_exam_user->status == "solved" ?
+                        $depends->full_degree+=$life_exam_user->question->degree
+                        : $depends->full_degree+=0,
+                ]);
+            }else{
                 ExamDegreeDepends::create([
                     'user_id' => auth('user-api')->id(),
                     'life_exam_id' =>  $life_exam_user->life_exam_id,
                     'full_degree' => $life_exam_user->status == "solved" ? $life_exam_user->question->degree : 0,
-                ]);
-            }else{
-                $degrees_depends->update([
-                  'full_degree' =>  $life_exam_user->status == "solved" ?
-                      $degrees_depends->full_degree+=$life_exam_user->question->degree
-                      : $degrees_depends->full_degree+=0,
                 ]);
             }
 
             $next_question = Question::orderBy('id','ASC')->get()->except($request->question_id)->where('id','>',$request->question_id)->first();
             if($next_question){
                 return self::returnResponseDataApi(new QuestionResource($next_question),"تم حل السؤال بنجاح",200);
-
             }else{
-                return self::returnResponseDataApi(null,"تم الوصول الي السؤال الاخير",201);
+
+               $sum_degree_for_user = ExamDegreeDepends::where('life_exam_id','=',$id)
+                    ->where('user_id', '=',auth('user-api')->id())->sum('full_degree');
+               $per = (($sum_degree_for_user / $life_exam->degree) * 100);
+               if($per >= 65){
+                   ExamDegreeDepends::where('life_exam_id','=',$id)
+                       ->where('user_id', '=',auth('user-api')->id())->first()->update(['exam_depends' => 'yes']);
+               }
+
+               return response()->json([
+                   "data" => null,
+                   "message" => "تم الوصول الي السؤال الاخير",
+                   "code" => 201,
+                   "degree" => $sum_degree_for_user,
+                   "per" => $per . "%",
+               ]);
             }
+        }
+
 
 
 
