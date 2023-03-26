@@ -14,7 +14,9 @@ use App\Http\Resources\SubjectClassResource;
 use App\Http\Resources\SuggestResource;
 use App\Http\Resources\UserResource;
 use App\Models\AllExam;
+use App\Models\ExamDegreeDepends;
 use App\Models\Lesson;
+use App\Models\LifeExam;
 use App\Models\Notification;
 use App\Models\OpenLesson;
 use App\Models\PapelSheetExam;
@@ -359,6 +361,33 @@ class AuthController extends Controller
             }
 
 
+            //start life exam show
+            $life_exam = LifeExam::whereHas('term', function ($term){
+                $term->where('status','=','active');
+            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)
+                ->where('date_exam','=',Carbon::now()->format('Y-m-d'))
+                ->first();
+
+            $now = Carbon::now();
+            $start = Carbon::createFromTimeString($life_exam->time_start);
+            $end =  Carbon::createFromTimeString($life_exam->time_end);
+
+
+            $degree_depends = ExamDegreeDepends::where('user_id','=',Auth::guard('user-api')->id())
+                ->where('life_exam_id','=',$life_exam->id);
+
+            if($degree_depends->exists()){
+                $id = null;
+            }else{
+                if ($now->isBetween($start,$end)) {
+                    // between 8:00 AM and 8:00 PM
+                    $id = $life_exam->id;
+                } else {
+                    $id = null;
+                }
+            }
+            //end life exam show
+
             //end opened first subject class and first lesson
             $classes = SubjectClass::whereHas('term', function ($term){
                 $term->where('status','=','active');
@@ -371,9 +400,10 @@ class AuthController extends Controller
 
             return response()->json([
                 'data' => [
+                     'life_exam' => $id,
                      'sliders' => SliderResource::collection($sliders),
-                    'notification' => new NotificationResource($notification),
-                    'classes' => SubjectClassResource::collection($classes),
+                     'notification' => new NotificationResource($notification),
+                     'classes' => SubjectClassResource::collection($classes),
 
                 ],
                 'code' => 200,
