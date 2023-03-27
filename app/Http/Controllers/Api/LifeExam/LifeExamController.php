@@ -96,7 +96,6 @@ class LifeExamController extends Controller{
 
         if($online_exam_answer){
             return self::returnResponseDataApi(null,"تم حل هذا السؤال من قبل", 202);
-
         }else{
 
             $life_exam_user = OnlineExamUser::create([
@@ -134,13 +133,12 @@ class LifeExamController extends Controller{
                     'full_degree' => $life_exam_user->status == "solved" ? $life_exam_user->question->degree : 0,
                 ]);
             }
-
             $next_question = Question::orderBy('id','ASC')->get()->except($request->question_id)->where('id','>',$request->question_id)->first();
-            $end =  Carbon::createFromTimeString($life_exam->time_end);
-            $next_question->remaining_time = $end->diffInMinutes(Carbon::now()->format('H:i:s'));
 
-            
             if($next_question){
+                $end =  Carbon::createFromTimeString($life_exam->time_end);
+                $next_question->remaining_time = $end->diffInMinutes(Carbon::now()->format('H:i:s'));
+
                 return self::returnResponseDataApi(new LifeExamQuestionsResource($next_question),"تم حل السؤال بنجاح",200);
             }else{
 
