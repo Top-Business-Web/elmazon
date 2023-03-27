@@ -107,6 +107,7 @@ class LifeExamController extends Controller{
             ]);
 
 
+            //
             Degree::create([
                 'user_id' => auth()->id(),
                 'question_id' => $request->question_id,
