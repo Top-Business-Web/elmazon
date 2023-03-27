@@ -113,6 +113,7 @@ class OnlineExamController extends Controller
 
     public function storeExamPaper(Request $request)
     {
+//        return $request;
         foreach ($request->questions as $question) {
             $text_exam_user = Degree::where('user_id', $request->user_id)
                 ->where('question_id', $question['question_id'])

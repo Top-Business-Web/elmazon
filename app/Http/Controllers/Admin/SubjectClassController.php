@@ -33,6 +33,12 @@ class SubjectClassController extends Controller
                 ->editColumn('image', function ($subjects_classes) {
                     return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset($subjects_classes->image) . '"/>';
                 })
+                ->editColumn('term_id', function ($subjects_classes) {
+                    return '<td>'.$subjects_classes->term->name_ar.'</td>';
+                })
+                ->editColumn('season_id', function ($subjects_classes) {
+                    return '<td>'.$subjects_classes->season->name_ar.'</td>';
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {

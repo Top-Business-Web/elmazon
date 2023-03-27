@@ -14,8 +14,15 @@
                     <input type="text" class="form-control" value="{{ $term->name_en }}" name="name_en">
                 </div>
                 <div class="col-md-12">
-                    <label for="note" class="form-control-label">ملاحظة</label>
-                    <textarea class="form-control" name="note" rows="10">{{ $term->note }}</textarea>
+                    <label for="name_ar" class="form-control-label">الصف</label>
+                    <Select name="season_id" class="form-control">
+                        <option selected disabled style="text-align: center">اختار الصف</option>
+                        @foreach ($data['seasons'] as $season)
+                            <option value="{{ $season->id }}"
+                                    {{ $term->season_id == $season->id ? 'selected' : '' }}
+                                    style="text-align: center">{{ $season->name_ar }}</option>
+                        @endforeach
+                    </Select>
                 </div>
             </div>
         </div>

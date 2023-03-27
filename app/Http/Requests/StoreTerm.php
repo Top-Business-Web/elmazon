@@ -26,7 +26,7 @@ class StoreTerm extends FormRequest
         return [
             'name_ar' => 'required',
             'name_en' => 'required',
-            'note' => 'required',
+            'season_id' => 'required',
         ];
     }
 }

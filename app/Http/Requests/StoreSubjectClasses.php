@@ -26,7 +26,6 @@ class StoreSubjectClasses extends FormRequest
         return [
             'name_ar' => 'required',
             'name_en' => 'required',
-            'note' => 'required',
             'term_id' => 'required',
         ];
     }

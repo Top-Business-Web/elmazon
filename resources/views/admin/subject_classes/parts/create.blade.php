@@ -36,10 +36,6 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                        <label for="note" class="form-control-label">ملاحظة</label>
-                        <textarea class="form-control" name="note" rows="8"></textarea>
-                    </div>
-                <div class="col-md-6">
                     <div class="form-group">
                         <label for="">الصورة :</label>
                         <input type="file" name="image" class="dropify"
