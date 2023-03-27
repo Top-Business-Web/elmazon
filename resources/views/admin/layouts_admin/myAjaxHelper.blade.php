@@ -290,6 +290,20 @@
         });
     }
 
+    function showEdit1(routeOfEdit) {
+        $(document).on('click', '.renew', function() {
+            var id = $(this).data('id')
+            var url = routeOfEdit;
+            url = url.replace(':id', id)
+            $('#modal-renew').html(loader)
+            $('#renew').modal('show')
+
+            setTimeout(function() {
+                $('#modal-renew').load(url)
+            }, 500)
+        })
+    }
+
     function showEditModal(routeOfEdit) {
         $(document).on('click', '.editBtn', function() {
             var id = $(this).data('id')

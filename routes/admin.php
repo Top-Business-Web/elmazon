@@ -58,6 +58,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Users ####
     Route::resource('users', UserController::class);
     Route::post('subscr_renew', [UserController::class, 'subscr_renew'])->name('subscr_renew');
+    Route::get('subscrView/{user}/view', [UserController::class, 'subscrView'])->name('subscrView');
 
     #### Season ####
     Route::resource('seasons', SeasonController::class);

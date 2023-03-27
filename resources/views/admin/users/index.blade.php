@@ -83,6 +83,24 @@
             </div>
         </div>
         <!-- Create Or Edit Modal -->
+
+        <!-- Renew Subscribe -->
+        <div class="modal fade" id="renew" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content ">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="example-Modal3">تجديد الاشتراك</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-renew" id="modal-renew">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Renew Subscribe -->
     </div>
     @include('admin.layouts_admin.myAjaxHelper')
 @endsection
@@ -105,10 +123,8 @@
         showEditModal('{{route('users.edit',':id')}}');
         editScript();
 
+        showEdit1('{{ route('subscrView',':id') }}')
 
-        // Add Using Ajax
-        showEdit('{{route('users.show',':id')}}');
-        edit2();
     </script>
 @endsection
 
