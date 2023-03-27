@@ -26,13 +26,13 @@ class DegreeController extends Controller{
 
 
         $examVideos =  OnlineExam::with(['term'])->whereHas('term', function ($term){
-            $term->where('status','=','active');
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->whereHas('exam_degree_depends')->where('season_id','=',auth()->guard('user-api')->user()->season_id)
             ->where('type','=','video')->get();
 
 
         $lessons_or_subject_classes = OnlineExam::with(['term'])->whereHas('term', function ($term){
-            $term->where('status','=','active');
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)
             ->whereNotIn('type',['video','all_exam'])
             ->whereHas('exam_degree_depends')
@@ -40,12 +40,12 @@ class DegreeController extends Controller{
 
 
        $all_exams = AllExam::whereHas('term', function ($term){
-           $term->where('status','=','active');
+           $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
        })->whereHas('exam_degree_depends')->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
 
 
         $papelSheetExam = PapelSheetExam::where('season_id','=',auth()->guard('user-api')->id())->whereHas('term', function ($term){
-            $term->where('status','=','active');
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->get();
 
         return response()->json([

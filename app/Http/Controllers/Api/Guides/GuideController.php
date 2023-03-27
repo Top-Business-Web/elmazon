@@ -12,7 +12,7 @@ class GuideController extends Controller
 
     public function index(){
         $guide = Guide::with('childs')->whereHas('term', function ($term){
-            $term->where('status','=','active');
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->whereNull('from_id')->get();
 
         if($guide->count() > 0){

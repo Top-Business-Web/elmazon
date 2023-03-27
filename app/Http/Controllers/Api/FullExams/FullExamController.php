@@ -15,7 +15,7 @@ class FullExamController extends Controller{
 
     public function fullExams(){
         $fullExams = AllExam::whereHas('term', function ($term){
-            $term->where('status','=','active');
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
 
         if($fullExams->count() > 0){

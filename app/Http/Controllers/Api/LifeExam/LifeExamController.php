@@ -26,7 +26,7 @@ class LifeExamController extends Controller{
     public function access_first_question($id){
 
         $life_exam = LifeExam::whereHas('term', function ($term){
-            $term->where('status','=','active');
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id','=',$id)->first();
 
         if(!$life_exam){
@@ -43,7 +43,7 @@ class LifeExamController extends Controller{
 
 
         $life_exam = LifeExam::whereHas('term', function ($term){
-            $term->where('status','=','active');
+            $term->where('status','=','active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id','=',$id)->first();
 
         if(!$life_exam){
@@ -87,7 +87,6 @@ class LifeExamController extends Controller{
         $online_exam_answer = OnlineExamUser::where('user_id','=',Auth::guard('user-api')->id())
             ->where('question_id','=',$request->question_id)
             ->where('life_exam_id','=',$id)->first();
-
 
         if($online_exam_answer){
             return self::returnResponseDataApi(null,"تم حل هذا السؤال من قبل", 202);
