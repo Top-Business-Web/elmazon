@@ -106,6 +106,7 @@ class LifeExamController extends Controller{
                 'status' =>  $answer->answer_status == "correct" ? "solved" : "un_correct",
             ]);
 
+
             Degree::create([
                 'user_id' => auth()->id(),
                 'question_id' => $request->question_id,
