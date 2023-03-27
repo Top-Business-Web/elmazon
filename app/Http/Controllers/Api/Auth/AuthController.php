@@ -368,6 +368,7 @@ class AuthController extends Controller
                 ->where('date_exam','=',Carbon::now()->format('Y-m-d'))
                 ->first();
 
+
 //            return $life_exam->time_start;
             if(!$life_exam){
               $id = null;
@@ -376,7 +377,8 @@ class AuthController extends Controller
                 $now = Carbon::now();
                 $start = Carbon::createFromTimeString($life_exam->time_start);
                 $end =  Carbon::createFromTimeString($life_exam->time_end);
-
+//                $diff_in_minutes = $end->diffInMinutes(Carbon::now()->format('H:i:s'));
+//                return $diff_in_minutes;
                 $degree_depends = ExamDegreeDepends::where('user_id','=',Auth::guard('user-api')->id())
                     ->where('life_exam_id','=',$life_exam->id);
 
@@ -388,6 +390,7 @@ class AuthController extends Controller
                     $id = null;
                 }
             }
+
 
 
 
