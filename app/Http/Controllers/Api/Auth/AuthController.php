@@ -370,7 +370,7 @@ class AuthController extends Controller
 
 //            return $life_exam->time_start;
             if(!$life_exam){
-                $id = null;
+              $id = null;
             }else{
 
                 $now = Carbon::now();
@@ -384,8 +384,12 @@ class AuthController extends Controller
                     $id = $life_exam->id;
                 }elseif ($degree_depends->exists()){
                     $id = null;
+                }else{
+                    $id = null;
                 }
             }
+
+
 
             //end life exam show
 
