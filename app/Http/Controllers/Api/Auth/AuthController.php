@@ -363,34 +363,35 @@ class AuthController extends Controller
 
             //start life exam show
             $life_exam = LifeExam::whereHas('term', function ($term){
-                $term->where('status','=','active');
+                $term->where('status','=','active')->where('season_id','=',auth('user-api')->user()->season_id);
             })->where('season_id','=',auth()->guard('user-api')->user()->season_id)
                 ->where('date_exam','=',Carbon::now()->format('Y-m-d'))
                 ->first();
 
-            $now = Carbon::now();
-            $start = Carbon::createFromTimeString($life_exam->time_start);
-            $end =  Carbon::createFromTimeString($life_exam->time_end);
-
-
-            $degree_depends = ExamDegreeDepends::where('user_id','=',Auth::guard('user-api')->id())
-                ->where('life_exam_id','=',$life_exam->id);
-
-            if($degree_depends->exists()){
+//            return $life_exam->time_start;
+            if(!$life_exam){
                 $id = null;
             }else{
-                if ($now->isBetween($start,$end)) {
-                    // between 8:00 AM and 8:00 PM
+
+                $now = Carbon::now();
+                $start = Carbon::createFromTimeString($life_exam->time_start);
+                $end =  Carbon::createFromTimeString($life_exam->time_end);
+
+                $degree_depends = ExamDegreeDepends::where('user_id','=',Auth::guard('user-api')->id())
+                    ->where('life_exam_id','=',$life_exam->id);
+
+                if($now->isBetween($start,$end)){
                     $id = $life_exam->id;
-                } else {
+                }elseif ($degree_depends->exists()){
                     $id = null;
                 }
             }
+
             //end life exam show
 
             //end opened first subject class and first lesson
             $classes = SubjectClass::whereHas('term', function ($term){
-                $term->where('status','=','active');
+                $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
             })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
 
             $sliders = Slider::get();
@@ -426,6 +427,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), $rules, [
             'phone_type.in' => 407,
         ]);
+
 
         if ($validator->fails()) {
 
