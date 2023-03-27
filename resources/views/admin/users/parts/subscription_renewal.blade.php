@@ -1,7 +1,6 @@
 <div class="modal-body">
     <form id="update_renwal" class="update_renwal" method="POST" action="{{ route('subscr_renew',$user->id) }}">
         @csrf
-{{--        @method('PATCH')--}}
         <input type="hidden" name="id" value="{{ $user->id }}">
         <div class="form-group">
             <div class="row">
@@ -19,7 +18,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-            <button type="submit" class="btn btn-primary" id="update2">تحديث</button>
+            <button type="submit" class="btn btn-primary">تحديث</button>
         </div>
     </form>
 </div>
