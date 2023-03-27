@@ -23,6 +23,7 @@ use Illuminate\Validation\Rule;
 class LifeExamController extends Controller{
 
 
+    //access first question of life exam
     public function access_first_question($id){
 
         $life_exam = LifeExam::whereHas('term', function ($term){
