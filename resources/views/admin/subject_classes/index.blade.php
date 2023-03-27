@@ -31,7 +31,6 @@
                                 <th class="min-w-50px">الاسم</th>
                                 <th class="min-w-50px">الترم</th>
                                 <th class="min-w-50px">الصف</th>
-                                <th class="min-w-50px">ملاحظة</th>
                                 <th class="min-w-50px">الصورة</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
@@ -95,7 +94,6 @@
             {data: 'name_ar', name: 'name_ar'},
             {data: 'term_id', name: 'term_id'},
             {data: 'season_id', name: 'season_id'},
-            {data: 'note', name: 'note'},
             {data: 'image', name: 'image'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]

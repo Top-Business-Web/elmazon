@@ -89,7 +89,7 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'name_en', name: 'name_en'},
+            {data: 'name_ar', name: 'name_ar'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('seasons.index')}}', columns);

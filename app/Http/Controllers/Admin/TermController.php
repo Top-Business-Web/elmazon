@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTerm;
 use App\Models\Term;
+use App\Models\Season;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -34,6 +35,9 @@ class TermController extends Controller
                         return '<a href="' . route('activate', $terms->id) . '" class="btn btn-pill btn-danger-light">غير مفعل</a>';
                     }
                 })
+                ->editColumn('season_id', function ($terms) {
+                    return '<td>'. $terms->seasons->name_ar .'</td>';
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {
@@ -47,7 +51,8 @@ class TermController extends Controller
 
     public function create()
     {
-        return view('admin.terms.parts.create');
+        $data['seasons'] = Season::all();
+        return view('admin.terms.parts.create', compact('data'));
     }
     // Create End
 
@@ -93,7 +98,8 @@ class TermController extends Controller
 
     public function edit(Term $term)
     {
-        return view('admin.terms.parts.edit', compact('term'));
+        $data['seasons'] = Season::all();
+        return view('admin.terms.parts.edit', compact('term', 'data'));
     }
 
 

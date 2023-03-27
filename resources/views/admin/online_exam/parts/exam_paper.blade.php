@@ -11,7 +11,7 @@
 
     <form action="{{ route('storeExamPaper') }}" method="post">
         @csrf
-{{--        <input type="hidden" name="user_id" value="{{ $answer->user->id }}"/>--}}
+        <input type="hidden" name="user_id" value="{{ $answer->user->id }}"/>
         <div class="form-group">
             <div class="row">
                 @foreach($answers as $answer)
