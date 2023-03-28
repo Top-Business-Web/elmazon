@@ -94,12 +94,12 @@
         ]
         showData('{{route('seasonTerm',$id)}}', columns);
         // Delete Using Ajax
-        destroyScript('{{route('seasonTermDelete',':id')}}');
+        {{--destroyScript('{{route('seasonTermDelete',':id')}}');--}}
         // Add Using Ajax
         showAddModal('{{route('seasonTermCreate', $id)}}');
         addScript();
         // Add Using Ajax
-        showEditModal('{{route('seasonTermEdit', ':id')}}');
+        {{--showEditModal('{{route('seasonTermEdit', ':id')}}');--}}
         editScript();
     </script>
 @endsection
