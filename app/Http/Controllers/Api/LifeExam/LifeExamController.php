@@ -56,7 +56,6 @@ class LifeExamController extends Controller{
             return self::returnResponseDataApi(null,"الامتحان الايف غير موجود",404,404);
         }
 
-
         $rules = [
             'question_id' => ['required',Rule::exists('online_exam_questions','question_id')->where(function ($query) use($life_exam) {return $query->where('life_exam_id',$life_exam->id);})],
             'answer_id' => ['required',Rule::exists('answers','id')->where(function ($query) use($request) {return $query->where('question_id',$request->question_id);})],
@@ -68,7 +67,6 @@ class LifeExamController extends Controller{
         ]);
 
         if ($validator->fails()) {
-
             $errors = collect($validator->errors())->flatten(1)[0];
             if (is_numeric($errors)) {
 
