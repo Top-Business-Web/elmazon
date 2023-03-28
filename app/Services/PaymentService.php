@@ -42,15 +42,15 @@ class PaymentService
 
         if ($validator->fails()) {
             $request->session()->flash('danger', $validator->errors()->first());
-            return response()->json(["data"=>'',"errors"=>$validator->errors()->first()],422);
+            return response()->json(["data"=>'',$validator->errors()->first(),'code'=>422],200);
         }
 
         $token = $this->createToken($request);
         if (!empty($token['error'])) {
-            return response()->json(["data"=>'',"errors"=>['error'=>$token['error']],'message'=>"Payment failed."],422);
+            return response()->json(["data"=>'','error'=> $token['error'],'message'=>"Payment failed.",'code'=>422],200);
         }
         if (empty($token['id'])) {
-            return response()->json(["data"=>'',"errors"=>[],'message'=>"Payment failed."],409);
+            return response()->json(["data"=>'',"errors"=>'','message'=>"Payment failed.",'code'=>409],200);
         }
 
         $charge = $this->createCharge($token['id'], $request->amount);
@@ -75,9 +75,9 @@ class PaymentService
                 ]);
             }
 
-            return response()->json(["data"=>'',"errors"=>[],'message'=>"Payment Successfully."],200);
+            return response()->json(["data"=>'',"errors"=>'','message'=>"Payment Successfully.",'code'=>200],200);
         } else {
-            return response()->json(["data"=>'',"errors"=>[],'message'=>"Payment failed."],406);
+            return response()->json(["data"=>'',"errors"=>[],'message'=>"Payment failed.",'code'=>406],200);
         }
         return response()->json(["data"=>''],200);
     }
