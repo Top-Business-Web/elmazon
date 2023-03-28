@@ -32,7 +32,6 @@ class LifeExamController extends Controller{
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id','=',$id)->first();
 
 
-
         if(!$life_exam){
             return self::returnResponseDataApi(null,"الامتحان الايف غير موجود",404,404);
         }
@@ -41,7 +40,20 @@ class LifeExamController extends Controller{
         $end =  Carbon::createFromTimeString($life_exam->time_end);
         $first_question->remaining_time = $end->diffInMinutes(Carbon::now()->format('H:i:s'));
 
-        return self::returnResponseDataApi(new LifeExamQuestionsResource($first_question),"تم الوصول الي اول سؤال في الامتحان الايف",200);
+        //start check last question of exam
+        $life_exam_user = OnlineExamUser::where('life_exam_id','=',$life_exam->id)->where('user_id','=',auth('user-api')->id())->latest()->first();
+        if($life_exam_user){
+          $access_question = Question::orderBy('id','ASC')->get()->except($life_exam_user->question_id)->where('id','>',$life_exam_user->question_id)->first();
+          if(!$access_question){
+              return self::returnResponseDataApi(null,"لقد انتهيت من اداء الامتحان",202);
+
+          }
+        }else{
+
+            $access_question = $first_question;
+        }
+
+        return self::returnResponseDataApi(new LifeExamQuestionsResource($access_question),"تم الوصول الي اول سؤال في الامتحان الايف",200);
     }
 
 

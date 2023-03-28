@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
 use App\Http\Controllers\Api\AllExamsUsersDegreeController;
 use App\Http\Controllers\Api\Payment;
 use App\Http\Controllers\Api\Question\QuestionController;
+use App\Http\Controllers\Api\StudentReport\ReportController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
 use App\Http\Controllers\Api\SubscribeController;
 use Illuminate\Http\Request;
@@ -125,6 +126,9 @@ Route::group(['prefix' => 'auth'], function (){
     });
 
     Route::post('access-end-time/exam/{id}',[QuestionController::class,'access_end_time_for_exam'])->middleware('jwt');
+
+    Route::get('reports/student-report',[ReportController::class,'student_report'])->middleware('jwt');
+
 
 
 
