@@ -30,6 +30,9 @@ class VideoPartController extends Controller
                             </button>
                        ';
                 })
+                ->editColumn('lesson_id', function ($videoParts) {
+                    return '<td>'. $videoParts->lesson->name_ar .'</td>';
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {
