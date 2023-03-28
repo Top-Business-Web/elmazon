@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\LifeExam;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LifeExamQuestionsResource;
 use App\Http\Resources\LifeExamResource;
 use App\Http\Resources\QuestionResource;
 use App\Models\Answer;
@@ -30,13 +31,17 @@ class LifeExamController extends Controller{
             $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id','=',$id)->first();
 
+
+
         if(!$life_exam){
             return self::returnResponseDataApi(null,"الامتحان الايف غير موجود",404,404);
         }
 
         $first_question = $life_exam->questions()->orderBy('id','ASC')->first();
+        $end =  Carbon::createFromTimeString($life_exam->time_end);
+        $first_question->remaining_time = $end->diffInMinutes(Carbon::now()->format('H:i:s'));
 
-        return self::returnResponseDataApi(new QuestionResource($first_question),"تم الوصول الي اول سؤال في الامتحان الايف",200);
+        return self::returnResponseDataApi(new LifeExamQuestionsResource($first_question),"تم الوصول الي اول سؤال في الامتحان الايف",200);
     }
 
 
@@ -51,7 +56,6 @@ class LifeExamController extends Controller{
             return self::returnResponseDataApi(null,"الامتحان الايف غير موجود",404,404);
         }
 
-
         $rules = [
             'question_id' => ['required',Rule::exists('online_exam_questions','question_id')->where(function ($query) use($life_exam) {return $query->where('life_exam_id',$life_exam->id);})],
             'answer_id' => ['required',Rule::exists('answers','id')->where(function ($query) use($request) {return $query->where('question_id',$request->question_id);})],
@@ -63,7 +67,6 @@ class LifeExamController extends Controller{
         ]);
 
         if ($validator->fails()) {
-
             $errors = collect($validator->errors())->flatten(1)[0];
             if (is_numeric($errors)) {
 
@@ -91,7 +94,6 @@ class LifeExamController extends Controller{
 
         if($online_exam_answer){
             return self::returnResponseDataApi(null,"تم حل هذا السؤال من قبل", 202);
-
         }else{
 
             $life_exam_user = OnlineExamUser::create([
@@ -102,6 +104,8 @@ class LifeExamController extends Controller{
                 'status' =>  $answer->answer_status == "correct" ? "solved" : "un_correct",
             ]);
 
+
+            //now
             Degree::create([
                 'user_id' => auth()->id(),
                 'question_id' => $request->question_id,
@@ -129,10 +133,13 @@ class LifeExamController extends Controller{
                     'full_degree' => $life_exam_user->status == "solved" ? $life_exam_user->question->degree : 0,
                 ]);
             }
-
             $next_question = Question::orderBy('id','ASC')->get()->except($request->question_id)->where('id','>',$request->question_id)->first();
+
             if($next_question){
-                return self::returnResponseDataApi(new QuestionResource($next_question),"تم حل السؤال بنجاح",200);
+                $end =  Carbon::createFromTimeString($life_exam->time_end);
+                $next_question->remaining_time = $end->diffInMinutes(Carbon::now()->format('H:i:s'));
+
+                return self::returnResponseDataApi(new LifeExamQuestionsResource($next_question),"تم حل السؤال بنجاح",200);
             }else{
 
                $sum_degree_for_user = ExamDegreeDepends::where('life_exam_id','=',$id)
