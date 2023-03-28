@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\SubscribeController;
 use App\Http\Controllers\Admin\AdsController;
 use App\Http\Controllers\Admin\CommentController;
+use App\Http\Controllers\Admin\LifeExamController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
 use Illuminate\Support\Facades\Route;
@@ -134,6 +135,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::post('deleteQuestion', [OnlineExamController::class, 'deleteQuestion'])->name('deleteQuestion');
     Route::get('paperExam/{id}', [OnlineExamController::class, 'paperExam'])->name('paperExam');
     Route::post('storeExamPaper', [OnlineExamController::class, 'storeExamPaper'])->name('storeExamPaper');
+
+    #### Life Exam ####
+    Route::resource('lifeExam', LifeExamController::class);
 
     #### Phone Communications ####
     Route::resource('phoneCommunications', PhoneCommunicationController::class);
