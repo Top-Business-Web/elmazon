@@ -36,5 +36,10 @@ protected $guarded = [];
         return $this->hasOne(VideoWatch::class, 'video_part_id','id');
     }
 
+    public function lesson()
+    {
+        return $this->belongsTo(Lesson::class, 'lesson_id', 'id');
+    }
+
 
 }

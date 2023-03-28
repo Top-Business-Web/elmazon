@@ -62,6 +62,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Season ####
     Route::resource('seasons', SeasonController::class);
+    Route::get('seasons/{id}/term', [SeasonController::class, 'seasonTerm'])->name('seasonTerm');
+    Route::get('term/{id}/subjectClass', [SeasonController::class, 'termSubjectClass'])->name('termSubjectClass');
+    Route::get('subjectClass/{id}/lesson', [SeasonController::class, 'subjectClassLesson'])->name('subjectClassLesson');
+    Route::get('lesson/{id}/VideoParts', [SeasonController::class, 'lessonVideoPart'])->name('lessonVideoPart');
+    Route::get('VideoParts/{id}/comment', [SeasonController::class, 'videoPartComment'])->name('videoPartComment');
 
     #### Term ####
     Route::resource('terms', TermController::class);

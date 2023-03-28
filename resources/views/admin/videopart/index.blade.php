@@ -96,7 +96,7 @@
             {data: 'name_ar', name: 'name_ar'},
             {data: 'note', name: 'note'},
             {data: 'lesson_id', name: 'lesson_id'},
-            {data: 'video_link', name: 'video_link'},
+            {data: 'link', name: 'link'},
             {data: 'video_time', name: 'video_time'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
