@@ -44,12 +44,12 @@ class LifeExamController extends Controller{
         $life_exam_user = OnlineExamUser::where('life_exam_id','=',$life_exam->id)->where('user_id','=',auth('user-api')->id())->latest()->first();
         if($life_exam_user){
           $access_question = Question::orderBy('id','ASC')->get()->except($life_exam_user->question_id)->where('id','>',$life_exam_user->question_id)->first();
+          $access_question->remaining_time = $end->diffInMinutes(Carbon::now()->format('H:i:s'));
           if(!$access_question){
               return self::returnResponseDataApi(null,"لقد انتهيت من اداء الامتحان",202);
 
           }
         }else{
-
             $access_question = $first_question;
         }
 
@@ -165,10 +165,6 @@ class LifeExamController extends Controller{
                return response()->json(["data" => null, "message" => "تم الوصول الي السؤال الاخير", "code" => 201, "degree" => $sum_degree_for_user, "per" => $per . "%",]);
             }
         }
-
-
-
-
 
     }
 }
