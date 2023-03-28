@@ -13,6 +13,13 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
+                    <div class="">
+                        <button class="btn btn-secondary btn-icon text-white addBtn">
+									<span>
+										<i class="fe fe-plus"></i>
+									</span> اضافة
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -63,7 +70,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">صف</h5>
+                        <h5 class="modal-title" id="example-Modal3">الترم</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -87,12 +94,12 @@
         ]
         showData('{{route('seasonTerm',$id)}}', columns);
         // Delete Using Ajax
-        destroyScript('{{route('seasons.destroy',':id')}}');
+        destroyScript('{{route('seasonTermDelete',':id')}}');
         // Add Using Ajax
-        showAddModal('{{route('seasons.create')}}');
+        showAddModal('{{route('seasonTermCreate', $id)}}');
         addScript();
         // Add Using Ajax
-        showEditModal('{{route('seasons.edit',':id')}}');
+        showEditModal('{{route('seasonTermEdit', ':id')}}');
         editScript();
     </script>
 @endsection
