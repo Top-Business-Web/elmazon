@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSeason;
 use App\Models\Comment;
+use App\Models\CommentReplay;
 use App\Models\Lesson;
 use App\Models\Season;
 use App\Models\SubjectClass;
@@ -72,6 +73,31 @@ class SeasonController extends Controller
     }
     // Edit END
 
+    // Update START
+
+    public function update(StoreSeason $request, Season $season)
+    {
+        if ($season->update($request->all())) {
+            return response()->json(['status' => 200]);
+        } else {
+            return response()->json(['status' => 405]);
+        }
+    }
+
+    // Update END
+
+    // Delete START
+
+    public function destroy(Request $request)
+    {
+        $seasons = Season::where('id', $request->id)->firstOrFail();
+        $seasons->delete();
+        return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
+    }
+
+    // Delete END
+
+
     // Season Term START
 
     public function seasonTerm(Request $request)
@@ -98,6 +124,64 @@ class SeasonController extends Controller
     }
     // Season Term END
 
+    // Season Term Store START
+
+    public function seasonTermCreate($id)
+    {
+        return view('admin.seasons.season_term.create', compact('id'));
+    }
+
+    // Season Term Store END
+
+    // Season Term Store START
+
+    public function seasonTermStore(Request $request, $id)
+    {
+        $inputs = $request->all();
+        if (Term::create($inputs)->where('season_id', $id)) {
+            return response()->json(['status' => 200]);
+        } else {
+            return response()->json(['status' => 405]);
+        }
+    }
+
+    // Season Term Store END
+
+    // Season Term Edit START
+
+    public function seasonTermEdit($id)
+    {
+        $term = Term::where('id', $id)->first();
+        return view('admin.seasons.season_term.edit', compact('id', 'term'));
+    }
+
+    // Season Term Edit END
+
+    // Season Term Update START
+
+    public function seasonTermUpdate(Request $request,Term $term)
+    {
+//        return $request;
+        if ($term->update($request->all())) {
+            return response()->json(['status' => 200]);
+        } else {
+            return response()->json(['status' => 405]);
+        }
+    }
+
+    // Season Term Update END
+
+    // Delete START
+
+    public function seasonTermDelete(Request $request)
+    {
+        $terms = Term::where('id', $request->id)->firstOrFail();
+        $terms->delete();
+        return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
+    }
+
+    // Delete END
+
     // Term SubjectClass START
 
     public function termSubjectClass(Request $request)
@@ -123,6 +207,30 @@ class SeasonController extends Controller
         }
     }
     // Term SubjectClass END
+
+    // Season Term Store START
+
+    public function termSubjectClassCreate($id)
+    {
+        $data['terms'] = Term::where('id', $id)->first();
+        return view('admin.seasons.term_subject.create', compact('id', 'data'));
+    }
+
+    // Season Term Store END
+
+    // Season Term Store START
+
+    public function termSubjectClassStore(Request $request, $id)
+    {
+        $inputs = $request->all();
+        if (SubjectClass::create($inputs)->where('term_id', $id)) {
+            return response()->json(['status' => 200]);
+        } else {
+            return response()->json(['status' => 405]);
+        }
+    }
+
+    // Season Term Store END
 
     // SubjectClass Lesson START
 
@@ -190,7 +298,7 @@ class SeasonController extends Controller
                                     data-id="' . $comments->id . '" data-title="' . $comments->name_en . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                            <a class="btn btn-pill btn-success-light questionBtn" data-id="' . $comments->id . '" data-target="#question_modal" href="' . route('videoPartComment', $comments->id) . '"><i class="fa fa-comments"></i></a>
+                            <a class="btn btn-pill btn-success-light questionBtn" data-id="' . $comments->id . '" data-target="#question_modal" href="' . route('commentReplayComment', $comments->id) . '"><i class="fa fa-comments"></i></a>
                        ';
                 })
                 ->editColumn('user_id', function ($comments) {
@@ -205,27 +313,29 @@ class SeasonController extends Controller
     }
     // VideoParts Comment END
 
-    // Update START
+    // Comment ReplayComment START
 
-    public function update(StoreSeason $request, Season $season)
+    public function commentReplayComment(Request $request)
     {
-        if ($season->update($request->all())) {
-            return response()->json(['status' => 200]);
+        if ($request->ajax()) {
+            $replys = CommentReplay::where('comment_id', $request->id)->get();
+            return Datatables::of($replys)
+                ->addColumn('action', function ($replys) {
+                    return '
+                            <button type="button" data-id="' . $replys->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
+                                    data-id="' . $replys->id . '" data-title="' . $replys->comment . '">
+                                    <i class="fas fa-trash"></i>
+                            </button>
+                       ';
+                })
+                ->escapeColumns([])
+                ->make(true);
         } else {
-            return response()->json(['status' => 405]);
+            $id = $request->id;
+            return view('admin.seasons.comment_reply_comment',compact('id'));
         }
     }
+    // VideoParts Comment END
 
-    // Update END
-
-    // Delete START
-
-    public function destroy(Request $request)
-    {
-        $seasons = Season::where('id', $request->id)->firstOrFail();
-        $seasons->delete();
-        return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
-    }
-
-    // Delete END
 }

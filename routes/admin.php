@@ -62,11 +62,40 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Season ####
     Route::resource('seasons', SeasonController::class);
+
+    #### Season Term
+
     Route::get('seasons/{id}/term', [SeasonController::class, 'seasonTerm'])->name('seasonTerm');
+    Route::get('seasons/term/create/{id}', [SeasonController::class, 'seasonTermCreate'])->name('seasonTermCreate');
+    Route::post('seasons/{id}/term/store', [SeasonController::class, 'seasonTermStore'])->name('seasonTermStore');
+    Route::get('seasons/{id}/term/edit', [SeasonController::class, 'seasonTermEdit'])->name('seasonTermEdit');
+    Route::put('seasons/term/update/{term}', [SeasonController::class, 'seasonTermUpdate'])->name('seasonTermUpdate');
+    Route::delete('seasons/{id}/term/delete', [SeasonController::class, 'seasonTermDelete'])->name('seasonTermDelete');
+
+    #### Term Subject ####
+
     Route::get('term/{id}/subjectClass', [SeasonController::class, 'termSubjectClass'])->name('termSubjectClass');
+    Route::get('term/subjectClass/create/{id}', [SeasonController::class, 'termSubjectClassCreate'])->name('termSubjectClassCreate');
+    Route::post('seasons/{id}/term/store', [SeasonController::class, 'termSubjectClassStore'])->name('termSubjectClassStore');
+    Route::get('seasons/{id}/term/edit', [SeasonController::class, 'termSubjectClassEdit'])->name('termSubjectClassEdit');
+    Route::put('seasons/term/update/{term}', [SeasonController::class, 'termSubjectClassUpdate'])->name('termSubjectClassUpdate');
+    Route::delete('seasons/{id}/term/delete', [SeasonController::class, 'termSubjectClassDelete'])->name('termSubjectClassDelete');
+
+    #### SubjectClass Lesson ####
+
     Route::get('subjectClass/{id}/lesson', [SeasonController::class, 'subjectClassLesson'])->name('subjectClassLesson');
+
+    #### Lesson Video Part
+
     Route::get('lesson/{id}/VideoParts', [SeasonController::class, 'lessonVideoPart'])->name('lessonVideoPart');
+
+    #### Video Part Comment ####
+
     Route::get('VideoParts/{id}/comment', [SeasonController::class, 'videoPartComment'])->name('videoPartComment');
+
+    #### Comment Reply Comment ####
+
+    Route::get('comment/{id}/replyComment', [SeasonController::class, 'commentReplayComment'])->name('commentReplayComment');
 
     #### Term ####
     Route::resource('terms', TermController::class);
