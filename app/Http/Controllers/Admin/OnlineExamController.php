@@ -40,6 +40,12 @@ class OnlineExamController extends Controller
                             <a class="btn btn-pill btn-warning-light questionBtn" data-id="' . $online_exams->id . '" data-target="#question_modal" href="' . route('usersExam', $online_exams->id) . '"><i class="fa fa-user"></i></a>
                        ';
                 })
+                ->editColumn('season_id', function ($online_exams) {
+                    return '<td>'. $online_exams->season->name_ar .'</td>';
+                })
+                ->editColumn('term_id', function ($online_exams) {
+                    return '<td>'. $online_exams->term->name_ar .'</td>';
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {
