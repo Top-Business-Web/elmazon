@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Term;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends JsonResource
 {
@@ -21,7 +22,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
             'season' => new SeasonResource($this->season),
-            'term' => new TermResource(Term::where('status','=','active')->first()),
+            'term' => new TermResource(Term::where('status','=','active')->where('season_id','=',Auth::guard('user-api')->user()->season_id)->first()),
             'father_phone' => $this->father_phone,
             'image' => $this->image != null ? asset('/users/'.$this->image) : asset('/default/avatar.jpg'),
             'user_status' => $this->user_status,
