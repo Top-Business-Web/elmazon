@@ -20,7 +20,7 @@ class AdsController extends Controller
         $life_exam = LifeExam::whereHas('term', function ($term){
             $term->where('status','=','active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)
-//                ->where('date_exam','=',Carbon::now()->format('Y-m-d'))
+                ->where('time_start','>',Carbon::now()->format('h:i'))
             ->first();
         if($ads->count() > 0){
 
