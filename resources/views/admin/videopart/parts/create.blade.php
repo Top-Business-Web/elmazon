@@ -2,6 +2,7 @@
     <form id="addForm" class="addForm" method="POST" action="{{ route('videosParts.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
+            <input type="hidden" name="ordered" value="" />
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم باللغة العربية</label>
@@ -27,9 +28,9 @@
                 <div class="col-md-4">
                     <label for="type" class="form-control-label">النوع</label>
                     <select class="form-control type" id="type" name="type">
-                        <option value="1">ملف ورقي</option>
-                        <option value="2">صوت</option>
-                        <option value="3">فيديو</option>
+                        <option value="pdf">ملف ورقي</option>
+                        <option value="audio">صوت</option>
+                        <option value="video">فيديو</option>
                     </select>
                 </div>
                 <div class="col-md-4 video_link">
@@ -61,11 +62,11 @@
         $('#type').on('change', function() {
             var element = document.getElementById("type");
             var value = $(element).find('option:selected').val();
-            if(value == 3){
-                $('.video_date').prop('hidden', false);
+            if(value !='video'){
+                $('.video_date').prop('hidden', true);
             }
             else{
-                $('.video_date').prop('hidden', true);
+                $('.video_date').prop('hidden', false);
             }
         })
     })

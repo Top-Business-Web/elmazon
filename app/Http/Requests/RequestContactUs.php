@@ -26,7 +26,6 @@ class RequestContactUs extends FormRequest
         return [
             'name' => 'required',
             'subject' => 'required',
-            'message' => 'required',
         ];
     }
 }

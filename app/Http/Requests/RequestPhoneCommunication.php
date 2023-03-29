@@ -25,7 +25,7 @@ class RequestPhoneCommunication extends FormRequest
     {
         return [
             'phone' => 'required',
-            'note' => 'required',
+            'note' => 'nullable',
         ];
     }
 }
