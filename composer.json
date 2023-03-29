@@ -13,7 +13,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "nafezly/payments": "^2.4",
-        "stripe/stripe-php": "^10.10",
+        "stripe/stripe-php": "10",
         "tymon/jwt-auth": "^1.0",
         "yajra/laravel-datatables-oracle": "*",
         "yoeunes/toastr": "^2.3"

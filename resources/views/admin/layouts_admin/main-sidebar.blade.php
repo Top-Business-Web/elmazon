@@ -94,8 +94,15 @@
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('lifeExam.index') }}">
-                <i class="fa fa-scroll side-menu__icon"></i>
+                <i class="fa fa-headset side-menu__icon"></i>
                 <span class="side-menu__label">امتحانات اللايف</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('papelSheetExam.index') }}">
+                <i class="fa fa-paper-plane side-menu__icon"></i>
+                <span class="side-menu__label">امتحانات الورقية</span>
             </a>
         </li>
 
