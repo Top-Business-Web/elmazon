@@ -67,11 +67,7 @@ class LifeExamController extends Controller
 
         if (LifeExam::create($inputs)) {
 
-            $this->sendFirebaseNotification([
-                'title' => 'اشعار جديد',
-                'body' => $request->name_ar,
-                'term_id' => $request->term_id
-            ],$request->season_id);
+            $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
 
             return response()->json(['status' => 200]);
         } else {

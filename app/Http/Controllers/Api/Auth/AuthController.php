@@ -363,7 +363,6 @@ class AuthController extends Controller
 
             }
 
-
             //start life exam show
             $life_exam = LifeExam::whereHas('term', function ($term){
                 $term->where('status','=','active')->where('season_id','=',auth('user-api')->user()->season_id);
@@ -393,9 +392,6 @@ class AuthController extends Controller
                     $id = null;
                 }
             }
-
-
-
 
             //end life exam show
 
@@ -491,7 +487,7 @@ class AuthController extends Controller
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
-        $this->sendFirebaseNotificationTest(['title' => 'اشعار جديد', 'body' => $request->body, 'term_id' => 1],1);
+        $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body, 'term_id' => 1],1);
 
         return self::returnResponseDataApi(null, "تم ارسال اشعار جديد", 200);
 
