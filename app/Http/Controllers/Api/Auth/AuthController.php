@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\Auth;
+use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllExamResource;
 use App\Http\Resources\CommunicationResource;
@@ -38,6 +39,8 @@ use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
+
+    use FirebaseNotification;
     public function login(Request $request)
     {
         try {
@@ -461,6 +464,44 @@ class AuthController extends Controller
         if(isset($phoneToken)){
             return self::returnResponseDataApi(new PhoneTokenResource($phoneToken),"Token insert successfully", 200);
         }
+    }
+
+    public function add_notification(Request $request){
+
+        $rules = [
+            'body' => 'required|string',
+        ];
+        $validator = Validator::make($request->all(), $rules, [
+            'body.string' => 407,
+        ]);
+
+
+        if ($validator->fails()) {
+
+            $errors = collect($validator->errors())->flatten(1)[0];
+            if (is_numeric($errors)) {
+
+                $errors_arr = [
+                    407 => 'Failed,The body must be an string.',
+                ];
+
+                $code = collect($validator->errors())->flatten(1)[0];
+                return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+            }
+            return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
+        }
+
+        Notification::create([
+            'title' => 'اشعار جديد',
+            'body' => $request->body,
+            'term_id' => 1,
+            'season_id' => 1,
+        ]);
+
+        $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body, 'term_id' => 1],1);
+
+        return self::returnResponseDataApi(null, "تم ارسال اشعار جديد", 200);
+
     }
 
     public function logout(Request $request){
