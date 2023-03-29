@@ -23,13 +23,13 @@ trait FirebaseNotification{
 
         $tokens = PhoneToken::whereIn('user_id',$usersIds)->pluck('token')->toArray();
 
-        $image = $data['image'];
-
-        if($image != null){
-            $destinationPath = 'notifications/';
-            $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
-            $image->move($destinationPath, $file);
-        }
+//        $image = $data['image'];
+//
+//        if($image != null){
+//            $destinationPath = 'notifications/';
+//            $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
+//            $image->move($destinationPath, $file);
+//        }
 
         //start notification store
         Notification::create([
@@ -37,7 +37,7 @@ trait FirebaseNotification{
             'body' => $data['body'],
             'term_id' => $data['term_id'],
             'season_id' => $season_id,
-            'image' => $file ?? null,
+//            'image' => $file ?? null,
         ]);
 
         $fields = array(
