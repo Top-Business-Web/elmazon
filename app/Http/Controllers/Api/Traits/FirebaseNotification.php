@@ -17,8 +17,6 @@ trait FirebaseNotification{
 
         $usersIds = User::whereHas('season', function ($season) use($season_id){
             $season->where('season_id', '=',$season_id);
-        })->whereHas('term', function ($term) use($season_id){
-            $term->where('status', '=','active')->where('season_id', '=',$season_id);
         })->pluck('id')->toArray();
 
         $tokens = PhoneToken::whereIn('user_id',$usersIds)->pluck('token')->toArray();
