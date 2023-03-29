@@ -13,6 +13,18 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
+                    <div class="col-md-2">
+                        <label class="">الترم</label>
+                        <select class="form-control">
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="">الصف</label>
+                        <select class="form-control">
+                            <option></option>
+                        </select>
+                    </div>
                     <div class="">
                         <button class="btn btn-secondary btn-icon text-white addBtn">
 									<span>
