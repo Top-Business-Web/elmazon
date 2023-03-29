@@ -34,7 +34,6 @@ class RequestLifeExam extends FormRequest
             'degree' => 'required',
             'season_id' => 'required',
             'term_id' => 'required',
-            'note' => 'required',
         ];
     }
 }

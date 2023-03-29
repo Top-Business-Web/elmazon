@@ -31,7 +31,7 @@
                                 <th class="min-w-50px">الاسم</th>
                                 <th class="min-w-50px">ملاحظة</th>
                                 <th class="min-w-50px">الدرس</th>
-                                <th class="min-w-50px">لينك الفيديو</th>
+                                <th class="min-w-50px">لينك</th>
                                 <th class="min-w-50px">وقت الفيديو</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>

@@ -29,7 +29,6 @@ class RequestAllExam extends FormRequest
             'quize_minute' => 'required',
             'trying_number' => 'required',
             'degree' => 'required',
-            'note' => 'required',
         ];
     }
 }

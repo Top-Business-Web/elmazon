@@ -26,7 +26,6 @@ class StoreVideoPart extends FormRequest
         return [
             'name_ar' => 'required',
             'name_en' => 'required',
-            'note' => 'required',
             'lesson_id' => 'nullable',
             'link' => 'nullable',
             'type' => 'required',
