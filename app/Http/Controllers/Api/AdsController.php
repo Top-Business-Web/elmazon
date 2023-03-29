@@ -24,7 +24,7 @@ class AdsController extends Controller
             ->first();
         if($ads->count() > 0){
 
-            return self::returnResponseDataApi(['ads'=>AdsResource::collection($ads),'life_exam'=>LifeExamResource::collection($life_exam)],"جميع الاعلانات ",200);
+            return self::returnResponseDataApi(['ads'=>AdsResource::collection($ads),'life_exam'=>new LifeExamResource($life_exam)],"جميع الاعلانات ",200);
 
         }else{
 
