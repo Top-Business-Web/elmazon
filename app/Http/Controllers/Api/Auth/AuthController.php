@@ -491,14 +491,7 @@ class AuthController extends Controller
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
-        Notification::create([
-            'title' => 'اشعار جديد',
-            'body' => $request->body,
-            'term_id' => 1,
-            'season_id' => 1,
-        ]);
-
-        $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body, 'term_id' => 1],1);
+        $this->sendFirebaseNotificationTest(['title' => 'اشعار جديد', 'body' => $request->body, 'term_id' => 1],1);
 
         return self::returnResponseDataApi(null, "تم ارسال اشعار جديد", 200);
 
