@@ -129,7 +129,7 @@ class AuthController extends Controller
 
             $allNotification = Notification::whereHas('term', function ($term) {
                 $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
+            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->get();
 
             return self::returnResponseDataApi(NotificationResource::collection($allNotification), "تم ارسال اشعارات المستخدم بنجاح", 200);
 
