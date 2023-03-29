@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\SubscribeController;
 use App\Http\Controllers\Admin\AdsController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\LifeExamController;
+use App\Http\Controllers\Admin\PapelSheetExamController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
 use Illuminate\Support\Facades\Route;
@@ -139,6 +140,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Life Exam ####
     Route::resource('lifeExam', LifeExamController::class);
 
+    #### Papel Sheet Exam ####
+    Route::resource('papelSheetExam', PapelSheetExamController::class);
+
     #### Phone Communications ####
     Route::resource('phoneCommunications', PhoneCommunicationController::class);
 
@@ -185,11 +189,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::resource('comment', CommentController::class);
     Route::get('replyComment/{id}', [CommentController::class, 'replyComment'])->name('replyComment');
     Route::post('replyCommentDelete/{id}', [CommentController::class, 'replyCommentDelete'])->name('replyCommentDelete');
-
-    #### Feedback ####
-    Route::resource('feedback', FeedbackController::class);
-    Route::get('indexFeedback/{id}', [FeedbackController::class, 'indexFeedback'])->name('indexFeedback');
-    Route::post('addFeedback', [FeedbackController::class, 'addFeedback'])->name('addFeedback');
 
 
     #### Auth ####

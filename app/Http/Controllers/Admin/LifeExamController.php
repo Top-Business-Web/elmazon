@@ -82,11 +82,11 @@ class LifeExamController extends Controller
 
     // Update Start
 
-    public function update(LifeExam $life_exam, RequestLifeExam $request)
+    public function update(LifeExam $lifeExam, RequestLifeExam $request)
     {
         $inputs = $request->all();
 
-        if ($life_exam->update($inputs)) {
+        if ($lifeExam->update($inputs)) {
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);

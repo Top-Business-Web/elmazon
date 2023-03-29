@@ -19,7 +19,8 @@ class LifeExam extends Model
         'trying',
         'degree',
         'season_id',
-        'term_id'
+        'term_id',
+        'note',
 
     ];
 

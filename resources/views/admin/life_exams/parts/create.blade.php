@@ -79,5 +79,5 @@
 </div>
 
 <script>
-    $('.dropify').dropify()
+
 </script>
