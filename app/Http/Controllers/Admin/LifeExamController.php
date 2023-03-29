@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestLifeExam;
 use App\Http\Requests\StoreSubjectClasses;
@@ -14,6 +15,8 @@ use Yajra\DataTables\DataTables;
 class LifeExamController extends Controller
 {
     // Index Start
+
+    use FirebaseNotification;
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -60,7 +63,16 @@ class LifeExamController extends Controller
     {
         $inputs = $request->all();
 
+//        return $inputs;
+
         if (LifeExam::create($inputs)) {
+
+            $this->sendFirebaseNotification([
+                'title' => 'اشعار جديد',
+                'body' => $request->name_ar,
+                'term_id' => $request->term_id
+            ],$request->season_id);
+
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
