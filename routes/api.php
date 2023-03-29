@@ -30,10 +30,13 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['middleware' => 'lang'], function (){
 
-Route::group(['prefix' => 'auth'], function (){
+
+    Route::post('add-notification',[AuthController::class,'add_notification']);
+    Route::group(['prefix' => 'auth'], function (){
 
     Route::post('login',[AuthController::class,'login']);
     Route::get('communication',[AuthController::class,'communication']);
+
 
     Route::middleware('jwt')->group(function (){
         Route::post('logout',[AuthController::class,'logout']);
