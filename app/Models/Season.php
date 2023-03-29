@@ -11,9 +11,8 @@ class Season extends Model
 
     protected $guarded = [];
 
-    public function term()
-    {
-        return $this->hasMany(Term::class);
+    public function term(){
+        return $this->hasMany(Term::class,'season_id','id');
     }
 
 
