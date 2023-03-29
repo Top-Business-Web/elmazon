@@ -24,14 +24,22 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 video_link">
-                    <label for="video_link" class="form-control-label">لينك الفيديو</label>
-                    <input type="file" name="video_link" class="form-control"
+                <div class="col-md-4">
+                    <label for="type" class="form-control-label">النوع</label>
+                    <select class="form-control type" id="type" name="type">
+                        <option value="1">ملف ورقي</option>
+                        <option value="2">صوت</option>
+                        <option value="3">فيديو</option>
+                    </select>
+                </div>
+                <div class="col-md-4 video_link">
+                    <label for="video_link" class="form-control-label">لينك</label>
+                    <input type="file" name="link" class="form-control"
                            data-default-file=""/>
                 </div>
-                <div class="col-md-6 video_date">
+                <div class="col-md-4 video_date" hidden>
                     <label for="video_date" class="form-control-label">وقت الفيديو</label>
-                    <input type="text" class="form-control" name="video_time">
+                    <input type="text" id="date_video" class="form-control" name="video_time">
                 </div>
             </div>
             <div class="row">
@@ -48,14 +56,19 @@
     </form>
 </div>
 <script>
-    $('.dropify').dropify();
 
-    // $(".user_choose").on("change", function () {
-    //     var getValue = $(this).find("option:selected").val();
-    //     alert(getValue);
-    //     $('.video_link').prop('hidden', false);
-    // })
-
+    $(document).ready(function() {
+        $('#type').on('change', function() {
+            var element = document.getElementById("type");
+            var value = $(element).find('option:selected').val();
+            if(value == 3){
+                $('.video_date').prop('hidden', false);
+            }
+            else{
+                $('.video_date').prop('hidden', true);
+            }
+        })
+    })
 
 </script>
 <!-- fix -->

@@ -56,12 +56,20 @@ class VideoPartController extends Controller
 
     public function store(StoreVideoPart $request)
     {
-        $file = $request->file('video_link');
-        $file->move('uploads/videos', $file->getClientOriginalName());
-        $file_name = $file->getClientOriginalName();
-
         $insert = new VideoParts();
-        $insert->video_link = $file_name;
+        $file = $request->file('link');
+        if($request->link == '3')
+        {
+            $file->move('uploads/videos', $file->getClientOriginalName());
+            $file_name = $file->getClientOriginalName();
+        }
+        if($request->link == '2')
+        {
+            $insert->link = $request->link;
+        }
+
+
+        $insert->link = $file_name;
         $insert->name_ar = $request->name_ar;
         $insert->name_en = $request->name_en;
         $insert->note = $request->note;
