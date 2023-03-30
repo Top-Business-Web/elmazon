@@ -1,6 +1,6 @@
 <div class="modal-body">
     <form id="updateForm" class="updateForm" method="POST"
-        action="{{ route('subjectsClasses.update', $subjectsClass->id) }}" enctype="multipart/form-data">
+          action="{{ route('subjectsClasses.update', $subjectsClass->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <input type="hidden" value="{{ $subjectsClass->id }}" name="id">
@@ -22,7 +22,7 @@
                         <option selected disabled style="text-align: center">اختار الترم</option>
                         @foreach ($terms as $term)
                             <option value="{{ $term->id }}"
-                                {{ $subjectsClass->term_id == $term->id ? 'selected' : '' }} style="text-align: center">
+                                    {{ $subjectsClass->term_id == $term->id ? 'selected' : '' }} style="text-align: center">
                                 {{ $term->name_en }}</option>
                         @endforeach
                     </Select>
@@ -33,17 +33,17 @@
                         <option selected disabled style="text-align: center">اختار الصف</option>
                         @foreach ($seasons as $season)
                             <option value="{{ $season->id }}"
-                                {{ $subjectsClass->season_id == $season->id ? 'selected' : '' }}
-                                style="text-align: center">{{ $season->name_en }}</option>
+                                    {{ $subjectsClass->season_id == $season->id ? 'selected' : '' }}
+                                    style="text-align: center">{{ $season->name_en }}</option>
                         @endforeach
                     </Select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
-                        <label for="">الصورة :</label>
-                        <input type="file" name="image" class="dropify"
-                            data-default-file="{{ $subjectsClass->image }}" />
+                <div class="col-md-12">
+                    <label for="">الصورة :</label>
+                    <input type="file" name="image" class="dropify"
+                           data-default-file="{{ $subjectsClass->image }}"/>
 
                     <span class="form-text text-danger text-center"> Recomended : 2048 X 1200 to up Px <br> Extension :
                         png, gif, jpeg,
@@ -55,7 +55,8 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
             <button type="submit" class="btn btn-success" id="updateButton">تحديث</button>
-        </div </form>
+        </div>
+    </form>
 </div>
 <script>
     $('.dropify').dropify()

@@ -13,18 +13,32 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
-                    <div class="col-md-2">
-                        <label class="">الترم</label>
-                        <select class="form-control">
-                            <option></option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="">الصف</label>
-                        <select class="form-control">
-                            <option></option>
-                        </select>
-                    </div>
+                    <form id="filter-form">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label for="">الترم</label>
+                                <select name="term_id" id="term_id" class="form-control">
+                                    <option value="">اختر الترم</option>
+                                    @foreach($terms as $term)
+                                        <option value="{{ $term->id }}">{{ $term->name_ar }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="">الصف</label>
+                                <select name="season_id" id="season_id" class="form-control">
+                                    <option value="">اختر الصف</option>
+                                    @foreach($seasons as $season)
+                                        <option value="{{ $season->id }}">{{ $season->name_ar }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-1 mt-6">
+                                <button class="btn btn-success" type="submit">فلتر</button>
+                            </div>
+                        </div>
+                    </form>
+
                     <div class="">
                         <button class="btn btn-secondary btn-icon text-white addBtn">
 									<span>
@@ -36,7 +50,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <!--begin::Table-->
-                        <table class="table table-striped table-bordered text-nowrap w-100" id="dataTable">
+                        <table class="table table-striped table-bordered text-nowrap w-100" id="subject-class-table">
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
@@ -80,7 +94,8 @@
         <!-- MODAL CLOSED -->
 
         <!-- Create Or Edit Modal -->
-        <div class="modal fade bd-example-modal-lg" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog"
+             aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -111,13 +126,44 @@
         ]
         showData('{{route('subjectsClasses.index')}}', columns);
         // Delete Using Ajax
-        destroyScript('{{route('subjectsClasses.destroy',':id')}}');
+        destroyScript('{{route('subjectsClasses.destroy', ':id')}}');
         // Add Using Ajax
         showAddModal('{{route('subjectsClasses.create')}}');
         addScript();
         // Add Using Ajax
-        showEditModal('{{route('subjectsClasses.edit',':id')}}');
+        showEditModal('{{route('subjectsClasses.edit', ':id')}}');
         editScript();
+
+
+        $(document).ready(function () {
+            $('#subject-class-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '{{ route("subject-class.filter") }}',
+                    method: 'POST',
+                    data: function (d) {
+                        d.term_id = $('#term_id').val();
+                        d.season_id = $('#season_id').val();
+                        d._token = '{{ csrf_token() }}';
+                    }
+                },
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'name_ar', name: 'name_ar'},
+                    {data: 'term_id', name: 'term_id'},
+                    {data: 'season_id', name: 'season_id'},
+                    {data: 'image', name: 'image'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+            });
+
+            $('#filter-form').on('submit', function (event) {
+                event.preventDefault();
+                $('#subject-class-table').DataTable().ajax.reload();
+            });
+        });
     </script>
+
 @endsection
 

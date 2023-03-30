@@ -102,13 +102,18 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Term ####
     Route::resource('terms', TermController::class);
     Route::get('activate/{id}', [TermController::class, 'activate'])->name('activate');
+    Route::post('/term/filter', [TermController::class,'filterTerm'])->name('term.filter');
 
     #### Subject Class ####
     Route::resource('subjectsClasses', SubjectClassController::class);
+    Route::post('/subject-class/filter', [SubjectClassController::class,'filterSubject'])->name('subject-class.filter');
+    Route::get('season/term', [SubjectClassController::class, 'seasonTerm'])->name('seasonTerm');
+
 
     #### Lesson ####
     Route::resource('lessons', LessonController::class);
     Route::get('showUnit', [LessonController::class, 'showUnit'])->name('showUnit');
+    Route::post('/lesson/filter', [LessonController::class,'filterLesson'])->name('lesson.filter');
 
     #### Notification ####
     Route::resource('notifications', NotificationController::class);
@@ -142,6 +147,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Papel Sheet Exam ####
     Route::resource('papelSheetExam', PapelSheetExamController::class);
+    Route::get('usersExamPapel/{id}', [PapelSheetExamController::class, 'usersExamPapel'])->name('usersExamPapel');
+    Route::get('paperExamSheet/{id}', [PapelSheetExamController::class, 'paperExamSheet'])->name('paperExamSheet');
+    Route::post('paperExamSheetStore/{id}', [PapelSheetExamController::class, 'paperExamSheetStore'])->name('paperExamSheetStore');
 
     #### Phone Communications ####
     Route::resource('phoneCommunications', PhoneCommunicationController::class);

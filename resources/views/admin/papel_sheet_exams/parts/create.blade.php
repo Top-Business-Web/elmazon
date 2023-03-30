@@ -27,22 +27,22 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <label for="note" class="form-control-label">تيرم</label>
-                    <Select name="term_id" class="form-control">
-                        <option selected disabled style="text-align: center">اختر تيرم</option>
-                        @foreach($terms as $term)
-                            <option value="{{ $term->id }}"
-                                    style="text-align: center">{{ $term->name_en }}</option>
-                        @endforeach
-                    </Select>
-                </div>
-                <div class="col-md-6">
                     <label for="note" class="form-control-label">فصل</label>
                     <Select name="season_id" class="form-control">
                         <option selected disabled style="text-align: center">اختر صف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
-                                    style="text-align: center">{{ $season->name_en }}</option>
+                                    style="text-align: center">{{ $season->name_ar }}</option>
+                        @endforeach
+                    </Select>
+                </div>
+                <div class="col-md-6">
+                    <label for="note" class="form-control-label">تيرم</label>
+                    <Select name="term_id" class="form-control">
+                        <option selected disabled style="text-align: center">اختر تيرم</option>
+                        @foreach($terms as $term)
+                            <option value="{{ $term->id }}"
+                                    style="text-align: center">{{ $term->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>

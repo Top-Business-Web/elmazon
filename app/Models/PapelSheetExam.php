@@ -34,4 +34,5 @@ class PapelSheetExam extends Model
 
         return $this->hasMany(PapelSheetExamTime::class,'papel_sheet_exam_id','id');
     }
+
 }

@@ -14,6 +14,22 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
+                    <form id="filter-form">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <label for="">الصف</label>
+                                <select name="season_id" id="season_id" class="form-control">
+                                    <option value="">اختر الصف</option>
+                                    @foreach($seasons as $season)
+                                        <option value="{{ $season->id }}">{{ $season->name_ar }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-1 mt-6">
+                                <button class="btn btn-success" type="submit">فلتر</button>
+                            </div>
+                        </div>
+                    </form>
                     <div class="">
                         <button class="btn btn-secondary btn-icon text-white addBtn">
 									<span>
@@ -25,7 +41,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <!--begin::Table-->
-                        <table class="table table-striped table-bordered text-nowrap w-100" id="dataTable">
+                        <table class="table table-striped table-bordered text-nowrap w-100" id="term-table">
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
@@ -112,6 +128,34 @@
       $(".checkBtn").on('click', function() {
         alert('hehj')
       })
+
+        $(document).ready(function () {
+            $('#term-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '{{ route("term.filter") }}',
+                    method: 'POST',
+                    data: function (d) {
+                        d.season_id = $('#season_id').val();
+                        d._token = '{{ csrf_token() }}';
+                    }
+                },
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'name_ar', name: 'name_ar'},
+                    {data: 'season_id', name: 'season_id'},
+                    {data: 'status', name: 'status'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+            });
+
+            $('#filter-form').on('submit', function (event) {
+                event.preventDefault();
+                $('#term-table').DataTable().ajax.reload();
+            });
+        });
+
 
     </script>
 @endsection

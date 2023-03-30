@@ -3,6 +3,20 @@
         @csrf
         <div class="form-group">
             <div class="row">
+                <div class="col-md-2">
+                    <label for="name_ar" class="form-control-label">الدرجة</label>
+                    <input type="number" class="form-control" name="degree" style="text-align: center">
+                </div>
+                <div class="col-md-5">
+                    <label for="date_exam" class="form-control-label">موعد الامتحان</label>
+                    <input type="date" class="form-control" name="date_exam" style="text-align: center">
+                </div>
+                <div class="col-md-5">
+                    <label for="name_en" class="form-control-label"> وقت الامتحان</label>
+                    <input type="time" class="form-control" name="quiz_minute" style="text-align: center">
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
                     <input type="text" class="form-control" name="name_ar" style="text-align: center">
@@ -14,22 +28,22 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <label for="note" class="form-control-label">تيرم</label>
-                    <Select name="term_id" class="form-control">
-                        <option selected disabled style="text-align: center">اختر تيرم</option>
-                        @foreach($terms as $term)
-                            <option value="{{ $term->id }}"
-                                    style="text-align: center">{{ $term->name_en }}</option>
-                        @endforeach
-                    </Select>
-                </div>
-                <div class="col-md-6">
                     <label for="note" class="form-control-label">فصل</label>
                     <Select name="season_id" class="form-control">
                         <option selected disabled style="text-align: center">اختر فصل</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
                                     style="text-align: center">{{ $season->name_en }}</option>
+                        @endforeach
+                    </Select>
+                </div>
+                <div class="col-md-6">
+                    <label for="note" class="form-control-label">تيرم</label>
+                    <Select name="term_id" class="form-control">
+                        <option selected disabled style="text-align: center">اختر تيرم</option>
+                        @foreach($terms as $term)
+                            <option value="{{ $term->id }}"
+                                    style="text-align: center">{{ $term->name_en }}</option>
                         @endforeach
                     </Select>
                 </div>

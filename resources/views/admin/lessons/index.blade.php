@@ -13,6 +13,22 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
+                    <form id="filter-form">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <label for="">الوحدة</label>
+                                <select name="subject_class_id" id="subject_class_id" class="form-control">
+                                    <option value="">اختر الوحدة</option>
+                                    @foreach($subjectClass as $subject)
+                                        <option value="{{ $subject->id }}">{{ $subject->name_ar }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-1 mt-6">
+                                <button class="btn btn-success" type="submit">فلتر</button>
+                            </div>
+                        </div>
+                    </form>
                     <div class="">
                         <button class="btn btn-secondary btn-icon text-white addBtn">
 									<span>
@@ -24,7 +40,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <!--begin::Table-->
-                        <table class="table table-striped table-bordered text-nowrap w-100" id="dataTable">
+                        <table class="table table-striped table-bordered text-nowrap w-100" id="lesson-table">
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
@@ -105,6 +121,36 @@
         // Add Using Ajax
         showEditModal('{{route('lessons.edit',':id')}}');
         editScript();
+
+
+        $(document).ready(function () {
+            $('#lesson-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '{{ route("lesson.filter") }}',
+                    method: 'POST',
+                    data: function (d) {
+                        d.$subject_class_id = $('#subject_class_id').val();
+                        d._token = '{{ csrf_token() }}';
+                    }
+                },
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'name_ar', name: 'name_ar'},
+                    {data: 'subject_class_id', name: 'subject_class_id'},
+                    {data: 'note', name: 'note'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+            });
+
+            $('#filter-form').on('submit', function (event) {
+                event.preventDefault();
+                $('#lesson-table').DataTable().ajax.reload();
+            });
+        });
+
+
     </script>
 @endsection
 
