@@ -35,7 +35,6 @@
                                 <th class="min-w-50px">من</th>
                                 <th class="min-w-50px">ألى</th>
                                 <th class="min-w-50px">موعد الامتحان</th>
-                                <th class="min-w-50px">الوصف</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -102,7 +101,6 @@
             {data: 'from', name: 'from'},
             {data: 'to', name: 'to'},
             {data: 'date_exam', name: 'date_exam'},
-            {data: 'description', name: 'description'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('papelSheetExam.index')}}', columns);

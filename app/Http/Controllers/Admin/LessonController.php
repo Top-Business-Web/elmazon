@@ -15,6 +15,7 @@ class LessonController extends Controller
     // Index Start
     public function index(request $request)
     {
+        $subjectClass = SubjectClass::all();
         if ($request->ajax()) {
             $lessons = lesson::get();
             return Datatables::of($lessons)
@@ -30,9 +31,40 @@ class LessonController extends Controller
                 ->escapeColumns([])
                 ->make(true);
         }
-        return view('admin.lessons.index');
+        return view('admin.lessons.index', compact('subjectClass'));
     }
     // Index End
+
+    // Filter Start
+
+    public function filterLesson(Request $request)
+    {
+        $subjectId = $request->input('subject_class_id');
+
+        $lessons = Lesson::query()
+            ->when($subjectId, function ($query, $subjectId) {
+                return $query->where('subject_class_id', $subjectId);
+            })
+            ->get();
+
+        return DataTables::of($lessons)
+            ->addColumn('action', function ($lessons) {
+                return '
+                            <button type="button" data-id="' . $lessons->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
+                                    data-id="' . $lessons->id . '" data-title="' . $lessons->name_ar . '">
+                                    <i class="fas fa-trash"></i>
+                            </button>
+                       ';
+            })
+            ->editColumn('subject_class_id', function ($lessons) {
+                return '<td>' . $lessons->subject_class->name_ar . '</td>';
+            })
+            ->escapeColumns([])
+            ->make(true);
+    }
+
+    // Filter End
 
     // Create Start
 
@@ -44,7 +76,7 @@ class LessonController extends Controller
     }
     // Create End
 
-    // Show Unit 
+    // Show Unit
 
     public function showUnit(Request $request)
     {
