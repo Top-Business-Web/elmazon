@@ -14,14 +14,15 @@ if(!function_exists('lang')){
 if(!function_exists('getFromToFromMonthsList')){
 
     function getFromToFromMonthsList($months){
+        $first_day = new DateTime(date('Y') . '-' . $months[0] . '-01');
         foreach ($months as $month) {
-            $first_day = new DateTime(date('Y') . '-' . $month . '-01');
+
             $last_day = new DateTime(date('Y') . '-' . $month . '-01');
             $last_day->modify('last day of this month');
 
-            return [$first_day->format('Y-m-d') , $last_day->format('Y-m-d')];
-        }
 
+        }
+        return [$first_day->format('Y-m-d') , $last_day->format('Y-m-d')];
     }
 
 }

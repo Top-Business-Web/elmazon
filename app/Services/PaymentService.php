@@ -78,8 +78,10 @@ class PaymentService
                 array_push($months,$subscribe_item->month);
             }  //
 
+
            $dates = getFromToFromMonthsList($months);
-           User::find(auth()->guard('user-api')->user()->id)->update(['date_start_code'=> $dates[0],'date_end_code'=> $dates[1]]);
+
+           $user = User::find(auth()->guard('user-api')->user()->id)->update(['date_start_code'=> $dates[0],'date_end_code'=> $dates[1]]);
            return response()->json(["data"=>'',"errors"=>'','message'=>"Payment Successfully.",'code'=>200],200);
 
         } else {
