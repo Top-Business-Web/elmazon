@@ -16,7 +16,11 @@ class MonthlyPlanController extends Controller{
 
         try {
 
-            $plans = MonthlyPlan::get();
+            $plans = MonthlyPlan::whereHas('term', function ($term){
+
+                $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+
             return self::returnResponseDataApi(MonthlyPlanResource::collection($plans), "تم الحصول علي بيانات الخطه الشهريه بنجاح", 200);
         } catch (\Exception $exception) {
 

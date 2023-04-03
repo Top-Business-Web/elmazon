@@ -11,4 +11,9 @@ class MonthlyPlan extends Model
 
     protected $fillable = ['title','start','end'];
 
+    public function term(){
+
+        return $this->belongsTo(Term::class,'term_id','id');
+    }
+
 }

@@ -37,12 +37,16 @@ class VideoPartResource extends JsonResource
         }
         }
 
+        $like_video_count = VideoRate::where('video_id','=',$this->id)->where('action','=','like')->count();
+        $dislike_video_count = VideoRate::where('video_id','=',$this->id)->where('action','=','dislike')->count();
+
         $video_rate = VideoRate::where('video_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first();
         if($video_rate){
             $rate = $video_rate->action;
         }else{
             $rate = "no_rate";
         }
+
 
         return [
             'id' => $this->id,
@@ -53,6 +57,8 @@ class VideoPartResource extends JsonResource
             'ordered' => $this->ordered,
             'status' => $watched,
             'rate' => $rate,
+             'like_count' => $like_video_count,
+             'dislike_count' => $dislike_video_count,
             'video_time' => (int)$this->video_time,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
