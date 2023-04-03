@@ -51,7 +51,7 @@ class AuthController extends Controller
                 'code.exists' => 407,
             ]);
 
-            
+
             if ($validator->fails()) {
 
                 $errors = collect($validator->errors())->flatten(1)[0];
@@ -165,7 +165,6 @@ class AuthController extends Controller
 
             $user = Auth::guard('user-api')->user();
             $user['token'] = $request->bearerToken();
-
             return self::returnResponseDataApi(new UserResource($user), "تم الحصول علي بيانات الطالب بنجاح", 200);
 
         } catch (\Exception $exception) {
@@ -242,7 +241,7 @@ class AuthController extends Controller
                         } else {
 
                             if (Carbon::now()->format('Y-m-d') <= $papelSheetExam->to) {
-                                $papelSheetUser = PapelSheetExamUser::create([
+                               PapelSheetExamUser::create([
                                     'user_id' => Auth::guard('user-api')->id(),
                                     'section_id' => $section->id,
                                     'papel_sheet_exam_id' => $papelSheetExam->id,

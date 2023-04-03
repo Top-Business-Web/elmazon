@@ -129,10 +129,8 @@ Route::group(['middleware' => 'lang'], function (){
     });
 
     Route::post('access-end-time/exam/{id}',[QuestionController::class,'access_end_time_for_exam'])->middleware('jwt');
-
     Route::get('reports/student-report',[ReportController::class,'student_report'])->middleware('jwt');
-
-
+    Route::post('user-rate-video/{id}',[App\Http\Controllers\Api\VideoRate\VideoRateController::class,'user_rate_video'])->middleware('jwt');
 
 
 });
