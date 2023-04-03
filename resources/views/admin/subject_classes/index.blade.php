@@ -13,27 +13,24 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
-                    <form id="filter-form">
+                    <form action="" class="d-flex" method="get">
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-5">
                                 <label for="">الصف</label>
-                                <select name="season_id" id="season_id" class="form-control">
-                                    <option value="">اختر الصف</option>
+                                <select name="season_id" id="season_id" class="form-control season_id">
+                                    <option value="">كل الصفوف</option>
                                     @foreach($seasons as $season)
                                         <option value="{{ $season->id }}">{{ $season->name_ar }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-5">
                                 <label for="">الترم</label>
-                                <select name="term_id" id="term_id" class="form-control">
-                                    <option value="">اختر الترم</option>
-                                    @foreach($terms as $term)
-                                        <option value="{{ $term->id }}">{{ $term->name_ar }}</option>
-                                    @endforeach
+                                <select name="term_id" id="term_id" class="form-control term_id">
+                                    <option value="">الكل</option>
                                 </select>
                             </div>
-                            <div class="col-md-1 mt-6">
+                            <div class="col-1 mt-6">
                                 <button class="btn btn-success" type="submit">فلتر</button>
                             </div>
                         </div>
@@ -50,7 +47,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <!--begin::Table-->
-                        <table class="table table-striped table-bordered text-nowrap w-100" id="subject-class-table">
+                        <table class="table table-striped table-bordered text-nowrap w-100" id="dataTable">
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
@@ -124,7 +121,18 @@
             {data: 'image', name: 'image'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
-        showData('{{route('subjectsClasses.index')}}', columns);
+        var subjectClass = $('.term_id').val();
+
+        var ajax = $.ajax({
+            url: '{{route('subjectsClasses.index')}}',
+            method: 'GET',
+            data: {
+                'term_id': subjectClass,
+            }, success: function (data) {
+                table.draw();
+            }
+        })
+        showData(ajax, columns);
         // Delete Using Ajax
         destroyScript('{{route('subjectsClasses.destroy', ':id')}}');
         // Add Using Ajax
@@ -136,33 +144,22 @@
 
 
         $(document).ready(function () {
-            $('#subject-class-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: '{{ route("subject-class.filter") }}',
-                    method: 'POST',
-                    data: function (d) {
-                        d.term_id = $('#term_id').val();
-                        d.season_id = $('#season_id').val();
-                        d._token = '{{ csrf_token() }}';
+            $('.season_id').on('change', function () {
+                let season = $(this).val();
+                $.ajax({
+                    url: '{{ route("subjectClassSort")}}',
+                    method: 'GET',
+                    data: {
+                        'id': season,
+                    }, success: function (data) {
+                        $('.term_id').html(data);
+                        console.log(data);
                     }
-                },
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'name_ar', name: 'name_ar'},
-                    {data: 'term_id', name: 'term_id'},
-                    {data: 'season_id', name: 'season_id'},
-                    {data: 'image', name: 'image'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
-                ]
-            });
-
-            $('#filter-form').on('submit', function (event) {
-                event.preventDefault();
-                $('#subject-class-table').DataTable().ajax.reload();
-            });
+                })
+            })
         });
+
+
     </script>
 
 @endsection
