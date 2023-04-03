@@ -24,6 +24,7 @@ class VideoPartResource extends JsonResource
 
             $link = asset('audios/'. $this->link);
         }else{
+
             $link = asset('pdf/'. $this->link);
         }
 
