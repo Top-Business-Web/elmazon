@@ -16,20 +16,20 @@
                     <form id="filter-form">
                         <div class="row">
                             <div class="col-md-5">
-                                <label for="">الترم</label>
-                                <select name="term_id" id="term_id" class="form-control">
-                                    <option value="">اختر الترم</option>
-                                    @foreach($terms as $term)
-                                        <option value="{{ $term->id }}">{{ $term->name_ar }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-5">
                                 <label for="">الصف</label>
                                 <select name="season_id" id="season_id" class="form-control">
                                     <option value="">اختر الصف</option>
                                     @foreach($seasons as $season)
                                         <option value="{{ $season->id }}">{{ $season->name_ar }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="">الترم</label>
+                                <select name="term_id" id="term_id" class="form-control">
+                                    <option value="">اختر الترم</option>
+                                    @foreach($terms as $term)
+                                        <option value="{{ $term->id }}">{{ $term->name_ar }}</option>
                                     @endforeach
                                 </select>
                             </div>

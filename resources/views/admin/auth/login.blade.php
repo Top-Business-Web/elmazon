@@ -27,8 +27,8 @@
         </form>
     </main>
     <div class="welcome-container">
-        <h1 class="heading-secondary"> <span class="lg">{{($setting->title) ?? 'مرحبا بعودتك'}}</span></h1>
-        <img src="{{asset('assets/admin/images/Banner-Big-min.gif')}}" alt="login" style="max-height: 400px; max-width: 400px; mix-blend-mode: multiply">
+        <h1 class="heading-secondary"> <span class="lg">{{($setting->title) ?? 'مرحبا بعودتك '}}</span></h1>
+        <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" alt="login" style="">
     </div>
 </div>
 

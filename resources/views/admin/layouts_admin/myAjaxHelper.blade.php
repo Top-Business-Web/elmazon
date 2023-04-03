@@ -6,7 +6,7 @@
         `;
     // Show Data Using YAJRA
     async function showData(routeOfShow, columns) {
-        $('#dataTable').DataTable({
+      var table = $('#dataTable').DataTable({
             processing: true,
             serverSide: true,
             ajax: routeOfShow,
