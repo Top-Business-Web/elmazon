@@ -55,6 +55,7 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
+        'check-subscription' =>  \App\Http\Middleware\CheckSubscribtionMonthUser::class,
         'lang' => \App\Http\Middleware\ChangeLanguageApi::class,
         'jwt' => \App\Http\Middleware\JwtMiddleware::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
