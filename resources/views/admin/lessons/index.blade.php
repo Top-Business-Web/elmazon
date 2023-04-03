@@ -15,10 +15,10 @@
                     <h3 class="card-title"></h3>
                     <form id="filter-form">
                         <div class="row">
-                            <div class="col-md-10">
+                            <div class="col-md-8">
                                 <label for="">الوحدة</label>
                                 <select name="subject_class_id" id="subject_class_id" class="form-control">
-                                    <option value="">اختر الوحدة</option>
+                                    <option value="">الكل</option>
                                     @foreach($subjectClass as $subject)
                                         <option value="{{ $subject->id }}">{{ $subject->name_ar }}</option>
                                     @endforeach
@@ -76,7 +76,8 @@
                             أغلاق
                         </button>
                         <button type="button" class="btn btn-danger"
-                                id="delete_btn">حذف</button>
+                                id="delete_btn">حذف
+                        </button>
                     </div>
                 </div>
             </div>
@@ -122,7 +123,6 @@
         showEditModal('{{route('lessons.edit',':id')}}');
         editScript();
 
-
         $(document).ready(function () {
             $('#lesson-table').DataTable({
                 processing: true,
@@ -131,7 +131,7 @@
                     url: '{{ route("lesson.filter") }}',
                     method: 'POST',
                     data: function (d) {
-                        d.$subject_class_id = $('#subject_class_id').val();
+                        d.subject_class_id = $('#subject_class_id').val();
                         d._token = '{{ csrf_token() }}';
                     }
                 },

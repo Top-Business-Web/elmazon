@@ -50,6 +50,42 @@ class SubjectClassController extends Controller
 
     // Index End
 
+    // Examble Type Start
+
+    public function seasonTerm(Request $request)
+    {
+        if ($request->ajax()) {
+            $output = '<option value="" style="text-align: center">اختار</option>';
+            if ($request->id == 1) {
+                $firstLevels = Term::where('season_id', $request->id)->get();
+                foreach ($firstLevels as $firstLevel) {
+                    if ($firstLevel->status == 'active') {
+                        $output .= '<option value="' . $firstLevel->id . '" style="text-align: center">' . $firstLevel->name_ar . '</option>';
+                    }
+                }
+            } else if ($request->id == 2) {
+                $secondLevels = Term::where('season_id', $request->id)->get();
+                foreach ($secondLevels as $secondLevel) {
+                    if ($secondLevel->status == 'active') {
+                        $output .= '<option value="' . $secondLevel->id . '" style="text-align: center">' . $secondLevel->name_ar . '</option>';
+                    }
+                }
+            } else if ($request->id == 3) {
+                $therdLevels = Term::where('season_id', $request->id)->get();
+                foreach ($therdLevels as $therdLevel) {
+                    if ($therdLevel->status == 'active') {
+                        $output .= '<option value="' . $therdLevel->id . '" style="text-align: center">' . $therdLevel->name_ar . '</option>';
+                    }
+                }
+            }
+
+            return $output;
+
+        }
+    }
+
+    // Examble Type End
+
     // Filter Start
 
     public function filterSubject(Request $request)

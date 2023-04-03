@@ -41,24 +41,24 @@ class LessonController extends Controller
     {
         $subjectId = $request->input('subject_class_id');
 
-        $lessons = Lesson::query()
+        $lesson = Lesson::query()
             ->when($subjectId, function ($query, $subjectId) {
                 return $query->where('subject_class_id', $subjectId);
             })
             ->get();
 
-        return DataTables::of($lessons)
-            ->addColumn('action', function ($lessons) {
+        return DataTables::of($lesson)
+            ->addColumn('action', function ($lesson) {
                 return '
-                            <button type="button" data-id="' . $lessons->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                            <button type="button" data-id="' . $lesson->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
-                                    data-id="' . $lessons->id . '" data-title="' . $lessons->name_ar . '">
+                                    data-id="' . $lesson->id . '" data-title="' . $lesson->name_en . '">
                                     <i class="fas fa-trash"></i>
                             </button>
                        ';
             })
-            ->editColumn('subject_class_id', function ($lessons) {
-                return '<td>' . $lessons->subject_class->name_ar . '</td>';
+            ->editColumn('subject_class_id', function ($lesson) {
+                return '<td>' . $lesson->subject_class->name_ar . '</td>';
             })
             ->escapeColumns([])
             ->make(true);

@@ -18,16 +18,18 @@
                             <div class="col-md-5">
                                 <label for="">الترم</label>
                                 <select name="term_id" id="term_id" class="form-control">
-                                    <option value="">اختر الترم</option>
+                                    <option value="">الكل</option>
                                     @foreach($terms as $term)
-                                        <option value="{{ $term->id }}">{{ $term->name_ar }}</option>
+                                        @if($term->status == 'active')
+                                            <option value="{{ $term->id }}">{{ $term->name_ar }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-5">
                                 <label for="">الصف</label>
                                 <select name="season_id" id="season_id" class="form-control">
-                                    <option value="">اختر الصف</option>
+                                    <option value="">الكل</option>
                                     @foreach($seasons as $season)
                                         <option value="{{ $season->id }}">{{ $season->name_ar }}</option>
                                     @endforeach

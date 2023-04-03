@@ -19,7 +19,7 @@
                             <div class="col-md-10">
                                 <label for="">الصف</label>
                                 <select name="season_id" id="season_id" class="form-control">
-                                    <option value="">اختر الصف</option>
+                                    <option value="">الكل</option>
                                     @foreach($seasons as $season)
                                         <option value="{{ $season->id }}">{{ $season->name_ar }}</option>
                                     @endforeach
@@ -123,11 +123,6 @@
         // Add Using Ajax
         showEditModal('{{route('terms.edit',':id')}}');
         editScript();
-
-
-      $(".checkBtn").on('click', function() {
-        alert('hehj')
-      })
 
         $(document).ready(function () {
             $('#term-table').DataTable({

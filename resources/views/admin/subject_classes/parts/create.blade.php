@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الترم</label>
-                    <Select name="term_id" class="form-control">
+                    <Select name="term_id" class="form-control type_ajax_choose">
 
                     </Select>
                 </div>
@@ -51,13 +51,16 @@
     </form>
 </div>
 <script>
+
+    $('.dropify').dropify()
+
     $(".season_choose").click(function () {
         var element = document.getElementById("type");
         var value = $(element).find("option:selected").val();
         var season = $('.seasonChoose').find("option:selected").val();
 
         $.ajax({
-            url: '{{ route('examble_type') }}',
+            url: '{{ route('seasonTerm') }}',
             data: {
                 'id': value,
                 'season_id': season,
