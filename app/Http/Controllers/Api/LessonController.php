@@ -242,7 +242,7 @@ class LessonController extends Controller{
             }
             if (isset($watched)) {
 
-                $next_videos = VideoParts::where('lesson_id', '=', $video->lesson_id)->orderBy('ordered', 'ASC')->whereNotIn('id', $ids)->get();
+                $next_videos = VideoParts::where('lesson_id', '=',$video->lesson_id)->orderBy('ordered', 'ASC')->whereNotIn('id', $ids)->get();
                 foreach ($next_videos as $next_video) {
                     $next_video_watched = VideoWatch::where('user_id', '=', Auth::guard('user-api')->id())->where('video_part_id', '=', $next_video->id)->first();
                     if (!$next_video_watched) {

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddYearAndMonthToVideoPartsTable extends Migration
+class AddYearToUserSubscribesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddYearAndMonthToVideoPartsTable extends Migration
      */
     public function up()
     {
-        Schema::table('video_parts', function (Blueprint $table) {
-            $table->tinyInteger('month')->nullable();
+        Schema::table('user_subscribes', function (Blueprint $table) {
+
+            $table->string('year')->after('student_id')->nullable();
         });
     }
 
@@ -25,7 +26,7 @@ class AddYearAndMonthToVideoPartsTable extends Migration
      */
     public function down()
     {
-        Schema::table('vedio', function (Blueprint $table) {
+        Schema::table('user_subscribes', function (Blueprint $table) {
             //
         });
     }

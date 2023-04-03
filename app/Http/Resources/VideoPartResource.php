@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\UserSubscribe;
 use App\Models\VideoParts;
 use App\Models\VideoRate;
 use App\Models\VideoWatch;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,6 +50,14 @@ class VideoPartResource extends JsonResource
         }
 
 
+        $user_subscribes = UserSubscribe::where('student_id','=',Auth::guard('user-api')->id())->where('year','=',Carbon::now()->format('Y'))
+            ->pluck('month')->toArray();
+
+        $user_access_video = VideoParts::where('id','=',$this->id)
+            ->where('month','=',Carbon::now()->format('m'))
+            ->whereIn('month',$user_subscribes)->first();
+
+
         return [
             'id' => $this->id,
             'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
@@ -56,6 +66,7 @@ class VideoPartResource extends JsonResource
             'type' => $this->type,
             'ordered' => $this->ordered,
             'status' => $watched,
+            'subscribe' =>  count($user_subscribes) > 0 ? ($user_access_video ? 'access' : 'not_access') : 'not_access',
             'rate' => $rate,
              'like_count' => $like_video_count,
              'dislike_count' => $dislike_video_count,
