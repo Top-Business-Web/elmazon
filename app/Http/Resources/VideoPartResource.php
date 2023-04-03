@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\VideoParts;
+use App\Models\VideoRate;
 use App\Models\VideoWatch;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -35,6 +36,13 @@ class VideoPartResource extends JsonResource
         }
         }
 
+        $video_rate = VideoRate::where('video_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first();
+        if($video_rate){
+            $rate = $video_rate->action;
+        }else{
+            $rate = "no_rate";
+        }
+
         return [
             'id' => $this->id,
             'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
@@ -43,6 +51,7 @@ class VideoPartResource extends JsonResource
             'type' => $this->type,
             'ordered' => $this->ordered,
             'status' => $watched,
+            'rate' => $rate,
             'video_time' => (int)$this->video_time,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
