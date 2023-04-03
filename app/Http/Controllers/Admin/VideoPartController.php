@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreVideoPart;
 use App\Models\VideoParts;
@@ -17,6 +18,7 @@ class VideoPartController extends Controller
 {
     use PhotoTrait;
 
+    use FirebaseNotification;
     // Index Start
     public function index(request $request)
     {
@@ -95,6 +97,8 @@ class VideoPartController extends Controller
         $insert->ordered = $last_orderd + 1;
 
         if ($insert->save()) {
+
+//            $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
