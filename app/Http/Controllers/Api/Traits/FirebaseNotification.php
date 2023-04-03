@@ -8,6 +8,7 @@ use App\Models\User;
 
 trait FirebaseNotification{
 
+    //firebase server key
     private $serverKey = 'AAAAvcvsG5E:APA91bHXIApfxcgUYwNQohgWbydXAOTcjSr5dWzQpT5HnID-v0GN3HuxahdId2DG4saeoNHu7tSFdL3h9AOwH_p8HOst0IQNPKkbCMycBgI7ZkaB5XWpQdN3bmOAFItqdTNVMh8EJgKH';
 
 
@@ -32,7 +33,7 @@ trait FirebaseNotification{
             'body' => $data['body'],
             'term_id' => $data['term_id'],
             'season_id' => $season_id,
-//            'image' => $file ?? null,
+//           'image' => $file ?? null,
         ]);
 
         $fields = array(

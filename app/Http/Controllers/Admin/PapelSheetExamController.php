@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Controllers\Controller;
 use App\Models\OnlineExam;
 use App\Models\PapelSheetExam;
@@ -14,6 +15,7 @@ class PapelSheetExamController extends Controller
 {
     // Index START
 
+    use FirebaseNotification;
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -61,6 +63,8 @@ class PapelSheetExamController extends Controller
     {
         $inputs = $request->all();
         if ($papelSheetExam->create($inputs)) {
+
+            $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
