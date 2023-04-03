@@ -51,6 +51,7 @@ class AuthController extends Controller
                 'code.exists' => 407,
             ]);
 
+
             if ($validator->fails()) {
 
                 $errors = collect($validator->errors())->flatten(1)[0];
@@ -164,7 +165,6 @@ class AuthController extends Controller
 
             $user = Auth::guard('user-api')->user();
             $user['token'] = $request->bearerToken();
-
             return self::returnResponseDataApi(new UserResource($user), "تم الحصول علي بيانات الطالب بنجاح", 200);
 
         } catch (\Exception $exception) {
@@ -205,12 +205,15 @@ class AuthController extends Controller
             $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->where('id', '=', $id)->first();
 
+
         if (!$papelSheetExam) {
             return self::returnResponseDataApi(null, "لا يوجد اي امتحان ورقي متاح لك", 404);
         }
 
-        $ids = Section::query()->orderBy('id', 'ASC')->pluck('id')->toArray();;
+        $ids = Section::query()->orderBy('id', 'ASC')->pluck('id')->toArray();
+
         foreach ($ids as $id) {
+
             $sectionCheck = Section::query()->where('id', '=', $id)->first();
             $CheckCountSectionExam = PapelSheetExamUser::where('section_id', '=', $sectionCheck->id)
                 ->where('papel_sheet_exam_id', '=', $papelSheetExam->id)->count();
@@ -222,8 +225,9 @@ class AuthController extends Controller
             $countExamId = PapelSheetExamUser::where('papel_sheet_exam_id', '=', $papelSheetExam->id)->count();
 
             if ((int)$countExamId < (int)$sumCapacityOfSection) {
+
                 if ($CheckCountSectionExam < $sectionCheck->capacity) {
-                    $section = Section::query()->where('id', '=', $id)->first();
+                    $section = Section::where('id', '=', $id)->first();
                     if ($CheckCountSectionExam == $sectionCheck->capacity) {
                         $section = Section::query()->skip($section->id)->first();//to get empty section after complete check
                     }
@@ -237,7 +241,7 @@ class AuthController extends Controller
                         } else {
 
                             if (Carbon::now()->format('Y-m-d') <= $papelSheetExam->to) {
-                                $papelSheetUser = PapelSheetExamUser::create([
+                               PapelSheetExamUser::create([
                                     'user_id' => Auth::guard('user-api')->id(),
                                     'section_id' => $section->id,
                                     'papel_sheet_exam_id' => $papelSheetExam->id,
