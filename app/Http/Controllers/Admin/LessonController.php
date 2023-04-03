@@ -13,11 +13,20 @@ use App\Models\Season;
 class LessonController extends Controller
 {
     // Index Start
-    public function index(request $request)
+    public function index(Request $request)
     {
+
+        $lessonList = Lesson::select('*');
+
         $subjectClass = SubjectClass::all();
+        $seasons = Season::all();
         if ($request->ajax()) {
-            $lessons = lesson::get();
+            if ($request->has('subject_class_id')){
+                $classs = $request->get('subject_class_id');
+                $lessonList->where('subject_class_id', $classs);
+            }
+
+            $lessons = $lessonList->get();
             return Datatables::of($lessons)
                 ->addColumn('action', function ($lessons) {
                     return '
@@ -28,41 +37,66 @@ class LessonController extends Controller
                             </button>
                        ';
                 })
+                ->editColumn('subject_class_id', function ($lessons) {
+                    return $lessons->subject_class->name_ar;
+                })
                 ->escapeColumns([])
                 ->make(true);
         }
-        return view('admin.lessons.index', compact('subjectClass'));
+        return view('admin.lessons.index', compact('subjectClass', 'seasons'));
     }
-    // Index End
+
+    // Index End fun
+
+
+    public function seasonSort(Request $request)
+    {
+        $season = $request->id;
+        $subjects = SubjectClass::where('season_id', $season)->get();
+
+        $output = '<option value="">اختر الوحدة</option>';
+
+        foreach ($subjects as $subject) {
+            $output .= '<option value="' . $subject->id . '">' . $subject->name_ar . ' </option>';
+        }
+        if ($subjects->count() > 0) {
+            return $output;
+        } else {
+            return  '<option value="">لا يوجد وحدات</option>';
+        }
+
+    }
+
+
 
     // Filter Start
 
-    public function filterLesson(Request $request)
-    {
-        $subjectId = $request->input('subject_class_id');
-
-        $lessons = Lesson::query()
-            ->when($subjectId, function ($query, $subjectId) {
-                return $query->where('subject_class_id', $subjectId);
-            })
-            ->get();
-
-        return DataTables::of($lessons)
-            ->addColumn('action', function ($lessons) {
-                return '
-                            <button type="button" data-id="' . $lessons->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
-                                    data-id="' . $lessons->id . '" data-title="' . $lessons->name_ar . '">
-                                    <i class="fas fa-trash"></i>
-                            </button>
-                       ';
-            })
-            ->editColumn('subject_class_id', function ($lessons) {
-                return '<td>' . $lessons->subject_class->name_ar . '</td>';
-            })
-            ->escapeColumns([])
-            ->make(true);
-    }
+//    public function filterLesson(Request $request)
+//    {
+//        $subjectId = $request->input('subject_class_id');
+//
+//        $lessons = Lesson::query()
+//            ->when($subjectId, function ($query, $subjectId) {
+//                return $query->where('subject_class_id', $subjectId);
+//            })
+//            ->get();
+//
+//        return DataTables::of($lessons)
+//            ->addColumn('action', function ($lessons) {
+//                return '
+//                            <button type="button" data-id="' . $lessons->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+//                            <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
+//                                    data-id="' . $lessons->id . '" data-title="' . $lessons->name_ar . '">
+//                                    <i class="fas fa-trash"></i>
+//                            </button>
+//                       ';
+//            })
+//            ->editColumn('subject_class_id', function ($lessons) {
+//                return '<td>' . $lessons->subject_class->name_ar . '</td>';
+//            })
+//            ->escapeColumns([])
+//            ->make(true);
+//    }
 
     // Filter End
 
@@ -124,7 +158,6 @@ class LessonController extends Controller
     }
 
     // Store Start
-
 
 
     // Edit Start

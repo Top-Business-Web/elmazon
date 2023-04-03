@@ -30,7 +30,6 @@ class SeasonController extends Controller
                                     data-id="' . $seasons->id . '" data-title="' . $seasons->name_en . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                            <a class="btn btn-pill btn-success-light questionBtn" data-id="' . $seasons->id . '" data-target="#question_modal" href="' . route('seasonTerm', $seasons->id) . '"><i class="fa fa-list-ol"></i></a>
                        ';
                 })
                 ->escapeColumns([])

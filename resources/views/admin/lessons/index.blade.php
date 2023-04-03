@@ -13,22 +13,28 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
-                    <form id="filter-form">
-                        <div class="row">
-                            <div class="col-md-10">
+                    <div class="row">
+                        <form action="" method="get" class="d-flex">
+                        <div class="col-5">
+                            <label for="">الصف</label>
+                            <select class="form-control seasonSort">
+                                <option value="" selected>اختر الصف</option>
+                                @foreach($seasons as $season)
+                                    <option value="{{ $season->id }}">{{ $season->name_ar }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                            <div class="col-5">
                                 <label for="">الوحدة</label>
-                                <select name="subject_class_id" id="subject_class_id" class="form-control">
-                                    <option value="">اختر الوحدة</option>
-                                    @foreach($subjectClass as $subject)
-                                        <option value="{{ $subject->id }}">{{ $subject->name_ar }}</option>
-                                    @endforeach
+                                <select class="form-control subjectClass" name="subject_class_id">
+                                    <option value="" selected>اختر الصف</option>
                                 </select>
                             </div>
-                            <div class="col-md-1 mt-6">
+                            <div class="col-2 mt-6">
                                 <button class="btn btn-success" type="submit">فلتر</button>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                     <div class="">
                         <button class="btn btn-secondary btn-icon text-white addBtn">
 									<span>
@@ -40,7 +46,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <!--begin::Table-->
-                        <table class="table table-striped table-bordered text-nowrap w-100" id="lesson-table">
+                        <table class="table table-striped table-bordered text-nowrap w-100" id="dataTable">
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
@@ -76,7 +82,8 @@
                             أغلاق
                         </button>
                         <button type="button" class="btn btn-danger"
-                                id="delete_btn">حذف</button>
+                                id="delete_btn">حذف
+                        </button>
                     </div>
                 </div>
             </div>
@@ -112,7 +119,22 @@
             {data: 'note', name: 'note'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
-        showData('{{route('lessons.index')}}', columns);
+        let subjectClass = $('.subjectClass').val();
+
+        // $('.subjectClass').on('change', function(){
+        //     let subjectClass = $('.subjectClass').val();
+        // })
+
+        var ajax = $.ajax({
+            url: '{{ route("lessons.index")}}',
+            method: 'GET',
+            data: {
+                'subject_class_id': subjectClass,
+            }, success: function (data) {
+                table.draw();
+            }
+        })
+        showData(ajax, columns);
         // Delete Using Ajax
         destroyScript('{{route('lessons.destroy',':id')}}');
         // Add Using Ajax
@@ -124,31 +146,36 @@
 
 
         $(document).ready(function () {
-            $('#lesson-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: '{{ route("lesson.filter") }}',
-                    method: 'POST',
-                    data: function (d) {
-                        d.$subject_class_id = $('#subject_class_id').val();
-                        d._token = '{{ csrf_token() }}';
+            $('.seasonSort').on('change', function () {
+                let season = $(this).val();
+                $.ajax({
+                    url: '{{ route("seasonSort")}}',
+                    method: 'GET',
+                    data: {
+                        'id': season,
+                    }, success: function (data) {
+                        $('.subjectClass').html(data);
+                        console.log(data);
                     }
-                },
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'name_ar', name: 'name_ar'},
-                    {data: 'subject_class_id', name: 'subject_class_id'},
-                    {data: 'note', name: 'note'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
-                ]
-            });
-
-            $('#filter-form').on('submit', function (event) {
-                event.preventDefault();
-                $('#lesson-table').DataTable().ajax.reload();
-            });
+                })
+            })
         });
+
+        {{--$(document).ready(function () {--}}
+        {{--    $('.subjectClass').on('change', function () {--}}
+        {{--        let subjectClass = $('.subjectClass').val();--}}
+
+        {{--        $.ajax({--}}
+        {{--            url: '{{ route("lessons.index")}}',--}}
+        {{--            method: 'GET',--}}
+        {{--            data: {--}}
+        {{--                'subject_class_id': subjectClass,--}}
+        {{--            }, success: function (data) {--}}
+        {{--                table.draw();--}}
+        {{--            }--}}
+        {{--        })--}}
+        {{--    })--}}
+        {{--})--}}
 
 
     </script>

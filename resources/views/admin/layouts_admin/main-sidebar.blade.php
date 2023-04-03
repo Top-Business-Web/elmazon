@@ -19,7 +19,7 @@
         </li>
         <li class="slide">
             <a class="side-menu__item" href="{{ route('seasons.index') }}">
-                <i class="fa fa-scree side-menu__icon"></i>
+                <i class="fa fa-save side-menu__icon"></i>
                 <span class="side-menu__label">الصفوف الدراسيه</span>
             </a>
         </li>

@@ -113,7 +113,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Lesson ####
     Route::resource('lessons', LessonController::class);
     Route::get('showUnit', [LessonController::class, 'showUnit'])->name('showUnit');
-    Route::post('/lesson/filter', [LessonController::class,'filterLesson'])->name('lesson.filter');
+//    Route::post('/lesson/filter', [LessonController::class,'filterLesson'])->name('lesson.filter');
+    Route::get('/lesson/seasonSort', [LessonController::class,'seasonSort'])->name('seasonSort');
 
     #### Notification ####
     Route::resource('notifications', NotificationController::class);
