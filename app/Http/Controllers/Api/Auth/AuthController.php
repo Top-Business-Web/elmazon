@@ -51,6 +51,7 @@ class AuthController extends Controller
                 'code.exists' => 407,
             ]);
 
+            
             if ($validator->fails()) {
 
                 $errors = collect($validator->errors())->flatten(1)[0];

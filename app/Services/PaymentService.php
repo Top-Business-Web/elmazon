@@ -7,6 +7,7 @@ use App\Models\Subscribe;
 use App\Models\UserPackage;
 use App\Models\UserSubscribe;
 use Exception;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use IZaL\Knet\KnetBilling;
 use Omnipay\Common\CreditCard;
@@ -66,6 +67,7 @@ class PaymentService
             $payment->currency = $charge->currency;
             $payment->status = $charge->status;
             $payment->save();
+            $months = [];
             foreach ($request->subscribes_ids as  $item){
                 $subscribe_item = Subscribe::find($item);
                 UserSubscribe::create([
@@ -73,9 +75,15 @@ class PaymentService
                     'month' => $subscribe_item->month,
                     'student_id' =>  auth()->guard('user-api')->user()->id,
                 ]);
-            }
+                array_push($months,$subscribe_item->month);
+            }  //
 
-            return response()->json(["data"=>'',"errors"=>'','message'=>"Payment Successfully.",'code'=>200],200);
+
+           $dates = getFromToFromMonthsList($months);
+
+           $user = User::find(auth()->guard('user-api')->user()->id)->update(['date_start_code'=> $dates[0],'date_end_code'=> $dates[1]]);
+           return response()->json(["data"=>'',"errors"=>'','message'=>"Payment Successfully.",'code'=>200],200);
+
         } else {
             return response()->json(["data"=>'',"errors"=>[],'message'=>"Payment failed.",'code'=>406],200);
         }

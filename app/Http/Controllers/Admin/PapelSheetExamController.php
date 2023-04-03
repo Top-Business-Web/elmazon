@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Controllers\Controller;
 use App\Models\OnlineExam;
 use App\Models\PapelSheetExam;
+use App\Models\PapelSheetExamDegree;
+use App\Models\PapelSheetExamUser;
 use App\Models\Season;
 use App\Models\Term;
 use Illuminate\Http\Request;
@@ -28,6 +30,7 @@ class PapelSheetExamController extends Controller
                                     data-id="' . $sheet_exams->id . '" data-title="' . $sheet_exams->name_ar . '">
                                     <i class="fas fa-trash"></i>
                             </button>
+                            <a class="btn btn-pill btn-warning-light questionBtn" data-id="' . $sheet_exams->id . '" data-target="#question_modal" href="' . route('usersExamPapel', $sheet_exams->id) . '"><i class="fa fa-user"></i></a>
                        ';
                 })
                 ->editColumn('season_id', function ($sheet_exams) {
@@ -44,6 +47,52 @@ class PapelSheetExamController extends Controller
     }
 
     // End Index
+
+    // User Exam Start
+
+    public function usersExamPapel(Request $request)
+    {
+        $papelExams = PapelSheetExam::find($request->id);
+        $papel_exam_users = PapelSheetExamUser::where('papel_sheet_exam_id', $papelExams->id)->select('user_id')->groupBy('user_id')->get();
+        $answers = PapelSheetExamUser::where('papel_sheet_exam_id', $papelExams->id)
+            ->whereIn('user_id', $papel_exam_users->pluck('user_id'))
+            ->get();
+//        return $answers;
+        return view('admin.papel_sheet_exams.parts.text_exam_users', compact('papelExams', 'papel_exam_users'));
+    }
+
+    // User Exam End
+
+    // Paper Exam Start
+
+    public function paperExamSheet(Request $request)
+    {
+        $user = PapelSheetExamUser::where('user_id', $request->id)->select('user_id')->groupBy('user_id')->get();
+        $exam = PapelSheetExamUser::where('user_id', $request->id)->first('papel_sheet_exam_id');
+        $answers = PapelSheetExamUser::where('papel_sheet_exam_id', $exam->papel_sheet_exam_id)
+            ->where('user_id', $user->pluck('user_id'))
+            ->get();
+//        return $answers;
+        return view('admin.papel_sheet_exams.parts.exam_paper_sheets', compact('answers'));
+    }
+
+    // Paper Exam End
+
+    // Paper Exam Start
+
+    public function paperExamSheetStore(Request $request, PapelSheetExamDegree $papel_sheet_exam_degree)
+    {
+        $inputs = $request->all();
+        if($papel_sheet_exam_degree->create($inputs)) {
+            toastr('تم الاضافة بنجاح');
+            return redirect('paperExamSheet');
+        }
+        else{
+            toastr('هناك خطأ ما');
+        }
+    }
+
+    // Paper Exam End
 
     // Start Create
 
