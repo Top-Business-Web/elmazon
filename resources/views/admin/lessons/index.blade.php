@@ -18,7 +18,7 @@
                         <div class="col-5">
                             <label for="">الصف</label>
                             <select class="form-control seasonSort">
-                                <option value="" selected>اختر الصف</option>
+                                <option value="" selected>الكل</option>
                                 @foreach($seasons as $season)
                                     <option value="{{ $season->id }}">{{ $season->name_ar }}</option>
                                 @endforeach
@@ -27,7 +27,7 @@
                             <div class="col-5">
                                 <label for="">الوحدة</label>
                                 <select class="form-control subjectClass" name="subject_class_id">
-                                    <option value="" selected>اختر الصف</option>
+                                    <option value="" selected>الكل</option>
                                 </select>
                             </div>
                             <div class="col-2 mt-6">

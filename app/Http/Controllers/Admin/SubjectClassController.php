@@ -16,12 +16,18 @@ class SubjectClassController extends Controller
     use PhotoTrait;
 
     // Index Start
-    public function index(request $request)
+    public function index(Request $request)
     {
+        $subjects_classes_list = SubjectClass::select('*');
         $terms = Term::all();
         $seasons = Season::all();
         if ($request->ajax()) {
-            $subjects_classes = SubjectClass::get();
+            if ($request->has('term_id') && $request->term_id != ''){
+                $term = $request->get('term_id');
+//                dd($term);
+                $subjects_classes_list->where('term_id', $term);
+            }
+            $subjects_classes = $subjects_classes_list->get();
             return Datatables::of($subjects_classes)
                 ->addColumn('action', function ($subjects_classes) {
                     return '
@@ -50,47 +56,23 @@ class SubjectClassController extends Controller
 
     // Index End
 
-    // Filter Start
-
-    public function filterSubject(Request $request)
+    public function seasonSort(Request $request)
     {
-        $termId = $request->input('term_id');
-        $seasonId = $request->input('season_id');
+        $season = $request->id;
+        $subjects = Term::where('season_id', $season)->get();
 
-        $subjectClasses = SubjectClass::query()
-            ->when($termId, function ($query, $termId) {
-                return $query->where('term_id', $termId);
-            })
-            ->when($seasonId, function ($query, $seasonId) {
-                return $query->where('season_id', $seasonId);
-            })
-            ->get();
+        $output = '<option value="">اختر الترم</option>';
 
-        return DataTables::of($subjectClasses)
-            ->addColumn('action', function ($subjectClasses) {
-                return '
-                            <button type="button" data-id="' . $subjectClasses->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
-                                    data-id="' . $subjectClasses->id . '" data-title="' . $subjectClasses->name_en . '">
-                                    <i class="fas fa-trash"></i>
-                            </button>
-                       ';
-            })
-            ->editColumn('image', function ($subjectClasses) {
-                return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset($subjectClasses->image) . '"/>';
-            })
-            ->editColumn('term_id', function ($subjectClasses) {
-                return '<td>' . $subjectClasses->term->name_ar . '</td>';
-            })
-            ->editColumn('season_id', function ($subjectClasses) {
-                return '<td>' . $subjectClasses->season->name_ar . '</td>';
-            })
-            ->escapeColumns([])
-            ->make(true);
+        foreach ($subjects as $subject) {
+            $output .= '<option value="' . $subject->id . '">' . $subject->name_ar . ' </option>';
+        }
+        if ($subjects->count() > 0) {
+            return $output;
+        } else {
+            return  '<option value="">لا يوجد ترمات</option>';
+        }
+
     }
-
-    // Filter End
-
 
     // Create Start
 

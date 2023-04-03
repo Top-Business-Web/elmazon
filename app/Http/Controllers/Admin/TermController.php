@@ -14,9 +14,16 @@ class TermController extends Controller
     // Index Start
     public function index(request $request)
     {
+        $terms = Term::select('*');
+
         $seasons = Season::all();
         if ($request->ajax()) {
-            $terms = Term::get();
+            if ($request->has('season_id') && $request->season_id != ''){
+                $seasonId = $request->get('season_id');
+//                dd($seasonId);
+                $terms->where('season_id', $seasonId);
+            }
+            $terms->get();
             return Datatables::of($terms)
                 ->addColumn('action', function ($terms) {
                     return '
@@ -48,44 +55,7 @@ class TermController extends Controller
 
     // Index End
 
-    // Filter Start
 
-    public function filterTerm(Request $request)
-    {
-        $seasonId = $request->input('season_id');
-
-        $terms = Term::query()
-            ->when($seasonId, function ($query, $seasonId) {
-                return $query->where('season_id', $seasonId);
-            })
-            ->get();
-
-        return DataTables::of($terms)
-            ->addColumn('action', function ($terms) {
-                return '
-                            <button type="button" data-id="' . $terms->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
-                                    data-id="' . $terms->id . '" data-title="' . $terms->name_ar . '">
-                                    <i class="fas fa-trash"></i>
-                            </button>
-                       ';
-            })
-            ->editColumn('status', function ($terms) {
-                if($terms->status == 'active') {
-                    return '<a href="' . route('activate', $terms->id) . '" class="btn btn-pill btn-success-light">مفعل</a>';
-                }
-                else {
-                    return '<a href="' . route('activate', $terms->id) . '" class="btn btn-pill btn-danger-light">غير مفعل</a>';
-                }
-            })
-            ->editColumn('season_id', function ($terms) {
-                return '<td>' . $terms->seasons->name_ar . '</td>';
-            })
-            ->escapeColumns([])
-            ->make(true);
-    }
-
-    // Filter End
 
     // Create Start
 

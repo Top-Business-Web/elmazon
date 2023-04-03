@@ -21,7 +21,7 @@ class LessonController extends Controller
         $subjectClass = SubjectClass::all();
         $seasons = Season::all();
         if ($request->ajax()) {
-            if ($request->has('subject_class_id')){
+            if ($request->has('subject_class_id') && $request->subject_class_id != ''){
                 $classs = $request->get('subject_class_id');
                 $lessonList->where('subject_class_id', $classs);
             }
