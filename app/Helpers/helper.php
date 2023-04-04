@@ -1,5 +1,6 @@
 <?php
 //check current language
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Config;
 
 if(!function_exists('lang')){
@@ -19,10 +20,21 @@ if(!function_exists('getFromToFromMonthsList')){
 
             $last_day = new DateTime(date('Y') . '-' . $month . '-01');
             $last_day->modify('last day of this month');
-
-
         }
         return [$first_day->format('Y-m-d') , $last_day->format('Y-m-d')];
+    }
+
+}
+if(!function_exists('getFromToMonthsList')){
+
+    function getFromToMonthsList($date_from,$date_to){
+        $months =[];
+        $result = CarbonPeriod::create($date_from, '1 month', $date_to);
+
+        foreach ($result as $dt) {
+            array_push($months,$dt->format("j"));
+        }
+       return $months;
     }
 
 }

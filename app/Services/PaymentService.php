@@ -47,6 +47,8 @@ class PaymentService
         }
 
         $token = $this->createToken($request);
+        $user = auth()->guard('user-api')->user();
+
         if (!empty($token['error'])) {
             return response()->json(["data"=>'','error'=> $token['error'],'message'=>"Payment failed.",'code'=>422],200);
         }
@@ -73,15 +75,16 @@ class PaymentService
                 UserSubscribe::create([
                     'price' => $subscribe_item->price_in_center,
                     'month' => $subscribe_item->month,
+                    'year' => $subscribe_item->year,
                     'student_id' =>  auth()->guard('user-api')->user()->id,
                 ]);
                 array_push($months,$subscribe_item->month);
             }  //
+           $subscribed_months = getFromToMonthsList($user->date_start_code, $user->date_end_code);
+           $months_to_subscribe = sort(array_merge($months,$subscribed_months));
+           $dates = getFromToFromMonthsList($months_to_subscribe);
 
-
-           $dates = getFromToFromMonthsList($months);
-
-           $user = User::find(auth()->guard('user-api')->user()->id)->update(['date_start_code'=> $dates[0],'date_end_code'=> $dates[1]]);
+//           $user = User::find(auth()->guard('user-api')->user()->id)->update(['date_start_code'=> $dates[0],'date_end_code'=> $dates[1]]);
            return response()->json(["data"=>'',"errors"=>'','message'=>"Payment Successfully.",'code'=>200],200);
 
         } else {

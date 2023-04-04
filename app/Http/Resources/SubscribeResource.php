@@ -35,7 +35,8 @@ class SubscribeResource extends JsonResource
             'is_free' => $this->free,
             'month' => $this->month,
             'month_name' => (lang() == "en")? date("F", mktime(0, 0, 0, $this->month, 10)) : $months[date("M", mktime(0, 0, 0, $this->month, 10))],
-            'created_at' => $this->created_at->format('Y-m-d')
+            'created_at' => $this->created_at->format('Y-m-d'),
+            'monthly_plan' => $this->plan
         ];
     }
 }
