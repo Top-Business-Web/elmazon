@@ -40,7 +40,7 @@ class LifeExam extends Model
 
     public function questions(){
 
-        return $this->belongsToMany(Question::class,'online_exam_questions', 'life_exam_id','question_id','id','id');
+        return $this->belongsToMany(Question::class,'online_exam_questions', 'life_exam_id','question_id','id','id')->inRandomOrder();
     }
 
 }
