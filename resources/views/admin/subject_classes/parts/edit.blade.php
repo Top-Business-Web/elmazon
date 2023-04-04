@@ -23,7 +23,7 @@
                         @foreach ($terms as $term)
                             <option value="{{ $term->id }}"
                                     {{ $subjectsClass->term_id == $term->id ? 'selected' : '' }} style="text-align: center">
-                                {{ $term->name_en }}</option>
+                                {{ $term->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>
@@ -34,7 +34,7 @@
                         @foreach ($seasons as $season)
                             <option value="{{ $season->id }}"
                                     {{ $subjectsClass->season_id == $season->id ? 'selected' : '' }}
-                                    style="text-align: center">{{ $season->name_en }}</option>
+                                    style="text-align: center">{{ $season->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>

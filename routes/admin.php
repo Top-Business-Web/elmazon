@@ -77,6 +77,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Term Subject ####
 
     Route::get('term/{id}/subjectClass', [SeasonController::class, 'termSubjectClass'])->name('termSubjectClass');
+
     Route::get('term/subjectClass/create/{id}', [SeasonController::class, 'termSubjectClassCreate'])->name('termSubjectClassCreate');
     Route::post('seasons/{id}/term/store', [SeasonController::class, 'termSubjectClassStore'])->name('termSubjectClassStore');
     Route::get('seasons/{id}/term/edit', [SeasonController::class, 'termSubjectClassEdit'])->name('termSubjectClassEdit');
@@ -106,7 +107,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Subject Class ####
     Route::resource('subjectsClasses', SubjectClassController::class);
-    Route::post('/subject-class/filter', [SubjectClassController::class,'filterSubject'])->name('subject-class.filter');
+//    Route::post('/subject-class/filter', [SubjectClassController::class,'filterSubject'])->name('subject-class.filter');
+    Route::get('term/seasonSort', [SubjectClassController::class, 'seasonSort'])->name('subjectClassSort');
     Route::get('season/term', [SubjectClassController::class, 'seasonTerm'])->name('seasonTerm');
 
 

@@ -14,11 +14,11 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
-                    <form id="filter-form">
+                    <form action="" method="get">
                         <div class="row">
                             <div class="col-md-10">
                                 <label for="">الصف</label>
-                                <select name="season_id" id="season_id" class="form-control">
+                                <select name="season_id" id="season_id" class="form-control season_id">
                                     <option value="">اختر الصف</option>
                                     @foreach($seasons as $season)
                                         <option value="{{ $season->id }}">{{ $season->name_ar }}</option>
@@ -41,7 +41,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <!--begin::Table-->
-                        <table class="table table-striped table-bordered text-nowrap w-100" id="term-table">
+                        <table class="table table-striped table-bordered text-nowrap w-100" id="dataTable">
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
@@ -113,8 +113,20 @@
             {data: 'season_id', name: 'season_id'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
-        showData('{{route('terms.index')}}', columns);
+        ];
+        var seasonId = $('.season_id').val();
+
+        var ajax = $.ajax({
+            url: '{{route('terms.index')}}',
+            method: 'GET',
+            data: {
+                'season_id': seasonId,
+            }, success: function (data) {
+                table.draw();
+            }
+        })
+
+        showData(ajax, columns);
         // Delete Using Ajax
         destroyScript('{{route('terms.destroy',':id')}}');
         // Add Using Ajax
@@ -123,38 +135,6 @@
         // Add Using Ajax
         showEditModal('{{route('terms.edit',':id')}}');
         editScript();
-
-
-      $(".checkBtn").on('click', function() {
-        alert('hehj')
-      })
-
-        $(document).ready(function () {
-            $('#term-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: '{{ route("term.filter") }}',
-                    method: 'POST',
-                    data: function (d) {
-                        d.season_id = $('#season_id').val();
-                        d._token = '{{ csrf_token() }}';
-                    }
-                },
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'name_ar', name: 'name_ar'},
-                    {data: 'season_id', name: 'season_id'},
-                    {data: 'status', name: 'status'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
-                ]
-            });
-
-            $('#filter-form').on('submit', function (event) {
-                event.preventDefault();
-                $('#term-table').DataTable().ajax.reload();
-            });
-        });
 
 
     </script>
