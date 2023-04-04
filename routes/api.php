@@ -124,7 +124,9 @@ Route::group(['middleware' => 'lang'], function (){
 
     Route::middleware('jwt')->group(function (){
         Route::get('life-exam/access-first-question/{id}',[LifeExamController::class,'access_first_question']);
+        Route::get('live-exam/{id}',[LifeExamController::class,'access_live_exam']);
         Route::post('life-exam/add-life-exam/{id}',[LifeExamController::class,'add_life_exam_with_student']);
+        Route::post('live-exam/add-live-exam/{id}',[LifeExamController::class,'solve_live_exam_with_student']);
 
     });
 

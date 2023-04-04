@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\LifeExam;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LifeExamQuestionsResource;
 use App\Http\Resources\LifeExamResource;
+use App\Http\Resources\LiveExamResource;
 use App\Http\Resources\QuestionResource;
 use App\Models\Answer;
 use App\Models\Degree;
@@ -57,9 +58,88 @@ class LifeExamController extends Controller{
 
         return self::returnResponseDataApi(new LifeExamQuestionsResource($access_question),"تم الوصول الي اول سؤال في الامتحان الايف",200);
     }
+    //access  live exam
+    public function access_live_exam($id){
+
+        $life_exam = LifeExam::whereHas('term', function ($term){
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id','=',$id)->first();
 
 
-    public function add_life_exam_with_student(Request $request,$id){
+        if(!$life_exam){
+            return self::returnResponseDataApi(null,"الامتحان الايف غير موجود",404,404);
+        }
+
+
+
+        return self::returnResponseDataApi(new LiveExamResource($life_exam),"تم الوصول الي اول سؤال في الامتحان الايف",200);
+    }
+
+
+    public function solve_live_exam_with_student(Request $request,$id){
+
+
+        $life_exam = LifeExam::whereHas('term', function ($term){
+            $term->where('status','=','active')->where('season_id','=',auth('user-api')->user()->season_id);
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where('id','=',$id)->first();
+
+        if(!$life_exam){
+            return self::returnResponseDataApi(null,"الامتحان الايف غير موجود",404,404);
+        }
+
+
+        $per = 0;
+        $sum_degree_for_user = 0;
+        for ($i = 0; $i < count($request->details); $i++) {
+            $answer = Answer::where('id', '=', $request->details[$i]['answer'])->first();
+            $life_exam_user = OnlineExamUser::create([
+                'user_id' => Auth::guard('user-api')->id(),
+                'question_id' => $request->details[$i]['question'],
+                'answer_id' => $request->details[$i]['answer'],
+                'life_exam_id' => $life_exam->id,
+                'status' =>  $answer->answer_status == "correct" ? "solved" : "un_correct",
+            ]);
+
+
+            //now
+            Degree::create([
+                'user_id' => auth()->id(),
+                'question_id' => $request->details[$i]['question'],
+                'life_exam_id' =>  $life_exam_user->life_exam_id,
+                'type' => 'choice',
+                'degree' => $life_exam_user->status == "solved" ? $life_exam_user->question->degree : 0,
+            ]);
+
+            $degrees_depends = ExamDegreeDepends::where('life_exam_id','=',$id)
+                ->where('user_id', '=',auth('user-api')->id());
+
+            $depends = ExamDegreeDepends::where('life_exam_id','=',$id)
+                ->where('user_id', '=',auth('user-api')->id())->first();
+
+            if($degrees_depends->exists()){
+                $depends->update([
+                    'full_degree' =>  $life_exam_user->status == "solved" ?
+                        $depends->full_degree+=$life_exam_user->question->degree
+                        : $depends->full_degree+=0,
+                ]);
+            }else{
+                ExamDegreeDepends::create([
+                    'user_id' => auth('user-api')->id(),
+                    'life_exam_id' =>  $life_exam_user->life_exam_id,
+                    'full_degree' => $life_exam_user->status == "solved" ? $life_exam_user->question->degree : 0,
+                ]);
+            }
+            $sum_degree_for_user = ExamDegreeDepends::where('life_exam_id','=',$id)
+                    ->where('user_id', '=',auth('user-api')->id())->sum('full_degree');
+            $per = (($sum_degree_for_user / $life_exam->degree) * 100);
+        }
+
+        return response()->json(["data" => null, "message" => "تم الوصول الي حل جميع الاسئلة", "code" => 201, "degree" => (int)$sum_degree_for_user, "per" => $per . "%",]);
+
+    }
+
+
+    public function add_life_exam_with_student_question_by_question(Request $request,$id){
 
 
         $life_exam = LifeExam::whereHas('term', function ($term){
@@ -110,6 +190,7 @@ class LifeExamController extends Controller{
             return self::returnResponseDataApi(null,"تم حل هذا السؤال من قبل", 202);
         }else{
 
+
             $life_exam_user = OnlineExamUser::create([
                 'user_id' => Auth::guard('user-api')->id(),
                 'question_id' => $request->question_id,
@@ -147,6 +228,8 @@ class LifeExamController extends Controller{
                     'full_degree' => $life_exam_user->status == "solved" ? $life_exam_user->question->degree : 0,
                 ]);
             }
+
+
             $next_question = Question::orderBy('id','ASC')->get()->except($request->question_id)->where('id','>',$request->question_id)->first();
 
             if($next_question){

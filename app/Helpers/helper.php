@@ -12,6 +12,15 @@ if(!function_exists('lang')){
 }
 
 
+if(!function_exists('month_with_zero')){
+
+    function month_with_zero($number){
+        return ($number < 10) ? '0'.$number : $number;
+
+    }
+}
+
+
 if(!function_exists('getFromToFromMonthsList')){
 
     function getFromToFromMonthsList($months){
