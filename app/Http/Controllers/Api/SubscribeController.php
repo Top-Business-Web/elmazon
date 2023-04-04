@@ -40,9 +40,11 @@ class SubscribeController extends Controller
                     return  $query->where('year',$start_year)->orWhere('year',$end_year);
                 }
             )->pluck('month')->toArray();
-            $dates = getFromToFromMonthsList($months);
-            $subscribes->map(function ($subscribe) use($dates)  {
-                $subscribe->plan = MonthlyPlanResource::collection(MonthlyPlan::where('start' ,'<=',$dates[1])->where('end','>=',$dates[1])->get());
+//            $dates = getFromToFromMonthsList($months);
+
+            $subscribes->map(function ($subscribe)  {
+//                dd($subscribe->year."-".month_with_zero($subscribe->month)."-31");
+                $subscribe->plan = MonthlyPlanResource::collection(MonthlyPlan::where('start' ,'>=', $subscribe->year."-".month_with_zero($subscribe->month)."-01")->where('end','<=',$subscribe->year."-".month_with_zero($subscribe->month)."-31")->get());
 //                return [
 //                    'id'            => $product->id,
 //                    'title'         => $product->title,

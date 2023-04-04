@@ -80,7 +80,9 @@ class PaymentService
                 ]);
                 array_push($months,$subscribe_item->month);
             }  //
+
            $subscribed_months = getFromToMonthsList($user->date_start_code, $user->date_end_code);
+        dd($months,$subscribed_months);
            $months_to_subscribe = sort(array_merge($months,$subscribed_months));
            $dates = getFromToFromMonthsList($months_to_subscribe);
 
