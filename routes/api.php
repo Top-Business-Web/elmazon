@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\LifeExam\LifeExamController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
 use App\Http\Controllers\Api\AllExamsUsersDegreeController;
+use App\Http\Controllers\Api\OnBoardingController;
 use App\Http\Controllers\Api\Payment;
 use App\Http\Controllers\Api\Question\QuestionController;
 use App\Http\Controllers\Api\StudentReport\ReportController;
@@ -113,6 +114,7 @@ Route::group(['middleware' => 'lang'], function (){
     });
 
     Route::get('ads',[AdsController::class,'index']);
+    Route::get('on-boarding',[OnBoardingController::class,'index']);
     //exam details
 
     Route::middleware('jwt')->group(function (){

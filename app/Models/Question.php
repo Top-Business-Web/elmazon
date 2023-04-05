@@ -11,7 +11,6 @@ class Question extends Model
 
     protected $guarded = [];
 
-
     public function answers(){
 
         return $this->hasMany(Answer::class,'question_id','id')->inRandomOrder();

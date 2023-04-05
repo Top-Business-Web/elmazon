@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MainController;
+use App\Http\Controllers\Admin\OnBoardingController;
 use App\Http\Controllers\Admin\SeasonController;
 use App\Http\Controllers\Admin\SubjectClassController;
 use App\Http\Controllers\Admin\TermController;
@@ -159,6 +160,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Slider ####
     Route::resource('slider', SliderController::class);
+    Route::resource('onBoarding', OnBoardingController::class);
 
     #### Pdf ####
     Route::resource('pdf', PdfFileUploadController::class);
