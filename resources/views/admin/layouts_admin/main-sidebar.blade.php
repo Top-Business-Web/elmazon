@@ -121,6 +121,13 @@
         </li>
 
         <li class="slide">
+            <a class="side-menu__item" href="{{ route('onBoarding.index') }}">
+                <i class="fa fa-images side-menu__icon"></i>
+                <span class="side-menu__label">الشاشات الافتتاحيه</span>
+            </a>
+        </li>
+
+        <li class="slide">
             <a class="side-menu__item" href="{{ route('slider.index') }}">
                 <i class="fa fa-images side-menu__icon"></i>
                 <span class="side-menu__label">سلايدر</span>
