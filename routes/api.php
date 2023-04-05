@@ -50,8 +50,9 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
         Route::get('all-subscribes',[SubscribeController::class,'all']);
-
         Route::post('/payments/pay',[Payment::class,'pay']);
+        Route::post('user-add-screenshot',[AuthController::class,'user_add_screenshot']);
+
 
     });
   });
