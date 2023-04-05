@@ -30,6 +30,7 @@ use App\Models\Slider;
 use App\Models\SubjectClass;
 use App\Models\Suggestion;
 use App\Models\User;
+use App\Models\UserScreenShot;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -67,14 +68,23 @@ class AuthController extends Controller
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
 
-            $token = Auth::guard('user-api')->attempt(['code' => $request->code, 'password' => '123456', 'user_status' => 'active']);
 
+            $token = Auth::guard('user-api')->attempt(['code' => $request->code, 'password' => '123456','user_status' => 'active','login_status' => 0]);
+
+            $user_data = User::where('code','=',$request->code)->first();
+            if($user_data->login_status == 1){
+                return self::returnResponseDataApi(null, "هذا الطالب مسجل دخول من جهاز اخر!", 410);
+
+            }
             if (!$token) {
                 return self::returnResponseDataApi(null, "الطالب غير مفعل برجاء التواصل مع السيكرتاريه", 408);
             }
             $user = Auth::guard('user-api')->user();
+            $user->update(['login_status' => 1]);
             $user['token'] = $token;
+
             return self::returnResponseDataApi(new UserResource($user), "تم تسجيل الدخول بنجاح", 200);
+
 
         } catch (\Exception $exception) {
 
@@ -494,6 +504,43 @@ class AuthController extends Controller
         $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body, 'term_id' => 1],1);
 
         return self::returnResponseDataApi(null, "تم ارسال اشعار جديد", 200);
+
+    }
+
+    public function user_add_screenshot(){
+
+        $user_screen = UserScreenShot::where('user_id','=',Auth::guard('user-api')->id());
+
+        if($user_screen->count() == 0){
+            $user_screen_shot = UserScreenShot::create([
+
+                    'user_id'   => Auth::guard('user-api')->id(),
+                    'count_screen_shots' => 1,
+                ]);
+
+            if(isset($user_screen_shot)){
+                return self::returnResponseDataApi(null, "تم اخذ اسكرين شوت بالتطبيق بواسطه اليوزر", 200);
+
+            }else{
+
+                return self::returnResponseDataApi(null, "يوجد خطاء بدخول البيانات برجاء الرجوع لمطور الباك اند", 500);
+
+            }
+        }elseif ($user_screen->first()->count_screen_shots < 2){
+
+            $user_screen_before = UserScreenShot::where('user_id','=',Auth::guard('user-api')->id())->first();
+            $user_screen_before->update(['count_screen_shots' => $user_screen_before->count_screen_shots+=1]);
+            return self::returnResponseDataApi(null, "تم اخذ اسكرين شوت بالتطبيق بواسطه اليوزر", 200);
+
+        }else{
+
+           $user = User::where('id','=',Auth::guard('user-api')->id())->first();
+           $user->update(['user_status' => 'not_active', 'login_status' => 0,]);
+
+            return self::returnResponseDataApi(null, "تم حظر ذلك المستخدم لانه تخطي 3 مرات من اخذ الاسكرين", 201);
+
+        }
+
 
     }
 
