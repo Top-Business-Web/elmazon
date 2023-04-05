@@ -12,12 +12,19 @@ trait FirebaseNotification{
     private $serverKey = 'AAAAvcvsG5E:APA91bHXIApfxcgUYwNQohgWbydXAOTcjSr5dWzQpT5HnID-v0GN3HuxahdId2DG4saeoNHu7tSFdL3h9AOwH_p8HOst0IQNPKkbCMycBgI7ZkaB5XWpQdN3bmOAFItqdTNVMh8EJgKH';
 
 
-    public function sendFirebaseNotification($data,$season_id){
+    public function sendFirebaseNotification($data,$season_id,$user_id = null){
 
         $url = 'https://fcm.googleapis.com/fcm/send';
 
-        $usersIds = User::where('season_id','=',$season_id)->pluck('id')->toArray();
-        $tokens = PhoneToken::whereIn('user_id',$usersIds)->pluck('token')->toArray();
+        if($user_id != null){
+            $userIds = User::where('id','=',$user_id)->pluck('id')->toArray();
+            $tokens = PhoneToken::whereIn('user_id',$userIds)->pluck('token')->toArray();
+
+        }else{
+            $usersIds = User::where('season_id','=',$season_id)->pluck('id')->toArray();
+            $tokens = PhoneToken::whereIn('user_id',$usersIds)->pluck('token')->toArray();
+        }
+
 
 //        $image = $data['image'];
 //
@@ -33,6 +40,7 @@ trait FirebaseNotification{
             'body' => $data['body'],
             'term_id' => $data['term_id'],
             'season_id' => $season_id,
+             'user_id' => $user_id ?? null,
 //           'image' => $file ?? null,
         ]);
 

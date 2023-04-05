@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\Auth;
+
 use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllExamResource;
@@ -42,6 +43,7 @@ class AuthController extends Controller
 {
 
     use FirebaseNotification;
+
     public function login(Request $request)
     {
         try {
@@ -69,10 +71,10 @@ class AuthController extends Controller
             }
 
 
-            $token = Auth::guard('user-api')->attempt(['code' => $request->code, 'password' => '123456','user_status' => 'active','login_status' => 0]);
+            $token = Auth::guard('user-api')->attempt(['code' => $request->code, 'password' => '123456', 'user_status' => 'active', 'login_status' => 0]);
 
-            $user_data = User::where('code','=',$request->code)->first();
-            if($user_data->login_status == 1){
+            $user_data = User::where('code', '=', $request->code)->first();
+            if ($user_data->login_status == 1) {
                 return self::returnResponseDataApi(null, "هذا الطالب مسجل دخول من جهاز اخر!", 410);
 
             }
@@ -97,10 +99,15 @@ class AuthController extends Controller
 
         try {
             $rules = [
-                'suggestion' => 'required|string',
+                'suggestion' => 'nullable|string',
+                'type' => 'required|in:file,text,audio',
+                'audio' => 'nullable',
+                'image' => 'nullable|mimes:jpg,png,jpeg'
             ];
             $validator = Validator::make($request->all(), $rules, [
                 'suggestion.string' => 407,
+                'image.mimes' => 408,
+                'type.in' => 409
             ]);
 
             if ($validator->fails()) {
@@ -110,6 +117,8 @@ class AuthController extends Controller
 
                     $errors_arr = [
                         407 => 'Failed,Suggestion must be an a string.',
+                        408 => 'Failed,The image type must be an jpg or jpeg or png.',
+                        409 => 'Failed,The type of suggestion must be an file or text or audio',
                     ];
 
                     $code = collect($validator->errors())->flatten(1)[0];
@@ -118,16 +127,43 @@ class AuthController extends Controller
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
 
-            $suggestion = Suggestion::create([
+            if ($image = $request->file('image')) {
+                $destinationPath = 'suggestions_uploads/images/';
+                $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                $image->move($destinationPath, $file);
+                $request['image'] = "$file";
+
+            } elseif ($audio = $request->file('audio')) {
+                $audioPath = 'suggestions_uploads/audios/';
+                $audioUpload = date('YmdHis') . "." . $audio->getClientOriginalExtension();
+                $audio->move($audioPath, $audioUpload);
+                $request['audio'] = "$audioUpload";
+            } else {
+
+                $suggestion = $request->suggestion;
+            }
+
+
+            if ($request->suggestion == null && $request->audio == null && $request->image == null) {
+
+                return self::returnResponseDataApi(null, "يجب كتابه اقتراح او ارفاق صوره او رفع ملف صوتي", 422);
+            }
+            $suggestion_add = Suggestion::create([
 
                 'user_id' => Auth::guard('user-api')->id(),
-                'suggestion' => $request->suggestion,
+                'audio' => $audioUpload ?? null,
+                'image' => $file ?? null,
+                'type' => $request->type,
+                'suggestion' => $suggestion ?? null,
             ]);
 
-            if (isset($suggestion)) {
+            if (isset($suggestion_add)) {
 
-                return self::returnResponseDataApi(new SuggestResource($suggestion), "تم تسجيل الاقتراح بنجاح", 200);
+                $suggestion_add->user->token = $request->bearerToken();
+                return self::returnResponseDataApi(new SuggestResource($suggestion_add), "تم تسجيل الاقتراح بنجاح", 200);
 
+            } else {
+                return self::returnResponseDataApi(null, "يوجد خطاء ما اثناء دخول البيانات", 500);
             }
         } catch (\Exception $exception) {
 
@@ -136,14 +172,15 @@ class AuthController extends Controller
     }
 
 
-    public function allNotifications()
-    {
+    public function allNotifications(){
 
         try {
 
             $allNotification = Notification::whereHas('term', function ($term) {
-                $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->get();
+                $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
+            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->where(function ($q){
+                $q->whereNull('user_id')->orWhere('user_id', '=', auth()->guard('user-api')->id());
+            })->latest()->get();
 
             return self::returnResponseDataApi(NotificationResource::collection($allNotification), "تم ارسال اشعارات المستخدم بنجاح", 200);
 
@@ -212,7 +249,7 @@ class AuthController extends Controller
         $papelSheetExam = PapelSheetExam::whereHas('season', function ($season) {
             $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
         })->whereHas('term', function ($term) {
-            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+            $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
         })->where('id', '=', $id)->first();
 
 
@@ -251,22 +288,21 @@ class AuthController extends Controller
                         } else {
 
                             if (Carbon::now()->format('Y-m-d') <= $papelSheetExam->to) {
-                               PapelSheetExamUser::create([
+                                PapelSheetExamUser::create([
                                     'user_id' => Auth::guard('user-api')->id(),
                                     'section_id' => $section->id,
                                     'papel_sheet_exam_id' => $papelSheetExam->id,
                                     'papel_sheet_exam_time_id' => $request->papel_sheet_exam_time_id,
                                 ]);
-                                return response()->json([
-                                    'data' => [
-                                        'exam' => new PapelSheetExamTimeUserResource($papelSheetExam),
-                                    ],
-                                    'message' => 'تم تسجيل بياناتك فى الامتحان',
-                                    'code' => 200,
-                                    'date_exam' => $papelSheetExam->date_exam,
-                                    'address' => $section->address,
-                                    'section_name' => lang() == 'ar' ? $section->section_name_ar : $section->section_name_en,
-                                ]);
+
+
+                                //start push notification for user when register in exam
+                                $time_exam = PapelSheetExamTime::where('id', '=', $request->papel_sheet_exam_time_id)->first();
+                                $this->sendFirebaseNotification(['title' => 'اشعار جديد',
+                                    'body' => $time_exam->from . 'وموعد الامتحان  ' . $section->section_name_ar . 'واسم القاعه  ' . $section->address . 'ومكان الامتحان  ' . $papelSheetExam->date_exam . 'تاريخ الامتحان',
+                                    'term_id' => $papelSheetExam->term_id], $papelSheetExam->season_id, Auth::guard('user-api')->id());
+
+                                return response()->json(['data' => ['exam' => new PapelSheetExamTimeUserResource($papelSheetExam)], 'message' => 'تم تسجيل بياناتك فى الامتحان', 'code' => 200, 'date_exam' => $papelSheetExam->date_exam, 'address' => $section->address, 'section_name' => lang() == 'ar' ? $section->section_name_ar : $section->section_name_en,]);
                             } else {
 
                                 return self::returnResponseDataApi(null, "!لقد تعديت اخر موعد لتسجيل الامتحان", 412);
@@ -288,8 +324,8 @@ class AuthController extends Controller
         $papelSheetExam = PapelSheetExam::whereHas('season', function ($season) {
             $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
         })->whereHas('term', function ($term) {
-            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-        })->whereDate('to','>=',Carbon::now()->format('Y-m-d'))->first();
+            $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
+        })->whereDate('to', '>=', Carbon::now()->format('Y-m-d'))->first();
 
         if (!$papelSheetExam) {
             return self::returnResponseDataApi(null, "لا يوجد امتحان ورقي", 404);
@@ -299,7 +335,8 @@ class AuthController extends Controller
     }
 
 
-    public function updateProfile(Request $request){
+    public function updateProfile(Request $request)
+    {
 
         $rules = [
             'image' => 'nullable|image|mimes:jpg,png,jpeg',
@@ -326,14 +363,14 @@ class AuthController extends Controller
         }
         $user = Auth::guard('user-api')->user();
 
-        if($image = $request->file('image')){
+        if ($image = $request->file('image')) {
             $destinationPath = 'users/';
             $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $file);
             $request['image'] = "$file";
 
-            if(file_exists(public_path('users/'. $user->image)) && $user->image != null){
-                unlink(public_path('users/'. $user->image));
+            if (file_exists(public_path('users/' . $user->image)) && $user->image != null) {
+                unlink(public_path('users/' . $user->image));
             }
         }
 
@@ -341,68 +378,67 @@ class AuthController extends Controller
             'image' => $file ?? $user->image
         ]);
         $user['token'] = $request->bearerToken();
-        return self::returnResponseDataApi(new UserResource($user),"تم تعديل صوره الطالب بنجاح",200);
+        return self::returnResponseDataApi(new UserResource($user), "تم تعديل صوره الطالب بنجاح", 200);
 
     }
 
-    public function home_page(){
+    public function home_page()
+    {
 
         try {
 
             //start opened first subject class and first lesson
             $subject_class = SubjectClass::first();
-            $first_lesson = Lesson::where('subject_class_id','=',$subject_class->id)->first();
+            $first_lesson = Lesson::where('subject_class_id', '=', $subject_class->id)->first();
 
-            if(!$subject_class){
-                return self::returnResponseDataApi(null,"لا يوجد فصول برجاء ادخال عدد من الفصول لفتح اول فصل من القائمه",404,404);
+            if (!$subject_class) {
+                return self::returnResponseDataApi(null, "لا يوجد فصول برجاء ادخال عدد من الفصول لفتح اول فصل من القائمه", 404, 404);
             }
 
-            if(!$first_lesson){
-                return self::returnResponseDataApi(null,"لا يوجد قائمه دروس لفتح اول درس",404,404);
+            if (!$first_lesson) {
+                return self::returnResponseDataApi(null, "لا يوجد قائمه دروس لفتح اول درس", 404, 404);
             }
 
-            $subject_class_opened = OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('subject_class_id','=',$subject_class->id);
-            $lesson_opened = OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('lesson_id','=',$first_lesson->id);
+            $subject_class_opened = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())->where('subject_class_id', '=', $subject_class->id);
+            $lesson_opened = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())->where('lesson_id', '=', $first_lesson->id);
 
-            if(!$subject_class_opened->exists() &&  !$lesson_opened->exists()){
+            if (!$subject_class_opened->exists() && !$lesson_opened->exists()) {
                 OpenLesson::create([
                     'user_id' => Auth::guard('user-api')->id(),
-                    'subject_class_id' =>  $subject_class->id,
+                    'subject_class_id' => $subject_class->id,
                 ]);
 
                 OpenLesson::create([
                     'user_id' => Auth::guard('user-api')->id(),
-                    'lesson_id' =>  $first_lesson->id,
+                    'lesson_id' => $first_lesson->id,
                 ]);
 
             }
 
             //start life exam show
-            $life_exam = LifeExam::whereHas('term', function ($term){
-                $term->where('status','=','active')->where('season_id','=',auth('user-api')->user()->season_id);
-            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)
-                ->where('date_exam','=',Carbon::now()->format('Y-m-d'))
+            $life_exam = LifeExam::whereHas('term', function ($term) {
+                $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
+            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+                ->where('date_exam', '=', Carbon::now()->format('Y-m-d'))
                 ->first();
 
 
-//            return $life_exam->time_start;
-            if(!$life_exam){
-              $id = null;
-            }else{
+            if (!$life_exam) {
+                $id = null;
+            } else {
 
                 $now = Carbon::now();
                 $start = Carbon::createFromTimeString($life_exam->time_start);
-                $end =  Carbon::createFromTimeString($life_exam->time_end);
-//                $diff_in_minutes = $end->diffInMinutes(Carbon::now()->format('H:i:s'));
-//                return $diff_in_minutes;
-                $degree_depends = ExamDegreeDepends::where('user_id','=',Auth::guard('user-api')->id())
-                    ->where('life_exam_id','=',$life_exam->id);
+                $end = Carbon::createFromTimeString($life_exam->time_end);
 
-                if($now->isBetween($start,$end)){
+                $degree_depends = ExamDegreeDepends::where('user_id', '=', Auth::guard('user-api')->id())
+                    ->where('life_exam_id', '=', $life_exam->id);
+
+                if ($now->isBetween($start, $end)) {
                     $id = $life_exam->id;
-                }elseif ($degree_depends->exists()){
+                } elseif ($degree_depends->exists()) {
                     $id = null;
-                }else{
+                } else {
                     $id = null;
                 }
             }
@@ -410,35 +446,35 @@ class AuthController extends Controller
             //end life exam show
 
             //end opened first subject class and first lesson
-            $classes = SubjectClass::whereHas('term', function ($term){
-                $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+            $classes = SubjectClass::whereHas('term', function ($term) {
+                $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
+            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
 
             $sliders = Slider::get();
             $notification = Notification::whereHas('term', function ($term) {
-                $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+                $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
             })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->first();
 
             return response()->json([
                 'data' => [
-                     'life_exam' => $id,
-                     'sliders' => SliderResource::collection($sliders),
-                     'notification' => new NotificationResource($notification),
-                     'classes' => SubjectClassResource::collection($classes),
-
+                    'life_exam' => $id,
+                    'sliders' => SliderResource::collection($sliders),
+                    'notification' => new NotificationResource($notification),
+                    'classes' => SubjectClassResource::collection($classes),
                 ],
                 'code' => 200,
                 'message' => "تم ارسال جميع بيانات الصفحه الرئيسيه",
             ]);
-        }catch (\Exception $exception) {
+        } catch (\Exception $exception) {
 
-            return self::returnResponseDataApi(null,$exception->getMessage(),500);
+            return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
 
 
     }
 
-    public function add_device_token(Request $request){
+    public function add_device_token(Request $request)
+    {
 
         $rules = [
             'token' => 'required',
@@ -471,12 +507,13 @@ class AuthController extends Controller
         ]);
 
         $phoneToken->user->token = $request->bearerToken();
-        if(isset($phoneToken)){
-            return self::returnResponseDataApi(new PhoneTokenResource($phoneToken),"Token insert successfully", 200);
+        if (isset($phoneToken)) {
+            return self::returnResponseDataApi(new PhoneTokenResource($phoneToken), "Token insert successfully", 200);
         }
     }
 
-    public function add_notification(Request $request){
+    public function add_notification(Request $request)
+    {
 
         $rules = [
             'body' => 'required|string',
@@ -501,41 +538,42 @@ class AuthController extends Controller
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
-        $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body, 'term_id' => 1],1);
+        $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body, 'term_id' => 1], 1);
 
         return self::returnResponseDataApi(null, "تم ارسال اشعار جديد", 200);
 
     }
 
-    public function user_add_screenshot(){
+    public function user_add_screenshot()
+    {
 
-        $user_screen = UserScreenShot::where('user_id','=',Auth::guard('user-api')->id());
+        $user_screen = UserScreenShot::where('user_id', '=', Auth::guard('user-api')->id());
 
-        if($user_screen->count() == 0){
+        if ($user_screen->count() == 0) {
             $user_screen_shot = UserScreenShot::create([
 
-                    'user_id'   => Auth::guard('user-api')->id(),
-                    'count_screen_shots' => 1,
-                ]);
+                'user_id' => Auth::guard('user-api')->id(),
+                'count_screen_shots' => 1,
+            ]);
 
-            if(isset($user_screen_shot)){
+            if (isset($user_screen_shot)) {
                 return self::returnResponseDataApi(null, "تم اخذ اسكرين شوت بالتطبيق بواسطه اليوزر", 200);
 
-            }else{
+            } else {
 
                 return self::returnResponseDataApi(null, "يوجد خطاء بدخول البيانات برجاء الرجوع لمطور الباك اند", 500);
 
             }
-        }elseif ($user_screen->first()->count_screen_shots < 2){
+        } elseif ($user_screen->first()->count_screen_shots < 2) {
 
-            $user_screen_before = UserScreenShot::where('user_id','=',Auth::guard('user-api')->id())->first();
-            $user_screen_before->update(['count_screen_shots' => $user_screen_before->count_screen_shots+=1]);
+            $user_screen_before = UserScreenShot::where('user_id', '=', Auth::guard('user-api')->id())->first();
+            $user_screen_before->update(['count_screen_shots' => $user_screen_before->count_screen_shots += 1]);
             return self::returnResponseDataApi(null, "تم اخذ اسكرين شوت بالتطبيق بواسطه اليوزر", 200);
 
-        }else{
+        } else {
 
-           $user = User::where('id','=',Auth::guard('user-api')->id())->first();
-           $user->update(['user_status' => 'not_active', 'login_status' => 0,]);
+            $user = User::where('id', '=', Auth::guard('user-api')->id())->first();
+            $user->update(['user_status' => 'not_active', 'login_status' => 0,]);
 
             return self::returnResponseDataApi(null, "تم حظر ذلك المستخدم لانه تخطي 3 مرات من اخذ الاسكرين", 201);
 
@@ -544,7 +582,8 @@ class AuthController extends Controller
 
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
 
         try {
 
@@ -569,7 +608,7 @@ class AuthController extends Controller
                 }
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
-            PhoneToken::where('token','=',$request->token)->where('user_id','=',auth('user-api')->id())->delete();
+            PhoneToken::where('token', '=', $request->token)->where('user_id', '=', auth('user-api')->id())->delete();
             auth()->guard('user-api')->logout();
             return self::returnResponseDataApi(null, "تم تسجيل الخروج بنجاح", 200);
 

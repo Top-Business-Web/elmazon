@@ -43,4 +43,10 @@ class AllExam extends Model
 
         return $this->hasMany(ExamDegreeDepends::class,'all_exam_id','id');
     }
+
+
+    public function subject_class(){
+
+        return $this->belongsTo(SubjectClass::class,'subject_id','id');
+    }
 }
