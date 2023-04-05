@@ -31,7 +31,7 @@ class OnlineExam extends Model
 
     public function questions(){
 
-        return $this->belongsToMany(Question::class,'online_exam_questions', 'online_exam_id','question_id','id','id');
+        return $this->belongsToMany(Question::class,'online_exam_questions', 'online_exam_id','question_id','id','id')->inRandomOrder();
     }
 
 
