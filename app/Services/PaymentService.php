@@ -62,7 +62,7 @@ class PaymentService
             return response()->json(["data"=>'',"errors"=>['error'=>$charge['error']],'message'=>$charge['error']],409);
         }if (!empty($charge) && $charge['status'] == 'succeeded') {
            $payment = new Payment;
-            $payment->user_id = auth()->guard('user-api')->user()->id;
+            $payment->user_id = auth()->guard('user-api')->id();
             $payment->payment_id = $charge->id;
             $payment->payer_email = $charge->billing_details->email;
             $payment->amount = $charge->amount;
