@@ -17,7 +17,7 @@ class CreateVideoRatesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('video_id');
             $table->unsignedBigInteger('user_id');
-            $table->enum('action',['like', 'dislike']);
+            $table->enum('action',['like', 'dislike','no_rate']);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('video_id')->references('id')->on('video_parts')->cascadeOnUpdate()->cascadeOnDelete();
