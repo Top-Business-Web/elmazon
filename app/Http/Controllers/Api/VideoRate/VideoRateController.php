@@ -21,7 +21,7 @@ class VideoRateController extends Controller{
         }
 
         $rules = [
-            'action' => 'required|in:like,dislike',
+            'action' => 'required|in:like,dislike,no_rate',
         ];
         $validator = Validator::make($request->all(), $rules, [
             'action.in' => 407
@@ -33,7 +33,7 @@ class VideoRateController extends Controller{
             if (is_numeric($errors)) {
 
                 $errors_arr = [
-                    407 => 'Failed,The action type must be like or dislike',
+                    407 => 'Failed,The action type must be like or dislike or no_rate',
                 ];
 
                 $code = collect($validator->errors())->flatten(1)[0];
