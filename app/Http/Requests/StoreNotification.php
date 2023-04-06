@@ -26,7 +26,9 @@ class StoreNotification extends FormRequest
         return [
             'title' => 'required',
             'body' => 'required',
-            'user_id' => 'required'
+            'user_id' => 'nullable',
+            'season_id' => 'required',
+            'term_id' => 'required'
         ];
     }
 }

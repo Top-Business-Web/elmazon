@@ -12,7 +12,7 @@ trait FirebaseNotification{
     private $serverKey = 'AAAAvcvsG5E:APA91bHXIApfxcgUYwNQohgWbydXAOTcjSr5dWzQpT5HnID-v0GN3HuxahdId2DG4saeoNHu7tSFdL3h9AOwH_p8HOst0IQNPKkbCMycBgI7ZkaB5XWpQdN3bmOAFItqdTNVMh8EJgKH';
 
 
-    public function sendFirebaseNotification($data,$season_id,$user_id = null){
+    public function sendFirebaseNotification($data,$season_id,$user_id = null,$file=null){
 
         $url = 'https://fcm.googleapis.com/fcm/send';
 
@@ -41,7 +41,7 @@ trait FirebaseNotification{
             'term_id' => $data['term_id'],
             'season_id' => $season_id,
              'user_id' => $user_id ?? null,
-//           'image' => $file ?? null,
+           'image' => $file ?? null,
         ]);
 
         $fields = array(
