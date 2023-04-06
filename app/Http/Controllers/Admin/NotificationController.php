@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreNotification;
 use App\Models\Notification;
+use App\Models\Season;
+use App\Models\Term;
+use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\User;
 
 class NotificationController extends Controller
 {
+    use FirebaseNotification,PhotoTrait;
     // Index Start
     public function index(request $request)
     {
@@ -36,8 +41,10 @@ class NotificationController extends Controller
 
     public function create()
     {
-        $users = User::get();
-        return view('admin.notifications.parts.create', compact('users'));
+        $data['terms'] = Term::get();
+        $data['seasons'] = Season::get();
+        $data['users'] = User::get();
+        return view('admin.notifications.parts.create', $data);
     }
 
     // Create End
@@ -46,8 +53,15 @@ class NotificationController extends Controller
 
     public function store(StoreNotification $request)
     {
-        $input = $request->all();
-        if(Notification::create($input)) {
+        $inputs = $request->all();
+        $inputs['image'] = '';
+        if($request->has('image')){
+            $inputs['image'] = $this->saveImage($request->image,'assets/uploads/notification');
+        }
+
+        $this->sendFirebaseNotification(['title' => $request->title, 'body' => $request->body, 'term_id' => $inputs['term_id']], $inputs['season_id'],null,$inputs['image']);
+
+        if(Notification::create($inputs)) {
             return response()->json(['status' => 200]);
         }
         else
@@ -62,8 +76,11 @@ class NotificationController extends Controller
 
     public function edit(Notification $notification)
     {
-        $users = User::all();
-        return view('admin.notifications.parts.edit', compact('notification', 'users'));
+        $data['terms'] = Term::get();
+        $data['seasons'] = Season::get();
+        $data['users'] = User::get();
+        $data['notification'] = $notification;
+        return view('admin.notifications.parts.edit', $data);
     }
 
     // Edit End
@@ -72,7 +89,12 @@ class NotificationController extends Controller
 
     public function update(Notification $notification, StoreNotification $request)
     {
-        if($notification->update($request->all())) {
+        $inputs = $request->all();
+        if($request->has('image')){
+            $inputs['image'] = $this->saveImage($request->image,'assets/uploads/notification');
+        }
+
+        if($notification->update($inputs)) {
             return response()->json(['status' => 200]);
         }
         else
