@@ -17,7 +17,11 @@ class SuggestResource extends JsonResource
         return [
 
             'id' => $this->id,
-            'suggestion' => $this->suggestion,
+            'suggestion' => $this->suggestion ?? 'No suggestion',
+            'audio' => $this->audio != null ? asset('suggestions_uploads/audios/'. $this->audio) : 'No audio',
+            'image' => $this->image != null ? asset('suggestions_uploads/images/'. $this->image) : 'No image',
+            'type' => $this->type,
+            'user' => new UserResource($this->user),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
 

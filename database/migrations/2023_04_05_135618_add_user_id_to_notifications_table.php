@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSuggestionsTable extends Migration
+class AddUserIdToNotificationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateSuggestionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('suggestions', function (Blueprint $table) {
+        Schema::table('notifications', function (Blueprint $table) {
 
-            $table->bigIncrements('id');
-            $table->string('suggestion')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->timestamps();
+            $table->unsignedBigInteger('user_id')->nullable()->after('image');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
 
         });
@@ -31,6 +28,8 @@ class CreateSuggestionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('suggestions');
+        Schema::table('notifications', function (Blueprint $table) {
+            //
+        });
     }
 }

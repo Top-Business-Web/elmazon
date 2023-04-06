@@ -65,7 +65,7 @@ class CommentController extends Controller{
         }
 
 
-        if($request->comment && $request->audio && $request->image){
+        if($request->comment == null && $request->audio == null && $request->image == null){
 
             return self::returnResponseDataApi(null,"يجب كتابه كومنت او ارفاق صوره او رفع ملف صوتي",422);
         }
@@ -139,7 +139,7 @@ class CommentController extends Controller{
         }
 
 
-        if($request->replay && $request->audio && $request->image){
+        if($request->replay == null && $request->audio == null && $request->image == null){
 
             return self::returnResponseDataApi(null,"يجب الرد علي التعليق بكومنت او ارفاق صوره او رفع ملف صوتي",422);
         }
@@ -216,7 +216,7 @@ class CommentController extends Controller{
         }
 
 
-        if($request->comment && $request->audio && $request->image){
+        if($request->comment == null && $request->audio == null && $request->image == null){
             return self::returnResponseDataApi(null,"يجب كتابه كومنت او ارفاق صوره او رفع ملف صوتي",422);
         }
 
@@ -312,7 +312,7 @@ class CommentController extends Controller{
         }
 
 
-        if($request->comment && $request->audio && $request->image){
+        if($request->comment == null && $request->audio == null && $request->image == null){
             return self::returnResponseDataApi(null,"يجب كتابه كومنت او ارفاق صوره او رفع ملف صوتي",422);
         }
 

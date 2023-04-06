@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Stripe\ApiOperations\All;
 
 class SubjectClass extends Model
 {
@@ -40,6 +41,11 @@ class SubjectClass extends Model
         return $this->morphOne(ExamInstruction::class, 'examable');
     }
 
+
+    public function all_exams(){
+
+        return $this->hasMany(AllExam::class,'subject_class_id','id')->whereHas('questions');
+    }
 
 
 

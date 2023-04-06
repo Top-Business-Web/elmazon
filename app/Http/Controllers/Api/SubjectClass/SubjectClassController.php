@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AllExamResource;
 use App\Http\Resources\LessonResource;
 use App\Http\Resources\OnlineExamResource;
+use App\Http\Resources\SubjectClassAllExamResource;
 use App\Http\Resources\SubjectClassResource;
 use App\Models\AllExam;
 use App\Models\Lesson;
@@ -24,16 +25,25 @@ class SubjectClassController extends Controller
                 $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
             })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
 
-            $fullExams = AllExam::whereHas('term', function ($term){
+//            $fullExams = AllExam::whereHas('term', function ($term){
+//
+//                $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+//            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+
+
+            $subject_classes_all_exams = SubjectClass::whereHas('term', function ($term){
 
                 $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->whereHas('all_exams')->get();
+
 
             return response()->json([
 
                 'data' => [
                      'classes' => SubjectClassResource::collection($classes),
-                     'fullExams' => AllExamResource::collection($fullExams),
+//                     'fullExams' => AllExamResource::collection($fullExams),
+                     'classes_all_exams' => SubjectClassAllExamResource::collection($subject_classes_all_exams),
+
                     'code' => 200,
                     'message' => "تم الحصول علي جميع الدروس التابعه لهذا الفصل",
                 ]
