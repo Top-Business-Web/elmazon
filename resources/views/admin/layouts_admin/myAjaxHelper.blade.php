@@ -63,6 +63,10 @@
                 },
             ]
         });
+
+        $('#type').on('click',function(){
+            table.draw();
+        });
     }
 
     // Delete Using Ajax

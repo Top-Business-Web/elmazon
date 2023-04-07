@@ -33,6 +33,7 @@
                                 <th class="min-w-50px">الدرس</th>
                                 <th class="min-w-50px">لينك</th>
                                 <th class="min-w-50px">وقت الفيديو</th>
+                                <th class="min-w-50px">التقييم</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -98,6 +99,7 @@
             {data: 'lesson_id', name: 'lesson_id'},
             {data: 'link', name: 'link'},
             {data: 'video_time', name: 'video_time'},
+            {data: 'rate', name: 'rate'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('videosParts.index')}}', columns);

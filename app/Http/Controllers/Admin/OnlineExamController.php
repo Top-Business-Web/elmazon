@@ -151,6 +151,11 @@ class OnlineExamController extends Controller
 
     // End Add Question
 
+    public function selectTerm(Request $request)
+    {
+        //
+    }
+
     // Delete Question
 
     public function deleteQuestion(Request $request)
@@ -233,4 +238,5 @@ class OnlineExamController extends Controller
     }
 
     // Delete End
+
 }

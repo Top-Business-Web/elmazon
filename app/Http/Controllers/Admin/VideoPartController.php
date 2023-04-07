@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreVideoPart;
 use App\Models\VideoParts;
 use App\Models\Lesson;
+use App\Models\VideoRate;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,7 @@ class VideoPartController extends Controller
     use PhotoTrait;
 
     use FirebaseNotification;
+
     // Index Start
     public function index(request $request)
     {
@@ -29,13 +31,28 @@ class VideoPartController extends Controller
                     return '
                             <button type="button" data-id="' . $videoParts->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
-                                    data-id="' . $videoParts->id . '" data-title="' . $videoParts->name_en . '">
+                                    data-id="' . $videoParts->id . '" data-title="' .' '. $videoParts->name_ar .' '. '">
                                     <i class="fas fa-trash"></i>
                             </button>
                        ';
                 })
                 ->editColumn('lesson_id', function ($videoParts) {
-                    return '<td>' . $videoParts->lesson->name_ar . '</td>';
+                    return $videoParts->lesson->name_ar;
+                })
+                ->addColumn('rate', function ($videoParts) {
+                    $like = VideoRate::where('video_id', $videoParts->id)
+                        ->where('action','=', 'like')
+                        ->count('action');
+                    $disLike = VideoRate::where('video_id', $videoParts->id)
+                        ->where('action','=', 'dislike')
+                        ->count('action');
+                    return  $like . ' <i class="fa fa-thumbs-up ml-2 mr-2 text-success"></i> ' . $disLike . '<i class="fa fa-thumbs-down text-danger ml-2 mr-2"></i>' ;
+                })
+                ->editColumn('link', function ($videoParts) {
+                    if ($videoParts->type == 'video')
+                        return '<a href="' . asset('videos/' . $videoParts->link) . '">
+                                لينك الفيديو
+                            </a>';
                 })
                 ->escapeColumns([])
                 ->make(true);

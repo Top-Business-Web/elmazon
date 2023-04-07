@@ -41,5 +41,9 @@ protected $guarded = [];
         return $this->belongsTo(Lesson::class, 'lesson_id', 'id');
     }
 
+    public function rate()
+    {
+        return $this->hasMany(VideoRate::class, 'video_id','id');
+    }
 
 }

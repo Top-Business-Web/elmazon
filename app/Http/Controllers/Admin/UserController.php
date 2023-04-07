@@ -7,7 +7,9 @@ use App\Http\Requests\StoreUser;
 use App\Http\Requests\UpdateUser;
 use App\Models\Country;
 use App\Models\Season;
+use App\Models\Subscribe;
 use App\Models\User;
+use App\Models\UserSubscribe;
 use App\Traits\PhotoTrait;
 use Buglinjo\LaravelWebp\Exceptions\CwebpShellExecutionFailed;
 use Buglinjo\LaravelWebp\Exceptions\DriverIsNotSupportedException;
@@ -19,6 +21,7 @@ use Yajra\DataTables\DataTables;
 class UserController extends Controller
 {
     use PhotoTrait;
+
     // Index Start
     public function index(request $request)
     {
@@ -59,8 +62,8 @@ class UserController extends Controller
         $inputs = $request->all();
         $inputs['user_status'] = 'active';
 
-        if($request->has('image')){
-            $inputs['image'] = $this->saveImage($request->image,'assets/uploads/students','photo');
+        if ($request->has('image')) {
+            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/students', 'photo');
         }
 
         if (User::create($inputs)) {
@@ -98,7 +101,7 @@ class UserController extends Controller
             if (file_exists($user->image)) {
                 unlink($user->image);
             }
-            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/students','photo');
+            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/students', 'photo');
         }
 
         if ($user->update($inputs)) {
@@ -115,7 +118,10 @@ class UserController extends Controller
 
     public function subscrView(User $user)
     {
-      return view('admin.users.parts.subscription_renewal', compact('user'));
+        $userSubscriptions = UserSubscribe::where('student_id',$user->id)->pluck('month')->toArray();
+        $months_user = Subscribe::whereIn('month',$userSubscriptions)->get();
+        $months = Subscribe::get();
+        return view('admin.users.parts.subscription_renewal', compact('user', 'months','months_user'));
     }
 
     // Subscripition View End
@@ -124,20 +130,51 @@ class UserController extends Controller
 
     public function subscr_renew(Request $request, User $user)
     {
-        $renewals = User::findOrFail($request->id);
-        $renewals->date_start_code = $request->date_start_code;
-        $renewals->date_end_code = $request->date_end_code;
 
-        if ($renewals->save()) {
-            toastr('تم التجديد بنجاح');
-            return redirect()->back();
-        } else {
-            return response()->json(['error' => 'Failed to save.'], 500);
+        $user = User::findOrFail($request->id);
+
+        $inputs = $request->all();
+        $year = $inputs['year'];
+
+        foreach ($inputs['month'] as $value) {
+            $month = Subscribe::find($value);
+            UserSubscribe::create([
+                'student_id' => $user->id,
+                'month' => $value,
+                'price' => ($user->center == 'in') ? $month->price_in_center : $month->price_out_center,
+                'year' => $year
+            ]);
         }
-
+        toastr('تم التجديد بنجاح');
+        return redirect()->route('users.index');
     }
 
     // Subscripition Renewal End
+
+    public function priceMonth(Request $request)
+    {
+        $user = User::find($request->id);
+
+        $month = $request->month;
+        $price_out_center = Subscribe::whereIn('month', $month)
+            ->where('season_id', $user->season_id)
+            ->sum('price_in_center');
+
+        $price_in_center = Subscribe::whereIn('month', $month)
+            ->where('season_id', $user->season_id)
+            ->sum('price_out_center');
+//            ->get(['price_in_center', 'price_out_center']);
+//        dd($price_out_center,$price_in_center);
+
+        $output = '';
+//        foreach ($price_out_center as $p) {
+        $output .= '<option value="' . $price_in_center . '">' . ' السعر داخل السنتر ' . $price_in_center . '</option>';
+        $output .= '<option value="' . $price_out_center . '">' . ' السعر خارج السنتر ' . $price_out_center . '</option>';
+//        }
+
+        return $output;
+    }
+
 
     // Destroy Start
 

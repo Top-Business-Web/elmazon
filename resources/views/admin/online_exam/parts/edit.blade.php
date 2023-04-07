@@ -5,6 +5,24 @@
         <input type="hidden" value="{{ $onlineExam->id }}" name="id">
         <div class="form-group">
             <div class="row">
+                <div class="col-md-2">
+                    <label for="name_ar" class="form-control-label">الدرجة</label>
+                    <input type="number" class="form-control" name="degree" style="text-align: center" value="{{ $onlineExam->degree }}">
+                </div>
+                <div class="col-md-5">
+                    <label for="date_exam" class="form-control-label">موعد الامتحان</label>
+                    <input type="date" class="form-control" name="date_exam" style="text-align: center" value="{{ $onlineExam->date_exam }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="name_en" class="form-control-label"> وقت الامتحان</label>
+                    <input type="number" class="form-control" value="{{ $onlineExam->quize_minute }}" name="quize_minute" style="text-align: center" placeholder="الوقت بالدقائق">
+                </div>
+                <div class="col-md-2">
+                    <label for="name_en" class="form-control-label"> عدد المحاولات </label>
+                    <input type="number" class="form-control" value="{{ $onlineExam->trying_number }}" name="trying_number" style="text-align: center" placeholder="الوقت بالدقائق">
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
                     <input type="text" class="form-control" value="{{ $onlineExam->name_ar }}" name="name_ar" style="text-align: center">
@@ -22,7 +40,7 @@
                         @foreach($terms as $term)
                             <option value="{{ $term->id }}"
                                     {{ ($onlineExam->term_id == $term->id)? 'selected' : '' }}
-                                    style="text-align: center">{{ $term->name_en }}</option>
+                                    style="text-align: center">{{ $term->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>
@@ -33,7 +51,7 @@
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
                                     {{ ($onlineExam->season_id == $season->id)? 'selected' : '' }}
-                                    style="text-align: center">{{ $season->name_en }}</option>
+                                    style="text-align: center">{{ $season->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>

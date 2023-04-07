@@ -90,7 +90,7 @@
             {data: 'audio', name: 'audio'},
             {data: 'image', name: 'image'},
             {data: 'type', name: 'type'},
-            {data: 'video_part', name: 'video_part'},
+            {data: 'video_part_id', name: 'video_part_id'},
             {data: 'user_id', name: 'user_id'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
