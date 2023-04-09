@@ -75,13 +75,13 @@ class AuthController extends Controller
             }
 
 
-            $token = Auth::guard('user-api')->attempt(['code' => $request->code, 'password' => '123456', 'user_status' => 'active', 'login_status' => 0]);
+            $token = Auth::guard('user-api')->attempt(['code' => $request->code, 'password' => '123456', 'user_status' => 'active']);
 
-            $user_data = User::where('code', '=', $request->code)->first();
-            if ($user_data->login_status == 1) {
-                return self::returnResponseDataApi(null, "هذا الطالب مسجل دخول من جهاز اخر!", 410);
-
-            }
+//            $user_data = User::where('code', '=', $request->code)->first();
+//            if ($user_data->login_status == 1) {
+//                return self::returnResponseDataApi(null, "هذا الطالب مسجل دخول من جهاز اخر!", 410);
+//
+//            }
             if (!$token) {
                 return self::returnResponseDataApi(null, "الطالب غير مفعل برجاء التواصل مع السيكرتاريه", 408);
             }
