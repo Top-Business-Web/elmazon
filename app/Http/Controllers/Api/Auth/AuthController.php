@@ -257,11 +257,11 @@ class AuthController extends Controller
             return self::returnResponseDataApi(null, "لا يوجد اي امتحان ورقي متاح لك", 404);
         }
 
-        $ids = Section::query()->orderBy('id', 'ASC')->pluck('id')->toArray();
+        $ids = Section::orderBy('id','ASC')->pluck('id')->toArray();
 
         foreach ($ids as $id) {
 
-            $sectionCheck = Section::query()->where('id', '=', $id)->first();
+            $sectionCheck = Section::where('id', '=',$id)->first();
             $CheckCountSectionExam = PapelSheetExamUser::where('section_id', '=', $sectionCheck->id)
                 ->where('papel_sheet_exam_id', '=', $papelSheetExam->id)->count();
 
@@ -274,17 +274,30 @@ class AuthController extends Controller
             if ((int)$countExamId < (int)$sumCapacityOfSection) {
 
                 if ($CheckCountSectionExam < $sectionCheck->capacity) {
+
                     $section = Section::where('id', '=', $id)->first();
+
                     if ($CheckCountSectionExam == $sectionCheck->capacity) {
                         $section = Section::query()->skip($section->id)->first();//to get empty section after complete check
                     }
+
                     if (Auth::guard('user-api')->user()->center == 'out') {
                         return self::returnResponseDataApi(null, "لا يمكنك التسجيل في الامتحان الورقي لانك خارج السنتر", 407);
                     } else {
 
                         if ($userRegisterExamBefore > 0) {
 
-                            return self::returnResponseDataApi(null, "تم التسجيل في الامتحان الورقي من قبل", 408);
+                            $section_register = PapelSheetExamUser::where('user_id','=',Auth::guard('user-api')->id())->where('papel_sheet_exam_id','=',$papelSheetExam->id)->first();
+                            return response()->json([
+
+                                'data' => ['exam' => new PapelSheetExamTimeUserResource($papelSheetExam)],
+                                'message' => "تم التسجيل في الامتحان الورقي من قبل",
+                                'code' => 408, 'date_exam' => $papelSheetExam->date_exam,
+                                'address' =>  $section_register->sections->address,
+                                'section_name' => lang() == 'ar' ?  $section_register->sections->section_name_ar :  $section_register->sections->section_name_en,
+                                ]);
+
+
                         } else {
 
                             if (Carbon::now()->format('Y-m-d') <= $papelSheetExam->to) {
