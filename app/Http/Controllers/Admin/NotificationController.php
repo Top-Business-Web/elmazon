@@ -15,7 +15,8 @@ use App\Models\User;
 
 class NotificationController extends Controller
 {
-    use FirebaseNotification,PhotoTrait;
+    use FirebaseNotification, PhotoTrait;
+
     // Index Start
     public function index(request $request)
     {
@@ -24,7 +25,6 @@ class NotificationController extends Controller
             return Datatables::of($notifications)
                 ->addColumn('action', function ($notifications) {
                     return '
-                            <button type="button" data-id="' . $notifications->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
                                     data-id="' . $notifications->id . '" data-title="' . $notifications->name_en . '">
                                     <i class="fas fa-trash"></i>
@@ -55,17 +55,21 @@ class NotificationController extends Controller
     {
         $inputs = $request->all();
         $inputs['image'] = '';
-        if($request->has('image')){
-            $inputs['image'] = $this->saveImage($request->image,'assets/uploads/notification');
+        if ($request->has('image')) {
+            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/notification');
         }
 
-        $this->sendFirebaseNotification(['title' => $request->title, 'body' => $request->body, 'term_id' => $inputs['term_id']], $inputs['season_id'],null,$inputs['image']);
+        $user = User::where('code', $request->user_id)->first();
 
-        if(Notification::create($inputs)) {
+        if ($request->has('user_id')) {
+            $inputs['user_id'] = $user->id;
+        }
+
+        $this->sendFirebaseNotification(['title' => $request->title, 'body' => $request->body, 'term_id' => $inputs['term_id']], $inputs['season_id'], $user->id, $inputs['image']);
+
+        if (Notification::create($inputs)) {
             return response()->json(['status' => 200]);
-        }
-        else
-        {
+        } else {
             return response()->json(['status' => 405]);
         }
     }
@@ -90,15 +94,13 @@ class NotificationController extends Controller
     public function update(Notification $notification, StoreNotification $request)
     {
         $inputs = $request->all();
-        if($request->has('image')){
-            $inputs['image'] = $this->saveImage($request->image,'assets/uploads/notification');
+        if ($request->has('image')) {
+            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/notification');
         }
 
-        if($notification->update($inputs)) {
+        if ($notification->update($inputs)) {
             return response()->json(['status' => 200]);
-        }
-        else
-        {
+        } else {
             return response()->json(['status' => 405]);
         }
     }
@@ -111,7 +113,7 @@ class NotificationController extends Controller
     {
         $notifications = Notification::where('id', $request->id)->firstOrFail();
         $notifications->delete();
-        return response()->json(['message' => 'تم الحذف بنجاح' ,'status' => 200], 200);
+        return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
     // Delete End
