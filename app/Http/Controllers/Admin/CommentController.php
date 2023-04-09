@@ -26,6 +26,28 @@ class CommentController extends Controller
                             <a href="' . route('replyComment', $comments->id) . '" class="btn btn-pill btn-success-light"><li class="fa fa-comment"></li></a>
                        ';
                 })
+                ->editColumn('image', function ($comments) {
+                    if ($comments->type == 'file') {
+                        return '<img alt="image" onclick="window.open(this.src)" class="avatar avatar-md rounded-circle" src="' . asset('comments_upload_file/' . $comments->image) . '">';
+                    } else {
+                        return 'No Image';
+                    }
+                })
+                ->editColumn('video_part_id', function ($comments) {
+                    return $comments->video->name_ar;
+                })
+                ->editColumn('user_id', function ($comments) {
+                    return $comments->user->name;
+                })
+                ->editColumn('audio', function ($comments) {
+                    if ($comments->audio !== null) {
+                        return '<audio controls class="form-control">
+                                <source src="" type="audio/ogg">
+                            </audio>';
+                    } else {
+                        return 'No Audio';
+                    }
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {

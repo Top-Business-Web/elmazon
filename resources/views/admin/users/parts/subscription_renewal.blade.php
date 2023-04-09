@@ -1,18 +1,37 @@
 <div class="modal-body">
     <form id="update_renwal" class="update_renwal" method="POST" action="{{ route('subscr_renew',$user->id) }}">
         @csrf
-        <input type="hidden" name="id" value="{{ $user->id }}">
+        <input type="hidden" class="userId" name="id" value="{{ $user->id }}">
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
-                    <label for="date_start_code" class="form-control-label">تاريخ بداية الاشتراك</label>
-                    <input type="date" class="form-control" value="{{ $user->date_start_code }}" name="date_start_code" placeholder="تاريخ بداية الاشتراك"
-                           required="required">
+                    <label for="date_end_code" class="form-control-label">الشهر</label>
+                    <select name="month[]" class="selectMonth form-control" multiple="multiple">
+                        <option value="" disabled selected>أختر الشهر</option>
+                        @foreach($months as $month)
+                            <option class="form-control" value="{{ $month->id }}">
+                                {{ ' شهر '. $month->month }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="col-md-6">
-                    <label for="date_end_code" class="form-control-label">تاريخ نهاية الاشتراك</label>
-                    <input type="date" class="form-control" value="{{ $user->date_end_code }}" name="date_end_code" placeholder="تاريخ نهاية الاشتراك"
-                           required="required">
+                    <label for="date_end_code" class="form-control-label">سعر الشهر</label>
+                    <select name="price" class="form-control priceMonth">
+                        <option value="" disabled selected>أختر السعر</option>
+
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="date_end_code" class="form-control-label">السنة الدراسية</label>
+                    <select name="year" class="form-control">
+                        <option value="" disabled selected>أختر السنة</option>
+                        @for($i = 2022; $i <= 2050; $i++)
+                            <option class="form-control" value="{{ $i }}">
+                                {{ ' سنة ' . $i }}
+                            </option>
+                        @endfor
+                    </select>
                 </div>
             </div>
         </div>
@@ -23,4 +42,26 @@
     </form>
 </div>
 
+<script>
+
+    $(document).on('change','.selectMonth',function (){
+
+        let id = $('.userId').val();
+        let month = $(this).val();
+
+        $.ajax({
+            url: '{{ route('priceMonth') }}',
+            method: 'GET',
+            data : {
+                'id': id,
+                'month': month,
+            }, success: function(data) {
+                $('.priceMonth').html(data);
+            }
+        })
+    })
+
+
+
+</script>
 
