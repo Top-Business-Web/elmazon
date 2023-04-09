@@ -158,7 +158,6 @@ class AuthController extends Controller
             ]);
 
             if (isset($suggestion_add)) {
-
                 $suggestion_add->user->token = $request->bearerToken();
                 return self::returnResponseDataApi(new SuggestResource($suggestion_add), "تم تسجيل الاقتراح بنجاح", 200);
 
@@ -192,8 +191,7 @@ class AuthController extends Controller
 
     }
 
-    public function communication()
-    {
+    public function communication(){
         try {
             $setting = Setting::first();
 
@@ -295,6 +293,7 @@ class AuthController extends Controller
                                 'code' => 408, 'date_exam' => $papelSheetExam->date_exam,
                                 'address' =>  $section_register->sections->address,
                                 'section_name' => lang() == 'ar' ?  $section_register->sections->section_name_ar :  $section_register->sections->section_name_en,
+
                                 ]);
 
 
