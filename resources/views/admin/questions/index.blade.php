@@ -15,9 +15,10 @@
                     <h3 class="card-title"></h3>
                     <div class="">
                         <label><strong>فلتر :</strong></label>
-                        <select id='approved' class="form-control" style="width: 200px">
-                            <option value="1">التيرم</option>
-                            <option value="0">الصف</option>
+                        <select id='type' class="form-control" style="width: 200px">
+                            @foreach(DB::table('seasons')->get() as $season)
+                                <option value="{{ $season->id }}">{{ $season->name_ar }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="">
@@ -145,7 +146,17 @@
             {data: 'examable_id', name: 'examable_id'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
-        showData('{{route('questions.index')}}', columns);
+
+        var ajax = {
+            url: "{{ route('questions.index') }}",
+            data: function (d) {
+                d.type = $('#type').val()
+                // d.search = $('input[type="search"]').val()
+            }
+        };
+
+
+        showData(ajax, columns);
         // Delete Using Ajax
         destroyScript('{{route('questions.destroy',':id')}}');
         // Add Using Ajax

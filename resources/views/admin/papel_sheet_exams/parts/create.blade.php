@@ -27,7 +27,7 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <label for="note" class="form-control-label">فصل</label>
+                    <label for="note" class="form-control-label">الصف</label>
                     <Select name="season_id" class="form-control">
                         <option selected disabled style="text-align: center">اختر صف</option>
                         @foreach($seasons as $season)

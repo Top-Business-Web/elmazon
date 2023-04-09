@@ -61,6 +61,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Users ####
     Route::resource('users', UserController::class);
     Route::post('subscr_renew', [UserController::class, 'subscr_renew'])->name('subscr_renew');
+    Route::get('priceMonth', [UserController::class, 'priceMonth'])->name('priceMonth');
     Route::get('subscrView/{user}/view', [UserController::class, 'subscrView'])->name('subscrView');
 
     #### Season ####
@@ -138,6 +139,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Online Exam ####
     Route::resource('onlineExam', OnlineExamController::class);
+    Route::get('selectTerm', [OnlineExamController::class,'selectTerm'])->name('selectTerm');
     Route::get('examble_type', [OnlineExamController::class, 'examble_type'])->name('examble_type');
     Route::get('indexQuestion/{id}', [OnlineExamController::class, 'indexQuestion'])->name('indexQuestion');
     Route::get('usersExam/{id}', [OnlineExamController::class, 'usersExam'])->name('usersExam');
@@ -183,7 +185,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::resource('allExam', AllExamController::class);
 
     #### Contact Us ####
-    Route::resource('contactUs', ContactUsController::class);
+//    Route::resource('contactUs', ContactUsController::class);
 
     #### Subscribe ####
     Route::resource('subscribe', SubscribeController::class);

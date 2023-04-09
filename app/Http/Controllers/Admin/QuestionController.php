@@ -23,7 +23,7 @@ class QuestionController extends Controller
     public function index(request $request)
     {
         if ($request->ajax()) {
-            $questions = Question::get();
+            $questions = Question::select('*');
             return Datatables::of($questions)
                 ->addColumn('action', function ($questions) {
                     return '
@@ -42,16 +42,9 @@ class QuestionController extends Controller
                         return '<span class="badge badge-danger">No</span>';
                     }
                 })
-                ->filter(function ($instance) use ($request) {
-                    if ($request->get('approved') == '0' || $request->get('approved') == '1') {
-                        $instance->where('approved', $request->get('approved'));
-                    }
-                    if (!empty($request->get('search'))) {
-                        $instance->where(function($w) use($request){
-                            $search = $request->get('search');
-                            $w->orWhere('name', 'LIKE', "%$search%")
-                                ->orWhere('email', 'LIKE', "%$search%");
-                        });
+                ->filter(function ($questions) use ($request) {
+                    if ($request->get('type')) {
+                        $questions->where('season_id', $request->get('type'))->get();
                     }
                 })
                 ->rawColumns(['approved'])
