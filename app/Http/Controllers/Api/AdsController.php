@@ -22,13 +22,15 @@ class AdsController extends Controller
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)
                 ->where('time_start','>',Carbon::now()->format('h:i'))
             ->first();
+
+
         if($ads->count() > 0){
 
             return self::returnResponseDataApi(['ads'=>AdsResource::collection($ads),'life_exam'=>new LifeExamResource($life_exam)],"جميع الاعلانات ",200);
 
         }else{
 
-            return self::returnResponseDataApi(['life_exam'=>LifeExamResource::collection($life_exam)],"لا يوجد بيانات في العلانات الي الان ",200);
+            return self::returnResponseDataApi(['life_exam'=>new LifeExamResource($life_exam)],"لا يوجد بيانات في العلانات الي الان ",200);
         }
 
     }
