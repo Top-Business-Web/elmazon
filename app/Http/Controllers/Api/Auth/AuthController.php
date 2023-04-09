@@ -15,6 +15,8 @@ use App\Http\Resources\SliderResource;
 use App\Http\Resources\SubjectClassResource;
 use App\Http\Resources\SuggestResource;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\VideoBasicResource;
+use App\Http\Resources\VideoResourceResource;
 use App\Models\AllExam;
 use App\Models\ExamDegreeDepends;
 use App\Models\Lesson;
@@ -32,6 +34,8 @@ use App\Models\SubjectClass;
 use App\Models\Suggestion;
 use App\Models\User;
 use App\Models\UserScreenShot;
+use App\Models\VideoBasic;
+use App\Models\VideoResource;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -463,16 +467,22 @@ class AuthController extends Controller
             })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
 
             $sliders = Slider::get();
-            $notification = Notification::whereHas('term', function ($term) {
+//            $notification = Notification::whereHas('term', function ($term) {
+//                $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
+//            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->first();
+
+            $videos_resources = VideoResource::whereHas('term', function ($term) {
                 $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
-            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->first();
+            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->get();
 
             return response()->json([
                 'data' => [
                     'life_exam' => $id,
                     'sliders' => SliderResource::collection($sliders),
-                    'notification' => new NotificationResource($notification),
+                     'videos_basics' => VideoBasicResource::collection(VideoBasic::get()),
+//                    'notification' => new NotificationResource($notification),
                     'classes' => SubjectClassResource::collection($classes),
+                    'videos_resources' => VideoResourceResource::collection($videos_resources),
                 ],
                 'code' => 200,
                 'message' => "تم ارسال جميع بيانات الصفحه الرئيسيه",
