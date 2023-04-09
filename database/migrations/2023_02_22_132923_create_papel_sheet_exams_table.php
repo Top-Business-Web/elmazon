@@ -23,7 +23,7 @@ class CreatePapelSheetExamsTable extends Migration
             $table->date('date_exam');
             $table->longText('description')->nullable();
             $table->unsignedBigInteger('season_id');
-            $table->unsignedBigInteger('term_id')->nullable();
+            $table->unsignedBigInteger('term_id');
             $table->timestamps();
 
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
