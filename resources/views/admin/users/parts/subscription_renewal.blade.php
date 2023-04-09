@@ -1,3 +1,5 @@
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <div class="modal-body">
     <form id="update_renwal" class="update_renwal" method="POST" action="{{ route('subscr_renew',$user->id) }}">
         @csrf
@@ -6,7 +8,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="date_end_code" class="form-control-label">الشهر</label>
-                    <select name="month[]" class="selectMonth form-control" multiple="multiple">
+                    <select name="month[]" class="selectMonth form-control select2" multiple="multiple">
                         <option value="" disabled selected>أختر الشهر</option>
                         @foreach($months as $month)
                             <option class="form-control" value="{{ $month->id }}">
@@ -21,6 +23,11 @@
                         <option value="" disabled selected>أختر السعر</option>
 
                     </select>
+{{--                    <select class="js-example-basic-multiple" name="states[]" multiple="multiple">--}}
+{{--                        <option value="AL">Alabama</option>--}}
+{{--                        ...--}}
+{{--                        <option value="WY">Wyoming</option>--}}
+{{--                    </select>--}}
                 </div>
                 <div class="col-md-6">
                     <label for="date_end_code" class="form-control-label">السنة الدراسية</label>
@@ -62,6 +69,9 @@
     })
 
 
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
 
 </script>
 

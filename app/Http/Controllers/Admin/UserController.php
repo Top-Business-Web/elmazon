@@ -36,6 +36,7 @@ class UserController extends Controller
                                     <i class="fas fa-trash"></i>
                             </button>
                             <button type="button" data-id="' . $users->id . '" class="btn btn-pill btn-success-light renew">تجديد الاشتراك</i></button>
+                            <a href="'. route('printReport',$users->id) .'" data-id="' . $users->id . '" class="btn btn-pill btn-info-light reportPrint"> تقرير الطالب <i class="fa fa-file-excel"></i></a>
                        ';
                 })
                 ->escapeColumns([])
@@ -173,6 +174,14 @@ class UserController extends Controller
 //        }
 
         return $output;
+    }
+
+    // print report
+    public function printReport($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.users.parts.report',compact('user'));
+
     }
 
 
