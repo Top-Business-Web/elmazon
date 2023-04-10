@@ -8,6 +8,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="date_end_code" class="form-control-label">الشهر</label>
+
                     <select name="month[]" class="selectMonth form-control select2" multiple="multiple">
                         <option value="" disabled selected>أختر الشهر</option>
                         @foreach($months as $month)
@@ -23,11 +24,6 @@
                         <option value="" disabled selected>أختر السعر</option>
 
                     </select>
-{{--                    <select class="js-example-basic-multiple" name="states[]" multiple="multiple">--}}
-{{--                        <option value="AL">Alabama</option>--}}
-{{--                        ...--}}
-{{--                        <option value="WY">Wyoming</option>--}}
-{{--                    </select>--}}
                 </div>
                 <div class="col-md-6">
                     <label for="date_end_code" class="form-control-label">السنة الدراسية</label>
@@ -67,6 +63,7 @@
             }
         })
     })
+
 
 
     $(document).ready(function() {

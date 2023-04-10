@@ -176,6 +176,7 @@ class UserController extends Controller
         return $output;
     }
 
+
     // print report
     public function printReport($id)
     {
@@ -183,7 +184,6 @@ class UserController extends Controller
         return view('admin.users.parts.report',compact('user'));
 
     }
-
 
     // Destroy Start
 

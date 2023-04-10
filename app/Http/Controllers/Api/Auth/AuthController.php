@@ -15,6 +15,8 @@ use App\Http\Resources\SliderResource;
 use App\Http\Resources\SubjectClassResource;
 use App\Http\Resources\SuggestResource;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\VideoBasicResource;
+use App\Http\Resources\VideoResourceResource;
 use App\Models\AllExam;
 use App\Models\ExamDegreeDepends;
 use App\Models\Lesson;
@@ -32,6 +34,8 @@ use App\Models\SubjectClass;
 use App\Models\Suggestion;
 use App\Models\User;
 use App\Models\UserScreenShot;
+use App\Models\VideoBasic;
+use App\Models\VideoResource;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -71,13 +75,13 @@ class AuthController extends Controller
             }
 
 
-            $token = Auth::guard('user-api')->attempt(['code' => $request->code, 'password' => '123456', 'user_status' => 'active', 'login_status' => 0]);
+            $token = Auth::guard('user-api')->attempt(['code' => $request->code, 'password' => '123456', 'user_status' => 'active']);
 
-            $user_data = User::where('code', '=', $request->code)->first();
-            if ($user_data->login_status == 1) {
-                return self::returnResponseDataApi(null, "هذا الطالب مسجل دخول من جهاز اخر!", 410);
-
-            }
+//            $user_data = User::where('code', '=', $request->code)->first();
+//            if ($user_data->login_status == 1) {
+//                return self::returnResponseDataApi(null, "هذا الطالب مسجل دخول من جهاز اخر!", 410);
+//
+//            }
             if (!$token) {
                 return self::returnResponseDataApi(null, "الطالب غير مفعل برجاء التواصل مع السيكرتاريه", 408);
             }
@@ -158,7 +162,6 @@ class AuthController extends Controller
             ]);
 
             if (isset($suggestion_add)) {
-
                 $suggestion_add->user->token = $request->bearerToken();
                 return self::returnResponseDataApi(new SuggestResource($suggestion_add), "تم تسجيل الاقتراح بنجاح", 200);
 
@@ -192,8 +195,7 @@ class AuthController extends Controller
 
     }
 
-    public function communication()
-    {
+    public function communication(){
         try {
             $setting = Setting::first();
 
@@ -295,6 +297,7 @@ class AuthController extends Controller
                                 'code' => 408, 'date_exam' => $papelSheetExam->date_exam,
                                 'address' =>  $section_register->sections->address,
                                 'section_name' => lang() == 'ar' ?  $section_register->sections->section_name_ar :  $section_register->sections->section_name_en,
+
                                 ]);
 
 
@@ -464,16 +467,22 @@ class AuthController extends Controller
             })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
 
             $sliders = Slider::get();
-            $notification = Notification::whereHas('term', function ($term) {
+//            $notification = Notification::whereHas('term', function ($term) {
+//                $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
+//            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->first();
+
+            $videos_resources = VideoResource::whereHas('term', function ($term) {
                 $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
-            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->first();
+            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->get();
 
             return response()->json([
                 'data' => [
                     'life_exam' => $id,
                     'sliders' => SliderResource::collection($sliders),
-                    'notification' => new NotificationResource($notification),
+                     'videos_basics' => VideoBasicResource::collection(VideoBasic::get()),
+//                    'notification' => new NotificationResource($notification),
                     'classes' => SubjectClassResource::collection($classes),
+                    'videos_resources' => VideoResourceResource::collection($videos_resources),
                 ],
                 'code' => 200,
                 'message' => "تم ارسال جميع بيانات الصفحه الرئيسيه",

@@ -114,7 +114,7 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('depends/exam/{id}',[DegreeController::class,'degrees_depends']);
     });
 
-    Route::get('ads',[AdsController::class,'index']);
+    Route::get('ads',[AdsController::class,'index'])->middleware('jwt');
     Route::get('on-boarding',[OnBoardingController::class,'index']);
     //exam details
 
