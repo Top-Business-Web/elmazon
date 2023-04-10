@@ -51,6 +51,7 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('home-page',[AuthController::class,'home_page']);
         Route::get('all-subscribes',[SubscribeController::class,'all']);
         Route::post('/payments/pay',[Payment::class,'pay']);
+        Route::post('/payments/paymob____',[Payment::class,'pay_']);
         Route::post('user-add-screenshot',[AuthController::class,'user_add_screenshot']);
 
 

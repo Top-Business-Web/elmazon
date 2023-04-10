@@ -51,7 +51,7 @@ class Payment extends Controller
     public function pay_(Request $request)
     {
         $inputs = $request->all();
-
+//dd($inputs);
         $endpoint = "https://accept.paymobsolutions.com/api/auth/tokens";
         $orderEndpoint = "https://accept.paymobsolutions.com/api/ecommerce/orders";
         $payment_keysEndpoint = "https://accept.paymobsolutions.com/api/acceptance/payment_keys";
@@ -72,7 +72,7 @@ class Payment extends Controller
                 "merchant_id" => 743638,
                 "amount_cents" => 2 *100,
                 "currency" => "EGP",
-                'items'=>[]
+                'items'=>$inputs['subscribes_ids']
             ])->json();
 
         $payment_to_pay = Http::withHeaders(['content-type' => 'application/json'])
@@ -111,9 +111,16 @@ class Payment extends Controller
     public function pay_callback()
     {
 //        dd(request()->all());
+        $endpoint = "https://accept.paymobsolutions.com/api/auth/tokens";
+        $value = env('PAYMOB_API_KEY');
+        $transaction = Http::withHeaders(['content-type' => 'application/json'])
+            ->get($endpoint, [
+                "api_key" => $value
+            ])->json();
         $response = request()->query();
+        dd($transaction);
         if($response['success'] == true){
-            dd(Session::get('items_posts'));
+//            dd(Session::get('items_posts'));
 //            foreach (Session::get('items_posts')['subscribes_ids'] as  $item){
 //                $subscribe_item = Subscribe::find($item);
 //                UserSubscribe::create([
@@ -123,7 +130,7 @@ class Payment extends Controller
 //                ]);
 //            }
         }
-        return redirect()->to('api/checkout?status='.$response['success']);
+        return redirect()->to('api/checkout?status='.$response['success'].'&status='.$response['success']);
     }
 
     public function checkout()
