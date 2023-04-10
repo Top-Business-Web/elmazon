@@ -125,6 +125,14 @@
 
         showEdit1('{{ route('subscrView',':id') }}')
 
+
+        // $(document).on('click','.reportPrint',function (e){
+        //     e.preventDefault;
+        //     var user = $(this).data('id');
+        //     location.href = ''
+        // })
+
+
     </script>
 @endsection
 
