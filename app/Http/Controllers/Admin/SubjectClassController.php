@@ -39,7 +39,7 @@ class SubjectClassController extends Controller
                        ';
                 })
                 ->editColumn('image', function ($subjects_classes) {
-                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset($subjects_classes->image) . '"/>';
+                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset('classes/'.$subjects_classes->image) . '"/>';
                 })
                 ->editColumn('term_id', function ($subjects_classes) {
                     return '<td>' . $subjects_classes->term->name_ar . '</td>';
@@ -58,6 +58,7 @@ class SubjectClassController extends Controller
 
     public function seasonSort(Request $request)
     {
+
         $season = $request->id;
         $subjects = Term::where('season_id', $season)->get();
 

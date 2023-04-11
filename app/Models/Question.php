@@ -46,4 +46,7 @@ class Question extends Model
 
         return $this->belongsToMany(OnlineExam::class,'online_exam_questions', 'question_id','life_exam_id','id','id');
     }
+
+
+
 }

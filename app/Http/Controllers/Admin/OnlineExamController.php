@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Degree;
+use App\Models\ExamDegreeDepends;
 use App\Models\Lesson;
 use App\Models\OnlineExam;
 use App\Models\OnlineExamUser;
@@ -85,55 +86,78 @@ class OnlineExamController extends Controller
     public function usersExam(Request $request)
     {
         $exam = OnlineExam::find($request->id);
-        $online_exams = OnlineExamUser::where('online_exam_id', $exam->id)->select('user_id')->groupBy('user_id')->get();
-        $questions = $exam->questions;
-        $answers = TextExamUser::where('online_exam_id', $exam->id)
-            ->whereIn('user_id', $online_exams->pluck('user_id'))
-            ->whereIn('question_id', $questions->pluck('id'))
-            ->get();
-//        return $questions_1;
-        return view('admin.online_exam.parts.text_exam_users', compact('exam', 'online_exams'));
+        $users = User::whereHas('online_exams', function ($online_exam) use($exam){
+
+            $online_exam->where('online_exam_id','=',$exam->id)->groupBy('user_id');
+        })->get();
+
+
+        return view('admin.online_exam.parts.text_exam_users', compact('exam', 'users'));
     }
 
     // User Exam End
 
     // Paper Exam Start
 
-    public function paperExam(Request $request)
-    {
-        $user = OnlineExamUser::where('user_id', $request->id)->select('user_id')->groupBy('user_id')->get();
-        $exam = OnlineExamUser::where('user_id', $request->id)->first('online_exam_id');
-        $questions = OnlineExamQuestion::whereIn('online_exam_id', $exam)->get('question_id');
-        $answers = TextExamUser::where('online_exam_id', $exam->online_exam_id)
-            ->where('user_id', $user->pluck('user_id'))
-            ->whereIn('question_id', $questions->pluck('question_id'))
+    public function paperExam($user_id,$exam_id){
+
+        $exam_user = OnlineExam::findOrFail($exam_id);
+        $user_exam = User::where('id','=',$user_id)->first();
+        $text_exam_users = TextExamUser::with(['question','user'])->where('online_exam_id', $exam_id)
+            ->where('user_id', $user_id)
             ->get();
-        $question = onlineExamQuestion::where('online_exam_id', $exam->online_exam_id)->get();
-//        return $answers;
-        return view('admin.online_exam.parts.exam_paper', compact('answers', 'question'));
+
+        $online_exam_users = OnlineExamUser::with(['question','user','answer'])->where('online_exam_id',$exam_id)
+            ->where('user_id', $user_id)->get();
+
+        $online_exam_count_text_questions = $exam_user->questions()->where('question_type','=','text')->count();
+        $text_exam_users_completed = TextExamUser::with(['question','user'])->where('online_exam_id', $exam_id)
+            ->where('user_id', $user_id)->where('degree_status','=','completed')->count();
+
+        $exam_depends_for_user = ExamDegreeDepends::where('online_exam_id',$exam_id)->where('user_id','=',$user_id)
+            ->where('exam_depends','=','yes')->first();
+
+//        return $text_exam_users_completed;
+        return view('admin.online_exam.parts.exam_paper',
+            compact('user_exam','text_exam_users', 'online_exam_users','exam_user','online_exam_count_text_questions',
+            'text_exam_users_completed','exam_depends_for_user')
+        );
     }
 
-    // Paper Exam End
 
-    // Store Exam Paper Start
+     public function exam_depends($user_id,$exam_id){
 
-    public function storeExamPaper(Request $request)
-    {
-//        return $request;
-        foreach ($request->questions as $question) {
-            $text_exam_user = Degree::where('user_id', $request->user_id)
-                ->where('question_id', $question['question_id'])
-                ->first();
+         $text_exam_user_sum_degree = TextExamUser::with(['question','user'])->where('online_exam_id', $exam_id)
+             ->where('user_id', $user_id)
+             ->sum('degree');
 
-            if ($text_exam_user) {
-                $text_exam_user->degree = $question['degree'];
-                $text_exam_user->status = 'completed';
-                $text_exam_user->save();
-            }
-        }
-        return redirect()->back();
+         $exam_degree_depends = ExamDegreeDepends::where('online_exam_id',$exam_id)->where('user_id','=',$user_id)
+             ->orderBy('full_degree','DESC')->latest()->first();
 
-    }
+         $exam_degree_depends->update(['full_degree' =>  $exam_degree_depends->full_degree+=$text_exam_user_sum_degree,'exam_depends' => 'yes']);
+         return response()->json(['status' => 200,'message' => 'تم اعتماد درجه الامتحان للطالب بنجاح']);
+
+     }
+
+
+
+//    public function storeExamPaper(Request $request)
+//    {
+////        return $request;
+//        foreach ($request->questions as $question) {
+//            $text_exam_user = Degree::where('user_id', $request->user_id)
+//                ->where('question_id', $question['question_id'])
+//                ->first();
+//
+//            if ($text_exam_user) {
+//                $text_exam_user->degree = $question['degree'];
+//                $text_exam_user->status = 'completed';
+//                $text_exam_user->save();
+//            }
+//        }
+//        return redirect()->back();
+//
+//    }
 
     // Store Exam Paper End
 
@@ -230,13 +254,19 @@ class OnlineExamController extends Controller
 
     // Destroy Start
 
-    public function destroy(Request $request)
-    {
+    public function destroy(Request $request){
         $onlineExam = OnlineExam::where('id', $request->id)->firstOrFail();
         $onlineExam->delete();
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
-    }
+    }// Delete End
 
-    // Delete End
+
+
+    public function addDegreeForTextExam(Request $request){
+
+      $text_exam_user = TextExamUser::findOrFail($request->exam_id);
+      $text_exam_user->update(['degree' => $request->degree ?? 0,'degree_status' => 'completed']);
+      return response()->json(['status' => 200,'message' => 'تم اضافه الدرجه بنجاح']);
+    }
 
 }
