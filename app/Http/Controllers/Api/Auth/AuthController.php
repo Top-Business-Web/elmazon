@@ -142,18 +142,16 @@ class AuthController extends Controller
                 $audioUpload = date('YmdHis') . "." . $audio->getClientOriginalExtension();
                 $audio->move($audioPath, $audioUpload);
                 $request['audio'] = "$audioUpload";
-            } else {
 
+            } else {
                 $suggestion = $request->suggestion;
             }
-
 
             if ($request->suggestion == null && $request->audio == null && $request->image == null) {
 
                 return self::returnResponseDataApi(null, "يجب كتابه اقتراح او ارفاق صوره او رفع ملف صوتي", 422);
             }
             $suggestion_add = Suggestion::create([
-
                 'user_id' => Auth::guard('user-api')->id(),
                 'audio' => $audioUpload ?? null,
                 'image' => $file ?? null,
@@ -300,8 +298,7 @@ class AuthController extends Controller
 
                                 ]);
 
-
-                        } else {
+                          } else {
 
                             if (Carbon::now()->format('Y-m-d') <= $papelSheetExam->to) {
                                 PapelSheetExamUser::create([
@@ -630,7 +627,7 @@ class AuthController extends Controller
                 }
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
-            PhoneToken::where('token', '=', $request->token)->where('user_id', '=', auth('user-api')->id())->delete();
+            PhoneToken::where('token', '=',$request->token)->where('user_id', '=',auth('user-api')->id())->delete();
             auth()->guard('user-api')->logout();
             return self::returnResponseDataApi(null, "تم تسجيل الخروج بنجاح", 200);
 

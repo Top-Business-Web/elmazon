@@ -148,8 +148,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('usersExam/{id}', [OnlineExamController::class, 'usersExam'])->name('usersExam');
     Route::post('addQuestion', [OnlineExamController::class, 'addQuestion'])->name('addQuestion');
     Route::post('deleteQuestion', [OnlineExamController::class, 'deleteQuestion'])->name('deleteQuestion');
-    Route::get('paperExam/{id}', [OnlineExamController::class, 'paperExam'])->name('paperExam');
+    Route::get('paper-exam/{user_id}/{exam_id}', [OnlineExamController::class, 'paperExam'])->name('paperExam');///????????
+    Route::post('exam-depends/{user_id}/{exam_id}', [OnlineExamController::class, 'exam_depends'])->name('exam-depends');///????????
     Route::post('storeExamPaper', [OnlineExamController::class, 'storeExamPaper'])->name('storeExamPaper');
+
+
+    //added by Islam
+    Route::post('add-degree-to-text-exam', [OnlineExamController::class, 'addDegreeForTextExam'])->name('add-degree-to-text-exam');
+
 
     #### Life Exam ####
     Route::resource('lifeExam', LifeExamController::class);

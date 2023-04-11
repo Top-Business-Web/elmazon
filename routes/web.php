@@ -18,3 +18,7 @@ use Illuminate\Support\Facades\Route;
 //    return view('admin.index');
 //});
 Route::get('/payments/verify/{payment?}',[Payment::class,'payment_verify'])->name('payment-verify');
+
+
+//get all terms by season_id
+Route::get('terms/season/{id}',[\App\Http\Controllers\Admin\TermController::class,'getAllTermsBySeason'])->middleware('auth:admin');

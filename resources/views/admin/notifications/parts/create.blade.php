@@ -27,16 +27,6 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <label for="term_id" class="form-control-label">الترم</label>
-                    <Select name="term_id" class="form-control">
-                        <option selected style="text-align: center">الكل</option>
-                        @foreach($terms as $term)
-                            <option value="{{ $term->id }}"
-                                    style="text-align: center">{{ $term->name_ar }}</option>
-                        @endforeach
-                    </Select>
-                </div>
-                <div class="col-md-6">
                     <label for="season_id" class="form-control-label">الصف</label>
                     <Select name="season_id" class="form-control">
                         <option selected style="text-align: center">الكل</option>
@@ -46,6 +36,14 @@
                         @endforeach
                     </Select>
                 </div>
+
+                <div class="col-md-6">
+                    <label for="term_id" class="form-control-label">الترم</label>
+                    <Select name="term_id" class="form-control">
+
+                    </Select>
+                </div>
+
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -66,6 +64,32 @@
         </div>
     </form>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('select[name="season_id"]').on('change', function () {
+            var season_id = $(this).val();
+            if (season_id) {
+                $.ajax({
+                    url: "{{ URL::to('terms/season/') }}/" + season_id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        $('select[name="term_id"]').empty();
+                        $.each(data, function (key, value) {
+                            $('select[name="term_id"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
+                    },
+                });
+            } else {
+                console.log('AJAX load did not work');
+            }
+        });
+    });
+
+</script>
+
+
 <script>
     $('.dropify').dropify();
 

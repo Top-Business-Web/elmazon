@@ -92,13 +92,13 @@ class TermController extends Controller
             if($term->status == 'active')
             {
                 toastr('تم التفعيل');
-            }
-            else
-            {
+
+            } else {
                 toastr('تم ألغاء التفعيل');
             }
+            return redirect()->back();
 
-            return view('admin.terms.index');
+
         }
     }
 
@@ -135,6 +135,12 @@ class TermController extends Controller
         $terms = Term::where('id', $request->id)->firstOrFail();
         $terms->delete();
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
+    }
+
+    public function getAllTermsBySeason($id){
+
+        $terms = Term::where('season_id','=',$id)->pluck('name_ar','id')->toArray();
+        return $terms;
     }
 
     // Destroy End

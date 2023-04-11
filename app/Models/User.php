@@ -57,8 +57,8 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Suggestion::class, 'user_id', 'id');
     }
 
-    public function onlineExam()
-    {
+    public function onlineExam(){
+
         return $this->belongsToMany(OnlineExam::class, 'online_exam_users');
     }
 
@@ -107,5 +107,14 @@ class User extends Authenticatable implements JWTSubject
     public function exam_degree_depends_user(){
 
         return $this->hasOne(ExamDegreeDepends::class,'user_id','id');
+    }
+
+
+
+    //relation user with online_exams
+    public function online_exams(){
+
+        return $this->belongsToMany(OnlineExam::class,'online_exam_users','user_id','online_exam_id','id','id');
+
     }
 }

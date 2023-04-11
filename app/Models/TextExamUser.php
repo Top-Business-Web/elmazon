@@ -21,12 +21,17 @@ class TextExamUser extends Model
         'audio',
         'answer_type',
         'status',
+        'degree',
+        'degree_status'
     ];
 
     public function onlineExamId()
     {
         return $this->belongsTo(OnlineExam::class, 'online_exam_id', 'id');
     }
+
+
+
     public function question(){
 
         return $this->belongsTo(Question::class,'question_id','id');
