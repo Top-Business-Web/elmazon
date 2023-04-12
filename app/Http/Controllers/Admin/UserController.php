@@ -5,17 +5,25 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUser;
 use App\Http\Requests\UpdateUser;
+use App\Models\AllExam;
 use App\Models\Country;
+use App\Models\ExamDegreeDepends;
+use App\Models\OnlineExam;
+use App\Models\OnlineExamUser;
+use App\Models\PapelSheetExam;
+use App\Models\PapelSheetExamDegree;
+use App\Models\PapelSheetExamUser;
 use App\Models\Season;
 use App\Models\Subscribe;
 use App\Models\User;
 use App\Models\UserSubscribe;
+use App\Models\VideoParts;
+use App\Models\VideoWatch;
 use App\Traits\PhotoTrait;
 use Buglinjo\LaravelWebp\Exceptions\CwebpShellExecutionFailed;
 use Buglinjo\LaravelWebp\Exceptions\DriverIsNotSupportedException;
 use Buglinjo\LaravelWebp\Exceptions\ImageMimeNotSupportedException;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Validator;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -36,7 +44,7 @@ class UserController extends Controller
                                     <i class="fas fa-trash"></i>
                             </button>
                             <button type="button" data-id="' . $users->id . '" class="btn btn-pill btn-success-light renew">تجديد الاشتراك</i></button>
-                            <a href="'. route('printReport',$users->id) .'" data-id="' . $users->id . '" class="btn btn-pill btn-info-light reportPrint"> تقرير الطالب <i class="fa fa-file-excel"></i></a>
+                            <a href="' . route('printReport', $users->id) . '" data-id="' . $users->id . '" class="btn btn-pill btn-info-light reportPrint"> تقرير الطالب <i class="fa fa-file-excel"></i></a>
                        ';
                 })
                 ->escapeColumns([])
@@ -119,10 +127,10 @@ class UserController extends Controller
 
     public function subscrView(User $user)
     {
-        $userSubscriptions = UserSubscribe::where('student_id',$user->id)->pluck('month')->toArray();
-        $months_user = Subscribe::whereIn('month',$userSubscriptions)->get();
+        $userSubscriptions = UserSubscribe::where('student_id', $user->id)->pluck('month')->toArray();
+        $months_user = Subscribe::whereIn('month', $userSubscriptions)->get();
         $months = Subscribe::get();
-        return view('admin.users.parts.subscription_renewal', compact('user', 'months','months_user'));
+        return view('admin.users.parts.subscription_renewal', compact('user', 'months', 'months_user'));
     }
 
     // Subscripition View End
@@ -181,7 +189,23 @@ class UserController extends Controller
     public function printReport($id)
     {
         $user = User::findOrFail($id);
-        return view('admin.users.parts.report',compact('user'));
+        $videos = VideoWatch::where('user_id', $user->id)->with('video')->get();
+        $video_ids = VideoWatch::where('user_id', $user->id)->pluck('video_part_id')->toArray();
+        $videoMin = VideoParts::whereIn('id', $video_ids)->sum('video_time');
+        $exams = ExamDegreeDepends::where('user_id','=',$user->id)
+            ->where('exam_depends','=','yes')->get();
+        $paperExams = PapelSheetExamDegree::where('user_id','=',$user->id)->get();
+
+        $subscriptions = UserSubscribe::where('student_id', $user->id)->get();
+        return view('admin.users.parts.report', compact([
+            'user',
+            'videos',
+            'exams',
+            'videoMin',
+            'subscriptions',
+            'paperExams'
+
+        ]));
 
     }
 

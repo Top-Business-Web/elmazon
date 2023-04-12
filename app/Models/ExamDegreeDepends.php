@@ -24,6 +24,10 @@ class ExamDegreeDepends extends Model
         return $this->belongsTo(OnlineExam::class,'online_exam_id','id');
     }
 
+    public function life_exam()
+    {
+        return $this->belongsTo(LifeExam::class,'life_exam_id','id');
+    }
 
     public function all_exam(){
 

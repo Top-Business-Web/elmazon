@@ -1,8 +1,8 @@
 @extends('admin.layouts_admin.master')
-@section('title') {{$setting->title ?? ''}} | Profile @endsection
+@section('title') {{$setting->title ?? ''}} الملف الشخصي @endsection
 
 @section('page_name')
-    My Profile
+    ملفك الشخصي
 @endsection
 @section('content')
     <div class="row">
@@ -12,7 +12,7 @@
                     <div class="wideget-user text-center">
                         <div class="wideget-user-desc">
                             <div class="wideget-user-img">
-                                <img class="" src="{{get_user_file($admin->image)}}" alt="img">
+                                <img class="" src="{{asset($admin->image)}}" alt="img">
                             </div>
                             <div class="user-wrap">
                                 <h4 class="mb-1 text-capitalize">{{$admin->name}}</h4>
@@ -30,7 +30,7 @@
                     <div class="tab-menu-heading">
                         <div class="tabs-menu1">
                             <ul class="nav">
-                                <li class=""><a href="#tab-51" class="active show" data-toggle="tab">Information</a></li>
+                                <li class=""><a href="#tab-51" class="active show" data-toggle="tab">معلومات</a></li>
                             </ul>
                         </div>
                     </div>
@@ -42,23 +42,23 @@
                         <div class="card-body">
                             <div id="profile-log-switch">
                                 <div class="media-heading">
-                                    <h5><strong>Personal Information</strong></h5>
+                                    <h5><strong>معلومات الادمن</strong></h5>
                                 </div>
                                 <div class="table-responsive ">
                                     <table class="table row table-borderless">
                                         <tbody class="col-lg-12 col-xl-4 p-0">
                                         <tr>
-                                            <td class="text-capitalize"><strong>Name :</strong> {{$admin->name}}</td>
+                                            <td class="text-capitalize"><strong>الاسم :</strong> {{$admin->name}}</td>
                                         </tr>
                                         </tbody>
                                         <tbody class="col-lg-12 col-xl-4 p-0">
                                         <tr>
-                                            <td><strong>Email :</strong> {{$admin->email}}</td>
+                                            <td><strong>الايميل :</strong> {{$admin->email}}</td>
                                         </tr>
                                         </tbody>
                                         <tbody class="col-lg-12 col-xl-4 p-0">
                                         <tr>
-                                            <td><strong>Register Date :</strong> {{$admin->created_at->diffForHumans()}}</td>
+                                            <td><strong>تاريخ الانضمام :</strong> {{$admin->created_at->diffForHumans()}}</td>
                                         </tr>
                                         </tbody>
                                     </table>
