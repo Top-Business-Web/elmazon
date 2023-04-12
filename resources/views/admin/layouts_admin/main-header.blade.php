@@ -103,14 +103,15 @@
 {{--                    @endphp--}}
                     <a href="#" data-toggle="dropdown" class="nav-link pl-2 pr-2  leading-none d-flex">
 									<span>
-										<img src="" alt="profile-user" class="avatar  mr-xl-3 profile-user brround cover-image">
+										<img src="{{ asset(auth('admin')->user()->image)  }}" alt="profile-user" class="avatar  mr-xl-3 profile-user brround cover-image">
 									</span>
                         <div class="text-center mt-1 d-none d-xl-block">
-                            <h6 class="text-dark mb-0 fs-13 font-weight-semibold text-capitalize">jjj</h6>
+                            <h6 class="text-dark mb-0 fs-13 font-weight-semibold text-capitalize">
+                                {{ auth('admin')->user()->name }}</h6>
                         </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-left dropdown-menu-arrow"> {{--style--}}
-                        <a class="dropdown-item" href="">
+                        <a class="dropdown-item" href="{{ route('myProfile') }}">
                             <i class="dropdown-icon mdi mdi-account-outline"></i> My Profile
                         </a>
 {{--                        <a class="dropdown-item" href="#">--}}

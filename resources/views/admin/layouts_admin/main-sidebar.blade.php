@@ -14,6 +14,12 @@
         <!-- LOGO -->
     </div>
     <ul class="side-menu">
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('adminHome') }}">
+                <i class="fa fa-home side-menu__icon"></i>
+                <span class="side-menu__label">الرئيسية</span>
+            </a>
+        </li>
         <li>
             <h3>Elements</h3>
         </li>
@@ -51,7 +57,7 @@
 
         <li class="slide">
             <a class="side-menu__item" href="{{ route('users.index') }}">
-                <i class="icon icon-screen-users side-menu__icon"></i>
+                <i class="fe fe-users side-menu__icon"></i>
                 <span class="side-menu__label">الطلاب</span>
             </a>
         </li>
@@ -196,6 +202,13 @@
             <a class="side-menu__item" href="{{ route('ads.index') }}">
                 <i class="fa fa-ad side-menu__icon"></i>
                 <span class="side-menu__label">الاعلانات</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('admins.index') }}">
+                <i class="fa fa-user-secret side-menu__icon"></i>
+                <span class="side-menu__label">الادمن</span>
             </a>
         </li>
 

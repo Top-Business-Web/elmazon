@@ -2,40 +2,42 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\NewMessage;
+
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreAdmin;
+use App\Http\Requests\AdminRequest;
 use App\Models\Admin;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class AdminController extends Controller
 {
     use PhotoTrait;
-    public function sendAdminMessage(request $request){
-        broadcast(new NewMessage('ahmed'));
-        return 'ahmed';
-    }
+
     public function index(request $request)
     {
         if($request->ajax()) {
             $admins = Admin::latest()->get();
             return Datatables::of($admins)
                 ->addColumn('action', function ($admins) {
-                    return '
+                    if ($admins->id == 1){
+                        return '
+                            <button type="button" data-id="' . $admins->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                      ';
+                    }else {
+                        return '
                             <button type="button" data-id="' . $admins->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
                                     data-id="' . $admins->id . '" data-title="' . $admins->name . '">
                                     <i class="fas fa-trash"></i>
                             </button>
                        ';
+                    }
                 })
                 ->editColumn('image', function ($admins) {
                     return '
-                    <img alt="image" onclick="window.open(this.src)" class="avatar avatar-md rounded-circle" src="">
+                    <img alt="image" onclick="window.open(this.src)" class="avatar avatar-md rounded-circle" src="'. asset($admins->image).'">
                     ';
                 })
                 ->escapeColumns([])
@@ -72,7 +74,7 @@ class AdminController extends Controller
         return view('Admin/admin.parts.create');
     }
 
-    public function store(StoreAdmin $request)
+    public function store(AdminRequest $request)
     {
             $inputs = $request->all();
             if($request->has('image')){
@@ -89,7 +91,7 @@ class AdminController extends Controller
         return view('Admin/admin.parts.edit',compact('admin'));
     }
 
-    public function update(StoreAdmin $request,$id)
+    public function update(AdminRequest $request,$id)
     {
         $inputs = $request->except('id');
 

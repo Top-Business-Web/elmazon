@@ -5,7 +5,7 @@
         <input type="hidden" value="{{$admin->id}}" name="id">
         <div class="form-group">
             <label for="name" class="form-control-label">الصورة</label>
-            <input type="file" id="testDrop" class="dropify" name="image" data-default-file="{{get_user_file($admin->image)}}"/>
+            <input type="file" id="testDrop" class="dropify" name="image" data-default-file="{{asset($admin->image)}}"/>
         </div>
         <div class="form-group">
             <label for="name" class="form-control-label">الاسم</label>

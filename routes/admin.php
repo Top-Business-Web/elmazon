@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\LessonController;
@@ -52,6 +53,13 @@ Route::group(['prefix' => 'admin'], function () {
 
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
+
+    #### Admins ####
+    Route::resource('admins',AdminController::class);
+    Route::POST('delete_admin',[AdminController::class,'delete'])->name('delete_admin');
+    Route::get('my_profile',[AdminController::class,'myProfile'])->name('myProfile');
+
+
     Route::get('/', [MainController::class, 'index'])->name('adminHome');
 
 
