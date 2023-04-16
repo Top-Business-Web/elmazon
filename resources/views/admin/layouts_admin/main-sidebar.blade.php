@@ -78,6 +78,13 @@
         </li>
 
         <li class="slide">
+            <a class="side-menu__item" href="{{ route('videoBasic.index') }}">
+                <i class="icon icon-control-play side-menu__icon"></i>
+                <span class="side-menu__label">الفيديوهات الاساسية</span>
+            </a>
+        </li>
+
+        <li class="slide">
             <a class="side-menu__item" href="{{ route('monthlyPlans.index') }}">
                 <i class="icon icon-calendar side-menu__icon"></i>
                 <span class="side-menu__label">الخطة الشهرية</span>

@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\AdsController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\LifeExamController;
 use App\Http\Controllers\Admin\PapelSheetExamController;
+use App\Http\Controllers\Admin\VideoBasicController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
 use Illuminate\Support\Facades\Route;
@@ -221,6 +222,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::resource('comment', CommentController::class);
     Route::get('replyComment/{id}', [CommentController::class, 'replyComment'])->name('replyComment');
     Route::post('replyCommentDelete/{id}', [CommentController::class, 'replyCommentDelete'])->name('replyCommentDelete');
+
+
+    #### Video Basic ####
+    Route::resource('videoBasic', VideoBasicController::class);
 
 
     #### Auth ####
