@@ -51,7 +51,7 @@ class SubjectClass extends Model
 
     public function videos(){
 
-        return $this->hasManyThrough(VideoParts::class,Lesson::class,'subject_class_id','lesson_id','id','id')->where('type','=','video');
+        return $this->hasManyThrough(VideoParts::class,Lesson::class,'subject_class_id','lesson_id','id','id');
     }
 
 }

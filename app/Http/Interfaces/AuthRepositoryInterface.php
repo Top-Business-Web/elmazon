@@ -25,6 +25,8 @@ interface AuthRepositoryInterface{
 
     public function home_page(): \Illuminate\Http\JsonResponse;
     public function startYourJourney(Request $request):\Illuminate\Http\JsonResponse;
+
+    public function findExamByClassById($id):\Illuminate\Http\JsonResponse;
     public function add_device_token(Request $request);
     public function add_notification(Request $request): \Illuminate\Http\JsonResponse;
     public function user_add_screenshot(): \Illuminate\Http\JsonResponse;
