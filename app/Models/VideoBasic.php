@@ -9,12 +9,5 @@ class VideoBasic extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-
-        'name_ar',
-        'name_en',
-        'time',
-        'video_link'
-
-    ];
+    protected $guarded = [];
 }
