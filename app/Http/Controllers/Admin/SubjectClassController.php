@@ -22,7 +22,7 @@ class SubjectClassController extends Controller
         $terms = Term::all();
         $seasons = Season::all();
         if ($request->ajax()) {
-            if ($request->has('term_id') && $request->term_id != ''){
+            if ($request->has('term_id') && $request->term_id != '') {
                 $term = $request->get('term_id');
 //                dd($term);
                 $subjects_classes_list->where('term_id', $term);
@@ -38,8 +38,12 @@ class SubjectClassController extends Controller
                             </button>
                        ';
                 })
+                ->editColumn('background_color', function ($subjects_classes) {
+                    return '<input type="color" class="form-control" name="background_color"
+                           value="'. $subjects_classes->background_color .'" disabled>';
+                })
                 ->editColumn('image', function ($subjects_classes) {
-                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset('classes/'.$subjects_classes->image) . '"/>';
+                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset('classes/' . $subjects_classes->image) . '"/>';
                 })
                 ->editColumn('term_id', function ($subjects_classes) {
                     return '<td>' . $subjects_classes->term->name_ar . '</td>';
@@ -70,7 +74,7 @@ class SubjectClassController extends Controller
         if ($subjects->count() > 0) {
             return $output;
         } else {
-            return  '<option value="">لا يوجد ترمات</option>';
+            return '<option value="">لا يوجد ترمات</option>';
         }
 
     }
@@ -92,8 +96,12 @@ class SubjectClassController extends Controller
     {
         $inputs = $request->all();
 
-        if ($request->has('image')) {
-            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/subject_class', 'photo');
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = $file->getClientOriginalName();
+
+            $file->move('classes/', $filename);
+            $inputs['image'] = $filename;
         }
 
         if (SubjectClass::create($inputs)) {
@@ -122,11 +130,12 @@ class SubjectClassController extends Controller
     {
         $inputs = $request->all();
 
-        if ($request->has('image')) {
-            if (file_exists($subjectsClass->image)) {
-                unlink($subjectsClass->image);
-            }
-            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/subject_class', 'photo');
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = $file->getClientOriginalName();
+
+            $file->move('classes/', $filename);
+            $inputs['image'] = $filename;
         }
         if ($subjectsClass->update($inputs)) {
             return response()->json(['status' => 200]);

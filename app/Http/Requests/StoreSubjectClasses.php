@@ -27,6 +27,10 @@ class StoreSubjectClasses extends FormRequest
             'name_ar' => 'required',
             'name_en' => 'required',
             'term_id' => 'required',
+            'season_id' => 'required',
+            'note_ar' => 'required',
+            'note_en' => 'required',
+            'image' => 'image|nullable',
         ];
     }
 }

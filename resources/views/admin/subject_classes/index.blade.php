@@ -54,6 +54,9 @@
                                 <th class="min-w-50px">الاسم</th>
                                 <th class="min-w-50px">الترم</th>
                                 <th class="min-w-50px">الصف</th>
+                                <th class="min-w-50px">ملاحظة بالعربي</th>
+                                <th class="min-w-50px">ملاحظة بالانجليزي</th>
+                                <th class="min-w-50px">لون الخلفية</th>
                                 <th class="min-w-50px">الصورة</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
@@ -118,6 +121,9 @@
             {data: 'name_ar', name: 'name_ar'},
             {data: 'term_id', name: 'term_id'},
             {data: 'season_id', name: 'season_id'},
+            {data: 'note_ar', name: 'note_ar'},
+            {data: 'note_en', name: 'note_en'},
+            {data: 'background_color', name: 'background_color'},
             {data: 'image', name: 'image'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
