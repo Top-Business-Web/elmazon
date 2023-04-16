@@ -45,10 +45,11 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('add-suggest',[AuthController::class,'addSuggest']);
         Route::get('all-notifications',[AuthController::class,'allNotifications']);
         Route::post('add-device-token',[AuthController::class,'add_device_token']);
-        Route::post('papel-sheet-exam/user/{id}',[AuthController::class,'papel_sheet_exam']);
-        Route::get('papel-sheet-exam/show',[AuthController::class,'papel_sheet_exam_show']);
+        Route::post('papel-sheet-exam/user/{id}',[AuthController::class,'paper_sheet_exam']);
+        Route::get('papel-sheet-exam/show',[AuthController::class,'paper_sheet_exam_show']);
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
+        Route::get('home-page/start-your-journey',[AuthController::class,'startYourJourney']);
         Route::get('all-subscribes',[SubscribeController::class,'all']);
         Route::post('/payments/pay',[Payment::class,'pay']);
         Route::post('/payments/paymob____',[Payment::class,'pay_']);

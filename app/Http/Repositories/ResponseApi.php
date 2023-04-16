@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Http\Repositories;
+
+class ResponseApi{
+
+    public static function returnResponseDataApi($data=null,string $message,int $code,int $status = 200): \Illuminate\Http\JsonResponse
+    {
+
+        return response()->json([
+
+            'data' => $data,
+            'message' => $message,
+            'code' => $code,
+
+        ],$status);
+
+    }
+
+}

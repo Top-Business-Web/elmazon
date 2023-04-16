@@ -25,7 +25,6 @@ class UserReportResource extends JsonResource
             'country' => new CountryResource($this->country),
             'father_phone' => $this->father_phone,
             'image' => $this->image != null ? asset('/users/'.$this->image) : asset('/default/avatar.jpg'),
-
         ];
     }
 }

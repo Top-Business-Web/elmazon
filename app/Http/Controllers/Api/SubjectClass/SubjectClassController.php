@@ -7,7 +7,7 @@ use App\Http\Resources\AllExamResource;
 use App\Http\Resources\LessonResource;
 use App\Http\Resources\OnlineExamResource;
 use App\Http\Resources\SubjectClassAllExamResource;
-use App\Http\Resources\SubjectClassResource;
+use App\Http\Resources\SubjectClassNewResource;
 use App\Models\AllExam;
 use App\Models\Lesson;
 use App\Models\OnlineExam;
@@ -40,7 +40,7 @@ class SubjectClassController extends Controller
             return response()->json([
 
                 'data' => [
-                     'classes' => SubjectClassResource::collection($classes),
+                     'classes' => SubjectClassNewResource::collection($classes),
 //                     'fullExams' => AllExamResource::collection($fullExams),
                      'classes_all_exams' => SubjectClassAllExamResource::collection($subject_classes_all_exams),
 
@@ -70,7 +70,7 @@ class SubjectClassController extends Controller
             return response()->json([
 
                 'data' => [
-                    'class' => new SubjectClassResource($class),
+                    'class' => new SubjectClassNewResource($class),
                     'code' => 200,
                     'message' => "تم الحصول علي جميع الدروس التابعه لهذا الفصل",
                 ]
