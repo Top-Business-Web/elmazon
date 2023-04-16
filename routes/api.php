@@ -51,6 +51,7 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('home-page',[AuthController::class,'home_page']);
         Route::get('home-page/start-your-journey',[AuthController::class,'startYourJourney']);
         Route::get('home-page/start-your-journey/findExamByClassById/{id}',[AuthController::class,'findExamByClassById']);
+        Route::get('home-page/videos-resources',[AuthController::class,'videosResources']);
         Route::get('all-subscribes',[SubscribeController::class,'all']);
         Route::post('/payments/pay',[Payment::class,'pay']);
         Route::post('/payments/paymob____',[Payment::class,'pay_']);

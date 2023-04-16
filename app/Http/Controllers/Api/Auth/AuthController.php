@@ -84,6 +84,12 @@ class AuthController extends Controller
         return $this->authRepositoryInterface->startYourJourney($request);
     }
 
+    public function videosResources(): \Illuminate\Http\JsonResponse{
+
+        return $this->authRepositoryInterface->videosResources();
+
+    }
+
     public function add_device_token(Request $request)
     {
 

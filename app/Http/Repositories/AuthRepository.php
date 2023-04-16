@@ -494,6 +494,16 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
     }
 
+    public function videosResources(): \Illuminate\Http\JsonResponse{
+
+        $resources = VideoResource::whereHas('term', function ($term){
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+
+        return self::returnResponseDataApi(VideoResourceResource::collection($resources),"تم الحصول علي بيانات المراجعه النهائيه بنجاح",200);
+
+    }
+
     public function findExamByClassById($id):\Illuminate\Http\JsonResponse{
 
         $class = SubjectClass::where('id', $id)->first();
