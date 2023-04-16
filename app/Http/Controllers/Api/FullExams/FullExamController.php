@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\FullExams;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllExamResource;
 use App\Http\Resources\ExamInstructionResource;
-use App\Http\Resources\SubjectClassResource;
+use App\Http\Resources\SubjectClassNewResource;
 use App\Models\AllExam;
 use App\Models\ExamInstruction;
 use App\Models\SubjectClass;

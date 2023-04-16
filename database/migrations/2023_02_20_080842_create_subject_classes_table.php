@@ -17,7 +17,7 @@ class CreateSubjectClassesTable extends Migration
                 $table->bigIncrements('id');
                 $table->string('name_ar');
                 $table->string('name_en');
-                $table->string('note')->nullable();
+                $table->string('note_ar');
                 $table->longText('image')->nullable();
                 $table->unsignedBigInteger('term_id')->nullable();
                 $table->unsignedBigInteger('season_id')->nullable();

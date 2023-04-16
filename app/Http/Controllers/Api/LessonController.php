@@ -3,18 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AudioResource;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\LessonResource;
 use App\Http\Resources\OnlineExamResource;
-use App\Http\Resources\PdfUploadResource;
-use App\Http\Resources\SubjectClassResource;
+use App\Http\Resources\SubjectClassNewResource;
 use App\Http\Resources\VideoPartResource;
-use App\Models\Audio;
 use App\Models\Comment;
 use App\Models\Lesson;
 use App\Models\OpenLesson;
-use App\Models\PdfFileUpload;
 use App\Models\SubjectClass;
 use App\Models\VideoParts;
 use App\Models\VideoWatch;
@@ -25,7 +21,8 @@ use Illuminate\Support\Facades\Validator;
 class LessonController extends Controller{
 
 
-    public function allVideos($id){
+    public function allVideos($id): \Illuminate\Http\JsonResponse
+    {
 
 
         $lesson = Lesson::where('id','=',$id)->first();
@@ -41,7 +38,8 @@ class LessonController extends Controller{
 
     }
 
-    public function allPdf($id){
+    public function allPdf($id): \Illuminate\Http\JsonResponse
+    {
 
 
         $lesson = Lesson::where('id','=',$id)->first();
@@ -55,7 +53,8 @@ class LessonController extends Controller{
 
     }
 
-    public function allAudios($id){
+    public function allAudios($id): \Illuminate\Http\JsonResponse
+    {
         $lesson = Lesson::where('id','=',$id)->first();
         if(!$lesson){
             return self::returnResponseDataApi(null,"هذا الدرس غير موجود",404,404);
@@ -65,10 +64,10 @@ class LessonController extends Controller{
 
         return self::returnResponseDataApi(AudioResource::collection($allAudios),"تم ارسال جميع الملفات الصوتيه التابعه للدرس بنجاح ",200);
 
-
     }
 
-    public function videoDetails($id){
+    public function videoDetails($id): \Illuminate\Http\JsonResponse
+    {
 
         $video = VideoParts::where('id','=',$id)->first();
         if(!$video){
@@ -78,7 +77,8 @@ class LessonController extends Controller{
 
     }
 
-    public function videoComments($id){
+    public function videoComments($id): \Illuminate\Http\JsonResponse
+    {
 
         $video = VideoParts::where('id','=',$id)->first();
         if(!$video){
@@ -94,7 +94,8 @@ class LessonController extends Controller{
     }
 
 
-    public function accessFirstVideo(Request $request,$id){
+    public function accessFirstVideo(Request $request,$id): \Illuminate\Http\JsonResponse
+    {
 
         $rules = [
             'type' => 'required|in:video,subject_class',
@@ -185,7 +186,7 @@ class LessonController extends Controller{
 
     }
 
-    public function accessNextVideo(Request $request,$id)
+    public function accessNextVideo(Request $request,$id): \Illuminate\Http\JsonResponse
     {
 
         $rules = [
@@ -332,7 +333,7 @@ class LessonController extends Controller{
                     ]);
                 }
 
-                return self::returnResponseDataApi(new SubjectClassResource($next_subject_class),"تم الوصول الي الدرس التالي",200);
+                return self::returnResponseDataApi(new SubjectClassNewResource($next_subject_class),"تم الوصول الي الدرس التالي",200);
 
             } else{
                 return self::returnResponseDataApi(null,"تم الوصول للفصل الاخير ولا يوجد اي فصل اخر لفتحه",500);
