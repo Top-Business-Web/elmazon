@@ -73,6 +73,12 @@ class AuthController extends Controller
         return $this->authRepositoryInterface->home_page();
     }
 
+    public function findExamByClassById($id): \Illuminate\Http\JsonResponse{
+
+        return $this->authRepositoryInterface->findExamByClassById($id);
+
+    }
+
     public function startYourJourney(Request $request): \Illuminate\Http\JsonResponse{
 
         return $this->authRepositoryInterface->startYourJourney($request);

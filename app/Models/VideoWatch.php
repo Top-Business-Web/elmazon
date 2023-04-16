@@ -12,8 +12,10 @@ class VideoWatch extends Model
     protected  $guarded = [];
 
 
-    public function video()
-    {
+    public function video(){
         return $this->belongsTo(VideoParts::class, 'video_part_id','id');
     }
+
+
+
 }

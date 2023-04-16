@@ -485,25 +485,25 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
     public function startYourJourney(Request $request):\Illuminate\Http\JsonResponse{
 
 
-          $explanations = SubjectClass::whereHas('term', function ($term){
+          $classes = SubjectClass::whereHas('term', function ($term){
               $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
           })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
 
-
-//        $exams = ;
-//        $resources = ;
+          return self::returnResponseDataApi(SubjectClassNewResource::collection($classes),"تم الحصول علي بيانات ابدء رحلتك بنجاح",200);
 
 
-        return response()->json([
+    }
 
-            'data' => [
-                'explanations' => SubjectClassNewResource::collection($explanations)
-            ],
-            'message' => 'تم الحصول علي بيانات ابدء رحلتك بنجاح',
-            'code' => 200,
+    public function findExamByClassById($id):\Illuminate\Http\JsonResponse{
+
+        $class = SubjectClass::where('id', $id)->first();
+        if(!$class){
+
+            return self::returnResponseDataApi(null,"هذا الفصل غير موجود",404);
+        }
 
 
-        ]);
+       return self::returnResponseDataApi(new SubjectClassNewResource($class),"message",200);
     }
 
     public function add_device_token(Request $request)
