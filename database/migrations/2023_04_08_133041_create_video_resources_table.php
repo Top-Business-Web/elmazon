@@ -20,8 +20,8 @@ class CreateVideoResourcesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name_ar');
             $table->string('name_en');
-            $table->integer('time')->comment('زمن الفيديو');
-            $table->longText('video_link');
+            $table->integer('time')->nullable()->comment('زمن الفيديو');
+            $table->longText('video_link')->nullable();
             $table->unsignedBigInteger('season_id');
             $table->unsignedBigInteger('term_id');
             $table->timestamps();
