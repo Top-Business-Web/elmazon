@@ -3,7 +3,6 @@
 namespace App\Http\Repositories;
 
 use App\Http\Interfaces\ReportRepositoryInterface;
-use App\Http\Requests\ReportApiRequest;
 use App\Http\Resources\ReportApiResource;
 use App\Models\Report;
 use Illuminate\Http\JsonResponse;
@@ -14,22 +13,47 @@ use Illuminate\Support\Facades\Validator;
 class ReportRepository extends ResponseApi implements ReportRepositoryInterface {
 
 
-    public function studentAddReport(ReportApiRequest $request): JsonResponse
+    public function studentAddReport(Request $request): JsonResponse
     {
 
         try {
 
-//            if ($request->video_part_id === null && $request->video_basic_id === null && $request->video_resource_id === null) {
-//                return self::returnResponseDataApi(null, "يجب عليك ارفاق الفيديو الذي تم البلاغ عنه", 407);
-//            }
+            $rules = [
+                'report' => 'required',
+                'type' => 'required|in:video_part,video_basic,video_resource',
+                'video_part_id' => 'nullable|integer|exists:video_parts,id',
+                'video_basic_id' => 'nullable|integer|exists:video_basics,id',
+                'video_resource_id' => 'nullable|integer|exists:video_resources,id',
+            ];
+            $validator = Validator::make($request->all(), $rules, [
+                'type.in' => 407,
+            ]);
+
+            if ($validator->fails()) {
+                $errors = collect($validator->errors())->flatten(1)[0];
+                if (is_numeric($errors)) {
+
+                    $errors_arr = [
+                        407 => 'Failed,The type of video must be an video_part or video_basic or video_resource',
+                    ];
+
+                    $code = collect($validator->errors())->flatten(1)[0];
+                    return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+                }
+                return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
+            }
+
+            if ($request->video_part_id === null && $request->video_basic_id === null && $request->video_resource_id === null) {
+                return self::returnResponseDataApi(null, "يجب عليك ارفاق الفيديو الذي تم البلاغ عنه", 407);
+            }
 
             $report = Report::create([
                  'report' => $request->report,
                  'user_id' => Auth::guard('user-api')->id(),
-                'type' => $request->type,
-                'video_part_id' => $request->video_part_id ?? null,
-                'video_basic_id' => $request->video_basic_id ?? null,
-                'video_resource_id' => $request->video_resource_id ?? null,
+                 'type' => $request->type,
+                 'video_part_id' => $request->video_part_id ?? null,
+                 'video_basic_id' => $request->video_basic_id ?? null,
+                 'video_resource_id' => $request->video_resource_id ?? null,
             ]);
 
             if($report->save()){
@@ -39,7 +63,6 @@ class ReportRepository extends ResponseApi implements ReportRepositoryInterface 
                 return self::returnResponseDataApi(null,"يوجد خطاء ما اثناء ادخال البيانات",500);
 
             }
-
 
         }catch (\Exception $exception) {
 
