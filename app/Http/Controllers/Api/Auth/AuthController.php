@@ -36,7 +36,7 @@ class AuthController extends Controller
         return $this->authRepositoryInterface->allNotifications();
     }
 
-    public function communication(): \Illuminate\Http\JsonResponse
+    public function communication(): JsonResponse
     {
         return $this->authRepositoryInterface->communication();
     }
