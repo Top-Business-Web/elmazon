@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\OnBoardingController;
 use App\Http\Controllers\Api\Payment;
 use App\Http\Controllers\Api\Question\QuestionController;
 use App\Http\Controllers\Api\StudentReport\ReportController;
+use App\Http\Controllers\Api\Report\ReportController as ReportStudentController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
 use App\Http\Controllers\Api\SubscribeController;
 use Illuminate\Http\Request;
@@ -141,6 +142,13 @@ Route::group(['middleware' => 'lang'], function (){
     Route::get('reports/student-report',[ReportController::class,'student_report'])->middleware('jwt');
     Route::post('user-rate-video/{id}',[App\Http\Controllers\Api\VideoRate\VideoRateController::class,'user_rate_video'])->middleware('jwt');
 
+
+    //Added by eng islam mohammed
+    Route::group(['prefix' => 'report','middleware' => 'jwt'], function (){
+
+        Route::post('student-add-report',[ReportStudentController::class,'studentAddReport']);
+
+    });
 
 });
 

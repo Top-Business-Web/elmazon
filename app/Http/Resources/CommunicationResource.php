@@ -20,6 +20,9 @@ class CommunicationResource extends JsonResource
             'id' => $this->id,
             'facebook_link' => $this->facebook_link,
             'youtube_link' => $this->youtube_link,
+            'website_link' => $this->website_link,
+            'instagram_link' => $this->instagram_link,
+            'twitter_link' => $this->twitter_link,
             'phones' => PhoneCommunication::get(),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
