@@ -37,13 +37,15 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\JsonResponse;
+
 
 class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
 
     use FirebaseNotification;
 
-    public function login(Request $request): \Illuminate\Http\JsonResponse
+    public function login(Request $request): JsonResponse
     {
         try {
             $rules = [
@@ -91,7 +93,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
         }
     }
 
-    public function addSuggest(Request $request): \Illuminate\Http\JsonResponse
+    public function addSuggest(Request $request): JsonResponse
     {
 
         try {
@@ -166,7 +168,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
     }
 
 
-    public function allNotifications(): \Illuminate\Http\JsonResponse
+    public function allNotifications(): JsonResponse
     {
 
         try {
@@ -187,7 +189,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
     }
 
-    public function communication(): \Illuminate\Http\JsonResponse
+    public function communication(): JsonResponse
     {
         try {
             $setting = Setting::first();
@@ -200,7 +202,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
         }
     }
 
-    public function getProfile(Request $request): \Illuminate\Http\JsonResponse
+    public function getProfile(Request $request): JsonResponse
     {
 
         try {
@@ -329,7 +331,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
     }
 
-    public function paper_sheet_exam_show(): \Illuminate\Http\JsonResponse
+    public function paper_sheet_exam_show(): JsonResponse
     {
 
         $papelSheetExam = PapelSheetExam::whereHas('season', function ($season) {
@@ -346,7 +348,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
     }
 
 
-    public function updateProfile(Request $request): \Illuminate\Http\JsonResponse
+    public function updateProfile(Request $request): JsonResponse
     {
 
         $rules = [
@@ -393,7 +395,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
     }
 
-    public function home_page(): \Illuminate\Http\JsonResponse
+    public function home_page(): JsonResponse
     {
 
         try {
@@ -482,7 +484,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
     }
 
 
-    public function startYourJourney(Request $request):\Illuminate\Http\JsonResponse{
+    public function startYourJourney(Request $request): JsonResponse{
 
 
           $classes = SubjectClass::whereHas('term', function ($term){
@@ -494,7 +496,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
     }
 
-    public function videosResources(): \Illuminate\Http\JsonResponse{
+    public function videosResources(): JsonResponse{
 
         $resources = VideoResource::whereHas('term', function ($term){
             $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
@@ -504,7 +506,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
     }
 
-    public function findExamByClassById($id):\Illuminate\Http\JsonResponse{
+    public function findExamByClassById($id): JsonResponse{
 
         $class = SubjectClass::where('id', $id)->first();
         if(!$class){
@@ -555,7 +557,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
         }
     }
 
-    public function add_notification(Request $request): \Illuminate\Http\JsonResponse
+    public function add_notification(Request $request): JsonResponse
     {
 
         $rules = [
@@ -587,7 +589,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
     }
 
-    public function user_add_screenshot(): \Illuminate\Http\JsonResponse
+    public function user_add_screenshot(): JsonResponse
     {
 
         $user_screen = UserScreenShot::where('user_id', '=', Auth::guard('user-api')->id());
@@ -625,7 +627,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
     }
 
-    public function logout(Request $request): \Illuminate\Http\JsonResponse
+    public function logout(Request $request): JsonResponse
     {
 
         try {
