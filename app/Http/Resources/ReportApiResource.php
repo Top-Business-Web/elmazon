@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class VideoBasicResource extends JsonResource
+class ReportApiResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,13 +16,12 @@ class VideoBasicResource extends JsonResource
     {
         return [
 
-            'id' => $this->id,
-            'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
-            'time' => $this->time,
-            'background_color' => $this->background_color,
-            'video_link' => asset('videos_basics/videos/'. $this->video_link),
+           'id' => $this->id,
+           'type' => $this->type,
+           'report' => $this->report,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
+
 
         ];
     }
