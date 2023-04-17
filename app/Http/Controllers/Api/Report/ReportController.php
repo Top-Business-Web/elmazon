@@ -19,7 +19,7 @@ class ReportController extends Controller{
         $this->reportRepositoryInterface = $reportRepositoryInterface;
     }
 
-    public function studentAddReport(ReportApiRequest $request):JsonResponse{
+    public function studentAddReport(Request $request):JsonResponse{
 
         return $this->reportRepositoryInterface->studentAddReport($request);
     }

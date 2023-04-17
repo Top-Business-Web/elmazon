@@ -9,6 +9,6 @@ use Illuminate\Http\Request;
 interface ReportRepositoryInterface{
 
 
-    public function studentAddReport(ReportApiRequest $request):JsonResponse;
+    public function studentAddReport(Request $request):JsonResponse;
 
 }
