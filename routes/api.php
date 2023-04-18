@@ -147,6 +147,8 @@ Route::group(['middleware' => 'lang'], function (){
     Route::group(['prefix' => 'report','middleware' => 'jwt'], function (){
 
         Route::post('student-add-report',[ReportStudentController::class,'studentAddReport']);
+        Route::get('all-by-student',[ReportStudentController::class,'allByStudent']);
+        Route::delete('delete/{id}',[ReportStudentController::class,'delete']);
 
     });
 
