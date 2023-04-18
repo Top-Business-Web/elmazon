@@ -15,9 +15,11 @@ class CreateSubjectClassesTable extends Migration
     {
         Schema::create('subject_classes', function (Blueprint $table) {
                 $table->bigIncrements('id');
+                $table->string('title_ar');
+                 $table->string('title_en');
                 $table->string('name_ar');
                 $table->string('name_en');
-                $table->string('note_ar');
+                $table->string('note');
                 $table->longText('image')->nullable();
                 $table->unsignedBigInteger('term_id')->nullable();
                 $table->unsignedBigInteger('season_id')->nullable();

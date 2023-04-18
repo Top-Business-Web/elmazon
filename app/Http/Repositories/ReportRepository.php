@@ -19,14 +19,14 @@ class ReportRepository extends ResponseApi implements ReportRepositoryInterface 
         try {
 
             $rules = [
-                'report' => 'required',
-                'type' => 'required|in:video_part,video_basic,video_resource',
-                'video_part_id' => 'nullable|integer|exists:video_parts,id',
-                'video_basic_id' => 'nullable|integer|exists:video_basics,id',
+                'report'            => 'required',
+                'type'              => 'required|in:video_part,video_basic,video_resource',
+                'video_part_id'     => 'nullable|integer|exists:video_parts,id',
+                'video_basic_id'    => 'nullable|integer|exists:video_basics,id',
                 'video_resource_id' => 'nullable|integer|exists:video_resources,id',
             ];
             $validator = Validator::make($request->all(), $rules, [
-                'type.in' => 407,
+                'type.in'           => 407,
             ]);
 
             if ($validator->fails()) {
@@ -48,11 +48,11 @@ class ReportRepository extends ResponseApi implements ReportRepositoryInterface 
             }
 
             $report = Report::create([
-                 'report' => $request->report,
-                 'user_id' => Auth::guard('user-api')->id(),
-                 'type' => $request->type,
-                 'video_part_id' => $request->video_part_id ?? null,
-                 'video_basic_id' => $request->video_basic_id ?? null,
+                 'report'            => $request->report,
+                 'user_id'           => Auth::guard('user-api')->id(),
+                 'type'              => $request->type,
+                 'video_part_id'     => $request->video_part_id ?? null,
+                 'video_basic_id'    => $request->video_basic_id ?? null,
                  'video_resource_id' => $request->video_resource_id ?? null,
             ]);
 
@@ -69,5 +69,35 @@ class ReportRepository extends ResponseApi implements ReportRepositoryInterface 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
 
+    }
+
+    public function allByStudent():JsonResponse{
+
+        $reports = Report::where('user_id','=',Auth::guard('user-api')->id())->get();
+        if($reports->count() > 0){
+            return self::returnResponseDataApi(ReportApiResource::collection($reports),"تم الحصول علي جميع بلاغات الطالب",200);
+
+        }else{
+
+            return self::returnResponseDataApi(null, "لا يوجد اي بلاغات للطالب", 201);
+        }
+    }
+
+    public function delete($id):JsonResponse{
+
+        $report = Report::where('id','=',$id)->first();
+        if(!$report){
+            return self::returnResponseDataApi(null, "البلاغ غير موجود", 404);
+
+        }
+
+        if($report->user_id != Auth::guard('user-api')->id()){
+            return self::returnResponseDataApi(null, "لا يوجد لديك صلاحيه لحذف هذا البلاغ", 407);
+
+        }else{
+            $report->delete();
+            return self::returnResponseDataApi(null, "تم حذف البلغ بنجاح", 200);
+
+        }
     }
 }

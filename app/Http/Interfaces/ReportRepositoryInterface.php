@@ -10,5 +10,8 @@ interface ReportRepositoryInterface{
 
 
     public function studentAddReport(Request $request):JsonResponse;
+    public function allByStudent():JsonResponse;
+
+    public function delete($id):JsonResponse;
 
 }

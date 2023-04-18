@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\SubjectClass;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllExamResource;
+use App\Http\Resources\LessonNewResource;
 use App\Http\Resources\LessonResource;
 use App\Http\Resources\OnlineExamResource;
 use App\Http\Resources\SubjectClassAllExamResource;
@@ -71,9 +72,10 @@ class SubjectClassController extends Controller
 
                 'data' => [
                     'class' => new SubjectClassNewResource($class),
-                    'code' => 200,
-                    'message' => "تم الحصول علي جميع الدروس التابعه لهذا الفصل",
-                ]
+                    'lessons' => LessonNewResource::collection($class->lessons),
+                ],
+                'code' => 200,
+                'message' => "تم الحصول علي جميع الدروس التابعه لهذا الفصل",
             ]);
 
 
