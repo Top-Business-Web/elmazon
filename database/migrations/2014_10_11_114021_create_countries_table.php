@@ -17,7 +17,9 @@ class CreateCountriesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name_ar')->comment('اسم المحافظه بالعربي');
             $table->string('name_en')->comment('اسم المحافظه بالانجليزي');
+            $table->unsignedBigInteger('city_id');
             $table->timestamps();
+            $table->foreign('city_id')->references('id')->on('cities')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 
