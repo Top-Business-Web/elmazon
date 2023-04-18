@@ -24,7 +24,6 @@ class SubjectClassController extends Controller
         if ($request->ajax()) {
             if ($request->has('term_id') && $request->term_id != '') {
                 $term = $request->get('term_id');
-//                dd($term);
                 $subjects_classes_list->where('term_id', $term);
             }
             $subjects_classes = $subjects_classes_list->get();

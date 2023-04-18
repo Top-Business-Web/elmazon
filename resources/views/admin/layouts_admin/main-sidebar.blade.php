@@ -85,6 +85,20 @@
         </li>
 
         <li class="slide">
+            <a class="side-menu__item" href="{{ route('videoResource.index') }}">
+                <i class="icon icon-control-play side-menu__icon"></i>
+                <span class="side-menu__label">مصادر الفيديوهات</span>
+            </a>
+        </li>
+
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('videoBasicPdf.index') }}">
+                <i class="icon icon-control-play side-menu__icon"></i>
+                <span class="side-menu__label">الفيديوهات الاساسية ملفات ورقية</span>
+            </a>
+        </li>
+
+        <li class="slide">
             <a class="side-menu__item" href="{{ route('monthlyPlans.index') }}">
                 <i class="icon icon-calendar side-menu__icon"></i>
                 <span class="side-menu__label">الخطة الشهرية</span>

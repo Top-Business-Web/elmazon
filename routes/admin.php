@@ -31,6 +31,8 @@ use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\LifeExamController;
 use App\Http\Controllers\Admin\PapelSheetExamController;
 use App\Http\Controllers\Admin\VideoBasicController;
+use App\Http\Controllers\Admin\VideoResourceController;
+use App\Http\Controllers\Admin\VideoBasicPdfController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
 use Illuminate\Support\Facades\Route;
@@ -226,6 +228,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Video Basic ####
     Route::resource('videoBasic', VideoBasicController::class);
+
+    #### Video Resource ####
+    Route::resource('videoResource', VideoResourceController::class);
+    Route::get('videoResource/Sort', [VideoResourceController::class, 'videoResourceSort'])->name('videoResourceSort');
+
+    #### Video Basic Pdf ####
+    Route::resource('videoBasicPdf', VideoBasicPdfController::class);
+
 
 
     #### Auth ####
