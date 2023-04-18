@@ -10,4 +10,10 @@ class VideoBasic extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+
+    public function videoBasicPdf()
+    {
+        return $this->hasMany(VideoBasicPdfUploads::class);
+    }
 }

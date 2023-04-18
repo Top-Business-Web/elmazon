@@ -18,4 +18,13 @@ class VideoBasicPdfUploads extends Model
         'video_basic_id',
         'video_resource_id'
     ];
+
+    protected $casts = [
+        'pdf_links' => 'array',
+    ];
+
+    public function videoBasic()
+    {
+        return $this->belongsTo(VideoBasic::class, 'video_basic_id', 'id');
+    }
 }

@@ -29,6 +29,10 @@ class VideoBasicController extends Controller
 
                        ';
                 })
+                ->editColumn('background_color', function ($videbasics) {
+                    return '<input type="color" class="form-control" name="background_color"
+                           value="'. $videbasics->background_color .'" disabled>';
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {

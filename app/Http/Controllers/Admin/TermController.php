@@ -20,7 +20,6 @@ class TermController extends Controller
         if ($request->ajax()) {
             if ($request->has('season_id') && $request->season_id != ''){
                 $seasonId = $request->get('season_id');
-//                dd($seasonId);
                 $terms->where('season_id', $seasonId);
             }
             $terms->get();
