@@ -7,6 +7,7 @@ use App\Http\Resources\AllExamResource;
 use App\Http\Resources\CommunicationResource;
 use App\Http\Resources\HomeAllClasses;
 use App\Http\Resources\NotificationResource;
+use App\Http\Resources\OnlineExamNewResource;
 use App\Http\Resources\PapelSheetExamTimeUserResource;
 use App\Http\Resources\PapelSheetResource;
 use App\Http\Resources\PhoneTokenResource;
@@ -539,8 +540,9 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
             return self::returnResponseDataApi(null,"هذا الفصل غير موجود",404);
         }
 
+        $exams = $class->exams;
 
-       return self::returnResponseDataApi(new SubjectClassNewResource($class),"message",200);
+       return self::returnResponseDataApi(OnlineExamNewResource::collection($exams),"تم ارسال جميع امتحانات الفصل بنجاح",200);
     }
 
     public function add_device_token(Request $request)
