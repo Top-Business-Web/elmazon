@@ -233,6 +233,13 @@
             </a>
         </li>
 
+        <li class="slide">
+            <a class="side-menu__item" href="{{ route('roles.index') }}">
+                <i class="fa fa-user-secret side-menu__icon"></i>
+                <span class="side-menu__label">الادوار و الصلاحيات</span>
+            </a>
+        </li>
+
 {{--        <li class="slide">--}}
 {{--            <a class="side-menu__item" href="{{ route('contactUs.index') }}">--}}
 {{--                <i class="fa fa-globe side-menu__icon"></i>--}}

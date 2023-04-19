@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\OnBoardingController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SeasonController;
 use App\Http\Controllers\Admin\SubjectClassController;
 use App\Http\Controllers\Admin\TermController;
@@ -236,6 +237,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Video Basic Pdf ####
     Route::resource('videoBasicPdf', VideoBasicPdfController::class);
 
+
+
+
+
+    #### roles ####
+    Route::resource('roles', RoleController::class);
+    Route::POST('delete_roles',[RoleController::class,'delete'])->name('delete_roles');
 
 
     #### Auth ####
