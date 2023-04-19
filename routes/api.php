@@ -51,6 +51,7 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
         Route::get('home-page/all-classes',[AuthController::class,'allClasses']);
+        Route::get('home-page/all-exams',[AuthController::class,'all_exams']);
         Route::get('home-page/start-your-journey',[AuthController::class,'startYourJourney']);
         Route::get('home-page/start-your-journey/findExamByClassById/{id}',[AuthController::class,'findExamByClassById']);
         Route::get('home-page/videos-resources',[AuthController::class,'videosResources']);
