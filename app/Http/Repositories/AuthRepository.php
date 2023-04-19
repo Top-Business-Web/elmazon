@@ -494,18 +494,18 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
 
 
+       return self::returnResponseDataApi(HomeAllClasses::collection($classes),"تم ارسال جميع الفصول بنجاح",200);
+
+    }
+
+
+    public function all_exams(): JsonResponse{
+
         $allExams = AllExam::whereHas('term', function ($term){
             $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
 
-        return response()->json([
-            'data' => [
-                 'classes' => HomeAllClasses::collection($classes),
-                 'all_exams' => AllExamResource::collection($allExams),
-            ],
-            'message' => 'تم الحصول علي جميع الفصول والامتحانات الشامله بنجاح بنجاح ',
-            'code' => 200
-        ]);
+        return self::returnResponseDataApi(AllExamResource::collection($allExams),"تم الحصول علي جميع الامتحانات الشامله بنجاح",200);
 
     }
 

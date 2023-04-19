@@ -25,6 +25,7 @@ interface AuthRepositoryInterface{
 
     public function home_page(): \Illuminate\Http\JsonResponse;
     public function allClasses(): JsonResponse;
+    public function all_exams(): JsonResponse;
     public function startYourJourney(Request $request):JsonResponse;
     public function videosResources(): JsonResponse;
     public function findExamByClassById($id):JsonResponse;
