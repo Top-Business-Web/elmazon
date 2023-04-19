@@ -94,7 +94,6 @@ Route::group(['middleware' => 'lang'], function (){
 
     Route::group(['prefix' => 'plans','middleware' => ['jwt']], function (){
         Route::get('all',[MonthlyPlanController::class,'all_plans']);
-        Route::get('oneDay',[MonthlyPlanController::class,'plan_today']);
 
     });
 
@@ -116,7 +115,7 @@ Route::group(['middleware' => 'lang'], function (){
     });
 
     Route::post('onlineExam/exam/{id}',[QuestionController::class,'online_exam_by_user'])->middleware('jwt');
-    Route::group(['prefix' => 'degrees','middleware' => ['jwt']], function (){
+        Route::group(['prefix' => 'degrees','middleware' => ['jwt']], function (){
         Route::get('all-exams-degrees',[DegreeController::class,'degrees']);
         Route::get('depends/exam/{id}',[DegreeController::class,'degrees_depends']);
     });
@@ -156,7 +155,6 @@ Route::group(['middleware' => 'lang'], function (){
 
 });
 
-
-Route::post('/payments/pay',[Payment::class,'pay']);
-Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
-Route::get('/checkout',[Payment::class,'checkout']);
+        Route::post('/payments/pay',[Payment::class,'pay']);
+        Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
+        Route::get('/checkout',[Payment::class,'checkout']);
