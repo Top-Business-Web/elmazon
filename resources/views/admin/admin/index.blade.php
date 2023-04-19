@@ -116,7 +116,7 @@
         showAddModal('{{ route('admins.create') }}');
         addScript();
         // Add Using Ajax
-        showEditModal('{{ route('admins.edit', ': id ') }}');
+        showEditModal('{{ route('admins.edit', ':id') }}');
         editScript();
     </script>
     @endsection
