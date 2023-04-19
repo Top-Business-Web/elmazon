@@ -9,7 +9,7 @@ class MonthlyPlan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title','start','end'];
+    protected $fillable = ['background_color','title_ar','title_en','description_ar','description_en','start','end','season_id','term_id'];
 
     public function term(){
 

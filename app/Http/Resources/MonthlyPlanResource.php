@@ -17,8 +17,10 @@ class MonthlyPlanResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'background_color' => $this->background_color,
             'date' => $this->start,
-            "plans" =>  MonthlyPlan::where('start','=',$this->start)->get(),
+            "title" => lang() == 'ar' ?$this->title_ar : $this->title_en,
+            "description" => lang() == 'ar' ?$this->description_ar : $this->description_en,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
 
