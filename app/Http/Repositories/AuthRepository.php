@@ -3,7 +3,9 @@
 namespace App\Http\Repositories;
 use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Interfaces\AuthRepositoryInterface;
+use App\Http\Resources\AllExamResource;
 use App\Http\Resources\CommunicationResource;
+use App\Http\Resources\HomeAllClasses;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\PapelSheetExamTimeUserResource;
 use App\Http\Resources\PapelSheetResource;
@@ -14,6 +16,7 @@ use App\Http\Resources\SuggestResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\VideoBasicResource;
 use App\Http\Resources\VideoResourceResource;
+use App\Models\AllExam;
 use App\Models\ExamDegreeDepends;
 use App\Models\Lesson;
 use App\Models\LifeExam;
@@ -483,6 +486,28 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
     }
 
+
+    public function allClasses(): JsonResponse{
+
+        $classes = SubjectClass::whereHas('term', function ($term){
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+
+
+        $allExams = AllExam::whereHas('term', function ($term){
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+
+        return response()->json([
+            'data' => [
+                 'classes' => HomeAllClasses::collection($classes),
+                 'all_exams' => AllExamResource::collection($allExams),
+            ],
+            'message' => 'تم الحصول علي جميع الفصول والامتحانات الشامله بنجاح بنجاح ',
+            'code' => 200
+        ]);
+
+    }
 
     public function startYourJourney(Request $request): JsonResponse{
 
