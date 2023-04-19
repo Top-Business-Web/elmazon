@@ -19,12 +19,11 @@ class AllExamResource extends JsonResource
             'id' => $this->id,
             'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'note' => $this->note,
-            'depends' => $this->depends,
             'date_exam' => $this->date_exam,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
-            'instruction' => new AllExamInstructionResource($this->instruction),
-            'questions' => QuestionResource::collection($this->questions),
+//            'instruction' => new AllExamInstructionResource($this->instruction),
+//            'questions' => QuestionResource::collection($this->questions),
         ];
     }
 }
