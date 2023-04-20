@@ -50,6 +50,8 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('papel-sheet-exam/show',[AuthController::class,'paper_sheet_exam_show']);
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
+        Route::get('home-page/all-classes',[AuthController::class,'allClasses']);
+        Route::get('home-page/all-exams',[AuthController::class,'all_exams']);
         Route::get('home-page/start-your-journey',[AuthController::class,'startYourJourney']);
         Route::get('home-page/start-your-journey/findExamByClassById/{id}',[AuthController::class,'findExamByClassById']);
         Route::get('home-page/videos-resources',[AuthController::class,'videosResources']);
@@ -92,7 +94,6 @@ Route::group(['middleware' => 'lang'], function (){
 
     Route::group(['prefix' => 'plans','middleware' => ['jwt']], function (){
         Route::get('all',[MonthlyPlanController::class,'all_plans']);
-        Route::get('oneDay',[MonthlyPlanController::class,'plan_today']);
 
     });
 
@@ -114,7 +115,7 @@ Route::group(['middleware' => 'lang'], function (){
     });
 
     Route::post('onlineExam/exam/{id}',[QuestionController::class,'online_exam_by_user'])->middleware('jwt');
-    Route::group(['prefix' => 'degrees','middleware' => ['jwt']], function (){
+        Route::group(['prefix' => 'degrees','middleware' => ['jwt']], function (){
         Route::get('all-exams-degrees',[DegreeController::class,'degrees']);
         Route::get('depends/exam/{id}',[DegreeController::class,'degrees_depends']);
     });
@@ -147,12 +148,13 @@ Route::group(['middleware' => 'lang'], function (){
     Route::group(['prefix' => 'report','middleware' => 'jwt'], function (){
 
         Route::post('student-add-report',[ReportStudentController::class,'studentAddReport']);
+        Route::get('all-by-student',[ReportStudentController::class,'allByStudent']);
+        Route::delete('delete/{id}',[ReportStudentController::class,'delete']);
 
     });
 
 });
 
-
-Route::post('/payments/pay',[Payment::class,'pay']);
-Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
-Route::get('/checkout',[Payment::class,'checkout']);
+        Route::post('/payments/pay',[Payment::class,'pay']);
+        Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
+        Route::get('/checkout',[Payment::class,'checkout']);

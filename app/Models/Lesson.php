@@ -29,5 +29,11 @@ class Lesson extends Model
     }
 
 
+    public function videos(){
+
+        return $this->hasMany(VideoParts::class,'lesson_id','id');
+    }
+
+
 
 }

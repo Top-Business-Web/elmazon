@@ -6,8 +6,7 @@ use App\Http\Interfaces\AuthRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
-class AuthController extends Controller
-{
+class AuthController extends Controller{
 
 
     public $authRepositoryInterface;
@@ -71,6 +70,16 @@ class AuthController extends Controller
     {
 
         return $this->authRepositoryInterface->home_page();
+    }
+
+    public function allClasses(): JsonResponse{
+
+        return $this->authRepositoryInterface->allClasses();
+    }
+
+    public function all_exams(): JsonResponse{
+
+        return $this->authRepositoryInterface->all_exams();
     }
 
     public function findExamByClassById($id): JsonResponse{

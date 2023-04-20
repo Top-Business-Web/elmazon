@@ -16,7 +16,7 @@
                             </div>
                             <div class="user-wrap">
                                 <h4 class="mb-1 text-capitalize">{{$admin->name}}</h4>
-                                <h6 class="text-muted mb-4"> {{$admin->created_at->diffForHumans()}}</h6>
+                                <h6 class="badge badge-primary-gradient">{{ $roleName }}</h6>
                                 <h6 class="text-muted mb-4"> {{$admin->email}}</h6>
                             </div>
                         </div>

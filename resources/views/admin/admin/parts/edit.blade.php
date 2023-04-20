@@ -1,6 +1,6 @@
 <div class="modal-body">
-    <form id="updateForm" method="POST" enctype="multipart/form-data" action="{{route('admins.update',$admin->id)}}" >
-    @csrf
+    <form id="updateForm" method="POST" enctype="multipart/form-data" action="{{route('admins.update',$admin->id)}}">
+        @csrf
         @method('PUT')
         <input type="hidden" value="{{$admin->id}}" name="id">
         <div class="form-group">
@@ -18,6 +18,19 @@
         <div class="form-group">
             <label for="password" class="form-control-label">كلمة المرور</label>
             <input type="password" class="form-control" name="password" id="password" placeholder="(اختيارى)">
+        </div>
+        <div class="form-group">
+            <label for="roles" class="form-check-label">الدور</label>
+            <select class="form-control" name="roles" required="required" {{ $admin->id == 1 ? 'disabled' : '' }}>
+                <option selected disabled>اختر دور</option>
+                @foreach($roles as $role)
+                    <option class="form-control"
+                            {{ in_array($role->id, $adminRole) ? 'selected' : '' }}
+                            value="{{ $role->id }}">
+                        {{ $role->name }}
+                    </option>
+                @endforeach
+            </select>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
