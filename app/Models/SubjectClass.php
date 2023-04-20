@@ -28,11 +28,16 @@ class SubjectClass extends Model
         return $this->belongsTo(Term::class,'term_id','id');
     }
 
+//    public function exams()
+//    {
+//        return $this->morphMany(OnlineExam::class, 'examable');
+//    }
+
+
     public function exams()
     {
-        return $this->morphMany(OnlineExam::class, 'examable');
+        return $this->hasMany(OnlineExam::class,'class_id','id');
     }
-
 
 
     //start instruction for exams

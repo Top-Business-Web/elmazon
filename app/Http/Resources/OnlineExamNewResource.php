@@ -17,7 +17,11 @@ class OnlineExamNewResource extends JsonResource
         return [
             'id' => $this->id,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
-            'num_of_question' => $this->questions->count(),
+            'type' => $this->exam_type,
+            'pdf_exam_upload' => $this->pdf_file_upload != null ? asset('online_exams/pdf_file_uploads/'. $this->pdf_file_upload) : null,
+            'answer_pdf_file' => $this->answer_pdf_file != null ? asset('online_exams/pdf_answers/'. $this->answer_pdf_file) : null,
+            'answer_video_file' => $this->answer_video_file != null ? asset('online_exams/videos_answers/'. $this->answer_video_file) : null,
+            'num_of_question' => $this->exam_type == 'online' ? $this->questions->count() : $this->pdf_num_questions,
             'total_time' => $this->quize_minute,
         ];
     }
