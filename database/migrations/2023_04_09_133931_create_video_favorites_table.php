@@ -19,7 +19,7 @@ class CreateVideoFavoritesTable extends Migration
             $table->unsignedBigInteger('video_basic_id')->nullable();
             $table->unsignedBigInteger('video_resource_id')->nullable();
             $table->unsignedBigInteger('video_part_id')->nullable();
-            $table->enum('favorite',['favorite','un_favorite']);
+            $table->enum('action',['favorite','un_favorite']);
             $table->enum('favorite_type',['video_basic','video_resource','video_part']);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
