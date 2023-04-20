@@ -31,8 +31,8 @@
                                 <th class="min-w-50px">الاسم</th>
                                 <th class="min-w-50px">الفصل</th>
                                 <th class="min-w-50px">الترم</th>
-                                <th class="min-w-50px">النوع</th>
-                                <th class="min-w-50px">ملاحظة</th>
+{{--                                <th class="min-w-50px">النوع</th>--}}
+{{--                                <th class="min-w-50px">ملاحظة</th>--}}
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -95,8 +95,8 @@
             {data: 'name_ar', name: 'name_ar'},
             {data: 'season_id', name: 'season_id'},
             {data: 'term_id', name: 'term_id'},
-            {data: 'examable_type', name: 'examable_type'},
-            {data: 'examable_id', name: 'examble_id'},
+            // {data: 'examable_type', name: 'examable_type'},
+            // {data: 'examable_id', name: 'examble_id'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('onlineExam.index')}}', columns);

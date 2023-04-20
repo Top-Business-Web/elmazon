@@ -138,29 +138,6 @@ class OnlineExamController extends Controller
          return response()->json(['status' => 200,'message' => 'تم اعتماد درجه الامتحان للطالب بنجاح']);
 
      }
-
-
-
-//    public function storeExamPaper(Request $request)
-//    {
-////        return $request;
-//        foreach ($request->questions as $question) {
-//            $text_exam_user = Degree::where('user_id', $request->user_id)
-//                ->where('question_id', $question['question_id'])
-//                ->first();
-//
-//            if ($text_exam_user) {
-//                $text_exam_user->degree = $question['degree'];
-//                $text_exam_user->status = 'completed';
-//                $text_exam_user->save();
-//            }
-//        }
-//        return redirect()->back();
-//
-//    }
-
-    // Store Exam Paper End
-
     // Add Question
 
     public function addQuestion(Request $request, OnlineExamQuestion $onlineExamQuestion)
@@ -177,7 +154,9 @@ class OnlineExamController extends Controller
 
     public function selectTerm(Request $request)
     {
-        //
+        $terms = Term::where('season_id',$request->season_id)->pluck('name_ar','id')->toArray();
+
+        return $terms;
     }
 
     // Delete Question

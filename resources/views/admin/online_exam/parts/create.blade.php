@@ -3,6 +3,17 @@
         @csrf
         <div class="form-group">
             <div class="row">
+                <div class="col-md-12">
+                    <label for="name_ar" class="form-control-label">نوع الامتحان</label>
+                    <select name="exam_type" class="form-control" id="exam_type" required="required">
+                        <option value="">اختر نوع الامتحان</option>
+                        <option value="pdf">PDF</option>
+                        <option value="online">Online</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-2">
                     <label for="name_ar" class="form-control-label">الدرجة</label>
                     <input type="number" class="form-control" name="degree" style="text-align: center">
@@ -20,6 +31,7 @@
                     <input type="number" class="form-control" value="" name="trying_number" style="text-align: center" placeholder="عدد المحاولات">
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
@@ -30,6 +42,7 @@
                     <input type="text" class="form-control" name="name_en" style="text-align: center">
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-6">
                     <label for="note" class="form-control-label">الصف</label>
@@ -45,7 +58,6 @@
                     <label for="note" class="form-control-label">تيرم</label>
                     <Select name="term_id" class="form-control selectTerm">
                         <option selected disabled style="text-align: center">اختر تيرم</option>
-
                     </Select>
                 </div>
             </div>
@@ -67,7 +79,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <label for="note" class="form-control-label">ملاحظة</label>
+                    <label for="note" class="form-control-label">التعليمات</label>
                     <textarea class="form-control" rows="10" name="note"></textarea>
                 </div>
             </div>
@@ -80,6 +92,11 @@
 </div>
 
 <script>
+
+        // $('#exam_type').change( function(){
+        //     $(this).val();
+        //     alert($(this).val())
+        // })
 
     $(".type_choose").click(function () {
         var element = document.getElementById("type");
@@ -98,18 +115,26 @@
         })
     })
 
-    $(".selectSeason").on('change',function () {
-        var season = $(this).val();
-        $.ajax({
-            url: '{{ route('selectTerm') }}',
-            data: {
-                'season_id': season,
-            },
-            success: function (data) {
-                $('.selectTerm').html(data);
+    $(document).ready(function () {
+        $('select[name="season_id"]').on('change', function () {
+            var season_id = $(this).val();
+            if (season_id) {
+                $.ajax({
+                    url: "{{ URL::to('terms/season/') }}/" + season_id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        $('select[name="term_id"]').empty();
+                        $.each(data, function (key, value) {
+                            $('select[name="term_id"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
+                    },
+                });
+            } else {
+                console.log('AJAX load did not work');
             }
-        })
-    })
+        });
+    });
 
 
 

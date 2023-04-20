@@ -59,10 +59,10 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Admins ####
-//    Route::group(['middleware' => 'permission:الادمن'], function () {
+    Route::group(['middleware' => 'permission:الادمن'], function () {
         Route::resource('admins', AdminController::class);
         Route::POST('delete_admin', [AdminController::class, 'delete'])->name('delete_admin');
-//    });
+    });
     Route::get('my_profile', [AdminController::class, 'myProfile'])->name('myProfile');
 
     Route::get('/', [MainController::class, 'index'])->name('adminHome')->middleware('permission:الرئيسية');
