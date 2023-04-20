@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 
 class OnlineExam extends Model
@@ -54,6 +55,12 @@ class OnlineExam extends Model
 
         return $this->belongsToMany(User::class,'online_exam_users','online_exam_id','user_id','id','id');
 
+    }
+
+
+    public function exams_favorites(): HasMany{
+
+        return $this->hasMany(ExamsFavorite::class,'online_exam_id','id');
     }
 
 }

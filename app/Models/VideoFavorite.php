@@ -14,7 +14,7 @@ class VideoFavorite extends Model
         'video_basic_id',
         'video_resource_id',
         'video_part_id',
-        'favorite',
+        'action',
         'favorite_type'
 
     ];

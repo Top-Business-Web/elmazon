@@ -12,10 +12,10 @@ class VideoParts extends Model
 
 protected $guarded = [];
 
-    public function exams()
-    {
-        return $this->morphMany(OnlineExam::class, 'examable');
-    }
+//    public function exams()
+//    {
+//        return $this->morphMany(OnlineExam::class, 'examable');
+//    }
 
     //start instruction for exams
     public function instruction()
@@ -40,6 +40,8 @@ protected $guarded = [];
     {
         return $this->belongsTo(Lesson::class, 'lesson_id', 'id');
     }
+
+
 
     public function rate()
     {
