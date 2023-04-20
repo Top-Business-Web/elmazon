@@ -5,7 +5,6 @@
 @endsection
 @section('page_name') المشرفين @endsection
 @section('content')
-
     <div class="row">
         <div class="col-md-12 col-lg-12">
             <div class="card">
@@ -29,6 +28,7 @@
                                     <th class="min-w-50px">الصورة</th>
                                     <th class="min-w-50px">الاسم</th>
                                     <th class="min-w-125px">الايميل</th>
+                                    <th class="min-w-125px">الدور</th>
                                     <th class="min-w-50px rounded-end">العمليات</th>
                                 </tr>
                             </thead>
@@ -86,28 +86,13 @@
 @endsection
 @section('ajaxCalls')
     <script>
-        var columns = [{
-                data: 'id',
-                name: 'id'
-            },
-            {
-                data: 'image',
-                name: 'image'
-            },
-            {
-                data: 'name',
-                name: 'name'
-            },
-            {
-                data: 'email',
-                name: 'email'
-            },
-            {
-                data: 'action',
-                name: 'action',
-                orderable: false,
-                searchable: false
-            },
+        var columns = [
+            {data: 'id', name: 'id'},
+            {data: 'image', name: 'image'},
+            {data: 'name', name: 'name'},
+            {data: 'email', name: 'email'},
+            {data: 'roles', name: 'roles'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{ route('admins.index') }}', columns);
         // Delete Using Ajax

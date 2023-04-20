@@ -112,7 +112,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-left dropdown-menu-arrow"> {{--style--}}
                         <a class="dropdown-item" href="{{ route('myProfile') }}">
-                            <i class="dropdown-icon mdi mdi-account-outline"></i> My Profile
+                            <i class="dropdown-icon mdi mdi-account-outline"></i> ملفك الشخصي
                         </a>
 {{--                        <a class="dropdown-item" href="#">--}}
 {{--                            <i class="dropdown-icon zmdi zmdi-edit"></i> Edit Profile--}}
@@ -120,11 +120,11 @@
 {{--                        <a class="dropdown-item" href="#">--}}
 {{--                            <i class="dropdown-icon  mdi mdi-settings"></i> Account Settings--}}
 {{--                        </a>--}}
-                        <a class="dropdown-item" href="http://motaweron.com/contact-us.html/">
-                            <i class="dropdown-icon mdi mdi-compass-outline"></i>Need help ?
+                        <a class="dropdown-item" href="https://topbusiness.io/index.php/contact/">
+                            <i class="dropdown-icon mdi mdi-compass-outline"></i>تحتاج مساعدة ؟
                         </a>
                         <a class="dropdown-item logoutAdmin" href="#">
-                            <i class="dropdown-icon mdi  mdi-logout-variant"></i> Log out
+                            <i class="dropdown-icon mdi  mdi-logout-variant"></i> تسجيل الخروج
                         </a>
                     </div>
                 </div>

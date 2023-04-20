@@ -59,191 +59,219 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Admins ####
-    Route::resource('admins',AdminController::class);
-    Route::POST('delete_admin',[AdminController::class,'delete'])->name('delete_admin');
-    Route::get('my_profile',[AdminController::class,'myProfile'])->name('myProfile');
+//    Route::group(['middleware' => 'permission:الادمن'], function () {
+        Route::resource('admins', AdminController::class);
+        Route::POST('delete_admin', [AdminController::class, 'delete'])->name('delete_admin');
+//    });
+    Route::get('my_profile', [AdminController::class, 'myProfile'])->name('myProfile');
 
-
-    Route::get('/', [MainController::class, 'index'])->name('adminHome');
+    Route::get('/', [MainController::class, 'index'])->name('adminHome')->middleware('permission:الرئيسية');
 
 
     #### Country ####
-    Route::resource('countries', CountryController::class);
+    Route::resource('countries', CountryController::class)->middleware('permission:المدن');
 
     #### Users ####
-    Route::resource('users', UserController::class);
-    Route::post('subscr_renew', [UserController::class, 'subscr_renew'])->name('subscr_renew');
-
-    Route::get('print/{id}', [UserController::class, 'printReport'])->name('printReport');
-
-    Route::get('priceMonth', [UserController::class, 'priceMonth'])->name('priceMonth');
-    Route::get('subscrView/{user}/view', [UserController::class, 'subscrView'])->name('subscrView');
+    Route::group(['middleware' => 'permission:الطلاب'], function () {
+        Route::resource('users', UserController::class);
+        Route::post('subscr_renew', [UserController::class, 'subscr_renew'])->name('subscr_renew');
+        Route::get('print/{id}', [UserController::class, 'printReport'])->name('printReport');
+        Route::get('priceMonth', [UserController::class, 'priceMonth'])->name('priceMonth');
+        Route::get('subscrView/{user}/view', [UserController::class, 'subscrView'])->name('subscrView');
+    });
 
     #### Season ####
-    Route::resource('seasons', SeasonController::class);
+    Route::resource('seasons', SeasonController::class)->middleware('permission:الصفوف الدراسيه');
 
     #### Season Term
-
-    Route::get('seasons/{id}/term', [SeasonController::class, 'seasonTerm'])->name('seasonTerm');
-    Route::get('seasons/term/create/{id}', [SeasonController::class, 'seasonTermCreate'])->name('seasonTermCreate');
-    Route::post('seasons/{id}/term/store', [SeasonController::class, 'seasonTermStore'])->name('seasonTermStore');
-    Route::get('seasons/{id}/term/edit', [SeasonController::class, 'seasonTermEdit'])->name('seasonTermEdit');
-    Route::put('seasons/term/update/{term}', [SeasonController::class, 'seasonTermUpdate'])->name('seasonTermUpdate');
-    Route::delete('seasons/{id}/term/delete', [SeasonController::class, 'seasonTermDelete'])->name('seasonTermDelete');
+    Route::group(['middleware' => 'permission:الترم'], function () {
+        Route::get('seasons/{id}/term', [SeasonController::class, 'seasonTerm'])->name('seasonTerm');
+        Route::get('seasons/term/create/{id}', [SeasonController::class, 'seasonTermCreate'])->name('seasonTermCreate');
+        Route::post('seasons/{id}/term/store', [SeasonController::class, 'seasonTermStore'])->name('seasonTermStore');
+        Route::get('seasons/{id}/term/edit', [SeasonController::class, 'seasonTermEdit'])->name('seasonTermEdit');
+        Route::put('seasons/term/update/{term}', [SeasonController::class, 'seasonTermUpdate'])->name('seasonTermUpdate');
+        Route::delete('seasons/{id}/term/delete', [SeasonController::class, 'seasonTermDelete'])->name('seasonTermDelete');
+    });
 
     #### Term Subject ####
-
-    Route::get('term/{id}/subjectClass', [SeasonController::class, 'termSubjectClass'])->name('termSubjectClass');
-
-    Route::get('term/subjectClass/create/{id}', [SeasonController::class, 'termSubjectClassCreate'])->name('termSubjectClassCreate');
-    Route::post('seasons/{id}/term/store', [SeasonController::class, 'termSubjectClassStore'])->name('termSubjectClassStore');
-    Route::get('seasons/{id}/term/edit', [SeasonController::class, 'termSubjectClassEdit'])->name('termSubjectClassEdit');
-    Route::put('seasons/term/update/{term}', [SeasonController::class, 'termSubjectClassUpdate'])->name('termSubjectClassUpdate');
-    Route::delete('seasons/{id}/term/delete', [SeasonController::class, 'termSubjectClassDelete'])->name('termSubjectClassDelete');
+    Route::group(['middleware' => 'permission:الوحدات'], function () {
+        Route::get('term/{id}/subjectClass', [SeasonController::class, 'termSubjectClass'])->name('termSubjectClass');
+        Route::get('term/subjectClass/create/{id}', [SeasonController::class, 'termSubjectClassCreate'])->name('termSubjectClassCreate');
+        Route::post('seasons/{id}/term/store', [SeasonController::class, 'termSubjectClassStore'])->name('termSubjectClassStore');
+        Route::get('seasons/{id}/term/edit', [SeasonController::class, 'termSubjectClassEdit'])->name('termSubjectClassEdit');
+        Route::put('seasons/term/update/{term}', [SeasonController::class, 'termSubjectClassUpdate'])->name('termSubjectClassUpdate');
+        Route::delete('seasons/{id}/term/delete', [SeasonController::class, 'termSubjectClassDelete'])->name('termSubjectClassDelete');
+    });
 
     #### SubjectClass Lesson ####
 
-    Route::get('subjectClass/{id}/lesson', [SeasonController::class, 'subjectClassLesson'])->name('subjectClassLesson');
+    Route::get('subjectClass/{id}/lesson', [SeasonController::class, 'subjectClassLesson'])->name('subjectClassLesson')->middleware('permission:الدروس');
 
     #### Lesson Video Part
 
-    Route::get('lesson/{id}/VideoParts', [SeasonController::class, 'lessonVideoPart'])->name('lessonVideoPart');
+    Route::get('lesson/{id}/VideoParts', [SeasonController::class, 'lessonVideoPart'])->name('lessonVideoPart')->middleware('permission:اقسام الفيديوهات');
 
     #### Video Part Comment ####
 
-    Route::get('VideoParts/{id}/comment', [SeasonController::class, 'videoPartComment'])->name('videoPartComment');
+    Route::get('VideoParts/{id}/comment', [SeasonController::class, 'videoPartComment'])->name('videoPartComment')->middleware('permission:التعليقات');
 
     #### Comment Reply Comment ####
 
-    Route::get('comment/{id}/replyComment', [SeasonController::class, 'commentReplayComment'])->name('commentReplayComment');
+    Route::get('comment/{id}/replyComment', [SeasonController::class, 'commentReplayComment'])->name('commentReplayComment')->middleware('permission:التعليقات');;
 
     #### Term ####
-    Route::resource('terms', TermController::class);
-    Route::get('activate/{id}', [TermController::class, 'activate'])->name('activate');
-    Route::post('/term/filter', [TermController::class,'filterTerm'])->name('term.filter');
+    Route::group(['middleware' => 'permission:الترم'], function () {
+        Route::resource('terms', TermController::class);
+        Route::get('activate/{id}', [TermController::class, 'activate'])->name('activate');
+        Route::post('/term/filter', [TermController::class, 'filterTerm'])->name('term.filter');
+    });
 
     #### Subject Class ####
-    Route::resource('subjectsClasses', SubjectClassController::class);
-//    Route::post('/subject-class/filter', [SubjectClassController::class,'filterSubject'])->name('subject-class.filter');
-    Route::get('term/seasonSort', [SubjectClassController::class, 'seasonSort'])->name('subjectClassSort');
-    Route::get('season/term', [SubjectClassController::class, 'seasonTerm'])->name('seasonTerm');
-
+    Route::group(['middleware' => 'permission:الوحدات'], function () {
+        Route::resource('subjectsClasses', SubjectClassController::class);
+        Route::get('term/seasonSort', [SubjectClassController::class, 'seasonSort'])->name('subjectClassSort');
+        Route::get('season/term', [SubjectClassController::class, 'seasonTerm'])->name('seasonTerm');
+    });
 
     #### Lesson ####
-    Route::resource('lessons', LessonController::class);
-    Route::get('showUnit', [LessonController::class, 'showUnit'])->name('showUnit');
-//    Route::post('/lesson/filter', [LessonController::class,'filterLesson'])->name('lesson.filter');
-    Route::get('/lesson/seasonSort', [LessonController::class,'seasonSort'])->name('seasonSort');
+    Route::group(['middleware' => 'permission:الدروس'], function () {
+        Route::resource('lessons', LessonController::class);
+        Route::get('showUnit', [LessonController::class, 'showUnit'])->name('showUnit');
+        Route::get('/lesson/seasonSort', [LessonController::class, 'seasonSort'])->name('seasonSort');
+    });
 
     #### Notification ####
-    Route::resource('notifications', NotificationController::class);
+    Route::resource('notifications', NotificationController::class)->middleware('permission:الاشعارات');
 
     ##### Video Parts #####
-    Route::resource('videosParts', VideoPartController::class);
-    Route::get('/itemView', array('as'=> 'front.home', 'uses' => [VideoPartController::class, 'itemView']))->name('itemView');
-    Route::post('/update-items', array('as'=> 'update.items', 'uses' => [VideoPartController::class, 'updateItems']))->name('updateItems');
+    Route::group(['middleware' => 'permission:اقسام الفيديوهات'], function () {
+        Route::resource('videosParts', VideoPartController::class);
+        Route::get('/itemView', array('as' => 'front.home', 'uses' => [VideoPartController::class, 'itemView']))->name('itemView');
+        Route::post('/update-items', array('as' => 'update.items', 'uses' => [VideoPartController::class, 'updateItems']))->name('updateItems');
+    });
 
     #### Audio ####
-    Route::resource('audio', AudioController::class);
+    Route::resource('audio', AudioController::class)->middleware('permission:اقسام الفيديوهات');
 
     #### Monthly Plans ####
-    Route::resource('monthlyPlans', MonthlyPlanController::class);
+    Route::resource('monthlyPlans', MonthlyPlanController::class)->middleware('permission:الخطة الشهرية');
 
     #### Suggestion ####
-    Route::resource('suggestions', SuggestionController::class);
+    Route::resource('suggestions', SuggestionController::class)->middleware('permission:الاقتراحات');
 
     #### Online Exam ####
-    Route::resource('onlineExam', OnlineExamController::class);
-    Route::get('selectTerm', [OnlineExamController::class,'selectTerm'])->name('selectTerm');
-    Route::get('examble_type', [OnlineExamController::class, 'examble_type'])->name('examble_type');
-    Route::get('indexQuestion/{id}', [OnlineExamController::class, 'indexQuestion'])->name('indexQuestion');
-    Route::get('usersExam/{id}', [OnlineExamController::class, 'usersExam'])->name('usersExam');
-    Route::post('addQuestion', [OnlineExamController::class, 'addQuestion'])->name('addQuestion');
-    Route::post('deleteQuestion', [OnlineExamController::class, 'deleteQuestion'])->name('deleteQuestion');
-    Route::get('paper-exam/{user_id}/{exam_id}', [OnlineExamController::class, 'paperExam'])->name('paperExam');///????????
-    Route::post('exam-depends/{user_id}/{exam_id}', [OnlineExamController::class, 'exam_depends'])->name('exam-depends');///????????
-    Route::post('storeExamPaper', [OnlineExamController::class, 'storeExamPaper'])->name('storeExamPaper');
+    Route::group(['middleware' => 'permission:امتحانات الاونلاين'], function () {
+        Route::resource('onlineExam', OnlineExamController::class);
+        Route::get('selectTerm', [OnlineExamController::class, 'selectTerm'])->name('selectTerm');
+        Route::get('examble_type', [OnlineExamController::class, 'examble_type'])->name('examble_type');
+        Route::get('indexQuestion/{id}', [OnlineExamController::class, 'indexQuestion'])->name('indexQuestion');
+        Route::get('usersExam/{id}', [OnlineExamController::class, 'usersExam'])->name('usersExam');
+        Route::post('addQuestion', [OnlineExamController::class, 'addQuestion'])->name('addQuestion');
+        Route::post('deleteQuestion', [OnlineExamController::class, 'deleteQuestion'])->name('deleteQuestion');
+        Route::get('paper-exam/{user_id}/{exam_id}', [OnlineExamController::class, 'paperExam'])->name('paperExam');///????????
+        Route::post('exam-depends/{user_id}/{exam_id}', [OnlineExamController::class, 'exam_depends'])->name('exam-depends');///????????
+        Route::post('storeExamPaper', [OnlineExamController::class, 'storeExamPaper'])->name('storeExamPaper');
+    });
 
 
     //added by Islam
-    Route::post('add-degree-to-text-exam', [OnlineExamController::class, 'addDegreeForTextExam'])->name('add-degree-to-text-exam');
+    Route::post('add-degree-to-text-exam', [OnlineExamController::class, 'addDegreeForTextExam'])
+        ->name('add-degree-to-text-exam')->middleware('permission:امتحانات الاونلاين');
 
 
     #### Life Exam ####
-    Route::resource('lifeExam', LifeExamController::class);
+    Route::resource('lifeExam', LifeExamController::class)->middleware('permission:امتحانات اللايف');
 
     #### Papel Sheet Exam ####
-    Route::resource('papelSheetExam', PapelSheetExamController::class);
-    Route::get('usersExamPapel/{id}', [PapelSheetExamController::class, 'usersExamPapel'])->name('usersExamPapel');
-    Route::get('paperExamSheet/{id}', [PapelSheetExamController::class, 'paperExamSheet'])->name('paperExamSheet');
-    Route::post('paperExamSheetStore/{id}', [PapelSheetExamController::class, 'paperExamSheetStore'])->name('paperExamSheetStore');
+    Route::group(['middleware' => 'permission:امتحانات الورقية'], function () {
+        Route::resource('papelSheetExam', PapelSheetExamController::class);
+        Route::get('usersExamPapel/{id}', [PapelSheetExamController::class, 'usersExamPapel'])->name('usersExamPapel');
+        Route::get('paperExamSheet/{id}', [PapelSheetExamController::class, 'paperExamSheet'])->name('paperExamSheet');
+        Route::post('paperExamSheetStore/{id}', [PapelSheetExamController::class, 'paperExamSheetStore'])->name('paperExamSheetStore');
+    });
 
     #### Phone Communications ####
-    Route::resource('phoneCommunications', PhoneCommunicationController::class);
+    Route::resource('phoneCommunications', PhoneCommunicationController::class)
+        ->middleware('permission:الاتصالات الهاتفية');
 
     #### Slider ####
-    Route::resource('slider', SliderController::class);
-    Route::resource('onBoarding', OnBoardingController::class);
+    Route::group(['middleware' => 'permission:سلايدر'], function () {
+        Route::resource('slider', SliderController::class);
+    });
+    Route::resource('onBoarding', OnBoardingController::class)
+        ->middleware('permission:الشاشات الافتتاحيه');
 
     #### Pdf ####
-    Route::resource('pdf', PdfFileUploadController::class);
+    Route::resource('pdf', PdfFileUploadController::class)
+        ->middleware('permission:ملفات ورقية');
 
     #### Section ####
-    Route::resource('section', SectionController::class);
+    Route::resource('section', SectionController::class)
+        ->middleware('permission:القاعات');
 
     #### Setting ####
-    Route::resource('setting', SettingController::class);
+    Route::resource('setting', SettingController::class)
+        ->middleware('permission:الاعدادات');
 
     #### guide ####
-    Route::resource('guide', GuideController::class);
-    Route::get('item', [GuideController::class, 'item'])->name('item');
-    Route::get('indexItem/{id}', [GuideController::class, 'indexItem'])->name('indexItem');
-    Route::post('addItem', [GuideController::class, 'addItem'])->name('addItem');
-    Route::post('updateItem/{id}', [GuideController::class, 'updateItem'])->name('updateItem');
-    Route::post('destroyItem/{id}', [GuideController::class, 'destroyItem'])->name('destroyItem');
+    Route::group(['middleware' => 'permission:الدليل'], function () {
+        Route::resource('guide', GuideController::class);
+        Route::get('item', [GuideController::class, 'item'])->name('item');
+        Route::get('indexItem/{id}', [GuideController::class, 'indexItem'])->name('indexItem');
+        Route::post('addItem', [GuideController::class, 'addItem'])->name('addItem');
+        Route::post('updateItem/{id}', [GuideController::class, 'updateItem'])->name('updateItem');
+        Route::post('destroyItem/{id}', [GuideController::class, 'destroyItem'])->name('destroyItem');
+    });
 
     #### All Exam ####
-    Route::resource('allExam', AllExamController::class);
+    Route::resource('allExam', AllExamController::class)->middleware('permission:كل الامتحانات');
 
     #### Contact Us ####
 //    Route::resource('contactUs', ContactUsController::class);
 
     #### Subscribe ####
-    Route::resource('subscribe', SubscribeController::class);
+    Route::resource('subscribe', SubscribeController::class)->middleware('permission:الباقات');
 
     #### Question ####
-    Route::resource('questions', QuestionController::class);
-    Route::get('examble_type', [QuestionController::class, 'examble_type'])->name('examble_type');
-    Route::get('answer/{id}', [QuestionController::class, 'answer'])->name('answer');
-    Route::post('addAnswer/{id}', [QuestionController::class, 'addAnswer'])->name('addAnswer');
+    Route::group(['middleware' => 'permission:بنك الأسئلة'], function () {
+        Route::resource('questions', QuestionController::class);
+        Route::get('examble_type', [QuestionController::class, 'examble_type'])->name('examble_type');
+        Route::get('answer/{id}', [QuestionController::class, 'answer'])->name('answer');
+        Route::post('addAnswer/{id}', [QuestionController::class, 'addAnswer'])->name('addAnswer');
+    });
 
     #### Ads ####
-    Route::resource('ads', adsController::class);
-    Route::get('activateAds/{id}', [adsController::class, 'activateAds'])->name('activateAds');
+    Route::group(['middleware' => 'permission:الاعلانات'], function () {
+        Route::resource('ads', adsController::class);
+        Route::get('activateAds/{id}', [adsController::class, 'activateAds'])->name('activateAds');
+    });
 
     #### Comment ####
-    Route::resource('comment', CommentController::class);
-    Route::get('replyComment/{id}', [CommentController::class, 'replyComment'])->name('replyComment');
-    Route::post('replyCommentDelete/{id}', [CommentController::class, 'replyCommentDelete'])->name('replyCommentDelete');
+    Route::group(['middleware' => 'permission:التعليقات'], function () {
+        Route::resource('comment', CommentController::class);
+        Route::get('replyComment/{id}', [CommentController::class, 'replyComment'])->name('replyComment');
+        Route::post('replyCommentDelete/{id}', [CommentController::class, 'replyCommentDelete'])->name('replyCommentDelete');
+    });
 
 
     #### Video Basic ####
-    Route::resource('videoBasic', VideoBasicController::class);
+    Route::resource('videoBasic', VideoBasicController::class)->middleware('permission:الفيديوهات الاساسية');
 
     #### Video Resource ####
-    Route::resource('videoResource', VideoResourceController::class);
-    Route::get('videoResource/Sort', [VideoResourceController::class, 'videoResourceSort'])->name('videoResourceSort');
+    Route::group(['middleware' => 'permission:مصادر الفيديوهات'], function () {
+        Route::resource('videoResource', VideoResourceController::class);
+        Route::get('videoResource/Sort', [VideoResourceController::class, 'videoResourceSort'])->name('videoResourceSort');
+    });
 
     #### Video Basic Pdf ####
-    Route::resource('videoBasicPdf', VideoBasicPdfController::class);
-
-
-
+    Route::resource('videoBasicPdf', VideoBasicPdfController::class)->middleware('permission:الفيديوهات الاساسية ملفات ورقية');
 
 
     #### roles ####
-    Route::resource('roles', RoleController::class);
-    Route::POST('delete_roles',[RoleController::class,'delete'])->name('delete_roles');
+    Route::group(['middleware' => 'permission:الادوار و الصلاحيات'], function () {
+        Route::resource('roles', RoleController::class);
+        Route::POST('delete_roles', [RoleController::class, 'delete'])->name('delete_roles');
+    });
 
 
     #### Auth ####

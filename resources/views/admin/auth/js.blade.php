@@ -49,7 +49,7 @@
                 if (data === 200) {
                     toastr.success('مرحبا بعودتك');
                     window.setTimeout(function () {
-                        window.location.href = '/admin';
+                        window.location.href = '{{ route('myProfile') }}';
                     }, 1000);
                     playAudio();
                 } else {

@@ -29,6 +29,7 @@
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">الاسم</th>
+                                <th class="min-w-50px">الصلاحيات</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -89,6 +90,7 @@
         var columns = [
             {data: 'id', name: 'id'},
             {data: 'name', name: 'name'},
+            {data: 'permission', name: 'permission'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{ route('roles.index') }}', columns);

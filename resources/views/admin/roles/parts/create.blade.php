@@ -3,7 +3,7 @@
         @csrf
         <div class="form-group">
             <label for="name" class="form-control-label">الاسم</label>
-            <input type="text" class="form-control" name="name" id="name">
+            <input type="text" class="form-control" name="name" id="name" required="required">
         </div>
 
         <div class="form-group">
@@ -11,8 +11,9 @@
             <hr>
             @foreach($permissions as $permission)
                 <div class="badge badge-primary m-2">
-                <input type="checkbox" class="" name="permission[]" value="{{ $permission->id }}" id="{{ $permission->id }}">
-                <label for="{{ $permission->id }}" class="m-2">{{ $permission->name }}</label>
+                    <input type="checkbox" class="" name="permission[]" value="{{ $permission->id }}"
+                           id="{{ $permission->id }}">
+                    <label for="{{ $permission->id }}" class="m-2">{{ $permission->name }}</label>
                 </div>
             @endforeach
         </div>

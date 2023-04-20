@@ -1,10 +1,10 @@
 @extends('admin.layouts_admin.master')
 
 @section('title')
-    الاقسام
+    القاعات
 @endsection
 @section('page_name')
-    القسم
+    القاعات
 @endsection
 @section('content')
     <div class="row">
@@ -70,7 +70,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">القسم</h5>
+                        <h5 class="modal-title" id="example-Modal3">القاعة</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
