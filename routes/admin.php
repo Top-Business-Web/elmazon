@@ -255,7 +255,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
 
     #### Video Basic ####
-    Route::resource('videoBasic', VideoBasicController::class)->middleware('permission:الفيديوهات الاساسية');
+
+    Route::resource('videoBasic', VideoBasicController::class);
+    Route::get('videoBasic/comment/{id}', [VideoBasicController::class, 'indexComment'])->name('indexComment');
+    Route::get('videoBasic/commentReply/{id}', [VideoBasicController::class, 'indexCommentReply'])->name('indexCommentReply');
+    Route::get('videoBasic/comment/create', [VideoBasicController::class, 'indexCommentCreate'])->name('indexComment.create');
+    Route::post('videoBasic/comment/reply', [VideoBasicController::class, 'storeReply'])->name('storeReply');
+    Route::delete('videoBasic/commentReply/delete/{id}', [VideoBasicController::class, 'deleteCommentReply'])->name('deleteCommentReply');
 
     #### Video Resource ####
     Route::group(['middleware' => 'permission:مصادر الفيديوهات'], function () {

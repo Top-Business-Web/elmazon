@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreVideoBasic;
 use App\Http\Requests\UpdateVideoBasic;
+use App\Models\CommentReplay;
 use App\Models\VideoBasic;
+use App\Models\Comment;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -26,8 +28,15 @@ class VideoBasicController extends Controller
                                     data-id="' . $videbasics->id . '" data-title="' . $videbasics->name_ar . '">
                                     <i class="fas fa-trash"></i>
                             </button>
+                             <a href="' . route('indexComment', $videbasics->id) . '" data-id="' . $videbasics->id . '" class="btn btn-pill btn-success-light"> تعليقات <i class="fa fa-comment"></i></a>
 
                        ';
+                })
+                ->editColumn('video_link', function ($videbasics) {
+                    if ($videbasics->video_link)
+                        return '<a href="' . asset($videbasics->video_link) . '">
+                                '.$videbasics->video_link.'
+                            </a>';
                 })
                 ->editColumn('background_color', function ($videbasics) {
                     return '<input type="color" class="form-control" name="background_color"
@@ -42,6 +51,117 @@ class VideoBasicController extends Controller
 
     // Index End
 
+    // Video Basic Comment
+
+    public function indexComment(Request $request,$id)
+    {
+        if ($request->ajax()) {
+            $comments = Comment::where('video_basic_id', $id)->get();
+            return Datatables::of($comments)
+                ->addColumn('action', function ($comments) {
+                    return '
+                            <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
+                                    data-id="' . $comments->id . '" data-title="' . $comments->comment . '">
+                                    <i class="fas fa-trash"></i>
+                            </button>
+                            <button type="button" data-id="' . $comments->id . '" class="btn btn-pill btn-info-light editBtn">اضافة رد<i class="fa fa-plus"></i></button>
+                            <a href="' . route('indexCommentReply', $comments->id) . '" class="btn btn-pill btn-success-light">الردود<li class="fa fa-reply"></li></a>
+                       ';
+                })
+                ->editColumn('user_id', function ($comments) {
+                        return '<td>'. $comments->user->name .'</td>';
+                })
+                ->editColumn('image', function ($comments) {
+                    if ($comments->image)
+                        return '<a href="' . asset('comments_upload_file/'.$comments->image) . '">
+                                '.$comments->image.'
+                            </a>';
+                })
+                ->escapeColumns([])
+                ->make(true);
+        } else {
+            return view('admin.video_basic.parts.comments',compact('id'));
+        }
+    }
+
+    // Create Comment
+    public function indexCommentCreate()
+    {
+        return view('admin.video_basic.parts.store_comment');
+    }
+
+    // Video Basic Comment Reply
+
+    public function indexCommentReply(Request $request,$id)
+    {
+        if ($request->ajax()) {
+            $comments_replys = CommentReplay::where('comment_id', $id)
+                ->get();
+            return Datatables::of($comments_replys)
+                ->addColumn('action', function ($comments_replys) {
+                    return '
+                            <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
+                                    data-id="' . $comments_replys->id . '" data-title="' . $comments_replys->comment . '">
+                                    <i class="fas fa-trash"></i>
+                            </button>
+                       ';
+                })
+                ->editColumn('teacher_id', function ($comments) {
+                    return '<td>'. $comments->teacher->name .'</td>';
+                })
+                ->editColumn('image', function ($comments) {
+                    if ($comments->image)
+                        return '<a href="' . asset('comments_upload_file/'.$comments->image) . '">
+                                '.$comments->image.'
+                            </a>';
+                })
+                ->escapeColumns([])
+                ->make(true);
+        } else {
+            return view('admin.video_basic.parts.comment_reply',compact('id'));
+        }
+    }
+
+    // Delete comment Reply
+    public function deleteCommentReply(Request $request)
+    {
+        $comment_reply = CommentReplay::where('id', $request->id)->firstOrFail();
+        $comment_reply->delete();
+        return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
+    }
+
+    // Save Comment
+    public function storeReply(Request $request)
+    {
+        $parentComment = Comment::find($request->id);
+
+        if (!$parentComment) {
+            return redirect()->back()->with('error', 'Parent comment not found.');
+        }
+
+        $reply = new CommentReplay();
+        $reply->comment = $request->reply;
+        $reply->comment_id = $parentComment->id;
+        $reply->user_type = 'teacher';
+        $reply->teacher_id = auth('admin')->user()->id;
+
+        $reply->save();
+
+        return response()->json(200);
+    }
+
+
+    // // Video Basic Comment Reply
+
+    public function videoBasicCommentReply($id)
+    {
+        $users = CommentReplay::where('student_id', $id)
+            ->OrWhere('teacher_id',$id)
+            ->orderByDesc('created_at')
+            ->get();
+//        return $users;
+        return view('admin.video_basic.parts.comment_reply', compact('users'));
+    }
 
 
     // Create Start
