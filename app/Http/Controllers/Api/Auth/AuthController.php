@@ -6,8 +6,7 @@ use App\Http\Interfaces\AuthRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
-class AuthController extends Controller
-{
+class AuthController extends Controller{
 
 
     public $authRepositoryInterface;
