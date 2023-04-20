@@ -10,7 +10,26 @@ class OnlineExam extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'exam_type',
+        'pdf_file_upload',
+        'answer_pdf_file',
+        'answer_video_file',
+        'name_ar',
+        'name_en',
+        'date_exam',
+        'quize_minute',
+        'trying_number',
+        'degree',
+        'type',
+        'video_id',
+        'lesson_id',
+        'class_id',
+        'term_id',
+        'season_id',
+        'instruction_ar',
+        'instruction_en',
+    ];
 
 
     public function season(){

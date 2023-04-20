@@ -21,16 +21,29 @@
         </div>
         <div class="form-group">
             <label for="roles" class="form-check-label">الدور</label>
-            <select class="form-control" name="roles" required="required" {{ $admin->id == 1 ? 'disabled' : '' }}>
-                <option selected disabled>اختر دور</option>
-                @foreach($roles as $role)
+            @if($admin->id == 1)
+                <select class="form-control" name="roles" required="required">
+                    <option disabled>اختر دور</option>
+                    {{--                @foreach($roles as $role)--}}
                     <option class="form-control"
-                            {{ in_array($role->id, $adminRole) ? 'selected' : '' }}
-                            value="{{ $role->id }}">
-                        {{ $role->name }}
+                            selected
+                            value="1">
+                        سوبر ادمن
                     </option>
-                @endforeach
-            </select>
+                    {{--                @endforeach--}}
+                </select>
+            @else
+                <select class="form-control" name="roles" required="required">
+                    <option disabled>اختر دور</option>
+                    @foreach($roles as $role)
+                        <option class="form-control"
+                                {{ in_array($role->id, $adminRole) ? 'selected' : '' }}
+                                value="{{ $role->id }}">
+                            {{ $role->name }}
+                        </option>
+                    @endforeach
+                </select>
+            @endif
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
