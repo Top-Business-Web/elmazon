@@ -93,10 +93,6 @@
 
 <script>
 
-        // $('#exam_type').change( function(){
-        //     $(this).val();
-        //     alert($(this).val())
-        // })
 
     $(".type_choose").click(function () {
         var element = document.getElementById("type");
