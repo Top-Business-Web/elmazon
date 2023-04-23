@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminRequest;
 use App\Models\Admin;
@@ -11,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
-use function PHPUnit\Framework\lessThanOrEqual;
 
 class AdminController extends Controller
 {
@@ -23,7 +21,7 @@ class AdminController extends Controller
             $admins = Admin::latest()->get();
             return Datatables::of($admins)
                 ->addColumn('action', function ($admins) {
-                    if ($admins->id == 1 ) {
+                    if ($admins->id == 1) {
                         return '
                             <button type="button" data-id="' . $admins->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
                       ';
@@ -43,13 +41,12 @@ class AdminController extends Controller
                     ';
                 })
                 ->addColumn('roles', function ($admins) {
-                    $adminRole = $admins->roles->pluck('name','name')->first();
-                    if ($adminRole == 'سوبر ادمن'){
+                    $adminRole = $admins->roles->pluck('name', 'name')->first();
+                    if ($adminRole == 'سوبر ادمن') {
                         return '<span class="badge badge-primary-gradient">' . $adminRole . '</span>';
                     } else {
                         return '<span class="badge badge-info">' . $adminRole . '</span>';
                     }
-
                 })
                 ->escapeColumns([])
                 ->make(true);
@@ -71,14 +68,14 @@ class AdminController extends Controller
             $admin->delete();
             return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
         }
-    }
+    } // end of delete
 
     public function myProfile()
     {
         $admin = auth()->guard('admin')->user();
-        $roleName = $admin->roles->pluck('name','name')->first();
-        return view('Admin/admin/profile', compact('admin','roleName'));
-    }//end fun
+        $roleName = $admin->roles->pluck('name', 'name')->first();
+        return view('Admin.admin.profile', compact('admin', 'roleName'));
+    } //end fun
 
 
     public function create()
