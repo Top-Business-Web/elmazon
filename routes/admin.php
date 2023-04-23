@@ -168,8 +168,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::get('usersExam/{id}', [OnlineExamController::class, 'usersExam'])->name('usersExam');
         Route::post('addQuestion', [OnlineExamController::class, 'addQuestion'])->name('addQuestion');
         Route::post('deleteQuestion', [OnlineExamController::class, 'deleteQuestion'])->name('deleteQuestion');
-        Route::get('paper-exam/{user_id}/{exam_id}', [OnlineExamController::class, 'paperExam'])->name('paperExam');///????????
-        Route::post('exam-depends/{user_id}/{exam_id}', [OnlineExamController::class, 'exam_depends'])->name('exam-depends');///????????
+        Route::get('paper-exam/{user_id}/{exam_id}', [OnlineExamController::class, 'paperExam'])->name('paperExam'); ///????????
+        Route::post('exam-depends/{user_id}/{exam_id}', [OnlineExamController::class, 'exam_depends'])->name('exam-depends'); ///????????
         Route::post('storeExamPaper', [OnlineExamController::class, 'storeExamPaper'])->name('storeExamPaper');
     });
 
@@ -227,7 +227,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::resource('allExam', AllExamController::class)->middleware('permission:كل الامتحانات');
 
     #### Contact Us ####
-//    Route::resource('contactUs', ContactUsController::class);
+    //    Route::resource('contactUs', ContactUsController::class);
 
     #### Subscribe ####
     Route::resource('subscribe', SubscribeController::class)->middleware('permission:الباقات');
@@ -283,5 +283,3 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Auth ####
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
 });
-
-
