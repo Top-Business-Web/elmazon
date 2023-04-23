@@ -56,7 +56,7 @@ class AdminController extends Controller
         } else {
             return view('Admin/admin/index');
         }
-    }
+    } // end for index
 
 
     public function delete(Request $request)
