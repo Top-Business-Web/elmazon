@@ -71,7 +71,7 @@ class QuestionController extends Controller
                 }
             } else if ($request->id == 'App\Models\SubjectClass') {
                 $data = SubjectClass::where('id', $request->season_id)->get();
-                dd($data);
+//                dd($data);
                 foreach ($data as $value) {
                     if ($value->term->status == 'activate') {
                         $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';

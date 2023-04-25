@@ -174,26 +174,25 @@ class OnlineExamController extends Controller
     public function examble_type(Request $request)
     {
         if ($request->ajax()) {
-            $output = '<option value="" style="text-align: center">اختار</option>';
-            if ($request->id == 'App\Models\Lesson') {
-                $data = Lesson::get();
-                foreach ($data as $value) {
-                    $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
+            if ($request->type == 'App\Models\Lesson') {
+                $subjectClass = SubjectClass::where('season_id', $request->season)
+                    ->where('term_id', $request->term)
+                    ->pluck('id', 'id')->toArray();
+                if ($subjectClass) {
+
+                    $data = Lesson::whereIn('subject_class_id', $subjectClass)
+                        ->pluck('name_ar','id')->toArray();
+                } else if ($request->id == 'App\Models\Season') {
+                    $data = SubjectClass::where('season_id', $request->season_id)
+                        ->where('term_id', $request->term)
+                        ->pluck('name_ar','id')->toArray();
+                } else if ($request->id == 'App\Models\VideoParts') {
+                    $data = videoParts::get();
                 }
-            } else if ($request->id == 'App\Models\Season') {
-                $data = SubjectClass::where('season_id', $request->season_id)->get();
-                foreach ($data as $value) {
-                    $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
-                }
-            } else if ($request->id == 'App\Models\VideoParts') {
-                $data = videoParts::get();
-                foreach ($data as $value) {
-                    $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
-                }
+
+                return $output;
+
             }
-
-            return $output;
-
         }
     }
 

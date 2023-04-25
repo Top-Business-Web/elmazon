@@ -6,12 +6,37 @@
                 <div class="col-md-12">
                     <label for="name_ar" class="form-control-label">نوع الامتحان</label>
                     <select name="exam_type" class="form-control" id="exam_type" required="required">
-                        <option value="">اختر نوع الامتحان</option>
+                        <option value="" selected disabled>اختر نوع الامتحان</option>
                         <option value="pdf">PDF</option>
                         <option value="online">Online</option>
                     </select>
                 </div>
             </div>
+
+
+            <div class="row d-none pdfType">
+                <div class="col-md-6">
+                    <label for="pdf_num_questions" class="form-control-label">عدد الاسئلة</label>
+                    <input type="number" class="form-control" name="pdf_num_questions" style="text-align: center">
+                </div>
+                <div class="col-md-6">
+                    <label for="pdf_file_upload" class="form-control-label">ملف الpdf</label>
+                    <input type="file" class="form-control" name="pdf_file_upload" style="text-align: center">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="answer_pdf_file" class="form-control-label">ملف الاجابات pdf</label>
+                    <input type="file" class="form-control" name="answer_pdf_file" style="text-align: center">
+                </div>
+                <div class="col-md-6">
+                    <label for="answer_video_file" class="form-control-label">الاجابات فيديو</label>
+                    <input type="file" class="form-control" name="answer_video_file" style="text-align: center">
+                </div>
+            </div>
+
 
             <div class="row">
                 <div class="col-md-2">
@@ -24,11 +49,13 @@
                 </div>
                 <div class="col-md-3">
                     <label for="name_en" class="form-control-label"> وقت الامتحان</label>
-                    <input type="number" class="form-control" name="quize_minute" style="text-align: center" placeholder="الوقت بالدقائق">
+                    <input type="number" class="form-control" name="quize_minute" style="text-align: center"
+                           placeholder="الوقت بالدقائق">
                 </div>
                 <div class="col-md-2">
                     <label for="name_en" class="form-control-label"> عدد المحاولات </label>
-                    <input type="number" class="form-control" value="" name="trying_number" style="text-align: center" placeholder="عدد المحاولات">
+                    <input type="number" class="form-control" value="" name="trying_number" style="text-align: center"
+                           placeholder="عدد المحاولات">
                 </div>
             </div>
 
@@ -72,7 +99,7 @@
                     </Select>
                 </div>
                 <div class="col-md-12">
-                    <label for="lesson" class="form-control-label">الدرس</label>
+                    <label for="lesson" class="form-control-label typeName">الدرس</label>
                     <Select name="examable_id" class="form-control type_ajax_choose" required="required">
                     </Select>
                 </div>
@@ -92,24 +119,6 @@
 </div>
 
 <script>
-
-
-    $(".type_choose").click(function () {
-        var element = document.getElementById("type");
-        var value = $(element).find("option:selected").val();
-        var season = $('.seasonChoose').find("option:selected").val();
-
-        $.ajax({
-            url: '{{ route('examble_type') }}',
-            data: {
-                'id': value,
-                'season_id': season,
-            },
-            success: function (data) {
-                $('.type_ajax_choose').html(data);
-            }
-        })
-    })
 
     $(document).ready(function () {
         $('select[name="season_id"]').on('change', function () {
@@ -132,6 +141,44 @@
         });
     });
 
+    $(document).ready(function () {
+        $('select[name="examable_type"]').on('change', function () {
+           var season = $('select[name="season_id"]').val();
+           var term = $('select[name="term_id"]').val();
+            var type = $(this).val();
+            if (type) {
+                $.ajax({
+                    url: "{{ route('examble_type_exam') }}",
+                    type: "GET",
+                    data : {
+                      'type': type,
+                      'season': season,
+                      'term': term,
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        $('select[name="term_id"]').empty();
+                        $.each(data, function (key, value) {
+                            $('select[name="term_id"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
+                    },
+                });
+            } else {
+                console.log('AJAX load did not work');
+            }
+        });
+    });
+
+
+
+    $("#exam_type").on('change', function () {
+        let opt = $(this).find('option:selected').val();
+        if (opt === 'pdf') {
+            $('.pdfType').removeClass('d-none').prop('disabled', 'false');
+        } else {
+            $('.pdfType').addClass('d-none').prop('disabled', 'ture');
+        }
+    })
 
 
 </script>
