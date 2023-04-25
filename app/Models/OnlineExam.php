@@ -32,6 +32,11 @@ class OnlineExam extends Model
         'instruction_en',
     ];
 
+    protected $casts = [
+        'instruction_ar' => 'json',
+        'instruction_en' => 'json',
+    ];
+
 
     public function season(){
 

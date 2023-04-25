@@ -105,10 +105,30 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <label for="note" class="form-control-label">التعليمات</label>
-                    <textarea class="form-control" rows="10" name="note"></textarea>
+                <div class="col-md-6">
+                    <label class="control-label">التعليمات بالعربية</label>
+                    <div class="form-group itemItems1">
+                        <input type="text" name="items_ar[]" class="form-control InputItemExtra1" value="">
+                    </div>
                 </div>
+                <div class="col-md-6">
+                    <button type="button" class=" mt-5 btn btn-primary MoreItem1">المزيد</button>
+                    <button type="button" class=" mt-5 btn btn-danger delItem1">حذف</button>
+                </div>
+                <span class="badge Issue1 badge-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="control-label">التعليمات بالانجليزية</label>
+                    <div class="form-group itemItems2">
+                        <input type="text" name="items_en[]" class="form-control InputItemExtra2" value="">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class=" mt-5 btn btn-primary MoreItem2">المزيد</button>
+                    <button type="button" class=" mt-5 btn btn-danger delItem2">حذف</button>
+                </div>
+                <span class="badge Issue2 badge-danger"></span>
             </div>
         </div>
         <div class="modal-footer">
@@ -143,23 +163,23 @@
 
     $(document).ready(function () {
         $('select[name="examable_type"]').on('change', function () {
-           var season = $('select[name="season_id"]').val();
-           var term = $('select[name="term_id"]').val();
+            var season = $('select[name="season_id"]').val();
+            var term = $('select[name="term_id"]').val();
             var type = $(this).val();
             if (type) {
                 $.ajax({
                     url: "{{ route('examble_type_exam') }}",
                     type: "GET",
-                    data : {
-                      'type': type,
-                      'season': season,
-                      'term': term,
+                    data: {
+                        'type': type,
+                        'season': season,
+                        'term': term,
                     },
                     dataType: "json",
                     success: function (data) {
-                        $('select[name="term_id"]').empty();
+                        $('select[name="examable_id"]').empty();
                         $.each(data, function (key, value) {
-                            $('select[name="term_id"]').append('<option value="' + key + '">' + value + '</option>');
+                            $('select[name="examable_id"]').append('<option value="' + key + '">' + value + '</option>');
                         });
                     },
                 });
@@ -168,7 +188,6 @@
             }
         });
     });
-
 
 
     $("#exam_type").on('change', function () {
@@ -181,4 +200,53 @@
     })
 
 
+</script>
+
+
+<script>
+    $(document).on('click', '.delItem1', function () {
+        var Item = $('.InputItemExtra1').last();
+        let issue = $('.Issue1');
+        if (Item.val() === '' && $('.InputItemExtra1').length > 1) {
+            Item.fadeOut();
+            Item.remove();
+            issue.addClass('badge-success');
+            issue.text('The element deleted');
+            setTimeout(function () {
+                $('.Issue1').html('');
+            }, 3000)
+        } else {
+            console.log('error')
+        }
+    })
+
+    $(document).on('click', '.MoreItem1', function () {
+        var Item = $('.InputItemExtra1').last();
+        if (Item.val() !== '') {
+            $('.itemItems1').append('<input type="text" name="items_ar[]" class="form-control InputItemExtra1 mt-3">')
+        }
+    })
+
+    $(document).on('click', '.delItem2', function () {
+        var Item = $('.InputItemExtra2').last();
+        let issue = $('.Issue2');
+        if (Item.val() === '' && $('.InputItemExtra2').length > 1) {
+            Item.fadeOut();
+            Item.remove();
+            issue.addClass('badge-success');
+            issue.text('The element deleted');
+            setTimeout(function () {
+                $('.Issue2').html('');
+            }, 3000)
+        } else {
+            console.log('error')
+        }
+    })
+
+    $(document).on('click', '.MoreItem2', function () {
+        var Item = $('.InputItemExtra2').last();
+        if (Item.val() !== '') {
+            $('.itemItems2').append('<input type="text" name="items_en[]" class="form-control InputItemExtra2 mt-3">')
+        }
+    })
 </script>

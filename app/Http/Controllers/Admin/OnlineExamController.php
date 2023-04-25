@@ -155,7 +155,6 @@ class OnlineExamController extends Controller
     public function selectTerm(Request $request)
     {
         $terms = Term::where('season_id',$request->season_id)->pluck('name_ar','id')->toArray();
-
         return $terms;
     }
 
@@ -175,22 +174,26 @@ class OnlineExamController extends Controller
     {
         if ($request->ajax()) {
             if ($request->type == 'App\Models\Lesson') {
+
                 $subjectClass = SubjectClass::where('season_id', $request->season)
                     ->where('term_id', $request->term)
                     ->pluck('id', 'id')->toArray();
-                if ($subjectClass) {
 
+                if ($subjectClass) {
                     $data = Lesson::whereIn('subject_class_id', $subjectClass)
                         ->pluck('name_ar','id')->toArray();
+
                 } else if ($request->id == 'App\Models\Season') {
+
                     $data = SubjectClass::where('season_id', $request->season_id)
                         ->where('term_id', $request->term)
                         ->pluck('name_ar','id')->toArray();
+
                 } else if ($request->id == 'App\Models\VideoParts') {
-                    $data = videoParts::get();
+                    $data = videoParts::pluck('name_ar','id')->toArray();
                 }
 
-                return $output;
+                return $data;
 
             }
         }
