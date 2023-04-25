@@ -4,12 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 
 class AllExam extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $casts = ['instruction_ar'=> 'json','instruction_en' => 'json'];
+
 
     public function season(){
 
@@ -49,4 +54,28 @@ class AllExam extends Model
 
         return $this->belongsTo(SubjectClass::class,'subject_id','id');
     }
+
+    public function exams_favorites(): HasMany{
+
+        return $this->hasMany(ExamsFavorite::class,'all_exam_id','id');
+    }
+
+
+    /*
+    * start scopes
+    */
+
+
+    public function scopeAllExamFavorite($query){
+
+        return $query->whereHas('exams_favorites', function ($q){
+            $q->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','favorite');
+        })->whereHas('term', function ($term){
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+    }
+
+    /*
+     * end scopes
+     */
 }

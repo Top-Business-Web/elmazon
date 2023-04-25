@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,6 +33,8 @@ class OnlineExam extends Model
         'instruction_ar',
         'instruction_en',
     ];
+
+    protected $casts = ['instruction_ar'=> 'json','instruction_en' => 'json'];
 
 
     public function season(){
@@ -70,7 +74,7 @@ class OnlineExam extends Model
 
 
     //relation online_exams  with user
-    public function users(){
+    public function users(): BelongsToMany{
 
         return $this->belongsToMany(User::class,'online_exam_users','online_exam_id','user_id','id','id');
 
@@ -82,4 +86,22 @@ class OnlineExam extends Model
         return $this->hasMany(ExamsFavorite::class,'online_exam_id','id');
     }
 
+
+    /*
+    * start scopes
+    */
+
+
+    public function scopeOnlineExamFavorite($query){
+
+        return $query->whereHas('exams_favorites', function ($q){
+            $q->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','favorite');
+        })->whereHas('term', function ($term){
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+    }
+
+    /*
+     * end scopes
+     */
 }

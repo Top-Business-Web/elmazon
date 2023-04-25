@@ -22,6 +22,7 @@
                 </a>
             </li>
         @endcan
+
         @can('الصفوف الدراسيه')
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('seasons.index') }}">
@@ -39,6 +40,7 @@
                 </a>
             </li>
         @endcan
+
         @can('الترم')
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('terms.index') }}">
