@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Favorites;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AllExamNewResource;
 use App\Http\Resources\OnlineExamNewResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\VideoBasicResource;
+use App\Http\Resources\VideoPartNewResource;
 use App\Http\Resources\VideoPartResource;
 use App\Http\Resources\VideoResourceResource;
 use App\Models\AllExam;
@@ -303,41 +305,12 @@ class FavoriteController extends Controller{
 
     public function favoriteAll(): JsonResponse{
 
-        $online_exams = OnlineExam::whereHas('exams_favorites', function ($q){
-            $q->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','favorite');
-        })->whereHas('term', function ($term){
-            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+        $data['online_exams'] = OnlineExamNewResource::collection(OnlineExam::onlineExamFavorite());
+        $data['all_exams'] = AllExamNewResource::collection(AllExam::allExamFavorite());
+        $data['video_basics'] = VideoBasicResource::collection(VideoBasic::basicFavorite());
+        $data['video_resources'] = VideoResourceResource::collection(VideoResource::resourceFavorite());
+        $data['video_parts'] = VideoPartNewResource::collection(VideoParts::favorite());
 
-
-        $video_basics = VideoBasic::whereHas('video_favorites', function ($q){
-            $q->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','favorite');
-        })->get();
-
-        $video_resources = VideoResource::whereHas('video_favorites', function ($q){
-            $q->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','favorite');
-        })->whereHas('term', function ($term){
-            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
-
-
-
-        return response()->json([
-
-            'data' => [
-                'online_exams' => OnlineExamNewResource::collection($online_exams),
-                'all_exams' => [],
-                'video_parts' => [],
-                'video_basics' => VideoBasicResource::collection($video_basics),
-                'video_resources' => VideoResourceResource::collection($video_resources),
-            ],
-            'message' => 'تم الحصول علي جميع المفضله للطالب',
-            'code' => 200
-
-        ],
-
-        );
-
-
+        return self::returnResponseDataApiWithMultipleIndexes($data,'تم الحصول علي جميع المفضله للطالب',200);
     }
 }

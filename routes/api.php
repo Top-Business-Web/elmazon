@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Degree\DegreeController;
 use App\Http\Controllers\Api\Favorites\FavoriteController;
 use App\Http\Controllers\Api\FullExams\FullExamController;
 use App\Http\Controllers\Api\Guides\GuideController;
+use App\Http\Controllers\Api\Instruction\InstructionController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\LifeExam\LifeExamController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
@@ -161,6 +162,11 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('video-add-favorite',[FavoriteController::class,'videoAddFavorite']);
         Route::get('all',[FavoriteController::class,'favoriteAll']);
     });
+
+
+    Route::get('instruction/exam/{id}',[InstructionController::class,'instructionExamDetails']);
+
+
 
 });
 

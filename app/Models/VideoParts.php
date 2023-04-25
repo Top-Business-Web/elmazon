@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Scope;
+use Illuminate\Support\Facades\Auth;
 
 class VideoParts extends Model
 {
@@ -47,5 +50,26 @@ protected $guarded = [];
     {
         return $this->hasMany(VideoRate::class, 'video_id','id');
     }
+
+    public function video_favorites(): HasMany{
+
+        return $this->hasMany(VideoFavorite::class,'video_part_id','id');
+    }
+
+    /*
+     * start scopes
+     */
+
+
+    public function scopeFavorite($query){
+
+        return $query->whereHas('video_favorites', function ($q){
+            $q->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','favorite');
+        })->get();
+    }
+
+    /*
+     * end scopes
+     */
 
 }
