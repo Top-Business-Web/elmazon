@@ -16,6 +16,7 @@ class AuthController extends Controller{
         $this->authRepositoryInterface = $authRepositoryInterface;
     }
 
+
     public function login(Request $request): JsonResponse
     {
 
