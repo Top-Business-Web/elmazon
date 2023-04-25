@@ -1,10 +1,10 @@
 @extends('admin.layouts_admin.master')
 
 @section('title')
-    التعليقات
+    الردود
 @endsection
 @section('page_name')
-    التعليقات
+    الردود
 @endsection
 @section('content')
 
@@ -25,8 +25,9 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">الاسم</th>
-                                <th class="min-w-50px">التعليقات</th>
+                                <th class="min-w-50px">اسم الاستاذ</th>
+                                <th class="min-w-50px">اسم الطالب</th>
+                                <th class="min-w-50px">التعليق</th>
                                 <th class="min-w-50px">صورة</th>
                                 <th class="min-w-50px">صوت</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
@@ -70,7 +71,7 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">الفيديو الاساسي</h5>
+                        <h5 class="modal-title" id="example-Modal3">مصدر الفيديو</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -82,23 +83,6 @@
             </div>
         </div>
         <!-- Create Or Edit Modal -->
-
-        <!-- Create Reply -->
-        <div class="modal fade bd-example-modal-lg" id="addReplyModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">اضافة رد</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body-reply" id="modal-body-reply">
-
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     @include('admin.layouts_admin.myAjaxHelper')
 @endsection
@@ -106,20 +90,21 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'user_id', name: 'user_id'},
+            {data: 'teacher_id', name: 'teacher_id'},
+            {data: 'student_id', name: 'student_id'},
             {data: 'comment', name: 'comment'},
             {data: 'image', name: 'image'},
             {data: 'audio', name: 'audio'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
 
-        showData('{{ route('indexComment', $id) }}', columns);
+        showData('{{ route('indexCommentVideoReply', $id) }}', columns);
         // Delete Using Ajax
-        destroyScript('{{route('comment.destroy',':id')}}');
-
+        destroyScript('{{route('deleteCommentReply',':id')}}');
         // Add Using Ajax
-        showAddReply('{{route('indexComment.create', ':id')}}');
-        addReplyComment();
+        showAddModal('{{route('videoResource.create')}}');
+        addScript();
+
 
     </script>
 @endsection

@@ -26,6 +26,7 @@
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">اسم الاستاذ</th>
+                                <th class="min-w-50px">اسم الطالب</th>
                                 <th class="min-w-50px">التعليق</th>
                                 <th class="min-w-50px">صورة</th>
                                 <th class="min-w-50px">صوت</th>
@@ -90,6 +91,7 @@
         var columns = [
             {data: 'id', name: 'id'},
             {data: 'teacher_id', name: 'teacher_id'},
+            {data: 'student_id', name: 'student_id'},
             {data: 'comment', name: 'comment'},
             {data: 'image', name: 'image'},
             {data: 'audio', name: 'audio'},

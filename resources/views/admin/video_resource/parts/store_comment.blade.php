@@ -1,5 +1,5 @@
 <div class="modal-body">
-    <form id="addFormReply" class="addFormReply" method="POST" action="{{ route('storeReply') }}">
+    <form id="addFormReply" class="addFormReply" method="POST" action="{{ route('storeReplyVideo') }}">
         @csrf
         <input type="hidden" name="id" value="{{ $id }}"/>
         <div class="form-group">

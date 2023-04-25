@@ -22,6 +22,7 @@
                 </a>
             </li>
         @endcan
+
         @can('الصفوف الدراسيه')
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('seasons.index') }}">
@@ -39,6 +40,7 @@
                 </a>
             </li>
         @endcan
+
         @can('الترم')
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('terms.index') }}">
@@ -92,9 +94,9 @@
         @can('الفيديوهات الاساسية')
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('videoBasic.index') }}">
-                    <i class="icon icon-control-play side-menu__icon"></i>
+                    <i class="fa fa-file-video side-menu__icon"></i>
                     <span class="side-menu__label">
-                        الفيديوهات الاساسية
+                        فيديوهات الاساسيات
                     </span>
                 </a>
             </li>
@@ -102,9 +104,9 @@
         @can('مصادر الفيديوهات')
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('videoResource.index') }}">
-                    <i class="icon icon-control-play side-menu__icon"></i>
+                    <i class="fa fa-photo-video side-menu__icon"></i>
                     <span class="side-menu__label">
-                        مصادر الفيديوهات
+                        فيديوهات المراجعة
                     </span>
                 </a>
             </li>
