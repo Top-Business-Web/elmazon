@@ -17,9 +17,9 @@ class CreateAboutMesTable extends Migration
             $table->increments('id');
             $table->string('teacher_name')->comment('اسم المدرس');
             $table->string('department')->comment('التخصص');
-            $table->longText('qualification')->comment('المؤهلات');
-            $table->longText('experience');
-            $table->text('skills')->comment('المهارات');
+            $table->json('qualifications')->comment('المؤهلات');
+            $table->json('experience');
+            $table->json('skills')->comment('المهارات');
             $table->timestamps();
         });
     }

@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AdsController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Comment\CommentController;
 use App\Http\Controllers\Api\Degree\DegreeController;
+use App\Http\Controllers\Api\Favorites\FavoriteController;
 use App\Http\Controllers\Api\FullExams\FullExamController;
 use App\Http\Controllers\Api\Guides\GuideController;
 use App\Http\Controllers\Api\LessonController;
@@ -34,11 +35,12 @@ Route::group(['middleware' => 'lang'], function (){
 
 
     Route::post('add-notification',[AuthController::class,'add_notification']);
+    Route::get('teacher/about-me',[\App\Http\Controllers\Api\AboutMe\AboutMeController::class,'about_me'])->middleware('jwt');
+
     Route::group(['prefix' => 'auth'], function (){
 
     Route::post('login',[AuthController::class,'login']);
     Route::get('communication',[AuthController::class,'communication']);
-
 
     Route::middleware('jwt')->group(function (){
         Route::post('logout',[AuthController::class,'logout']);
@@ -151,6 +153,13 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('all-by-student',[ReportStudentController::class,'allByStudent']);
         Route::delete('delete/{id}',[ReportStudentController::class,'delete']);
 
+    });
+
+    Route::group(['prefix' => 'favorite','middleware' => 'jwt'], function (){
+
+        Route::post('exam-add-favorite',[FavoriteController::class,'examAddFavorite']);
+        Route::post('video-add-favorite',[FavoriteController::class,'videoAddFavorite']);
+        Route::get('all',[FavoriteController::class,'favoriteAll']);
     });
 
 });

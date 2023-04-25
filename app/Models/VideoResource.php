@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class VideoResource extends Model
 {
@@ -20,5 +21,10 @@ class VideoResource extends Model
     public function term(){
 
         return $this->belongsTo(Term::class,'term_id','id');
+    }
+
+    public function video_favorites(): HasMany{
+
+        return $this->hasMany(VideoFavorite::class,'video_resource_id','id');
     }
 }
