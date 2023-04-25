@@ -246,7 +246,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::get('activateAds/{id}', [adsController::class, 'activateAds'])->name('activateAds');
     });
 
-    #### Comment ####
+    #### Comment #####
     Route::group(['middleware' => 'permission:التعليقات'], function () {
         Route::resource('comment', CommentController::class);
         Route::get('replyComment/{id}', [CommentController::class, 'replyComment'])->name('replyComment');
