@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreVideoPart;
+use App\Models\Comment;
+use App\Models\CommentReplay;
 use App\Models\VideoParts;
 use App\Models\Lesson;
 use App\Models\VideoRate;
@@ -34,6 +36,7 @@ class VideoPartController extends Controller
                                     data-id="' . $videoParts->id . '" data-title="' .' '. $videoParts->name_ar .' '. '">
                                     <i class="fas fa-trash"></i>
                             </button>
+                            <a href="' . route('indexCommentVideo', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-success-light"> تعليقات <i class="fa fa-comment"></i></a>
                        ';
                 })
                 ->editColumn('lesson_id', function ($videoParts) {
@@ -62,6 +65,107 @@ class VideoPartController extends Controller
     }
 
     // Index End
+
+    // Video Part Comment
+
+    public function indexCommentVideo(Request $request,$id)
+    {
+        if ($request->ajax()) {
+            $comments = Comment::where('video_part_id', $id)->get();
+            return Datatables::of($comments)
+                ->addColumn('action', function ($comments) {
+                    return '
+                            <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
+                                    data-id="' . $comments->id . '" data-title="' . $comments->comment . '">
+                                    <i class="fas fa-trash"></i>
+                            </button>
+                                <button type="button" data-id="' . $comments->id . '" class="btn btn-pill btn-primary-light addReply"><i class="fa fa-plus"></i>اضافة رد</button>
+                            <a href="' . route('indexCommentVideoReply', $comments->id) . '" class="btn btn-pill btn-success-light">الردود<li class="fa fa-reply"></li></a>
+                       ';
+                })
+                ->editColumn('user_id', function ($comments) {
+                    return '<td>'. $comments->user->name .'</td>';
+                })
+                ->editColumn('image', function ($comments) {
+                    if ($comments->image)
+                        return '<a href="' . asset('comments_upload_file/'.$comments->image) . '">
+                                '.$comments->image.'
+                            </a>';
+                })
+                ->escapeColumns([])
+                ->make(true);
+        } else {
+            return view('admin.videopart.parts.comments',compact('id'));
+        }
+    }
+
+    public function indexCommentVideoCreate($id)
+    {
+        return view('admin.videopart.parts.store_comment', compact('id'));
+    }
+
+    // Save Comment
+    public function storeReplyVideo(Request $request)
+    {
+        $parentComment = Comment::find($request->id);
+        if (!$parentComment) {
+            return redirect()->back()->with('error', 'Parent comment not found.');
+        }
+
+        $reply = new CommentReplay();
+        $reply->comment = $request->comment;
+        $reply->comment_id = $request->id;
+        $reply->user_type = 'teacher';
+        $reply->teacher_id = auth('admin')->user()->id;
+
+        $reply->save();
+
+        return response()->json(['status' => 200]);
+    }
+
+    // Video Part Comment Reply
+
+    public function indexCommentVideoReply(Request $request,$id)
+    {
+        if ($request->ajax()) {
+            $comments_replys = CommentReplay::where('comment_id', $id)
+                ->get();
+            return Datatables::of($comments_replys)
+                ->addColumn('action', function ($comments_replys) {
+                    return '
+                            <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
+                                    data-id="' . $comments_replys->id . '" data-title="' . $comments_replys->comment . '">
+                                    <i class="fas fa-trash"></i>
+                            </button>
+                       ';
+                })
+                ->editColumn('teacher_id', function ($comments_replys) {
+                    return '<td>'. @$comments_replys->teacher->name  .'</td>';
+                })
+                ->editColumn('student_id', function ($comments_replys) {
+                    return '<td>'. @$comments_replys->student->name  .'</td>';
+                })
+                ->editColumn('image', function ($comments_replys) {
+                    if ($comments_replys->image)
+                        return '<a href="' . asset('comments_upload_file/'.$comments_replys->image) . '">
+                                '.$comments_replys->image.'
+                            </a>';
+                })
+                ->escapeColumns([])
+                ->make(true);
+        } else {
+            return view('admin.videopart.parts.comment_reply',compact('id'));
+        }
+    }
+
+    // Delete comment Reply
+    public function deleteCommentVideoReply(Request $request)
+    {
+        $comment_reply = CommentReplay::where('id', $request->id)->firstOrFail();
+        $comment_reply->delete();
+        return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
+    }
+
 
     // Create start
 

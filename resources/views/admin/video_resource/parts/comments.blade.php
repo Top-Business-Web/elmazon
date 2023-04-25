@@ -113,12 +113,12 @@
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
 
-        showData('{{ route('indexComment', $id) }}', columns);
+        showData('{{ route('indexCommentResource', $id) }}', columns);
         // Delete Using Ajax
         destroyScript('{{route('comment.destroy',':id')}}');
 
         // Add Using Ajax
-        showAddReply('{{route('indexComment.create', ':id')}}');
+        showAddReply('{{route('indexCommentResourceCreate', ':id')}}');
         addReplyComment();
 
     </script>

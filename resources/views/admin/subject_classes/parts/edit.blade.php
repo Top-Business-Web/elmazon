@@ -41,19 +41,13 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <label for="note_ar" class="form-control-label">ملاحظة بالعربية</label>
-                    <input type="text" class="form-control" value="{{ $subjectsClass->note_ar }}" name="note_ar">
-                </div>
-                <div class="col-md-6">
-                    <label for="note_en" class="form-control-label">ملاحظة بالانجليزية</label>
-                    <input type="text" class="form-control" value="{{ $subjectsClass->note_en }}" name="note_en">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
                     <label for="head">لون الخلفية</label>
                     <input type="color" class="form-control"  name="background_color"
                            value="{{ $subjectsClass->background_color }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="note_ar" class="form-control-label">ملاحظة بالعربية</label>
+                    <input type="text" class="form-control" value="{{ $subjectsClass->note }}" name="note">
                 </div>
             </div>
             <div class="row">
