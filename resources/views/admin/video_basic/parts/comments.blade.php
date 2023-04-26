@@ -70,7 +70,7 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">مصدر الفيديو</h5>
+                        <h5 class="modal-title" id="example-Modal3">الفيديو الاساسي</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -82,6 +82,23 @@
             </div>
         </div>
         <!-- Create Or Edit Modal -->
+
+        <!-- Create Reply -->
+        <div class="modal fade bd-example-modal-lg" id="addReplyModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="example-Modal3">اضافة رد</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body-reply" id="modal-body-reply">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     @include('admin.layouts_admin.myAjaxHelper')
 @endsection
@@ -101,8 +118,8 @@
         destroyScript('{{route('comment.destroy',':id')}}');
 
         // Add Using Ajax
-        showAddModal('{{route('indexComment.create')}}');
-        addScript();
+        showAddReply('{{route('indexComment.create', ':id')}}');
+        addReplyComment();
 
     </script>
 @endsection

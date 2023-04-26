@@ -19,7 +19,7 @@ class GuideResource extends JsonResource
             'title' => lang() == 'ar' ?$this->title_ar : $this->title_en,
             'description' => lang() == 'ar' ?$this->description_ar : $this->description_en,
             'created_at' => $this->created_at->format('Y-m-d'),
-            'inner_items' => GuideItemsResource::collection($this->childs)
+//            'inner_items' => GuideItemsResource::collection($this->childs)
         ];
     }
 }

@@ -148,6 +148,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::resource('videosParts', VideoPartController::class);
         Route::get('/itemView', array('as' => 'front.home', 'uses' => [VideoPartController::class, 'itemView']))->name('itemView');
         Route::post('/update-items', array('as' => 'update.items', 'uses' => [VideoPartController::class, 'updateItems']))->name('updateItems');
+        Route::get('videoPart/comment/{id}', [VideoPartController::class, 'indexCommentVideo'])->name('indexCommentVideo');
+        Route::get('videoPart/commentReply/{id}', [VideoPartController::class, 'indexCommentVideoReply'])->name('indexCommentVideoReply');
+        Route::get('videoPart/comment/create/{id}', [VideoPartController::class, 'indexCommentVideoCreate'])->name('indexCommentVideoCreate');
+        Route::post('videoPart/comment/reply', [VideoPartController::class, 'storeReplyVideo'])->name('storeReplyVideo');
+        Route::delete('videoPart/commentReply/delete/{id}', [VideoPartController::class, 'deleteCommentVideoReply'])->name('deleteCommentVideoReply');
     });
 
     #### Audio ####
@@ -259,7 +264,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::resource('videoBasic', VideoBasicController::class);
     Route::get('videoBasic/comment/{id}', [VideoBasicController::class, 'indexComment'])->name('indexComment');
     Route::get('videoBasic/commentReply/{id}', [VideoBasicController::class, 'indexCommentReply'])->name('indexCommentReply');
-    Route::get('videoBasic/comment/create', [VideoBasicController::class, 'indexCommentCreate'])->name('indexComment.create');
+    Route::get('videoBasic/comment/create/{id}', [VideoBasicController::class, 'indexCommentCreate'])->name('indexComment.create');
     Route::post('videoBasic/comment/reply', [VideoBasicController::class, 'storeReply'])->name('storeReply');
     Route::delete('videoBasic/commentReply/delete/{id}', [VideoBasicController::class, 'deleteCommentReply'])->name('deleteCommentReply');
 
@@ -267,6 +272,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::group(['middleware' => 'permission:مصادر الفيديوهات'], function () {
         Route::resource('videoResource', VideoResourceController::class);
         Route::get('videoResource/Sort', [VideoResourceController::class, 'videoResourceSort'])->name('videoResourceSort');
+        Route::get('videoResource/comment/{id}', [VideoResourceController::class, 'indexCommentResource'])->name('indexCommentResource');
+        Route::get('videoResource/commentReply/{id}', [VideoResourceController::class, 'indexCommentResourceReply'])->name('indexCommentResourceReply');
+        Route::get('videoResource/comment/create/{id}', [VideoResourceController::class, 'indexCommentResourceCreate'])->name('indexCommentResourceCreate');
+        Route::post('videoResource/comment/reply', [VideoResourceController::class, 'storeReplyResource'])->name('storeReplyResource');
+        Route::delete('videoResource/commentReply/delete/{id}', [VideoResourceController::class, 'deleteCommentResourceReply'])->name('deleteCommentResourceReply');
     });
 
     #### Video Basic Pdf ####

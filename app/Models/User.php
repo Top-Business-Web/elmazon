@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -41,23 +45,23 @@ class User extends Authenticatable implements JWTSubject
 
 
 
-    public function season(){
+    public function season(): BelongsTo{
 
         return $this->belongsTo(Season::class,'season_id','id');
     }
 
 
-    public function country(){
+    public function country(): BelongsTo{
 
         return $this->belongsTo(Country::class,'country_id','id');
     }
 
-    public function suggestion()
+    public function suggestion(): HasMany
     {
         return $this->hasMany(Suggestion::class, 'user_id', 'id');
     }
 
-    public function onlineExam(){
+    public function onlineExam(): BelongsToMany{
 
         return $this->belongsToMany(OnlineExam::class, 'online_exam_users');
     }
@@ -92,19 +96,19 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function papel_sheet_exam_degree(){
+    public function papel_sheet_exam_degree(): HasOne{
 
         return $this->hasOne(PapelSheetExamDegree::class,'user_id','id');
     }
 
 
-    public function exam_degree_depends(){
+    public function exam_degree_depends(): HasMany{
 
         return $this->hasMany(ExamDegreeDepends::class,'user_id','id');
     }
 
 
-    public function exam_degree_depends_user(){
+    public function exam_degree_depends_user(): HasOne{
 
         return $this->hasOne(ExamDegreeDepends::class,'user_id','id');
     }
@@ -112,9 +116,15 @@ class User extends Authenticatable implements JWTSubject
 
 
     //relation user with online_exams
-    public function online_exams(){
+    public function online_exams(): BelongsToMany{
 
         return $this->belongsToMany(OnlineExam::class,'online_exam_users','user_id','online_exam_id','id','id');
 
+    }
+
+
+    public function exams_favorites(): HasMany{
+
+        return $this->hasMany(ExamsFavorite::class,'user_id','id');
     }
 }

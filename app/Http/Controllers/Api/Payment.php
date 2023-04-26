@@ -72,7 +72,7 @@ class Payment extends Controller
                 "merchant_id" => 743638,
                 "amount_cents" => 2 *100,
                 "currency" => "EGP",
-                'items'=>$inputs['subscribes_ids']
+                'items'=>[]
             ])->json();
 
         $payment_to_pay = Http::withHeaders(['content-type' => 'application/json'])
@@ -118,7 +118,7 @@ class Payment extends Controller
                 "api_key" => $value
             ])->json();
         $response = request()->query();
-        dd($transaction);
+//        dd($response);
         if($response['success'] == true){
 //            dd(Session::get('items_posts'));
 //            foreach (Session::get('items_posts')['subscribes_ids'] as  $item){
@@ -130,12 +130,22 @@ class Payment extends Controller
 //                ]);
 //            }
         }
-        return redirect()->to('api/checkout?status='.$response['success'].'&status='.$response['success']);
+        return redirect()->to('api/checkout?status='.$response['success'].'&id='.$response['id']);
     }
 
-    public function checkout()
+    public function checkout(Request $request)
     {
-        $response = request()->query();
+        $user = auth()->guard('user-api')->user();
+        foreach ($request->subscribes_ids as  $item){
+            $subscribe_item = Subscribe::find($item);
+            UserSubscribe::create([
+                'price' => ($user->center == "in")? $subscribe_item->price_in_center : $subscribe_item->price_out_center,
+                'month' => $subscribe_item->month,
+                'year' => $subscribe_item->year,
+                'student_id' =>  $user->id,
+            ]);
+            array_push($months,$subscribe_item->month);
+        }  //
         return self::returnResponseDataApi(null,"تد الدفع بنجاح",200);
     }
 

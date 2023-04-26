@@ -15,6 +15,7 @@ class OnlineExamNewResource extends JsonResource
     public function toArray($request)
     {
         return [
+
             'id' => $this->id,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'type' => $this->exam_type,
@@ -23,6 +24,7 @@ class OnlineExamNewResource extends JsonResource
             'answer_video_file' => $this->answer_video_file != null ? asset('online_exams/videos_answers/'. $this->answer_video_file) : null,
             'num_of_question' => $this->exam_type == 'online' ? $this->questions->count() : $this->pdf_num_questions,
             'total_time' => $this->quize_minute,
+
         ];
     }
 }

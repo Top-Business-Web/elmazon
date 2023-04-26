@@ -64,7 +64,7 @@ class VideoBasicController extends Controller
                                     data-id="' . $comments->id . '" data-title="' . $comments->comment . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                            <button type="button" data-id="' . $comments->id . '" class="btn btn-pill btn-info-light editBtn">اضافة رد<i class="fa fa-plus"></i></button>
+                            <button type="button" data-id="' . $comments->id . '" class="btn btn-pill btn-primary-light addReply"><i class="fa fa-plus"></i>اضافة رد</button>
                             <a href="' . route('indexCommentReply', $comments->id) . '" class="btn btn-pill btn-success-light">الردود<li class="fa fa-reply"></li></a>
                        ';
                 })
@@ -85,9 +85,9 @@ class VideoBasicController extends Controller
     }
 
     // Create Comment
-    public function indexCommentCreate()
+    public function indexCommentCreate($id)
     {
-        return view('admin.video_basic.parts.store_comment');
+        return view('admin.video_basic.parts.store_comment', compact('id'));
     }
 
     // Video Basic Comment Reply
@@ -106,13 +106,16 @@ class VideoBasicController extends Controller
                             </button>
                        ';
                 })
-                ->editColumn('teacher_id', function ($comments) {
-                    return '<td>'. $comments->teacher->name .'</td>';
+                ->editColumn('teacher_id', function ($comments_replys) {
+                    return '<td>'. @$comments_replys->teacher->name  .'</td>';
                 })
-                ->editColumn('image', function ($comments) {
-                    if ($comments->image)
-                        return '<a href="' . asset('comments_upload_file/'.$comments->image) . '">
-                                '.$comments->image.'
+                ->editColumn('student_id', function ($comments_replys) {
+                    return '<td>'. @$comments_replys->student->name  .'</td>';
+                })
+                ->editColumn('image', function ($comments_replys) {
+                    if ($comments_replys->image)
+                        return '<a href="' . asset('comments_upload_file/'.$comments_replys->image) . '">
+                                '.$comments_replys->image.'
                             </a>';
                 })
                 ->escapeColumns([])
@@ -134,20 +137,19 @@ class VideoBasicController extends Controller
     public function storeReply(Request $request)
     {
         $parentComment = Comment::find($request->id);
-
         if (!$parentComment) {
             return redirect()->back()->with('error', 'Parent comment not found.');
         }
 
         $reply = new CommentReplay();
-        $reply->comment = $request->reply;
-        $reply->comment_id = $parentComment->id;
+        $reply->comment = $request->comment;
+        $reply->comment_id = $request->id;
         $reply->user_type = 'teacher';
         $reply->teacher_id = auth('admin')->user()->id;
 
         $reply->save();
 
-        return response()->json(200);
+        return response()->json(['status' => 200]);
     }
 
 

@@ -315,9 +315,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
                                 //start push notification for user when register in exam
                                 $time_exam = PapelSheetExamTime::where('id', '=', $request->papel_sheet_exam_time_id)->first();
-                                $this->sendFirebaseNotification(['title' => 'اشعار جديد',
-                                    'body' => $time_exam->from . 'وموعد الامتحان  ' . $section->section_name_ar . 'واسم القاعه  ' . $section->address . 'ومكان الامتحان  ' . $papelSheetExam->date_exam . 'تاريخ الامتحان',
-                                    'term_id' => $papelSheetExam->term_id], $papelSheetExam->season_id, Auth::guard('user-api')->id());
+                                $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $time_exam->from . 'وموعد الامتحان  ' . $section->section_name_ar . 'واسم القاعه  ' . $section->address . 'ومكان الامتحان  ' . $papelSheetExam->date_exam . 'تاريخ الامتحان', 'term_id' => $papelSheetExam->term_id], $papelSheetExam->season_id, Auth::guard('user-api')->id());
 
                                 return response()->json(['data' => ['exam' => new PapelSheetExamTimeUserResource($papelSheetExam)], 'message' => 'تم تسجيل بياناتك فى الامتحان', 'code' => 200, 'date_exam' => $papelSheetExam->date_exam, 'address' => $section->address, 'section_name' => lang() == 'ar' ? $section->section_name_ar : $section->section_name_en,]);
                             } else {

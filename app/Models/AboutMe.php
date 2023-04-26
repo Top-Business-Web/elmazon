@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class AboutMe extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'teacher_name',
+        'department',
+        'qualifications',
+        'experience',
+        'skills'
+
+
+    ];
+
+
 }
+

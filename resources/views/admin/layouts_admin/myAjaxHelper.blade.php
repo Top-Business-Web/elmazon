@@ -4,6 +4,9 @@
 			<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
 			</div>
         `;
+
+
+
     // Show Data Using YAJRA
     async function showData(routeOfShow, columns) {
       var table = $('#dataTable').DataTable({
@@ -244,6 +247,83 @@
                 $('#modal-body').load(url)
             }, 500)
         })
+    }
+
+    function showReply(routeOfEdit) {
+        $(document).on('click', '.replys', function() {
+            var id = $(this).data('id')
+            var url = routeOfEdit;
+            url = url.replace(':id', id)
+            $('#modal-body-replys').html(loader)
+            $('#addReplsyModal').modal('show')
+
+            setTimeout(function() {
+                $('#modal-body-replys').load(url)
+            }, 500)
+        })
+    }
+
+    function showAddReply(routeOfEdit) {
+        $(document).on('click', '.addReply', function() {
+            var id = $(this).data('id')
+            var url = routeOfEdit;
+            url = url.replace(':id', id)
+            $('#modal-body-reply').html(loader)
+            $('#addReplyModal').modal('show')
+
+            setTimeout(function() {
+                $('#modal-body-reply').load(url)
+            }, 500)
+        })
+    }
+
+    function addReplyComment() {
+        $(document).on('submit', 'Form#addFormReply', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            var url = $('#addFormReply').attr('action');
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                beforeSend: function() {
+                    $('#addReply').html('<span class="spinner-border spinner-border-sm mr-2" ' +
+                        ' ></span> <span style="margin-left: 4px;">انتظر ..</span>').attr(
+                        'disabled', true);
+                },
+                success: function(data) {
+                    if (data.status == 200) {
+                        $('#dataTable').DataTable().ajax.reload();
+                        toastr.success('تم اضافة رد');
+                    } else if (data.status == 405) {
+                        toastr.error(data.mymessage);
+                    } else
+                        toastr.error('هناك خطأ ما ..');
+                    $('#addReply').html(`اضافة`).attr('disabled', false);
+                    $('#addReplyModal').modal('hide')
+                },
+                error: function(data) {
+                    if (data.status === 500) {
+                        toastr.error('هناك خطأ ما ..');
+                    } else if (data.status === 422) {
+                        var errors = $.parseJSON(data.responseText);
+                        $.each(errors, function(key, value) {
+                            if ($.isPlainObject(value)) {
+                                $.each(value, function(key, value) {
+                                    toastr.error(value, 'خطأ');
+                                });
+                            }
+                        });
+                    } else
+                        toastr.error('هناك خطأ ما ..');
+                    $('#addReply').html(`اضافة`).attr('disabled', false);
+                }, //end error method
+
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
     }
 
     function edit2() {
