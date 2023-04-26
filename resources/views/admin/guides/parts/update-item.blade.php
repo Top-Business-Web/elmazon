@@ -1,7 +1,6 @@
 <div class="modal-body">
     <form id="updateForm" class="updateForm" method="POST" action="{{ route('updateItem', $guide->id) }}">
         @csrf
-        <input type="hidden" name="from_id" value="{{ $guide->id }}" />
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
@@ -16,7 +15,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الوحدة</label>
-                    <Select name="subject_class_id" id="subject_id" class="form-control subject_id">
+                    <Select name="subject_class_id" id="subject_id" class="form-control subject_id" required>
                         <option selected disabled style="text-align: center">اختار الوحدة</option>
                         @foreach($subjects as $subject)
                             <option value="{{ $subject->id }}" {{ $guide->subject_class_id == $subject->id ? 'selected' : '' }}
@@ -26,9 +25,19 @@
                 </div>
                 <div class="col-md-6">
                     <label for="">الدرس</label>
-                    <select name="lesson_id" id="lesson_id" class="form-control lesson_id">
+                    <select name="lesson_id" id="lesson_id" class="form-control lesson_id" required>
                         <option value="" style="text-align: center">الكل</option>
                     </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="name_ar" class="form-control-label">النوع</label>
+                    <Select name="file_type" id="file_type" class="form-control file_type" required>
+                        <option selected disabled style="text-align: center">اختار النوع</option>
+                        <option style="text-align: center" value="video" {{ $guide->file_type == 'video' ? 'selected' : '' }}>فيديو</option>
+                        <option style="text-align: center" value="pdf" {{ $guide->file_type == 'pdf' ? 'selected' : '' }}>ملف ورقي</option>
+                    </Select>
                 </div>
             </div>
             <div class="row">

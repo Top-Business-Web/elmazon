@@ -17,6 +17,7 @@ class Guide extends Model
         'from_id',
         'file',
         'icon',
+        'file_type',
         'term_id',
         'season_id',
         'lesson_id',
