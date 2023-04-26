@@ -223,9 +223,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::resource('guide', GuideController::class);
         Route::get('item', [GuideController::class, 'item'])->name('item');
         Route::get('indexItem/{id}', [GuideController::class, 'indexItem'])->name('indexItem');
-        Route::post('addItem', [GuideController::class, 'addItem'])->name('addItem');
+        Route::get('addItem/{id}', [GuideController::class, 'addItem'])->name('addItem');
+        Route::post('addItems', [GuideController::class, 'addItems'])->name('addItems');
+        Route::get('EditItem/{id}', [GuideController::class, 'editItem'])->name('editItem');
         Route::post('updateItem/{id}', [GuideController::class, 'updateItem'])->name('updateItem');
-        Route::post('destroyItem/{id}', [GuideController::class, 'destroyItem'])->name('destroyItem');
+        Route::get('term/subjectSort', [GuideController::class, 'subjectSort'])->name('subjectSort');
+        Route::get('term/lessonSort', [GuideController::class, 'lessonSort'])->name('lessonSort');
     });
 
     #### All Exam ####

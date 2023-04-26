@@ -27,6 +27,7 @@
                             <thead>
                                 <tr class="fw-bolder text-muted bg-light">
                                     <th class="min-w-25px">#</th>
+                                    <th class="min-w-25px">ايقونة</th>
                                     <th class="min-w-50px">العنوان</th>
                                     <th class="min-w-50px">التيرم</th>
                                     <th class="min-w-50px">الصف</th>
@@ -91,6 +92,10 @@
         var columns = [{
                 data: 'id',
                 name: 'id'
+            },
+            {
+                data: 'icon',
+                name: 'icon'
             },
             {
                 data: 'title_ar',

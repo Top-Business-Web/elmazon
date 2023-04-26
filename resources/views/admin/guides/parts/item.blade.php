@@ -7,17 +7,18 @@
     عنصر
 @endsection
 @section('content')
+
     <div class="row">
         <div class="col-md-12 col-lg-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
+
                     <div class="">
-                        <button class="btn btn-secondary btn-icon text-white " data-target="#create"
-                                data-toggle="modal">
-                            <span>
-                                <i class="fe fe-plus"></i>
-                            </span> اضافة
+                        <button class="btn btn-secondary btn-icon text-white addBtn">
+									<span>
+										<i class="fe fe-plus"></i>
+									</span> اضافة
                         </button>
                     </div>
                 </div>
@@ -29,240 +30,110 @@
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">العنوان</th>
-                                <th class="min-w-50px">الوصف</th>
                                 <th class="min-w-50px">من</th>
-                                <th class="min-w-50px">ملف</th>
+                                <th class="min-w-50px">الوحدة</th>
+                                <th class="min-w-50px">الدرس</th>
+                                <th class="min-w-50px">ملف المراجعة</th>
+                                <th class="min-w-50px">ملف الاجابة (فيديو)</th>
+                                <th class="min-w-50px">ملف الاجابة (ملف ورقي)</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            @foreach($guide as $item)
-                                <tr>
-                                    <td class="min-w-25px">{{ $item->id }}</td>
-                                    <td class="min-w-25px">{{ $item->title_ar }}</td>
-                                    <td class="min-w-25px">{{ $item->description_ar }}</td>
-                                    <td class="min-w-25px">{{ $item->from_id }}</td>
-                                    <td class="min-w-25px">{{ $item->file }}
-                                        <a href="{{ asset('assets/uploads/pdfs/'.$item->file) }}" target="-_blank" onclick="window.open(this.href)"><button class="btn btn-pill btn-warning-light pdf_renderer1">
-                                            <li class="fas fa-eye"></li>
-                                        </button></a>
-                                    </td>
-                                    <td>
-                                        <button type="button" data-target="#editOrCreate{{ $item->id }}"
-                                                data-toggle="modal" class="btn btn-pill btn-info-light editBtn"><i
-                                                class="fa fa-edit"></i></button>
-                                        <button class="btn btn-pill btn-danger-light" data-toggle="modal"
-                                                data-target="#delete_modal{{ $item->id }}"
-                                                data-id="" data-title="">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="my_pdf_viewer">
-            <div id="canvas_container">
-                <canvas id="pdf_renderer"></canvas>
-            </div>
-        </div>
 
         <!--Delete MODAL -->
-        @foreach($guide as $item)
-            <div class="modal fade" id="delete_modal{{ $item->id }}" tabindex="-1" role="dialog"
-
-                 aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">حذف</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="addForm" class="addForm" method="POST"
-                                  action="{{ route('destroyItem', $item->id) }}">
-                                @csrf
-                                <input id="delete_id" name="id" type="hidden">
-                                <p>حذف<span id="title" class="text-danger">{{ $item->title_ar }}</span></p>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal"
-                                            id="dismiss_delete_modal">
-                                        اغلاق
-                                    </button>
-                                    <button type="submit" class="btn btn-danger">حذف</button>
-
-                                </div>
-                            </form>
-                        </div>
+        <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{ trans('admin.delete') }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input id="delete_id" name="id" type="hidden">
+                        <p>هل انت متاكد من عملية الحذف<span id="title" class="text-danger"></span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_delete_modal">
+                            اغلاق
+                        </button>
+                        <button type="button" class="btn btn-danger" id="delete_btn">حدف</button>
                     </div>
                 </div>
             </div>
-        @endforeach
+        </div>
         <!-- MODAL CLOSED -->
 
-        <!-- Edit Modal -->
-        @foreach($guide as $item)
-            <div class="modal fade bd-example-modal-lg" id="editOrCreate{{ $item->id }}" data-backdrop="static"
-                 tabindex="-1" role="dialog"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="example-Modal3">القسم</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body" id="modal-body">
-                            <form id="addForm" class="addForm" method="POST"
-                                  action="{{ route('updateItem', $item->id) }}" enctype="multipart/form-data">
-                                @csrf
-                                <div class="form-group">
-                                    <input type="hidden" name="from_id" value="{{ $item->from_id }}"/>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="section_name_ar" class="form-control-label">العنوان
-                                                بالعربية</label>
-                                            <input type="text" class="form-control" value="{{ $item->title_ar }}"
-                                                   name="title_ar" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="section_name_en" class="form-control-label">العنوان
-                                                بالانجليزية</label>
-                                            <input type="text" class="form-control" value="{{ $item->title_en }}"
-                                                   name="title_en" required>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label for="file">ملف</label>
-                                            <input type="file" class="form-control" value="{{ asset($item->file) }}"
-                                                   name="file" required>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="section_name_ar" class="form-control-label">الوصف
-                                                بالعربية</label>
-                                            <textarea class="form-control" name="description_ar" rows="8"
-                                                      required>{{ $item->description_ar }}</textarea>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="section_name_en" class="form-control-label">الوصف
-                                                بالانجليزية</label>
-                                            <textarea class="form-control" name="description_en" rows="8"
-                                                      required>{{ $item->description_en }}</textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-                                    <button type="submit" class="btn btn-primary" id="addButton">تحديث</button>
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <!-- Edit Modal -->
-        @endforeach
-        <!-- Create Modal -->
-        <div class="modal fade bd-example-modal-lg" id="create" data-backdrop="static" tabindex="-1" role="dialog"
+        <!-- Create Or Edit Modal -->
+        <div class="modal fade bd-example-modal-lg" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog"
              aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">القسم</h5>
+                        <h5 class="modal-title" id="example-Modal3">اضافة عنصر</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body" id="modal-body">
-                        <form id="addForm" class="addForm" method="POST" action="{{ route('addItem') }}" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <input type="hidden" name="from_id" value="{{ $id }}"/>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="section_name_ar" class="form-control-label">العنوان بالعربية</label>
-                                        <input type="text" class="form-control" name="title_ar" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="section_name_en" class="form-control-label">العنوان
-                                            بالانجليزية</label>
-                                        <input type="text" class="form-control" name="title_en" required>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <label for="file">ملف</label>
-                                        <input type="file" class="form-control" name="file" required>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="section_name_ar" class="form-control-label">الوصف بالعربية</label>
-                                        <textarea class="form-control" name="description_ar" rows="8"
-                                                  required></textarea>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="section_name_en" class="form-control-label">الوصف
-                                            بالانجليزية</label>
-                                        <textarea class="form-control" name="description_en" rows="8"
-                                                  required></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-                                <button type="submit" class="btn btn-primary" id="addButton">اضافة</button>
-                            </div>
-                        </form>
+
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Create Modal -->
+        <!-- Create Or Edit Modal -->
     </div>
     @include('admin.layouts_admin.myAjaxHelper')
+@endsection
+@section('ajaxCalls')
     <script>
-        var myState = {
-            pdf: null,
-        }
+        var columns = [
+            {data: 'id', name: 'id'},
+            {data: 'title_ar', name: 'title_ar'},
+            {data: 'from_id', name: 'from_id'},
+            {data: 'subject_class_id', name: 'subject_class_id'},
+            {data: 'lesson_id', name: 'lesson_id'},
+            {data: 'file', name: 'file'},
+            {data: 'answer_pdf_file', name: 'answer_pdf_file'},
+            {data: 'answer_video_file', name: 'answer_video_file'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+        showData('{{ route('indexItem', $id) }}', columns);
+        // Delete Using Ajax
+        destroyScript('{{ route('guide.destroy', ':id') }}');
+        // Add Using Ajax
+        showAddModal('{{route('addItem', $id)}}');
+        addScript();
+        // Add Using Ajax
+        showEditModal('{{route('editItem', ':id')}}');
+        editScript();
 
-        pdfjsLib.getDocument('./my_document.pdf').then((pdf) => {
 
-            myState.pdf = pdf;
-            render();
+        $(document).ready(function () {
+            $('.season_id').on('change', function () {
+                let season = $(this).val();
+                $.ajax({
+                    url: '{{ route("subjectClassSort")}}',
+                    method: 'GET',
+                    data: {
+                        'id': season,
+                    }, success: function (data) {
+                        $('.term_id').html(data);
+                        console.log(data);
+                    }
+                })
+            })
         });
-        $(document).on('click', '#pdf_renderer1', function () {
-            alert('Click')
-            function render() {
-                myState.pdf.getPage(myState.currentPage).then((page) => {
 
-                    var canvas = document.getElementById("pdf_renderer");
-                    var ctx = canvas.getContext('2d');
 
-                    var viewport = page.getViewport(myState.zoom);
-                    canvas.width = viewport.width;
-                    canvas.height = viewport.height;
-
-                    page.render({
-                        canvasContext: ctx,
-                        viewport: viewport
-                    });
-                });
-            }
-        })
     </script>
+
 @endsection
 
