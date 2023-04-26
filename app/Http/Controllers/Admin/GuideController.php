@@ -114,7 +114,9 @@ class GuideController extends Controller
     {
         $inputs = $request->all();
 
-        $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guide/icon', 'photo');
+        if($request->hasFile('icon')){
+            $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guides/icon', 'photo');
+        }
 
         if (Guide::create($inputs)) {
             return response()->json(['status' => 200]);
@@ -129,7 +131,8 @@ class GuideController extends Controller
 
     public function edit(Guide $guide)
     {
-        return view('admin.guides.parts.edit', compact('guide'));
+        $seasons = Season::all();
+        return view('admin.guides.parts.edit', compact('guide', 'seasons'));
     }
 
     // Edit end
@@ -140,7 +143,9 @@ class GuideController extends Controller
     {
         $inputs = $request->all();
 
-        $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guide/icon', 'photo');
+        if($request->hasFile('icon')){
+            $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guides/icon', 'photo');
+        }
 
         if ($guide->update($inputs)) {
             return response()->json(['status' => 200]);

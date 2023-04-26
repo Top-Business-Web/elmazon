@@ -15,7 +15,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الصف</label>
-                    <Select name="season_id" id="season_id" class="form-control season_id">
+                    <Select name="season_id" id="season_id" class="form-control season_id" required>
                         <option selected disabled style="text-align: center">اختار الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="">الترم</label>
-                    <select name="term_id" id="term_id" class="form-control term_id">
+                    <select name="term_id" id="term_id" class="form-control term_id" required>
                         <option value="" style="text-align: center">الكل</option>
                     </select>
                 </div>
