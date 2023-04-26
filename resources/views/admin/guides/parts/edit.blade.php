@@ -35,7 +35,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="head">لون الخلفية</label>
-                    <input type="color" class="form-control" name="background_color"
+                    <input type="color" class="form-control" name="color"
                            value="{{ $guide->color }}">
                 </div>
             </div>
@@ -53,8 +53,8 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <label for="section_name_ar" class="form-control-label">ايقونة</label>
-                    <input type="file" name="icon" class="dropify" data-default-file="{{ asset($guide->icon) }}"/>
+                    <label for="section_name_ar" class="form-control-label">مرجع</label>
+                    <input type="file" name="file" class="dropify" data-default-file="{{ asset($guide->file) }}"/>
                 </div>
             </div>
         </div>
