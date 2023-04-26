@@ -9,11 +9,12 @@ use Illuminate\Support\Facades\Auth;
 class OnlineExam extends Model
 {
     use HasFactory;
+    public int $id;
 
     protected $fillable = [
         'exam_type',
         'pdf_file_upload',
-        'size',
+        'pdf_num_questions',
         'answer_pdf_file',
         'answer_video_file',
         'name_ar',

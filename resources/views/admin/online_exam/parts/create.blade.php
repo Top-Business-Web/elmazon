@@ -108,7 +108,7 @@
                 <div class="col-md-6">
                     <label class="control-label">التعليمات بالعربية</label>
                     <div class="form-group itemItems1">
-                        <input type="text" name="items_ar[]" class="form-control InputItemExtra1" value="">
+                        <input type="text" name="instruction_ar[]" class="form-control InputItemExtra1" value="">
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -121,7 +121,7 @@
                 <div class="col-md-6">
                     <label class="control-label">التعليمات بالانجليزية</label>
                     <div class="form-group itemItems2">
-                        <input type="text" name="items_en[]" class="form-control InputItemExtra2" value="">
+                        <input type="text" name="instruction_en[]" class="form-control InputItemExtra2" value="">
                     </div>
                 </div>
                 <div class="col-md-6">
