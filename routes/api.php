@@ -102,6 +102,7 @@ Route::group(['middleware' => 'lang'], function (){
 
     Route::group(['prefix' => 'guide','middleware' => ['jwt']], function (){
         Route::get('sources_references/all',[GuideController::class,'index']);
+        Route::get('sources_references/by-lesson/{id}/{lesson_id}',[GuideController::class,'itemsByLesson']);
 
     });
 
