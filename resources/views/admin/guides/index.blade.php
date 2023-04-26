@@ -98,10 +98,6 @@
                 name: 'color'
             },
             {
-                data: 'file',
-                name: 'file'
-            },
-            {
                 data: 'title_ar',
                 name: 'title_ar'
             },
