@@ -27,7 +27,7 @@
                             <thead>
                                 <tr class="fw-bolder text-muted bg-light">
                                     <th class="min-w-25px">#</th>
-                                    <th class="min-w-25px">ايقونة</th>
+                                    <th class="min-w-25px">لون الخلفية</th>
                                     <th class="min-w-50px">العنوان</th>
                                     <th class="min-w-50px">التيرم</th>
                                     <th class="min-w-50px">الصف</th>
@@ -94,7 +94,7 @@
                 name: 'id'
             },
             {
-                data: 'icon',
+                data: 'background_color',
                 name: 'icon'
             },
             {

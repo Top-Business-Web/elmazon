@@ -33,6 +33,13 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-12">
+                    <label for="head">لون الخلفية</label>
+                    <input type="color" class="form-control" name="background_color"
+                           value="{{ $guide->background_color }}">
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <label for="section_name_ar" class="form-control-label">الوصف بالعربية</label>
                     <textarea class="form-control" name="description_ar" rows="8"

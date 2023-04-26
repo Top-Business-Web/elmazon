@@ -35,8 +35,9 @@ class GuideController extends Controller
                             <a href="' . route('indexItem', $guides->id) . '" class="btn btn-pill btn-success-light addItem">اضافة عنصر</a>
                        ';
                 })
-                ->editColumn('icon', function ($guides) {
-                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset($guides->icon) . '"/>';
+                ->editColumn('background_color', function ($guides) {
+                    return '<input type="color" class="form-control" name="background_color"
+                           value="'. $guides->background_color .'" disabled>';
                 })
                 ->editColumn('term_id', function ($guides) {
                     return '<td>' . $guides->term->name_ar . '</td>';
@@ -114,8 +115,8 @@ class GuideController extends Controller
     {
         $inputs = $request->all();
 
-        if($request->hasFile('icon')){
-            $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guides/icon', 'photo');
+        if($request->hasFile('file')){
+            $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'photo');
         }
 
         if (Guide::create($inputs)) {
@@ -189,15 +190,21 @@ class GuideController extends Controller
                 ->editColumn('lesson_id', function ($guides) {
                     return '<td>' . $guides->lesson->title_ar . '</td>';
                 })
+                ->editColumn('file', function ($guides) {
+                    if ($guides->file)
+                        return '<a href="' . asset('assets/uploads/guide/answers/'.$guides->file) . '">
+                                لينك ملف المراجعة
+                            </a>';
+                })
                 ->editColumn('answer_video_file', function ($guides) {
                     if ($guides->answer_video_file)
-                        return '<a href="' . asset($guides->answer_video_file) . '">
+                        return '<a href="' . asset('assets/uploads/guide/answers/'.$guides->answer_video_file) . '">
                                 لينك الفيديو
                             </a>';
                 })
                 ->editColumn('answer_pdf_file', function ($guides) {
                     if ($guides->answer_pdf_file)
-                        return '<a href="' . asset($guides->answer_pdf_file) . '">
+                        return '<a href="' . asset('assets/uploads/guide/answers/'.$guides->answer_pdf_file) . '">
                                 لينك الملف الورقي
                             </a>';
                 })
