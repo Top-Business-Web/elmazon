@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestGuide;
 use App\Models\Guide;
+use App\Models\Lesson;
+use App\Models\SubjectClass;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Claims\Subject;
 use Yajra\DataTables\DataTables;
 use App\Models\Term;
 use App\Models\Season;
@@ -32,6 +35,15 @@ class GuideController extends Controller
                             <a href="' . route('indexItem', $guides->id) . '" class="btn btn-pill btn-success-light addItem">اضافة عنصر</a>
                        ';
                 })
+                ->editColumn('icon', function ($guides) {
+                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset($guides->icon) . '"/>';
+                })
+                ->editColumn('term_id', function ($guides) {
+                    return '<td>' . $guides->term->name_ar . '</td>';
+                })
+                ->editColumn('season_id', function ($guides) {
+                    return '<td>' . $guides->season->name_ar . '</td>';
+                })
                 ->escapeColumns([])
                 ->make(true);
         }
@@ -50,11 +62,59 @@ class GuideController extends Controller
 
     // Create End
 
+    // Subject Class Sort Start
+
+    public function subjectSort(Request $request)
+    {
+
+        $terms = $request->id;
+        $subjects = SubjectClass::where('term_id', $terms)->get();
+
+        $output = '<option value="" style="text-align: center">اختر الوحدة</option>';
+
+        foreach ($subjects as $subject) {
+            $output .= '<option value="' . $subject->id . '" style="text-align: center">' . $subject->name_ar . ' </option>';
+        }
+        if ($subjects->count() > 0) {
+            return $output;
+        } else {
+            return '<option value="" style="text-align: center">لا يوجد وحدات</option>';
+        }
+
+    }
+
+    // Subject Class Sort End
+
+    // Subject Class Sort Start
+
+    public function lessonSort(Request $request)
+    {
+
+        $subject = $request->id;
+        $lessons = Lesson::where('subject_class_id', $subject)->get();
+
+        $output = '<option value="" style="text-align: center">اختر الوحدة</option>';
+
+        foreach ($lessons as $lesson) {
+            $output .= '<option value="' . $lesson->id . '" style="text-align: center">' . $lesson->name_ar . ' </option>';
+        }
+        if ($lessons->count() > 0) {
+            return $output;
+        } else {
+            return '<option value="" style="text-align: center">لا يوجد وحدات</option>';
+        }
+
+    }
+
+    // Subject Class Sort End
+
     // Store Start
 
-    public function store(RequestGuide $request)
+    public function store(Request $request)
     {
         $inputs = $request->all();
+
+        $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guide/icon', 'photo');
 
         if (Guide::create($inputs)) {
             return response()->json(['status' => 200]);
@@ -80,10 +140,11 @@ class GuideController extends Controller
     {
         $inputs = $request->all();
 
+        $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guide/icon', 'photo');
+
         if ($guide->update($inputs)) {
             return response()->json(['status' => 200]);
-        }
-        else {
+        } else {
             return response()->json(['status' => 405]);
         }
     }
@@ -103,48 +164,114 @@ class GuideController extends Controller
     //  Destroy End
 
     // IndexItem Start
-    public function indexItem($id)
+    public function indexItem(Request $request, $id)
     {
-        $guide = Guide::where('from_id', $id)->get();
-        return view('admin.guides.parts.item', compact('guide', 'id'));
+        if ($request->ajax()) {
+            $items = Guide::where('from_id', $id)->get();
+            return Datatables::of($items)
+                ->addColumn('action', function ($items) {
+                    return '
+                    <button type="button" data-id="' . $items->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
+                                    data-id="' . $items->id . '" data-title="' . $items->title_ar . '">
+                                    <i class="fas fa-trash"></i>
+                            </button>
+                       ';
+                })
+                ->editColumn('subject_class_id', function ($guides) {
+                    return '<td>' . $guides->subjectClass->title_ar . '</td>';
+                })
+                ->editColumn('lesson_id', function ($guides) {
+                    return '<td>' . $guides->lesson->title_ar . '</td>';
+                })
+                ->editColumn('answer_video_file', function ($guides) {
+                    if ($guides->answer_video_file)
+                        return '<a href="' . asset($guides->answer_video_file) . '">
+                                لينك الفيديو
+                            </a>';
+                })
+                ->editColumn('answer_pdf_file', function ($guides) {
+                    if ($guides->answer_pdf_file)
+                        return '<a href="' . asset($guides->answer_pdf_file) . '">
+                                لينك الملف الورقي
+                            </a>';
+                })
+                ->escapeColumns([])
+                ->make(true);
+        } else {
+            return view('admin.guides.parts.item', compact('id'));
+        }
     }
     // IndexItem End
+
+    // Create Item Start
+
+    public function addItem($id)
+    {
+        $subjects = SubjectClass::all();
+        return view('admin.guides.parts.add-item', compact('subjects', 'id'));
+    }
+
+    // Create Item End
 
 
     // StoreItem Start
 
-    public function addItem(Request $request)
+    public function addItems(Request $request)
     {
         $inputs = $request->all();
 
-        if($request->has('file')){
+        if ($request->has('file')) {
             $file = $request->file;
             $path = public_path('assets/uploads/guide/');
             $file_name = $file->getClientOriginalName();
             $file->move($path, $file_name);
-            $inputs['file']=$file_name;
+            $inputs['file'] = $file_name;
         }
 
-        if($request->has('icon')){
+        if ($request->has('answer_pdf_file')) {
+            $file = $request->answer_pdf_file;
+            $path = public_path('assets/uploads/guide/answers');
+            $file_name = $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $inputs['answer_pdf_file'] = $file_name;
+        }
+        if ($request->has('answer_video_file')) {
+            $file = $request->answer_video_file;
+            $path = public_path('assets/uploads/guide/answers');
+            $file_name = $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $inputs['answer_video_file'] = $file_name;
+        }
+
+
+        if ($request->has('icon')) {
             $file = $request->icon;
             $path = public_path('assets/uploads/icon/');
             $file_name = $file->getClientOriginalName();
             $file->move($path, $file_name);
-            $inputs['icon']=$file_name;
+            $inputs['icon'] = $file_name;
         }
 
-        $guide = Guide::create($inputs);
-        if($guide->save()) {
-            toastr('تم الاضافة بنجاح');
-            return redirect()->back();
-        }
-        else {
-            toastr('حصل خطأ ما');
-            return redirect()->back();
+        if (Guide::create($inputs)) {
+            return response()->json(['status' => 200]);
+        } else {
+            return response()->json(['status' => 405]);
         }
     }
 
     // StoereItem End
+
+    // Edit Item Start
+
+    public function editItem($id)
+    {
+        $guide = Guide::find($id);
+        $subjects = SubjectClass::all();
+        return view('admin.guides.parts.update-item', compact('subjects', 'guide'));
+    }
+
+    // Edit Item End
 
     // UpdateItem Start
 
@@ -153,28 +280,45 @@ class GuideController extends Controller
         $items = Guide::find($id);
         $inputs = $request->all();
 
-        if($items->update($inputs)) {
-            toastr('تم التعديل بنجاح');
-            return redirect()->back();
+        if ($request->has('file')) {
+            $file = $request->file;
+            $path = public_path('assets/uploads/guide/');
+            $file_name = $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $inputs['file'] = $file_name;
         }
-        else {
-            toastr('حصل خطأ ما');
-            return redirect()->back();
+
+        if ($request->has('answer_pdf_file')) {
+            $file = $request->answer_pdf_file;
+            $path = public_path('assets/uploads/guide/answers');
+            $file_name = $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $inputs['answer_pdf_file'] = $file_name;
+        }
+        if ($request->has('answer_video_file')) {
+            $file = $request->answer_video_file;
+            $path = public_path('assets/uploads/guide/answers');
+            $file_name = $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $inputs['answer_video_file'] = $file_name;
+        }
+
+
+        if ($request->has('icon')) {
+            $file = $request->icon;
+            $path = public_path('assets/uploads/icon/');
+            $file_name = $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $inputs['icon'] = $file_name;
+        }
+
+        if ($items->update($inputs)) {
+            return response()->json(['status' => 200]);
+        } else {
+            return response()->json(['status' => 405]);
         }
     }
 
     // UpdatedItem End
-
-    // DestroyItem Start
-
-    public function destroyItem($id)
-    {
-        $guide = Guide::find($id);
-        $guide->delete();
-        toastr('تم الحذف بنجاح');
-        return redirect()->back();
-    }
-
-    // DeleteItem End
 
 }

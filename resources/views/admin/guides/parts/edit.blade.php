@@ -24,6 +24,12 @@
                     <textarea class="form-control" name="description_en" rows="8" required>{{ $guide->description_en }}</textarea>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="section_name_ar" class="form-control-label">ايقونة</label>
+                    <input type="file" name="icon" class="dropify" data-default-file="{{ asset($guide->icon) }}"/>
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
@@ -31,3 +37,7 @@
         </div>
     </form>
 </div>
+
+<script>
+    $('.dropify').dropify()
+    </script>

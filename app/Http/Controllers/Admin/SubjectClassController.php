@@ -65,10 +65,10 @@ class SubjectClassController extends Controller
         $season = $request->id;
         $subjects = Term::where('season_id', $season)->get();
 
-        $output = '<option value="">اختر الترم</option>';
+        $output = '<option value="" style="text-align: center">اختر الترم</option>';
 
         foreach ($subjects as $subject) {
-            $output .= '<option value="' . $subject->id . '">' . $subject->name_ar . ' </option>';
+            $output .= '<option value="' . $subject->id . '" style="text-align: center">' . $subject->name_ar . ' </option>';
         }
         if ($subjects->count() > 0) {
             return $output;
