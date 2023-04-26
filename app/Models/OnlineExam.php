@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 class OnlineExam extends Model
 {
     use HasFactory;
-    public int $id;
 
     protected $fillable = [
         'exam_type',
@@ -77,6 +76,10 @@ class OnlineExam extends Model
         return $this->hasMany(ExamDegreeDepends::class,'online_exam_id','id');
     }
 
+    public function lesson()
+    {
+        return $this->belongsTo(Lesson::class,'lesson_id','id');
+    }
 
 
     //relation online_exams  with user

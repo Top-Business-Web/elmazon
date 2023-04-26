@@ -5,105 +5,155 @@
         <input type="hidden" value="{{ $onlineExam->id }}" name="id">
         <div class="form-group">
             <div class="row">
+                <div class="col-md-12">
+                    <label for="name_ar" class="form-control-label">نوع الامتحان</label>
+                    <select name="exam_type" class="form-control" id="exam_type"
+                            required="required" @selected(old('exam_type', $onlineExam->exam_type))>
+                        <option value="" disabled>اختر نوع الامتحان</option>
+                        <option value="pdf">PDF</option>
+                        <option value="online">Online</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="row d-none pdfType">
+                <div class="col-md-6">
+                    <label for="pdf_num_questions" class="form-control-label">عدد الاسئلة</label>
+                    <input type="number" class="form-control" name="pdf_num_questions"
+                           value="{{ $onlineExam->pdf_num_questions }}" style="text-align: center">
+                </div>
+                <div class="col-md-6">
+                    <label for="pdf_file_upload" class="form-control-label">ملف الpdf</label>
+                    <input type="file" class="form-control" name="pdf_file_upload"
+                           value="{{ $onlineExam->pdf_file_upload }}" style="text-align: center">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="answer_pdf_file" class="form-control-label">ملف الاجابات pdf</label>
+                    <input type="file" class="form-control" name="answer_pdf_file"
+                           value="{{ $onlineExam->answer_pdf_file }}" style="text-align: center">
+                </div>
+                <div class="col-md-6">
+                    <label for="answer_video_file" class="form-control-label">الاجابات فيديو</label>
+                    <input type="file" class="form-control" name="answer_video_file"
+                           value="{{ $onlineExam->answer_video_file }}" style="text-align: center">
+                </div>
+            </div>
+
+
+            <div class="row">
                 <div class="col-md-2">
                     <label for="name_ar" class="form-control-label">الدرجة</label>
-                    <input type="number" class="form-control" name="degree" style="text-align: center" value="{{ $onlineExam->degree }}">
+                    <input type="number" class="form-control" name="degree" value="{{ $onlineExam->degree }}"
+                           style="text-align: center">
                 </div>
                 <div class="col-md-5">
                     <label for="date_exam" class="form-control-label">موعد الامتحان</label>
-                    <input type="date" class="form-control" name="date_exam" style="text-align: center" value="{{ $onlineExam->date_exam }}">
+                    <input type="date" class="form-control" name="date_exam" value="{{ $onlineExam->date_exam }}"
+                           style="text-align: center">
                 </div>
                 <div class="col-md-3">
                     <label for="name_en" class="form-control-label"> وقت الامتحان</label>
-                    <input type="number" class="form-control" value="{{ $onlineExam->quize_minute }}" name="quize_minute" style="text-align: center" placeholder="الوقت بالدقائق">
+                    <input type="number" class="form-control" name="quize_minute"
+                           value="{{ $onlineExam->quize_minute }}" style="text-align: center"
+                           placeholder="الوقت بالدقائق">
                 </div>
                 <div class="col-md-2">
                     <label for="name_en" class="form-control-label"> عدد المحاولات </label>
-                    <input type="number" class="form-control" value="{{ $onlineExam->trying_number }}" name="trying_number" style="text-align: center" placeholder="الوقت بالدقائق">
+                    <input type="number" class="form-control" name="trying_number"
+                           value="{{ $onlineExam->trying_number }}" style="text-align: center"
+                           placeholder="عدد المحاولات">
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
-                    <input type="text" class="form-control" value="{{ $onlineExam->name_ar }}" name="name_ar" style="text-align: center">
+                    <input type="text" class="form-control" value="{{ $onlineExam->name_ar }}" name="name_ar"
+                           style="text-align: center">
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
-                    <input type="text" class="form-control" value="{{ $onlineExam->name_en }}" name="name_en" style="text-align: center">
+                    <input type="text" class="form-control" value="{{ $onlineExam->name_en }}" name="name_en"
+                           style="text-align: center">
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-6">
-                    <label for="note" class="form-control-label">تيرم</label>
-                    <Select name="term_id" class="form-control">
-                        <option selected disabled style="text-align: center">اختر تيرم</option>
-                        @foreach($terms as $term)
-                            <option value="{{ $term->id }}"
-                                    {{ ($onlineExam->term_id == $term->id)? 'selected' : '' }}
-                                    style="text-align: center">{{ $term->name_ar }}</option>
-                        @endforeach
-                    </Select>
-                </div>
-                <div class="col-md-6">
-                    <label for="note" class="form-control-label">فصل</label>
-                    <Select name="season_id" class="form-control">
-                        <option selected disabled style="text-align: center">اختر فصل</option>
+                    <label for="note" class="form-control-label">الصف</label>
+                    <select name="season_id"
+                            class="form-control selectSeason" @selected( old('season_id',$onlineExam->season_id)) >
+                        <option disabled style="text-align: center">اختر الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
-                                    {{ ($onlineExam->season_id == $season->id)? 'selected' : '' }}
                                     style="text-align: center">{{ $season->name_ar }}</option>
                         @endforeach
-                    </Select>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="note" class="form-control-label">تيرم</label>
+                    <select name="term_id"
+                            class="form-control selectTerm" @selected( old('term_id',$onlineExam->term_id))>
+                        <option disabled style="text-align: center">اختر تيرم</option>
+                        <option value="{{ $onlineExam->term_id }}" class="form-control">{{ $onlineExam->term->name_ar }}</option>
+                    </select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <label for="type" class="form-control-label">النوع</label>
-                    <Select name="examable_type" id="type" class="form-control type_choose">
+                    <Select name="examable_type" id="type" class="form-control type_choose"
+                            required="required" @selected( old('examable_type',$onlineExam->type))>
                         <option disabled style="text-align: center">اختار النوع</option>
-                        <option value="App\Models\Lesson"
-                                {{ $onlineExam->examable_type == 'App\Models\Lesson' ? 'selected' : '' }} style="text-align: center">
-                            درس
-                        </option>
-                        <option value="App\Models\Season"
-                                {{ $onlineExam->examable_type == 'App\Models\Season' ? 'selected' : '' }} style="text-align: center">
-                            فصل
-                        </option>
-                        <option value="App\Models\VideoParts"
-                                {{ $onlineExam->examable_type == 'App\Models\VideoParts' ? 'selected' : '' }} style="text-align: center">
-                            الفيديو
-                        </option>
+                        <option value="App\Models\Lesson" style="text-align: center">درس</option>
+                        <option value="App\Models\class" style="text-align: center">فصل</option>
+                        <option value="App\Models\VideoParts" style="text-align: center">الفيديو</option>
                     </Select>
                 </div>
                 <div class="col-md-12">
-                    <label for="lesson" class="form-control-label">الدرس</label>
-                    <Select name="examable_id" class="form-control type_ajax_choose">
-                        @if($onlineExam->examable_type == 'App\Models\Lesson')
-                            @foreach(\Illuminate\Support\Facades\DB::table('lessons')->get() as $lesson)
-                                <option selected style="text-align: center"
-                                        {{ $onlineExam->examable_id  == $lesson->id ? 'selected' : '' }} value="{{ $lesson->id }}">{{ $lesson->name_ar }}</option>
-                            @endforeach
-                        @endif
-                        @if($onlineExam->examable_type == 'App\Models\Season')
-                            @foreach(\Illuminate\Support\Facades\DB::table('seasons')->get() as $season)
-                                <option selected style="text-align: center"
-                                        {{ $onlineExam->examable_id  == $season->id ? 'selected' : '' }} value="{{ $season->id }}">{{ $season->name_ar }}</option>
-                            @endforeach
-                        @endif
-                        @if($onlineExam->examable_type == 'App\Models\VideoParts')
-                            @foreach(\Illuminate\Support\Facades\DB::table('video_parts')->get() as $videoparts)
-                                <option selected style="text-align: center"
-                                        {{ $onlineExam->examable_id  == $videoparts->id ? 'selected' : '' }} value="{{ $videoparts->id }}">{{ $videoparts->name_ar }}</option>
-                            @endforeach
-                        @endif
+                    <label for="lesson" class="form-control-label typeName">الدرس</label>
+                    <Select name="examable_id" class="form-control type_ajax_choose" required="required">
+                        <option value="{{ $onlineExam->term_id ?? $onlineExam->class_id ?? $onlineExam->video_id }}">
+                            {{ $onlineExam->lesson->name_ar ?? $onlineExam->class->name_ar ?? $onlineExam->video->name_ar }}
+                        </option>
                     </Select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <label for="note" class="form-control-label">ملاحظة</label>
-                    <textarea class="form-control" rows="10" name="note">{{ $onlineExam->note }}</textarea>
+                <div class="col-md-6">
+                    <label class="control-label">التعليمات بالعربية</label>
+                    <div class="form-group itemItems1">
+                        @foreach($onlineExam->instruction_ar as $val1)
+                            <input type="text" name="instruction_ar[]" class="form-control mt-3 InputItemExtra1"
+                                   value="{{ $val1 }}">
+                        @endforeach
+                    </div>
                 </div>
+                <div class="col-md-6">
+                    <button type="button" class=" mt-5 btn btn-primary MoreItem1">المزيد</button>
+                    <button type="button" class=" mt-5 btn btn-danger delItem1">حذف</button>
+                </div>
+                <span class="badge Issue1 badge-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="control-label">التعليمات بالانجليزية</label>
+                    <div class="form-group itemItems2">
+                        @foreach($onlineExam->instruction_en as $val2)
+                            <input type="text" name="instruction_en[]" class="form-control mt-3 InputItemExtra2" value="{{ $val2 }}">
+                        @endforeach
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class=" mt-5 btn btn-primary MoreItem2">المزيد</button>
+                    <button type="button" class=" mt-5 btn btn-danger delItem2">حذف</button>
+                </div>
+                <span class="badge Issue2 badge-danger"></span>
             </div>
         </div>
         <div class="modal-footer">
@@ -112,23 +162,118 @@
         </div>
     </form>
 </div>
+
 <script>
 
-    $(".type_choose").click(function () {
-        var element = document.getElementById("type");
-        var value = $(element).find("option:selected").val();
-        var season = $('.seasonChoose').find("option:selected").val();
-
-        $.ajax({
-            url: '{{ route('examble_type') }}',
-            data: {
-                'id': value,
-                'season_id': season,
-            },
-            success: function (data) {
-                $('.type_ajax_choose').html(data);
+    $(document).ready(function () {
+        $('select[name="season_id"]').on('change', function () {
+            var season_id = $(this).val();
+            if (season_id) {
+                $.ajax({
+                    url: "{{ URL::to('terms/season/') }}/" + season_id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        $('select[name="term_id"]').empty();
+                        $.each(data, function (key, value) {
+                            $('select[name="term_id"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
+                    },
+                });
+            } else {
+                console.log('AJAX load did not work');
             }
-        })
+        });
+    });
+
+    $(document).ready(function () {
+        $('select[name="examable_type"]').on('change', function () {
+            var season = $('select[name="season_id"]').val();
+            var term = $('select[name="term_id"]').val();
+            var type = $(this).val();
+            var typeText = $(this).find(":selected").text();
+            $('.typeName').html(typeText);
+            if (type) {
+                $.ajax({
+                    url: "{{ route('examble_type_exam') }}",
+                    type: "GET",
+                    data: {
+                        'type': type,
+                        'season': season,
+                        'term': term,
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        $('select[name="examable_id"]').empty();
+                        $.each(data, function (key, value) {
+                            $('select[name="examable_id"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
+                    },
+                });
+            } else {
+                console.log('AJAX load did not work');
+            }
+        });
+    });
+
+
+    $("#exam_type").on('change', function () {
+        let opt = $(this).find('option:selected').val();
+        if (opt === 'pdf') {
+            $('.pdfType').removeClass('d-none').prop('disabled', 'false');
+        } else {
+            $('.pdfType').addClass('d-none').prop('disabled', 'ture');
+        }
     })
 
+
+</script>
+
+
+<script>
+    $(document).on('click', '.delItem1', function () {
+        var Item = $('.InputItemExtra1').last();
+        let issue = $('.Issue1');
+        if (Item.val() === '' && $('.InputItemExtra1').length > 1) {
+            Item.fadeOut();
+            Item.remove();
+            issue.addClass('badge-success');
+            issue.text('The element deleted');
+            setTimeout(function () {
+                $('.Issue1').html('');
+            }, 3000)
+        } else {
+            console.log('error')
+        }
+    })
+
+    $(document).on('click', '.MoreItem1', function () {
+        var Item = $('.InputItemExtra1').last();
+        if (Item.val() !== '') {
+            $('.itemItems1').append('<input type="text" name="instruction_ar[]" class="form-control InputItemExtra1 mt-3">')
+        }
+    })
+
+    $(document).on('click', '.delItem2', function () {
+        var Item = $('.InputItemExtra2').last();
+        let issue = $('.Issue2');
+        if (Item.val() === '' && $('.InputItemExtra2').length > 1) {
+            Item.fadeOut();
+            Item.remove();
+            issue.addClass('badge-success');
+            issue.text('The element deleted');
+            setTimeout(function () {
+                $('.Issue2').html('');
+            }, 3000)
+        } else {
+            console.log('error')
+        }
+    })
+
+    $(document).on('click', '.MoreItem2', function () {
+        var Item = $('.InputItemExtra2').last();
+        if (Item.val() !== '') {
+            $('.itemItems2').append('<input type="text" name="instruction_en[]" class="form-control InputItemExtra2 mt-3">')
+        }
+    })
 </script>

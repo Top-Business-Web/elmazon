@@ -2,6 +2,7 @@
 //check current language
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\File;
 
 if (!function_exists('lang')) {
 
@@ -27,7 +28,7 @@ if (!function_exists('file_size')) {
      * @param $filePath
      * @return string
      */
-    function file_size($filePath) : string
+    function file_size($filePath): string
     {
         $getID3 = new \getID3;
         $file = $getID3->analyze($filePath);
@@ -40,7 +41,7 @@ if (!function_exists('video_duration')) {
      * @param $videoPath
      * @return string
      */
-    function video_duration($videoPath) : string
+    function video_duration($videoPath): string
     {
         $getID3 = new \getID3;
         $file = $getID3->analyze($videoPath);
@@ -50,12 +51,11 @@ if (!function_exists('video_duration')) {
 
 if (!function_exists('saveFile')) {
 
-    function saveFile($photo,$folder): string
+    function saveFile($folder,$file): string
     {
-        $file_extension = $photo->getClientOriginalExtension();
-        $file_name =  $folder.'/'.rand('1','9999').time().'.'.$file_extension;
-        $photo -> move($folder,$file_name);
-
+        $path = public_path($folder);
+        $file_name = rand('1', '9999') . time()  . '.' . $file->getClientOriginalExtension();
+        $file->move($path, $file_name);
         return $file_name;
     }
 }

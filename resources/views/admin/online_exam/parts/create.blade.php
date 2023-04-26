@@ -94,7 +94,7 @@
                     <Select name="examable_type" id="type" class="form-control type_choose" required="required">
                         <option selected disabled style="text-align: center">اختار النوع</option>
                         <option value="App\Models\Lesson" style="text-align: center">درس</option>
-                        <option value="App\Models\Season" style="text-align: center">فصل</option>
+                        <option value="App\Models\class" style="text-align: center">فصل</option>
                         <option value="App\Models\VideoParts" style="text-align: center">الفيديو</option>
                     </Select>
                 </div>
@@ -166,6 +166,8 @@
             var season = $('select[name="season_id"]').val();
             var term = $('select[name="term_id"]').val();
             var type = $(this).val();
+            var typeText = $(this).find(":selected").text();
+            $('.typeName').html(typeText);
             if (type) {
                 $.ajax({
                     url: "{{ route('examble_type_exam') }}",
@@ -223,7 +225,7 @@
     $(document).on('click', '.MoreItem1', function () {
         var Item = $('.InputItemExtra1').last();
         if (Item.val() !== '') {
-            $('.itemItems1').append('<input type="text" name="items_ar[]" class="form-control InputItemExtra1 mt-3">')
+            $('.itemItems1').append('<input type="text" name="instruction_ar[]" class="form-control InputItemExtra1 mt-3">')
         }
     })
 
@@ -246,7 +248,7 @@
     $(document).on('click', '.MoreItem2', function () {
         var Item = $('.InputItemExtra2').last();
         if (Item.val() !== '') {
-            $('.itemItems2').append('<input type="text" name="items_en[]" class="form-control InputItemExtra2 mt-3">')
+            $('.itemItems2').append('<input type="text" name="instruction_en[]" class="form-control InputItemExtra2 mt-3">')
         }
     })
 </script>
