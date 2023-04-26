@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\Auth;
 class OnlineExam extends Model
 {
     use HasFactory;
+    public int $id;
 
     protected $fillable = [
         'exam_type',
         'pdf_file_upload',
+        'pdf_num_questions',
         'answer_pdf_file',
         'answer_video_file',
         'name_ar',
@@ -34,7 +36,11 @@ class OnlineExam extends Model
         'instruction_en',
     ];
 
-    protected $casts = ['instruction_ar'=> 'json','instruction_en' => 'json'];
+    protected $casts = [
+        'instruction_ar' => 'json',
+        'instruction_en' => 'json',
+    ];
+
 
 
     public function season(){
