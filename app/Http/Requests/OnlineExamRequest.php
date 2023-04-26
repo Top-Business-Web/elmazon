@@ -22,7 +22,7 @@ class OnlineExamRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'pdf_file_upload' => 'nullable',
@@ -35,7 +35,7 @@ class OnlineExamRequest extends FormRequest
             'quize_minute' => 'required',
             'trying_number' => 'required',
             'degree' => 'required',
-            'type' => 'required',
+            'type' => 'nullable',
             'video_id' => 'nullable',
             'lesson_id' => 'nullable',
             'class_id' => 'nullable',

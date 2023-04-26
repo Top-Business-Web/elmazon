@@ -28,9 +28,10 @@ class OnlineExamController extends Controller
 
     public function index(request $request)
     {
+
         if ($request->ajax()) {
-            $online_exams = OnlineExam::get();
-            return Datatables::of($online_exams)
+            $online_exams = OnlineExam::latest()->get();
+            return DataTables::of($online_exams)
                 ->addColumn('action', function ($online_exams) {
                     return '
                             <button type="button" data-id="' . $online_exams->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
@@ -187,7 +188,7 @@ class OnlineExamController extends Controller
                     $data = Lesson::whereIn('subject_class_id', $subjectClass)
                         ->pluck('name_ar', 'id')->toArray();
 
-                } else if ($request->id == 'App\Models\Season') {
+                } else if ($request->id == 'App\Models\class') {
 
                     $data = SubjectClass::where('season_id', $request->season_id)
                         ->where('term_id', $request->term)
@@ -209,13 +210,31 @@ class OnlineExamController extends Controller
 
     public function store(OnlineExamRequest $request, OnlineExam $online_exam)
     {
+//        dd(file_size(asset('online_exams/pdf_answers/1.pdf')));
         $inputs = $request->all();
+//        dd($request->pdf_file_upload);
+        if ($request->has('pdf_file_upload')) {
+            $inputs['pdf_file_upload'] = saveFile('online_exams/pdf_file_uploads', $request->pdf_file_upload);
+        } // end save file
 
-        if ($request->hasFile('pdf_file_upload')){
+        if ($request->has('answer_pdf_file')) {
+            $inputs['answer_pdf_file'] = saveFile('online_exams/pdf_answers', $request->answer_pdf_file);
+        } // end save file
 
-            $this->saveImage;
-        }
+        if ($request->has('answer_video_file')) {
+            $inputs['answer_video_file'] = saveFile('online_exams/videos_answers', $request->answer_video_file);
+        } // end save file
 
+        if ($request->examable_type == 'App\Models\Lesson') {
+            $inputs['type'] = 'lesson';
+            $inputs['lesson_id'] = $request->examable_id;
+        } elseif ($request->examable_type == 'App\Models\class') {
+            $inputs['type'] = 'class';
+            $inputs['class_id'] = $request->examable_id;
+        } elseif ($request->examable_type == 'App\Models\VideoParts') {
+            $inputs['type'] = 'video';
+            $inputs['video_id'] = $request->examable_id;
+        } // end if
 
         if ($online_exam->create($inputs)) {
             return response()->json(['status' => 200]);
@@ -233,9 +252,46 @@ class OnlineExamController extends Controller
 
     // Update Start
 
-    public function update(Request $request, OnlineExam $onlineExam)
+    public function update(OnlineExamRequest $request, OnlineExam $onlineExam)
     {
-        if ($onlineExam->update($request->all())) {
+
+        $inputs = $request->all();
+
+
+        if ($request->has('pdf_file_upload')) {
+             if (file_exists($onlineExam->pdf_file_upload)) {
+                unlink($onlineExam->pdf_file_upload);
+            }
+            $inputs['pdf_file_upload'] = saveFile('online_exams/pdf_file_uploads', $request->pdf_file_upload);
+        } // end save file
+
+        if ($request->has('answer_pdf_file')) {
+             if (file_exists($onlineExam->answer_pdf_file)) {
+                unlink($onlineExam->answer_pdf_file);
+            }
+            $inputs['answer_pdf_file'] = saveFile('online_exams/pdf_answers', $request->answer_pdf_file);
+        } // end save file
+
+        if ($request->has('answer_video_file')) {
+             if (file_exists($onlineExam->answer_pdf_file)) {
+                unlink($onlineExam->answer_video_file);
+            }
+            $inputs['answer_video_file'] = saveFile('online_exams/videos_answers', $request->answer_video_file);
+        } // end save file
+
+        if ($request->examable_type == 'App\Models\Lesson') {
+            $inputs['type'] = 'lesson';
+            $inputs['lesson_id'] = $request->examable_id;
+        } elseif ($request->examable_type == 'App\Models\class') {
+            $inputs['type'] = 'class';
+            $inputs['class_id'] = $request->examable_id;
+        } elseif ($request->examable_type == 'App\Models\VideoParts') {
+            $inputs['type'] = 'video';
+            $inputs['video_id'] = $request->examable_id;
+        } // end if
+
+
+        if ($onlineExam->update($inputs)) {
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
