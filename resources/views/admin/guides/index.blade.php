@@ -1,10 +1,10 @@
 @extends('admin.layouts_admin.master')
 
 @section('title')
-    الدليل
+    المصادر والمراجع
 @endsection
 @section('page_name')
-    الدليل
+    المصادر والمراجع
 @endsection
 @section('content')
     <div class="row">
@@ -94,8 +94,8 @@
                 name: 'id'
             },
             {
-                data: 'background_color',
-                name: 'icon'
+                data: 'color',
+                name: 'color'
             },
             {
                 data: 'title_ar',

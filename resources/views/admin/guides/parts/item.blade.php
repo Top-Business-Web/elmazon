@@ -34,8 +34,8 @@
                                 <th class="min-w-50px">الوحدة</th>
                                 <th class="min-w-50px">الدرس</th>
                                 <th class="min-w-50px">ملف المراجعة</th>
-                                <th class="min-w-50px">ملف الاجابة (فيديو)</th>
                                 <th class="min-w-50px">ملف الاجابة (ملف ورقي)</th>
+                                <th class="min-w-50px">ملف الاجابة (فيديو)</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
