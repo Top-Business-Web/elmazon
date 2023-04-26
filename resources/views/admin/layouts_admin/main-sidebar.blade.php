@@ -236,7 +236,7 @@
                 <a class="side-menu__item" href="{{ route('guide.index') }}">
                     <i class="icon icon-note side-menu__icon"></i>
                     <span class="side-menu__label">
-                        المصادر <والمراجعات></والمراجعات>
+                        المصادر والمراجعات
                     </span>
                 </a>
             </li>

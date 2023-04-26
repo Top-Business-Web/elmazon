@@ -31,6 +31,13 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-12">
+                    <label for="head">لون الخلفية</label>
+                    <input type="color" class="form-control" name="background_color"
+                           value="">
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <label for="section_name_ar" class="form-control-label">الوصف بالعربية</label>
                     <textarea class="form-control" name="description_ar" rows="8" required></textarea>
@@ -42,8 +49,8 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <label for="section_name_ar" class="form-control-label">ايقونة</label>
-                    <input type="file" name="icon" class="dropify" data-default-file=""/>
+                    <label for="section_name_ar" class="form-control-label">مرجع</label>
+                    <input type="file" name="file" class="form-control" />
                 </div>
             </div>
         </div>
