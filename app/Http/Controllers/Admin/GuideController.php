@@ -230,6 +230,7 @@ class GuideController extends Controller
         }
 
         if ($request->has('answer_pdf_file')) {
+            $inputs['file_type'] = 'pdf';
             $file = $request->answer_pdf_file;
             $path = public_path('assets/uploads/guide/answers');
             $file_name = $file->getClientOriginalName();
@@ -237,6 +238,7 @@ class GuideController extends Controller
             $inputs['answer_pdf_file'] = $file_name;
         }
         if ($request->has('answer_video_file')) {
+            $inputs['file_type'] = 'video';
             $file = $request->answer_video_file;
             $path = public_path('assets/uploads/guide/answers');
             $file_name = $file->getClientOriginalName();
