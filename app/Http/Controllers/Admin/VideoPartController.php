@@ -52,10 +52,19 @@ class VideoPartController extends Controller
                     return  $like . ' <i class="fa fa-thumbs-up ml-2 mr-2 text-success"></i> ' . $disLike . '<i class="fa fa-thumbs-down text-danger ml-2 mr-2"></i>' ;
                 })
                 ->editColumn('link', function ($videoParts) {
-                    if ($videoParts->type == 'video')
-                        return '<a href="' . asset('videos/' . $videoParts->link) . '">
-                                لينك الفيديو
+                    if ($videoParts->type == 'video'){
+                        return '<a target="_blank" href="' . asset('videos/' . $videoParts->link) . '">
+                                <span class="badge badge-secondary">لينك الفيديو</span>
                             </a>';
+                    } elseif ($videoParts->type == 'pdf'){
+                        return '<a target="_blank" href="' . asset('pdf/' . $videoParts->link) . '">
+                                <span class="badge badge-success">لينك pdf</span>
+                            </a>';
+                    } else {
+                        return '<a target="_blank" href="' . asset('sound/' . $videoParts->link) . '">
+                                <span class="badge badge-info">لينك صوتي</span>
+                            </a>';
+                    }
                 })
                 ->escapeColumns([])
                 ->make(true);
