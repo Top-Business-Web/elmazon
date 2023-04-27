@@ -4,12 +4,12 @@
         <div class="form_holder switcher-sidebar">
             <div class="row">
                 <div class="predefined_styles">
-                    <div class="swichermainleft">
+                    <div class="swichermainright">
                         <div class="p-3">
                             <a href="" class="btn btn-warning btn-block mt-0">Home</a>
                         </div>
                     </div>
-                    <div class="swichermainleft">
+                    <div class="swichermainright">
                         <h4>Quick Access</h4>
                         <div class="pl-3 pr-3">
                             <a class="btn btn-info btn-block" href="">
