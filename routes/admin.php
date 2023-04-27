@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\PapelSheetExamController;
 use App\Http\Controllers\Admin\VideoBasicController;
 use App\Http\Controllers\Admin\VideoResourceController;
 use App\Http\Controllers\Admin\VideoBasicPdfController;
+use App\Http\Controllers\Admin\AboutMesController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
 use Illuminate\Support\Facades\Route;
@@ -284,6 +285,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Video Basic Pdf ####
     Route::resource('videoBasicPdf', VideoBasicPdfController::class)->middleware('permission:الفيديوهات الاساسية ملفات ورقية');
+
+    #### About Mes ####
+    Route::resource('aboutMes', AboutMesController::class);
 
 
     #### roles ####
