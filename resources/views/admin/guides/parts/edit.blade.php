@@ -54,7 +54,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="section_name_ar" class="form-control-label">مرجع</label>
-                    <input type="file" name="file" class="dropify" data-default-file="{{ asset($guide->file) }}"/>
+                    <input type="file" name="file" class="form-control" data-default-file="{{ asset($guide->file) }}"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="section_name_ar" class="form-control-label">ايقونة</label>
+                    <input type="file" name="icon" class="dropify" data-default-file="{{ asset($guide->icon) }}" />
                 </div>
             </div>
         </div>

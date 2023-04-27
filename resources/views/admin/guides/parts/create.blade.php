@@ -53,6 +53,12 @@
                     <input type="file" name="file" class="form-control" />
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="section_name_ar" class="form-control-label">ايقونة</label>
+                    <input type="file" name="icon" class="dropify" />
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>

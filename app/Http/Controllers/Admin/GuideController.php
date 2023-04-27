@@ -119,6 +119,10 @@ class GuideController extends Controller
             $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'photo');
         }
 
+        if($request->hasFile('icon')){
+            $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guides/icon', 'photo');
+        }
+
         if (Guide::create($inputs)) {
             return response()->json(['status' => 200]);
         } else {
@@ -143,6 +147,10 @@ class GuideController extends Controller
     public function update(Guide $guide, RequestGuide $request)
     {
         $inputs = $request->all();
+
+        if($request->hasFile('file')){
+            $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'photo');
+        }
 
         if($request->hasFile('icon')){
             $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guides/icon', 'photo');
