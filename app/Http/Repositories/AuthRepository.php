@@ -282,7 +282,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
                         $section = Section::orderBy('id','ASC')->get()->except($sectionCheck->id)->where('id','>',$sectionCheck->id);
                     }else{
                         $section = Section::where('id', '=', $id)->first();
-
                     }
 
                     if (Auth::guard('user-api')->user()->center == 'out') {

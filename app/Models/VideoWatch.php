@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class VideoWatch extends Model
 {
@@ -12,7 +13,7 @@ class VideoWatch extends Model
     protected  $guarded = [];
 
 
-    public function video(){
+    public function video(): BelongsTo{
         return $this->belongsTo(VideoParts::class, 'video_part_id','id');
     }
 
