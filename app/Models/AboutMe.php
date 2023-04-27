@@ -19,6 +19,11 @@ class AboutMe extends Model
 
     ];
 
+    protected $casts = [
+        'qualifications' =>'json',
+        'experience' =>'json',
+        'skills' =>'json',
+        ];
 
 }
 
