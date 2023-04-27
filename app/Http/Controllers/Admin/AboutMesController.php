@@ -9,20 +9,12 @@ use Illuminate\Http\Request;
 class AboutMesController extends Controller
 {
     // Index Start
-    public function index(Request $request)
+    public function index()
     {
         $about_me = AboutMe::all();
         return view('admin.about_mes.index', compact('about_me'));
     }
     // Index End
-
-    // Profile Teacher Start
-    public function show($id)
-    {
-        $teachers = AboutMe::where('id', $id)->get();
-        return view('admin.about_mes.parts.teacher', compact('teachers'));
-    }
-    // Profile Teacher End
 
     // Update Start
 
