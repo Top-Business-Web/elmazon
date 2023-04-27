@@ -52,9 +52,9 @@
 
 <body class="app sidebar-mini">
 
-<!-- Start Switcher -->
-@include('admin.layouts_admin.switcher')
-<!-- End Switcher -->
+{{--<!-- Start Switcher -->--}}
+{{--@include('admin.layouts_admin.switcher')--}}
+{{--<!-- End Switcher -->--}}
 
 <!-- GLOBAL-LOADER -->
 @include('admin.layouts_admin.loader')
