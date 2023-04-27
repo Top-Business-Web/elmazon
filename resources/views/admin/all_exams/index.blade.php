@@ -1,10 +1,10 @@
 @extends('admin.layouts_admin.master')
 
 @section('title')
-    كل الامتحانات
+    الامتحانات الشاملة
 @endsection
 @section('page_name')
-    الامتحان
+    الامتحانات الشاملة
 @endsection
 @section('content')
 
@@ -32,7 +32,7 @@
                                 <th class="min-w-50px">وقت الامتحان</th>
                                 <th class="min-w-50px">المحاولات المسموحة</th>
                                 <th class="min-w-50px">الدرجة</th>
-                                <th class="min-w-50px">ملاحظة</th>
+{{--                                <th class="min-w-50px">ملاحظة</th>--}}
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -74,7 +74,7 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">امتحان</h5>
+                        <h5 class="modal-title" id="example-Modal3"> الامتحانات الشاملة</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -97,7 +97,7 @@
             {data: 'quize_minute', name: 'quize_minute'},
             {data: 'trying_number', name: 'trying_number'},
             {data: 'degree', name: 'degree'},
-            {data: 'note', name: 'note'},
+            // {data: 'note', name: 'note'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('allExam.index')}}', columns);

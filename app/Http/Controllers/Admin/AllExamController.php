@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AllExamRequest;
 use App\Models\AllExam;
 use App\Models\Season;
 use App\Models\Term;
@@ -49,9 +50,22 @@ class AllExamController extends Controller
 
     // Store Start
 
-    public function store(Request $request, AllExam $allExam)
+    public function store(AllExamRequest $request, AllExam $allExam)
     {
         $inputs = $request->all();
+
+        if ($request->has('pdf_file_upload')) {
+            $inputs['pdf_file_upload'] = saveFile('all_exams/pdf_file_uploads', $request->pdf_file_upload);
+        } // end save file
+
+        if ($request->has('answer_pdf_file')) {
+            $inputs['answer_pdf_file'] = saveFile('all_exams/pdf_answers', $request->answer_pdf_file);
+        } // end save file
+
+        if ($request->has('answer_video_file')) {
+            $inputs['answer_video_file'] = saveFile('all_exams/videos_answers', $request->answer_video_file);
+        } // end save file
+
         if($allExam->create($inputs))
         {
             return response()->json(['status' => 200]);
@@ -77,9 +91,32 @@ class AllExamController extends Controller
 
     // Update Start
 
-    public function update(Request $request, AllExam $allExam)
+    public function update(AllExamRequest $request, AllExam $allExam)
     {
-        if ($allExam->update($request->all())) {
+        $inputs = $request->all();
+
+        if ($request->has('pdf_file_upload')) {
+            if (file_exists($allExam->pdf_file_upload)) {
+                unlink($allExam->pdf_file_upload);
+            }
+            $inputs['pdf_file_upload'] = saveFile('all_exams/pdf_file_uploads', $request->pdf_file_upload);
+        } // end save file
+
+        if ($request->has('answer_pdf_file')) {
+            if (file_exists($allExam->answer_pdf_file)) {
+                unlink($allExam->answer_pdf_file);
+            }
+            $inputs['answer_pdf_file'] = saveFile('all_exams/pdf_answers', $request->answer_pdf_file);
+        } // end save file
+
+        if ($request->has('answer_video_file')) {
+            if (file_exists($allExam->answer_video_file)) {
+                unlink($allExam->answer_video_file);
+            }
+            $inputs['answer_video_file'] = saveFile('all_exams/videos_answers', $request->answer_video_file);
+        } // end save file
+
+        if ($allExam->update($inputs)) {
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);

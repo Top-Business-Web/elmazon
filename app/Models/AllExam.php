@@ -11,7 +11,23 @@ class AllExam extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name_ar',
+        'name_en',
+        'exam_type',
+        'pdf_file_upload',
+        'pdf_num_questions',
+        'answer_pdf_file',
+        'answer_video_file',
+        'date_exam',
+        'quize_minute',
+        'trying_number',
+        'degree',
+        'season_id',
+        'term_id',
+        'instruction_ar',
+        'instruction_en',
+    ];
 
     protected $casts = ['instruction_ar'=> 'json','instruction_en' => 'json'];
 

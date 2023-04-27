@@ -3,6 +3,54 @@
         @csrf
         <div class="form-group">
             <div class="row">
+                <div class="col-md-12">
+                    <label for="exam_type" class="form-control-label">نوع الامتحان</label>
+                    <select class="form-control" name="exam_type" id="exam_type">
+                        <option value="" disabled selected>اختر النوع</option>
+                        <option value="all_exam" class="form-control">أونلاين</option>
+                        <option value="pdf" class="form-control">Pdf</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row d-none pdfType">
+                <div class="col-md-6">
+                    <label class="form-control-label" for="pdf_file_upload">رفع الملف (pdf)</label>
+                    <input type="file" class="form-control" name="pdf_file_upload">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-control-label" for="pdf_num_questions">عدد الاسئلة</label>
+                    <input type="number" class="form-control" name="pdf_num_questions">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-control-label" for="answer_pdf_file">رفع الاجابة pdf</label>
+                    <input type="file" class="form-control" name="answer_pdf_file">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-control-label" for="answer_video_file">رفع الاجابة video</label>
+                    <input type="file" class="form-control" name="answer_video_file">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-control-label" for="date_exam">موعد الامتحان</label>
+                    <input type="date" class="form-control" name="date_exam">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-control-label" for="quize_minute">وقت الامتحان بالدقائق</label>
+                    <input type="number" class="form-control" name="quize_minute">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-control-label" for="trying_number">عدد المحاولات</label>
+                    <input type="number" class="form-control" name="trying_number">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-control-label" for="degree">درجة الامتحان</label>
+                    <input type="number" class="form-control" name="degree">
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم بالعربية</label>
                     <input type="text" class="form-control" name="name_ar">
@@ -14,45 +62,48 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <label for="note" class="form-control-label">تيرم</label>
-                    <Select name="term_id" class="form-control">
-                        <option selected disabled style="text-align: center">اختر تيرم</option>
-                        @foreach($data['terms'] as $term)
-                            <option value="{{ $term->id }}"
-                                    style="text-align: center">{{ $term->name_en }}</option>
-                        @endforeach
-                    </Select>
-                </div>
-                <div class="col-md-6">
                     <label for="note" class="form-control-label">فصل</label>
                     <Select name="season_id" class="form-control">
                         <option selected disabled style="text-align: center">اختر فصل</option>
                         @foreach($data['seasons'] as $season)
                             <option value="{{ $season->id }}"
-                                    style="text-align: center">{{ $season->name_en }}</option>
+                                    style="text-align: center">{{ $season->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-6">
-                    <label for="name_ar" class="form-control-label">وقت الامتحان</label>
-                    <input type="number" class="form-control" name="quize_minute">
-                </div>
-                <div class="col-md-6">
-                    <label for="name_en" class="form-control-label">عدد المحاولات</label>
-                    <input type="number" class="form-control" name="trying_number">
+                    <label for="note" class="form-control-label">تيرم</label>
+                    <Select name="term_id" class="form-control">
+                        <option selected disabled style="text-align: center">اختر تيرم</option>
+                    </Select>
                 </div>
             </div>
+           <hr>
             <div class="row">
-                <div class="col-md-6">
-                    <label for="name_ar" class="form-control-label">الدرجة</label>
-                    <input type="number" class="form-control" name="degree">
+                <div class="col-md-9">
+                    <label class="control-label">التعليمات بالعربية</label>
+                    <div class="form-group itemItems1">
+                        <input type="text" name="instruction_ar[]" class="form-control InputItemExtra1" value="">
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label for="name_en" class="form-control-label">ملاحظة</label>
-                    <textarea class="form-control" name="note" rows="10"></textarea>
+                <div class="col-md-3">
+                    <button type="button" class=" mt-5 btn btn-primary MoreItem1">المزيد</button>
+                    <button type="button" class=" mt-5 btn btn-danger delItem1">حذف</button>
                 </div>
+                <span class="badge Issue1 badge-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-9">
+                    <label class="control-label">التعليمات بالانجليزية</label>
+                    <div class="form-group itemItems2">
+                        <input type="text" name="instruction_en[]" class="form-control InputItemExtra2" value="">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class=" mt-5 btn btn-primary MoreItem2">المزيد</button>
+                    <button type="button" class=" mt-5 btn btn-danger delItem2">حذف</button>
+                </div>
+                <span class="badge Issue2 badge-danger"></span>
             </div>
         </div>
         <div class="modal-footer">
@@ -64,4 +115,84 @@
 
 <script>
     $('.dropify').dropify()
+
+
+    $(document).ready(function () {
+        $('select[name="season_id"]').on('change', function () {
+            var season_id = $(this).val();
+            if (season_id) {
+                $.ajax({
+                    url: "{{ URL::to('terms/season/') }}/" + season_id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        $('select[name="term_id"]').empty();
+                        $.each(data, function (key, value) {
+                            $('select[name="term_id"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
+                    },
+                });
+            } else {
+                console.log('AJAX load did not work');
+            }
+        });
+    });
+
+    $("#exam_type").on('change', function () {
+        let opt = $(this).find('option:selected').val();
+        if (opt === 'pdf') {
+            $('.pdfType').removeClass('d-none').prop('disabled', 'false');
+        } else {
+            $('.pdfType').addClass('d-none').prop('disabled', 'ture');
+        }
+    })
+
+</script>
+
+<script>
+    $(document).on('click', '.delItem1', function () {
+        var Item = $('.InputItemExtra1').last();
+        let issue = $('.Issue1');
+        if (Item.val() === '' && $('.InputItemExtra1').length > 1) {
+            Item.fadeOut();
+            Item.remove();
+            issue.addClass('badge-success');
+            issue.text('The element deleted');
+            setTimeout(function () {
+                $('.Issue1').html('');
+            }, 3000)
+        } else {
+            console.log('error')
+        }
+    })
+
+    $(document).on('click', '.MoreItem1', function () {
+        var Item = $('.InputItemExtra1').last();
+        if (Item.val() !== '') {
+            $('.itemItems1').append('<input type="text" name="instruction_ar[]" class="form-control InputItemExtra1 mt-3">')
+        }
+    })
+
+    $(document).on('click', '.delItem2', function () {
+        var Item = $('.InputItemExtra2').last();
+        let issue = $('.Issue2');
+        if (Item.val() === '' && $('.InputItemExtra2').length > 1) {
+            Item.fadeOut();
+            Item.remove();
+            issue.addClass('badge-success');
+            issue.text('The element deleted');
+            setTimeout(function () {
+                $('.Issue2').html('');
+            }, 3000)
+        } else {
+            console.log('error')
+        }
+    })
+
+    $(document).on('click', '.MoreItem2', function () {
+        var Item = $('.InputItemExtra2').last();
+        if (Item.val() !== '') {
+            $('.itemItems2').append('<input type="text" name="instruction_en[]" class="form-control InputItemExtra2 mt-3">')
+        }
+    })
 </script>

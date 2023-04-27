@@ -10,11 +10,13 @@ use App\Models\Country;
 use App\Models\ExamDegreeDepends;
 use App\Models\OnlineExam;
 use App\Models\OnlineExamUser;
+use App\Models\OpenLesson;
 use App\Models\PapelSheetExam;
 use App\Models\PapelSheetExamDegree;
 use App\Models\PapelSheetExamUser;
 use App\Models\Season;
 use App\Models\Subscribe;
+use App\Models\Term;
 use App\Models\User;
 use App\Models\UserSubscribe;
 use App\Models\VideoParts;
@@ -79,7 +81,7 @@ class UserController extends Controller
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
-        }
+        } // Create End
     }
 
     // Store End
@@ -189,13 +191,20 @@ class UserController extends Controller
     public function printReport($id)
     {
         $user = User::findOrFail($id);
+        $term = Term::where('season_id',$user->season_id)
+            ->where('status','=','active')->first();
+        $lessonCount = OpenLesson::where('user_id',$user->id)
+            ->where('lesson_id','!=',null)->count('lesson_id');
+
+        $classCount = OpenLesson::where('user_id',$user->id)
+            ->where('subject_class_id','!=',null)->count('subject_class_id');
+
         $videos = VideoWatch::where('user_id', $user->id)->with('video')->get();
         $video_ids = VideoWatch::where('user_id', $user->id)->pluck('video_part_id')->toArray();
         $videoMin = VideoParts::whereIn('id', $video_ids)->sum('video_time');
-        $exams = ExamDegreeDepends::where('user_id','=',$user->id)
-            ->where('exam_depends','=','yes')->get();
-        $paperExams = PapelSheetExamDegree::where('user_id','=',$user->id)->get();
-
+        $exams = ExamDegreeDepends::where('user_id', '=', $user->id)
+            ->where('exam_depends', '=', 'yes')->get();
+        $paperExams = PapelSheetExamDegree::where('user_id', '=', $user->id)->get();
         $subscriptions = UserSubscribe::where('student_id', $user->id)->get();
         return view('admin.users.parts.report', compact([
             'user',
@@ -203,7 +212,10 @@ class UserController extends Controller
             'exams',
             'videoMin',
             'subscriptions',
-            'paperExams'
+            'paperExams',
+            'term',
+            'lessonCount',
+            'classCount',
 
         ]));
 
