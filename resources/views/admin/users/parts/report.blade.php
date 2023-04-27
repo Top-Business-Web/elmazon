@@ -19,15 +19,17 @@
                                 <div class="invoice-title">
                                     <h3 class="float-end font-size-16">{{ ' اسم الطالب : ' . $user->name }}</h3>
                                     <h6 class="float-end font-size-16">{{ ' كود الطالب : ' . $user->code }} </h6>
-                                    <h6 class="float-end font-size-16">{{ ' الصف الدراسي : ' . $user->season->name_ar }} </h6>
+                                    <h6 class="float-end font-size-16">
+                                        {{ ' الصف الدراسي : ' . $user->season->name_ar . ' - ' . $term->name_ar }}
+                                    </h6>
                                 </div>
                                 <hr>
                                 <div class="py-2 mt-3">
                                     <h3 class="font-size-15 col-6 fw-bold">معلومات الاشتراك</h3>
                                 </div>
-                                <div class="table-responsive">
-                                    <table class="table table-nowrap table-bordered">
-                                        <thead>
+                                <div class="styled-table">
+                                    <table class="styled-table">
+                                        <thead class="thead-dark">
                                         <tr>
                                             <th style="width: 70px;">#</th>
                                             <th>الشهر</th>
@@ -51,45 +53,54 @@
                                 <div class="py-2 mt-3">
                                     <h3 class="font-size-15 col-6 fw-bold">معلومات المشاهدة</h3>
                                 </div>
-                                <div class="table-responsive">
-                                    <table class="table table-nowrap table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th style="width: 70px;">#</th>
-                                            <th>اسم الفيديو</th>
-                                            <th class="text-end">وقت المشاهدة</th>
-                                            <th class="text-end">مدة الفيديو</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($videos as $video)
+
+                                <div class="row">
+                                    <div class="styled-table col-md-8">
+                                        <table class="styled-table">
+                                            <thead class="thead-dark">
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $video->video->name_ar }}</td>
-                                                <td class="text-end">{{ $video->created_at->format('Y-m-d') }}</td>
-                                                <td>{{ $video->video->video_time . ' دقيقة ' }}</td>
+                                                <th style="width: 70px;">#</th>
+                                                <th>اسم الفيديو</th>
+                                                <th class="text-end">وقت المشاهدة</th>
+                                                <th class="text-end">مدة الفيديو</th>
                                             </tr>
-                                        @endforeach
-                                        </tbody>
-                                        <tfoot>
-                                        <td></td>
-                                        <td>المجموع :
-                                            {{ $videos->count() . '  فيديو  ' }}
-                                        </td>
-                                        <td></td>
-                                        <td>مجموع دقائق المشاهده :
-                                        {{ $videoMin . ' دقيقة ' }}
-                                        </td>
-                                        </tfoot>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                            @foreach($videos as $video)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $video->video->name_ar }}</td>
+                                                    <td class="text-end">{{ $video->created_at->format('Y-m-d') }}</td>
+                                                    <td>{{ $video->video->video_time . ' دقيقة ' }}</td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                            <tfoot>
+                                            <td></td>
+                                            <td>المجموع :
+                                                {{ $videos->count() . '  فيديو  ' }}
+                                            </td>
+                                            <td></td>
+                                            <td>مجموع دقائق المشاهده :
+                                                {{ $videoMin . ' دقيقة ' }}
+                                            </td>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="col-4">
+                                        <div>
+                                            <h3 class="">معلومات الانجازات</h3>
+                                        <canvas id="myChart"></canvas>
+                                        </div>
+                                    </div>
                                 </div>
                                 <hr>
                                 <div class="py-2 mt-3">
                                     <h3 class="font-size-15 col-6 fw-bold">معلومات الامتحانات</h3>
                                 </div>
-                                <div class="table-responsive">
-                                    <table class="table table-nowrap table-bordered">
-                                        <thead>
+                                <div class="styled-table">
+                                    <table class="styled-table">
+                                        <thead class="thead-dark">
                                         <tr>
                                             <th style="width: 70px;">#</th>
                                             <th>اسم الامتحان</th>
@@ -119,7 +130,7 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $paper->papel_sheet_exam->name_ar }}</td>
-                                               <td>ورقي</td>
+                                                <td>ورقي</td>
                                                 <td>{{ $paper->papel_sheet_exam->degree }}
                                                     / {{ $paper->degree }}</td>
                                                 <td>{{ $paper->created_at->format('Y-m-d') }}</td>
@@ -135,10 +146,11 @@
                                         </tfoot>
                                     </table>
                                 </div>
+
                             </div>
                             <div class="d-print-none m-3">
                                 <div class="float-end">
-                                    <a style="color: white" onclick="printData()"
+                                    <a style="color: white" onclick="printReport()"
                                        class="btn btn-success waves-effect waves-light me-1 printReport"><i
                                             class="fa fa-print"></i> طباعة </a>
                                     <a href="{{ route('users.index') }}"
@@ -153,27 +165,44 @@
             </div> <!-- container-fluid -->
         </div>
 
-
         @include('admin.layouts_admin.myAjaxHelper')
         @endsection
         @section('ajaxCalls')
+{{--            <script type="text/javascript" src="{{ asset('assets/admin/assets/js/printThis.js') }}"></script>--}}
             <script>
-                function printData() {
-                    var css = '<link href="{{asset('assets/admin/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" />';
-                    css += '<link href="{{asset('assets/admin/css-rtl/style.css')}}" rel="stylesheet"/>';
-                    var printContent = document.getElementById("cardPrint");
-
-                    var WinPrint = window.open('', '', 'width=1024,height=1024');
-                    WinPrint.document.write('<html lang="en" dir="rtl">');
-                    WinPrint.document.write(printContent.innerHTML);
-                    WinPrint.document.head.innerHTML = css;
-                    WinPrint.document.URL = ''
-                    WinPrint.document.close();
-                    WinPrint.focus();
-                    WinPrint.print();
-                    WinPrint.close();
-                }
-
+               function printReport(){
+                   $('#cardPrint').printThis({
+                       importCSS: true,            // import parent page css
+                       importStyle: true,          // import style tags
+                       printContainer: true,      // print html container
+                       pageTitle: "تقرير الطالب",              // add title to print page
+                       loadCSS: '{{ asset('assets/admin/css/custom-table.css') }}',                // path to additional css file - use an array [] for multiple
+                   });
+               }
             </script>
-@endsection
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+            <script>
+                var xValues = ["الدروس", "الوحدات"];
+                var yValues = ['{{ $lessonCount }}','{{ $classCount }}'];
+                var barColors = ["green", "blue"];
 
+                new Chart("myChart", {
+                    type: "bar",
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                            backgroundColor: barColors,
+                            data: yValues
+                        }]
+                    },
+                    options: {
+                        legend: {display: false},
+                        title: {
+                            display: false,
+                            text: "معلومات الانجازات"
+                        }
+                    }
+                });
+            </script>
+
+@endsection
