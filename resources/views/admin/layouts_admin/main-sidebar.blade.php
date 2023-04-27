@@ -226,7 +226,7 @@
                     <a class="side-menu__item" href="{{ route('aboutMes.index') }}">
                         <i class="fa fa-wrench side-menu__icon"></i>
                         <span class="side-menu__label">
-                        معلومات عن الاستاذ
+                         الاساتذة
                     </span>
                     </a>
                 </li>
