@@ -224,9 +224,9 @@
             @can('الاعدادات')
                 <li class="slide">
                     <a class="side-menu__item" href="{{ route('aboutMes.index') }}">
-                        <i class="fa fa-wrench side-menu__icon"></i>
+                        <i class="fa fa-person-booth side-menu__icon"></i>
                         <span class="side-menu__label">
-                         الاساتذة
+                         معلومات عن الاستاذ
                     </span>
                     </a>
                 </li>
