@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\FullExams\FullExamController;
 use App\Http\Controllers\Api\Guides\GuideController;
 use App\Http\Controllers\Api\Instruction\InstructionController;
 use App\Http\Controllers\Api\LessonController;
+use App\Http\Controllers\Api\LessonDetails\LessonDetailsController;
 use App\Http\Controllers\Api\LifeExam\LifeExamController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
 use App\Http\Controllers\Api\AllExamsUsersDegreeController;
@@ -167,6 +168,16 @@ Route::group(['middleware' => 'lang'], function (){
 
     Route::get('instruction/exam/{id}',[InstructionController::class,'instructionExamDetails']);
 
+
+    //start lesson details
+    Route::group(['prefix' => 'lesson','middleware' => 'jwt'], function (){
+        Route::get('all-video-by-lessonId/{id}',[LessonDetailsController::class,'allVideoByLessonId']);
+        Route::get('all-pdf-by-lessonId/{id}',[LessonDetailsController::class,'allPdfByLessonId']);
+        Route::get('all-audios-by-lessonId/{id}',[LessonDetailsController::class,'allAudiosByLessonId']);
+        Route::get('all-exams-by-lessonId/{id}',[LessonDetailsController::class,'allExamsByLessonId']);
+        Route::get('exam-details-by-examId/{id}',[LessonDetailsController::class,'examDetailsByExamId']);
+
+    });
 
 
 });

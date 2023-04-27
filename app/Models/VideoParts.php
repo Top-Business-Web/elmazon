@@ -56,6 +56,13 @@ protected $guarded = [];
         return $this->hasMany(VideoFavorite::class,'video_part_id','id');
     }
 
+
+    public function video_watches(): HasMany{
+
+        return $this->hasMany(VideoWatch::class,'video_part_id','id')
+            ->where('status','=','watched');
+    }
+
     /*
      * start scopes
      */
