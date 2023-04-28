@@ -18,7 +18,7 @@
                     <label for="lesson_id" class="form-control-label">درس</label>
                     <Select name="lesson_id" class="form-control user_choose">
                         <option selected disabled style="text-align: center">اختار درس</option>
-                        <option value="" style="text-align: center">فيديوهات عامة</option>
+{{--                        <option value="" style="text-align: center">فيديوهات عامة</option>--}}
                         @foreach($lessons as $lesson)
                             <option value="{{ $lesson->id }}"
                                     {{ $videosPart->lesson_id == $lesson->id ? 'selected' : '' }}
@@ -47,6 +47,10 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-12">
+                    <label for="background_color" class="form-control-label">لون الخلفية</label>
+                    <input type="color" id="background_color" class="form-control" name="background_color" value="{{ $videosPart->background_color }}">
+                </div>
                 <div class="col-md-12">
                     <label for="name_en" class="form-control-label">ملاحظة</label>
                     <textarea class="form-control" name="note" rows="10">{{ $videosPart->note }}</textarea>

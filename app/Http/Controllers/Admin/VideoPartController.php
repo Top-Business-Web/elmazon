@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreVideoPart;
 use App\Models\Comment;
 use App\Models\CommentReplay;
+use App\Models\VideoFilesUploads;
 use App\Models\VideoParts;
 use App\Models\Lesson;
 use App\Models\VideoRate;
@@ -57,11 +58,11 @@ class VideoPartController extends Controller
                                 <span class="badge badge-secondary">لينك الفيديو</span>
                             </a>';
                     } elseif ($videoParts->type == 'pdf'){
-                        return '<a target="_blank" href="' . asset('pdf/' . $videoParts->link) . '">
+                        return '<a target="_blank" href="' . asset('video_files/pdf/' . $videoParts->link) . '">
                                 <span class="badge badge-success">لينك pdf</span>
                             </a>';
                     } else {
-                        return '<a target="_blank" href="' . asset('sound/' . $videoParts->link) . '">
+                        return '<a target="_blank" href="' . asset('video_files/audios/' . $videoParts->link) . '">
                                 <span class="badge badge-info">لينك صوتي</span>
                             </a>';
                     }
@@ -190,8 +191,8 @@ class VideoPartController extends Controller
 
     public function store(StoreVideoPart $request)
     {
-        $last_orderd = DB::table('video_parts')->orderBy('id', 'DESC')->first()->ordered;
-        $insert = new VideoParts();
+//        $last_orderd = DB::table('video_parts')->orderBy('id', 'DESC')->first()->ordered;
+        $videoPart = new VideoParts();
         $file = $request->file('link');
         $file_name = '';
 
@@ -203,31 +204,40 @@ class VideoPartController extends Controller
                 $file_name = $file->getClientOriginalName();
 
                 if ($extension == 'pdf') {
-                    $file->move('Pdfs', $file_name);
-                    $insert->type = 'pdf';
+                    $file->move('video_files/pdf/', $file_name);
+                    $videoPart->type = 'pdf';
                 } elseif ($extension == 'mp3') {
-                    $file->move('Audios', $file_name);
-                    $insert->type = 'audio';
+                    $file->move('video_files/audios/', $file_name);
+                    $videoPart->type = 'audio';
                 } elseif ($extension == 'mp4') {
                     $file->move('videos', $file_name);
-                    $insert->type = 'video';
+                    $videoPart->type = 'video';
                 }
 
-                $insert->link = $file_name;
+                $videoPart->link = $file_name;
             } else {
                 return response()->json(['status' => 405, 'message' => 'Invalid file type']);
             }
         }
 
-        $insert->name_ar = $request->name_ar;
-        $insert->name_en = $request->name_en;
-        $insert->note = $request->note;
-        $insert->video_time = $request->video_time;
-        $insert->lesson_id = $request->lesson_id;
-        $insert->ordered = $last_orderd + 1;
+        $videoPart->name_ar = $request->name_ar;
+        $videoPart->name_en = $request->name_en;
+        $videoPart->note = $request->note;
+        $videoPart->video_time = $request->video_time;
+        $videoPart->lesson_id = $request->lesson_id;
+        $videoPart->background_color = $request->background_color;
+//        $videoPart->ordered = $last_orderd + 1;
 
-        if ($insert->save()) {
+        if ($videoPart->save()) {
 
+            VideoFilesUploads::create([
+                'name_ar' => $videoPart->name_ar,
+                'name_en' =>  $videoPart->name_en,
+                'background_color' => $videoPart->background_color, // default
+                'file_link' => $videoPart->link,
+                'file_type' => $videoPart->type,
+                'video_part_id' => $videoPart->id,
+            ]);
 //            $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
             return response()->json(['status' => 200]);
         } else {
