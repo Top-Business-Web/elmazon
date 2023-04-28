@@ -98,14 +98,18 @@
 {{--                    @endphp--}}
                     <a href="#" data-toggle="dropdown" class="nav-link pl-2 pr-2  leading-none d-flex">
 									<span>
-										<img src="{{ asset(auth('admin')->user()->image)  }}" alt="profile-user" class="avatar  mr-xl-3 profile-user brround cover-image">
-									</span>
-                        <div class="text-center mt-1 d-none d-xl-block">
-                            <h6 class="text-dark mb-0 fs-13 font-weight-semibold text-capitalize">
-                                {{ auth('admin')->user()->name }}</h6>
-                        </div>
+										<img src="{{ asset(auth('admin')->user()->image) ?? asset('assets/admin/images/logo-mazon.png')  }}" alt="{{ auth('admin')->user()->name }}" class="avatar  mr-xl-3 profile-user brround cover-image">
+                                    </span>
+{{--                        <div class="text-center mt-1 d-none d-xl-block">--}}
+{{--                            <h6 class="text-dark mb-0 fs-13 font-weight-semibold text-capitalize">--}}
+{{--                                {{ auth('admin')->user()->name }}</h6>--}}
+{{--                        </div>--}}
                     </a>
                     <div class="dropdown-menu dropdown-menu-left dropdown-menu-arrow"> {{--style--}}
+                        <h3 class="dropdown-item m-0 text-primary d-flex justify-content-center">
+                            {{ auth('admin')->user()->name }}
+                        </h3>
+                        <hr style="margin-top: 0rem;margin-bottom: 0rem;">
                         <a class="dropdown-item" href="{{ route('myProfile') }}">
                             <i class="dropdown-icon mdi mdi-account-outline"></i> ملفك الشخصي
                         </a>
