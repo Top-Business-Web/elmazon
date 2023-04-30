@@ -9,7 +9,13 @@ class Term extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name_ar',
+        'name_en',
+        'note',
+        'status',
+        'season_id'
+    ];
 
 
     public function seasons()
