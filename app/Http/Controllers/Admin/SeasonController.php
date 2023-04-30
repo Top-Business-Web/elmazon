@@ -52,7 +52,7 @@ class SeasonController extends Controller
 
     // Store START
 
-    public function store(StoreSeason $request)
+    public function store(Request $request)
     {
         $inputs = $request->all();
         if (Season::create($inputs)) {
@@ -74,7 +74,7 @@ class SeasonController extends Controller
 
     // Update START
 
-    public function update(StoreSeason $request, Season $season)
+    public function update(Request $request, Season $season)
     {
         if ($season->update($request->all())) {
             return response()->json(['status' => 200]);

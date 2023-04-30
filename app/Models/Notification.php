@@ -9,7 +9,14 @@ class Notification extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'title',
+        'body',
+        'season_id',
+        'term_id',
+        'image',
+        'user_id',
+    ];
 
     public function term(){
 
@@ -19,6 +26,11 @@ class Notification extends Model
     public function season(){
 
         return $this->belongsTo(Season::class,'season_id','id');
+    }
+
+    public function user(){
+
+        return $this->belongsTo(User::class,'user_id','id');
     }
 
 

@@ -465,7 +465,7 @@
             return true;
         },
         _setAnchor: function (idx) {
-            // Current step anchor > Remove other classes and add done class
+            // Current step anchor > Remove other subject_class and add done class
             this.steps.eq(this.current_index).parent('li').removeClass("active");
             if (this.options.anchorSettings.markDoneStep !== false && this.current_index !== null) {
                 this.steps.eq(this.current_index).parent('li').addClass("done");
@@ -474,7 +474,7 @@
                 }
             }
 
-            // Next step anchor > Remove other classes and add active class
+            // Next step anchor > Remove other subject_class and add active class
             this.steps.eq(idx).parent('li').removeClass("done").addClass("active");
             return true;
         },
@@ -574,7 +574,7 @@
                 return false;
             }
 
-            // Reset all elements and classes
+            // Reset all elements and subject_class
             this.container.stop(true);
             this.pages.stop(true);
             this.pages.hide();

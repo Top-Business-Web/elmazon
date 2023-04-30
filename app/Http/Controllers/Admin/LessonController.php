@@ -21,7 +21,7 @@ class LessonController extends Controller
         $subjectClass = SubjectClass::all();
         $seasons = Season::all();
         if ($request->ajax()) {
-            if ($request->has('subject_class_id') && $request->subject_class_id != ''){
+            if ($request->has('subject_class_id') && $request->subject_class_id != '') {
                 $classs = $request->get('subject_class_id');
                 $lessonList->where('subject_class_id', $classs);
             }
@@ -62,43 +62,11 @@ class LessonController extends Controller
         if ($subjects->count() > 0) {
             return $output;
         } else {
-            return  '<option value="">لا يوجد وحدات</option>';
+            return '<option value="">لا يوجد وحدات</option>';
         }
 
     }
 
-
-
-    // Filter Start
-
-//    public function filterLesson(Request $request)
-//    {
-//        $subjectId = $request->input('subject_class_id');
-//
-//        $lessons = Lesson::query()
-//            ->when($subjectId, function ($query, $subjectId) {
-//                return $query->where('subject_class_id', $subjectId);
-//            })
-//            ->get();
-//
-//        return DataTables::of($lessons)
-//            ->addColumn('action', function ($lessons) {
-//                return '
-//                            <button type="button" data-id="' . $lessons->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
-//                            <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
-//                                    data-id="' . $lessons->id . '" data-title="' . $lessons->name_ar . '">
-//                                    <i class="fas fa-trash"></i>
-//                            </button>
-//                       ';
-//            })
-//            ->editColumn('subject_class_id', function ($lessons) {
-//                return '<td>' . $lessons->subject_class->name_ar . '</td>';
-//            })
-//            ->escapeColumns([])
-//            ->make(true);
-//    }
-
-    // Filter End
 
     // Create Start
 
@@ -147,7 +115,7 @@ class LessonController extends Controller
 
     // Store Start
 
-    public function store(StoreLesson $request)
+    public function store(Request $request)
     {
         $inputs = $request->all();
         if (Lesson::create($inputs)) {
@@ -173,7 +141,7 @@ class LessonController extends Controller
 
     // Update Start
 
-    public function update(Lesson $lesson, StoreLesson $request)
+    public function update(Lesson $lesson, Request $request)
     {
         if ($lesson->update($request->all())) {
             return response()->json(['status' => 200]);

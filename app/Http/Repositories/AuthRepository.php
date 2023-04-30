@@ -471,7 +471,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
                     'life_exam' => $id,
                     'sliders' => SliderResource::collection($sliders),
                     'videos_basics' => VideoBasicResource::collection(VideoBasic::get()),
-                    'classes' => SubjectClassNewResource::collection($classes),
+                    'subject_class' => SubjectClassNewResource::collection($classes),
                     'videos_resources' => VideoResourceResource::collection($videos_resources),
                 ],
                 'code' => 200,

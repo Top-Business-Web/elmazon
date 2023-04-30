@@ -68,13 +68,13 @@ class UserController extends Controller
 
     // Store Start
 
-    public function store(StoreUser $request)
+    public function store(Request $request)
     {
         $inputs = $request->all();
         $inputs['user_status'] = 'active';
 
         if ($request->has('image')) {
-            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/students', 'photo');
+            $inputs['image'] = $this->saveImage($request->image, 'user', 'photo');
         }
 
         if (User::create($inputs)) {
@@ -103,7 +103,7 @@ class UserController extends Controller
      * @throws ImageMimeNotSupportedException
      * @throws DriverIsNotSupportedException
      */
-    public function update(StoreUser $request, User $user)
+    public function update(Request $request, User $user)
     {
 
         $inputs = $request->except('id');
