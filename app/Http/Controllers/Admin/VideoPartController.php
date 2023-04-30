@@ -350,5 +350,5 @@ class VideoPartController extends Controller
         $id = $request->id;
         VideoFilesUploads::find($id)->delete();
         return response()->json(['status' => 'تم الحذف بنجاح']);
-    }
+    } // Delete Files
 }
