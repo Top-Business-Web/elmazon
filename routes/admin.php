@@ -147,6 +147,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     ##### Video Parts #####
     Route::group(['middleware' => 'permission:اقسام الفيديوهات'], function () {
         Route::resource('videosParts', VideoPartController::class);
+        Route::get('showFiles/{id}', [VideoPartController::class,'showFiles'])->name('showFiles');
+        Route::post('modifyFiles/{id}', [VideoPartController::class,'modifyFiles'])->name('modifyFiles');
+        Route::post('deleteFiles', [VideoPartController::class,'deleteFiles'])->name('deleteFiles');
         Route::get('/itemView', array('as' => 'front.home', 'uses' => [VideoPartController::class, 'itemView']))->name('itemView');
         Route::post('/update-items', array('as' => 'update.items', 'uses' => [VideoPartController::class, 'updateItems']))->name('updateItems');
         Route::get('videoPart/comment/{id}', [VideoPartController::class, 'indexCommentVideo'])->name('indexCommentVideo');

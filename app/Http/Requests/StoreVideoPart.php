@@ -26,10 +26,16 @@ class StoreVideoPart extends FormRequest
         return [
             'name_ar' => 'required',
             'name_en' => 'required',
-            'lesson_id' => 'nullable',
-            'link' => 'nullable',
-            'type' => 'required',
-            'video_time' => 'nullable',
+            'lesson_id' => 'required',
+            'link' => 'required|mimes:mp4',
+            'video_time' => 'required',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'link.mimes' => 'يجب ان يكون الملف فيديو',
         ];
     }
 }
