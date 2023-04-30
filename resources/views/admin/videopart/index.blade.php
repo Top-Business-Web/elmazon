@@ -31,6 +31,7 @@
                                 <th class="min-w-50px">الاسم</th>
                                 <th class="min-w-50px">ملاحظة</th>
                                 <th class="min-w-50px">الدرس</th>
+                                <th class="min-w-50px">الشهر</th>
                                 <th class="min-w-50px">لينك</th>
                                 <th class="min-w-50px">وقت الفيديو</th>
                                 <th class="min-w-50px">التقييم</th>
@@ -97,6 +98,7 @@
             {data: 'name_ar', name: 'name_ar'},
             {data: 'note', name: 'note'},
             {data: 'lesson_id', name: 'lesson_id'},
+            {data: 'month', name: 'month'},
             {data: 'link', name: 'link'},
             {data: 'video_time', name: 'video_time'},
             {data: 'rate', name: 'rate'},

@@ -189,7 +189,7 @@ class VideoPartController extends Controller
 
     // Store start
 
-    public function store(StoreVideoPart $request)
+    public function store(Request $request)
     {
 //        $last_orderd = DB::table('video_parts')->orderBy('id', 'DESC')->first()->ordered;
         $videoPart = new VideoParts();
@@ -204,13 +204,13 @@ class VideoPartController extends Controller
                 $file_name = $file->getClientOriginalName();
 
                 if ($extension == 'pdf') {
-                    $file->move('video_files/pdf/', $file_name);
+                    $file->move('videos_basics/pdf/', $file_name);
                     $videoPart->type = 'pdf';
                 } elseif ($extension == 'mp3') {
-                    $file->move('video_files/audios/', $file_name);
+                    $file->move('videos_basics/pdf/', $file_name);
                     $videoPart->type = 'audio';
                 } elseif ($extension == 'mp4') {
-                    $file->move('videos', $file_name);
+                    $file->move('videos_basics/', $file_name);
                     $videoPart->type = 'video';
                 }
 
@@ -223,6 +223,7 @@ class VideoPartController extends Controller
         $videoPart->name_ar = $request->name_ar;
         $videoPart->name_en = $request->name_en;
         $videoPart->note = $request->note;
+        $videoPart->month = $request->month;
         $videoPart->video_time = $request->video_time;
         $videoPart->lesson_id = $request->lesson_id;
         $videoPart->background_color = $request->background_color;
@@ -235,6 +236,7 @@ class VideoPartController extends Controller
                 'name_en' =>  $videoPart->name_en,
                 'background_color' => $videoPart->background_color, // default
                 'file_link' => $videoPart->link,
+                'month' => $videoPart->month,
                 'file_type' => $videoPart->type,
                 'video_part_id' => $videoPart->id,
             ]);
@@ -278,13 +280,13 @@ class VideoPartController extends Controller
                 $file_name = $file->getClientOriginalName();
 
                 if ($extension == 'pdf') {
-                    $file->move('Pdfs', $file_name);
+                    $file->move('videos_basics/pdf/', $file_name);
                     $videoPart->type = 'pdf';
                 } elseif ($extension == 'mp3') {
-                    $file->move('Audios', $file_name);
+                    $file->move('videos_basics/pdf/', $file_name);
                     $videoPart->type = 'audio';
                 } elseif ($extension == 'mp4') {
-                    $file->move('videos', $file_name);
+                    $file->move('videos_basics/', $file_name);
                     $videoPart->type = 'video';
                 }
 
@@ -297,6 +299,7 @@ class VideoPartController extends Controller
         $videoPart->name_ar = $request->name_ar;
         $videoPart->name_en = $request->name_en;
         $videoPart->note = $request->note;
+        $videoPart->month = $request->month;
         $videoPart->video_time = $request->video_time;
         $videoPart->lesson_id = $request->lesson_id;
 

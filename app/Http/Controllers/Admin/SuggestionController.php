@@ -24,6 +24,27 @@ class SuggestionController extends Controller
                             </button>
                        ';
                 })
+                ->editColumn('user_id', function ($suggestions) {
+                        return '<td>'. $suggestions->user->name .'</td>';
+                })
+                ->editColumn('audio', function ($suggestions) {
+                    if($suggestions->audio) {
+                        return '<td>'. ($suggestions->audio ? $suggestions->audio : '____') .'</td>';
+                    }
+                    else
+                    {
+                        return '____';
+                    }
+                })
+                ->editColumn('suggestion', function ($suggestions) {
+                    if($suggestions->suggestion) {
+                        return '<td>'. ($suggestions->suggestion ? $suggestions->suggestion : '____') .'</td>';
+                    }
+                    else
+                    {
+                        return '____';
+                    }
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {
@@ -35,7 +56,7 @@ class SuggestionController extends Controller
 
     // Delete Start
 
-    public function delete(Request $request)
+    public function destroy(Request $request)
     {
         $suggestion = Suggestion::where('id', $request->id)->firstOrFail();
         $suggestion->delete();
