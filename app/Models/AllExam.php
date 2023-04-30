@@ -81,7 +81,6 @@ class AllExam extends Model
     * start scopes
     */
 
-
     public function scopeAllExamFavorite($query){
 
         return $query->whereHas('exams_favorites', function ($q){
