@@ -32,6 +32,7 @@ class AllExamRequest extends FormRequest
             'pdf_num_questions' => 'nullable',
             'answer_pdf_file' => 'nullable',
             'answer_video_file' => 'nullable',
+            'background_color' => 'nullable',
             'date_exam' => 'required',
             'quize_minute' => 'required',
             'trying_number' => 'required',

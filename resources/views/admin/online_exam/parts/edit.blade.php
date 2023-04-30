@@ -100,12 +100,12 @@
                     <select name="term_id"
                             class="form-control selectTerm" @selected( old('term_id',$onlineExam->term_id))>
                         <option disabled style="text-align: center">اختر تيرم</option>
-                        <option value="{{ $onlineExam->term_id }}" class="form-control">{{ $onlineExam->term->name_ar }}</option>
+                        <option value="{{ $onlineExam->term_id }}" class="form-control">{{ $onlineExam->term->name_ar ?? '' }}</option>
                     </select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <label for="type" class="form-control-label">النوع</label>
                     <Select name="examable_type" id="type" class="form-control type_choose"
                             required="required" @selected( old('examable_type',$onlineExam->type))>
@@ -115,11 +115,15 @@
                         <option value="App\Models\VideoParts" style="text-align: center">الفيديو</option>
                     </Select>
                 </div>
+                <div class="col-md-6">
+                    <label for="note" class="form-control-label">لون الخلفية</label>
+                    <input type="color" class="form-control" value="{{ $onlineExam->background_color }}" name="background_color" required>
+                </div>
                 <div class="col-md-12">
                     <label for="lesson" class="form-control-label typeName">الدرس</label>
                     <Select name="examable_id" class="form-control type_ajax_choose" required="required">
                         <option value="{{ $onlineExam->term_id ?? $onlineExam->class_id ?? $onlineExam->video_id }}">
-                            {{ $onlineExam->lesson->name_ar ?? $onlineExam->class->name_ar ?? $onlineExam->video->name_ar }}
+                            {{ $onlineExam->lesson->name_ar ?? $onlineExam->class->name_ar ?? $onlineExam->video->name_ar ?? '' }}
                         </option>
                     </Select>
                 </div>
@@ -128,10 +132,12 @@
                 <div class="col-md-6">
                     <label class="control-label">التعليمات بالعربية</label>
                     <div class="form-group itemItems1">
+                        @if($onlineExam->instruction_ar != null)
                         @foreach($onlineExam->instruction_ar as $val1)
                             <input type="text" name="instruction_ar[]" class="form-control mt-3 InputItemExtra1"
                                    value="{{ $val1 }}">
                         @endforeach
+                        @endif
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -144,9 +150,11 @@
                 <div class="col-md-6">
                     <label class="control-label">التعليمات بالانجليزية</label>
                     <div class="form-group itemItems2">
+                        @if($onlineExam->instruction_en != null)
                         @foreach($onlineExam->instruction_en as $val2)
                             <input type="text" name="instruction_en[]" class="form-control mt-3 InputItemExtra2" value="{{ $val2 }}">
                         @endforeach
+                            @endif
                     </div>
                 </div>
                 <div class="col-md-6">

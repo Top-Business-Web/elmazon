@@ -34,9 +34,10 @@ class VideoPartController extends Controller
                     return '
                             <button type="button" data-id="' . $videoParts->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
-                                    data-id="' . $videoParts->id . '" data-title="' .' '. $videoParts->name_ar .' '. '">
+                                    data-id="' . $videoParts->id . '" data-title="' . ' ' . $videoParts->name_ar . ' ' . '">
                                     <i class="fas fa-trash"></i>
                             </button>
+                             <button type="button" data-id="' . $videoParts->id . '" class="btn btn-pill btn-info-light addFile"><i class="fa fa-file"></i>الملحقات</button>
                             <a href="' . route('indexCommentVideo', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-success-light"> تعليقات <i class="fa fa-comment"></i></a>
                        ';
                 })
@@ -45,27 +46,17 @@ class VideoPartController extends Controller
                 })
                 ->addColumn('rate', function ($videoParts) {
                     $like = VideoRate::where('video_id', $videoParts->id)
-                        ->where('action','=', 'like')
+                        ->where('action', '=', 'like')
                         ->count('action');
                     $disLike = VideoRate::where('video_id', $videoParts->id)
-                        ->where('action','=', 'dislike')
+                        ->where('action', '=', 'dislike')
                         ->count('action');
-                    return  $like . ' <i class="fa fa-thumbs-up ml-2 mr-2 text-success"></i> ' . $disLike . '<i class="fa fa-thumbs-down text-danger ml-2 mr-2"></i>' ;
+                    return $like . ' <i class="fa fa-thumbs-up ml-2 mr-2 text-success"></i> ' . $disLike . '<i class="fa fa-thumbs-down text-danger ml-2 mr-2"></i>';
                 })
                 ->editColumn('link', function ($videoParts) {
-                    if ($videoParts->type == 'video'){
-                        return '<a target="_blank" href="' . asset('videos/' . $videoParts->link) . '">
+                    return '<a target="_blank" href="' . asset('videos/' . $videoParts->link) . '">
                                 <span class="badge badge-secondary">لينك الفيديو</span>
                             </a>';
-                    } elseif ($videoParts->type == 'pdf'){
-                        return '<a target="_blank" href="' . asset('video_files/pdf/' . $videoParts->link) . '">
-                                <span class="badge badge-success">لينك pdf</span>
-                            </a>';
-                    } else {
-                        return '<a target="_blank" href="' . asset('video_files/audios/' . $videoParts->link) . '">
-                                <span class="badge badge-info">لينك صوتي</span>
-                            </a>';
-                    }
                 })
                 ->escapeColumns([])
                 ->make(true);
@@ -78,7 +69,7 @@ class VideoPartController extends Controller
 
     // Video Part Comment
 
-    public function indexCommentVideo(Request $request,$id)
+    public function indexCommentVideo(Request $request, $id)
     {
         if ($request->ajax()) {
             $comments = Comment::where('video_part_id', $id)->get();
@@ -94,18 +85,18 @@ class VideoPartController extends Controller
                        ';
                 })
                 ->editColumn('user_id', function ($comments) {
-                    return '<td>'. $comments->user->name .'</td>';
+                    return '<td>' . $comments->user->name . '</td>';
                 })
                 ->editColumn('image', function ($comments) {
                     if ($comments->image)
-                        return '<a href="' . asset('comments_upload_file/'.$comments->image) . '">
-                                '.$comments->image.'
+                        return '<a href="' . asset('comments_upload_file/' . $comments->image) . '">
+                                ' . $comments->image . '
                             </a>';
                 })
                 ->escapeColumns([])
                 ->make(true);
         } else {
-            return view('admin.videopart.parts.comments',compact('id'));
+            return view('admin.videopart.parts.comments', compact('id'));
         }
     }
 
@@ -135,7 +126,7 @@ class VideoPartController extends Controller
 
     // Video Part Comment Reply
 
-    public function indexCommentVideoReply(Request $request,$id)
+    public function indexCommentVideoReply(Request $request, $id)
     {
         if ($request->ajax()) {
             $comments_replys = CommentReplay::where('comment_id', $id)
@@ -150,21 +141,21 @@ class VideoPartController extends Controller
                        ';
                 })
                 ->editColumn('teacher_id', function ($comments_replys) {
-                    return '<td>'. @$comments_replys->teacher->name  .'</td>';
+                    return '<td>' . @$comments_replys->teacher->name . '</td>';
                 })
                 ->editColumn('student_id', function ($comments_replys) {
-                    return '<td>'. @$comments_replys->student->name  .'</td>';
+                    return '<td>' . @$comments_replys->student->name . '</td>';
                 })
                 ->editColumn('image', function ($comments_replys) {
                     if ($comments_replys->image)
-                        return '<a href="' . asset('comments_upload_file/'.$comments_replys->image) . '">
-                                '.$comments_replys->image.'
+                        return '<a href="' . asset('comments_upload_file/' . $comments_replys->image) . '">
+                                ' . $comments_replys->image . '
                             </a>';
                 })
                 ->escapeColumns([])
                 ->make(true);
         } else {
-            return view('admin.videopart.parts.comment_reply',compact('id'));
+            return view('admin.videopart.parts.comment_reply', compact('id'));
         }
     }
 
@@ -197,28 +188,13 @@ class VideoPartController extends Controller
         $file_name = '';
 
         if ($request->hasFile('link')) {
-            $extension = $file->getClientOriginalExtension();
-            $allowed_file_types = ['pdf', 'mp3', 'mp4'];
-
-            if (in_array($extension, $allowed_file_types)) {
-                $file_name = $file->getClientOriginalName();
-
-                if ($extension == 'pdf') {
-                    $file->move('video_files/pdf/', $file_name);
-                    $videoPart->type = 'pdf';
-                } elseif ($extension == 'mp3') {
-                    $file->move('video_files/audios/', $file_name);
-                    $videoPart->type = 'audio';
-                } elseif ($extension == 'mp4') {
-                    $file->move('videos', $file_name);
-                    $videoPart->type = 'video';
-                }
-
-                $videoPart->link = $file_name;
-            } else {
-                return response()->json(['status' => 405, 'message' => 'Invalid file type']);
-            }
+            $file_name = $file->getClientOriginalName();
+            $file->move('videos', $file_name);
+            $videoPart->link = $file_name;
+        } else {
+            return response()->json(['status' => 405, 'message' => 'Invalid file type']);
         }
+
 
         $videoPart->name_ar = $request->name_ar;
         $videoPart->name_en = $request->name_en;
@@ -229,37 +205,30 @@ class VideoPartController extends Controller
 //        $videoPart->ordered = $last_orderd + 1;
 
         if ($videoPart->save()) {
-
-            VideoFilesUploads::create([
-                'name_ar' => $videoPart->name_ar,
-                'name_en' =>  $videoPart->name_en,
-                'background_color' => $videoPart->background_color, // default
-                'file_link' => $videoPart->link,
-                'file_type' => $videoPart->type,
-                'video_part_id' => $videoPart->id,
-            ]);
-//            $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
+            $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id], $request->season_id);
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
         }
     }
 
-    // Store End
+// Store End
 
-    // Edit start
+// Edit start
 
-    public function edit(VideoParts $videosPart)
+    public
+    function edit(VideoParts $videosPart)
     {
         $lessons = Lesson::get();
         return view('admin.videopart.parts.edit', compact('videosPart', 'lessons'));
     }
 
-    // Edit End
+// Edit End
 
-    // Update start
+// Update start
 
-    public function update(Request $request, $id)
+    public
+    function update(Request $request, $id)
     {
         $videoPart = VideoParts::find($id);
 
@@ -308,22 +277,24 @@ class VideoPartController extends Controller
     }
 
 
-    // Update end
+// Update end
 
-    // Destroy Start
+// Destroy Start
 
-    public function destroy(Request $request)
+    public
+    function destroy(Request $request)
     {
         $videoParts = VideoParts::where('id', $request->id)->firstOrFail();
         $videoParts->delete();
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Destroy End
+// Destroy End
 
-    // Drag Start
+// Drag Start
 
-    public function updateItems(Request $request)
+    public
+    function updateItems(Request $request)
     {
         $input = $request->all();
 
@@ -338,7 +309,46 @@ class VideoPartController extends Controller
         }
 
         return response()->json(['status' => 'success']);
-    }
+    }// Drag End
 
-    // Drag End
+
+    public function showFiles(Request $request, $id)
+    {
+        $files = VideoFilesUploads::where('video_part_id', '=', $id)->get();
+        return view('admin.videopart.parts.files', compact('id', 'files'));
+    } // Show Files
+
+    public function modifyFiles(Request $request, $id)
+    {
+
+        if ($request->has('file_link')) {
+
+            $file = $request->file('file_link');
+            $file_name = $file->getClientOriginalName();
+
+            if ($request->type == 'pdf') {
+                $file->move('video_files/pdf', $file_name);
+            } else {
+                $file->move('video_files/audios', $file_name);
+            }
+        }
+
+        VideoFilesUploads::create([
+            'name_ar' => $request->name_ar,
+            'name_en' => $request->name_en,
+            'background_color' => $request->background_color, // default
+            'file_link' => $file_name,
+            'file_type' => $request->type,
+            'video_part_id' => $id,
+        ]);
+
+        return response()->json(['status' => 200]);
+    } // Modify Files
+
+    public function deleteFiles(Request $request)
+    {
+        $id = $request->id;
+        VideoFilesUploads::find($id)->delete();
+        return response()->json(['status' => 'تم الحذف بنجاح']);
+    } // Delete Files
 }
