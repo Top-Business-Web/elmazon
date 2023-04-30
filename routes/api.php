@@ -171,8 +171,9 @@ Route::group(['middleware' => 'lang'], function (){
     //start lesson details
     Route::group(['prefix' => 'lesson','middleware' => 'jwt'], function (){
         Route::get('all-video-by-lessonId/{id}',[LessonDetailsController::class,'allVideoByLessonId']);
-        Route::get('all-pdf-by-lessonId/{id}',[LessonDetailsController::class,'allPdfByLessonId']);
-        Route::get('all-audios-by-lessonId/{id}',[LessonDetailsController::class,'allAudiosByLessonId']);
+        Route::get('all-pdf-by-videoId/{id}',[LessonDetailsController::class,'allPdfByVideoId']);
+        Route::get('all-audios-by-videoId/{id}',[LessonDetailsController::class,'allAudiosByVideoId']);
+        Route::get('all-exams-by-videoId/{id}',[LessonDetailsController::class,'allExamsByVideoId']);
         Route::get('all-exams-by-lessonId/{id}',[LessonDetailsController::class,'allExamsByLessonId']);
         Route::get('exam-details-by-examId/{id}',[LessonDetailsController::class,'examDetailsByExamId']);
 
