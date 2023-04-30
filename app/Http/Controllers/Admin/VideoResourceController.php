@@ -50,16 +50,31 @@ class VideoResourceController extends Controller
                            value="' . $video_resource->background_color . '" disabled>';
                 })
                 ->editColumn('video_link', function ($video_resource) {
-                    if ($video_resource->video_link)
-                        return '<a href="' . asset($video_resource->video_link) . '">
-                                لينك الفيديو
-                            </a>';
+                    if ($video_resource->video_link) {
+                        return '<a href="' . asset($video_resource->video_link) . '">'
+                            . ($video_resource->video_link ? $video_resource->video_link : '____') .
+                            '</a>';
+                    } else {
+                        return '____';
+                    }
                 })
                 ->editColumn('pdf_file', function ($video_resource) {
                     if ($video_resource->pdf_file)
-                        return '<a href="' . asset($video_resource->pdf_file) . '">
-                                لينك الملف الورقي
-                            </a>';
+                        return '<a href="' . asset($video_resource->pdf_file) . '">'
+                               . ($video_resource->pdf_file ? $video_resource->pdf_file : '____') .
+                            '</a>';
+                    else
+                    {
+                        return '____';
+                    }
+                })
+                ->editColumn('time', function ($video_resource) {
+                    if ($video_resource->time)
+                        return '<td>'. ($video_resource->time ? $video_resource->time : '____') .'</td>';
+                    else
+                    {
+                        return '____';
+                    }
                 })
                 ->filter(function ($video_resource) use ($request) {
                     if ($request->get('season_id')) {
@@ -89,7 +104,7 @@ class VideoResourceController extends Controller
                                     <i class="fas fa-trash"></i>
                             </button>
                                 <button type="button" data-id="' . $comments->id . '" class="btn btn-pill btn-primary-light addReply"><i class="fa fa-plus"></i>اضافة رد</button>
-                            <a href="' . route('indexCommentVideoReply', $comments->id) . '" class="btn btn-pill btn-success-light">الردود<li class="fa fa-reply"></li></a>
+                            <a href="' . route('indexCommentResourceReply', $comments->id) . '" class="btn btn-pill btn-success-light">الردود<li class="fa fa-reply"></li></a>
                        ';
                 })
                 ->editColumn('user_id', function ($comments) {
@@ -126,7 +141,13 @@ class VideoResourceController extends Controller
                        ';
                 })
                 ->editColumn('user_id', function ($comments_replys) {
-                    return '<td>'. $comments_replys->user->name .'</td>';
+                    if($comments_replys->user->name) {
+                        return '<td>'. ($comments_replys->user->name ? $comments_replys->user->name : '____') .'</td>';
+                    }
+                    else
+                    {
+                        return '____';
+                    }
                 })
                 ->editColumn('image', function ($comments_replys) {
                     if ($comments_replys->image)
@@ -204,7 +225,7 @@ class VideoResourceController extends Controller
 
     // Store Start
 
-    public function store(StoreVideoResource $request)
+    public function store(Request $request)
     {
         $inputs = $request->all();
 
@@ -245,7 +266,7 @@ class VideoResourceController extends Controller
 
     // Update Start
 
-    public function update(UpdateVideoResource $request, VideoResource $videoResource)
+    public function update(Request  $request, VideoResource $videoResource)
     {
 
         if ($image = $request->hasFile('image')) {

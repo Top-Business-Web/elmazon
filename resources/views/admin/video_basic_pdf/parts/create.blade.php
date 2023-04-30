@@ -5,17 +5,17 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم باللغة العربية</label>
-                    <input type="text" class="form-control" name="name_ar">
+                    <input type="text" class="form-control" name="name_ar" required>
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم باللغة الانجليزية</label>
-                    <input type="text" class="form-control" name="name_en">
+                    <input type="text" class="form-control" name="name_en" required>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <label for="">النوع :</label>
-                    <select name="type" class="form-control type_choose">
+                    <select name="type" class="form-control type_choose" required>
                         <option style="text-align: center" value="video_basic">فيديو تأسيسي</option>
                         <option style="text-align: center" value="video_resource">مصدر الفيديو</option>
                     </select>

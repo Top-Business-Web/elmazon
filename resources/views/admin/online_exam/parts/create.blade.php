@@ -41,7 +41,7 @@
             <div class="row">
                 <div class="col-md-2">
                     <label for="name_ar" class="form-control-label">الدرجة</label>
-                    <input type="number" class="form-control" name="degree" style="text-align: center">
+                    <input type="number" class="form-control" name="degree" style="text-align: center" required >
                 </div>
                 <div class="col-md-5">
                     <label for="date_exam" class="form-control-label">موعد الامتحان</label>

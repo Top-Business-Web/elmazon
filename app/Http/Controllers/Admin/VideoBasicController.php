@@ -176,11 +176,11 @@ class VideoBasicController extends Controller
 
     // Store Start
 
-    public function store(StoreVideoBasic $request)
+    public function store(Request $request)
     {
         $inputs = $request->all();
         if($request->hasFile('video_link')){
-                $inputs['video_link'] = $this->saveImage($request->video_link, 'assets/uploads/video_basic/image', 'photo');
+                $inputs['video_link'] = $this->saveImage($request->video_link, 'videos_basics/', 'photo');
         }
         if(VideoBasic::create($inputs)) {
             return response()->json(['status' => 200]);
@@ -206,11 +206,11 @@ class VideoBasicController extends Controller
 
     // Update Start
 
-    public function update(UpdateVideoBasic $request, VideoBasic $videoBasic)
+    public function update(Request $request, VideoBasic $videoBasic)
     {
         $inputs = $request->all();
         if($request->hasFile('video_link')){
-            $inputs['video_link'] = $this->saveImage($request->video_link, 'assets/uploads/video_basic/image', 'photo');
+            $inputs['video_link'] = $this->saveImage($request->video_link, 'videos_basics/', 'photo');
         }
 
         if ($videoBasic->update($inputs)) {
