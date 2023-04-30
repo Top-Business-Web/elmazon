@@ -66,7 +66,6 @@ class LessonDetailsController extends Controller{
 
           $video = VideoParts::where('id','=',$id)->first();
           if(!$video){
-
               return self::returnResponseDataApi(null,"هذا الفيديو غير موجود",404,404);
           }
 
@@ -88,7 +87,6 @@ class LessonDetailsController extends Controller{
         $allExams = OnlineExam::query()->where('lesson_id','=',$lesson->id)->get();
 
         return self::returnResponseDataApi(OnlineExamNewResource::collection($allExams),"تم الحصول علي جميع امتحانات الدرس بنجاح",200);
-
 
     }
 

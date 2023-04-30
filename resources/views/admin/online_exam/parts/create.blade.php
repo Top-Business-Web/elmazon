@@ -89,7 +89,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <label for="type" class="form-control-label">النوع</label>
                     <Select name="examable_type" id="type" class="form-control type_choose" required="required">
                         <option selected disabled style="text-align: center">اختار النوع</option>
@@ -97,6 +97,10 @@
                         <option value="App\Models\class" style="text-align: center">فصل</option>
                         <option value="App\Models\VideoParts" style="text-align: center">الفيديو</option>
                     </Select>
+                </div>
+                <div class="col-md-6">
+                    <label for="note" class="form-control-label">لون الخلفية</label>
+                    <input type="color" class="form-control" value="" name="background_color" required>
                 </div>
                 <div class="col-md-12">
                     <label for="lesson" class="form-control-label typeName">الدرس</label>

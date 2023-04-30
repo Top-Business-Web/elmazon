@@ -64,7 +64,8 @@
                             أغلاق
                         </button>
                         <button type="button" class="btn btn-danger"
-                                id="delete_btn">حذف</button>
+                                id="delete_btn">حذف
+                        </button>
                     </div>
                 </div>
             </div>
@@ -72,7 +73,8 @@
         <!-- MODAL CLOSED -->
 
         <!-- Create Or Edit Modal -->
-        <div class="modal fade bd-example-modal-lg" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog"
+             aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -113,6 +115,20 @@
         // Add Using Ajax
         showEditModal('{{route('videosParts.edit',':id')}}');
         editScript();
+
+        $(document).on('click', '.addFile', function () {
+            var id = $(this).data('id')
+            var url = '{{ route('showFiles', ':id') }}';
+            url = url.replace(':id', id)
+            $('#modal-body').html(loader)
+            $('#editOrCreate').modal('show')
+
+            setTimeout(function () {
+                $('#modal-body').load(url)
+            }, 500)
+        })
+
+
     </script>
 @endsection
 

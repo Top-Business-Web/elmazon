@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 class MonthlyPlanController extends Controller{
 
 
-    public function all_plans(Request $request) : JsonResponse{
+    public function all_plans(Request $request){
 
         try {
 

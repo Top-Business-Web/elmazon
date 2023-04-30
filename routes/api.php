@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\LessonDetails\LessonDetailsController;
 use App\Http\Controllers\Api\LifeExam\LifeExamController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
 use App\Http\Controllers\Api\AllExamsUsersDegreeController;
+use App\Http\Controllers\Api\Notes\NoteController;
 use App\Http\Controllers\Api\OnBoardingController;
 use App\Http\Controllers\Api\Payment;
 use App\Http\Controllers\Api\Question\QuestionController;
@@ -177,6 +178,14 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('all-exams-by-videoId/{id}',[LessonDetailsController::class,'allExamsByVideoId']);
         Route::get('all-exams-by-lessonId/{id}',[LessonDetailsController::class,'allExamsByLessonId']);
         Route::get('exam-details-by-examId/{id}',[LessonDetailsController::class,'examDetailsByExamId']);
+
+    });
+
+
+    //start note add and note details
+    Route::group(['prefix' => 'notes','middleware' => 'jwt'], function (){
+        Route::post('note-add-by-student',[NoteController::class,'noteAddByStudent']);
+        Route::get('note-all-by-date',[NoteController::class,'noteAllByDate']);
 
     });
 

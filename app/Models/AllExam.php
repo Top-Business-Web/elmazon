@@ -15,6 +15,7 @@ class AllExam extends Model
         'name_ar',
         'name_en',
         'exam_type',
+        'background_color',
         'pdf_file_upload',
         'pdf_num_questions',
         'answer_pdf_file',
@@ -80,7 +81,6 @@ class AllExam extends Model
     /*
     * start scopes
     */
-
 
     public function scopeAllExamFavorite($query){
 
