@@ -188,27 +188,32 @@ class OnlineExamController extends Controller
                     $data = Lesson::whereIn('subject_class_id', $subjectClass)
                         ->pluck('name_ar', 'id')->toArray();
 
-                } else if ($request->id == 'App\Models\class') {
-
-                    $data = SubjectClass::where('season_id', $request->season_id)
-                        ->where('term_id', $request->term)
-                        ->pluck('name_ar', 'id')->toArray();
-
-                } else if ($request->id == 'App\Models\VideoParts') {
-                    $data = videoParts::pluck('name_ar', 'id')->toArray();
                 }
+            } else if ($request->type == 'App\Models\SubjectClass') {
 
+                $data = SubjectClass::where('season_id', $request->season)
+                    ->where('term_id', $request->term)
+                    ->pluck('name_ar', 'id')->toArray();
+
+
+            } else if ($request->type == 'App\Models\VideoParts') {
+                $data = videoParts::pluck('name_ar', 'id')->toArray();
+            }
+            if (!$data) {
+                return response()->json(['' => 'لايوجد بيانات']);
+            } else {
                 return $data;
-
             }
         }
+
     }
 
-    // Examble Type End
+// Examble Type End
 
-    // Store End
+// Store End
 
-    public function store(OnlineExamRequest $request, OnlineExam $online_exam)
+    public
+    function store(OnlineExamRequest $request, OnlineExam $online_exam)
     {
 //        dd(file_size(asset('online_exams/pdf_answers/1.pdf')));
         $inputs = $request->all();
@@ -243,37 +248,39 @@ class OnlineExamController extends Controller
         }
     } // Store End
 
-    public function edit(OnlineExam $onlineExam)
+    public
+    function edit(OnlineExam $onlineExam)
     {
         $seasons = Season::all();
         $terms = Term::all();
         return view('admin.online_exam.parts.edit', compact('onlineExam', 'seasons', 'terms'));
     }
 
-    // Update Start
+// Update Start
 
-    public function update(OnlineExamRequest $request, OnlineExam $onlineExam)
+    public
+    function update(OnlineExamRequest $request, OnlineExam $onlineExam)
     {
 
         $inputs = $request->all();
 
 
         if ($request->has('pdf_file_upload')) {
-             if (file_exists($onlineExam->pdf_file_upload)) {
+            if (file_exists($onlineExam->pdf_file_upload)) {
                 unlink($onlineExam->pdf_file_upload);
             }
             $inputs['pdf_file_upload'] = saveFile('online_exams/pdf_file_uploads', $request->pdf_file_upload);
         } // end save file
 
         if ($request->has('answer_pdf_file')) {
-             if (file_exists($onlineExam->answer_pdf_file)) {
+            if (file_exists($onlineExam->answer_pdf_file)) {
                 unlink($onlineExam->answer_pdf_file);
             }
             $inputs['answer_pdf_file'] = saveFile('online_exams/pdf_answers', $request->answer_pdf_file);
         } // end save file
 
         if ($request->has('answer_video_file')) {
-             if (file_exists($onlineExam->answer_pdf_file)) {
+            if (file_exists($onlineExam->answer_pdf_file)) {
                 unlink($onlineExam->answer_video_file);
             }
             $inputs['answer_video_file'] = saveFile('online_exams/videos_answers', $request->answer_video_file);
@@ -298,11 +305,12 @@ class OnlineExamController extends Controller
         }
     }
 
-    // Update End
+// Update End
 
-    // Destroy Start
+// Destroy Start
 
-    public function destroy(Request $request)
+    public
+    function destroy(Request $request)
     {
         $onlineExam = OnlineExam::where('id', $request->id)->firstOrFail();
         $onlineExam->delete();
@@ -310,7 +318,8 @@ class OnlineExamController extends Controller
     }// Delete End
 
 
-    public function addDegreeForTextExam(Request $request)
+    public
+    function addDegreeForTextExam(Request $request)
     {
 
         $text_exam_user = TextExamUser::findOrFail($request->exam_id);
