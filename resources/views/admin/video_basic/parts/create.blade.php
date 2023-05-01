@@ -5,29 +5,29 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم باللغة العربية</label>
-                    <input type="text" class="form-control" name="name_ar">
+                    <input type="text" class="form-control" name="name_ar" required>
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم باللغة الانجليزية</label>
-                    <input type="text" class="form-control" name="name_en">
+                    <input type="text" class="form-control" name="name_en" required>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <label for="head">لون الخلفية</label>
                     <input type="color" class="form-control" name="background_color"
-                           value="">
+                           value="" required>
                 </div>
                 <div class="col-md-6">
                     <label for="time" class="form-control-label">المدة</label>
-                    <input type="number" class="form-control" name="time">
+                    <input type="number" class="form-control" name="time" required>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <label for="">لينك الفيديو :</label>
                     <input type="file" name="video_link" class="dropify"
-                           data-default-file=""/>
+                           data-default-file="" required/>
                 </div>
             </div>
         </div>

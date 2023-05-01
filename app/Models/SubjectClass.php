@@ -9,7 +9,18 @@ use Stripe\ApiOperations\All;
 class SubjectClass extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+
+    protected $fillable = [
+        'title_ar',
+        'title_en',
+        'name_ar',
+        'name_en',
+        'note',
+        'image',
+        'background_color',
+        'term_id',
+        'season_id',
+    ];
 
 
     public function lessons(){
@@ -27,12 +38,6 @@ class SubjectClass extends Model
 
         return $this->belongsTo(Term::class,'term_id','id');
     }
-
-//    public function exams()
-//    {
-//        return $this->morphMany(OnlineExam::class, 'examable');
-//    }
-
 
     public function exams()
     {

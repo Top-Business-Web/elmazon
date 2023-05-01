@@ -19,8 +19,9 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">الاقتراح</th>
                                 <th class="min-w-50px">الطالب</th>
+                                <th class="min-w-50px">الاقتراح</th>
+                                <th class="min-w-50px">الصوت</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -81,8 +82,9 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'suggestion', name: 'suggestion'},
             {data: 'user_id', name: 'user_id'},
+            {data: 'suggestion', name: 'suggestion'},
+            {data: 'audio', name: 'audio'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('suggestions.index')}}', columns);

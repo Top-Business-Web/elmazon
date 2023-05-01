@@ -5,17 +5,17 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم باللغة العربية</label>
-                    <input type="text" class="form-control" name="name_ar">
+                    <input type="text" class="form-control" name="name_ar" required>
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم باللغة الانجليزية</label>
-                    <input type="text" class="form-control" name="name_en">
+                    <input type="text" class="form-control" name="name_en" required>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الصف</label>
-                    <Select name="season_id" class="form-control">
+                    <Select name="season_id" class="form-control" required>
                         <option selected disabled style="text-align: center">اختار الصف</option>
                         @foreach ($data['seasons'] as $season)
                             <option value="{{ $season->id }}" style="text-align: center">{{ $season->name_ar }}</option>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الترم</label>
-                    <Select name="term_id" class="form-control">
+                    <Select name="term_id" class="form-control" required>
                         <option selected disabled style="text-align: center">اختار الترم</option>
                         @foreach ($data['terms'] as $term)
                             <option value="{{ $term->id }}" style="text-align: center">
@@ -37,15 +37,15 @@
                 <div class="col-md-4">
                     <label for="head">لون الخلفية</label>
                     <input type="color" class="form-control" name="background_color"
-                           value="">
+                           value="" required>
                 </div>
                 <div class="col-md-4">
                     <label for="time" class="form-control-label">الوقت</label>
-                    <input type="number" class="form-control" name="time">
+                    <input type="number" class="form-control time_video" name="time" required>
                 </div>
                 <div class="col-md-4">
                     <label for="">النوع :</label>
-                    <select class="form-control" name="type" id="type_choose">
+                    <select class="form-control" name="type" id="type_choose" required>
                         <option style="text-align: center" value="video">فيديو</option>
                         <option style="text-align: center" value="pdf">ملف ورقي</option>
                     </select>
@@ -108,10 +108,12 @@
             if('video' === value) {
                 $('.video').prop('disabled', false);
                 $('.pdf').prop('disabled', true);
+                $('.time_video').prop('disabled', false);
             }
             else {
                 $('.pdf').prop('disabled', false);
                 $('.video').prop('disabled', true);
+                $('.time_video').prop('disabled', true);
             }
         })
     });

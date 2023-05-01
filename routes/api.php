@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\LessonDetails\LessonDetailsController;
 use App\Http\Controllers\Api\LifeExam\LifeExamController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
 use App\Http\Controllers\Api\AllExamsUsersDegreeController;
+use App\Http\Controllers\Api\Notes\NoteController;
 use App\Http\Controllers\Api\OnBoardingController;
 use App\Http\Controllers\Api\Payment;
 use App\Http\Controllers\Api\Question\QuestionController;
@@ -54,7 +55,7 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('papel-sheet-exam/show',[AuthController::class,'paper_sheet_exam_show']);
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
-        Route::get('home-page/all-classes',[AuthController::class,'allClasses']);
+        Route::get('home-page/all-subject_class',[AuthController::class,'allClasses']);
         Route::get('home-page/all-exams',[AuthController::class,'all_exams']);
         Route::get('home-page/start-your-journey',[AuthController::class,'startYourJourney']);
         Route::get('home-page/start-your-journey/findExamByClassById/{id}',[AuthController::class,'findExamByClassById']);
@@ -68,7 +69,7 @@ Route::group(['middleware' => 'lang'], function (){
     });
   });
 
-    Route::group(['prefix' => 'classes','middleware' => ['jwt']], function (){
+    Route::group(['prefix' => 'subject_class','middleware' => ['jwt']], function (){
         Route::get('all',[SubjectClassController::class,'allClasses']);
         Route::get('lessonsByClassId/{id}',[SubjectClassController::class,'lessonsByClassId']);
     });
@@ -172,10 +173,20 @@ Route::group(['middleware' => 'lang'], function (){
     //start lesson details
     Route::group(['prefix' => 'lesson','middleware' => 'jwt'], function (){
         Route::get('all-video-by-lessonId/{id}',[LessonDetailsController::class,'allVideoByLessonId']);
-        Route::get('all-pdf-by-lessonId/{id}',[LessonDetailsController::class,'allPdfByLessonId']);
-        Route::get('all-audios-by-lessonId/{id}',[LessonDetailsController::class,'allAudiosByLessonId']);
+        Route::get('all-pdf-by-videoId/{id}',[LessonDetailsController::class,'allPdfByVideoId']);
+        Route::get('all-audios-by-videoId/{id}',[LessonDetailsController::class,'allAudiosByVideoId']);
+        Route::get('all-exams-by-videoId/{id}',[LessonDetailsController::class,'allExamsByVideoId']);
         Route::get('all-exams-by-lessonId/{id}',[LessonDetailsController::class,'allExamsByLessonId']);
         Route::get('exam-details-by-examId/{id}',[LessonDetailsController::class,'examDetailsByExamId']);
+
+    });
+
+
+    //start note add and note details
+    Route::group(['prefix' => 'notes','middleware' => 'jwt'], function (){
+        Route::post('note-add-by-student',[NoteController::class,'noteAddByStudent']);
+        Route::get('note-all-by-date',[NoteController::class,'noteAllByDate']);
+        Route::delete('note-delete/{id}',[NoteController::class,'noteDelete']);
 
     });
 

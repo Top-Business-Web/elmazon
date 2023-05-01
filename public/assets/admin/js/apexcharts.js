@@ -24177,7 +24177,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             // add every point to the set
             this.pointSelection.set.add(
-            // a circle with our css-classes and a touchstart-event which fires our event for moving points
+            // a circle with our css-subject_class and a touchstart-event which fires our event for moving points
             this.nested.circle(this.options.radius).center(array[i][0], array[i][1]).addClass(this.options.classPoints).addClass(this.options.classPoints + '_point').on('touchstart', curriedEvent).on('mousedown', curriedEvent));
         }
     };
@@ -25535,7 +25535,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       toString: function toString() {
         return this.attr('id');
       },
-      // Return array of classes on the node
+      // Return array of subject_class on the node
       classes: function classes() {
         var attr = this.attr('class');
 

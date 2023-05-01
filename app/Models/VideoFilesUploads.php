@@ -18,7 +18,6 @@ class VideoFilesUploads extends Model
         'file_link',
         'file_type',
         'video_part_id'
-
     ];
 
     public function video_part(): BelongsTo{

@@ -37,6 +37,23 @@ class NotificationController extends Controller
         return view('admin.notifications.index');
     }
 
+    // Search User Start
+
+    public function searchUser(Request $request)
+    {
+        $code = $request->input('code');
+        $user = User::where('code', $code)->first();
+
+        if ($user) {
+            return response('هذا الطالب موجود');
+        } else {
+            return response('هذا الطالب غير موجود');
+        }
+    }
+
+
+    // Search User End
+
     // Create Start
 
     public function create()
@@ -51,7 +68,7 @@ class NotificationController extends Controller
 
     // Store Start
 
-    public function store(StoreNotification $request)
+    public function store(Request $request)
     {
         $inputs = $request->all();
         $inputs['image'] = '';
@@ -63,6 +80,11 @@ class NotificationController extends Controller
 
         if ($request->has('user_id')) {
             $inputs['user_id'] = $user->id;
+        }
+        else
+        {
+            $error = 'ليس هناك مستخدم بهذا الكود';
+            toastr($error, 'info');
         }
 
         $this->sendFirebaseNotification(['title' => $request->title, 'body' => $request->body, 'term_id' => $inputs['term_id']], $inputs['season_id'], $user->id, $inputs['image']);
@@ -91,7 +113,7 @@ class NotificationController extends Controller
 
     // Update Start
 
-    public function update(Notification $notification, StoreNotification $request)
+    public function update(Notification $notification, Request $request)
     {
         $inputs = $request->all();
         if ($request->has('image')) {
