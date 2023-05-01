@@ -94,7 +94,7 @@
                     <Select name="examable_type" id="type" class="form-control type_choose" required="required">
                         <option selected disabled style="text-align: center">اختار النوع</option>
                         <option value="App\Models\Lesson" style="text-align: center">درس</option>
-                        <option value="App\Models\class" style="text-align: center">فصل</option>
+                        <option value="App\Models\SubjectClass" style="text-align: center">فصل</option>
                         <option value="App\Models\VideoParts" style="text-align: center">الفيديو</option>
                     </Select>
                 </div>

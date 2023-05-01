@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\QuestionExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestQuestion;
+use App\Imports\QuestionImport;
+use App\Models\AllExam;
 use App\Models\Answer;
 use App\Models\Lesson;
+use App\Models\LifeExam;
 use App\Models\Question;
 use App\Models\SubjectClass;
 use App\Traits\PhotoTrait;
@@ -13,6 +17,7 @@ use Illuminate\Http\Request;
 use App\Models\Season;
 use App\Models\Term;
 use App\Models\VideoParts;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class QuestionController extends Controller
@@ -35,19 +40,42 @@ class QuestionController extends Controller
                             <button type="button" data-id="' . $questions->id . '" class="btn btn-pill btn-success-light editBtnAnswer">الاجابة</button>
                        ';
                 })
-                ->addColumn('approved', function($row){
-                    if($row->approved){
-                        return '<span class="badge badge-primary">Yes</span>';
-                    }else{
-                        return '<span class="badge badge-danger">No</span>';
-                    }
+                ->editColumn('type', function ($questions) {
+                    if ($questions->type == 'video')
+                        return 'فيديو';
+                    else if ($questions->type == 'lesson')
+                        return 'درس';
+                    else if ($questions->type == 'all_exam')
+                        return 'امتحان شامل';
+                    else if ($questions->type == 'subject_class')
+                        return 'وحده';
+                    else if ($questions->type == 'life_exam')
+                        return 'امتحان لايف';
+
+                })
+                ->editColumn('question', function ($questions) {
+                    return \Str::limit($questions->question, 50);
+                })
+                ->editColumn('season_id', function ($questions) {
+                    return $questions->season->name_ar;
+                })
+                ->editColumn('term_id', function ($questions) {
+                    return $questions->term->name_ar;
+                })
+                ->editColumn('difficulty', function ($questions) {
+                    if ($questions->difficulty == 'low')
+                        return '<span class="badge badge-success">سـهل</span>';
+                    else if ($questions->difficulty =='mid')
+                        return '<span class="badge badge-info">متوسـط</span>';
+                    else
+                        return '<span class="badge badge-danger">صـعب</span>';
                 })
                 ->filter(function ($questions) use ($request) {
                     if ($request->get('type')) {
                         $questions->where('season_id', $request->get('type'))->get();
                     }
                 })
-                ->rawColumns(['approved'])
+                ->rawColumns([])
                 ->escapeColumns([])
                 ->make(true);
         } else {
@@ -61,34 +89,43 @@ class QuestionController extends Controller
     public function examble_type(Request $request)
     {
         if ($request->ajax()) {
-            $output = '<option value="" style="text-align: center">اختار</option>';
-            if ($request->id == 'App\Models\Lesson') {
-                $data = Lesson::get();
-                foreach ($data as $value) {
-                    if ($value->subject_class->term->status == 'active') {
-                        $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
-                    }
+            if ($request->type == 'App\Models\Lesson') {
+
+                $subjectClass = SubjectClass::where('season_id', $request->season)
+                    ->where('term_id', $request->term)
+                    ->pluck('id', 'id')->toArray();
+
+                if ($subjectClass) {
+                    $data = Lesson::whereIn('subject_class_id', $subjectClass)
+                        ->pluck('name_ar', 'id')->toArray();
+
                 }
-            } else if ($request->id == 'App\Models\SubjectClass') {
-                $data = SubjectClass::where('id', $request->season_id)->get();
-//                dd($data);
-                foreach ($data as $value) {
-                    if ($value->term->status == 'activate') {
-                        $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
-                    }
-                }
-            } else if ($request->id == 'App\Models\VideoParts') {
-                $data = videoParts::get();
-                foreach ($data as $value) {
-                    if ($value->term->status == 'activate') {
-                        $output .= '<option value="' . $value->id . '" style="text-align: center">' . $value->name_ar . '</option>';
-                    }
-                }
+            } else if ($request->type == 'App\Models\SubjectClass') {
+
+                $data = SubjectClass::where('season_id', $request->season)
+                    ->where('term_id', $request->term)
+                    ->pluck('name_ar', 'id')->toArray();
+
+
+            } else if ($request->type == 'App\Models\VideoParts') {
+                $data = videoParts::pluck('name_ar', 'id')->toArray();
+
+            } else if ($request->type == 'App\Models\AllExam') {
+                $data = AllExam::where('season_id', $request->season)
+                    ->where('term_id', $request->term)
+                    ->pluck('name_ar', 'id')->toArray();
+            } else if ($request->type == 'App\Models\LifeExam') {
+                $data = LifeExam::where('season_id', $request->season)
+                    ->where('term_id', $request->term)
+                    ->pluck('name_ar', 'id')->toArray();
             }
-
-            return $output;
-
+            if (!$data) {
+                return response()->json(['' => 'لايوجد بيانات']);
+            } else {
+                return $data;
+            }
         }
+
     }
 
     // Examble Type End
@@ -120,6 +157,19 @@ class QuestionController extends Controller
             $inputs['file_type'] = 'text';
         }
 
+        if ($request->examable_type == 'App\Models\Lesson') {
+            $inputs['type'] = 'lesson';
+        } elseif ($request->examable_type == 'App\Models\SubjectClass') {
+            $inputs['type'] = 'subject_class';
+        } elseif ($request->examable_type == 'App\Models\VideoParts') {
+            $inputs['type'] = 'video';
+        } elseif ($request->examable_type == 'App\Models\AllExam') {
+            $inputs['type'] = 'all_exam';
+        } elseif ($request->examable_type == 'App\Models\LifeExam') {
+            $inputs['type'] = 'life_exam';
+        }
+
+
         if ($question->create($inputs)) {
             return response()->json(['status' => 200]);
         } else {
@@ -127,21 +177,23 @@ class QuestionController extends Controller
         }
     }
 
-    // Store End
+// Store End
 
-    // Show Start
+// Show Start
 
-    public function answer($id)
+    public
+    function answer($id)
     {
         $question = Question::findOrFail($id);
         return view('admin.questions.parts.answers', compact('question'));
     }
 
-    // Show End
+// Show End
 
-    // Add Answer Start
+// Add Answer Start
 
-    public function addAnswer(Request $request)
+    public
+    function addAnswer(Request $request)
     {
         $answers = $request->answer;
 
@@ -159,22 +211,24 @@ class QuestionController extends Controller
 
     }
 
-    // Add Answer End
+// Add Answer End
 
-    // Edit Start
+// Edit Start
 
-    public function edit(Question $question)
+    public
+    function edit(Question $question)
     {
         $seasons = Season::get();
         $terms = Term::get();
         return view('admin.questions.parts.edit', compact('question', 'seasons', 'terms'));
     }
 
-    // Edit End
+// Edit End
 
-    // Update Start
+// Update Start
 
-    public function update(Request $request, Question $question)
+    public
+    function update(Request $request, Question $question)
     {
 
         $inputs = $request->all();
@@ -192,6 +246,19 @@ class QuestionController extends Controller
             $inputs['file_type'] = 'text';
         }
 
+        if ($request->examable_type == 'App\Models\Lesson') {
+            $inputs['type'] = 'lesson';
+        } elseif ($request->examable_type == 'App\Models\SubjectClass') {
+            $inputs['type'] = 'subject_class';
+        } elseif ($request->examable_type == 'App\Models\VideoParts') {
+            $inputs['type'] = 'video';
+        } elseif ($request->examable_type == 'App\Models\AllExam') {
+            $inputs['type'] = 'all_exam';
+        } elseif ($request->examable_type == 'App\Models\LifeExam') {
+            $inputs['type'] = 'life_exam';
+        }
+
+
         if ($question->update($inputs)) {
             return response()->json(['status' => 200]);
         } else {
@@ -199,17 +266,29 @@ class QuestionController extends Controller
         }
     }
 
-    // Update End
+// Update End
 
-    // Destroy Start
+// Destroy Start
 
-    public function destroy(Request $request)
+    public
+    function destroy(Request $request)
     {
         $questions = Question::where('id', $request->id)->firstOrFail();
         $questions->delete();
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Delete End
+// Delete End
+
+    public function questionExport()
+    {
+        return Excel::download(new QuestionExport, 'question.xlsx');
+    }
+
+    public function questionImport(Request $request)
+    {
+        Excel::import(new QuestionImport,$request->exelFile);
+        return response()->json(['status' => 200]);
+    }
 
 }

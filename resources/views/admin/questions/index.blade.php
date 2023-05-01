@@ -27,6 +27,16 @@
 										<i class="fe fe-plus"></i>
 									</span> أضافة
                         </button>
+                        <button class="btn btn-success btn-icon text-white exportExel">
+									<span>
+										<i class="fa fa-file-pdf"></i>
+									</span> تحميل ملف اكسيل
+                        </button>
+                        <button class="btn btn-info btn-icon text-white importExel">
+									<span>
+										<i class="fa fa-file-pdf"></i>
+									</span> رفع ملف اكسيل
+                        </button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -37,11 +47,10 @@
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">السؤال</th>
-                                <th class="min-w-50px">الملاحظة</th>
                                 <th class="min-w-50px">الفصل</th>
                                 <th class="min-w-50px">الترم</th>
-                                <th class="min-w-50px">نوع المثال</th>
-                                <th class="min-w-50px">المثال</th>
+                                <th class="min-w-50px">الصعوبة</th>
+                                <th class="min-w-50px">مخصص لـ</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -139,11 +148,10 @@
         var columns = [
             {data: 'id', name: 'id'},
             {data: 'question', name: 'question'},
-            {data: 'note', name: 'note'},
             {data: 'season_id', name: 'season_id'},
             {data: 'term_id', name: 'term_id'},
-            {data: 'examable_type', name: 'examable_type'},
-            {data: 'examable_id', name: 'examable_id'},
+            {data: 'difficulty', name: 'difficulty'},
+            {data: 'type', name: 'type'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
 
@@ -168,6 +176,18 @@
 
         showEdit('{{ route('answer',':id') }}');
         addAnswer();
+
+        $(document).ready(function () {
+            $('.exportExel').on('click', function () {
+                window.location.href = '{{ route('questionExport')}}'
+            })
+        })
+
+        $(document).ready(function () {
+            $('.importExel').on('click', function () {
+                window.location.href = '{{ route('questionImport')}}'
+            })
+        })
 
     </script>
 @endsection
