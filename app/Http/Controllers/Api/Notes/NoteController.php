@@ -94,15 +94,15 @@ class NoteController extends Controller{
             }
 
             if($request->has('date')){
-                if(Note::where('note_date','=',$request->date)->exists()){
+                if(Note::where('note_date','=',$request->date)->where('user_id','=',Auth::guard('user-api')->id())->exists()){
 
-                    $notes = Note::where('note_date','=',$request->date)->get();
+                    $notes = Note::where('note_date','=',$request->date) ->where('user_id','=',Auth::guard('user-api')->id())->get();
 
                     return self::returnResponseDataApi(NoteResource::collection($notes), "تم ارسال جميع الملاحظات في هذا اليوم بنجاح", 200);
 
                 }else{
 
-                    return self::returnResponseDataApi(null, "لا يوجد ملاحظات في هذا اليوم", 202);
+                    return self::returnResponseDataApi(null, "لا يوجد ملاحظات في هذا اليوم", 200);
                 }
             }
 
@@ -110,6 +110,26 @@ class NoteController extends Controller{
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
+
+
+    }
+
+
+    public function noteDelete($id): JsonResponse{
+
+       $note = Note::where('id','=',$id)->first();
+
+       if(!$note){
+           return self::returnResponseDataApi(null,"الملاحظه غير موجوده", 404,404);
+       }
+
+       if($note->user_id != Auth::guard('user-api')->id()){
+           return self::returnResponseDataApi(null,"لا يوجد لديك صلاحيه لحذف تلك الملاحظه", 405);
+
+       }
+
+       $note->delete();
+        return self::returnResponseDataApi(null,"تم حذف الملاحظه بنجاح", 200);
 
 
     }

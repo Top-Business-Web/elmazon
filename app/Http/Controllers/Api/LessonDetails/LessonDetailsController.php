@@ -3,16 +3,22 @@
 namespace App\Http\Controllers\Api\LessonDetails;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ExamQuestionsNewResource;
 use App\Http\Resources\OnlineExamNewResource;
 use App\Http\Resources\VideoPartOnlineExamsResource;
 use App\Http\Resources\VideoUploadFileDetailsResource;
 use App\Http\Resources\VideoPartDetailsNewResource;
+use App\Models\ExamDegreeDepends;
 use App\Models\Lesson;
 use App\Models\OnlineExam;
+use App\Models\OnlineExamUser;
+use App\Models\TextExamUser;
+use App\Models\Timer;
 use App\Models\VideoFilesUploads;
 use App\Models\VideoParts;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LessonDetailsController extends Controller{
 
@@ -40,9 +46,7 @@ class LessonDetailsController extends Controller{
         }
 
         $allPdf = VideoFilesUploads::query()->where('video_part_id','=',$video->id)->where('file_type','=','pdf')->get();
-
         return self::returnResponseDataApi(VideoUploadFileDetailsResource::collection($allPdf),"تم الحصول علي جميع ملخصات الشرح بنجاح",200);
-
 
     }
 
@@ -69,9 +73,9 @@ class LessonDetailsController extends Controller{
               return self::returnResponseDataApi(null,"هذا الفيديو غير موجود",404,404);
           }
 
-          $allExams = OnlineExam::query()->where('video_id','=',$video->id)->get();
+          $allExams = OnlineExam::query()->where('video_id','=',$video->id)->first();
 
-          return self::returnResponseDataApi(VideoPartOnlineExamsResource::collection($allExams),"تم الحصول علي جميع امتحانات الفيديو بنجاح",200);
+          return self::returnResponseDataApi(new VideoPartOnlineExamsResource($allExams),"تم الحصول علي امتحان الفيديو بنجاح",200);
 
 
       }
@@ -93,7 +97,57 @@ class LessonDetailsController extends Controller{
 
     public function examDetailsByExamId($id): JsonResponse{
 
-        return response()->json(['data' => null]);
+
+        $exam = OnlineExam::where('id','=',$id)->first();
+        if(!$exam){
+            return self::returnResponseDataApi(null,"هذا الامتحان غير موجود",404,404);
+        }
+
+        $degree = ExamDegreeDepends::query()->where('user_id','=',Auth::guard('user-api')->id())
+                  ->where('online_exam_id','=',$exam->id)
+                  ->latest()->first();
+
+        if(!$degree){
+            return self::returnResponseDataApi(null,"يجب انت تمتحن اولا لاظهار تقيمك في الامتحان",201);
+
+        }elseif ($degree->exam_depends == 'no'){
+
+            return self::returnResponseDataApi(null,"يجب الانتظار حين اكتمال تصحيح امتحانك بواسطه المدرس",202);
+
+        }else{
+
+            $onlineExamUserCorrectAnswers  = OnlineExamUser::query()
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->where('online_exam_id','=',$exam->id)->where('status','=','solved')
+                ->count();
+
+            $onlineExamUserMistakeAnswers  = OnlineExamUser::query()
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->where('online_exam_id','=',$exam->id)->where('status','=','un_correct')
+                ->orWhere('status','=','leave')
+                ->count();
+
+
+            $textExamUserDegrees = TextExamUser::query()->where('user_id','=',Auth::guard('user-api')->id())
+                ->where('online_exam_id','=',$exam->id)
+                ->where('degree_status','=','completed')
+                ->where('status','=','solved')->sum('degree');
+
+
+            $tryingNumber = Timer::query()->where('user_id','=',Auth::guard('user-api')->id())
+                ->where('online_exam_id','=',$exam->id)->count();
+
+
+            $data['full_degree']     = ($degree->full_degree +  $textExamUserDegrees) . " / " . $exam->degree;
+            $data['correct_numbers'] =  $onlineExamUserCorrectAnswers;
+            $data['mistake_numbers'] =  $onlineExamUserMistakeAnswers;
+            $data['trying_numbers']  =  $tryingNumber;
+            $data['exam_questions'] = new ExamQuestionsNewResource($exam);
+
+            return self::returnResponseDataApiWithMultipleIndexes($data,"تم الحصول علي تفاصيل الامتحان بنجاح",200);
+
+        }
+
 
     }
 
