@@ -112,7 +112,7 @@ class LessonDetailsController extends Controller{
 
         }elseif ($degree->exam_depends == 'no'){
 
-            return self::returnResponseDataApi(null,"يجب الانتظار حين اكتمال تصحيح امتحانك بواسطه المدرس",202);
+            return self::returnResponseDataApi(null,"يجب اعتماد درجه الامتحان لاظهار ادائك في الامتحان",202);
 
         }else{
 
@@ -128,21 +128,16 @@ class LessonDetailsController extends Controller{
                 ->count();
 
 
-            $textExamUserDegrees = TextExamUser::query()->where('user_id','=',Auth::guard('user-api')->id())
-                ->where('online_exam_id','=',$exam->id)
-                ->where('degree_status','=','completed')
-                ->where('status','=','solved')->sum('degree');
-
 
             $tryingNumber = Timer::query()->where('user_id','=',Auth::guard('user-api')->id())
                 ->where('online_exam_id','=',$exam->id)->count();
 
 
-            $data['full_degree']     = ($degree->full_degree +  $textExamUserDegrees) . " / " . $exam->degree;
+            $data['full_degree']     = ($degree->full_degree) . " / " . $exam->degree;
             $data['correct_numbers'] =  $onlineExamUserCorrectAnswers;
             $data['mistake_numbers'] =  $onlineExamUserMistakeAnswers;
             $data['trying_numbers']  =  $tryingNumber;
-            $data['exam_questions'] = new ExamQuestionsNewResource($exam);
+            $data['exam_questions']  = new ExamQuestionsNewResource($exam);
 
             return self::returnResponseDataApiWithMultipleIndexes($data,"تم الحصول علي تفاصيل الامتحان بنجاح",200);
 
