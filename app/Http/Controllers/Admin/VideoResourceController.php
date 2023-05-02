@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\CommentReplay;
 use App\Models\Term;
 use App\Models\Season;
+use App\Models\Report;
 use App\Models\VideoResource;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
@@ -39,6 +40,7 @@ class VideoResourceController extends Controller
                                     <i class="fas fa-trash"></i>
                             </button>
                             <a href="' . route('indexCommentResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-success-light"> تعليقات <i class="fa fa-comment"></i></a>
+                            <a href="' . route('ReportVideosResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-danger-light"> بلاغات <i class="fe fe-book"></i></a>
 
                        ';
                 })
@@ -89,6 +91,33 @@ class VideoResourceController extends Controller
     }
 
     // Index End
+
+    // Report Start
+    public function ReportVideosResource(Request $request, $id)
+    {
+        $reports = Report::where('video_resource_id', $id)->get();
+        if ($request->ajax()) {
+            return Datatables::of($reports)
+                ->addColumn('action', function ($reports) {
+                    return '
+                    <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
+                    data-id="' . $reports->id . '" data-title="' . $reports->report . '">
+                    <i class="fas fa-trash"></i>
+            </button>
+                       ';
+                })
+                ->editColumn('user_id', function ($reports) {
+
+                        return '<td>'. $reports->user->name .'</td>';
+                })
+                ->escapeColumns([])
+                ->make(true);
+        } else {
+            return view('admin.video_resource.parts.report', compact('id'));
+        }
+    }
+
+    // Report End
 
     // index comment
 

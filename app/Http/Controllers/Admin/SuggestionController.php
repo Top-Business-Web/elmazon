@@ -27,19 +27,40 @@ class SuggestionController extends Controller
                 ->editColumn('user_id', function ($suggestions) {
                         return '<td>'. $suggestions->user->name .'</td>';
                 })
-                ->editColumn('audio', function ($suggestions) {
+                ->editColumn('suggestion', function ($suggestions) {
                     if($suggestions->audio) {
-                        return '<td>'. ($suggestions->audio ? $suggestions->audio : '____') .'</td>';
+                        return '<td>'. ($suggestions->suggestion ? $suggestions->suggestion : '____') .'</td>';
                     }
                     else
                     {
                         return '____';
                     }
                 })
-                ->editColumn('suggestion', function ($suggestions) {
-                    if($suggestions->suggestion) {
-                        return '<td>'. ($suggestions->suggestion ? $suggestions->suggestion : '____') .'</td>';
+                ->editColumn('audio', function ($suggestions) {
+                    if ($suggestions->audio)
+                        return '<a class="badge badge-danger" href="' . asset('suggestions_uploads/audios/'.$suggestions->audio) . '">
+                                '. ($suggestions->audio ? 'لينك الصوت' : '____') .'
+                            </a>';
+                    else
+                    {
+                        return '____';
                     }
+                })
+                ->editColumn('image', function ($suggestions) {
+                    if ($suggestions->image)
+                        return '<a class="badge badge-secondary" href="' . asset('suggestions_uploads/images/'.$suggestions->image) . '">
+                                '. ($suggestions->image ? 'لينك الصورة' : '____') .'
+                            </a>';
+                    else
+                    {
+                        return '____';
+                    }
+                })
+                ->editColumn('suggestion', function ($suggestions) {
+                    if ($suggestions->suggestion)
+                        return '<a class="badge badge-success" href="#">
+                                '. ($suggestions->suggestion ? $suggestions->suggestion : '____') .'
+                            </a>';
                     else
                     {
                         return '____';

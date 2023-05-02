@@ -58,6 +58,47 @@ class OnlineExamController extends Controller
 
     // End Index
 
+    // Index Question START
+
+    public function indexQuestion(request $request, $id)
+    {
+
+        if ($request->ajax()) {
+            $online_exams_questions = OnlineExamQuestion::where('online_exam_id', $id)->get();
+            return DataTables::of($online_exams_questions)
+                ->addColumn('action', function ($online_exams_questions) {
+                    return '
+                            <a class="btn btn-pill btn-success-light" href="'. route('addQuestion', $online_exams_questions->id) .'">اضافة</a>
+                       ';
+                })
+                ->editColumn('question', function ($online_exams_questions) {
+                    return '<td>' . $online_exams_questions->question->question . '</td>';
+                })
+                ->escapeColumns([])
+                ->make(true);
+        } else {
+            return view('admin.online_exam.parts.questions', compact('id'));
+        }
+    }
+
+    // End Question Index
+
+    // Add Question
+
+    public function addQuestion(Request $request)
+    {
+        return $request;
+        $newQuestion = new OnlineExamQuestion();
+        $newQuestion->question_id = $request->question_id;
+        $newQuestion->save();
+
+        // Redirect to the questions page with a success message
+        return redirect()->route('questions')->with('success', 'Question added successfully!');
+    }
+
+
+    // End Add Question
+
     // Start Store
 
     public function create()
@@ -71,15 +112,15 @@ class OnlineExamController extends Controller
 
     // Question Start
 
-    public function indexQuestion(Request $request)
-    {
-        $exam = OnlineExam::find($request->id);
-        $questions = Question::where('season_id', $exam->season_id)
-            ->where('term_id', $exam->term_id)
-            ->get();
-        $online_questions_ids = OnlineExamQuestion::where(['online_exam_id' => $request->id])->pluck('question_id')->toArray();
-        return view('admin.online_exam.parts.questions', compact('questions', 'exam', 'online_questions_ids'));
-    }
+//    public function indexQuestion(Request $request)
+//    {
+//        $exam = OnlineExam::find($request->id);
+//        $questions = Question::where('season_id', $exam->season_id)
+//            ->where('term_id', $exam->term_id)
+//            ->get();
+//        $online_questions_ids = OnlineExamQuestion::where(['online_exam_id' => $request->id])->pluck('question_id')->toArray();
+//        return view('admin.online_exam.parts.questions', compact('questions', 'exam', 'online_questions_ids'));
+//    }
 
     // Question End
 
@@ -143,20 +184,7 @@ class OnlineExamController extends Controller
 
     }
 
-    // Add Question
-
-    public function addQuestion(Request $request, OnlineExamQuestion $onlineExamQuestion)
-    {
-        $inputs = $request->all();
-        if ($onlineExamQuestion->create($inputs)) {
-            return response()->json(['status' => 200]);
-        } else {
-            return response()->json(['status' => 405]);
-        }
-    }
-
-    // End Add Question
-
+    // Select Term
     public function selectTerm(Request $request)
     {
         $terms = Term::where('season_id', $request->season_id)->pluck('name_ar', 'id')->toArray();

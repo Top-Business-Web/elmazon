@@ -49,24 +49,24 @@
                 <div class="col-md-2">
                     <label for="name_ar" class="form-control-label">الدرجة</label>
                     <input type="number" class="form-control" name="degree" value="{{ $onlineExam->degree }}"
-                           style="text-align: center">
+                           style="text-align: center" required>
                 </div>
                 <div class="col-md-5">
                     <label for="date_exam" class="form-control-label">موعد الامتحان</label>
                     <input type="date" class="form-control" name="date_exam" value="{{ $onlineExam->date_exam }}"
-                           style="text-align: center">
+                           style="text-align: center" required>
                 </div>
                 <div class="col-md-3">
                     <label for="name_en" class="form-control-label"> وقت الامتحان</label>
                     <input type="number" class="form-control" name="quize_minute"
                            value="{{ $onlineExam->quize_minute }}" style="text-align: center"
-                           placeholder="الوقت بالدقائق">
+                           placeholder="الوقت بالدقائق" required>
                 </div>
                 <div class="col-md-2">
                     <label for="name_en" class="form-control-label"> عدد المحاولات </label>
                     <input type="number" class="form-control" name="trying_number"
                            value="{{ $onlineExam->trying_number }}" style="text-align: center"
-                           placeholder="عدد المحاولات">
+                           placeholder="عدد المحاولات" required>
                 </div>
             </div>
 
@@ -74,12 +74,12 @@
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
                     <input type="text" class="form-control" value="{{ $onlineExam->name_ar }}" name="name_ar"
-                           style="text-align: center">
+                           style="text-align: center" required>
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
                     <input type="text" class="form-control" value="{{ $onlineExam->name_en }}" name="name_en"
-                           style="text-align: center">
+                           style="text-align: center" required>
                 </div>
             </div>
 
@@ -87,7 +87,7 @@
                 <div class="col-md-6">
                     <label for="note" class="form-control-label">الصف</label>
                     <select name="season_id"
-                            class="form-control selectSeason" @selected( old('season_id',$onlineExam->season_id)) >
+                            class="form-control selectSeason" @selected( old('season_id',$onlineExam->season_id))  required>
                         <option disabled style="text-align: center">اختر الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
@@ -98,7 +98,7 @@
                 <div class="col-md-6">
                     <label for="note" class="form-control-label">تيرم</label>
                     <select name="term_id"
-                            class="form-control selectTerm" @selected( old('term_id',$onlineExam->term_id))>
+                            class="form-control selectTerm" @selected( old('term_id',$onlineExam->term_id)) required>
                         <option disabled style="text-align: center">اختر تيرم</option>
                         <option value="{{ $onlineExam->term_id }}" class="form-control">{{ $onlineExam->term->name_ar ?? '' }}</option>
                     </select>

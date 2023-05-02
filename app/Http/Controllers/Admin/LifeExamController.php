@@ -59,7 +59,7 @@ class LifeExamController extends Controller
 
     // Store Start
 
-    public function store(RequestLifeExam $request)
+    public function store(Request $request)
     {
         $inputs = $request->all();
 
@@ -90,7 +90,7 @@ class LifeExamController extends Controller
 
     // Update Start
 
-    public function update(LifeExam $lifeExam, RequestLifeExam $request)
+    public function update(LifeExam $lifeExam, Request $request)
     {
         $inputs = $request->all();
 
