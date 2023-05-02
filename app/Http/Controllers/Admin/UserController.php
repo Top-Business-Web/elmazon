@@ -20,7 +20,7 @@ use App\Models\Term;
 use App\Models\User;
 use App\Models\UserSubscribe;
 use App\Models\VideoParts;
-use App\Models\VideoWatch;
+use App\Models\VideoOpened;
 use App\Traits\PhotoTrait;
 use Buglinjo\LaravelWebp\Exceptions\CwebpShellExecutionFailed;
 use Buglinjo\LaravelWebp\Exceptions\DriverIsNotSupportedException;
@@ -199,8 +199,8 @@ class UserController extends Controller
         $classCount = OpenLesson::where('user_id',$user->id)
             ->where('subject_class_id','!=',null)->count('subject_class_id');
 
-        $videos = VideoWatch::where('user_id', $user->id)->with('video')->get();
-        $video_ids = VideoWatch::where('user_id', $user->id)->pluck('video_part_id')->toArray();
+        $videos = VideoOpened::where('user_id', $user->id)->with('video')->get();
+        $video_ids = VideoOpened::where('user_id', $user->id)->pluck('video_part_id')->toArray();
         $videoMin = VideoParts::whereIn('id', $video_ids)->sum('video_time');
         $exams = ExamDegreeDepends::where('user_id', '=', $user->id)
             ->where('exam_depends', '=', 'yes')->get();

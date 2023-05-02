@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\OpenLesson;
 use App\Models\SubjectClass;
-use App\Models\VideoWatch;
+use App\Models\VideoOpened;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +19,7 @@ class SubjectClassNewResource extends JsonResource
     public function toArray($request)
     {
 
-        $totalWatch = VideoWatch::where([
+        $totalWatch = VideoOpened::where([
              'user_id' => auth('user-api')->id(),
              'status' => 'watched'
         ])->count();

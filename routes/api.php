@@ -81,13 +81,11 @@ Route::group(['middleware' => 'lang'], function (){
 
     Route::group(['prefix' => 'lesson','middleware' => ['jwt']], function (){
         Route::get('videos/{id}',[LessonController::class,'allVideos']);
-        Route::get('pdf/{id}',[LessonController::class,'allPdf']);
-        Route::get('audios/{id}',[LessonController::class,'allAudios']);
 
         //video details
         Route::get('video/details/{id}',[LessonController::class,'videoDetails']);
         Route::get('video/comments/{id}',[LessonController::class,'videoComments']);
-        Route::post('video/add-comment/{id}',[CommentController::class,'videoAddComment']);
+        Route::post('video/add-comment',[CommentController::class,'videoAddComment']);
         Route::post('comment/add-replay/{id}',[CommentController::class,'commentAddReplay']);
 
 
