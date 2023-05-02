@@ -99,6 +99,11 @@ class VideoBasicController extends Controller
 
                         return '<td>'. $reports->user->name .'</td>';
                 })
+                ->editColumn('video_basic_id', function ($reports) {
+                    return '<a href="' . asset('video_basic/'.$reports->video_basic_id) . '">'
+                           . $reports->video_basic->name_ar .
+                        '</a>';
+            })
                 ->escapeColumns([])
                 ->make(true);
         } else {

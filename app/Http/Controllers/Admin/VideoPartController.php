@@ -40,7 +40,7 @@ class VideoPartController extends Controller
                             </button>
                              <button type="button" data-id="' . $videoParts->id . '" class="btn btn-pill btn-info-light addFile"><i class="fa fa-file"></i>الملحقات</button>
                             <a href="' . route('indexCommentVideo', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-success-light"> تعليقات <i class="fa fa-comment"></i></a>
-                            <a href="' . route('ReportVideoPart', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-danger-light"> بلاغات <i class="fe fe-book"></i></a>
+                            <a href="' . route('reportPart', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-danger-light"> بلاغات <i class="fe fe-book"></i></a>
                        ';
                 })
                 ->editColumn('lesson_id', function ($videoParts) {
@@ -86,6 +86,11 @@ class VideoPartController extends Controller
                 ->editColumn('user_id', function ($reports) {
 
                         return '<td>'. $reports->user->name .'</td>';
+                })
+                ->editColumn('video_part_id', function ($reports) {
+                        return '<a href="' . asset('video_files/'.$reports->video_part_id) . '">'
+                               . $reports->video_part->name_ar .
+                            '</a>';
                 })
                 ->escapeColumns([])
                 ->make(true);

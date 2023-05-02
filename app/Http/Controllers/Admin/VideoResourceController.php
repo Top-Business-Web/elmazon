@@ -110,6 +110,11 @@ class VideoResourceController extends Controller
 
                         return '<td>'. $reports->user->name .'</td>';
                 })
+                ->editColumn('video_resource_id', function ($reports) {
+                    return '<a href="' . asset('videos_resources/'.$reports->video_resource_id) . '">'
+                           . $reports->video_resource->name_ar .
+                        '</a>';
+            })
                 ->escapeColumns([])
                 ->make(true);
         } else {
