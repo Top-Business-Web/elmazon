@@ -35,6 +35,7 @@ use App\Http\Controllers\Admin\VideoBasicController;
 use App\Http\Controllers\Admin\VideoResourceController;
 use App\Http\Controllers\Admin\VideoBasicPdfController;
 use App\Http\Controllers\Admin\AboutMesController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
 use Illuminate\Support\Facades\Route;
@@ -158,6 +159,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::get('videoPart/comment/create/{id}', [VideoPartController::class, 'indexCommentVideoCreate'])->name('indexCommentVideoCreate');
         Route::post('videoPart/comment/reply', [VideoPartController::class, 'storeReplyVideo'])->name('storeReplyVideo');
         Route::delete('videoPart/commentReply/delete/{id}', [VideoPartController::class, 'deleteCommentVideoReply'])->name('deleteCommentVideoReply');
+
+        Route::get('video_part/{id}/reports', [VideoPartController::class, 'reportPart'])->name('reportPart');
     });
 
     #### Audio ####
@@ -176,7 +179,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::get('examble_type_exam', [OnlineExamController::class, 'examble_type'])->name('examble_type_exam');
         Route::get('indexQuestion/{id}', [OnlineExamController::class, 'indexQuestion'])->name('indexQuestion');
         Route::get('usersExam/{id}', [OnlineExamController::class, 'usersExam'])->name('usersExam');
-        Route::post('addQuestion', [OnlineExamController::class, 'addQuestion'])->name('addQuestion');
+        Route::get('addQuestion/{id}', [OnlineExamController::class, 'addQuestion'])->name('addQuestion');
         Route::post('deleteQuestion', [OnlineExamController::class, 'deleteQuestion'])->name('deleteQuestion');
         Route::get('paper-exam/{user_id}/{exam_id}', [OnlineExamController::class, 'paperExam'])->name('paperExam'); ///????????
         Route::post('exam-depends/{user_id}/{exam_id}', [OnlineExamController::class, 'exam_depends'])->name('exam-depends'); ///????????
@@ -275,6 +278,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('videoBasic/comment/create/{id}', [VideoBasicController::class, 'indexCommentCreate'])->name('indexComment.create');
     Route::post('videoBasic/comment/reply', [VideoBasicController::class, 'storeReply'])->name('storeReply');
     Route::delete('videoBasic/commentReply/delete/{id}', [VideoBasicController::class, 'deleteCommentReply'])->name('deleteCommentReply');
+    Route::get('video_basic/{id}/reports', [VideoBasicController::class, 'reportBasic'])->name('reportBasic');
+    Route::delete('videoBasic/delete/report/{id}', [VideoBasicController::class, 'deleteReport'])->name('deleteReport');
 
     #### Video Resource ####
     Route::group(['middleware' => 'permission:مصادر الفيديوهات'], function () {
@@ -285,6 +290,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::get('videoResource/comment/create/{id}', [VideoResourceController::class, 'indexCommentResourceCreate'])->name('indexCommentResourceCreate');
         Route::post('videoResource/comment/reply', [VideoResourceController::class, 'storeReplyResource'])->name('storeReplyResource');
         Route::delete('videoResource/commentReply/delete/{id}', [VideoResourceController::class, 'deleteCommentResourceReply'])->name('deleteCommentResourceReply');
+        Route::get('video_resource/{id}/reports', [VideoResourceController::class, 'ReportVideosResource'])->name('ReportVideosResource');
     });
 
     #### Video Basic Pdf ####
@@ -292,7 +298,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### About Mes ####
     Route::resource('aboutMes', AboutMesController::class);
-
 
     #### roles ####
     Route::group(['middleware' => 'permission:الادوار و الصلاحيات'], function () {

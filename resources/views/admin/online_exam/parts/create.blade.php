@@ -29,11 +29,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="answer_pdf_file" class="form-control-label">ملف الاجابات pdf</label>
-                    <input type="file" class="form-control" name="answer_pdf_file" style="text-align: center">
+                    <input type="file" class="form-control" name="answer_pdf_file" style="text-align: center" required>
                 </div>
                 <div class="col-md-6">
                     <label for="answer_video_file" class="form-control-label">الاجابات فيديو</label>
-                    <input type="file" class="form-control" name="answer_video_file" style="text-align: center">
+                    <input type="file" class="form-control" name="answer_video_file" style="text-align: center" required>
                 </div>
             </div>
 
@@ -45,35 +45,35 @@
                 </div>
                 <div class="col-md-5">
                     <label for="date_exam" class="form-control-label">موعد الامتحان</label>
-                    <input type="date" class="form-control" name="date_exam" style="text-align: center">
+                    <input type="date" class="form-control" name="date_exam" style="text-align: center" required>
                 </div>
                 <div class="col-md-3">
                     <label for="name_en" class="form-control-label"> وقت الامتحان</label>
                     <input type="number" class="form-control" name="quize_minute" style="text-align: center"
-                           placeholder="الوقت بالدقائق">
+                           placeholder="الوقت بالدقائق" required>
                 </div>
                 <div class="col-md-2">
                     <label for="name_en" class="form-control-label"> عدد المحاولات </label>
                     <input type="number" class="form-control" value="" name="trying_number" style="text-align: center"
-                           placeholder="عدد المحاولات">
+                           placeholder="عدد المحاولات" required>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
-                    <input type="text" class="form-control" name="name_ar" style="text-align: center">
+                    <input type="text" class="form-control" name="name_ar" style="text-align: center" required>
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
-                    <input type="text" class="form-control" name="name_en" style="text-align: center">
+                    <input type="text" class="form-control" name="name_en" style="text-align: center" required>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6">
                     <label for="note" class="form-control-label">الصف</label>
-                    <Select name="season_id" class="form-control selectSeason">
+                    <Select name="season_id" class="form-control selectSeason" required>
                         <option selected disabled style="text-align: center">اختر الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
@@ -83,7 +83,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="note" class="form-control-label">تيرم</label>
-                    <Select name="term_id" class="form-control selectTerm">
+                    <Select name="term_id" class="form-control selectTerm" required>
                         <option selected disabled style="text-align: center">اختر تيرم</option>
                     </Select>
                 </div>
@@ -102,7 +102,9 @@
                     <label for="note" class="form-control-label">لون الخلفية</label>
                     <input type="color" class="form-control" value="" name="background_color" required>
                 </div>
-                <div class="col-md-12">
+            </div>
+            <div class="row">
+                <div class="col-md-6">
                     <label for="lesson" class="form-control-label typeName">الدرس</label>
                     <Select name="examable_id" class="form-control type_ajax_choose" required="required">
                     </Select>

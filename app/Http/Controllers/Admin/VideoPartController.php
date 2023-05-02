@@ -11,6 +11,7 @@ use App\Models\VideoFilesUploads;
 use App\Models\VideoParts;
 use App\Models\Lesson;
 use App\Models\VideoRate;
+use App\Models\Report;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -39,6 +40,7 @@ class VideoPartController extends Controller
                             </button>
                              <button type="button" data-id="' . $videoParts->id . '" class="btn btn-pill btn-info-light addFile"><i class="fa fa-file"></i>الملحقات</button>
                             <a href="' . route('indexCommentVideo', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-success-light"> تعليقات <i class="fa fa-comment"></i></a>
+                            <a href="' . route('ReportVideoPart', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-danger-light"> بلاغات <i class="fe fe-book"></i></a>
                        ';
                 })
                 ->editColumn('lesson_id', function ($videoParts) {
@@ -66,6 +68,33 @@ class VideoPartController extends Controller
     }
 
     // Index End
+
+    // Report Start
+    public function reportPart(Request $request, $id)
+    {
+        $reports = Report::where('video_part_id', $id)->get();
+        if ($request->ajax()) {
+            return Datatables::of($reports)
+                ->addColumn('action', function ($reports) {
+                    return '
+                    <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
+                    data-id="' . $reports->id . '" data-title="' . $reports->report . '">
+                    <i class="fas fa-trash"></i>
+            </button>
+                       ';
+                })
+                ->editColumn('user_id', function ($reports) {
+
+                        return '<td>'. $reports->user->name .'</td>';
+                })
+                ->escapeColumns([])
+                ->make(true);
+        } else {
+            return view('admin.videopart.parts.report', compact('id'));
+        }
+    }
+
+    // Report End
 
     // Video Part Comment
 
@@ -212,33 +241,33 @@ class VideoPartController extends Controller
             }
 
 
-
-        $videoPart->name_ar = $request->name_ar;
-        $videoPart->name_en = $request->name_en;
-        $videoPart->note = $request->note;
-        $videoPart->month = $request->month;
-        $videoPart->video_time = $request->video_time;
-        $videoPart->lesson_id = $request->lesson_id;
-        $videoPart->background_color = $request->background_color;
+            $videoPart->name_ar = $request->name_ar;
+            $videoPart->name_en = $request->name_en;
+            $videoPart->note = $request->note;
+            $videoPart->month = $request->month;
+            $videoPart->video_time = $request->video_time;
+            $videoPart->lesson_id = $request->lesson_id;
+            $videoPart->background_color = $request->background_color;
 //        $videoPart->ordered = $last_orderd + 1;
 
-        if ($videoPart->save()) {
+            if ($videoPart->save()) {
 
 
-            VideoFilesUploads::create([
-                'name_ar' => $videoPart->name_ar,
-                'name_en' =>  $videoPart->name_en,
-                'background_color' => $videoPart->background_color, // default
-                'file_link' => $videoPart->link,
-                'month' => $videoPart->month,
-                'file_type' => $videoPart->type,
-                'video_part_id' => $videoPart->id,
-            ]);
+                VideoFilesUploads::create([
+                    'name_ar' => $videoPart->name_ar,
+                    'name_en' => $videoPart->name_en,
+                    'background_color' => $videoPart->background_color, // default
+                    'file_link' => $videoPart->link,
+                    'month' => $videoPart->month,
+                    'file_type' => $videoPart->type,
+                    'video_part_id' => $videoPart->id,
+                ]);
 //            $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
 
-            return response()->json(['status' => 200]);
-        } else {
-            return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
+                return response()->json(['status' => 200]);
+            } else {
+                return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
+            }
         }
     }
 
@@ -246,8 +275,7 @@ class VideoPartController extends Controller
 
 // Edit start
 
-    public
-    function edit(VideoParts $videosPart)
+    public function edit(VideoParts $videosPart)
     {
         $lessons = Lesson::get();
         return view('admin.videopart.parts.edit', compact('videosPart', 'lessons'));
@@ -257,8 +285,7 @@ class VideoPartController extends Controller
 
 // Update start
 
-    public
-    function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $videoPart = VideoParts::find($id);
 
@@ -312,8 +339,7 @@ class VideoPartController extends Controller
 
 // Destroy Start
 
-    public
-    function destroy(Request $request)
+    public function destroy(Request $request)
     {
         $videoParts = VideoParts::where('id', $request->id)->firstOrFail();
         $videoParts->delete();
@@ -324,8 +350,7 @@ class VideoPartController extends Controller
 
 // Drag Start
 
-    public
-    function updateItems(Request $request)
+    public function updateItems(Request $request)
     {
         $input = $request->all();
 
