@@ -30,13 +30,13 @@ class VideoParts extends Model
 
     public function watches()
     {
-        return $this->hasMany(VideoWatch::class, 'video_part_id','id');
+        return $this->hasMany(VideoOpened::class, 'video_part_id','id');
     }
 
 
     public function watch()
     {
-        return $this->hasOne(VideoWatch::class, 'video_part_id','id');
+        return $this->hasOne(VideoOpened::class, 'video_part_id','id');
     }
 
     public function lesson()
@@ -59,7 +59,7 @@ class VideoParts extends Model
 
     public function video_watches(): HasMany{
 
-        return $this->hasMany(VideoWatch::class,'video_part_id','id')
+        return $this->hasMany(VideoOpened::class,'video_part_id','id')
             ->where('status','=','watched');
     }
 

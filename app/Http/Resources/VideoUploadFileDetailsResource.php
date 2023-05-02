@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\ExamsFavorite;
 use App\Models\VideoRate;
-use App\Models\VideoWatch;
+use App\Models\VideoOpened;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +18,7 @@ class VideoUploadFileDetailsResource extends JsonResource
      */
     public function toArray($request)
     {
-        $user_watch_video = VideoWatch::where('video_upload_file_pdf_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first();
+        $user_watch_video = VideoOpened::where('video_upload_file_pdf_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first();
 
         //($user_watch_video->status == 'opened' ? 'opened': 'watched')
         return [

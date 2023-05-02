@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use App\Models\UserSubscribe;
 use App\Models\VideoParts;
 use App\Models\VideoRate;
-use App\Models\VideoWatch;
+use App\Models\VideoOpened;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +30,7 @@ class VideoPartResource extends JsonResource
             $link = asset('pdf/'. $this->link);
         }
 
-        $user_watch_video = VideoWatch::where('video_part_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first();
+        $user_watch_video = VideoOpened::where('video_part_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first();
 
         $watched = "lock";
         if($user_watch_video){

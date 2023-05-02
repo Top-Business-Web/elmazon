@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\OpenLesson;
-use App\Models\VideoWatch;
+use App\Models\VideoOpened;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
