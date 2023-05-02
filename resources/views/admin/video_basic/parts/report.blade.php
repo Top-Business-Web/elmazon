@@ -29,10 +29,7 @@
                                     <th class="min-w-25px">#</th>
                                     <th class="min-w-25px">البلاغ</th>
                                     <th class="min-w-50px">الطالب</th>
-                                    <th class="min-w-50px">النوع</th>
-                                    <th class="min-w-50px">قسم الفيديو</th>
                                     <th class="min-w-50px">الفيديو الاساسي</th>
-                                    <th class="min-w-50px">الفيديو مرجعي</th>
                                     <th class="min-w-50px rounded-end">العمليات</th>
                                 </tr>
                             </thead>
@@ -103,20 +100,8 @@
                 name: 'user_id'
             },
             {
-                data: 'type',
-                name: 'type'
-            },
-            {
-                data: 'video_part_id',
-                name: 'video_part_id'
-            },
-            {
                 data: 'video_basic_id',
                 name: 'video_basic_id'
-            },
-            {
-                data: 'video_resource_id',
-                name: 'video_resource_id'
             },
             {
                 data: 'action',
