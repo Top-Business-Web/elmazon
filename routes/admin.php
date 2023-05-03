@@ -253,7 +253,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::resource('questions', QuestionController::class);
         Route::get('examble_type', [QuestionController::class, 'examble_type'])->name('examble_type_question');
         Route::get('questionExport', [QuestionController::class, 'questionExport'])->name('questionExport');
-        Route::get('questionImport', [QuestionController::class, 'questionImport'])->name('questionImport');
+        Route::post('questionImport', [QuestionController::class, 'questionImport'])->name('questionImport');
         Route::get('answer/{id}', [QuestionController::class, 'answer'])->name('answer');
         Route::post('addAnswer/{id}', [QuestionController::class, 'addAnswer'])->name('addAnswer');
     });

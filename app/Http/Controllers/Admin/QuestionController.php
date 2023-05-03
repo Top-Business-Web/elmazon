@@ -65,7 +65,7 @@ class QuestionController extends Controller
                 ->editColumn('difficulty', function ($questions) {
                     if ($questions->difficulty == 'low')
                         return '<span class="badge badge-success">سـهل</span>';
-                    else if ($questions->difficulty =='mid')
+                    else if ($questions->difficulty == 'mid')
                         return '<span class="badge badge-info">متوسـط</span>';
                     else
                         return '<span class="badge badge-danger">صـعب</span>';
@@ -283,12 +283,15 @@ class QuestionController extends Controller
     public function questionExport()
     {
         return Excel::download(new QuestionExport, 'question.xlsx');
-    }
+    } // end question Export
 
     public function questionImport(Request $request)
     {
-        Excel::import(new QuestionImport,$request->exelFile);
-        return response()->json(['status' => 200]);
-    }
+        $import = Excel::import(new QuestionImport, $request->exelFile);
+        if ($import)
+            return response()->json(['status' => 200]);
+        else
+            return response()->json(['status' => 500]);
+    } // end question import
 
 }
