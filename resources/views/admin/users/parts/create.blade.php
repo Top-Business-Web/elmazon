@@ -31,6 +31,11 @@
                                 generate code
                             </button>
                         </div>
+                        <div class="col-12">
+                            <label for="birth_date" class="form-control-label">تاريخ الميلاد</label>
+                            <input type="date" class="form-control" placeholder="تاريخ الميلاد" name="birth_date"
+                                  required>
+                        </div>
                     </div>
                 </div>
             </div>
