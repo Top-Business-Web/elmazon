@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreVideoBasic;
-use App\Http\Requests\UpdateVideoBasic;
 use App\Models\CommentReplay;
 use App\Models\VideoBasic;
 use App\Models\Report;
@@ -20,6 +18,7 @@ class VideoBasicController extends Controller
     public function index(request $request)
     {
         $video_basics = VideoBasic::all();
+        $comment = Comment::where('video_part_id', $request->id);
         if ($request->ajax()) {
             return Datatables::of($video_basics)
                 ->addColumn('action', function ($video_basics) {
@@ -29,7 +28,7 @@ class VideoBasicController extends Controller
                                     data-id="' . $video_basics->id . '" data-title="' . $video_basics->name_ar . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                             <a href="' . route('indexComment', $video_basics->id) . '" data-id="' . $video_basics->id . '" class="btn btn-pill btn-success-light"> تعليقات <i class="fa fa-comment"></i></a>
+                             <a href="' . route('indexComment', $video_basics->id) . '" data-id="' . $video_basics->id . '" class="btn btn-pill btn-success-light"> تعليقات '. $video_basics->comment->count() .' <i class="fa fa-comment"></i></a>
                              <a href="' . route('reportBasic', $video_basics->id) . '" data-id="' . $video_basics->id . '" class="btn btn-pill btn-danger-light"> بلاغات <i class="fe fe-book"></i></a>
                        ';
                 })

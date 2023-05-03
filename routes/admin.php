@@ -35,6 +35,7 @@ use App\Http\Controllers\Admin\VideoBasicController;
 use App\Http\Controllers\Admin\VideoResourceController;
 use App\Http\Controllers\Admin\VideoBasicPdfController;
 use App\Http\Controllers\Admin\AboutMesController;
+use App\Http\Controllers\Admin\DiscountCouponsController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
@@ -300,6 +301,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### About Mes ####
     Route::resource('aboutMes', AboutMesController::class);
+
+    #### Discount Coupons ####
+    Route::resource('discount_coupons', DiscountCouponsController::class);
 
     #### roles ####
     Route::group(['middleware' => 'permission:الادوار و الصلاحيات'], function () {

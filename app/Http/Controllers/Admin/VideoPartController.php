@@ -38,9 +38,9 @@ class VideoPartController extends Controller
                                     data-id="' . $videoParts->id . '" data-title="' . ' ' . $videoParts->name_ar . ' ' . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                             <button type="button" data-id="' . $videoParts->id . '" class="btn btn-pill btn-info-light addFile"><i class="fa fa-file"></i>الملحقات</button>
-                            <a href="' . route('indexCommentVideo', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-success-light"> تعليقات <i class="fa fa-comment"></i></a>
-                            <a href="' . route('reportPart', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-danger-light"> بلاغات <i class="fe fe-book"></i></a>
+                             <button type="button" data-id="' . $videoParts->id . '" class="btn btn-pill btn-info-light addFile"><i class="fa fa-file"></i>الملحقات '. $videoParts->videoFileUpload->count() .' </button>
+                            <a href="' . route('indexCommentVideo', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-success-light"> تعليقات '. $videoParts->comment->count() .' <i class="fa fa-comment"></i></a>
+                            <a href="' . route('reportPart', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-danger-light"> بلاغات '. $videoParts->report->count() .' <i class="fe fe-book"></i></a>
                        ';
                 })
                 ->editColumn('lesson_id', function ($videoParts) {
