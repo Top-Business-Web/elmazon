@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 20, 2023 at 12:28 PM
+-- Generation Time: May 03, 2023 at 12:40 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.0.26
 
@@ -103,15 +103,22 @@ CREATE TABLE IF NOT EXISTS `all_exams` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `name_ar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `name_en` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `background_color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '#FFEAD7',
+  `exam_type` enum('all_exam','pdf') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pdf_file_upload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `pdf_num_questions` int DEFAULT NULL,
+  `answer_pdf_file` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `answer_video_file` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `date_exam` date NOT NULL,
   `quize_minute` int NOT NULL,
   `trying_number` int NOT NULL,
   `degree` int NOT NULL,
-  `note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `season_id` bigint UNSIGNED NOT NULL,
   `term_id` bigint UNSIGNED NOT NULL,
+  `instruction_ar` json DEFAULT NULL,
+  `instruction_en` json DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `all_exams_season_id_foreign` (`season_id`),
   KEY `all_exams_term_id_foreign` (`term_id`)
@@ -121,15 +128,15 @@ CREATE TABLE IF NOT EXISTS `all_exams` (
 -- Dumping data for table `all_exams`
 --
 
-INSERT INTO `all_exams` (`id`, `name_ar`, `name_en`, `date_exam`, `quize_minute`, `trying_number`, `degree`, `note`, `created_at`, `updated_at`, `season_id`, `term_id`) VALUES
-(1, '1امتحان شامل علي الفصل ', 'Full Exam about 1', '2023-03-20', 40, 10, 40, 'يرجي الالتزام بالتعليمات والارشادات للامتحانات الشامله', '2023-02-23 06:05:56', '2023-02-23 06:05:56', 1, 1),
-(2, '2امتحان شامل علي الفصل ', 'Full Exam about 2', '2023-03-20', 50, 10, 40, 'يرجي الالتزام بالتعليمات والارشادات للامتحانات الشامله', '2023-02-23 06:05:56', '2023-02-23 06:05:56', 1, 1),
-(3, '3امتحان شامل علي الفصل ', 'Full Exam about 3', '2023-03-20', 70, 10, 40, 'يرجي الالتزام بالتعليمات والارشادات للامتحانات الشامله', '2023-02-23 06:05:56', '2023-02-23 06:05:56', 1, 1),
-(4, '4امتحان شامل علي الفصل ', 'Full Exam about 4', '2023-03-20', 70, 10, 40, 'يرجي الالتزام بالتعليمات والارشادات للامتحانات الشامله', '2023-02-23 06:05:57', '2023-02-23 06:05:57', 1, 1),
-(5, '5امتحان شامل علي الفصل ', 'Full Exam about 5', '2023-03-20', 80, 10, 40, 'يرجي الالتزام بالتعليمات والارشادات للامتحانات الشامله', '2023-02-23 06:05:57', '2023-02-23 06:05:57', 1, 1),
-(6, '6امتحان شامل علي الفصل ', 'Full Exam about 6', '2023-03-20', 90, 10, 40, 'يرجي الالتزام بالتعليمات والارشادات للامتحانات الشامله', '2023-02-23 06:05:57', '2023-02-23 06:05:57', 1, 1),
-(7, '7امتحان شامل علي الفصل ', 'Full Exam about 7', '2023-03-20', 100, 10, 40, 'يرجي الالتزام بالتعليمات والارشادات للامتحانات الشامله', '2023-02-23 06:05:57', '2023-02-23 06:05:57', 1, 1),
-(8, '8امتحان شامل علي الفصل ', 'Full Exam about 8', '2023-03-20', 90, 10, 40, 'يرجي الالتزام بالتعليمات والارشادات للامتحانات الشامله', '2023-02-23 06:05:57', '2023-02-23 06:05:57', 1, 1);
+INSERT INTO `all_exams` (`id`, `name_ar`, `name_en`, `background_color`, `exam_type`, `pdf_file_upload`, `pdf_num_questions`, `answer_pdf_file`, `answer_video_file`, `date_exam`, `quize_minute`, `trying_number`, `degree`, `created_at`, `updated_at`, `season_id`, `term_id`, `instruction_ar`, `instruction_en`) VALUES
+(1, '1امتحان شامل علي الفصل ', 'Full Exam about 1', '#FFEAD7', 'all_exam', NULL, NULL, NULL, NULL, '2023-03-20', 40, 10, 40, '2023-02-23 06:05:56', '2023-02-23 06:05:56', 1, 1, '[\"احتفظ بهدوئك وخذ نفساً عميقاً\", \"اقرأ ورقة الامتحان كاملة قبل البدء بالإجابة\", \"نظم وقت الإجابة\", \"انتقل إلى السؤال التالي إذا تعثرت في إجابة سؤال ما\", \"اقرأ الأسئلة بعناية وتأكد من حل كل سؤال بالشكل الصحيح\", \"اشرب الماء خلال الامتحان\", \"تأكد من جميع الإجابات، خاصة إذا أنهيت الامتحان مبكراً.\"]', '[\"Keep calm and take a deep breath\", \"Read the entire exam paper before starting to answer.\", \"response time systems\", \"Go to the next question if you get stuck on the answer to a question\", \"Read the questions carefully and make sure you answer each question correctly.\", \"Drink water during the exam.\", \"Be sure of all the answers, especially if you finish the exam early.\"]'),
+(2, '2امتحان شامل علي الفصل ', 'Full Exam about 2', '#FFEAD7', 'all_exam', NULL, NULL, NULL, NULL, '2023-03-20', 50, 10, 40, '2023-02-23 06:05:56', '2023-02-23 06:05:56', 1, 1, '[\"احتفظ بهدوئك وخذ نفساً عميقاً\", \"اقرأ ورقة الامتحان كاملة قبل البدء بالإجابة\", \"نظم وقت الإجابة\", \"انتقل إلى السؤال التالي إذا تعثرت في إجابة سؤال ما\", \"اقرأ الأسئلة بعناية وتأكد من حل كل سؤال بالشكل الصحيح\", \"اشرب الماء خلال الامتحان\", \"تأكد من جميع الإجابات، خاصة إذا أنهيت الامتحان مبكراً.\"]', '[\"Keep calm and take a deep breath\", \"Read the entire exam paper before starting to answer.\", \"response time systems\", \"Go to the next question if you get stuck on the answer to a question\", \"Read the questions carefully and make sure you answer each question correctly.\", \"Drink water during the exam.\", \"Be sure of all the answers, especially if you finish the exam early.\"]'),
+(3, '3امتحان شامل علي الفصل ', 'Full Exam about 3', '#FFEAD7', 'all_exam', NULL, NULL, NULL, NULL, '2023-03-20', 70, 10, 40, '2023-02-23 06:05:56', '2023-02-23 06:05:56', 1, 1, '[\"احتفظ بهدوئك وخذ نفساً عميقاً\", \"اقرأ ورقة الامتحان كاملة قبل البدء بالإجابة\", \"نظم وقت الإجابة\", \"انتقل إلى السؤال التالي إذا تعثرت في إجابة سؤال ما\", \"اقرأ الأسئلة بعناية وتأكد من حل كل سؤال بالشكل الصحيح\", \"اشرب الماء خلال الامتحان\", \"تأكد من جميع الإجابات، خاصة إذا أنهيت الامتحان مبكراً.\"]', '[\"Keep calm and take a deep breath\", \"Read the entire exam paper before starting to answer.\", \"response time systems\", \"Go to the next question if you get stuck on the answer to a question\", \"Read the questions carefully and make sure you answer each question correctly.\", \"Drink water during the exam.\", \"Be sure of all the answers, especially if you finish the exam early.\"]'),
+(4, '4امتحان شامل علي الفصل ', 'Full Exam about 4', '#FFEAD7', 'all_exam', NULL, NULL, NULL, NULL, '2023-03-20', 70, 10, 40, '2023-02-23 06:05:57', '2023-02-23 06:05:57', 1, 1, '[\"احتفظ بهدوئك وخذ نفساً عميقاً\", \"اقرأ ورقة الامتحان كاملة قبل البدء بالإجابة\", \"نظم وقت الإجابة\", \"انتقل إلى السؤال التالي إذا تعثرت في إجابة سؤال ما\", \"اقرأ الأسئلة بعناية وتأكد من حل كل سؤال بالشكل الصحيح\", \"اشرب الماء خلال الامتحان\", \"تأكد من جميع الإجابات، خاصة إذا أنهيت الامتحان مبكراً.\"]', '[\"Keep calm and take a deep breath\", \"Read the entire exam paper before starting to answer.\", \"response time systems\", \"Go to the next question if you get stuck on the answer to a question\", \"Read the questions carefully and make sure you answer each question correctly.\", \"Drink water during the exam.\", \"Be sure of all the answers, especially if you finish the exam early.\"]'),
+(5, '5امتحان شامل علي الفصل ', 'Full Exam about 5', '#FFEAD7', 'all_exam', NULL, NULL, NULL, NULL, '2023-03-20', 80, 10, 40, '2023-02-23 06:05:57', '2023-02-23 06:05:57', 1, 1, '[\"احتفظ بهدوئك وخذ نفساً عميقاً\", \"اقرأ ورقة الامتحان كاملة قبل البدء بالإجابة\", \"نظم وقت الإجابة\", \"انتقل إلى السؤال التالي إذا تعثرت في إجابة سؤال ما\", \"اقرأ الأسئلة بعناية وتأكد من حل كل سؤال بالشكل الصحيح\", \"اشرب الماء خلال الامتحان\", \"تأكد من جميع الإجابات، خاصة إذا أنهيت الامتحان مبكراً.\"]', '[\"Keep calm and take a deep breath\", \"Read the entire exam paper before starting to answer.\", \"response time systems\", \"Go to the next question if you get stuck on the answer to a question\", \"Read the questions carefully and make sure you answer each question correctly.\", \"Drink water during the exam.\", \"Be sure of all the answers, especially if you finish the exam early.\"]'),
+(6, '6امتحان شامل علي الفصل ', 'Full Exam about 6', '#FFEAD7', 'all_exam', NULL, NULL, NULL, NULL, '2023-03-20', 90, 10, 40, '2023-02-23 06:05:57', '2023-02-23 06:05:57', 1, 1, '[\"احتفظ بهدوئك وخذ نفساً عميقاً\", \"اقرأ ورقة الامتحان كاملة قبل البدء بالإجابة\", \"نظم وقت الإجابة\", \"انتقل إلى السؤال التالي إذا تعثرت في إجابة سؤال ما\", \"اقرأ الأسئلة بعناية وتأكد من حل كل سؤال بالشكل الصحيح\", \"اشرب الماء خلال الامتحان\", \"تأكد من جميع الإجابات، خاصة إذا أنهيت الامتحان مبكراً.\"]', '[\"Keep calm and take a deep breath\", \"Read the entire exam paper before starting to answer.\", \"response time systems\", \"Go to the next question if you get stuck on the answer to a question\", \"Read the questions carefully and make sure you answer each question correctly.\", \"Drink water during the exam.\", \"Be sure of all the answers, especially if you finish the exam early.\"]'),
+(7, '7امتحان شامل علي الفصل ', 'Full Exam about 7', '#FFEAD7', 'all_exam', NULL, NULL, NULL, NULL, '2023-03-20', 100, 10, 40, '2023-02-23 06:05:57', '2023-02-23 06:05:57', 1, 1, '[\"احتفظ بهدوئك وخذ نفساً عميقاً\", \"اقرأ ورقة الامتحان كاملة قبل البدء بالإجابة\", \"نظم وقت الإجابة\", \"انتقل إلى السؤال التالي إذا تعثرت في إجابة سؤال ما\", \"اقرأ الأسئلة بعناية وتأكد من حل كل سؤال بالشكل الصحيح\", \"اشرب الماء خلال الامتحان\", \"تأكد من جميع الإجابات، خاصة إذا أنهيت الامتحان مبكراً.\"]', '[\"Keep calm and take a deep breath\", \"Read the entire exam paper before starting to answer.\", \"response time systems\", \"Go to the next question if you get stuck on the answer to a question\", \"Read the questions carefully and make sure you answer each question correctly.\", \"Drink water during the exam.\", \"Be sure of all the answers, especially if you finish the exam early.\"]'),
+(8, '8امتحان شامل علي الفصل ', 'Full Exam about 8', '#FFEAD7', 'all_exam', NULL, NULL, NULL, NULL, '2023-03-20', 90, 10, 40, '2023-02-23 06:05:57', '2023-02-23 06:05:57', 1, 1, '[\"احتفظ بهدوئك وخذ نفساً عميقاً\", \"اقرأ ورقة الامتحان كاملة قبل البدء بالإجابة\", \"نظم وقت الإجابة\", \"انتقل إلى السؤال التالي إذا تعثرت في إجابة سؤال ما\", \"اقرأ الأسئلة بعناية وتأكد من حل كل سؤال بالشكل الصحيح\", \"اشرب الماء خلال الامتحان\", \"تأكد من جميع الإجابات، خاصة إذا أنهيت الامتحان مبكراً.\"]', '[\"Keep calm and take a deep breath\", \"Read the entire exam paper before starting to answer.\", \"response time systems\", \"Go to the next question if you get stuck on the answer to a question\", \"Read the questions carefully and make sure you answer each question correctly.\", \"Drink water during the exam.\", \"Be sure of all the answers, especially if you finish the exam early.\"]');
 
 -- --------------------------------------------------------
 
@@ -150,72 +157,6 @@ CREATE TABLE IF NOT EXISTS `answers` (
   PRIMARY KEY (`id`),
   KEY `answers_question_id_foreign` (`question_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `answers`
---
-
-INSERT INTO `answers` (`id`, `answer`, `answer_number`, `answer_status`, `note`, `question_id`, `created_at`, `updated_at`) VALUES
-(1, '0.1', '(ا)', 'correct', NULL, 1, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(2, '0.2', '(ب)', 'un_correct', NULL, 1, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(3, '0.5', '(ج)', 'un_correct', NULL, 1, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(4, '7', '(د)', 'un_correct', NULL, 1, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(5, '0.03', '(ا)', 'correct', NULL, 2, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(6, '0.04', '(ب)', 'un_correct', NULL, 2, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(7, '0.06', '(ج)', 'un_correct', NULL, 2, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(8, '0.08', '(د)', 'un_correct', NULL, 2, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(9, '0.25%', '(ا)', 'correct', NULL, 3, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(10, '0.40%', '(ب)', 'un_correct', NULL, 3, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(11, '0.60%', '(ج)', 'un_correct', NULL, 3, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(12, '0.80%', '(د)', 'un_correct', NULL, 3, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(13, '70', '(ا)', 'correct', NULL, 5, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(14, '120', '(ب)', 'un_correct', NULL, 5, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(15, '15', '(ج)', 'un_correct', NULL, 5, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(16, '110', '(د)', 'un_correct', NULL, 5, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(17, '5', '(ا)', 'correct', NULL, 6, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(18, '10', '(ب)', 'un_correct', NULL, 6, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(19, '15', '(ج)', 'un_correct', NULL, 6, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(20, '20', '(د)', 'un_correct', NULL, 6, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(21, '3', '(ا)', 'correct', NULL, 7, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(22, '16', '(ب)', 'un_correct', NULL, 7, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(23, '18', '(ج)', 'un_correct', NULL, 7, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(24, '25', '(د)', 'un_correct', NULL, 7, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(25, '90', '(ا)', 'correct', NULL, 8, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(26, '100', '(ب)', 'un_correct', NULL, 8, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(27, '110', '(ج)', 'un_correct', NULL, 8, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(28, '120', '(د)', 'un_correct', NULL, 8, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(29, '200', '(ا)', 'correct', NULL, 10, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(30, '300', '(ب)', 'un_correct', NULL, 10, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(31, '400', '(ج)', 'un_correct', NULL, 10, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(32, '500', '(د)', 'un_correct', NULL, 10, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(33, '6.6', '(ا)', 'correct', NULL, 11, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(34, '6.8', '(ب)', 'un_correct', NULL, 11, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(35, '6.9', '(ج)', 'un_correct', NULL, 11, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(36, '6.1', '(د)', 'un_correct', NULL, 11, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(37, '90', '(ا)', 'correct', NULL, 9, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(38, '36', '(ب)', 'un_correct', NULL, 9, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(39, '20', '(ج)', 'un_correct', NULL, 9, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(40, '17', '(د)', 'un_correct', NULL, 9, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(41, 'صفر', '(ا)', 'correct', NULL, 12, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(42, ' محيط الدائرة ', '(ب)', 'un_correct', NULL, 12, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(43, 'قطر الدائرة ', '(ج)', 'un_correct', NULL, 12, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(44, 'نصف قطر الدائرة', '(د)', 'un_correct', NULL, 12, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(45, '360', '(ا)', 'correct', NULL, 13, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(46, '0.5', '(ب)', 'un_correct', NULL, 13, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(47, ' 2م', '(ج)', 'un_correct', NULL, 13, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(48, '3.0', '(د)', 'un_correct', NULL, 13, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(49, '0.25', '(ا)', 'correct', NULL, 14, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(50, '0.5', '(ب)', 'un_correct', NULL, 14, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(51, '2م', '(ج)', 'un_correct', NULL, 14, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(52, '7.0', '(د)', 'un_correct', NULL, 14, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(53, 'الدينمومتر', '(ا)', 'correct', NULL, 15, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(54, 'الترمومتر', '(ب)', 'un_correct', NULL, 15, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(55, 'الأميتر', '(ج)', 'un_correct', NULL, 15, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(56, 'الآفومتر', '(د)', 'un_correct', NULL, 15, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(57, 'تعيين درجة حرارة الجو', '(ا)', 'correct', NULL, 16, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(58, 'قياس ارتفاعات الأبراج', '(ب)', 'un_correct', NULL, 16, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(59, 'تعيين السرعة الزاوية لجسم.', '(ج)', 'un_correct', NULL, 16, '2023-03-06 07:56:03', '2023-03-06 07:56:03'),
-(60, 'تعيين سرعة الكواكب', '(د)', 'un_correct', NULL, 16, '2023-03-06 07:56:03', '2023-03-06 07:56:03');
 
 -- --------------------------------------------------------
 
@@ -253,7 +194,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `audio` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `image` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `type` enum('text','audio','file') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `video_part_id` bigint UNSIGNED NOT NULL,
+  `video_part_id` bigint UNSIGNED DEFAULT NULL,
   `video_basic_id` bigint UNSIGNED DEFAULT NULL,
   `video_resource_id` bigint UNSIGNED DEFAULT NULL,
   `user_id` bigint UNSIGNED NOT NULL,
@@ -264,14 +205,13 @@ CREATE TABLE IF NOT EXISTS `comments` (
   KEY `comments_user_id_foreign` (`user_id`),
   KEY `comments_video_basic_id_foreign` (`video_basic_id`),
   KEY `comments_video_resource_id_foreign` (`video_resource_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `comments`
 --
 
 INSERT INTO `comments` (`id`, `comment`, `audio`, `image`, `type`, `video_part_id`, `video_basic_id`, `video_resource_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(1, 'المعادله صعبه جدا', NULL, NULL, 'text', 1, NULL, NULL, 1, '2023-02-26 11:10:00', '2023-03-08 04:13:50'),
 (6, 'برضو جزء معادله الحركه مش فاهمها اوي', NULL, NULL, 'text', 1, NULL, NULL, 1, '2023-02-26 10:28:00', '2023-02-26 10:28:00'),
 (7, 'برضو جزء معادله الحركه مش فاهمها اوي', NULL, NULL, 'text', 1, NULL, NULL, 1, '2023-02-26 11:11:20', '2023-02-26 11:11:20'),
 (8, 'برضو جزء معادله الحركه مش فاهمها اوي', NULL, NULL, 'text', 1, NULL, NULL, 1, '2023-02-26 11:11:23', '2023-02-26 11:11:23'),
@@ -280,7 +220,9 @@ INSERT INTO `comments` (`id`, `comment`, `audio`, `image`, `type`, `video_part_i
 (11, 'برضو جزء معادله الحركه مش فاهمها اوي', NULL, NULL, 'text', 1, NULL, NULL, 1, '2023-02-26 11:11:30', '2023-02-26 11:11:30'),
 (12, 'برضو جزء معادله الحركه مش فاهمها اوي', NULL, NULL, 'text', 1, NULL, NULL, 1, '2023-02-26 11:11:32', '2023-02-26 11:11:32'),
 (13, 'برضو جزء معادله الحركه مش فاهمها اوي', NULL, NULL, 'text', 1, NULL, NULL, 1, '2023-02-26 11:53:48', '2023-02-26 11:53:48'),
-(14, NULL, NULL, '20230302071203.jpg', 'file', 1, NULL, NULL, 1, '2023-03-02 05:12:03', '2023-03-02 05:12:03');
+(14, NULL, NULL, '20230302071203.jpg', 'file', 1, NULL, NULL, 1, '2023-03-02 05:12:03', '2023-03-02 05:12:03'),
+(16, 'هو جزء معادله الحركه مينفعشي نكتبه بطريقه تانيه', NULL, NULL, 'text', NULL, NULL, 1, 1, '2023-05-02 08:15:29', '2023-05-02 08:15:29'),
+(17, 'وممكن برضو توضحلي جزء البندول مع المقاومه الثابته', NULL, NULL, 'text', NULL, NULL, 1, 1, '2023-05-02 08:16:15', '2023-05-02 08:27:28');
 
 -- --------------------------------------------------------
 
@@ -305,7 +247,7 @@ CREATE TABLE IF NOT EXISTS `comment_replays` (
   KEY `comment_replays_student_id_foreign` (`student_id`),
   KEY `comment_replays_teacher_id_foreign` (`teacher_id`),
   KEY `comment_replays_comment_id_foreign` (`comment_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `comment_replays`
@@ -313,7 +255,10 @@ CREATE TABLE IF NOT EXISTS `comment_replays` (
 
 INSERT INTO `comment_replays` (`id`, `comment`, `audio`, `image`, `type`, `student_id`, `teacher_id`, `comment_id`, `user_type`, `created_at`, `updated_at`) VALUES
 (1, 'مش فاهم انهي جزئيه بالزبط في المعادلات', NULL, NULL, 'text', NULL, 1, 13, 'teacher', '2023-02-26 11:25:10', '2023-02-26 11:25:10'),
-(8, 'تمام انا كده فهمت', NULL, NULL, 'file', 1, NULL, 1, 'student', '2023-03-02 07:33:29', '2023-03-02 07:33:29');
+(9, 'تمام ممكن تتصل بالسكرتاريه', NULL, NULL, 'text', NULL, 1, 17, 'teacher', '2023-02-26 11:25:10', '2023-02-26 11:25:10'),
+(11, 'تمام يا مستر', NULL, NULL, 'text', 1, NULL, 17, 'student', '2023-05-02 08:33:29', '2023-05-02 08:33:29'),
+(12, 'لا الجزئيه دي اسهل في الشرح', NULL, NULL, 'text', NULL, 1, 16, 'teacher', '2023-05-02 08:33:29', '2023-05-02 08:33:29'),
+(13, 'تمام يا مستر شكرا', NULL, NULL, 'text', 1, NULL, 16, 'student', '2023-05-02 08:33:29', '2023-05-02 08:33:29');
 
 -- --------------------------------------------------------
 
@@ -372,56 +317,44 @@ CREATE TABLE IF NOT EXISTS `degrees` (
   KEY `life_exam_cons_2` (`life_exam_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=425 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `degrees`
+-- Table structure for table `discount_coupons`
 --
 
-INSERT INTO `degrees` (`id`, `user_id`, `question_id`, `online_exam_id`, `all_exam_id`, `life_exam_id`, `type`, `degree`, `status`, `created_at`, `updated_at`) VALUES
-(259, 1, 1, 4, NULL, NULL, 'choice', 20, 'completed', '2023-03-18 06:30:11', '2023-03-18 06:30:11'),
-(260, 1, 2, 4, NULL, NULL, 'choice', 0, 'completed', '2023-03-18 06:30:11', '2023-03-18 06:30:11'),
-(261, 1, 3, 4, NULL, NULL, 'choice', 20, 'completed', '2023-03-18 06:30:11', '2023-03-18 06:30:11'),
-(262, 1, 4, 4, NULL, NULL, 'text', 20, 'completed', '2023-03-18 06:30:11', '2023-03-18 06:30:11'),
-(267, 2, 1, 4, NULL, NULL, 'choice', 20, 'completed', '2023-03-18 06:42:56', '2023-03-18 06:42:56'),
-(268, 2, 2, 4, NULL, NULL, 'choice', 20, 'completed', '2023-03-18 06:42:56', '2023-03-18 06:42:56'),
-(269, 2, 3, 4, NULL, NULL, 'choice', 20, 'completed', '2023-03-18 06:42:56', '2023-03-18 06:42:56'),
-(270, 2, 4, 4, NULL, NULL, 'text', 10, 'completed', '2023-03-18 06:42:56', '2023-03-18 06:42:56'),
-(275, 6, 1, 4, NULL, NULL, 'choice', 20, 'completed', '2023-03-18 10:30:14', '2023-03-18 10:30:14'),
-(276, 6, 2, 4, NULL, NULL, 'choice', 0, 'completed', '2023-03-18 10:30:15', '2023-03-18 10:30:15'),
-(277, 6, 3, 4, NULL, NULL, 'choice', 20, 'completed', '2023-03-18 10:30:15', '2023-03-18 10:30:15'),
-(278, 6, 4, 4, NULL, NULL, 'text', 15, 'completed', '2023-03-18 10:30:15', '2023-03-18 10:30:15'),
-(283, 10, 1, 4, NULL, NULL, 'choice', 20, 'completed', '2023-03-18 10:35:14', '2023-03-18 10:35:14'),
-(284, 10, 2, 4, NULL, NULL, 'choice', 20, 'completed', '2023-03-18 10:35:14', '2023-03-18 10:35:14'),
-(285, 10, 3, 4, NULL, NULL, 'choice', 20, 'completed', '2023-03-18 10:35:14', '2023-03-18 10:35:14'),
-(286, 10, 4, 4, NULL, NULL, 'text', 20, 'completed', '2023-03-18 10:35:14', '2023-03-18 10:35:14'),
-(291, 9, 1, 4, NULL, NULL, 'choice', 20, 'completed', '2023-03-18 10:40:59', '2023-03-18 10:40:59'),
-(292, 9, 2, 4, NULL, NULL, 'choice', 0, 'completed', '2023-03-18 10:40:59', '2023-03-18 10:40:59'),
-(293, 9, 3, 4, NULL, NULL, 'choice', 20, 'completed', '2023-03-18 10:40:59', '2023-03-18 10:40:59'),
-(294, 9, 4, 4, NULL, NULL, 'text', 7, 'completed', '2023-03-18 10:40:59', '2023-03-18 10:40:59'),
-(297, 5, 1, 2, NULL, NULL, 'choice', 20, 'completed', '2023-03-19 05:41:05', '2023-03-19 05:41:05'),
-(298, 5, 2, 2, NULL, NULL, 'choice', 20, 'completed', '2023-03-19 05:41:06', '2023-03-19 05:41:06'),
-(346, 1, 7, 2, NULL, NULL, 'choice', 30, 'completed', '2023-03-21 09:48:20', '2023-03-21 09:48:20'),
-(347, 1, 8, 2, NULL, NULL, 'choice', 30, 'completed', '2023-03-21 09:48:20', '2023-03-21 09:48:20'),
-(348, 1, 9, 2, NULL, NULL, 'choice', 40, 'completed', '2023-03-21 09:48:20', '2023-03-21 09:48:20'),
-(384, 1, 12, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-26 08:30:19', '2023-03-26 08:30:19'),
-(385, 1, 13, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-26 08:30:39', '2023-03-26 08:30:39'),
-(386, 1, 14, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-26 08:30:52', '2023-03-26 08:30:52'),
-(387, 1, 15, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-26 08:31:10', '2023-03-26 08:31:10'),
-(388, 1, 16, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-26 08:31:50', '2023-03-26 08:31:50'),
-(400, 9, 12, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-27 12:33:34', '2023-03-27 12:33:34'),
-(401, 9, 13, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-27 12:33:49', '2023-03-27 12:33:49'),
-(402, 9, 14, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-27 12:34:06', '2023-03-27 12:34:06'),
-(403, 9, 15, NULL, NULL, 1, 'choice', 0, 'completed', '2023-03-27 12:34:38', '2023-03-27 12:34:38'),
-(404, 9, 16, NULL, NULL, 1, 'choice', 0, 'completed', '2023-03-27 12:34:52', '2023-03-27 12:34:52'),
-(410, 13, 12, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-28 09:26:19', '2023-03-28 09:26:19'),
-(411, 13, 13, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-28 09:26:50', '2023-03-28 09:26:50'),
-(412, 13, 14, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-28 09:27:22', '2023-03-28 09:27:22'),
-(413, 13, 15, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-28 09:27:48', '2023-03-28 09:27:48'),
-(414, 13, 16, NULL, NULL, 1, 'choice', 0, 'completed', '2023-03-28 09:28:00', '2023-03-28 09:28:00'),
-(420, 4, 12, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-28 11:34:19', '2023-03-28 11:34:19'),
-(421, 4, 13, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-28 11:34:44', '2023-03-28 11:34:44'),
-(422, 4, 14, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-28 11:35:10', '2023-03-28 11:35:10'),
-(423, 4, 15, NULL, NULL, 1, 'choice', 40, 'completed', '2023-03-28 11:35:21', '2023-03-28 11:35:21'),
-(424, 4, 16, NULL, NULL, 1, 'choice', 0, 'completed', '2023-03-28 11:35:37', '2023-03-28 11:35:37');
+DROP TABLE IF EXISTS `discount_coupons`;
+CREATE TABLE IF NOT EXISTS `discount_coupons` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `coupon` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `discount_type` enum('per','value') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'نوع الخصم',
+  `discount_amount` double NOT NULL,
+  `valid_from` date DEFAULT NULL,
+  `valid_to` date DEFAULT NULL,
+  `is_enabled` tinyint(1) NOT NULL DEFAULT '1',
+  `total_usage` int NOT NULL COMMENT 'عدد مستخدمين هذا لكوبون',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `discount_coupon_students`
+--
+
+DROP TABLE IF EXISTS `discount_coupon_students`;
+CREATE TABLE IF NOT EXISTS `discount_coupon_students` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `discount_coupon_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `discount_coupon_students_user_id_foreign` (`user_id`),
+  KEY `discount_coupon_students_discount_coupon_id_foreign` (`discount_coupon_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -442,7 +375,7 @@ CREATE TABLE IF NOT EXISTS `exams_favorites` (
   KEY `exams_favorites_user_id_foreign` (`user_id`),
   KEY `exams_favorites_all_exam_id_foreign` (`all_exam_id`),
   KEY `exams_favorites_online_exam_id_foreign` (`online_exam_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `exams_favorites`
@@ -452,7 +385,8 @@ INSERT INTO `exams_favorites` (`id`, `user_id`, `online_exam_id`, `all_exam_id`,
 (1, 2, 1, NULL, 'favorite', '2023-04-20 10:12:32', '2023-04-20 10:23:57'),
 (2, 2, 2, NULL, 'favorite', '2023-04-20 10:30:25', '2023-04-20 10:30:25'),
 (3, 2, 3, NULL, 'favorite', '2023-04-20 10:32:12', '2023-04-20 10:32:12'),
-(4, 2, 4, NULL, 'favorite', '2023-04-20 10:32:17', '2023-04-20 10:32:17');
+(4, 2, 4, NULL, 'favorite', '2023-04-20 10:32:17', '2023-04-20 10:32:17'),
+(5, 2, NULL, 1, 'favorite', '2023-04-25 08:51:48', '2023-04-25 08:51:48');
 
 -- --------------------------------------------------------
 
@@ -476,7 +410,7 @@ CREATE TABLE IF NOT EXISTS `exam_degree_depends` (
   KEY `exam_degree_depends_online_exam_id_foreign` (`online_exam_id`),
   KEY `exam_degree_depends_all_exam_id_foreign` (`all_exam_id`),
   KEY `life_exam_cons_5` (`life_exam_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `exam_degree_depends`
@@ -500,7 +434,15 @@ INSERT INTO `exam_degree_depends` (`id`, `user_id`, `online_exam_id`, `all_exam_
 (72, 1, NULL, NULL, 1, 200, 'yes', '2023-03-26 08:30:19', '2023-03-26 08:31:50'),
 (75, 9, NULL, NULL, 1, 120, 'no', '2023-03-27 12:33:34', '2023-03-27 12:34:06'),
 (77, 13, NULL, NULL, 1, 160, 'yes', '2023-03-28 09:26:19', '2023-03-28 09:28:01'),
-(79, 4, NULL, NULL, 1, 160, 'yes', '2023-03-28 11:34:19', '2023-03-28 11:35:37');
+(79, 4, NULL, NULL, 1, 160, 'yes', '2023-03-28 11:34:19', '2023-03-28 11:35:37'),
+(80, 1, NULL, 1, NULL, 35, 'yes', '2023-03-28 11:34:19', '2023-03-28 11:35:37'),
+(81, 1, NULL, 2, NULL, 35, 'yes', '2023-03-28 11:34:19', '2023-03-28 11:35:37'),
+(82, 1, NULL, 3, NULL, 32, 'yes', '2023-03-28 11:34:19', '2023-03-28 11:35:37'),
+(83, 1, 1, NULL, NULL, 40, 'yes', '2023-03-28 11:34:19', '2023-03-28 11:35:37'),
+(84, 1, NULL, 1, NULL, 30, 'no', '2023-03-28 11:34:19', '2023-03-28 11:35:37'),
+(85, 1, NULL, 2, NULL, 30, 'no', '2023-03-28 11:34:19', '2023-03-28 11:35:37'),
+(86, 1, NULL, 3, NULL, 30, 'no', '2023-03-28 11:34:19', '2023-03-28 11:35:37'),
+(87, 1, 1, NULL, NULL, 30, 'no', '2023-03-28 11:34:19', '2023-03-28 11:35:37');
 
 -- --------------------------------------------------------
 
@@ -578,21 +520,28 @@ CREATE TABLE IF NOT EXISTS `guides` (
   `term_id` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `lesson_id` bigint UNSIGNED DEFAULT NULL,
+  `subject_class_id` bigint UNSIGNED DEFAULT NULL,
+  `answer_pdf_file` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `answer_pdf_file_size` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `answer_video_file` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `guides_season_id_foreign` (`season_id`),
-  KEY `guides_term_id_foreign` (`term_id`)
+  KEY `guides_term_id_foreign` (`term_id`),
+  KEY `guides_lesson_id_foreign` (`lesson_id`),
+  KEY `guides_subject_class_id_foreign` (`subject_class_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `guides`
 --
 
-INSERT INTO `guides` (`id`, `title_ar`, `title_en`, `description_ar`, `description_en`, `from_id`, `file`, `icon`, `season_id`, `term_id`, `created_at`, `updated_at`) VALUES
-(1, 'حل دورات', 'Solve cycles', 'سلسة صفحات من اهم الاسئلة مع الحل', 'A series of pages of the most important questions with the solution', NULL, NULL, NULL, 1, 1, '2023-03-15 07:00:01', '2023-03-15 07:00:01'),
-(2, 'حل القسم الاول', 'Solve the first section', 'مقرر محلول بأهم الاسئلة1', 'Solved decision with the most important questions 1', 1, 'Resume.pdf', NULL, NULL, NULL, '2023-03-15 07:08:07', '2023-03-15 07:08:07'),
-(3, 'حل القسم الثاني', 'The solution of the second section', 'مقرر بأهم الاسئلة 2', 'Decided on the most important questions 2', 1, 'Resume.pdf', NULL, NULL, NULL, '2023-03-15 07:08:46', '2023-03-15 07:08:46'),
-(4, 'اسئلة منوعة', 'Miscellaneous questions', 'اسئلة مفيدة للطالب', 'Useful questions for the student', NULL, NULL, NULL, 2, 2, '2023-03-15 07:09:30', '2023-03-15 07:09:30'),
-(5, 'حل الاسئلة المنوعة', 'Solve interesting questions', 'العديد من الاسئلة', 'Many questions', 4, 'Resume.pdf', NULL, NULL, NULL, '2023-03-15 07:10:14', '2023-03-15 07:10:14');
+INSERT INTO `guides` (`id`, `title_ar`, `title_en`, `description_ar`, `description_en`, `from_id`, `file`, `icon`, `season_id`, `term_id`, `created_at`, `updated_at`, `lesson_id`, `subject_class_id`, `answer_pdf_file`, `answer_pdf_file_size`, `answer_video_file`) VALUES
+(1, 'حل دورات', 'Solve cycles', 'سلسة صفحات من اهم الاسئلة مع الحل', 'A series of pages of the most important questions with the solution', NULL, NULL, NULL, 1, 1, '2023-03-15 07:00:01', '2023-03-15 07:00:01', NULL, NULL, NULL, NULL, NULL),
+(2, 'حل القسم الاول', 'Solve the first section', 'مقرر محلول بأهم الاسئلة1', 'Solved decision with the most important questions 1', 1, 'Resume.pdf', NULL, NULL, NULL, '2023-03-15 07:08:07', '2023-03-15 07:08:07', NULL, NULL, NULL, NULL, NULL),
+(3, 'حل القسم الثاني', 'The solution of the second section', 'مقرر بأهم الاسئلة 2', 'Decided on the most important questions 2', 1, 'Resume.pdf', NULL, NULL, NULL, '2023-03-15 07:08:46', '2023-03-15 07:08:46', NULL, NULL, NULL, NULL, NULL),
+(4, 'اسئلة منوعة', 'Miscellaneous questions', 'اسئلة مفيدة للطالب', 'Useful questions for the student', NULL, NULL, NULL, 2, 2, '2023-03-15 07:09:30', '2023-03-15 07:09:30', NULL, NULL, NULL, NULL, NULL),
+(5, 'حل الاسئلة المنوعة', 'Solve interesting questions', 'العديد من الاسئلة', 'Many questions', 4, 'Resume.pdf', NULL, NULL, NULL, '2023-03-15 07:10:14', '2023-03-15 07:10:14', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -701,7 +650,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -737,7 +686,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (30, '2023_02_22_132923_create_papel_sheet_exams_table', 1),
 (31, '2023_02_22_133343_create_papel_sheet_exam_times_table', 1),
 (32, '2023_02_22_133816_create_papel_sheet_exam_users_table', 1),
-(33, '2023_02_22_134512_create_video_watches_table', 1),
+(33, '2023_02_22_134512_create_video_opened_table', 1),
 (36, '2023_02_27_084130_create_suggestions_table', 3),
 (40, '2023_02_27_111823_create_notifications_table', 4),
 (41, '2023_03_05_064915_create_monthly_plans_table', 5),
@@ -782,7 +731,16 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (99, '2014_10_10_142457_create_cities_table', 34),
 (100, '2023_04_20_100154_create_about_mes_table', 35),
 (101, '2023_04_20_113107_create_exams_favorites_table', 36),
-(102, '2023_04_19_121837_create_permission_tables', 37);
+(102, '2023_04_19_121837_create_permission_tables', 37),
+(103, '0023_04_18_145125_add_lesson_id_to_table_guides', 38),
+(104, '2023_04_25_142920_add_answers_files_to_guides', 38),
+(105, '2023_04_27_102145_create_video_files_uploads_table', 38),
+(106, '2023_04_30_125637_create_notes_table', 39),
+(107, '2023_05_02_095009_create_video_total_views_table', 40),
+(108, '2023_05_03_080316_create_discount_coupons_table', 41),
+(109, '2023_05_03_081001_create_discount_coupon_students_table', 41),
+(110, '2023_02_22_134512_create_video_watches_table', 42),
+(111, '2023_05_03_133139_create_motivational_sentences_table', 42);
 
 -- --------------------------------------------------------
 
@@ -819,8 +777,7 @@ CREATE TABLE IF NOT EXISTS `model_has_roles` (
 --
 
 INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
-(1, 'App\\Models\\Admin', 1),
-(2, 'App\\Models\\Admin', 2);
+(1, 'App\\Models\\Admin', 1);
 
 -- --------------------------------------------------------
 
@@ -929,6 +886,60 @@ INSERT INTO `monthly_plans` (`id`, `background_color`, `title_ar`, `title_en`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `motivational_sentences`
+--
+
+DROP TABLE IF EXISTS `motivational_sentences`;
+CREATE TABLE IF NOT EXISTS `motivational_sentences` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title_ar` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title_en` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `percentage` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `motivational_sentences`
+--
+
+INSERT INTO `motivational_sentences` (`id`, `title_ar`, `title_en`, `percentage`, `created_at`, `updated_at`) VALUES
+(4, 'اهلا', 'hi', '22', '2023-05-03 11:37:00', '2023-05-03 11:37:00'),
+(3, 'اهلا', 'hi', '22', '2023-05-03 11:36:50', '2023-05-03 11:36:50'),
+(5, 'اهلا', 'hi', '22', '2023-05-03 11:37:20', '2023-05-03 11:37:20'),
+(6, 'اهلا', 'hi', '22', '2023-05-03 11:37:20', '2023-05-03 11:37:20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notes`
+--
+
+DROP TABLE IF EXISTS `notes`;
+CREATE TABLE IF NOT EXISTS `notes` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `note_date` date NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `notes_user_id_foreign` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `notes`
+--
+
+INSERT INTO `notes` (`id`, `title`, `note`, `note_date`, `user_id`, `created_at`, `updated_at`) VALUES
+(1, 'ملاحظه مهمه', 'عندى امتحان ورقى على الفصل الاول والثانى يوم الاثنين', '2023-05-10', 1, '2023-04-30 10:24:45', '2023-04-30 10:24:45'),
+(2, 'ملاحظه مهمه', 'لازم اشوف جزء المعادلات', '2023-05-11', 1, '2023-04-30 10:25:30', '2023-04-30 10:25:30');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `notifications`
 --
 
@@ -980,9 +991,10 @@ CREATE TABLE IF NOT EXISTS `online_exams` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `name_ar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `name_en` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `background_color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `exam_type` enum('pdf','online') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'online',
-  `pdf_num_questions` int DEFAULT NULL,
   `pdf_file_upload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `pdf_num_questions` int DEFAULT NULL,
   `answer_pdf_file` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `answer_video_file` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `date_exam` date NOT NULL,
@@ -1011,13 +1023,13 @@ CREATE TABLE IF NOT EXISTS `online_exams` (
 -- Dumping data for table `online_exams`
 --
 
-INSERT INTO `online_exams` (`id`, `name_ar`, `name_en`, `exam_type`, `pdf_num_questions`, `pdf_file_upload`, `answer_pdf_file`, `answer_video_file`, `date_exam`, `quize_minute`, `trying_number`, `degree`, `type`, `season_id`, `term_id`, `class_id`, `lesson_id`, `video_id`, `instruction_ar`, `instruction_en`, `created_at`, `updated_at`) VALUES
-(1, 'امتحان شامل علي الليزر', 'Exam about Lizer', 'online', NULL, NULL, NULL, NULL, '2023-03-20', 30, 2, 40, 'class', 1, 1, 1, NULL, NULL, NULL, NULL, '2023-02-23 08:25:36', '2023-02-23 08:25:36'),
-(2, 'امتحان علي الدرس الاول', 'Exam about lesson1', 'online', NULL, NULL, NULL, NULL, '2023-03-20', 30, 100, 100, 'lesson', 1, 1, NULL, 1, NULL, NULL, NULL, '2023-02-23 08:25:36', '2023-02-23 08:25:36'),
-(3, 'امتحان علي الدرس الاول جزء المعادلات', 'Exam about lesson1', 'online', NULL, NULL, NULL, NULL, '2023-03-20', 30, 2, 50, 'lesson', 1, 1, NULL, 1, NULL, NULL, NULL, '2023-02-23 08:25:36', '2023-02-23 08:25:36'),
-(4, 'امتحان علي الفيديو الاول', 'Exam for part 1', 'online', NULL, NULL, NULL, NULL, '2023-03-20', 30, 20, 80, 'video', 1, 1, NULL, NULL, 1, NULL, NULL, '2023-02-23 08:25:36', '2023-02-23 08:25:36'),
-(5, 'امتحان علي المقاومه الكهربائيه', 'Electrical resistance test', 'online', NULL, NULL, NULL, NULL, '2023-03-20', 30, 9, 40, 'class', 1, 1, 1, NULL, NULL, NULL, NULL, '2023-02-23 08:25:36', '2023-02-23 08:25:36'),
-(6, 'الكميات القياسية والمتجهة', 'scalar and vector quantities', 'pdf', 10, '1.pdf', '1.pdf', 'v1.mp4', '2023-03-20', 0, 0, 40, 'class', 1, 1, 1, NULL, NULL, NULL, NULL, '2023-02-23 08:25:36', '2023-02-23 08:25:36');
+INSERT INTO `online_exams` (`id`, `name_ar`, `name_en`, `background_color`, `exam_type`, `pdf_file_upload`, `pdf_num_questions`, `answer_pdf_file`, `answer_video_file`, `date_exam`, `quize_minute`, `trying_number`, `degree`, `type`, `season_id`, `term_id`, `class_id`, `lesson_id`, `video_id`, `instruction_ar`, `instruction_en`, `created_at`, `updated_at`) VALUES
+(1, 'امتحان شامل علي الليزر', 'Exam about Lizer', '#FFEAD7', 'online', NULL, NULL, NULL, NULL, '2023-03-20', 30, 2, 40, 'class', 1, 1, 1, NULL, NULL, '[\"احتفظ بهدوئك وخذ نفساً عميقاً\", \"اقرأ ورقة الامتحان كاملة قبل البدء بالإجابة\", \"نظم وقت الإجابة\", \"انتقل إلى السؤال التالي إذا تعثرت في إجابة سؤال ما\", \"اقرأ الأسئلة بعناية وتأكد من حل كل سؤال بالشكل الصحيح\", \"اشرب الماء خلال الامتحان\", \"تأكد من جميع الإجابات، خاصة إذا أنهيت الامتحان مبكراً.\"]', '[\"Keep calm and take a deep breath\", \"Read the entire exam paper before starting to answer.\", \"response time systems\", \"Go to the next question if you get stuck on the answer to a question\", \"Read the questions carefully and make sure you answer each question correctly.\", \"Drink water during the exam.\", \"Be sure of all the answers, especially if you finish the exam early.\"]', '2023-02-23 08:25:36', '2023-02-23 08:25:36'),
+(2, 'امتحان علي الدرس الاول', 'Exam about lesson1', '#D7EAF9', 'online', NULL, NULL, NULL, NULL, '2023-03-20', 30, 100, 100, 'lesson', 1, 1, NULL, 1, NULL, '[\"احتفظ بهدوئك وخذ نفساً عميقاً\", \"اقرأ ورقة الامتحان كاملة قبل البدء بالإجابة\", \"نظم وقت الإجابة\", \"انتقل إلى السؤال التالي إذا تعثرت في إجابة سؤال ما\", \"اقرأ الأسئلة بعناية وتأكد من حل كل سؤال بالشكل الصحيح\", \"اشرب الماء خلال الامتحان\", \"تأكد من جميع الإجابات، خاصة إذا أنهيت الامتحان مبكراً.\"]', '[\"Keep calm and take a deep breath\", \"Read the entire exam paper before starting to answer.\", \"response time systems\", \"Go to the next question if you get stuck on the answer to a question\", \"Read the questions carefully and make sure you answer each question correctly.\", \"Drink water during the exam.\", \"Be sure of all the answers, especially if you finish the exam early.\"]', '2023-02-23 08:25:36', '2023-02-23 08:25:36'),
+(3, 'امتحان علي الدرس الاول جزء المعادلات', 'Exam about lesson1', '#E3D2FE', 'online', NULL, NULL, NULL, NULL, '2023-03-20', 30, 2, 50, 'lesson', 1, 1, NULL, 1, NULL, '[\"احتفظ بهدوئك وخذ نفساً عميقاً\", \"اقرأ ورقة الامتحان كاملة قبل البدء بالإجابة\", \"نظم وقت الإجابة\", \"انتقل إلى السؤال التالي إذا تعثرت في إجابة سؤال ما\", \"اقرأ الأسئلة بعناية وتأكد من حل كل سؤال بالشكل الصحيح\", \"اشرب الماء خلال الامتحان\", \"تأكد من جميع الإجابات، خاصة إذا أنهيت الامتحان مبكراً.\"]', '[\"Keep calm and take a deep breath\", \"Read the entire exam paper before starting to answer.\", \"response time systems\", \"Go to the next question if you get stuck on the answer to a question\", \"Read the questions carefully and make sure you answer each question correctly.\", \"Drink water during the exam.\", \"Be sure of all the answers, especially if you finish the exam early.\"]', '2023-02-23 08:25:36', '2023-02-23 08:25:36'),
+(4, 'قانون نيوتن الأول للحركة', 'Newton\'s first law of motion', '#FFEAD7', 'online', NULL, NULL, NULL, NULL, '2023-03-20', 30, 20, 80, 'video', 1, 1, NULL, NULL, 1, '[\"احتفظ بهدوئك وخذ نفساً عميقاً\", \"اقرأ ورقة الامتحان كاملة قبل البدء بالإجابة\", \"نظم وقت الإجابة\", \"انتقل إلى السؤال التالي إذا تعثرت في إجابة سؤال ما\", \"اقرأ الأسئلة بعناية وتأكد من حل كل سؤال بالشكل الصحيح\", \"اشرب الماء خلال الامتحان\", \"تأكد من جميع الإجابات، خاصة إذا أنهيت الامتحان مبكراً.\"]', '[\"Keep calm and take a deep breath\", \"Read the entire exam paper before starting to answer.\", \"response time systems\", \"Go to the next question if you get stuck on the answer to a question\", \"Read the questions carefully and make sure you answer each question correctly.\", \"Drink water during the exam.\", \"Be sure of all the answers, especially if you finish the exam early.\"]', '2023-02-23 08:25:36', '2023-02-23 08:25:36'),
+(5, 'امتحان علي المقاومه الكهربائيه', 'Electrical resistance test', '#D7EAF9', 'online', NULL, NULL, NULL, NULL, '2023-03-20', 30, 9, 40, 'class', 1, 1, 1, NULL, NULL, '[\"احتفظ بهدوئك وخذ نفساً عميقاً\", \"اقرأ ورقة الامتحان كاملة قبل البدء بالإجابة\", \"نظم وقت الإجابة\", \"انتقل إلى السؤال التالي إذا تعثرت في إجابة سؤال ما\", \"اقرأ الأسئلة بعناية وتأكد من حل كل سؤال بالشكل الصحيح\", \"اشرب الماء خلال الامتحان\", \"تأكد من جميع الإجابات، خاصة إذا أنهيت الامتحان مبكراً.\"]', '[\"Keep calm and take a deep breath\", \"Read the entire exam paper before starting to answer.\", \"response time systems\", \"Go to the next question if you get stuck on the answer to a question\", \"Read the questions carefully and make sure you answer each question correctly.\", \"Drink water during the exam.\", \"Be sure of all the answers, especially if you finish the exam early.\"]', '2023-02-23 08:25:36', '2023-02-23 08:25:36'),
+(6, 'الكميات القياسية والمتجهة', 'scalar and vector quantities', '#E3D2FE', 'pdf', '1.pdf', 10, '1.pdf', 'v1.mp4', '2023-03-20', 0, 0, 40, 'class', 1, 1, 1, NULL, NULL, NULL, NULL, '2023-02-23 08:25:36', '2023-02-23 08:25:36');
 
 -- --------------------------------------------------------
 
@@ -1040,29 +1052,6 @@ CREATE TABLE IF NOT EXISTS `online_exam_questions` (
   KEY `online_exam_questions_question_id_foreign` (`question_id`),
   KEY `life_exam_cons_3` (`life_exam_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `online_exam_questions`
---
-
-INSERT INTO `online_exam_questions` (`id`, `online_exam_id`, `all_exam_id`, `life_exam_id`, `question_id`, `created_at`, `updated_at`) VALUES
-(5, 4, NULL, NULL, 1, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(6, 4, NULL, NULL, 2, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(7, 4, NULL, NULL, 3, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(8, 4, NULL, NULL, 4, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(9, NULL, 1, NULL, 5, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(10, NULL, 1, NULL, 6, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(11, 2, NULL, NULL, 7, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(12, 2, NULL, NULL, 8, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(13, 1, NULL, NULL, 10, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(14, 1, NULL, NULL, 11, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(15, 2, NULL, NULL, 9, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(16, NULL, NULL, 1, 12, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(17, NULL, NULL, 1, 13, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(18, NULL, NULL, 1, 14, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(19, NULL, NULL, 1, 15, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(20, NULL, NULL, 1, 16, '2023-03-13 08:21:51', '2023-03-13 08:21:51'),
-(21, 4, NULL, NULL, 17, '2023-03-13 08:21:51', '2023-03-13 08:21:51');
 
 -- --------------------------------------------------------
 
@@ -1092,52 +1081,6 @@ CREATE TABLE IF NOT EXISTS `online_exam_users` (
   KEY `online_exam_users_online_exam_id_foreign` (`online_exam_id`),
   KEY `life_exam_cons_1` (`life_exam_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=479 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `online_exam_users`
---
-
-INSERT INTO `online_exam_users` (`id`, `user_id`, `question_id`, `answer_id`, `online_exam_id`, `all_exam_id`, `life_exam_id`, `degree`, `degree_status`, `status`, `created_at`, `updated_at`) VALUES
-(322, 1, 1, 1, 4, NULL, NULL, 20, 'completed', 'solved', '2023-03-18 06:30:11', '2023-03-18 06:30:11'),
-(323, 1, 2, 2, 4, NULL, NULL, 0, 'completed', 'un_correct', '2023-03-18 06:30:11', '2023-03-18 06:30:11'),
-(324, 1, 3, 1, 4, NULL, NULL, 20, 'completed', 'solved', '2023-03-18 06:30:11', '2023-03-18 06:30:11'),
-(328, 2, 1, 1, 4, NULL, NULL, 20, 'completed', 'solved', '2023-03-18 06:42:56', '2023-03-18 06:42:56'),
-(329, 2, 2, 1, 4, NULL, NULL, 20, 'completed', 'solved', '2023-03-18 06:42:56', '2023-03-18 06:42:56'),
-(330, 2, 3, 1, 4, NULL, NULL, 20, 'completed', 'solved', '2023-03-18 06:42:56', '2023-03-18 06:42:56'),
-(334, 6, 1, 1, 4, NULL, NULL, 20, 'completed', 'solved', '2023-03-18 10:30:14', '2023-03-18 10:30:14'),
-(335, 6, 2, 2, 4, NULL, NULL, 0, 'completed', 'un_correct', '2023-03-18 10:30:15', '2023-03-18 10:30:15'),
-(336, 6, 3, 1, 4, NULL, NULL, 20, 'completed', 'solved', '2023-03-18 10:30:15', '2023-03-18 10:30:15'),
-(340, 10, 1, 1, 4, NULL, NULL, 20, 'completed', 'solved', '2023-03-18 10:35:14', '2023-03-18 10:35:14'),
-(341, 10, 2, 1, 4, NULL, NULL, 20, 'completed', 'solved', '2023-03-18 10:35:14', '2023-03-18 10:35:14'),
-(342, 10, 3, 1, 4, NULL, NULL, 20, 'completed', 'solved', '2023-03-18 10:35:14', '2023-03-18 10:35:14'),
-(346, 9, 1, 1, 4, NULL, NULL, 20, 'completed', 'solved', '2023-03-18 10:40:59', '2023-03-18 10:40:59'),
-(347, 9, 2, 2, 4, NULL, NULL, 0, 'completed', 'un_correct', '2023-03-18 10:40:59', '2023-03-18 10:40:59'),
-(348, 9, 3, 1, 4, NULL, NULL, 20, 'completed', 'solved', '2023-03-18 10:40:59', '2023-03-18 10:40:59'),
-(351, 5, 1, 1, 2, NULL, NULL, 20, 'completed', 'solved', '2023-03-19 05:41:05', '2023-03-19 05:41:05'),
-(352, 5, 2, 1, 2, NULL, NULL, 20, 'completed', 'solved', '2023-03-19 05:41:05', '2023-03-19 05:41:05'),
-(400, 1, 7, 21, 2, NULL, NULL, 30, 'completed', 'solved', '2023-03-21 09:48:20', '2023-03-21 09:48:20'),
-(401, 1, 8, 25, 2, NULL, NULL, 30, 'completed', 'solved', '2023-03-21 09:48:20', '2023-03-21 09:48:20'),
-(402, 1, 9, 37, 2, NULL, NULL, 40, 'completed', 'solved', '2023-03-21 09:48:20', '2023-03-21 09:48:20'),
-(438, 1, 12, 41, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-26 08:30:19', '2023-03-26 08:30:19'),
-(439, 1, 13, 45, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-26 08:30:39', '2023-03-26 08:30:39'),
-(440, 1, 14, 49, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-26 08:30:52', '2023-03-26 08:30:52'),
-(441, 1, 15, 53, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-26 08:31:10', '2023-03-26 08:31:10'),
-(442, 1, 16, 57, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-26 08:31:50', '2023-03-26 08:31:50'),
-(454, 9, 12, 41, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-27 12:33:34', '2023-03-27 12:33:34'),
-(455, 9, 13, 45, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-27 12:33:49', '2023-03-27 12:33:49'),
-(456, 9, 14, 49, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-27 12:34:06', '2023-03-27 12:34:06'),
-(457, 9, 15, 56, NULL, NULL, 1, 0, 'completed', 'un_correct', '2023-03-27 12:34:37', '2023-03-27 12:34:37'),
-(458, 9, 16, 60, NULL, NULL, 1, 0, 'completed', 'un_correct', '2023-03-27 12:34:52', '2023-03-27 12:34:52'),
-(464, 13, 12, 41, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-28 09:26:19', '2023-03-28 09:26:19'),
-(465, 13, 13, 45, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-28 09:26:50', '2023-03-28 09:26:50'),
-(466, 13, 14, 49, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-28 09:27:22', '2023-03-28 09:27:22'),
-(467, 13, 15, 53, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-28 09:27:48', '2023-03-28 09:27:48'),
-(468, 13, 16, 60, NULL, NULL, 1, 0, 'completed', 'un_correct', '2023-03-28 09:28:00', '2023-03-28 09:28:00'),
-(474, 4, 12, 41, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-28 11:34:19', '2023-03-28 11:34:19'),
-(475, 4, 13, 45, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-28 11:34:44', '2023-03-28 11:34:44'),
-(476, 4, 14, 49, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-28 11:35:10', '2023-03-28 11:35:10'),
-(477, 4, 15, 53, NULL, NULL, 1, 40, 'completed', 'solved', '2023-03-28 11:35:21', '2023-03-28 11:35:21'),
-(478, 4, 16, 60, NULL, NULL, 1, 0, 'completed', 'un_correct', '2023-03-28 11:35:37', '2023-03-28 11:35:37');
 
 -- --------------------------------------------------------
 
@@ -1232,7 +1175,7 @@ CREATE TABLE IF NOT EXISTS `papel_sheet_exams` (
 --
 
 INSERT INTO `papel_sheet_exams` (`id`, `name_ar`, `name_en`, `description`, `degree`, `season_id`, `term_id`, `from`, `to`, `date_exam`, `created_at`, `updated_at`) VALUES
-(1, 'امتحان ورقي علي الوحده الاولي', 'Paper exam on the first unit', 'يجب الانتظام في القاعات وعدم النظر الي الطالب بجانبك', 80, 1, 1, '2023-04-05', '2023-04-08', '2023-04-10', '2023-02-27 09:54:04', '2023-02-27 09:54:04');
+(1, 'امتحان ورقي علي الوحده الاولي', 'Paper exam on the first unit', 'يجب الانتظام في القاعات وعدم النظر الي الطالب بجانبك', 80, 1, 1, '2023-04-30', '2023-05-09', '2023-05-10', '2023-02-27 09:54:04', '2023-02-27 09:54:04');
 
 -- --------------------------------------------------------
 
@@ -1515,6 +1458,7 @@ DROP TABLE IF EXISTS `questions`;
 CREATE TABLE IF NOT EXISTS `questions` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `question` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `difficulty` enum('low','mid','high') COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` enum('video','lesson','all_exam','subject_class','life_exam') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `file_type` enum('image','text') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'text',
@@ -1531,30 +1475,63 @@ CREATE TABLE IF NOT EXISTS `questions` (
   KEY `questions_examable_type_examable_id_index` (`examable_type`,`examable_id`),
   KEY `questions_season_id_foreign` (`season_id`),
   KEY `questions_term_id_foreign` (`term_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `questions`
 --
 
-INSERT INTO `questions` (`id`, `question`, `type`, `image`, `file_type`, `question_type`, `degree`, `note`, `season_id`, `term_id`, `examable_type`, `examable_id`, `created_at`, `updated_at`) VALUES
-(1, 'إذا كانت نسبة الخطأ في قياس طول قلم هي 2% وكان مقدار الخطأ يساوي 0.1 سم فإن طول القلم الحقيقي يساوي .......... سم', 'video', NULL, 'text', 'choice', 20, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\VideoParts', 1, '2023-03-06 07:43:37', '2023-03-06 07:43:37'),
-(2, 'إذا كان الخطأ النسبي في قياس الكتلة = 0.01 والخطأ النسبي في قياس العجلة = 0.03 فإن الخطأ النسبي في قياس القوة = .......... (القوة = كتلة في عجلة )', 'video', NULL, 'text', 'choice', 20, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\VideoParts', 1, '2023-03-06 09:56:25', '2023-03-06 09:56:30'),
-(3, 'إذا كان الخطأ النسبي في قياس نصف قطر كرة %5.0 فان الخطأ النسبي الكلي في قياس حجمها', 'video', NULL, 'text', 'choice', 20, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\VideoParts', 1, '2023-03-06 07:54:14', '2023-03-06 07:54:15'),
-(4, 'بداءت سياره حركتها من السكون وفي خط مستقيم وعجله منتظمه فاذا كانت سرعتها المتوسطه خلال 20s هي (2m/s) فان سرعتها بعد 25 ثانيه هي ', 'video', NULL, 'text', 'text', 20, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\VideoParts', 1, '2023-03-06 07:54:14', '2023-03-06 07:54:15'),
-(5, 'المقدار الحركي للمقاومه اثناء الحركه المستقيمه', 'all_exam', NULL, 'text', 'choice', 20, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\AllExam', 1, '2023-03-06 07:43:37', '2023-03-06 07:43:37'),
-(6, 'الخطاء النسبي = سم', 'all_exam', NULL, 'text', 'choice', 20, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\AllExam', 1, '2023-03-06 07:43:37', '2023-03-06 07:43:37'),
-(7, 'الحركه التفاعليه للمقاومه النسبيه هي تقاس ب ', 'lesson', NULL, 'text', 'choice', 30, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\Lesson', 2, '2023-03-06 07:43:37', '2023-03-06 07:43:37'),
-(8, 'اذا كانت سرعه الفهد عند السير في الغابه هي 1 كيلومتر علي الساعه فكم سرعته في اليوم', 'lesson', NULL, 'text', 'choice', 30, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\Lesson', 2, '2023-03-06 07:43:37', '2023-03-06 07:43:37'),
-(9, 'سرعه المقاومه للبندول عند السكون كام حركه', 'lesson', NULL, 'text', 'choice', 40, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\Lesson', 2, '2023-03-06 07:43:37', '2023-03-06 07:43:37'),
-(10, 'الطول المعياري لسلك الالمنويوم كام متر ', 'subject_class', NULL, 'text', 'choice', 20, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\SubjectClass', 1, '2023-03-06 07:43:37', '2023-03-06 07:43:37'),
-(11, 'الحركه المستقيمه للانسان تعادل كام من حركه الحيوان', 'subject_class', NULL, 'text', 'choice', 20, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\SubjectClass', 1, '2023-03-06 07:43:37', '2023-03-06 07:43:37'),
-(12, 'إذا تحرك جسم علي محيط دائرة دورة كاملة فإن إزاحة الجسم تساوي:', 'life_exam', NULL, 'text', 'choice', 40, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\LifeExam', 1, '2023-03-06 07:43:37', '2023-03-06 07:43:37'),
-(13, 'إذا تحرك جسم علي محيط دائرة دورة كاملة فإن الزاوية التي قطعها بالراديان تساوي:', 'life_exam', NULL, 'text', 'choice', 40, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\LifeExam', 1, '2023-03-06 07:43:37', '2023-03-06 07:43:37'),
-(14, 'إذا تحرك جسم علي محيط دائرة بسرعة خطية 3.14م/ث فقطع دورة كاملة في ثانيتين يكون نصف قطر الدائرة يساوي:-', 'life_exam', NULL, 'text', 'choice', 40, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\LifeExam', 1, '2023-03-06 07:43:37', '2023-03-06 07:43:37'),
-(15, ' تقاس القوة في المختبرات بجهاز يسمي:', 'life_exam', NULL, 'text', 'choice', 40, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\LifeExam', 1, '2023-03-06 07:43:37', '2023-03-06 07:43:37'),
-(16, 'من استخدامات البندول البسيط:', 'life_exam', NULL, 'text', 'choice', 40, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\LifeExam', 1, '2023-03-06 07:43:37', '2023-03-06 07:43:37'),
-(17, 'كتابة الصورة العشرية أكثر من مرة ستأخذ مساحة كبيرة، وتزيد من احتمال نسيان صفر أو اثنين؛ لذا، عند التعامل مع أعداد صغيرة جدًّا مثل هذه، تُستخدم الصيغة العلمية بدلًا من ذلك.', 'video', NULL, 'text', 'text', 20, 'اقراء السؤال بعنايه', 1, 1, 'App\\Models\\VideoParts', 1, '2023-03-06 07:54:14', '2023-03-06 07:54:15');
+INSERT INTO `questions` (`id`, `question`, `difficulty`, `type`, `image`, `file_type`, `question_type`, `degree`, `note`, `season_id`, `term_id`, `examable_type`, `examable_id`, `created_at`, `updated_at`) VALUES
+(101, 'إذا كانت نسبة الخطأ في قياس طول قلم هي 2% وكان مقدار الخطأ يساوي 0.1 سم فإن طول القلم الحقيقي يساوي .......... سم', 'mid', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(102, 'إذا كان الخطأ النسبي في قياس الكتلة = 0.01 والخطأ النسبي في قياس العجلة = 0.03 فإن الخطأ النسبي في قياس القوة = .......... (القوة = كتلة في عجلة )', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(103, 'إذا كان الخطأ النسبي في قياس نصف قطر كرة %5.0 فان الخطأ النسبي الكلي في قياس حجمها', 'mid', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(104, 'بداءت سياره حركتها من السكون وفي خط مستقيم وعجله منتظمه فاذا كانت سرعتها المتوسطه خلال 20s هي (2m/s) فان سرعتها بعد 25 ثانيه هي ', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(105, 'المقدار الحركي للمقاومه اثناء الحركه المستقيمه', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(106, 'الخطاء النسبي = سم', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(107, 'الحركه التفاعليه للمقاومه النسبيه هي تقاس ب ', 'high', 'video', NULL, 'text', 'choice', 30, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(108, 'اذا كانت سرعه الفهد عند السير في الغابه هي 1 كيلومتر علي الساعه فكم سرعته في اليوم', 'low', 'video', NULL, 'text', 'choice', 30, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(109, 'سرعه المقاومه للبندول عند السكون كام حركه', 'low', 'video', NULL, 'text', 'choice', 40, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(110, 'الطول المعياري لسلك الالمنويوم كام متر ', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(111, 'الحركه المستقيمه للانسان تعادل كام من حركه الحيوان', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(112, 'إذا تحرك جسم علي محيط دائرة دورة كاملة فإن إزاحة الجسم تساوي:', 'low', 'video', NULL, 'text', 'choice', 40, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(113, 'إذا تحرك جسم علي محيط دائرة دورة كاملة فإن الزاوية التي قطعها بالراديان تساوي:', 'low', 'video', NULL, 'text', 'choice', 40, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(114, 'إذا تحرك جسم علي محيط دائرة بسرعة خطية 3.14م/ث فقطع دورة كاملة في ثانيتين يكون نصف قطر الدائرة يساوي:-', 'low', 'video', NULL, 'text', 'choice', 40, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(115, ' تقاس القوة في المختبرات بجهاز يسمي:', 'low', 'video', NULL, 'text', 'choice', 40, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(116, 'من استخدامات البندول البسيط:', 'low', 'video', NULL, 'text', 'choice', 40, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(117, 'كتابة الصورة العشرية أكثر من مرة ستأخذ مساحة كبيرة، وتزيد من احتمال نسيان صفر أو اثنين؛ لذا، عند التعامل مع أعداد صغيرة جدًّا مثل هذه، تُستخدم الصيغة العلمية بدلًا من ذلك.', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(118, 'الحركه المستقيمه للانسان تعادل كام من حركه الحيوان', 'low', 'video', NULL, 'text', 'choice', 1, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(119, 'إذا تحرك جسم علي محيط دائرة دورة كاملة فإن الزاوية التي قطعها بالراديان تساوي:', 'low', 'video', NULL, 'text', 'choice', 1, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(120, 'إذا تحرك جسم علي محيط دائرة بسرعة خطية 3.14م/ث فقطع دورة كاملة في ثانيتين يكون نصف قطر الدائرة يساوي:-', 'low', 'video', NULL, 'text', 'choice', 1, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(121, ' تقاس القوة في المختبرات بجهاز يسمي:', 'low', 'video', NULL, 'text', 'choice', 1, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(122, 'من استخدامات البندول البسيط:', 'low', 'video', NULL, 'text', 'choice', 1, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(123, 'كتابة الصورة العشرية أكثر من مرة ستأخذ مساحة كبيرة، وتزيد من احتمال نسيان صفر أو اثنين؛ لذا، عند التعامل مع أعداد صغيرة جدًّا مثل هذه، تُستخدم الصيغة العلمية بدلًا من ذلك.', 'low', 'video', NULL, 'text', 'choice', 1, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(124, 'geagsf', 'low', 'video', NULL, 'text', 'choice', 1, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(125, '432432', 'low', 'video', NULL, 'text', 'choice', 1, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(126, 'إذا كانت نسبة الخطأ في قياس طول قلم هي 2% وكان مقدار الخطأ يساوي 0.1 سم فإن طول القلم الحقيقي يساوي .......... سم', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(127, 'إذا كان الخطأ النسبي في قياس الكتلة = 0.01 والخطأ النسبي في قياس العجلة = 0.03 فإن الخطأ النسبي في قياس القوة = .......... (القوة = كتلة في عجلة )', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(128, 'إذا كان الخطأ النسبي في قياس نصف قطر كرة %5.0 فان الخطأ النسبي الكلي في قياس حجمها', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(129, 'بداءت سياره حركتها من السكون وفي خط مستقيم وعجله منتظمه فاذا كانت سرعتها المتوسطه خلال 20s هي (2m/s) فان سرعتها بعد 25 ثانيه هي ', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(130, 'المقدار الحركي للمقاومه اثناء الحركه المستقيمه', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(131, 'الخطاء النسبي = سم', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(132, 'الحركه التفاعليه للمقاومه النسبيه هي تقاس ب ', 'low', 'video', NULL, 'text', 'choice', 30, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(133, 'اذا كانت سرعه الفهد عند السير في الغابه هي 1 كيلومتر علي الساعه فكم سرعته في اليوم', 'low', 'video', NULL, 'text', 'choice', 30, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(134, 'سرعه المقاومه للبندول عند السكون كام حركه', 'low', 'video', NULL, 'text', 'choice', 40, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(135, 'الطول المعياري لسلك الالمنويوم كام متر ', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(136, 'الحركه المستقيمه للانسان تعادل كام من حركه الحيوان', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(137, 'إذا تحرك جسم علي محيط دائرة دورة كاملة فإن إزاحة الجسم تساوي:', 'low', 'video', NULL, 'text', 'choice', 40, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(138, 'إذا تحرك جسم علي محيط دائرة دورة كاملة فإن الزاوية التي قطعها بالراديان تساوي:', 'low', 'video', NULL, 'text', 'choice', 40, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(139, 'إذا تحرك جسم علي محيط دائرة بسرعة خطية 3.14م/ث فقطع دورة كاملة في ثانيتين يكون نصف قطر الدائرة يساوي:-', 'low', 'video', NULL, 'text', 'choice', 40, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(140, ' تقاس القوة في المختبرات بجهاز يسمي:', 'low', 'video', NULL, 'text', 'choice', 40, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(141, 'من استخدامات البندول البسيط:', 'low', 'video', NULL, 'text', 'choice', 40, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(142, 'كتابة الصورة العشرية أكثر من مرة ستأخذ مساحة كبيرة، وتزيد من احتمال نسيان صفر أو اثنين؛ لذا، عند التعامل مع أعداد صغيرة جدًّا مثل هذه، تُستخدم الصيغة العلمية بدلًا من ذلك.', 'low', 'video', NULL, 'text', 'choice', 20, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(143, 'الحركه المستقيمه للانسان تعادل كام من حركه الحيوان', 'low', 'video', NULL, 'text', 'choice', 30, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(144, 'إذا تحرك جسم علي محيط دائرة دورة كاملة فإن الزاوية التي قطعها بالراديان تساوي:', 'low', 'video', NULL, 'text', 'choice', 30, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(145, 'إذا تحرك جسم علي محيط دائرة بسرعة خطية 3.14م/ث فقطع دورة كاملة في ثانيتين يكون نصف قطر الدائرة يساوي:-', 'low', 'video', NULL, 'text', 'choice', 30, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(146, ' تقاس القوة في المختبرات بجهاز يسمي:', 'low', 'video', NULL, 'text', 'choice', 30, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(147, 'من استخدامات البندول البسيط:', 'low', 'video', NULL, 'text', 'choice', 30, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(148, 'كتابة الصورة العشرية أكثر من مرة ستأخذ مساحة كبيرة، وتزيد من احتمال نسيان صفر أو اثنين؛ لذا، عند التعامل مع أعداد صغيرة جدًّا مثل هذه، تُستخدم الصيغة العلمية بدلًا من ذلك.', 'low', 'video', NULL, 'text', 'choice', 30, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(149, 'geagsf', 'low', 'video', NULL, 'text', 'choice', 30, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38'),
+(150, '432432', 'low', 'video', NULL, 'text', 'choice', 30, NULL, 1, 1, 'App\\Models\\VideoParts', 1, '2023-05-03 06:57:38', '2023-05-03 06:57:38');
 
 -- --------------------------------------------------------
 
@@ -1602,15 +1579,14 @@ CREATE TABLE IF NOT EXISTS `roles` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `roles_name_guard_name_unique` (`name`,`guard_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `roles`
 --
 
 INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'سوبر ادمن', 'admin', '2023-04-20 12:05:06', '2023-04-20 12:05:06'),
-(2, 'لل', 'admin', '2023-04-20 12:20:50', '2023-04-20 12:20:50');
+(1, 'سوبر ادمن', 'admin', '2023-04-20 12:05:06', '2023-04-20 12:05:06');
 
 -- --------------------------------------------------------
 
@@ -1661,9 +1637,7 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (28, 1),
 (29, 1),
 (30, 1),
-(31, 1),
-(2, 2),
-(3, 2);
+(31, 1);
 
 -- --------------------------------------------------------
 
@@ -1867,7 +1841,7 @@ CREATE TABLE IF NOT EXISTS `suggestions` (
   `audio` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `suggestions_user_id_foreign` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `suggestions`
@@ -1875,7 +1849,8 @@ CREATE TABLE IF NOT EXISTS `suggestions` (
 
 INSERT INTO `suggestions` (`id`, `suggestion`, `user_id`, `created_at`, `updated_at`, `type`, `image`, `audio`) VALUES
 (9, 'يا ريت ننزل امتحان كل اسبوع', 1, '2023-04-05 11:32:46', '2023-04-05 11:32:46', 'text', NULL, NULL),
-(11, NULL, 1, '2023-04-05 11:36:28', '2023-04-05 11:36:28', 'text', '20230405133628.jpg', NULL);
+(11, NULL, 1, '2023-04-05 11:36:28', '2023-04-05 11:36:28', 'text', '20230405133628.jpg', NULL),
+(12, 'ممكن نغير الالوان بتاعه التطبيق', 1, '2023-04-30 05:12:27', '2023-04-30 05:12:27', 'text', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1936,22 +1911,6 @@ CREATE TABLE IF NOT EXISTS `text_exam_users` (
   KEY `text_exam_users_all_exam_id_foreign` (`all_exam_id`),
   KEY `text_exam_users_online_exam_id_foreign` (`online_exam_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `text_exam_users`
---
-
-INSERT INTO `text_exam_users` (`id`, `user_id`, `question_id`, `online_exam_id`, `all_exam_id`, `answer`, `image`, `audio`, `answer_type`, `degree`, `degree_status`, `status`, `created_at`, `updated_at`) VALUES
-(64, 1, 4, 4, NULL, 'اذا كانت السرعه 2m/s فان السرعه سوف تكون عند ال 20 ثانيه هي 5m/s', NULL, NULL, 'text', 10, 'completed', 'solved', '2023-03-18 06:30:11', '2023-04-11 10:51:00'),
-(66, 2, 4, 4, NULL, 'اذا كانت السرعه 2m/s فان السرعه سوف تكون عند ال 20 ثانيه هي 5m/s', NULL, NULL, 'text', 10, 'completed', 'solved', '2023-03-18 06:42:56', '2023-03-18 06:42:56'),
-(68, 6, 4, 4, NULL, 'اذا كانت السرعه 2m/s فان السرعه سوف تكون عند ال 20 ثانيه هي 5m/s', NULL, NULL, 'text', 10, 'completed', 'solved', '2023-03-18 10:30:15', '2023-03-18 10:30:15'),
-(70, 10, 4, 4, NULL, 'اذا كانت السرعه 2m/s فان السرعه سوف تكون عند ال 20 ثانيه هي 5m/s', NULL, NULL, 'text', 10, 'completed', 'solved', '2023-03-18 10:35:14', '2023-03-18 10:35:14'),
-(72, 9, 4, 4, NULL, 'اذا كانت السرعه 2m/s فان السرعه سوف تكون عند ال 20 ثانيه هي 5m/s', NULL, NULL, 'text', 10, 'completed', 'solved', '2023-03-18 10:40:59', '2023-03-18 10:40:59'),
-(73, 1, 17, 4, NULL, 'يمكِّننا استخدام الصيغة العلمية من كتابة قيم صغيرة جدًّا بطريقة مرتبة. هذه شحنة البروتون معبَّر عنها بالصيغة العلمية:\n𝑞\n=\n1\n.\n6\n×\n1\n0\n.\nﺑ\nﺮ\nو\nﺗ\nﻮ\nن\n\n\n\nC', NULL, NULL, 'text', 10, 'completed', 'solved', '2023-03-18 06:31:11', '2023-04-11 10:51:07'),
-(74, 2, 17, 4, NULL, 'يمكِّننا استخدام الصيغة العلمية من كتابة قيم صغيرة جدًّا بطريقة مرتبة. هذه شحنة البروتون معبَّر عنها بالصيغة العلمية:\r\n𝑞\r\n=\r\n1\r\n.\r\n6\r\n×\r\n1\r\n0\r\n.\r\nﺑ\r\nﺮ\r\nو\r\nﺗ\r\nﻮ\r\nن\r\n\r\n\r\n\r\nC', NULL, NULL, 'text', 10, 'completed', 'solved', '2023-03-18 06:30:11', '2023-04-10 12:57:52'),
-(75, 6, 17, 4, NULL, 'يمكِّننا استخدام الصيغة العلمية من كتابة قيم صغيرة جدًّا بطريقة مرتبة. هذه شحنة البروتون معبَّر عنها بالصيغة العلمية:\r\n𝑞\r\n=\r\n1\r\n.\r\n6\r\n×\r\n1\r\n0\r\n.\r\nﺑ\r\nﺮ\r\nو\r\nﺗ\r\nﻮ\r\nن\r\n\r\n\r\n\r\nC', NULL, NULL, 'text', 10, 'completed', 'solved', '2023-03-18 06:30:11', '2023-04-10 12:57:52'),
-(76, 9, 17, 4, NULL, 'يمكِّننا استخدام الصيغة العلمية من كتابة قيم صغيرة جدًّا بطريقة مرتبة. هذه شحنة البروتون معبَّر عنها بالصيغة العلمية:\r\n𝑞\r\n=\r\n1\r\n.\r\n6\r\n×\r\n1\r\n0\r\n.\r\nﺑ\r\nﺮ\r\nو\r\nﺗ\r\nﻮ\r\nن\r\n\r\n\r\n\r\nC', NULL, NULL, 'text', 10, 'completed', 'solved', '2023-03-18 06:30:11', '2023-04-10 12:57:52'),
-(77, 10, 17, 4, NULL, 'يمكِّننا استخدام الصيغة العلمية من كتابة قيم صغيرة جدًّا بطريقة مرتبة. هذه شحنة البروتون معبَّر عنها بالصيغة العلمية:\r\n𝑞\r\n=\r\n1\r\n.\r\n6\r\n×\r\n1\r\n0\r\n.\r\nﺑ\r\nﺮ\r\nو\r\nﺗ\r\nﻮ\r\nن\r\n\r\n\r\n\r\nC', NULL, NULL, 'text', 10, 'completed', 'solved', '2023-03-18 06:30:11', '2023-04-10 12:57:52');
 
 -- --------------------------------------------------------
 
@@ -2020,6 +1979,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `birth_date` date NOT NULL,
   `login_status` tinyint(1) NOT NULL DEFAULT '0',
   `season_id` bigint UNSIGNED NOT NULL,
   `country_id` bigint UNSIGNED NOT NULL,
@@ -2041,25 +2001,26 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `users_code_unique` (`code`),
   KEY `users_season_id_foreign` (`season_id`),
   KEY `users_country_id_foreign` (`country_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `login_status`, `season_id`, `country_id`, `phone`, `father_phone`, `image`, `center`, `user_status`, `code`, `date_start_code`, `date_end_code`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'اسلام محمد', 1, 1, 1, '01062933188', '1005717155', '20230312141208.jpg', 'in', 'active', '295', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-09 08:23:11'),
-(2, 'احمد يحي', 1, 1, 2, '0190439660', '1005717144', 'avatar2.jpg', 'in', 'active', '333', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-18 12:50:49'),
-(4, 'اسامه عرفه', 0, 1, 6, '0190439699', '1005717133', 'avatar3.jpg', 'in', 'active', '444', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-05 12:24:50'),
-(5, 'عبدالله دبور', 0, 1, 1, '0190439600', '1005717100', 'avatar3.jpg', 'in', 'active', '2714', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-02-23 06:05:55'),
-(6, 'راضي فتح الله', 0, 1, 3, '0190439890', '1005717666', 'avatar3.jpg', 'in', 'active', '2715', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-05 12:25:32'),
-(8, 'عبدالله حمصي', 0, 1, 1, '0190439880', '1005717660', 'avatar3.jpg', 'in', 'active', '2711', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-02-23 06:05:55'),
-(9, 'احمد سعد', 0, 1, 4, '0190439960', '1005717664', 'avatar3.jpg', 'in', 'active', '62734', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-05 12:23:42'),
-(10, 'علاء محمد', 0, 1, 5, '0190439330', '1005717440', 'avatar3.jpg', 'in', 'active', '9026487', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-02-23 06:05:55'),
-(11, 'جمال عبد العزيز', 0, 3, 6, '01062933000', '1005717209', '20230312141208.jpg', 'in', 'active', '8320987', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-03-12 12:12:08'),
-(12, 'عبد الله حمصي', 0, 1, 6, '01062933099', '1005717208', '20230312141208.jpg', 'in', 'active', '6666', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-03-12 12:12:08'),
-(13, 'عبد الله منصور', 0, 1, 6, '01062933022', '1005717255', '20230312141208.jpg', 'in', 'active', '890890', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-05 12:57:44'),
-(14, 'شادي محمد', 0, 1, 6, '01062933777', '1005717530', '20230312141208.jpg', 'in', 'active', '11111', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-05 12:46:27');
+INSERT INTO `users` (`id`, `name`, `birth_date`, `login_status`, `season_id`, `country_id`, `phone`, `father_phone`, `image`, `center`, `user_status`, `code`, `date_start_code`, `date_end_code`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'اسلام محمد', '2000-06-01', 1, 1, 1, '01062933188', '1005717155', '20230312141208.jpg', 'in', 'active', '295', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-09 08:23:11'),
+(2, 'احمد يحي', '2000-06-02', 1, 1, 2, '0190439660', '1005717144', 'avatar2.jpg', 'in', 'active', '333', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-18 12:50:49'),
+(4, 'اسامه عرفه', '2000-06-03', 0, 1, 6, '0190439699', '1005717133', 'avatar3.jpg', 'in', 'active', '444', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-05 12:24:50'),
+(5, 'عبدالله دبور', '2000-06-04', 0, 1, 1, '0190439600', '1005717100', 'avatar3.jpg', 'in', 'active', '2714', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-02-23 06:05:55'),
+(6, 'راضي فتح الله', '2000-06-05', 0, 1, 3, '0190439890', '1005717666', 'avatar3.jpg', 'in', 'active', '2715', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-05 12:25:32'),
+(8, 'عبدالله حمصي', '2000-06-06', 0, 1, 1, '0190439880', '1005717660', 'avatar3.jpg', 'in', 'active', '2711', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-02-23 06:05:55'),
+(9, 'احمد سعد', '2000-06-07', 0, 1, 4, '0190439960', '1005717664', 'avatar3.jpg', 'in', 'active', '62734', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-05 12:23:42'),
+(10, 'علاء محمد', '2000-06-08', 0, 1, 5, '0190439330', '1005717440', 'avatar3.jpg', 'in', 'active', '9026487', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-02-23 06:05:55'),
+(11, 'جمال عبد العزيز', '2000-06-09', 0, 3, 6, '01062933000', '1005717209', '20230312141208.jpg', 'in', 'active', '8320987', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-03-12 12:12:08'),
+(12, 'عبد الله حمصي', '2000-06-10', 0, 1, 6, '01062933099', '1005717208', '20230312141208.jpg', 'in', 'active', '6666', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-03-12 12:12:08'),
+(13, 'عبد الله منصور', '2000-06-11', 0, 1, 6, '01062933022', '1005717255', '20230312141208.jpg', 'in', 'active', '890890', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-05 12:57:44'),
+(14, 'شادي محمد', '2000-06-12', 0, 1, 6, '01062933777', '1005717530', '20230312141208.jpg', 'in', 'active', '11111', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-04-05 12:46:27'),
+(15, 'احمد السيد علي', '2000-06-13', 1, 1, 6, '01062933781', '1005717500', '20230312141208.jpg', 'in', 'active', '663322', '2022-02-20', '2022-07-20', NULL, NULL, '$2y$10$Xdgyzpdc6owFBmGBCHyqL.0Ivc7XkuH83tcTCOQf4seEAV5Eeu1QS', NULL, '2023-02-23 06:05:55', '2023-05-01 11:17:46');
 
 -- --------------------------------------------------------
 
@@ -2192,7 +2153,7 @@ CREATE TABLE IF NOT EXISTS `video_favorites` (
   KEY `video_favorites_video_basic_id_foreign` (`video_basic_id`),
   KEY `video_favorites_video_resource_id_foreign` (`video_resource_id`),
   KEY `video_favorites_video_part_id_foreign` (`video_part_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `video_favorites`
@@ -2201,7 +2162,66 @@ CREATE TABLE IF NOT EXISTS `video_favorites` (
 INSERT INTO `video_favorites` (`id`, `user_id`, `video_basic_id`, `video_resource_id`, `video_part_id`, `action`, `favorite_type`, `created_at`, `updated_at`) VALUES
 (3, 2, 1, NULL, NULL, 'favorite', 'video_basic', '2023-04-20 11:03:26', '2023-04-20 11:03:26'),
 (4, 2, NULL, NULL, 1, 'favorite', 'video_part', '2023-04-20 11:03:44', '2023-04-20 11:04:15'),
-(5, 2, NULL, 1, NULL, 'favorite', 'video_resource', '2023-04-20 11:40:48', '2023-04-20 11:40:48');
+(5, 2, NULL, 1, NULL, 'favorite', 'video_resource', '2023-04-20 11:40:48', '2023-04-20 11:40:48'),
+(6, 2, NULL, NULL, 2, 'favorite', 'video_part', '2023-04-25 09:01:34', '2023-04-25 09:01:34');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `video_files_uploads`
+--
+
+DROP TABLE IF EXISTS `video_files_uploads`;
+CREATE TABLE IF NOT EXISTS `video_files_uploads` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name_ar` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name_en` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `background_color` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file_link` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file_type` enum('pdf','audio') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `video_part_id` bigint UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `video_files_uploads_video_part_id_foreign` (`video_part_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `video_files_uploads`
+--
+
+INSERT INTO `video_files_uploads` (`id`, `name_ar`, `name_en`, `background_color`, `file_link`, `file_type`, `video_part_id`, `created_at`, `updated_at`) VALUES
+(1, 'شرح جزء الليزر بالكامل', 'lizar all description', '#FFEAD7', '1.pdf', 'pdf', 1, '2023-04-30 06:34:03', '2023-04-30 06:34:03'),
+(2, 'شرح الكيميات الفيزيائيه', 'Explanation of physical chemicals', '#D7EAF9', '2.pdf', 'pdf', 1, '2023-04-30 06:34:03', '2023-04-30 06:34:03'),
+(3, 'الحركة بعجلة منتظمة', 'Motion with regular acceleration', '#FFEAD7', '3.pdf', 'pdf', 1, '2023-04-30 06:34:03', '2023-04-30 06:34:03'),
+(4, 'القوة والحركة', 'force and motion', '#E3D2FE', '4.pdf', 'pdf', 1, '2023-04-30 06:34:03', '2023-04-30 06:34:03'),
+(5, 'شرح ازدواجية الموجة والجسيم', 'Explain wave-particle duality', '#FFEAD7', '1.ogg', 'audio', 1, '2023-04-30 06:34:03', '2023-04-30 06:34:03'),
+(6, 'شرح التمثيل البياني للسرعة', 'Explanation of the velocity graph', '#E3D2FE', '2.ogg', 'audio', 1, '2023-04-30 06:34:03', '2023-04-30 06:34:03'),
+(7, 'جزء  السرعة اللحظية', 'The instantaneous velocity part', '#D7EAF9', '3.ogg', 'audio', 1, '2023-04-30 06:34:03', '2023-04-30 06:34:03'),
+(8, 'جزء  حركة المقذوفات', 'Projectile movement part', '#FFEAD7', '4.ogg', 'audio', 1, '2023-04-30 06:34:03', '2023-04-30 06:34:03');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `video_opened`
+--
+
+DROP TABLE IF EXISTS `video_opened`;
+CREATE TABLE IF NOT EXISTS `video_opened` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `video_part_id` bigint UNSIGNED DEFAULT NULL,
+  `video_upload_file_pdf_id` bigint UNSIGNED DEFAULT NULL,
+  `video_upload_file_audio_id` bigint UNSIGNED DEFAULT NULL,
+  `status` enum('opened','watched') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `video_watches_user_id_foreign` (`user_id`),
+  KEY `video_watches_video_part_id_foreign` (`video_part_id`),
+  KEY `video_watches_video_file_upload_pdf_foreign` (`video_upload_file_pdf_id`),
+  KEY `video_watches_video_file_upload_audio_foreign` (`video_upload_file_audio_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -2214,7 +2234,8 @@ CREATE TABLE IF NOT EXISTS `video_parts` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `name_ar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name_en` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ordered` int NOT NULL,
+  `background_color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `month` tinyint DEFAULT NULL,
   `note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `lesson_id` bigint UNSIGNED NOT NULL,
   `link` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -2222,7 +2243,6 @@ CREATE TABLE IF NOT EXISTS `video_parts` (
   `video_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `month` tinyint DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `video_parts_lesson_id_foreign` (`lesson_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2231,13 +2251,11 @@ CREATE TABLE IF NOT EXISTS `video_parts` (
 -- Dumping data for table `video_parts`
 --
 
-INSERT INTO `video_parts` (`id`, `name_ar`, `name_en`, `ordered`, `note`, `lesson_id`, `link`, `type`, `video_time`, `created_at`, `updated_at`, `month`) VALUES
-(1, 'فيديو شرح الليزر', 'lizar description', 1, 'يرجي متابعه جزء المعادلات جيدا', 1, 'v1.mp4', 'video', '10', '2023-02-26 09:13:32', '2023-02-26 09:13:32', 4),
-(2, 'فيديو شرح الليزر الجزء التاني', 'lizar 2 description', 2, 'يرجي متابعه جزء معادله الحركه جيدا', 1, 'v2.mp4', 'video', '15', '2023-02-26 09:13:32', '2023-02-26 09:13:32', 4),
-(3, 'فيديو شرح الليزر الجزء التالت', 'lizar 3 description', 3, 'يرجي متابعه جزء معادله الجسم جيدا', 1, 'v3.mp4', 'video', '10', '2023-02-26 09:13:32', '2023-02-26 09:13:32', 4),
-(4, 'شرح جزء الليزر بالكامل', 'lizar all description', 4, 'يرجي متابعه جزء معادله الجسم جيدا', 1, 'pd.pdf', 'pdf', NULL, '2023-02-26 09:13:32', '2023-02-26 09:13:32', 4),
-(5, 'جزء مقلتوش في الليزر', 'A part that was not covered in the laser', 5, 'يرجي متابعه جزء معادله الجسم جيدا', 1, 'au.ogg', 'audio', NULL, '2023-02-26 09:13:32', '2023-02-26 09:13:32', 4),
-(6, 'فيديو المعادله الحركيه', 'Kinematic equation video', 1, 'يرجي متابعه جزء المعادلات جيدا', 2, 'v2.mp4', 'video', '10', '2023-02-26 09:13:32', '2023-02-26 09:13:32', 4);
+INSERT INTO `video_parts` (`id`, `name_ar`, `name_en`, `background_color`, `month`, `note`, `lesson_id`, `link`, `type`, `video_time`, `created_at`, `updated_at`) VALUES
+(1, 'مقدمه التيار الكهربي', 'Introduction to electric current', NULL, 4, 'يرجي متابعه جزء المعادلات جيدا', 1, 'v1.mp4', 'video', '10', '2023-02-26 09:13:32', '2023-02-26 09:13:32'),
+(2, 'شرح ازدواجية الموجة والجسيم', 'Explain wave-particle duality', NULL, 4, 'يرجي متابعه جزء معادله الحركه جيدا', 1, 'v2.mp4', 'video', '15', '2023-02-26 09:13:32', '2023-02-26 09:13:32'),
+(3, 'قانون نيوتن الأول للحركة', 'Newton\'s first law of motion', NULL, 4, 'يرجي متابعه جزء معادله الجسم جيدا', 1, 'v3.mp4', 'video', '10', '2023-02-26 09:13:32', '2023-02-26 09:13:32'),
+(6, 'فيديو المعادله الحركيه', 'Kinematic equation video', NULL, 4, 'يرجي متابعه جزء المعادلات جيدا', 2, 'v2.mp4', 'video', '10', '2023-02-26 09:13:32', '2023-02-26 09:13:32');
 
 -- --------------------------------------------------------
 
@@ -2248,22 +2266,29 @@ INSERT INTO `video_parts` (`id`, `name_ar`, `name_en`, `ordered`, `note`, `lesso
 DROP TABLE IF EXISTS `video_rates`;
 CREATE TABLE IF NOT EXISTS `video_rates` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `video_id` bigint UNSIGNED NOT NULL,
+  `video_id` bigint UNSIGNED DEFAULT NULL,
+  `video_basic_id` bigint UNSIGNED DEFAULT NULL,
+  `video_resource_id` bigint UNSIGNED DEFAULT NULL,
   `user_id` bigint UNSIGNED NOT NULL,
-  `action` enum('like','dislike','no_rate') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('video_part','video_basic','video_resource') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `action` enum('like','dislike') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `video_rates_user_id_foreign` (`user_id`),
-  KEY `video_rates_video_id_foreign` (`video_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `video_rates_video_id_foreign` (`video_id`),
+  KEY `video_rates_video_b_id_foreign` (`video_basic_id`),
+  KEY `video_rates_video_r_id_foreign` (`video_resource_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `video_rates`
 --
 
-INSERT INTO `video_rates` (`id`, `video_id`, `user_id`, `action`, `created_at`, `updated_at`) VALUES
-(3, 1, 1, 'like', '2023-04-03 09:07:31', '2023-04-03 09:08:12');
+INSERT INTO `video_rates` (`id`, `video_id`, `video_basic_id`, `video_resource_id`, `user_id`, `type`, `action`, `created_at`, `updated_at`) VALUES
+(3, 1, NULL, NULL, 1, 'video_part', 'like', '2023-04-03 09:07:31', '2023-04-03 09:08:12'),
+(4, NULL, NULL, 1, 1, 'video_resource', 'like', '2023-04-03 09:07:31', '2023-04-03 09:08:12'),
+(5, NULL, 1, NULL, 1, 'video_basic', 'like', '2023-04-03 09:07:31', '2023-04-03 09:08:12');
 
 -- --------------------------------------------------------
 
@@ -2306,6 +2331,38 @@ INSERT INTO `video_resources` (`id`, `name_ar`, `name_en`, `image`, `background_
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `video_total_views`
+--
+
+DROP TABLE IF EXISTS `video_total_views`;
+CREATE TABLE IF NOT EXISTS `video_total_views` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `video_part_id` bigint UNSIGNED DEFAULT NULL,
+  `video_basic_id` bigint UNSIGNED DEFAULT NULL,
+  `video_resource_id` bigint UNSIGNED DEFAULT NULL,
+  `count` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `video_total_views_user_id_foreign` (`user_id`),
+  KEY `video_total_views_video_part_id_foreign` (`video_part_id`),
+  KEY `video_total_views_video_basic_id_foreign` (`video_basic_id`),
+  KEY `video_total_views_video_resource_id_foreign` (`video_resource_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `video_total_views`
+--
+
+INSERT INTO `video_total_views` (`id`, `user_id`, `video_part_id`, `video_basic_id`, `video_resource_id`, `count`, `created_at`, `updated_at`) VALUES
+(5, 1, NULL, NULL, 1, 1, '2023-05-02 07:21:31', '2023-05-02 07:21:31'),
+(6, 1, 1, NULL, NULL, 1, '2023-05-02 07:21:53', '2023-05-02 07:21:53'),
+(7, 1, NULL, 1, NULL, 1, '2023-05-02 07:22:14', '2023-05-02 07:22:14');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `video_watches`
 --
 
@@ -2314,26 +2371,13 @@ CREATE TABLE IF NOT EXISTS `video_watches` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint UNSIGNED NOT NULL,
   `video_part_id` bigint UNSIGNED NOT NULL,
-  `status` enum('opened','watched') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('opened','watched') COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `video_watches_user_id_foreign` (`user_id`),
   KEY `video_watches_video_part_id_foreign` (`video_part_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `video_watches`
---
-
-INSERT INTO `video_watches` (`id`, `user_id`, `video_part_id`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'watched', '2023-04-16 08:58:28', '2023-04-16 08:58:42'),
-(2, 1, 2, 'watched', '2023-04-16 08:58:42', '2023-04-16 09:23:23'),
-(3, 1, 3, 'watched', '2023-04-16 09:23:23', '2023-04-16 09:23:26'),
-(4, 1, 4, 'watched', '2023-04-16 09:23:26', '2023-04-16 09:23:26'),
-(5, 1, 5, 'watched', '2023-04-16 09:23:27', '2023-04-16 09:23:27'),
-(6, 2, 1, 'watched', '2023-04-18 12:51:45', '2023-04-18 12:52:05'),
-(7, 2, 2, 'opened', '2023-04-18 12:52:05', '2023-04-18 12:52:05');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Constraints for dumped tables
@@ -2386,6 +2430,13 @@ ALTER TABLE `degrees`
   ADD CONSTRAINT `life_exam_cons_2` FOREIGN KEY (`life_exam_id`) REFERENCES `life_exams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `discount_coupon_students`
+--
+ALTER TABLE `discount_coupon_students`
+  ADD CONSTRAINT `discount_coupon_students_discount_coupon_id_foreign` FOREIGN KEY (`discount_coupon_id`) REFERENCES `discount_coupons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `discount_coupon_students_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `exams_favorites`
 --
 ALTER TABLE `exams_favorites`
@@ -2413,7 +2464,9 @@ ALTER TABLE `exam_instructions`
 -- Constraints for table `guides`
 --
 ALTER TABLE `guides`
+  ADD CONSTRAINT `guides_lesson_id_foreign` FOREIGN KEY (`lesson_id`) REFERENCES `lessons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `guides_season_id_foreign` FOREIGN KEY (`season_id`) REFERENCES `seasons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `guides_subject_class_id_foreign` FOREIGN KEY (`subject_class_id`) REFERENCES `subject_classes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `guides_term_id_foreign` FOREIGN KEY (`term_id`) REFERENCES `terms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -2447,6 +2500,12 @@ ALTER TABLE `model_has_roles`
 ALTER TABLE `monthly_plans`
   ADD CONSTRAINT `monthly_plans_season_id_foreign` FOREIGN KEY (`season_id`) REFERENCES `seasons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `monthly_plans_term_id_foreign` FOREIGN KEY (`term_id`) REFERENCES `terms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `notes`
+--
+ALTER TABLE `notes`
+  ADD CONSTRAINT `notes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `notifications`
@@ -2631,6 +2690,21 @@ ALTER TABLE `video_favorites`
   ADD CONSTRAINT `video_favorites_video_resource_id_foreign` FOREIGN KEY (`video_resource_id`) REFERENCES `video_resources` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `video_files_uploads`
+--
+ALTER TABLE `video_files_uploads`
+  ADD CONSTRAINT `video_files_uploads_video_part_id_foreign` FOREIGN KEY (`video_part_id`) REFERENCES `video_parts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `video_opened`
+--
+ALTER TABLE `video_opened`
+  ADD CONSTRAINT `video_watches_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `video_watches_video_file_upload_audio_foreign` FOREIGN KEY (`video_upload_file_audio_id`) REFERENCES `video_files_uploads` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `video_watches_video_file_upload_pdf_foreign` FOREIGN KEY (`video_upload_file_pdf_id`) REFERENCES `video_files_uploads` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `video_watches_video_part_id_foreign` FOREIGN KEY (`video_part_id`) REFERENCES `video_parts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `video_parts`
 --
 ALTER TABLE `video_parts`
@@ -2641,7 +2715,9 @@ ALTER TABLE `video_parts`
 --
 ALTER TABLE `video_rates`
   ADD CONSTRAINT `video_rates_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `video_rates_video_id_foreign` FOREIGN KEY (`video_id`) REFERENCES `video_parts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `video_rates_video_b_id_foreign` FOREIGN KEY (`video_basic_id`) REFERENCES `video_basics` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `video_rates_video_id_foreign` FOREIGN KEY (`video_id`) REFERENCES `video_parts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `video_rates_video_r_id_foreign` FOREIGN KEY (`video_resource_id`) REFERENCES `video_resources` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `video_resources`
@@ -2651,11 +2727,13 @@ ALTER TABLE `video_resources`
   ADD CONSTRAINT `video_resources_term_id_foreign` FOREIGN KEY (`term_id`) REFERENCES `terms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `video_watches`
+-- Constraints for table `video_total_views`
 --
-ALTER TABLE `video_watches`
-  ADD CONSTRAINT `video_watches_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `video_watches_video_part_id_foreign` FOREIGN KEY (`video_part_id`) REFERENCES `video_parts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `video_total_views`
+  ADD CONSTRAINT `video_total_views_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `video_total_views_video_basic_id_foreign` FOREIGN KEY (`video_basic_id`) REFERENCES `video_basics` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `video_total_views_video_part_id_foreign` FOREIGN KEY (`video_part_id`) REFERENCES `video_parts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `video_total_views_video_resource_id_foreign` FOREIGN KEY (`video_resource_id`) REFERENCES `video_resources` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
