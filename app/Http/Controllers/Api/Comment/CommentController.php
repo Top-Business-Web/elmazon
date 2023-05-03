@@ -83,7 +83,6 @@ class CommentController extends Controller
 
         if ($add_comment->save()) {
             return self::returnResponseDataApi(new CommentResource($add_comment), "تم التعليق بنجاح", 200);
-
         }
 
     }
