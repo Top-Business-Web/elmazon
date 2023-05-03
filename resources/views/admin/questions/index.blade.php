@@ -30,12 +30,13 @@
                         <button class="btn btn-success btn-icon text-white exportExel">
 									<span>
 										<i class="fa fa-file-pdf"></i>
-									</span> تحميل ملف اكسيل
+									</span> تصدير ملف اكسيل
                         </button>
-                        <button class="btn btn-info btn-icon text-white importExel">
+                        <button class="btn btn-info btn-icon text-white importExel"
+                                data-toggle="modal" data-target="#importExel">
 									<span>
 										<i class="fa fa-file-pdf"></i>
-									</span> رفع ملف اكسيل
+									</span> استيراد ملف اكسيل
                         </button>
                     </div>
                 </div>
@@ -125,7 +126,39 @@
             </div>
         </div>
         <!-- Create Or Edit Modal -->
+
+        <!-- Import Modal -->
+        <div class="modal fade" id="importExel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">استيراد ملف اكسيل</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <form method="post" id="importExelForm" enctype="multipart/form-data">
+                                @csrf
+                                <div class="row">
+                                    <label class="form-label" for="exelFile">ملف الاسئلة</label>
+                                    <input class="form-control form-control-file dropify" type="file" name="exelFile">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary importBtn">رفع</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Import Modal -->
+        </div>
     </div>
+
     @include('admin.layouts_admin.myAjaxHelper')
 @endsection
 @section('ajaxCalls')
@@ -183,12 +216,43 @@
             })
         })
 
-        $(document).ready(function () {
-            $('.importExel').on('click', function () {
-                window.location.href = '{{ route('questionImport')}}'
-            })
-        })
+        $('.dropify').dropify();
 
+        $(document).on("submit", "#importExelForm", function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: '{{ route('questionImport') }}',
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    if (data.status === 200) {
+                        toastr.success('تم استيراد الملف بنجاح')
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 2000)
+
+                    } else if (data.status === 500) {
+                        toastr.error('فشل في استيراد الملف')
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 2000)
+                    }
+                },
+                error: function (data) {
+                    toastr.error('فشل في استيراد الملف')
+                    setTimeout(function () {
+                        // window.location.reload();
+                    }, 2000)
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
     </script>
 @endsection
 
