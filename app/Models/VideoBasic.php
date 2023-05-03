@@ -43,6 +43,11 @@ class VideoBasic extends Model
         })->get();
     }
 
+    public function comment()
+    {
+        return $this->hasMany(Comment::class, 'video_part_id', 'id');
+    }
+
     /*
      * end scopes
      */
