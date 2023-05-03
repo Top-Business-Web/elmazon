@@ -650,9 +650,7 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'AVCSequenceParameterSetReader' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio-video.flv.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
-
         'App\\Exports\\QuestionExport' => __DIR__ . '/../..' . '/app/Exports/QuestionExport.php',
-
         'App\\Http\\Controllers\\Admin\\AboutMesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AboutMesController.php',
         'App\\Http\\Controllers\\Admin\\AdminController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AdminController.php',
         'App\\Http\\Controllers\\Admin\\AdsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AdsController.php',
@@ -704,6 +702,7 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'App\\Http\\Controllers\\Api\\LessonDetails\\LessonDetailsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/LessonDetails/LessonDetailsController.php',
         'App\\Http\\Controllers\\Api\\LifeExam\\LifeExamController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/LifeExam/LifeExamController.php',
         'App\\Http\\Controllers\\Api\\MonthlyPlan\\MonthlyPlanController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/MonthlyPlan/MonthlyPlanController.php',
+        'App\\Http\\Controllers\\Api\\Notes\\NoteController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Notes/NoteController.php',
         'App\\Http\\Controllers\\Api\\OnBoardingController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/OnBoardingController.php',
         'App\\Http\\Controllers\\Api\\Payment' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Payment.php',
         'App\\Http\\Controllers\\Api\\Question\\QuestionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Question/QuestionController.php',
@@ -785,6 +784,7 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'App\\Http\\Resources\\CommunicationResource' => __DIR__ . '/../..' . '/app/Http/Resources/CommunicationResource.php',
         'App\\Http\\Resources\\CountryResource' => __DIR__ . '/../..' . '/app/Http/Resources/CountryResource.php',
         'App\\Http\\Resources\\ExamInstructionResource' => __DIR__ . '/../..' . '/app/Http/Resources/ExamInstructionResource.php',
+        'App\\Http\\Resources\\ExamQuestionsNewResource' => __DIR__ . '/../..' . '/app/Http/Resources/ExamQuestionsNewResource.php',
         'App\\Http\\Resources\\ExamResource' => __DIR__ . '/../..' . '/app/Http/Resources/ExamResource.php',
         'App\\Http\\Resources\\GetPlansByDayResource' => __DIR__ . '/../..' . '/app/Http/Resources/GetPlansByDayResource.php',
         'App\\Http\\Resources\\GuideItemsResource' => __DIR__ . '/../..' . '/app/Http/Resources/GuideItemsResource.php',
@@ -798,6 +798,7 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'App\\Http\\Resources\\LifeExamResource' => __DIR__ . '/../..' . '/app/Http/Resources/LifeExamResource.php',
         'App\\Http\\Resources\\LiveExamResource' => __DIR__ . '/../..' . '/app/Http/Resources/LiveExamResource.php',
         'App\\Http\\Resources\\MonthlyPlanResource' => __DIR__ . '/../..' . '/app/Http/Resources/MonthlyPlanResource.php',
+        'App\\Http\\Resources\\NoteResource' => __DIR__ . '/../..' . '/app/Http/Resources/NoteResource.php',
         'App\\Http\\Resources\\NotificationResource' => __DIR__ . '/../..' . '/app/Http/Resources/NotificationResource.php',
         'App\\Http\\Resources\\OnBoardingResource' => __DIR__ . '/../..' . '/app/Http/Resources/OnBoardingResource.php',
         'App\\Http\\Resources\\OnlineExamDegreeResource' => __DIR__ . '/../..' . '/app/Http/Resources/OnlineExamDegreeResource.php',
@@ -809,7 +810,9 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'App\\Http\\Resources\\PapelSheetExamTimeUserResource' => __DIR__ . '/../..' . '/app/Http/Resources/PapelSheetExamTimeUserResource.php',
         'App\\Http\\Resources\\PapelSheetResource' => __DIR__ . '/../..' . '/app/Http/Resources/PapelSheetResource.php',
         'App\\Http\\Resources\\PhoneTokenResource' => __DIR__ . '/../..' . '/app/Http/Resources/PhoneTokenResource.php',
+        'App\\Http\\Resources\\QuestionAnswersNewResource' => __DIR__ . '/../..' . '/app/Http/Resources/QuestionAnswersNewResource.php',
         'App\\Http\\Resources\\QuestionResource' => __DIR__ . '/../..' . '/app/Http/Resources/QuestionResource.php',
+        'App\\Http\\Resources\\QuestionsNewResource' => __DIR__ . '/../..' . '/app/Http/Resources/QuestionsNewResource.php',
         'App\\Http\\Resources\\ReportApiResource' => __DIR__ . '/../..' . '/app/Http/Resources/ReportApiResource.php',
         'App\\Http\\Resources\\SeasonResource' => __DIR__ . '/../..' . '/app/Http/Resources/SeasonResource.php',
         'App\\Http\\Resources\\SliderResource' => __DIR__ . '/../..' . '/app/Http/Resources/SliderResource.php',
@@ -831,11 +834,8 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'App\\Http\\Resources\\VideoPartResource' => __DIR__ . '/../..' . '/app/Http/Resources/VideoPartResource.php',
         'App\\Http\\Resources\\VideoRateResource' => __DIR__ . '/../..' . '/app/Http/Resources/VideoRateResource.php',
         'App\\Http\\Resources\\VideoResourceResource' => __DIR__ . '/../..' . '/app/Http/Resources/VideoResourceResource.php',
-
-        'App\\Imports\\QuestionImport' => __DIR__ . '/../..' . '/app/Imports/QuestionImport.php',
-
         'App\\Http\\Resources\\VideoUploadFileDetailsResource' => __DIR__ . '/../..' . '/app/Http/Resources/VideoUploadFileDetailsResource.php',
-
+        'App\\Imports\\QuestionImport' => __DIR__ . '/../..' . '/app/Imports/QuestionImport.php',
         'App\\Models\\AboutMe' => __DIR__ . '/../..' . '/app/Models/AboutMe.php',
         'App\\Models\\Admin' => __DIR__ . '/../..' . '/app/Models/Admin.php',
         'App\\Models\\Ads' => __DIR__ . '/../..' . '/app/Models/Ads.php',
@@ -854,6 +854,7 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'App\\Models\\Lesson' => __DIR__ . '/../..' . '/app/Models/Lesson.php',
         'App\\Models\\LifeExam' => __DIR__ . '/../..' . '/app/Models/LifeExam.php',
         'App\\Models\\MonthlyPlan' => __DIR__ . '/../..' . '/app/Models/MonthlyPlan.php',
+        'App\\Models\\MotivationalSentences' => __DIR__ . '/../..' . '/app/Models/MotivationalSentences.php',
         'App\\Models\\Note' => __DIR__ . '/../..' . '/app/Models/Note.php',
         'App\\Models\\Notification' => __DIR__ . '/../..' . '/app/Models/Notification.php',
         'App\\Models\\OnBoarding' => __DIR__ . '/../..' . '/app/Models/OnBoarding.php',
@@ -6222,9 +6223,7 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'Spatie\\Permission\\Traits\\RefreshesPermissionCache' => __DIR__ . '/..' . '/spatie/laravel-permission/src/Traits/RefreshesPermissionCache.php',
         'Spatie\\Permission\\WildcardPermission' => __DIR__ . '/..' . '/spatie/laravel-permission/src/WildcardPermission.php',
         'StellaMaris\\Clock\\ClockInterface' => __DIR__ . '/..' . '/stella-maris/clock/src/ClockInterface.php',
-
         'Stringable' => __DIR__ . '/..' . '/myclabs/php-enum/stubs/Stringable.php',
-
         'Stripe\\Account' => __DIR__ . '/..' . '/stripe/stripe-php/lib/Account.php',
         'Stripe\\AccountLink' => __DIR__ . '/..' . '/stripe/stripe-php/lib/AccountLink.php',
         'Stripe\\ApiOperations\\All' => __DIR__ . '/..' . '/stripe/stripe-php/lib/ApiOperations/All.php',

@@ -11,9 +11,7 @@ return array(
     'AVCSequenceParameterSetReader' => $vendorDir . '/james-heinrich/getid3/getid3/module.audio-video.flv.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
-
     'App\\Exports\\QuestionExport' => $baseDir . '/app/Exports/QuestionExport.php',
-
     'App\\Http\\Controllers\\Admin\\AboutMesController' => $baseDir . '/app/Http/Controllers/Admin/AboutMesController.php',
     'App\\Http\\Controllers\\Admin\\AdminController' => $baseDir . '/app/Http/Controllers/Admin/AdminController.php',
     'App\\Http\\Controllers\\Admin\\AdsController' => $baseDir . '/app/Http/Controllers/Admin/AdsController.php',
@@ -65,6 +63,7 @@ return array(
     'App\\Http\\Controllers\\Api\\LessonDetails\\LessonDetailsController' => $baseDir . '/app/Http/Controllers/Api/LessonDetails/LessonDetailsController.php',
     'App\\Http\\Controllers\\Api\\LifeExam\\LifeExamController' => $baseDir . '/app/Http/Controllers/Api/LifeExam/LifeExamController.php',
     'App\\Http\\Controllers\\Api\\MonthlyPlan\\MonthlyPlanController' => $baseDir . '/app/Http/Controllers/Api/MonthlyPlan/MonthlyPlanController.php',
+    'App\\Http\\Controllers\\Api\\Notes\\NoteController' => $baseDir . '/app/Http/Controllers/Api/Notes/NoteController.php',
     'App\\Http\\Controllers\\Api\\OnBoardingController' => $baseDir . '/app/Http/Controllers/Api/OnBoardingController.php',
     'App\\Http\\Controllers\\Api\\Payment' => $baseDir . '/app/Http/Controllers/Api/Payment.php',
     'App\\Http\\Controllers\\Api\\Question\\QuestionController' => $baseDir . '/app/Http/Controllers/Api/Question/QuestionController.php',
@@ -146,6 +145,7 @@ return array(
     'App\\Http\\Resources\\CommunicationResource' => $baseDir . '/app/Http/Resources/CommunicationResource.php',
     'App\\Http\\Resources\\CountryResource' => $baseDir . '/app/Http/Resources/CountryResource.php',
     'App\\Http\\Resources\\ExamInstructionResource' => $baseDir . '/app/Http/Resources/ExamInstructionResource.php',
+    'App\\Http\\Resources\\ExamQuestionsNewResource' => $baseDir . '/app/Http/Resources/ExamQuestionsNewResource.php',
     'App\\Http\\Resources\\ExamResource' => $baseDir . '/app/Http/Resources/ExamResource.php',
     'App\\Http\\Resources\\GetPlansByDayResource' => $baseDir . '/app/Http/Resources/GetPlansByDayResource.php',
     'App\\Http\\Resources\\GuideItemsResource' => $baseDir . '/app/Http/Resources/GuideItemsResource.php',
@@ -159,6 +159,7 @@ return array(
     'App\\Http\\Resources\\LifeExamResource' => $baseDir . '/app/Http/Resources/LifeExamResource.php',
     'App\\Http\\Resources\\LiveExamResource' => $baseDir . '/app/Http/Resources/LiveExamResource.php',
     'App\\Http\\Resources\\MonthlyPlanResource' => $baseDir . '/app/Http/Resources/MonthlyPlanResource.php',
+    'App\\Http\\Resources\\NoteResource' => $baseDir . '/app/Http/Resources/NoteResource.php',
     'App\\Http\\Resources\\NotificationResource' => $baseDir . '/app/Http/Resources/NotificationResource.php',
     'App\\Http\\Resources\\OnBoardingResource' => $baseDir . '/app/Http/Resources/OnBoardingResource.php',
     'App\\Http\\Resources\\OnlineExamDegreeResource' => $baseDir . '/app/Http/Resources/OnlineExamDegreeResource.php',
@@ -170,7 +171,9 @@ return array(
     'App\\Http\\Resources\\PapelSheetExamTimeUserResource' => $baseDir . '/app/Http/Resources/PapelSheetExamTimeUserResource.php',
     'App\\Http\\Resources\\PapelSheetResource' => $baseDir . '/app/Http/Resources/PapelSheetResource.php',
     'App\\Http\\Resources\\PhoneTokenResource' => $baseDir . '/app/Http/Resources/PhoneTokenResource.php',
+    'App\\Http\\Resources\\QuestionAnswersNewResource' => $baseDir . '/app/Http/Resources/QuestionAnswersNewResource.php',
     'App\\Http\\Resources\\QuestionResource' => $baseDir . '/app/Http/Resources/QuestionResource.php',
+    'App\\Http\\Resources\\QuestionsNewResource' => $baseDir . '/app/Http/Resources/QuestionsNewResource.php',
     'App\\Http\\Resources\\ReportApiResource' => $baseDir . '/app/Http/Resources/ReportApiResource.php',
     'App\\Http\\Resources\\SeasonResource' => $baseDir . '/app/Http/Resources/SeasonResource.php',
     'App\\Http\\Resources\\SliderResource' => $baseDir . '/app/Http/Resources/SliderResource.php',
@@ -192,11 +195,8 @@ return array(
     'App\\Http\\Resources\\VideoPartResource' => $baseDir . '/app/Http/Resources/VideoPartResource.php',
     'App\\Http\\Resources\\VideoRateResource' => $baseDir . '/app/Http/Resources/VideoRateResource.php',
     'App\\Http\\Resources\\VideoResourceResource' => $baseDir . '/app/Http/Resources/VideoResourceResource.php',
-
-    'App\\Imports\\QuestionImport' => $baseDir . '/app/Imports/QuestionImport.php',
-
     'App\\Http\\Resources\\VideoUploadFileDetailsResource' => $baseDir . '/app/Http/Resources/VideoUploadFileDetailsResource.php',
-
+    'App\\Imports\\QuestionImport' => $baseDir . '/app/Imports/QuestionImport.php',
     'App\\Models\\AboutMe' => $baseDir . '/app/Models/AboutMe.php',
     'App\\Models\\Admin' => $baseDir . '/app/Models/Admin.php',
     'App\\Models\\Ads' => $baseDir . '/app/Models/Ads.php',
@@ -215,6 +215,7 @@ return array(
     'App\\Models\\Lesson' => $baseDir . '/app/Models/Lesson.php',
     'App\\Models\\LifeExam' => $baseDir . '/app/Models/LifeExam.php',
     'App\\Models\\MonthlyPlan' => $baseDir . '/app/Models/MonthlyPlan.php',
+    'App\\Models\\MotivationalSentences' => $baseDir . '/app/Models/MotivationalSentences.php',
     'App\\Models\\Note' => $baseDir . '/app/Models/Note.php',
     'App\\Models\\Notification' => $baseDir . '/app/Models/Notification.php',
     'App\\Models\\OnBoarding' => $baseDir . '/app/Models/OnBoarding.php',
@@ -5584,9 +5585,6 @@ return array(
     'Spatie\\Permission\\WildcardPermission' => $vendorDir . '/spatie/laravel-permission/src/WildcardPermission.php',
     'StellaMaris\\Clock\\ClockInterface' => $vendorDir . '/stella-maris/clock/src/ClockInterface.php',
     'Stringable' => $vendorDir . '/myclabs/php-enum/stubs/Stringable.php',
-
-
-
     'Stripe\\Account' => $vendorDir . '/stripe/stripe-php/lib/Account.php',
     'Stripe\\AccountLink' => $vendorDir . '/stripe/stripe-php/lib/AccountLink.php',
     'Stripe\\ApiOperations\\All' => $vendorDir . '/stripe/stripe-php/lib/ApiOperations/All.php',

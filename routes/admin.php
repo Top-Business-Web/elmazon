@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MainController;
+use App\Http\Controllers\Admin\MotivationalSentencesController;
 use App\Http\Controllers\Admin\OnBoardingController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SeasonController;
@@ -84,6 +85,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Season ####
     Route::resource('seasons', SeasonController::class)->middleware('permission:الصفوف الدراسيه');
 
+    #### Season ####
+    Route::resource('motivational', MotivationalSentencesController::class)->middleware('permission:الاعدادات');
+    Route::get('motivationalExport', [MotivationalSentencesController::class, 'motivationalExport'])->name('motivationalExport');
+    Route::post('motivationalImport', [MotivationalSentencesController::class, 'motivationalImport'])->name('motivationalImport');
     #### Season Term
     Route::group(['middleware' => 'permission:الترم'], function () {
         Route::get('seasons/{id}/term', [SeasonController::class, 'seasonTerm'])->name('seasonTerm');
@@ -148,9 +153,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     ##### Video Parts #####
     Route::group(['middleware' => 'permission:اقسام الفيديوهات'], function () {
         Route::resource('videosParts', VideoPartController::class);
-        Route::get('showFiles/{id}', [VideoPartController::class,'showFiles'])->name('showFiles');
-        Route::post('modifyFiles/{id}', [VideoPartController::class,'modifyFiles'])->name('modifyFiles');
-        Route::post('deleteFiles', [VideoPartController::class,'deleteFiles'])->name('deleteFiles');
+        Route::get('showFiles/{id}', [VideoPartController::class, 'showFiles'])->name('showFiles');
+        Route::post('modifyFiles/{id}', [VideoPartController::class, 'modifyFiles'])->name('modifyFiles');
+        Route::post('deleteFiles', [VideoPartController::class, 'deleteFiles'])->name('deleteFiles');
         Route::get('/itemView', array('as' => 'front.home', 'uses' => [VideoPartController::class, 'itemView']))->name('itemView');
         Route::post('/update-items', array('as' => 'update.items', 'uses' => [VideoPartController::class, 'updateItems']))->name('updateItems');
         Route::get('videoPart/comment/{id}', [VideoPartController::class, 'indexCommentVideo'])->name('indexCommentVideo');
