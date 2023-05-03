@@ -5,9 +5,9 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="">Image :</label>
-                        <input type="file" name="image" class="dropify" value="{{ asset('users/default/avatar3.jpg') }}"
-                               data-default-file="{{ asset('users/default/avatar3.jpg') }}"/>
+                        <label for="">صورة :</label>
+                        <input type="file" name="image" class="dropify" value="{{ asset('users/default/avatar.jpg') }}"
+                               data-default-file="{{ asset('users/default/avatar.jpg') }}" required/>
                     </div>
                     <span class="form-text text-danger text-center">
                         Recomended : 2048 X 1200 to up Px <br>
@@ -22,8 +22,8 @@
                         <div class="col-7">
                             <label for="code" class="form-control-label">كود الطالب</label>
                             <input type="text" class="form-control CodeStudent" placeholder="كود الطالب" name="code"
-                                 disabled  required="required">
-                            <input type="hidden" class="form-control CodeStudent" placeholder="كود الطالب" name="code">
+                                 disabled  required>
+                            <input type="hidden" class="form-control CodeStudent" placeholder="كود الطالب" name="code" required>
                         </div>
                         <div class="col-5">
                             <button type="button"

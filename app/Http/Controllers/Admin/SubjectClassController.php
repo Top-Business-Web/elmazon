@@ -39,10 +39,10 @@ class SubjectClassController extends Controller
                 })
                 ->editColumn('background_color', function ($subjects_classes) {
                     return '<input type="color" class="form-control" name="background_color"
-                           value="'. $subjects_classes->background_color .'" disabled>';
+                           value="' . $subjects_classes->background_color . '" disabled>';
                 })
                 ->editColumn('image', function ($subjects_classes) {
-                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset('classes/' . $subjects_classes->image) . '"/>';
+                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset('subject_class/' . $subjects_classes->image) . '"/>';
                 })
                 ->editColumn('term_id', function ($subjects_classes) {
                     return '<td>' . $subjects_classes->term->name_ar . '</td>';
@@ -91,7 +91,7 @@ class SubjectClassController extends Controller
 
     // Store Start
 
-    public function store(StoreSubjectClasses $request)
+    public function store(Request $request)
     {
         $inputs = $request->all();
 
@@ -99,7 +99,7 @@ class SubjectClassController extends Controller
             $file = $request->file('image');
             $filename = $file->getClientOriginalName();
 
-            $file->move('classes/', $filename);
+            $file->move('subject_class/', $filename);
             $inputs['image'] = $filename;
         }
 
@@ -133,7 +133,7 @@ class SubjectClassController extends Controller
             $file = $request->file('image');
             $filename = $file->getClientOriginalName();
 
-            $file->move('classes/', $filename);
+            $file->move('subject_class/', $filename);
             $inputs['image'] = $filename;
         }
         if ($subjectsClass->update($inputs)) {

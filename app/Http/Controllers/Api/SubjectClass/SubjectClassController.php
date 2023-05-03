@@ -41,7 +41,7 @@ class SubjectClassController extends Controller
             return response()->json([
 
                 'data' => [
-                     'classes' => SubjectClassNewResource::collection($classes),
+                     'subject_class' => SubjectClassNewResource::collection($classes),
 //                     'fullExams' => AllExamResource::collection($fullExams),
                      'classes_all_exams' => SubjectClassAllExamResource::collection($subject_classes_all_exams),
 

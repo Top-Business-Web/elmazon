@@ -180,7 +180,7 @@ class VideoPartController extends Controller
 
     // Store start
 
-    public function store(StoreVideoPart $request)
+    public function store(Request $request)
     {
 //        $last_orderd = DB::table('video_parts')->orderBy('id', 'DESC')->first()->ordered;
         $videoPart = new VideoParts();
@@ -188,24 +188,54 @@ class VideoPartController extends Controller
         $file_name = '';
 
         if ($request->hasFile('link')) {
-            $file_name = $file->getClientOriginalName();
-            $file->move('videos', $file_name);
-            $videoPart->link = $file_name;
-        } else {
-            return response()->json(['status' => 405, 'message' => 'Invalid file type']);
-        }
+
+            $extension = $file->getClientOriginalExtension();
+            $allowed_file_types = ['pdf', 'mp3', 'mp4'];
+
+            if (in_array($extension, $allowed_file_types)) {
+                $file_name = $file->getClientOriginalName();
+
+                if ($extension == 'pdf') {
+                    $file->move('videos_basics/pdf/', $file_name);
+                    $videoPart->type = 'pdf';
+                } elseif ($extension == 'mp3') {
+                    $file->move('videos_basics/pdf/', $file_name);
+                    $videoPart->type = 'audio';
+                } elseif ($extension == 'mp4') {
+                    $file->move('videos_basics/', $file_name);
+                    $videoPart->type = 'video';
+                }
+
+                $videoPart->link = $file_name;
+            } else {
+                return response()->json(['status' => 405, 'message' => 'Invalid file type']);
+            }
+
 
 
         $videoPart->name_ar = $request->name_ar;
         $videoPart->name_en = $request->name_en;
         $videoPart->note = $request->note;
+        $videoPart->month = $request->month;
         $videoPart->video_time = $request->video_time;
         $videoPart->lesson_id = $request->lesson_id;
         $videoPart->background_color = $request->background_color;
 //        $videoPart->ordered = $last_orderd + 1;
 
         if ($videoPart->save()) {
-            $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id], $request->season_id);
+
+
+            VideoFilesUploads::create([
+                'name_ar' => $videoPart->name_ar,
+                'name_en' =>  $videoPart->name_en,
+                'background_color' => $videoPart->background_color, // default
+                'file_link' => $videoPart->link,
+                'month' => $videoPart->month,
+                'file_type' => $videoPart->type,
+                'video_part_id' => $videoPart->id,
+            ]);
+//            $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
+
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
@@ -247,13 +277,13 @@ class VideoPartController extends Controller
                 $file_name = $file->getClientOriginalName();
 
                 if ($extension == 'pdf') {
-                    $file->move('Pdfs', $file_name);
+                    $file->move('videos_basics/pdf/', $file_name);
                     $videoPart->type = 'pdf';
                 } elseif ($extension == 'mp3') {
-                    $file->move('Audios', $file_name);
+                    $file->move('videos_basics/pdf/', $file_name);
                     $videoPart->type = 'audio';
                 } elseif ($extension == 'mp4') {
-                    $file->move('videos', $file_name);
+                    $file->move('videos_basics/', $file_name);
                     $videoPart->type = 'video';
                 }
 
@@ -266,6 +296,7 @@ class VideoPartController extends Controller
         $videoPart->name_ar = $request->name_ar;
         $videoPart->name_en = $request->name_en;
         $videoPart->note = $request->note;
+        $videoPart->month = $request->month;
         $videoPart->video_time = $request->video_time;
         $videoPart->lesson_id = $request->lesson_id;
 

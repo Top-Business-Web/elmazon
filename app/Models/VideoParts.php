@@ -13,7 +13,18 @@ class VideoParts extends Model
     use HasFactory;
 
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'name_ar',
+        'name_en',
+        'background_color',
+        'month',
+        'note',
+        'lesson_id',
+        'link',
+        'type',
+        'video_time',
+
+    ];
 
 //    public function exams()
 //    {

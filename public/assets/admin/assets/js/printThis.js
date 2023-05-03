@@ -33,7 +33,7 @@
  *      canvas: true,                   // copy canvas elements
  *      doctypeString: '...',           // enter a different doctype for older markup
  *      removeScripts: false,           // remove script tags from print content
- *      copyTagClasses: true            // copy classes from the html & body tag
+ *      copyTagClasses: true            // copy subject_class from the html & body tag
  *      copyTagStyles: true,            // copy styles from html & body tag (for CSS Variables)
  *      beforePrintEvent: null,         // callback function for printEvent in iframe
  *      beforePrint: null,              // function called before iframe is filled
@@ -199,7 +199,7 @@
             // CSS VAR in html tag when dynamic apply e.g.  document.documentElement.style.setProperty("--foo", bar);
             $doc.find('html').prop('style', pageHtml.style.cssText);
 
-            // copy 'root' tag classes
+            // copy 'root' tag subject_class
             var tag = opt.copyTagClasses;
             if (tag) {
                 tag = tag === true ? 'bh' : tag;
@@ -211,7 +211,7 @@
                 }
             }
 
-            // copy ':root' tag classes
+            // copy ':root' tag subject_class
             tag = opt.copyTagStyles;
             if (tag) {
                 tag = tag === true ? 'bh' : tag;
@@ -341,7 +341,7 @@
         canvas: true,                       // copy canvas content
         doctypeString: '<!DOCTYPE html>',   // enter a different doctype for older markup
         removeScripts: false,               // remove script tags from print content
-        copyTagClasses: true,               // copy classes from the html & body tag
+        copyTagClasses: true,               // copy subject_class from the html & body tag
         copyTagStyles: true,                // copy styles from html & body tag (for CSS Variables)
         beforePrintEvent: null,             // callback function for printEvent in iframe
         beforePrint: null,                  // function called before iframe is filled

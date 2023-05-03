@@ -11,7 +11,19 @@ class VideoResource extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name_ar',
+        'name_en',
+        'image',
+        'background_color',
+        'time',
+        'video_link',
+        'type',
+        'pdf_file',
+        'season_id',
+        'term_id',
+
+    ];
 
     public function season(){
 

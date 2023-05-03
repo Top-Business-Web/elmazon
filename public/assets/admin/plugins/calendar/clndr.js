@@ -62,7 +62,7 @@
                 "<tr>" +
                 "<% for(var j = 0; j < 7; j++){ %>" +
                 "<% var d = j + i * 7; %>" +
-                    "<td class='<%= days[d].classes %>'>" +
+                    "<td class='<%= days[d].subject_class %>'>" +
                         "<div class='day-contents'><%= days[d].day %></div>" +
                     "</td>" +
                 "<% } %>" +
@@ -400,7 +400,7 @@
     /**
      * This is where the magic happens. Given a starting date and ending date,
      * an array of calendarDay objects is constructed that contains appropriate
-     * events and classes depending on the circumstance.
+     * events and subject_class depending on the circumstance.
      */
     Clndr.prototype.createDaysObject = function (startDate, endDate) {
         // This array will hold numbers for the entire grid (even the blank
@@ -411,7 +411,7 @@
             startOfLastMonth, endOfLastMonth, startOfNextMonth,
             endOfNextMonth, diff, dateIterator;
 
-        // This is a helper object so that days can resolve their classes
+        // This is a helper object so that days can resolve their subject_class
         // correctly. Don't use it for anything please.
         this._currentIntervalStart = startDate.clone();
 
@@ -669,7 +669,7 @@
             extraClasses += (" " + this.options.classes.selected);
         }
 
-        // We're moving away from using IDs in favor of classes, since when
+        // We're moving away from using IDs in favor of subject_class, since when
         // using multiple calendars on a page we are technically violating the
         // uniqueness of IDs.
         extraClasses += " calendar-day-" + day.format("YYYY-MM-DD");
@@ -806,7 +806,7 @@
         // the controls.
         if (this.options.constraints) {
             // In the interest of clarity we're just going to remove all
-            // inactive classes and re-apply them each render.
+            // inactive subject_class and re-apply them each render.
             for (var target in this.options.targets) {
                 if (target != this.options.targets.day) {
                     this.element.find('.' + this.options.targets[target])
@@ -816,7 +816,7 @@
                 }
             }
 
-            // Just like the classes we'll set this internal state to true and
+            // Just like the subject_class we'll set this internal state to true and
             // handle the disabling below.
             for (var i in this.constraints) {
                 this.constraints[i] = true;

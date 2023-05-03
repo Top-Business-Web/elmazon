@@ -11,7 +11,9 @@ return array(
     'AVCSequenceParameterSetReader' => $vendorDir . '/james-heinrich/getid3/getid3/module.audio-video.flv.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
+
     'App\\Exports\\QuestionExport' => $baseDir . '/app/Exports/QuestionExport.php',
+
     'App\\Http\\Controllers\\Admin\\AboutMesController' => $baseDir . '/app/Http/Controllers/Admin/AboutMesController.php',
     'App\\Http\\Controllers\\Admin\\AdminController' => $baseDir . '/app/Http/Controllers/Admin/AdminController.php',
     'App\\Http\\Controllers\\Admin\\AdsController' => $baseDir . '/app/Http/Controllers/Admin/AdsController.php',
@@ -167,7 +169,6 @@ return array(
     'App\\Http\\Resources\\PapelSheetExamTimeResource' => $baseDir . '/app/Http/Resources/PapelSheetExamTimeResource.php',
     'App\\Http\\Resources\\PapelSheetExamTimeUserResource' => $baseDir . '/app/Http/Resources/PapelSheetExamTimeUserResource.php',
     'App\\Http\\Resources\\PapelSheetResource' => $baseDir . '/app/Http/Resources/PapelSheetResource.php',
-    'App\\Http\\Resources\\PdfDetailsNewResource' => $baseDir . '/app/Http/Resources/PdfDetailsNewResource.php',
     'App\\Http\\Resources\\PhoneTokenResource' => $baseDir . '/app/Http/Resources/PhoneTokenResource.php',
     'App\\Http\\Resources\\QuestionResource' => $baseDir . '/app/Http/Resources/QuestionResource.php',
     'App\\Http\\Resources\\ReportApiResource' => $baseDir . '/app/Http/Resources/ReportApiResource.php',
@@ -187,10 +188,15 @@ return array(
     'App\\Http\\Resources\\VideoBasicResource' => $baseDir . '/app/Http/Resources/VideoBasicResource.php',
     'App\\Http\\Resources\\VideoPartDetailsNewResource' => $baseDir . '/app/Http/Resources/VideoPartDetailsNewResource.php',
     'App\\Http\\Resources\\VideoPartNewResource' => $baseDir . '/app/Http/Resources/VideoPartNewResource.php',
+    'App\\Http\\Resources\\VideoPartOnlineExamsResource' => $baseDir . '/app/Http/Resources/VideoPartOnlineExamsResource.php',
     'App\\Http\\Resources\\VideoPartResource' => $baseDir . '/app/Http/Resources/VideoPartResource.php',
     'App\\Http\\Resources\\VideoRateResource' => $baseDir . '/app/Http/Resources/VideoRateResource.php',
     'App\\Http\\Resources\\VideoResourceResource' => $baseDir . '/app/Http/Resources/VideoResourceResource.php',
+
     'App\\Imports\\QuestionImport' => $baseDir . '/app/Imports/QuestionImport.php',
+
+    'App\\Http\\Resources\\VideoUploadFileDetailsResource' => $baseDir . '/app/Http/Resources/VideoUploadFileDetailsResource.php',
+
     'App\\Models\\AboutMe' => $baseDir . '/app/Models/AboutMe.php',
     'App\\Models\\Admin' => $baseDir . '/app/Models/Admin.php',
     'App\\Models\\Ads' => $baseDir . '/app/Models/Ads.php',
@@ -209,6 +215,7 @@ return array(
     'App\\Models\\Lesson' => $baseDir . '/app/Models/Lesson.php',
     'App\\Models\\LifeExam' => $baseDir . '/app/Models/LifeExam.php',
     'App\\Models\\MonthlyPlan' => $baseDir . '/app/Models/MonthlyPlan.php',
+    'App\\Models\\Note' => $baseDir . '/app/Models/Note.php',
     'App\\Models\\Notification' => $baseDir . '/app/Models/Notification.php',
     'App\\Models\\OnBoarding' => $baseDir . '/app/Models/OnBoarding.php',
     'App\\Models\\OnlineExam' => $baseDir . '/app/Models/OnlineExam.php',
@@ -5577,6 +5584,9 @@ return array(
     'Spatie\\Permission\\WildcardPermission' => $vendorDir . '/spatie/laravel-permission/src/WildcardPermission.php',
     'StellaMaris\\Clock\\ClockInterface' => $vendorDir . '/stella-maris/clock/src/ClockInterface.php',
     'Stringable' => $vendorDir . '/myclabs/php-enum/stubs/Stringable.php',
+
+
+
     'Stripe\\Account' => $vendorDir . '/stripe/stripe-php/lib/Account.php',
     'Stripe\\AccountLink' => $vendorDir . '/stripe/stripe-php/lib/AccountLink.php',
     'Stripe\\ApiOperations\\All' => $vendorDir . '/stripe/stripe-php/lib/ApiOperations/All.php',

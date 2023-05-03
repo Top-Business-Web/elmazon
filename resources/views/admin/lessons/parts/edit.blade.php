@@ -6,18 +6,28 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
+                    <label for="title_ar" class="form-control-label">العنوان باللغة العربية</label>
+                    <input type="text" class="form-control" value="{{ $lesson->title_ar }}" name="title_ar" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="title_en" class="form-control-label">العنوان باللغة الانجليزية</label>
+                    <input type="text" class="form-control" value="{{ $lesson->title_ar }}" name="title_en" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم باللغة العربية</label>
-                    <input type="text" class="form-control" value="{{ $lesson->name_ar }}" name="name_ar">
+                    <input type="text" class="form-control" value="{{ $lesson->name_ar }}" name="name_ar" required>
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم باللغة الانجليزية</label>
-                    <input type="text" class="form-control" value="{{ $lesson->name_en }}"  name="name_en">
+                    <input type="text" class="form-control" value="{{ $lesson->name_en }}"  name="name_en" required>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الصف</label>
-                    <Select name="" id="season_choose" class="form-control season">
+                    <Select name="" id="season_choose" class="form-control season" required>
                         <option selected disabled style="text-align: center">اختار الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
@@ -28,8 +38,8 @@
                 </div>
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الوحدة</label>
-                    <Select name="subject_class_id" class="form-control type_ajax_choose">
-                    
+                    <Select name="subject_class_id" class="form-control type_ajax_choose" required>
+
                     </Select>
                 </div>
             </div>
@@ -39,7 +49,7 @@
                         <textarea class="form-control" name="note" rows="10">{{ $lesson->note }}</textarea>
                     </div>
                 </div>
-            </div>  
+            </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
             <button type="submit" class="btn btn-success" id="updateButton">تحديث</button>
@@ -48,4 +58,20 @@
 </div>
 <script>
     $('.dropify').dropify()
+
+    $(".season").on('change', function() {
+        var element = document.getElementById("season_choose");
+        var value = $(element).find('option:selected').val();
+
+        $.ajax({
+            url: '{{ route('showUnit') }}',
+            data: {
+                'id': value,
+            },
+            success: function (data) {
+                $('.type_ajax_choose').html(data);
+            }
+        })
+    })
+
 </script>
