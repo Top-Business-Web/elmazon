@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 
 class OnlineExam extends Model
@@ -71,11 +72,18 @@ class OnlineExam extends Model
     }
 
 
+    public function video() :BelongsTo{
 
-    public function exam_degree_depends(){
+        return $this->belongsTo(VideoParts::class,'video_id','id');
+    }
+
+    public function exam_degree_depends(): HasMany{
 
         return $this->hasMany(ExamDegreeDepends::class,'online_exam_id','id');
     }
+
+
+
 
     public function lesson()
     {
@@ -110,6 +118,42 @@ class OnlineExam extends Model
             $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
     }
+
+
+    //start degree details
+    public function scopeOnlineExamSubjectClassDegreeDetails($query,$class){
+
+       return $query->where('class_id','=',$class->id)->whereHas('term', function ($term){
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+        })->whereHas('exam_degree_depends', function ($q){
+            $q->where('user_id','=', auth('user-api')->id())->where('exam_depends','=','yes');
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+    }
+
+
+    public function scopeOnlineExamLessonVideosDegreeDetails($query,$lesson){
+
+        return $query->whereHas('video', function ($q) use($lesson){
+            $q->where('lesson_id','=', $lesson->id);
+        })->whereHas('term', function ($term){
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+        })->whereHas('exam_degree_depends', function ($q){
+            $q->where('user_id','=', auth('user-api')->id())->where('exam_depends','=','yes');
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+    }
+
+
+    public function scopeOnlineExamLessonDegreeDetails($query,$lesson){
+
+        return $query->where('lesson_id','=',$lesson->id)->whereHas('term', function ($term){
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+        })->whereHas('exam_degree_depends', function ($q){
+            $q->where('user_id','=', auth('user-api')->id())->where('exam_depends','=','yes');
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+    }
+
+
+    //end degree details
 
     /*
      * end scopes

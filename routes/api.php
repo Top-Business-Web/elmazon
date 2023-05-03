@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AdsController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Comment\CommentController;
 use App\Http\Controllers\Api\Degree\DegreeController;
+use App\Http\Controllers\Api\DegreeOfExamsDetails\DegreeExamsDetailsController;
 use App\Http\Controllers\Api\Favorites\FavoriteController;
 use App\Http\Controllers\Api\FullExams\FullExamController;
 use App\Http\Controllers\Api\Guides\GuideController;
@@ -176,6 +177,16 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('all-exams-by-videoId/{id}',[LessonDetailsController::class,'allExamsByVideoId']);
         Route::get('all-exams-by-lessonId/{id}',[LessonDetailsController::class,'allExamsByLessonId']);
         Route::get('exam-details-by-examId/{id}',[LessonDetailsController::class,'examDetailsByExamId']);
+
+    });
+
+
+    //start exams degree details
+    Route::group(['prefix' => 'degree-details','middleware' => 'jwt'], function (){
+        Route::get('all-exams',[DegreeExamsDetailsController::class,'allExamsDegreeDetails']);
+        Route::get('class/{id}',[DegreeExamsDetailsController::class,'classDegreeDetails']);
+        Route::get('videos-by-lesson/{id}',[DegreeExamsDetailsController::class,'videosByLessonDegreeDetails']);
+        Route::get('lesson/{id}',[DegreeExamsDetailsController::class,'lessonDegreeDetails']);
 
     });
 
