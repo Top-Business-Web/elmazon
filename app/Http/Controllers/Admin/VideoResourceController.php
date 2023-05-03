@@ -39,8 +39,8 @@ class VideoResourceController extends Controller
                                     data-id="' . $video_resource->id . '" data-title="' . $video_resource->name_ar . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                            <a href="' . route('indexCommentResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-success-light"> تعليقات <i class="fa fa-comment"></i></a>
-                            <a href="' . route('ReportVideosResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-danger-light"> بلاغات <i class="fe fe-book"></i></a>
+                            <a href="' . route('indexCommentResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-success-light"> تعليقات '. $video_resource->comment->count() .' <i class="fa fa-comment"></i></a>
+                            <a href="' . route('ReportVideosResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-danger-light"> بلاغات '. $video_resource->report->count() .' <i class="fe fe-book"></i></a>
 
                        ';
                 })
