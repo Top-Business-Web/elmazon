@@ -30,6 +30,7 @@ class VideoPartController extends Controller
     {
         if ($request->ajax()) {
             $videoParts = VideoParts::get();
+            // $comment = Comment::where()->get();
             return Datatables::of($videoParts)
                 ->addColumn('action', function ($videoParts) {
                     return '

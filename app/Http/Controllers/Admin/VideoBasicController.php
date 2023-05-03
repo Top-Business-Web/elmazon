@@ -29,7 +29,7 @@ class VideoBasicController extends Controller
                                     <i class="fas fa-trash"></i>
                             </button>
                              <a href="' . route('indexComment', $video_basics->id) . '" data-id="' . $video_basics->id . '" class="btn btn-pill btn-success-light"> تعليقات '. $video_basics->comment->count() .' <i class="fa fa-comment"></i></a>
-                             <a href="' . route('reportBasic', $video_basics->id) . '" data-id="' . $video_basics->id . '" class="btn btn-pill btn-danger-light"> بلاغات <i class="fe fe-book"></i></a>
+                             <a href="' . route('reportBasic', $video_basics->id) . '" data-id="' . $video_basics->id . '" class="btn btn-pill btn-danger-light"> بلاغات '. $video_basics->report->count() .' <i class="fe fe-book"></i></a>
                        ';
                 })
                 ->editColumn('video_link', function ($video_basics) {
