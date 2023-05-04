@@ -167,6 +167,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::delete('videoPart/commentReply/delete/{id}', [VideoPartController::class, 'deleteCommentVideoReply'])->name('deleteCommentVideoReply');
 
         Route::get('video_part/{id}/reports', [VideoPartController::class, 'reportPart'])->name('reportPart');
+
+        Route::get('video_part/likeActive', [VideoPartController::class, 'likeActive'])->name('likeActive');
+        Route::get('video_part/viewActive', [VideoPartController::class, 'viewActive'])->name('viewActive');
+
+
     });
 
     #### Audio ####
