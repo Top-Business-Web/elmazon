@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Comment\CommentController;
 use App\Http\Controllers\Api\Degree\DegreeController;
 use App\Http\Controllers\Api\DegreeOfExamsDetails\DegreeExamsDetailsController;
+use App\Http\Controllers\Api\ExamYourselfTest\TestYourselfExamsController;
 use App\Http\Controllers\Api\Favorites\FavoriteController;
 use App\Http\Controllers\Api\FullExams\FullExamController;
 use App\Http\Controllers\Api\Guides\GuideController;
@@ -17,7 +18,7 @@ use App\Http\Controllers\Api\AllExamsUsersDegreeController;
 use App\Http\Controllers\Api\Notes\NoteController;
 use App\Http\Controllers\Api\OnBoardingController;
 use App\Http\Controllers\Api\Payment;
-use App\Http\Controllers\Api\Question\QuestionController;
+use App\Http\Controllers\Api\ExamEntry\ExamEntryController;
 use App\Http\Controllers\Api\StudentReport\ReportController;
 use App\Http\Controllers\Api\Report\ReportController as ReportStudentController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
@@ -65,8 +66,6 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('/payments/pay',[Payment::class,'pay']);
         Route::post('/payments/paymob____',[Payment::class,'pay_']);
         Route::post('user-add-screenshot',[AuthController::class,'user_add_screenshot']);
-
-
     });
   });
 
@@ -115,15 +114,25 @@ Route::group(['middleware' => 'lang'], function (){
         Route::delete('replay/delete/{id}',[CommentController::class,'deleteReplay']);
     });
 
-    Route::group(['prefix' => 'show_exam','middleware' => ['jwt']], function (){
-        Route::get('questions/{id}',[QuestionController::class,'all_questions_by_online_exam']);
+    Route::group(['prefix' => 'ExamEntry','middleware' => ['jwt']], function (){
+        Route::get('all-of-questions/{id}',[ExamEntryController::class,'all_questions_by_online_exam']);
     });
 
-    Route::post('onlineExam/exam/{id}',[QuestionController::class,'online_exam_by_user'])->middleware('jwt');
-        Route::group(['prefix' => 'degrees','middleware' => ['jwt']], function (){
-        Route::get('all-exams-degrees',[DegreeController::class,'degrees']);
-        Route::get('depends/exam/{id}',[DegreeController::class,'degrees_depends']);
+
+    //start Exam entry controller
+    Route::group(['prefix' => 'ExamEntry','middleware' => ['jwt']], function (){
+
+        Route::post('exam/{id}',[ExamEntryController::class,'online_exam_by_user']);
+         Route::get('exam-degree-depends-with-student/{id}',[ExamEntryController::class,'degreesDependsWithStudent']);
     });
+
+
+    Route::group(['prefix' => 'degrees','middleware' => ['jwt']], function (){
+
+        Route::get('all-exams-degrees',[DegreeController::class,'degrees']);
+//        Route::get('depends/exam/{id}',[DegreeController::class,'degrees_depends']);
+
+        });
 
     Route::get('ads',[AdsController::class,'index'])->middleware('jwt');
     Route::get('on-boarding',[OnBoardingController::class,'index']);
@@ -132,7 +141,7 @@ Route::group(['middleware' => 'lang'], function (){
     Route::middleware('jwt')->group(function (){
         Route::get('exam-degree/details',[AllExamsUsersDegreeController::class,'all_exams_details']);
         Route::get('exam-degree/heroes',[AllExamsUsersDegreeController::class,'all_exams_heroes']);
-        Route::post('access-end-time/exam/{id}',[QuestionController::class,'access_end_time_for_exam']);
+        Route::post('access-end-time/exam/{id}',[ExamEntryController::class,'access_end_time_for_exam']);
 
     });
 
@@ -144,7 +153,7 @@ Route::group(['middleware' => 'lang'], function (){
 
     });
 
-    Route::post('access-end-time/exam/{id}',[QuestionController::class,'access_end_time_for_exam'])->middleware('jwt');
+    Route::post('access-end-time/exam/{id}',[ExamEntryController::class,'access_end_time_for_exam'])->middleware('jwt');
     Route::get('reports/student-report',[ReportController::class,'student_report'])->middleware('jwt');
     Route::post('user-rate-video/{id}',[App\Http\Controllers\Api\VideoRate\VideoRateController::class,'user_rate_video'])->middleware('jwt');
 
@@ -199,9 +208,18 @@ Route::group(['middleware' => 'lang'], function (){
 
     });
 
+    //start test-yourself-exams
+    Route::group(['prefix' => 'test-yourself-exams','middleware' => 'jwt'], function (){
+        Route::post('make-exam',[TestYourselfExamsController::class,'makeExam']);
+        Route::get('exam-questions/{id}',[TestYourselfExamsController::class,'examQuestions']);
+        Route::post('solve-exam/{id}',[TestYourselfExamsController::class,'solveExam']);
+        Route::get('all-classes-with-lessons',[TestYourselfExamsController::class,'allClassesWithLessons']);
+
+    });
+
 
 });
 
-        Route::post('/payments/pay',[Payment::class,'pay']);
-        Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
-        Route::get('/checkout',[Payment::class,'checkout']);
+    Route::post('/payments/pay',[Payment::class,'pay']);
+    Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
+    Route::get('/checkout',[Payment::class,'checkout']);
