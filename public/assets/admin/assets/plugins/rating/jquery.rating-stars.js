@@ -1,5 +1,5 @@
 jQuery.fn.ratingStars = function( options ) {
- 
+
     var defaults = {
         selectors: {
             starsSelector: '.rating-stars',
@@ -10,13 +10,13 @@ jQuery.fn.ratingStars = function( options ) {
             targetFormElementSelector: '.rating-value'
         }
     };
- 
+
     var settings = $.extend( {}, defaults, options );
 
     var methods = {
         init: function(element) {
             var me = this;
-            
+
             methods.registerEvents(element);
             methods.loadDefaultValue(element);
         },
@@ -36,7 +36,7 @@ jQuery.fn.ratingStars = function( options ) {
 
         registerEvents: function (element) {
             var me = this;
-    
+
             $.each($(element).children(settings.starsSelector).children(settings.starSelector), function(index, starElement) {
                 $(starElement).on("mouseenter", $.proxy(me.onStarEnter, me, starElement, element));
                 $(starElement).on("mouseleave", $.proxy(me.onStarLeave, me, starElement, element));
@@ -47,8 +47,8 @@ jQuery.fn.ratingStars = function( options ) {
         onStarEnter: function(starElement, container) {
             var me = this;
             var elementIndex = $(starElement).index();
-    
-            // add the hover classes
+
+            // add the hover subject_class
             var i = 0;
             $.each($(container).children(settings.starsSelector).children(settings.starSelector), function(index, element) {
                 if(i <= elementIndex) {
@@ -65,12 +65,12 @@ jQuery.fn.ratingStars = function( options ) {
                 ratingValue: (elementIndex + 1)
             });
         },
-    
+
         onStarLeave: function(starElement, container) {
             var me = this;
             var elementIndex = $(starElement).index();
-    
-            // remove all hover classes
+
+            // remove all hover subject_class
             $(container).children(settings.starsSelector).children(settings.starSelector).removeClass(settings.selectors.starHoverClass);
             $(container).children(settings.starsSelector).children(settings.starSelector).removeClass(settings.selectors.starNoHoverClass);
 
@@ -78,14 +78,14 @@ jQuery.fn.ratingStars = function( options ) {
                 ratingValue: (elementIndex + 1)
             });
         },
-    
+
         onStarSelected: function(starElement, container) {
             var me = this;
             var elementIndex = $(starElement).index();
-    
+
             // remove the currently selected class
             $(container).children(settings.starsSelector).children(settings.starSelector).removeClass(settings.selectors.starActiveClass);
-    
+
             // set the selected class for the stars
             var i = 0;
             $.each($(container).children(settings.starsSelector).children(settings.starSelector), function(index, element) {
@@ -94,7 +94,7 @@ jQuery.fn.ratingStars = function( options ) {
                 }
                 i++;
             });
-    
+
             // set the rating value to the form
             $(container).children(settings.selectors.targetFormElementSelector).val(elementIndex + 1);
 
@@ -103,7 +103,7 @@ jQuery.fn.ratingStars = function( options ) {
             });
         }
     };
- 
+
     return this.each(function() {
         methods.init($(this));
     });

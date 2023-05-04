@@ -9,7 +9,17 @@ class PapelSheetExam extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name_ar',
+        'name_en',
+        'description',
+        'degree',
+        'season_id',
+        'term_id',
+        'from',
+        'to',
+        'date_exam'
+    ];
 
     public function papel_sheet_exam_time(){
 

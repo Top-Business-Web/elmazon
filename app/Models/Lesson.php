@@ -12,7 +12,15 @@ class Lesson extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'background_color',
+        'title_ar',
+        'title_en',
+        'name_ar',
+        'name_en',
+        'note',
+        'subject_class_id',
+    ];
 
     /*
   |--------------------------------------------------------------------------

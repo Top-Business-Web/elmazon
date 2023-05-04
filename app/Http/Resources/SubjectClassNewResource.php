@@ -29,7 +29,7 @@ class SubjectClassNewResource extends JsonResource
 
             'id' => $this->id,
             'status' => OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('subject_class_id','=',$this->id)->count() > 0 ? 'opened' : 'lock',
-            'image' => $this->image == null ? asset('classes/default/p.png') : asset('classes/' . $this->image),
+            'image' => $this->image == null ? asset('subject_class/default/p.png') : asset('subject_class/' . $this->image),
             'background_color' => $this->background_color,
             'title' => lang() == 'ar' ? $this->title_ar : $this->title_en,
             'name' => lang() == 'ar' ? $this->name_ar : $this->name_en,

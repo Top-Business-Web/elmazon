@@ -27,6 +27,17 @@
 										<i class="fe fe-plus"></i>
 									</span> أضافة
                         </button>
+                        <button class="btn btn-success btn-icon text-white exportExel">
+									<span>
+										<i class="fa fa-file-pdf"></i>
+									</span> تصدير ملف اكسيل
+                        </button>
+                        <button class="btn btn-info btn-icon text-white importExel"
+                                data-toggle="modal" data-target="#importExel">
+									<span>
+										<i class="fa fa-file-pdf"></i>
+									</span> استيراد ملف اكسيل
+                        </button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -37,11 +48,10 @@
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">السؤال</th>
-                                <th class="min-w-50px">الملاحظة</th>
                                 <th class="min-w-50px">الفصل</th>
                                 <th class="min-w-50px">الترم</th>
-                                <th class="min-w-50px">نوع المثال</th>
-                                <th class="min-w-50px">المثال</th>
+                                <th class="min-w-50px">الصعوبة</th>
+                                <th class="min-w-50px">مخصص لـ</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -116,7 +126,39 @@
             </div>
         </div>
         <!-- Create Or Edit Modal -->
+
+        <!-- Import Modal -->
+        <div class="modal fade" id="importExel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">استيراد ملف اكسيل</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <form method="post" id="importExelForm" enctype="multipart/form-data">
+                                @csrf
+                                <div class="row">
+                                    <label class="form-label" for="exelFile">ملف الاسئلة</label>
+                                    <input class="form-control form-control-file dropify" type="file" name="exelFile">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary importBtn">رفع</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Import Modal -->
+        </div>
     </div>
+
     @include('admin.layouts_admin.myAjaxHelper')
 @endsection
 @section('ajaxCalls')
@@ -139,11 +181,10 @@
         var columns = [
             {data: 'id', name: 'id'},
             {data: 'question', name: 'question'},
-            {data: 'note', name: 'note'},
             {data: 'season_id', name: 'season_id'},
             {data: 'term_id', name: 'term_id'},
-            {data: 'examable_type', name: 'examable_type'},
-            {data: 'examable_id', name: 'examable_id'},
+            {data: 'difficulty', name: 'difficulty'},
+            {data: 'type', name: 'type'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
 
@@ -169,6 +210,49 @@
         showEdit('{{ route('answer',':id') }}');
         addAnswer();
 
+        $(document).ready(function () {
+            $('.exportExel').on('click', function () {
+                window.location.href = '{{ route('questionExport')}}'
+            })
+        })
+
+        $('.dropify').dropify();
+
+        $(document).on("submit", "#importExelForm", function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: '{{ route('questionImport') }}',
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    if (data.status === 200) {
+                        toastr.success('تم استيراد الملف بنجاح')
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 2000)
+
+                    } else if (data.status === 500) {
+                        toastr.error('فشل في استيراد الملف')
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 2000)
+                    }
+                },
+                error: function (data) {
+                    toastr.error('فشل في استيراد الملف')
+                    setTimeout(function () {
+                        // window.location.reload();
+                    }, 2000)
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
     </script>
 @endsection
 

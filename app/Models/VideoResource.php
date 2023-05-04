@@ -11,22 +11,48 @@ class VideoResource extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name_ar',
+        'name_en',
+        'image',
+        'background_color',
+        'time',
+        'video_link',
+        'type',
+        'pdf_file',
+        'season_id',
+        'term_id',
 
-    public function season(){
+    ];
 
-        return $this->belongsTo(Season::class,'season_id','id');
+    public function season()
+    {
+
+        return $this->belongsTo(Season::class, 'season_id', 'id');
     }
 
 
-    public function term(){
+    public function term()
+    {
 
-        return $this->belongsTo(Term::class,'term_id','id');
+        return $this->belongsTo(Term::class, 'term_id', 'id');
     }
 
-    public function video_favorites(): HasMany{
+    public function video_favorites(): HasMany
+    {
 
-        return $this->hasMany(VideoFavorite::class,'video_resource_id','id');
+        return $this->hasMany(VideoFavorite::class, 'video_resource_id', 'id');
+    }
+
+    public function report()
+    {
+
+        return $this->hasMany(Report::class, 'video_part_id', 'id');
+    }
+
+    public function comment()
+    {
+        return $this->hasMany(Comment::class, 'video_resource_id', 'id');
     }
 
     /*
@@ -34,13 +60,14 @@ class VideoResource extends Model
     */
 
 
-    public function scopeResourceFavorite($query){
+    public function scopeResourceFavorite($query)
+    {
 
-        return $query->whereHas('video_favorites', function ($q){
-            $q->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','favorite');
-        })->whereHas('term', function ($term){
-            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+        return $query->whereHas('video_favorites', function ($q) {
+            $q->where('user_id', '=', Auth::guard('user-api')->id())->where('action', '=', 'favorite');
+        })->whereHas('term', function ($term) {
+            $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
+        })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
     }
 
     /*

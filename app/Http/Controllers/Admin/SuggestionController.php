@@ -24,6 +24,48 @@ class SuggestionController extends Controller
                             </button>
                        ';
                 })
+                ->editColumn('user_id', function ($suggestions) {
+                        return '<td>'. $suggestions->user->name .'</td>';
+                })
+                ->editColumn('suggestion', function ($suggestions) {
+                    if($suggestions->audio) {
+                        return '<td>'. ($suggestions->suggestion ? $suggestions->suggestion : '____') .'</td>';
+                    }
+                    else
+                    {
+                        return '____';
+                    }
+                })
+                ->editColumn('audio', function ($suggestions) {
+                    if ($suggestions->audio)
+                        return '<a class="badge badge-danger" href="' . asset('suggestions_uploads/audios/'.$suggestions->audio) . '">
+                                '. ($suggestions->audio ? 'لينك الصوت' : '____') .'
+                            </a>';
+                    else
+                    {
+                        return '____';
+                    }
+                })
+                ->editColumn('image', function ($suggestions) {
+                    if ($suggestions->image)
+                        return '<a class="badge badge-secondary" href="' . asset('suggestions_uploads/images/'.$suggestions->image) . '">
+                                '. ($suggestions->image ? 'لينك الصورة' : '____') .'
+                            </a>';
+                    else
+                    {
+                        return '____';
+                    }
+                })
+                ->editColumn('suggestion', function ($suggestions) {
+                    if ($suggestions->suggestion)
+                        return '<a class="badge badge-success" href="#">
+                                '. ($suggestions->suggestion ? $suggestions->suggestion : '____') .'
+                            </a>';
+                    else
+                    {
+                        return '____';
+                    }
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {
@@ -35,7 +77,7 @@ class SuggestionController extends Controller
 
     // Delete Start
 
-    public function delete(Request $request)
+    public function destroy(Request $request)
     {
         $suggestion = Suggestion::where('id', $request->id)->firstOrFail();
         $suggestion->delete();

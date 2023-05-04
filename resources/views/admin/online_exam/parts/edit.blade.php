@@ -49,24 +49,24 @@
                 <div class="col-md-2">
                     <label for="name_ar" class="form-control-label">الدرجة</label>
                     <input type="number" class="form-control" name="degree" value="{{ $onlineExam->degree }}"
-                           style="text-align: center">
+                           style="text-align: center" required>
                 </div>
                 <div class="col-md-5">
                     <label for="date_exam" class="form-control-label">موعد الامتحان</label>
                     <input type="date" class="form-control" name="date_exam" value="{{ $onlineExam->date_exam }}"
-                           style="text-align: center">
+                           style="text-align: center" required>
                 </div>
                 <div class="col-md-3">
                     <label for="name_en" class="form-control-label"> وقت الامتحان</label>
                     <input type="number" class="form-control" name="quize_minute"
                            value="{{ $onlineExam->quize_minute }}" style="text-align: center"
-                           placeholder="الوقت بالدقائق">
+                           placeholder="الوقت بالدقائق" required>
                 </div>
                 <div class="col-md-2">
                     <label for="name_en" class="form-control-label"> عدد المحاولات </label>
                     <input type="number" class="form-control" name="trying_number"
                            value="{{ $onlineExam->trying_number }}" style="text-align: center"
-                           placeholder="عدد المحاولات">
+                           placeholder="عدد المحاولات" required>
                 </div>
             </div>
 
@@ -74,12 +74,12 @@
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
                     <input type="text" class="form-control" value="{{ $onlineExam->name_ar }}" name="name_ar"
-                           style="text-align: center">
+                           style="text-align: center" required>
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
                     <input type="text" class="form-control" value="{{ $onlineExam->name_en }}" name="name_en"
-                           style="text-align: center">
+                           style="text-align: center" required>
                 </div>
             </div>
 
@@ -87,7 +87,7 @@
                 <div class="col-md-6">
                     <label for="note" class="form-control-label">الصف</label>
                     <select name="season_id"
-                            class="form-control selectSeason" @selected( old('season_id',$onlineExam->season_id)) >
+                            class="form-control selectSeason" @selected( old('season_id',$onlineExam->season_id))  required>
                         <option disabled style="text-align: center">اختر الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
@@ -98,14 +98,14 @@
                 <div class="col-md-6">
                     <label for="note" class="form-control-label">تيرم</label>
                     <select name="term_id"
-                            class="form-control selectTerm" @selected( old('term_id',$onlineExam->term_id))>
+                            class="form-control selectTerm" @selected( old('term_id',$onlineExam->term_id)) required>
                         <option disabled style="text-align: center">اختر تيرم</option>
-                        <option value="{{ $onlineExam->term_id }}" class="form-control">{{ $onlineExam->term->name_ar }}</option>
+                        <option value="{{ $onlineExam->term_id }}" class="form-control">{{ $onlineExam->term->name_ar ?? '' }}</option>
                     </select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <label for="type" class="form-control-label">النوع</label>
                     <Select name="examable_type" id="type" class="form-control type_choose"
                             required="required" @selected( old('examable_type',$onlineExam->type))>
@@ -115,11 +115,15 @@
                         <option value="App\Models\VideoParts" style="text-align: center">الفيديو</option>
                     </Select>
                 </div>
+                <div class="col-md-6">
+                    <label for="note" class="form-control-label">لون الخلفية</label>
+                    <input type="color" class="form-control" value="{{ $onlineExam->background_color }}" name="background_color" required>
+                </div>
                 <div class="col-md-12">
                     <label for="lesson" class="form-control-label typeName">الدرس</label>
                     <Select name="examable_id" class="form-control type_ajax_choose" required="required">
                         <option value="{{ $onlineExam->term_id ?? $onlineExam->class_id ?? $onlineExam->video_id }}">
-                            {{ $onlineExam->lesson->name_ar ?? $onlineExam->class->name_ar ?? $onlineExam->video->name_ar }}
+                            {{ $onlineExam->lesson->name_ar ?? $onlineExam->class->name_ar ?? $onlineExam->video->name_ar ?? '' }}
                         </option>
                     </Select>
                 </div>
@@ -128,10 +132,12 @@
                 <div class="col-md-6">
                     <label class="control-label">التعليمات بالعربية</label>
                     <div class="form-group itemItems1">
+                        @if($onlineExam->instruction_ar != null)
                         @foreach($onlineExam->instruction_ar as $val1)
                             <input type="text" name="instruction_ar[]" class="form-control mt-3 InputItemExtra1"
                                    value="{{ $val1 }}">
                         @endforeach
+                        @endif
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -144,9 +150,11 @@
                 <div class="col-md-6">
                     <label class="control-label">التعليمات بالانجليزية</label>
                     <div class="form-group itemItems2">
+                        @if($onlineExam->instruction_en != null)
                         @foreach($onlineExam->instruction_en as $val2)
                             <input type="text" name="instruction_en[]" class="form-control mt-3 InputItemExtra2" value="{{ $val2 }}">
                         @endforeach
+                            @endif
                     </div>
                 </div>
                 <div class="col-md-6">

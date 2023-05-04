@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\CommentReplay;
 use App\Models\Term;
 use App\Models\Season;
+use App\Models\Report;
 use App\Models\VideoResource;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
@@ -38,7 +39,8 @@ class VideoResourceController extends Controller
                                     data-id="' . $video_resource->id . '" data-title="' . $video_resource->name_ar . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                            <a href="' . route('indexCommentResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-success-light"> تعليقات <i class="fa fa-comment"></i></a>
+                            <a href="' . route('indexCommentResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-success-light"> تعليقات '. $video_resource->comment->count() .' <i class="fa fa-comment"></i></a>
+                            <a href="' . route('ReportVideosResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-danger-light"> بلاغات '. $video_resource->report->count() .' <i class="fe fe-book"></i></a>
 
                        ';
                 })
@@ -50,16 +52,31 @@ class VideoResourceController extends Controller
                            value="' . $video_resource->background_color . '" disabled>';
                 })
                 ->editColumn('video_link', function ($video_resource) {
-                    if ($video_resource->video_link)
-                        return '<a href="' . asset($video_resource->video_link) . '">
-                                لينك الفيديو
-                            </a>';
+                    if ($video_resource->video_link) {
+                        return '<a href="' . asset($video_resource->video_link) . '">'
+                            . ($video_resource->video_link ? $video_resource->video_link : '____') .
+                            '</a>';
+                    } else {
+                        return '____';
+                    }
                 })
                 ->editColumn('pdf_file', function ($video_resource) {
                     if ($video_resource->pdf_file)
-                        return '<a href="' . asset($video_resource->pdf_file) . '">
-                                لينك الملف الورقي
-                            </a>';
+                        return '<a href="' . asset($video_resource->pdf_file) . '">'
+                               . ($video_resource->pdf_file ? $video_resource->pdf_file : '____') .
+                            '</a>';
+                    else
+                    {
+                        return '____';
+                    }
+                })
+                ->editColumn('time', function ($video_resource) {
+                    if ($video_resource->time)
+                        return '<td>'. ($video_resource->time ? $video_resource->time : '____') .'</td>';
+                    else
+                    {
+                        return '____';
+                    }
                 })
                 ->filter(function ($video_resource) use ($request) {
                     if ($request->get('season_id')) {
@@ -75,6 +92,38 @@ class VideoResourceController extends Controller
 
     // Index End
 
+    // Report Start
+    public function ReportVideosResource(Request $request, $id)
+    {
+        $reports = Report::where('video_resource_id', $id)->get();
+        if ($request->ajax()) {
+            return Datatables::of($reports)
+                ->addColumn('action', function ($reports) {
+                    return '
+                    <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
+                    data-id="' . $reports->id . '" data-title="' . $reports->report . '">
+                    <i class="fas fa-trash"></i>
+            </button>
+                       ';
+                })
+                ->editColumn('user_id', function ($reports) {
+
+                        return '<td>'. $reports->user->name .'</td>';
+                })
+                ->editColumn('video_resource_id', function ($reports) {
+                    return '<a href="' . asset('videos_resources/'.$reports->video_resource_id) . '">'
+                           . $reports->video_resource->name_ar .
+                        '</a>';
+            })
+                ->escapeColumns([])
+                ->make(true);
+        } else {
+            return view('admin.video_resource.parts.report', compact('id'));
+        }
+    }
+
+    // Report End
+
     // index comment
 
     public function indexCommentResource(Request $request,$id)
@@ -89,7 +138,7 @@ class VideoResourceController extends Controller
                                     <i class="fas fa-trash"></i>
                             </button>
                                 <button type="button" data-id="' . $comments->id . '" class="btn btn-pill btn-primary-light addReply"><i class="fa fa-plus"></i>اضافة رد</button>
-                            <a href="' . route('indexCommentVideoReply', $comments->id) . '" class="btn btn-pill btn-success-light">الردود<li class="fa fa-reply"></li></a>
+                            <a href="' . route('indexCommentResourceReply', $comments->id) . '" class="btn btn-pill btn-success-light">الردود<li class="fa fa-reply"></li></a>
                        ';
                 })
                 ->editColumn('user_id', function ($comments) {
@@ -126,7 +175,13 @@ class VideoResourceController extends Controller
                        ';
                 })
                 ->editColumn('user_id', function ($comments_replys) {
-                    return '<td>'. $comments_replys->user->name .'</td>';
+                    if($comments_replys->user->name) {
+                        return '<td>'. ($comments_replys->user->name ? $comments_replys->user->name : '____') .'</td>';
+                    }
+                    else
+                    {
+                        return '____';
+                    }
                 })
                 ->editColumn('image', function ($comments_replys) {
                     if ($comments_replys->image)
@@ -204,7 +259,7 @@ class VideoResourceController extends Controller
 
     // Store Start
 
-    public function store(StoreVideoResource $request)
+    public function store(Request $request)
     {
         $inputs = $request->all();
 
@@ -245,7 +300,7 @@ class VideoResourceController extends Controller
 
     // Update Start
 
-    public function update(UpdateVideoResource $request, VideoResource $videoResource)
+    public function update(Request  $request, VideoResource $videoResource)
     {
 
         if ($image = $request->hasFile('image')) {
