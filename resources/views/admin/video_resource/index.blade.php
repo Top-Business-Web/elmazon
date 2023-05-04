@@ -57,6 +57,8 @@
                                 <th class="min-w-50px">النوع</th>
                                 <th class="min-w-50px">الوقت</th>
                                 <th class="min-w-50px">لينك الملف الورقي</th>
+                                <th class="min-w-50px">تقييم</th>
+                                <th class="min-w-50px">مشاهدة</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -126,6 +128,8 @@
             {data: 'type', name: 'type'},
             {data: 'time', name: 'time'},
             {data: 'pdf_file', name: 'pdf_file'},
+            {data: 'like_active', name: 'like_active'},
+            {data: 'view_active', name: 'view_active'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
 
@@ -145,6 +149,72 @@
         // Add Using Ajax
         showEditModal('{{route('videoResource.edit',':id')}}');
         editScript();
+
+
+        $(document).on('click', '.addFile', function() {
+            var id = $(this).data('id')
+            var url = '{{ route('showFiles', ':id') }}';
+            url = url.replace(':id', id)
+            $('#modal-body').html(loader)
+            $('#editOrCreate').modal('show')
+
+            setTimeout(function() {
+                $('#modal-body').load(url)
+            }, 500)
+        })
+
+
+        $(document).on('click', '.like_active', function() {
+            var id = $(this).data('id');
+            var val = $(this).is(':checked') ? 1 : 0;
+
+            $.ajax({
+                url: '{{ route('likeActiveResource') }}',
+                type: 'post',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'id': id,
+                    'like_active': val
+                },
+                success: function(data) {
+
+                    // Check if val is not equal to 0 before executing toastr.success()
+                    if (val !== 0) {
+                        toastr.success('Success', 'تم التفعيل بنجاح');
+                    }
+                    else
+                    {
+                        toastr.warning('Success', 'تم الغاء التفعيل');
+                    }
+                },
+            });
+        });
+
+        $(document).on('click', '.view_active', function() {
+            var id = $(this).data('id');
+            var val = $(this).is(':checked') ? 1 : 0;
+
+            $.ajax({
+                url: '{{ route('viewActiveResource') }}',
+                type: 'post',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'id': id,
+                    'view_active': val
+                },
+                success: function(data) {
+
+                    // Check if val is not equal to 0 before executing toastr.success()
+                    if (val !== 0) {
+                        toastr.success('Success', 'تم التفعيل بنجاح');
+                    }
+                    else
+                    {
+                        toastr.warning('Success', 'تم الغاء التفعيل');
+                    }
+                },
+            });
+        });
 
 
     </script>

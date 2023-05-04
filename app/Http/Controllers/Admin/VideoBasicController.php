@@ -32,6 +32,14 @@ class VideoBasicController extends Controller
                              <a href="' . route('reportBasic', $video_basics->id) . '" data-id="' . $video_basics->id . '" class="btn btn-pill btn-danger-light"> بلاغات '. $video_basics->report->count() .' <i class="fe fe-book"></i></a>
                        ';
                 })
+                ->editColumn('like_active', function ($video_basics) {
+                        return '<input class="tgl tgl-ios like_active" data-id="'. $video_basics->id .'" name="like_active" id="like-' . $video_basics->id . '" type="checkbox" '. ($video_basics->like_active == 1 ? 'checked' : 'unchecked') .'/>
+                        <label class="tgl-btn" dir="ltr" for="like-' . $video_basics->id . '"></label>';
+                })
+                ->editColumn('view_active', function ($video_basics) {
+                        return '<input class="tgl tgl-ios view_active" data-id="'. $video_basics->id .'" name="view_active" id="view-' . $video_basics->id . '" type="checkbox" '. ($video_basics->view_active == 1 ? 'checked' : 'unchecked') .'/>
+                        <label class="tgl-btn" dir="ltr" for="view-' . $video_basics->id . '"></label>';
+                })
                 ->editColumn('video_link', function ($video_basics) {
                     if ($video_basics->video_link)
                         return '<a href="' . asset($video_basics->video_link) . '">
@@ -299,4 +307,21 @@ class VideoBasicController extends Controller
     }
 
     // Destroy End
+
+
+    public function likeActive(Request $request)
+    {
+        $like = $request->like_active;
+        $video = VideoBasic::findOrFail($request->id);
+        $video->like_active = $like;
+        $video->save();
+    }
+
+    public function viewActive(Request $request)
+    {
+        $view = $request->view_active;
+        $video = VideoBasic::findOrFail($request->id);
+        $video->view_active = $view;
+        $video->save();
+    }
 }
