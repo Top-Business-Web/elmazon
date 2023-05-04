@@ -887,6 +887,7 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'App\\Models\\Subscribe' => __DIR__ . '/../..' . '/app/Models/Subscribe.php',
         'App\\Models\\Suggestion' => __DIR__ . '/../..' . '/app/Models/Suggestion.php',
         'App\\Models\\Term' => __DIR__ . '/../..' . '/app/Models/Term.php',
+        'App\\Models\\TestYourselfExams' => __DIR__ . '/../..' . '/app/Models/TestYourselfExams.php',
         'App\\Models\\TextExamUser' => __DIR__ . '/../..' . '/app/Models/TextExamUser.php',
         'App\\Models\\Timer' => __DIR__ . '/../..' . '/app/Models/Timer.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',

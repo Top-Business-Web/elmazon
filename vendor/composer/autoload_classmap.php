@@ -248,6 +248,7 @@ return array(
     'App\\Models\\Subscribe' => $baseDir . '/app/Models/Subscribe.php',
     'App\\Models\\Suggestion' => $baseDir . '/app/Models/Suggestion.php',
     'App\\Models\\Term' => $baseDir . '/app/Models/Term.php',
+    'App\\Models\\TestYourselfExams' => $baseDir . '/app/Models/TestYourselfExams.php',
     'App\\Models\\TextExamUser' => $baseDir . '/app/Models/TextExamUser.php',
     'App\\Models\\Timer' => $baseDir . '/app/Models/Timer.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',

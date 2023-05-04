@@ -16,6 +16,7 @@ use App\Models\OnlineExam;
 use App\Models\OnlineExamQuestion;
 use App\Models\PapelSheetExam;
 use App\Models\SubjectClass;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -66,7 +67,7 @@ class DegreeController extends Controller{
     }
 
 
-    public function degrees_depends(Request $request,$id){
+    public function degrees_depends(Request $request,$id): JsonResponse{
 
         try {
 

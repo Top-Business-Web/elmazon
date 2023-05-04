@@ -30,6 +30,7 @@ class User extends Authenticatable implements JWTSubject
         'birth_date',
         'email',
         'password',
+        'birth_date',
         'season_id',
         'group_id',
         'country_id',
@@ -92,7 +93,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->getKey();
     }
 
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims():array
     {
         return [];
     }
@@ -128,4 +129,7 @@ class User extends Authenticatable implements JWTSubject
 
         return $this->hasMany(ExamsFavorite::class,'user_id','id');
     }
+
+
+
 }
