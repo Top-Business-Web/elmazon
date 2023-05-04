@@ -58,6 +58,47 @@ class OnlineExamController extends Controller
 
     // End Index
 
+    // Index Question START
+
+    public function indexQuestion(request $request, $id)
+    {
+
+        if ($request->ajax()) {
+            $online_exams_questions = OnlineExamQuestion::where('online_exam_id', $id)->get();
+            return DataTables::of($online_exams_questions)
+                ->addColumn('action', function ($online_exams_questions) {
+                    return '
+                            <a class="btn btn-pill btn-success-light" href="'. route('addQuestion', $online_exams_questions->id) .'">اضافة</a>
+                       ';
+                })
+                ->editColumn('question', function ($online_exams_questions) {
+                    return '<td>' . $online_exams_questions->question->question . '</td>';
+                })
+                ->escapeColumns([])
+                ->make(true);
+        } else {
+            return view('admin.online_exam.parts.questions', compact('id'));
+        }
+    }
+
+    // End Question Index
+
+    // Add Question
+
+    public function addQuestion(Request $request)
+    {
+        return $request;
+        $newQuestion = new OnlineExamQuestion();
+        $newQuestion->question_id = $request->question_id;
+        $newQuestion->save();
+
+        // Redirect to the questions page with a success message
+        return redirect()->route('questions')->with('success', 'Question added successfully!');
+    }
+
+
+    // End Add Question
+
     // Start Store
 
     public function create()
@@ -71,15 +112,15 @@ class OnlineExamController extends Controller
 
     // Question Start
 
-    public function indexQuestion(Request $request)
-    {
-        $exam = OnlineExam::find($request->id);
-        $questions = Question::where('season_id', $exam->season_id)
-            ->where('term_id', $exam->term_id)
-            ->get();
-        $online_questions_ids = OnlineExamQuestion::where(['online_exam_id' => $request->id])->pluck('question_id')->toArray();
-        return view('admin.online_exam.parts.questions', compact('questions', 'exam', 'online_questions_ids'));
-    }
+//    public function indexQuestion(Request $request)
+//    {
+//        $exam = OnlineExam::find($request->id);
+//        $questions = Question::where('season_id', $exam->season_id)
+//            ->where('term_id', $exam->term_id)
+//            ->get();
+//        $online_questions_ids = OnlineExamQuestion::where(['online_exam_id' => $request->id])->pluck('question_id')->toArray();
+//        return view('admin.online_exam.parts.questions', compact('questions', 'exam', 'online_questions_ids'));
+//    }
 
     // Question End
 
@@ -143,20 +184,7 @@ class OnlineExamController extends Controller
 
     }
 
-    // Add Question
-
-    public function addQuestion(Request $request, OnlineExamQuestion $onlineExamQuestion)
-    {
-        $inputs = $request->all();
-        if ($onlineExamQuestion->create($inputs)) {
-            return response()->json(['status' => 200]);
-        } else {
-            return response()->json(['status' => 405]);
-        }
-    }
-
-    // End Add Question
-
+    // Select Term
     public function selectTerm(Request $request)
     {
         $terms = Term::where('season_id', $request->season_id)->pluck('name_ar', 'id')->toArray();
@@ -188,27 +216,32 @@ class OnlineExamController extends Controller
                     $data = Lesson::whereIn('subject_class_id', $subjectClass)
                         ->pluck('name_ar', 'id')->toArray();
 
-                } else if ($request->id == 'App\Models\class') {
-
-                    $data = SubjectClass::where('season_id', $request->season_id)
-                        ->where('term_id', $request->term)
-                        ->pluck('name_ar', 'id')->toArray();
-
-                } else if ($request->id == 'App\Models\VideoParts') {
-                    $data = videoParts::pluck('name_ar', 'id')->toArray();
                 }
+            } else if ($request->type == 'App\Models\SubjectClass') {
 
+                $data = SubjectClass::where('season_id', $request->season)
+                    ->where('term_id', $request->term)
+                    ->pluck('name_ar', 'id')->toArray();
+
+
+            } else if ($request->type == 'App\Models\VideoParts') {
+                $data = videoParts::pluck('name_ar', 'id')->toArray();
+            }
+            if (!$data) {
+                return response()->json(['' => 'لايوجد بيانات']);
+            } else {
                 return $data;
-
             }
         }
+
     }
 
-    // Examble Type End
+// Examble Type End
 
-    // Store End
+// Store End
 
-    public function store(OnlineExamRequest $request, OnlineExam $online_exam)
+    public
+    function store(OnlineExamRequest $request, OnlineExam $online_exam)
     {
 //        dd(file_size(asset('online_exams/pdf_answers/1.pdf')));
         $inputs = $request->all();
@@ -243,37 +276,39 @@ class OnlineExamController extends Controller
         }
     } // Store End
 
-    public function edit(OnlineExam $onlineExam)
+    public
+    function edit(OnlineExam $onlineExam)
     {
         $seasons = Season::all();
         $terms = Term::all();
         return view('admin.online_exam.parts.edit', compact('onlineExam', 'seasons', 'terms'));
     }
 
-    // Update Start
+// Update Start
 
-    public function update(OnlineExamRequest $request, OnlineExam $onlineExam)
+    public
+    function update(OnlineExamRequest $request, OnlineExam $onlineExam)
     {
 
         $inputs = $request->all();
 
 
         if ($request->has('pdf_file_upload')) {
-             if (file_exists($onlineExam->pdf_file_upload)) {
+            if (file_exists($onlineExam->pdf_file_upload)) {
                 unlink($onlineExam->pdf_file_upload);
             }
             $inputs['pdf_file_upload'] = saveFile('online_exams/pdf_file_uploads', $request->pdf_file_upload);
         } // end save file
 
         if ($request->has('answer_pdf_file')) {
-             if (file_exists($onlineExam->answer_pdf_file)) {
+            if (file_exists($onlineExam->answer_pdf_file)) {
                 unlink($onlineExam->answer_pdf_file);
             }
             $inputs['answer_pdf_file'] = saveFile('online_exams/pdf_answers', $request->answer_pdf_file);
         } // end save file
 
         if ($request->has('answer_video_file')) {
-             if (file_exists($onlineExam->answer_pdf_file)) {
+            if (file_exists($onlineExam->answer_pdf_file)) {
                 unlink($onlineExam->answer_video_file);
             }
             $inputs['answer_video_file'] = saveFile('online_exams/videos_answers', $request->answer_video_file);
@@ -298,11 +333,12 @@ class OnlineExamController extends Controller
         }
     }
 
-    // Update End
+// Update End
 
-    // Destroy Start
+// Destroy Start
 
-    public function destroy(Request $request)
+    public
+    function destroy(Request $request)
     {
         $onlineExam = OnlineExam::where('id', $request->id)->firstOrFail();
         $onlineExam->delete();
@@ -310,7 +346,8 @@ class OnlineExamController extends Controller
     }// Delete End
 
 
-    public function addDegreeForTextExam(Request $request)
+    public
+    function addDegreeForTextExam(Request $request)
     {
 
         $text_exam_user = TextExamUser::findOrFail($request->exam_id);

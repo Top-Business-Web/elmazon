@@ -6,22 +6,22 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم باللغة العربية</label>
-                    <input type="text" class="form-control" value="{{ $videoBasic->name_ar }}" name="name_ar">
+                    <input type="text" class="form-control" value="{{ $videoBasic->name_ar }}" name="name_ar" required>
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم باللغة الانجليزية</label>
-                    <input type="text" class="form-control" value="{{ $videoBasic->name_en }}" name="name_en">
+                    <input type="text" class="form-control" value="{{ $videoBasic->name_en }}" name="name_en" required>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <label for="head">لون الخلفية</label>
                     <input type="color" class="form-control" value="{{ $videoBasic->background_color }}" name="background_color"
-                           value="">
+                           value="" required>
                 </div>
                 <div class="col-md-6">
                     <label for="time" class="form-control-label">المدة</label>
-                    <input type="number" class="form-control" value="{{ $videoBasic->time }}" name="time">
+                    <input type="number" class="form-control" value="{{ $videoBasic->time }}" name="time" required>
                 </div>
             </div>
             <div class="row">

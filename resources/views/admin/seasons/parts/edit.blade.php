@@ -7,11 +7,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم بالعربية</label>
-                    <input type="text" class="form-control" value="{{ $season->name_ar }}" name="name_ar">
+                    <input type="text" class="form-control" value="{{ $season->name_ar }}" name="name_ar" required>
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
-                    <input type="text" class="form-control" value="{{ $season->name_en }}" name="name_en">
+                    <input type="text" class="form-control" value="{{ $season->name_en }}" name="name_en" required>
                 </div>
             </div>
         </div>

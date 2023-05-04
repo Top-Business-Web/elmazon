@@ -31,6 +31,7 @@
                                 <th class="min-w-50px">الاسم</th>
                                 <th class="min-w-50px">ملاحظة</th>
                                 <th class="min-w-50px">الدرس</th>
+                                <th class="min-w-50px">الشهر</th>
                                 <th class="min-w-50px">لينك</th>
                                 <th class="min-w-50px">وقت الفيديو</th>
                                 <th class="min-w-50px">التقييم</th>
@@ -63,7 +64,8 @@
                             أغلاق
                         </button>
                         <button type="button" class="btn btn-danger"
-                                id="delete_btn">حذف</button>
+                                id="delete_btn">حذف
+                        </button>
                     </div>
                 </div>
             </div>
@@ -71,7 +73,8 @@
         <!-- MODAL CLOSED -->
 
         <!-- Create Or Edit Modal -->
-        <div class="modal fade bd-example-modal-lg" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog"
+             aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -97,6 +100,7 @@
             {data: 'name_ar', name: 'name_ar'},
             {data: 'note', name: 'note'},
             {data: 'lesson_id', name: 'lesson_id'},
+            {data: 'month', name: 'month'},
             {data: 'link', name: 'link'},
             {data: 'video_time', name: 'video_time'},
             {data: 'rate', name: 'rate'},
@@ -111,6 +115,20 @@
         // Add Using Ajax
         showEditModal('{{route('videosParts.edit',':id')}}');
         editScript();
+
+        $(document).on('click', '.addFile', function () {
+            var id = $(this).data('id')
+            var url = '{{ route('showFiles', ':id') }}';
+            url = url.replace(':id', id)
+            $('#modal-body').html(loader)
+            $('#editOrCreate').modal('show')
+
+            setTimeout(function () {
+                $('#modal-body').load(url)
+            }, 500)
+        })
+
+
     </script>
 @endsection
 

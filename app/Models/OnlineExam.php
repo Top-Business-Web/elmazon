@@ -16,6 +16,7 @@ class OnlineExam extends Model
 
     protected $fillable = [
         'exam_type',
+        'background_color',
         'pdf_file_upload',
         'pdf_num_questions',
         'answer_pdf_file',

@@ -35,7 +35,24 @@ class VideoBasicPdfController extends Controller
                     return '<td>'. ($video_basics_pdfs->type == 'video_resource' ? "مصدر الفيديو" : "فيديو تأسيسي") .'</td>';
 
                 })
-
+                ->editColumn('video_basic_id', function ($video_basics_pdfs) {
+                    if($video_basics_pdfs->video_basic_id) {
+                        return '<td>'. ($video_basics_pdfs->video_basic_id ? $video_basics_pdfs->video_basic_id : '____') .'</td>';
+                    }
+                    else
+                    {
+                        return '____';
+                    }
+                })
+                ->editColumn('video_resource_id', function ($video_basics_pdfs) {
+                    if($video_basics_pdfs->video_resource_id) {
+                        return '<td>'. ($video_basics_pdfs->video_resource_id ? $video_basics_pdfs->video_resource_id : '____') .'</td>';
+                    }
+                    else
+                    {
+                        return '____';
+                    }
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {
@@ -59,13 +76,13 @@ class VideoBasicPdfController extends Controller
 
     // Store Start
 
-    public function store(StoreVideoBasicPdf $request)
+    public function store(Request $request)
     {
         $inputs = $request->all();
         if($request->has('files')){
             foreach($request->file('files') as $file)
             {
-                $inputs['pdf_links'][] = $this->saveImage($file,'assets/uploads/products','photo');
+                $inputs['pdf_links'][] = $this->saveImage($file,'videos_basics_pdf/','photo');
             }
         }
         if(VideoBasicPdfUploads::create($inputs)) {
@@ -95,7 +112,7 @@ class VideoBasicPdfController extends Controller
 
     // Update Start
 
-    public function update(UpdateVideoBasicPdf $request, VideoBasicPdfUploads $videoBasicPdf)
+    public function update(Request $request, VideoBasicPdfUploads $videoBasicPdf)
     {
         $inputs = $request->all();
 
@@ -108,7 +125,7 @@ class VideoBasicPdfController extends Controller
 
         if($request->has('files')){
             foreach($request->file('files') as $file) {
-                $inputs['pdf_links'][] = $this->saveImage($file,'assets/uploads/products','photo');
+                $inputs['pdf_links'][] = $this->saveImage($file,'videos_basics_pdf/','photo');
             }
         }
 

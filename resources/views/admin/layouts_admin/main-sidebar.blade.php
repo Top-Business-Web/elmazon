@@ -41,6 +41,15 @@
             </li>
         @endcan
 
+        @can('الوحدات') <!-- DISCOUNT -->
+            <li class="slide">
+                <a class="side-menu__item" href="{{ route('discount_coupons.index') }}">
+                    <i class="fa fa-book-reader side-menu__icon"></i>
+                    <span class="side-menu__label">كوبونات الخضم</span>
+                </a>
+            </li>
+        @endcan
+
         @can('الترم')
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('terms.index') }}">

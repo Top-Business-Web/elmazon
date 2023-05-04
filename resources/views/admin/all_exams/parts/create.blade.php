@@ -77,6 +77,18 @@
                         <option selected disabled style="text-align: center">اختر تيرم</option>
                     </Select>
                 </div>
+                <div class="col-md-6">
+                    <label for="note" class="form-control-label">لون الخلفية</label>
+                    {{--                    <input type="color" class="form-control" value="{{ $allExam->background_color }}" name="background_color" required>--}}
+                    <select name="background_color" id="colorSelect" class="form-control">
+                        <option value="#FE7C04">#FE7C04</option>
+                        <option value="#143A7B">#143A7B</option>
+                        <option value="#854AA4">#854AA4</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <span class="btn btn-sm mt-4 colorInput" style="width: 100%">Preview</span>
+                </div>
             </div>
            <hr>
             <div class="row">
@@ -194,5 +206,15 @@
         if (Item.val() !== '') {
             $('.itemItems2').append('<input type="text" name="instruction_en[]" class="form-control InputItemExtra2 mt-3">')
         }
+    })
+
+    $(document).ready(function () {
+        $('.colorInput').addClass('d-none');
+
+        const colorSelect = document.querySelector('#colorSelect');
+        colorSelect.addEventListener('click', () => {
+            $('.colorInput').removeClass('d-none');
+            $('.colorInput').css('background-color', colorSelect.value);
+        });
     })
 </script>

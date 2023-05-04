@@ -7,6 +7,16 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
+                    <label for="title_ar" class="form-control-label">العنوان بالعربية</label>
+                    <input type="text" class="form-control" value="{{ $subjectsClass->title_ar }}" name="title_ar" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="title_en" class="form-control-label">العنوان بالانجليزية</label>
+                    <input type="text" class="form-control" value="{{ $subjectsClass->title_en }}" name="title_en" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم بالعربية</label>
                     <input type="text" class="form-control" value="{{ $subjectsClass->name_ar }}" name="name_ar">
                 </div>
@@ -43,7 +53,7 @@
                 <div class="col-md-6">
                     <label for="head">لون الخلفية</label>
                     <input type="color" class="form-control"  name="background_color"
-                           value="{{ $subjectsClass->background_color }}">
+                           value="{{ $subjectsClass->background_color }}" required>
                 </div>
                 <div class="col-md-6">
                     <label for="note_ar" class="form-control-label">ملاحظة بالعربية</label>
@@ -54,7 +64,7 @@
                 <div class="col-md-12">
                     <label for="">الصورة :</label>
                     <input type="file" name="image" class="dropify"
-                           data-default-file="{{ asset('classes/'.$subjectsClass->image) }}"/>
+                           data-default-file="{{ asset('subject_class/'.$subjectsClass->image) }}"/>
 
                     <span class="form-text text-danger text-center"> Recomended : 2048 X 1200 to up Px <br> Extension :
                         png, gif, jpeg,

@@ -67,7 +67,7 @@ class TermController extends Controller
 
     // Store Start
 
-    public function store(StoreTerm $request)
+    public function store(Request $request)
     {
         $inputs = $request->all();
         if (Term::create($inputs)) {
@@ -116,7 +116,7 @@ class TermController extends Controller
 
     // Update Start
 
-    public function update(StoreTerm $request, Term $term)
+    public function update(Request $request, Term $term)
     {
         if ($term->update($request->all())) {
             return response()->json(['status' => 200]);

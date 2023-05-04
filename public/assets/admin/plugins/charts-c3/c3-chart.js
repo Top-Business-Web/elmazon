@@ -56,7 +56,7 @@
         internal.tickTextCharSize;
         internal.tickTextRotate = internal.params.tickTextRotate;
         internal.tickLength;
-		
+
         internal.axis = internal.generateAxis();
     }
 
@@ -4312,7 +4312,7 @@
         if ('names' in args) {
             Chart.prototype.data.names.bind(this)(args.names);
         }
-        // update classes if exists
+        // update subject_class if exists
         if ('classes' in args) {
             Object.keys(args.classes).forEach(function (id) {
                 config.data_classes[id] = args.classes[id];

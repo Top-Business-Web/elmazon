@@ -9,13 +9,26 @@
         <div class="form-group">
             <label class="form-control-label">الصلاحيات</label>
             <hr>
-            @foreach($permissions as $permission)
-                <div class="badge badge-primary m-2">
-                    <input type="checkbox" class="" name="permission[]" value="{{ $permission->id }}"
-                           id="{{ $permission->id }}">
-                    <label for="{{ $permission->id }}" class="m-2">{{ $permission->name }}</label>
-                </div>
-            @endforeach
+
+            {{--                <div class="badge badge-primary m-2">--}}
+            {{--                    <input type="checkbox" role="switch" name="permission[]" value="{{ $permission->id }}"--}}
+            {{--                           id="{{ $permission->id }}">--}}
+            {{--                    <label for="{{ $permission->id }}" class="m-2">{{ $permission->name }}</label>--}}
+            {{--                </div>--}}
+            <!-- Rounded switch -->
+            <div class="row">
+                @foreach($permissions as $permission)
+                    <div class="col-6">
+                        <label class="switch">
+                            <input type="checkbox" role="switch" name="permission[]" value="{{ $permission->id }}"
+                                   id="{{ $permission->id }}">
+                            <span class="slider round"></span>
+                        </label>
+                        <label class="form-control-label" for="{{ $permission->id }}">{{ $permission->name }}</label>
+                    </div>
+                @endforeach
+            </div>
+
         </div>
 
         <div class="modal-footer">

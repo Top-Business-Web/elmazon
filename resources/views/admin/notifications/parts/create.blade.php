@@ -5,18 +5,19 @@
             <div class="row">
                 <div class="col-md-12">
                         <label for="name_ar" class="form-control-label">لمن الرسالة</label>
-                    <Select name="user_id" class="form-control notificationType">
+                    <Select name="user_id" class="form-control notificationType" required>
                         <option style="text-align: center" value="all">كل الطلاب</option>
                         <option style="text-align: center" value="user">اختر طالب</option>
                     </Select>
                 </div>
                 <div class="col-md-12 titleDiv">
                     <label for="name_ar" class="form-control-label">العنوان</label>
-                    <input type="text" class="form-control" name="title">
+                    <input type="text" class="form-control" name="title" required>
                 </div>
                 <div class="col-md-6 userSelect d-none">
                     <label for="name_ar" class="form-control-label">طالب</label>
-                    <input list="users" name="user_id" class="form-control" placeholder="اكتب كود الطالب">
+                    <input list="users" type="number" name="user_id" class="form-control student_code" placeholder="اكتب كود الطالب" required>
+                    <span id="status_code" style="background-color: #5cb85c"></span>
                     <datalist id="users">
                         @foreach($users as $user)
                             <option value="{{ $user->code }}"
@@ -28,7 +29,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="season_id" class="form-control-label">الصف</label>
-                    <Select name="season_id" class="form-control">
+                    <Select name="season_id" class="form-control" required>
                         <option selected style="text-align: center">الكل</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
@@ -39,7 +40,7 @@
 
                 <div class="col-md-6">
                     <label for="term_id" class="form-control-label">الترم</label>
-                    <Select name="term_id" class="form-control">
+                    <Select name="term_id" class="form-control" required>
 
                     </Select>
                 </div>
@@ -48,7 +49,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="name_en" class="form-control-label">الرسالة</label>
-                    <textarea class="form-control" name="body" rows="10"></textarea>
+                    <textarea class="form-control" name="body" required rows="10"></textarea>
                 </div>
             </div>
         </div>
@@ -103,5 +104,26 @@
             $('.titleDiv').addClass('col-md-12').removeClass('col-md-6')
         }
     })
+
+    $('.student_code').keyup(function(){
+        var code =  $(this).val();
+        if (code) {
+            $.ajax({
+                url: "{{ route('searchUser') }}",
+                type: "GET",
+                data: {
+                    code: code
+                },
+                success: function (data) {
+                    $('#status_code').text(data);
+                },
+            });
+        } else {
+            console.log('Code is empty');
+        }
+    });
+
+
+
 </script>
 

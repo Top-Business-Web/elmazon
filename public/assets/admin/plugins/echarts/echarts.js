@@ -11672,7 +11672,7 @@ function enableClassManagement(entity, options) {
     options = options || {};
 
     /**
-     * Component model classes
+     * Component model subject_class
      * key: componentType,
      * value:
      *     componentClass, when componentType is 'xxx'
@@ -17031,7 +17031,7 @@ Model.prototype = {
     },
 
     setReadOnly: function (properties) {
-        
+
     },
 
     // If path is null/undefined, return null/undefined.
@@ -25154,7 +25154,7 @@ var IntervalScale = Scale.extend({
         other[0] < extent[0] && (extent[0] = other[0]);
         other[1] > extent[1] && (extent[1] = other[1]);
 
-        // unionExtent may called by it's sub classes
+        // unionExtent may called by it's sub subject_class
         IntervalScale.prototype.setExtent.call(this, extent[0], extent[1]);
     },
     /**

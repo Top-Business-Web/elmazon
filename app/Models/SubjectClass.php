@@ -14,7 +14,18 @@ use Stripe\ApiOperations\All;
 class SubjectClass extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+
+    protected $fillable = [
+        'title_ar',
+        'title_en',
+        'name_ar',
+        'name_en',
+        'note',
+        'image',
+        'background_color',
+        'term_id',
+        'season_id',
+    ];
 
 
     public function lessons(): HasMany{
@@ -44,8 +55,8 @@ class SubjectClass extends Model
     }
 
 
-    public function exams(): HasMany
-    {
+
+    public function exams(){
         return $this->hasMany(OnlineExam::class,'class_id','id');
     }
 

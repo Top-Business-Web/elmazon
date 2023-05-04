@@ -21,7 +21,7 @@ class SubjectClassResource extends JsonResource
             'id' => $this->id,
             'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'status' => OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('subject_class_id','=',$this->id)->count() > 0 ? 'opened' : 'lock',
-            'image' => $this->image == null ? asset('classes/default/p.png') : asset('classes/' . $this->image),
+            'image' => $this->image == null ? asset('subject_class/default/p.png') : asset('subject_class/' . $this->image),
             'lessons' => LessonResource::collection($this->lessons),
             'exams' => OnlineExamResource::collection($this->exams),
             'created_at' => $this->created_at->format('Y-m-d'),

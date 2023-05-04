@@ -20,20 +20,16 @@ class SettingController extends Controller
      // Index End
 
      // Update Start
-    public function update(RequestSetting $request, Setting $setting)
+    public function update(RequestSetting $request)
     {
         $settings = Setting::findOrFail($request->id);
 
         $inputs = $request->all();
 
-        if($settings->update($inputs))
-        {
+        if ($settings->update($inputs))
             return response()->json(['status' => 200]);
-        }
         else
-        {
             return response()->json(['status' => 405]);
-        }
     }
 
     // Update End

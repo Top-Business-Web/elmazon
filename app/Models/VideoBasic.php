@@ -11,7 +11,13 @@ class VideoBasic extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name_ar',
+        'name_en',
+        'background_color',
+        'time',
+        'video_link',
+    ];
 
 
     public function videoBasicPdf(){
@@ -35,6 +41,17 @@ class VideoBasic extends Model
         return $query->whereHas('video_favorites', function ($q){
             $q->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','favorite');
         })->get();
+    }
+
+    public function report()
+    {
+
+        return $this->hasMany(Report::class,'video_basic_id','id');
+    }
+
+    public function comment()
+    {
+        return $this->hasMany(Comment::class, 'video_part_id', 'id');
     }
 
     /*

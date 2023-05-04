@@ -66,9 +66,9 @@
         <!-- MODAL CLOSED -->
 
         <!-- Create Or Edit Modal -->
-        <div class="modal fade" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content ">
+                <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="example-Modal3">بيانات الادوار والصلاحيات</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
