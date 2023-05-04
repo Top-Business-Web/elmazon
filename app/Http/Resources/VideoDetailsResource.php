@@ -68,6 +68,8 @@ class VideoDetailsResource extends JsonResource
             'favorite' => $favorite ? $favorite->action : 'un_favorite',
             'total_watch' => $total_views,
             'total_like' => (int)$like_video_count,
+            'like_active' => $this->like_active,
+            'view_active' => $this->view_active,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
 

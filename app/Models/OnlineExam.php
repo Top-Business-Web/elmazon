@@ -40,6 +40,7 @@ class OnlineExam extends Model
     protected $casts = [
         'instruction_ar' => 'json',
         'instruction_en' => 'json',
+
     ];
 
 
@@ -103,6 +104,8 @@ class OnlineExam extends Model
 
         return $this->hasMany(ExamsFavorite::class,'online_exam_id','id');
     }
+
+
 
 
     /*
