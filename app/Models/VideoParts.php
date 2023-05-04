@@ -23,6 +23,8 @@ class VideoParts extends Model
         'link',
         'type',
         'video_time',
+        'like_active',
+        'video_time'
 
     ];
 

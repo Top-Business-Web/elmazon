@@ -54,13 +54,13 @@ class VideoPartController extends Controller
                         ->count('action');
 
                     return $like . ' <i class="fa fa-thumbs-up ml-2 mr-2 text-success"></i>
-                                    <input class="tgl tgl-ios like_active" data-id="'. $videoParts->id .'" name="like_active" id="like-' . $videoParts->id . '" type="checkbox"/>
+                                    <input class="tgl tgl-ios like_active" data-id="'. $videoParts->id .'" name="like_active" id="like-' . $videoParts->id . '" type="checkbox" '. ($videoParts->like_active == 1 ? 'checked' : 'unchecked') .'/>
                                     <label class="tgl-btn" dir="ltr" for="like-' . $videoParts->id . '"></label>';
                 })
                 ->addColumn('view', function ($videoParts) {
                     $view = VideoTotalView::where('video_part_id', $videoParts->id)->count('count');
                     return $view . ' <i class="fa fa-eye"></i>
-                                    <input class="tgl tgl-ios" data-id="'. $videoParts->id .'" name="view_active" id="view-' . $videoParts->id . '" type="checkbox"/>
+                                    <input class="tgl tgl-ios viewActive" data-id="'. $videoParts->id .'" '. ($videoParts->view_active == 1 ? 'checked' : 'unchecked') .' name="view_active" id="view-' . $videoParts->id . '" type="checkbox"/>
                                     <label class="tgl-btn" dir="ltr" for="view-' . $videoParts->id . '"></label>';
                 })
                 ->editColumn('link', function ($videoParts) {
@@ -423,11 +423,17 @@ class VideoPartController extends Controller
 
     public function likeActive(Request $request)
     {
-        dd($request->all);
         $like = $request->like_active;
-
-        $video = VideoParts::findOrFail($vidId);
+        $video = VideoParts::findOrFail($request->id);
         $video->like_active = $like;
+        $video->save();
+    }
+
+    public function viewActive(Request $request)
+    {
+        $view = $request->view_active;
+        $video = VideoParts::findOrFail($request->id);
+        $video->view_active = $view;
         $video->save();
     }
 }

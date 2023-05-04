@@ -21,6 +21,8 @@ class VideoResource extends Model
         'type',
         'pdf_file',
         'season_id',
+        'like_active',
+        'view_active',
         'term_id',
 
     ];

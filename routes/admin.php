@@ -168,10 +168,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
         Route::get('video_part/{id}/reports', [VideoPartController::class, 'reportPart'])->name('reportPart');
 
-        Route::get('video_part/likeActive', [VideoPartController::class, 'likeActive'])->name('likeActive');
-        Route::get('video_part/viewActive', [VideoPartController::class, 'viewActive'])->name('viewActive');
-
-
+        Route::post('/video_part/likeActive', [VideoPartController::class, 'likeActive'])->name('likeActive');
+        Route::post('video_part/viewActive', [VideoPartController::class, 'viewActive'])->name('viewActive');
     });
 
     #### Audio ####
@@ -294,6 +292,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('video_basic/{id}/reports', [VideoBasicController::class, 'reportBasic'])->name('reportBasic');
     Route::delete('videoBasic/delete/report/{id}', [VideoBasicController::class, 'deleteReport'])->name('deleteReport');
 
+    Route::post('/video_basic/likeActive', [VideoBasicController::class, 'likeActive'])->name('likeActiveBasic');
+    Route::post('video_basic/viewActive', [VideoBasicController::class, 'viewActive'])->name('viewActiveBasic');
+
     #### Video Resource ####
     Route::group(['middleware' => 'permission:مصادر الفيديوهات'], function () {
         Route::resource('videoResource', VideoResourceController::class);
@@ -304,6 +305,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::post('videoResource/comment/reply', [VideoResourceController::class, 'storeReplyResource'])->name('storeReplyResource');
         Route::delete('videoResource/commentReply/delete/{id}', [VideoResourceController::class, 'deleteCommentResourceReply'])->name('deleteCommentResourceReply');
         Route::get('video_resource/{id}/reports', [VideoResourceController::class, 'ReportVideosResource'])->name('ReportVideosResource');
+
+        Route::post('/video_resource/likeActive', [VideoResourceController::class, 'likeActive'])->name('likeActiveResource');
+        Route::post('video_resource/viewActive', [VideoResourceController::class, 'viewActive'])->name('viewActiveResource');
     });
 
     #### Video Basic Pdf ####
