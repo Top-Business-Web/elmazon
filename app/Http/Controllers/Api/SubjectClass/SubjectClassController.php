@@ -13,6 +13,7 @@ use App\Models\AllExam;
 use App\Models\Lesson;
 use App\Models\OnlineExam;
 use App\Models\SubjectClass;
+use Illuminate\Http\JsonResponse;
 
 class SubjectClassController extends Controller
 {
@@ -58,7 +59,7 @@ class SubjectClassController extends Controller
 
     }
 
-    public function lessonsByClassId($id){
+    public function lessonsByClassId($id): JsonResponse{
 
         try {
             $class = SubjectClass::find($id);
