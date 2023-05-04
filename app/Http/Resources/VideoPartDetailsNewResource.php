@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\VideoOpened;
 use App\Models\VideoRate;
 use App\Models\VideoWatch;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -17,7 +18,7 @@ class VideoPartDetailsNewResource extends JsonResource
      */
     public function toArray($request){
 
-        $user_watch_video = VideoWatch::where('video_part_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first();
+        $user_watch_video = VideoOpened::where('video_part_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first();
         $video_rate = VideoRate::where('video_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first();
         $like_video_count = VideoRate::where('video_id','=',$this->id)->where('action','=','like')->count();
 
@@ -32,6 +33,8 @@ class VideoPartDetailsNewResource extends JsonResource
             'rate' =>  $video_rate ? $video_rate->action : 'no_rate',
             'total_watch' => (int)$this->video_watches->count(),
             'total_like' => (int)$like_video_count,
+            'like_active' => $this->like_active,
+            'view_active' => $this->view_active,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
 
