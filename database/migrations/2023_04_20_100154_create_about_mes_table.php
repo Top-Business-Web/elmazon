@@ -15,11 +15,17 @@ class CreateAboutMesTable extends Migration
     {
         Schema::create('about_mes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('teacher_name')->comment('اسم المدرس');
-            $table->string('department')->comment('التخصص');
-            $table->json('qualifications')->comment('المؤهلات');
-            $table->json('experience');
-            $table->json('skills')->comment('المهارات');
+            $table->string('teacher_name_ar')->comment('اسم المدرس');
+            $table->string('teacher_name_en')->comment('اسم المدرس');
+            $table->string('department_ar')->comment('التخصص');
+            $table->string('department_en')->comment('التخصص');
+            $table->json('qualifications_ar')->comment('المؤهلات');
+            $table->json('qualifications_en')->comment('المؤهلات');
+            $table->json('experience_ar');
+            $table->json('experience_en');
+            $table->json('social');
+            $table->json('skills_ar')->comment('المهارات');
+            $table->json('skills_en')->comment('المهارات');
             $table->timestamps();
         });
     }
