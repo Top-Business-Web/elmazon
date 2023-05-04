@@ -35,6 +35,7 @@
                                 <th class="min-w-50px">لينك</th>
                                 <th class="min-w-50px">وقت الفيديو</th>
                                 <th class="min-w-50px">التقييم</th>
+                                <th class="min-w-50px">المشاهده</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -104,6 +105,7 @@
             {data: 'link', name: 'link'},
             {data: 'video_time', name: 'video_time'},
             {data: 'rate', name: 'rate'},
+            {data: 'view', name: 'view'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('videosParts.index')}}', columns);
@@ -126,6 +128,14 @@
             setTimeout(function () {
                 $('#modal-body').load(url)
             }, 500)
+        })
+
+
+        $(document).on('click', '.like_active', function () {
+            var id = $(this).data('id');
+            $.ajax({
+                url: '{{ route('videosParts.like', ':id') }}',
+
         })
 
 

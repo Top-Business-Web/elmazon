@@ -60,8 +60,8 @@
                         <th>العمليات</th>
                     </tr>
                     </thead>
-                    <tbody>
                     @foreach($files as $file)
+                        <tbody>
                         <td>{{ $file->id }}</td>
                         <td>{{ $file->name_ar }}</td>
                         <td>{{ $file->file_type }}</td>
@@ -70,8 +70,8 @@
                                 حذف
                             </button>
                         </td>
+                        </tbody>
                     @endforeach
-                    </tbody>
                 </table>
             </div>
         </div>
