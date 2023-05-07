@@ -35,7 +35,7 @@ class GuideController extends Controller
                             <a href="' . route('indexItem', $guides->id) . '" class="btn btn-pill btn-success-light addItem">اضافة عنصر</a>
                        ';
                 })
-                ->editColumn('color', function ($guides) {
+                ->editColumn('background_color', function ($guides) {
                     return '<input type="color" class="form-control" name="color"
                            value="'. $guides->color .'" disabled>';
                 })
