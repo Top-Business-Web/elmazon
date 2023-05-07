@@ -200,19 +200,19 @@ class GuideController extends Controller
                 })
                 ->editColumn('file', function ($items) {
                     if ($items->file)
-                        return '<a href="' . asset('assets/uploads/guide/answers/'.$items->file) . '">
+                        return '<a href="' . asset('assets/uploads/guides/answers/'.$items->file) . '">
                                 لينك ملف المراجعة
                             </a>';
                 })
                 ->editColumn('answer_video_file', function ($items) {
                     if ($items->answer_video_file)
-                        return '<a href="' . asset('assets/uploads/guide/answers/'.$items->answer_video_file) . '">
+                        return '<a href="' . asset('assets/uploads/guides/answers/'.$items->answer_video_file) . '">
                                 لينك الفيديو
                             </a>';
                 })
                 ->editColumn('answer_pdf_file', function ($items) {
                     if ($items->answer_pdf_file)
-                        return '<a href="' . asset('assets/uploads/guide/answers/'.$items->answer_pdf_file) . '">
+                        return '<a href="' . asset('assets/uploads/guides/answers/'.$items->answer_pdf_file) . '">
                                 لينك الملف الورقي
                             </a>';
                 })
