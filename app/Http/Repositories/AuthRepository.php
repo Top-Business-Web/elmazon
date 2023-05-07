@@ -465,17 +465,15 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
                 $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
             })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->get();
 
-            return response()->json([
-                'data' => [
-                    'life_exam' => $id,
-                    'sliders' => SliderResource::collection($sliders),
-                    'videos_basics' => VideoBasicResource::collection(VideoBasic::get()),
-                    'subject_class' => SubjectClassNewResource::collection($classes),
-                    'videos_resources' => VideoResourceResource::collection($videos_resources),
-                ],
-                'code' => 200,
-                'message' => "تم ارسال جميع بيانات الصفحه الرئيسيه",
-            ]);
+            $data['life_exam'] = $id;
+            $data['sliders'] = SliderResource::collection($sliders);
+            $data['videos_basics'] = VideoBasicResource::collection(VideoBasic::get());
+            $data['classes'] = SubjectClassNewResource::collection($classes);
+            $data['videos_resources'] = VideoResourceResource::collection($videos_resources);
+
+
+            return self::returnResponseDataApiWithMultipleIndexes($data,"تم ارسال جميع بيانات الصفحه الرئيسيه",200);
+
         } catch (\Exception $exception) {
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
