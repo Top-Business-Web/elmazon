@@ -352,30 +352,50 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         $userRegisterExamBefore = PapelSheetExamUser::query()
             ->where('user_id', '=', Auth::guard('user-api')->id())
-            ->latest()->first();
+            ->latest()
+            ->first();
+
+         /*
+          اذا كان يوجد امتحان ورقي متاح للطالب
+         */
+        $paperSheetCheckExam = PapelSheetExam::whereHas('season',  fn(Builder $builder) =>
+        $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+            ->whereHas('term',  fn(Builder $builder) => $builder->where('status', '=', 'active')
+            ->where('season_id', '=', auth('user-api')->user()->season_id))
+            ->whereDate('to', '>=', Carbon::now()->format('Y-m-d'))
+            ->first();
 
 
-        if($userRegisterExamBefore){
+        if(!$paperSheetCheckExam){
 
-            $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) =>
-            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-                ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
-                    ->where('season_id', '=', auth('user-api')->user()->season_id))
-                ->where('id', '=',$userRegisterExamBefore->papel_sheet_exam_id)
-                ->first();
-
-
-            $data['nameOfExam'] = lang() == 'ar' ? $paperSheetExam->name_ar : $paperSheetExam->name_en;
-            $data['dateExam'] = $userRegisterExamBefore->papelSheetExam->date_exam;
-            $data['time'] = $userRegisterExamBefore->papelSheetExamTime->from;
-            $data['address'] = $userRegisterExamBefore->sections->address;
-            $data['section'] = lang() == 'ar' ? $userRegisterExamBefore->sections->section_name_ar : $userRegisterExamBefore->sections->section_name_en;
-
-            return self::returnResponseDataApi($data,"تم التسجيل في الامتحان الورقي من قبل", 201);
+            return self::returnResponseDataApi(null, "لا يوجد امتحان ورقي", 404);
 
         }else{
-            return self::returnResponseDataApi(null,"يجب الرجوع لصفحه تسجيل الامتحان الورقي", 200);
+
+            if($userRegisterExamBefore && Carbon::now()->format('Y-m-d') <= $userRegisterExamBefore->papelSheetExam->date_exam){
+
+                $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) =>
+                $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+                    ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+                    ->where('season_id', '=', auth('user-api')->user()->season_id))
+                    ->where('id', '=',$userRegisterExamBefore->papel_sheet_exam_id)
+                    ->first();
+
+
+                $data['nameOfExam'] = lang() == 'ar' ? $paperSheetExam->name_ar : $paperSheetExam->name_en;
+                $data['dateExam'] = $userRegisterExamBefore->papelSheetExam->date_exam;
+                $data['time'] = $userRegisterExamBefore->papelSheetExamTime->from;
+                $data['address'] = $userRegisterExamBefore->sections->address;
+                $data['section'] = lang() == 'ar' ? $userRegisterExamBefore->sections->section_name_ar : $userRegisterExamBefore->sections->section_name_en;
+
+                return self::returnResponseDataApi($data,"تم التسجيل في الامتحان الورقي من قبل", 201);
+
+            } else{
+                return self::returnResponseDataApi(new PapelSheetResource($paperSheetCheckExam),"يجب الرجوع لصفحه تسجيل الامتحان الورقي", 200);
+            }
         }
+
+
 
 
     }
@@ -383,7 +403,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function paper_sheet_exam_show(): JsonResponse
     {
 
-        $paperSheetExam = PapelSheetExam::whereHas('season',  fn(Builder $builder) => $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))->whereHas('term',  fn(Builder $builder) => $builder->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id))->whereDate('to', '>=', Carbon::now()->format('Y-m-d'))->first();
+        $paperSheetExam = PapelSheetExam::whereHas('season',  fn(Builder $builder) => $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+            ->whereHas('term',  fn(Builder $builder) => $builder->where('status', '=', 'active')
+            ->where('season_id', '=', auth('user-api')->user()->season_id))
+            ->whereDate('to', '>=', Carbon::now()->format('Y-m-d'))->first();
 
         if (!$paperSheetExam) {
             return self::returnResponseDataApi(null, "لا يوجد امتحان ورقي", 404);
