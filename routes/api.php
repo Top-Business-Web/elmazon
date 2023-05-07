@@ -194,3 +194,4 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('/payments/pay',[Payment::class,'pay']);
         Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
         Route::get('/checkout',[Payment::class,'checkout']);
+        Route::get('/payment/{}',[Payment::class,'payment']);
