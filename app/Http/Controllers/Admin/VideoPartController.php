@@ -12,6 +12,7 @@ use App\Models\VideoParts;
 use App\Models\Lesson;
 use App\Models\VideoRate;
 use App\Models\Report;
+use App\Models\VideoTotalView;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,7 @@ class VideoPartController extends Controller
     {
         if ($request->ajax()) {
             $videoParts = VideoParts::get();
+            // $comment = Comment::where()->get();
             return Datatables::of($videoParts)
                 ->addColumn('action', function ($videoParts) {
                     return '
@@ -38,9 +40,9 @@ class VideoPartController extends Controller
                                     data-id="' . $videoParts->id . '" data-title="' . ' ' . $videoParts->name_ar . ' ' . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                             <button type="button" data-id="' . $videoParts->id . '" class="btn btn-pill btn-info-light addFile"><i class="fa fa-file"></i>الملحقات</button>
-                            <a href="' . route('indexCommentVideo', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-success-light"> تعليقات <i class="fa fa-comment"></i></a>
-                            <a href="' . route('reportPart', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-danger-light"> بلاغات <i class="fe fe-book"></i></a>
+                             <button type="button" data-id="' . $videoParts->id . '" class="btn btn-pill btn-info-light addFile"><i class="fa fa-file"></i>الملحقات ' . $videoParts->videoFileUpload->count() . ' </button>
+                            <a href="' . route('indexCommentVideo', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-success-light"> تعليقات ' . $videoParts->comment->count() . ' <i class="fa fa-comment"></i></a>
+                            <a href="' . route('reportPart', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-danger-light"> بلاغات ' . $videoParts->report->count() . ' <i class="fe fe-book"></i></a>
                        ';
                 })
                 ->editColumn('lesson_id', function ($videoParts) {
@@ -50,10 +52,16 @@ class VideoPartController extends Controller
                     $like = VideoRate::where('video_id', $videoParts->id)
                         ->where('action', '=', 'like')
                         ->count('action');
-                    $disLike = VideoRate::where('video_id', $videoParts->id)
-                        ->where('action', '=', 'dislike')
-                        ->count('action');
-                    return $like . ' <i class="fa fa-thumbs-up ml-2 mr-2 text-success"></i> ' . $disLike . '<i class="fa fa-thumbs-down text-danger ml-2 mr-2"></i>';
+
+                    return $like . ' <i class="fa fa-thumbs-up ml-2 mr-2 text-success"></i>
+                                    <input class="tgl tgl-ios like_active" data-id="'. $videoParts->id .'" name="like_active" id="like-' . $videoParts->id . '" type="checkbox" '. ($videoParts->like_active == 1 ? 'checked' : 'unchecked') .'/>
+                                    <label class="tgl-btn" dir="ltr" for="like-' . $videoParts->id . '"></label>';
+                })
+                ->addColumn('view', function ($videoParts) {
+                    $view = VideoTotalView::where('video_part_id', $videoParts->id)->count('count');
+                    return $view . ' <i class="fa fa-eye"></i>
+                                    <input class="tgl tgl-ios viewActive" data-id="'. $videoParts->id .'" '. ($videoParts->view_active == 1 ? 'checked' : 'unchecked') .' name="view_active" id="view-' . $videoParts->id . '" type="checkbox"/>
+                                    <label class="tgl-btn" dir="ltr" for="view-' . $videoParts->id . '"></label>';
                 })
                 ->editColumn('link', function ($videoParts) {
                     return '<a target="_blank" href="' . asset('videos/' . $videoParts->link) . '">
@@ -85,12 +93,12 @@ class VideoPartController extends Controller
                 })
                 ->editColumn('user_id', function ($reports) {
 
-                        return '<td>'. $reports->user->name .'</td>';
+                    return '<td>' . $reports->user->name . '</td>';
                 })
                 ->editColumn('video_part_id', function ($reports) {
-                        return '<a href="' . asset('video_files/'.$reports->video_part_id) . '">'
-                               . $reports->video_part->name_ar .
-                            '</a>';
+                    return '<a href="' . asset('video_files/' . $reports->video_part_id) . '">'
+                        . $reports->video_part->name_ar .
+                        '</a>';
                 })
                 ->escapeColumns([])
                 ->make(true);
@@ -412,4 +420,20 @@ class VideoPartController extends Controller
         VideoFilesUploads::find($id)->delete();
         return response()->json(['status' => 'تم الحذف بنجاح']);
     } // Delete Files
+
+    public function likeActive(Request $request)
+    {
+        $like = $request->like_active;
+        $video = VideoParts::findOrFail($request->id);
+        $video->like_active = $like;
+        $video->save();
+    }
+
+    public function viewActive(Request $request)
+    {
+        $view = $request->view_active;
+        $video = VideoParts::findOrFail($request->id);
+        $video->view_active = $view;
+        $video->save();
+    }
 }

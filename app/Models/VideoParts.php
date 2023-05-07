@@ -23,13 +23,21 @@ class VideoParts extends Model
         'link',
         'type',
         'video_time',
+        'like_active',
+        'video_time'
 
     ];
 
-//    public function exams()
-//    {
-//        return $this->morphMany(OnlineExam::class, 'examable');
-//    }
+    //    public function exams()
+    //    {
+    //        return $this->morphMany(OnlineExam::class, 'examable');
+    //    }
+
+
+    public function comment()
+    {
+        return $this->hasMany(Comment::class, 'video_part_id', 'id');
+    }
 
     //start instruction for exams
     public function instruction()
@@ -41,13 +49,13 @@ class VideoParts extends Model
 
     public function watches()
     {
-        return $this->hasMany(VideoOpened::class, 'video_part_id','id');
+        return $this->hasMany(VideoOpened::class, 'video_part_id', 'id');
     }
 
 
     public function watch()
     {
-        return $this->hasOne(VideoOpened::class, 'video_part_id','id');
+        return $this->hasOne(VideoOpened::class, 'video_part_id', 'id');
     }
 
     public function lesson()
@@ -55,23 +63,36 @@ class VideoParts extends Model
         return $this->belongsTo(Lesson::class, 'lesson_id', 'id');
     }
 
+    public function report()
+    {
+
+        return $this->hasMany(Report::class,'video_part_id','id');
+    }
+
+    public function videoFileUpload()
+    {
+
+        return $this->hasMany(VideoFilesUploads::class,'video_part_id','id');
+    }
 
 
     public function rate()
     {
-        return $this->hasMany(VideoRate::class, 'video_id','id');
+        return $this->hasMany(VideoRate::class, 'video_id', 'id');
     }
 
-    public function video_favorites(): HasMany{
+    public function video_favorites(): HasMany
+    {
 
-        return $this->hasMany(VideoFavorite::class,'video_part_id','id');
+        return $this->hasMany(VideoFavorite::class, 'video_part_id', 'id');
     }
 
 
-    public function video_watches(): HasMany{
+    public function video_watches(): HasMany
+    {
 
-        return $this->hasMany(VideoOpened::class,'video_part_id','id')
-            ->where('status','=','watched');
+        return $this->hasMany(VideoOpened::class, 'video_part_id', 'id')
+            ->where('status', '=', 'watched');
     }
 
     /*
@@ -79,15 +100,15 @@ class VideoParts extends Model
      */
 
 
-    public function scopeFavorite($query){
+    public function scopeFavorite($query)
+    {
 
-        return $query->whereHas('video_favorites', function ($q){
-            $q->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','favorite');
+        return $query->whereHas('video_favorites', function ($q) {
+            $q->where('user_id', '=', Auth::guard('user-api')->id())->where('action', '=', 'favorite');
         })->get();
     }
 
     /*
      * end scopes
      */
-
 }

@@ -21,6 +21,8 @@ class CreateVideoBasicsTable extends Migration
             $table->string('name_en');
             $table->integer('time')->comment('زمن الفيديو');
             $table->longText('video_link');
+            $table->boolean('like_active')->default(false);
+            $table->boolean('view_active')->default(false);
             $table->timestamps();
         });
     }

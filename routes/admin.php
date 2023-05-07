@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MainController;
+use App\Http\Controllers\Admin\MotivationalSentencesController;
 use App\Http\Controllers\Admin\OnBoardingController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SeasonController;
@@ -35,6 +36,7 @@ use App\Http\Controllers\Admin\VideoBasicController;
 use App\Http\Controllers\Admin\VideoResourceController;
 use App\Http\Controllers\Admin\VideoBasicPdfController;
 use App\Http\Controllers\Admin\AboutMesController;
+use App\Http\Controllers\Admin\DiscountCouponsController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
@@ -85,6 +87,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Season ####
     Route::resource('seasons', SeasonController::class)->middleware('permission:الصفوف الدراسيه');
 
+    #### Season ####
+    Route::resource('motivational', MotivationalSentencesController::class)->middleware('permission:الاعدادات');
+    Route::get('motivationalExport', [MotivationalSentencesController::class, 'motivationalExport'])->name('motivationalExport');
+    Route::post('motivationalImport', [MotivationalSentencesController::class, 'motivationalImport'])->name('motivationalImport');
     #### Season Term
     Route::group(['middleware' => 'permission:الترم'], function () {
         Route::get('seasons/{id}/term', [SeasonController::class, 'seasonTerm'])->name('seasonTerm');
@@ -149,9 +155,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     ##### Video Parts #####
     Route::group(['middleware' => 'permission:اقسام الفيديوهات'], function () {
         Route::resource('videosParts', VideoPartController::class);
-        Route::get('showFiles/{id}', [VideoPartController::class,'showFiles'])->name('showFiles');
-        Route::post('modifyFiles/{id}', [VideoPartController::class,'modifyFiles'])->name('modifyFiles');
-        Route::post('deleteFiles', [VideoPartController::class,'deleteFiles'])->name('deleteFiles');
+        Route::get('showFiles/{id}', [VideoPartController::class, 'showFiles'])->name('showFiles');
+        Route::post('modifyFiles/{id}', [VideoPartController::class, 'modifyFiles'])->name('modifyFiles');
+        Route::post('deleteFiles', [VideoPartController::class, 'deleteFiles'])->name('deleteFiles');
         Route::get('/itemView', array('as' => 'front.home', 'uses' => [VideoPartController::class, 'itemView']))->name('itemView');
         Route::post('/update-items', array('as' => 'update.items', 'uses' => [VideoPartController::class, 'updateItems']))->name('updateItems');
         Route::get('videoPart/comment/{id}', [VideoPartController::class, 'indexCommentVideo'])->name('indexCommentVideo');
@@ -161,6 +167,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::delete('videoPart/commentReply/delete/{id}', [VideoPartController::class, 'deleteCommentVideoReply'])->name('deleteCommentVideoReply');
 
         Route::get('video_part/{id}/reports', [VideoPartController::class, 'reportPart'])->name('reportPart');
+
+        Route::post('/video_part/likeActive', [VideoPartController::class, 'likeActive'])->name('likeActive');
+        Route::post('video_part/viewActive', [VideoPartController::class, 'viewActive'])->name('viewActive');
     });
 
     #### Audio ####
@@ -253,7 +262,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::resource('questions', QuestionController::class);
         Route::get('examble_type', [QuestionController::class, 'examble_type'])->name('examble_type_question');
         Route::get('questionExport', [QuestionController::class, 'questionExport'])->name('questionExport');
-        Route::get('questionImport', [QuestionController::class, 'questionImport'])->name('questionImport');
+        Route::post('questionImport', [QuestionController::class, 'questionImport'])->name('questionImport');
         Route::get('answer/{id}', [QuestionController::class, 'answer'])->name('answer');
         Route::post('addAnswer/{id}', [QuestionController::class, 'addAnswer'])->name('addAnswer');
     });
@@ -283,6 +292,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('video_basic/{id}/reports', [VideoBasicController::class, 'reportBasic'])->name('reportBasic');
     Route::delete('videoBasic/delete/report/{id}', [VideoBasicController::class, 'deleteReport'])->name('deleteReport');
 
+    Route::post('/video_basic/likeActive', [VideoBasicController::class, 'likeActive'])->name('likeActiveBasic');
+    Route::post('video_basic/viewActive', [VideoBasicController::class, 'viewActive'])->name('viewActiveBasic');
+
     #### Video Resource ####
     Route::group(['middleware' => 'permission:مصادر الفيديوهات'], function () {
         Route::resource('videoResource', VideoResourceController::class);
@@ -293,6 +305,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::post('videoResource/comment/reply', [VideoResourceController::class, 'storeReplyResource'])->name('storeReplyResource');
         Route::delete('videoResource/commentReply/delete/{id}', [VideoResourceController::class, 'deleteCommentResourceReply'])->name('deleteCommentResourceReply');
         Route::get('video_resource/{id}/reports', [VideoResourceController::class, 'ReportVideosResource'])->name('ReportVideosResource');
+
+        Route::post('/video_resource/likeActive', [VideoResourceController::class, 'likeActive'])->name('likeActiveResource');
+        Route::post('video_resource/viewActive', [VideoResourceController::class, 'viewActive'])->name('viewActiveResource');
     });
 
     #### Video Basic Pdf ####
@@ -300,6 +315,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### About Mes ####
     Route::resource('aboutMes', AboutMesController::class);
+
+    #### Discount Coupons ####
+    Route::resource('discount_coupons', DiscountCouponsController::class);
 
     #### roles ####
     Route::group(['middleware' => 'permission:الادوار و الصلاحيات'], function () {

@@ -91,6 +91,16 @@ class AllExam extends Model
         })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
     }
 
+
+    public function scopeAllExamDegreeDetailsForStudent($query){
+
+       return $query->whereHas('term', function ($term){
+            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
+        })->whereHas('exam_degree_depends', function ($q){
+            $q->where('user_id','=', auth('user-api')->id())->where('exam_depends','=','yes');
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+
+    }
     /*
      * end scopes
      */

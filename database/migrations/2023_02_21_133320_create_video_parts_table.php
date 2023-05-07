@@ -23,6 +23,8 @@ class CreateVideoPartsTable extends Migration
             $table->longText('link');
             $table->enum('type',['video', 'pdf','audio']);
             $table->string('video_time')->nullable();
+            $table->boolean('like_active')->default(false);
+            $table->boolean('view_active')->default(false);
             $table->timestamps();
             $table->foreign('lesson_id')->references('id')->on('lessons')->cascadeOnUpdate()->cascadeOnDelete();
         });

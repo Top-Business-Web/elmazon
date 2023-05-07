@@ -39,11 +39,19 @@ class VideoResourceController extends Controller
                                     data-id="' . $video_resource->id . '" data-title="' . $video_resource->name_ar . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                            <a href="' . route('indexCommentResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-success-light"> تعليقات <i class="fa fa-comment"></i></a>
-                            <a href="' . route('ReportVideosResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-danger-light"> بلاغات <i class="fe fe-book"></i></a>
+                            <a href="' . route('indexCommentResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-success-light"> تعليقات '. $video_resource->comment->count() .' <i class="fa fa-comment"></i></a>
+                            <a href="' . route('ReportVideosResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-danger-light"> بلاغات '. $video_resource->report->count() .' <i class="fe fe-book"></i></a>
 
                        ';
                 })
+                ->editColumn('like_active', function ($video_resource) {
+                    return '<input class="tgl tgl-ios like_active" data-id="'. $video_resource->id .'" name="like_active" id="like-' . $video_resource->id . '" type="checkbox" '. ($video_resource->like_active == 1 ? 'checked' : 'unchecked') .'/>
+                    <label class="tgl-btn" dir="ltr" for="like-' . $video_resource->id . '"></label>';
+            })
+            ->editColumn('view_active', function ($video_resource) {
+                    return '<input class="tgl tgl-ios view_active" data-id="'. $video_resource->id .'" name="view_active" id="view-' . $video_resource->id . '" type="checkbox" '. ($video_resource->view_active == 1 ? 'checked' : 'unchecked') .'/>
+                    <label class="tgl-btn" dir="ltr" for="view-' . $video_resource->id . '"></label>';
+            })
                 ->editColumn('image', function ($video_resource) {
                     return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset('videos_resources/images/' . $video_resource->image) . '"/>';
                 })
@@ -359,4 +367,20 @@ class VideoResourceController extends Controller
 
 
     // Destroy End
+
+    public function likeActive(Request $request)
+    {
+        $like = $request->like_active;
+        $video = VideoResource::findOrFail($request->id);
+        $video->like_active = $like;
+        $video->save();
+    }
+
+    public function viewActive(Request $request)
+    {
+        $view = $request->view_active;
+        $video = VideoResource::findOrFail($request->id);
+        $video->view_active = $view;
+        $video->save();
+    }
 }

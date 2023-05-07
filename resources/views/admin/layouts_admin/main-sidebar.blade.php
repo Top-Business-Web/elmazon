@@ -23,6 +23,15 @@
             </li>
         @endcan
 
+        @can('الاعدادات')
+            <li class="slide">
+                <a class="side-menu__item" href="{{ route('motivational.index') }}">
+                    <i class="fa fa-heart side-menu__icon"></i>
+                    <span class="side-menu__label">الجمل التحفيزية</span>
+                </a>
+            </li>
+        @endcan
+
         @can('الصفوف الدراسيه')
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('seasons.index') }}">
@@ -37,6 +46,16 @@
                 <a class="side-menu__item" href="{{ route('subjectsClasses.index') }}">
                     <i class="fa fa-book-reader side-menu__icon"></i>
                     <span class="side-menu__label">الوحدات</span>
+                </a>
+            </li>
+        @endcan
+
+        @can('الوحدات')
+            <!-- DISCOUNT -->
+            <li class="slide">
+                <a class="side-menu__item" href="{{ route('discount_coupons.index') }}">
+                    <i class="fa fa-book-reader side-menu__icon"></i>
+                    <span class="side-menu__label">كوبونات الخضم</span>
                 </a>
             </li>
         @endcan
@@ -221,16 +240,16 @@
                 </a>
             </li>
         @endcan
-            @can('الاعدادات')
-                <li class="slide">
-                    <a class="side-menu__item" href="{{ route('aboutMes.index') }}">
-                        <i class="fa fa-person-booth side-menu__icon"></i>
-                        <span class="side-menu__label">
+        @can('الاعدادات')
+            <li class="slide">
+                <a class="side-menu__item" href="{{ route('aboutMes.index') }}">
+                    <i class="fa fa-person-booth side-menu__icon"></i>
+                    <span class="side-menu__label">
                          معلومات عن الاستاذ
                     </span>
-                    </a>
-                </li>
-            @endcan
+                </a>
+            </li>
+        @endcan
         @can('الاعدادات')
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('setting.index') }}">

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreVideoBasic;
-use App\Http\Requests\UpdateVideoBasic;
 use App\Models\CommentReplay;
 use App\Models\VideoBasic;
 use App\Models\Report;
@@ -20,6 +18,7 @@ class VideoBasicController extends Controller
     public function index(request $request)
     {
         $video_basics = VideoBasic::all();
+        $comment = Comment::where('video_part_id', $request->id);
         if ($request->ajax()) {
             return Datatables::of($video_basics)
                 ->addColumn('action', function ($video_basics) {
@@ -29,9 +28,17 @@ class VideoBasicController extends Controller
                                     data-id="' . $video_basics->id . '" data-title="' . $video_basics->name_ar . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                             <a href="' . route('indexComment', $video_basics->id) . '" data-id="' . $video_basics->id . '" class="btn btn-pill btn-success-light"> تعليقات <i class="fa fa-comment"></i></a>
-                             <a href="' . route('reportBasic', $video_basics->id) . '" data-id="' . $video_basics->id . '" class="btn btn-pill btn-danger-light"> بلاغات <i class="fe fe-book"></i></a>
+                             <a href="' . route('indexComment', $video_basics->id) . '" data-id="' . $video_basics->id . '" class="btn btn-pill btn-success-light"> تعليقات '. $video_basics->comment->count() .' <i class="fa fa-comment"></i></a>
+                             <a href="' . route('reportBasic', $video_basics->id) . '" data-id="' . $video_basics->id . '" class="btn btn-pill btn-danger-light"> بلاغات '. $video_basics->report->count() .' <i class="fe fe-book"></i></a>
                        ';
+                })
+                ->editColumn('like_active', function ($video_basics) {
+                        return '<input class="tgl tgl-ios like_active" data-id="'. $video_basics->id .'" name="like_active" id="like-' . $video_basics->id . '" type="checkbox" '. ($video_basics->like_active == 1 ? 'checked' : 'unchecked') .'/>
+                        <label class="tgl-btn" dir="ltr" for="like-' . $video_basics->id . '"></label>';
+                })
+                ->editColumn('view_active', function ($video_basics) {
+                        return '<input class="tgl tgl-ios view_active" data-id="'. $video_basics->id .'" name="view_active" id="view-' . $video_basics->id . '" type="checkbox" '. ($video_basics->view_active == 1 ? 'checked' : 'unchecked') .'/>
+                        <label class="tgl-btn" dir="ltr" for="view-' . $video_basics->id . '"></label>';
                 })
                 ->editColumn('video_link', function ($video_basics) {
                     if ($video_basics->video_link)
@@ -300,4 +307,21 @@ class VideoBasicController extends Controller
     }
 
     // Destroy End
+
+
+    public function likeActive(Request $request)
+    {
+        $like = $request->like_active;
+        $video = VideoBasic::findOrFail($request->id);
+        $video->like_active = $like;
+        $video->save();
+    }
+
+    public function viewActive(Request $request)
+    {
+        $view = $request->view_active;
+        $video = VideoBasic::findOrFail($request->id);
+        $video->view_active = $view;
+        $video->save();
+    }
 }
