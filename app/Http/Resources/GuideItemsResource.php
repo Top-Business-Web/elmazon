@@ -19,11 +19,11 @@ class GuideItemsResource extends JsonResource
             'title' => lang() == 'ar' ?$this->title_ar : $this->title_en,
             'file_path' => $this->file != null ? asset('assets/uploads/guides/file/'.$this->file) : '',
             'file_type' => $this->file_type,
-            'file_path_size' => $this->file != null ? file_size(asset('assets/uploads/guides/file/'.$this->file)) : '',
-            'answer_pdf_file' => $this->answer_pdf_file != null ? asset('assets/uploads/guides/answers/'.$this->answer_pdf_file) : '',
-            'answer_pdf_file_size' => $this->file != null ? file_size(asset('assets/uploads/guides/answers/'.$this->answer_pdf_file)) : '0',
-            'answer_video_file' => $this->answer_video_file != null ? asset('assets/uploads/guides/answers/'.$this->answer_video_file) : '',
-            'answer_video_file_time' => $this->answer_video_file != null ? video_duration('assets/uploads/guides/answers/'.$this->answer_video_file) : "0" ,
+            'file_path_size' => $this->file != null ? file_size(asset($this->file)) : '',
+            'answer_pdf_file' => $this->answer_pdf_file != null ? asset($this->answer_pdf_file) : '',
+            'answer_pdf_file_size' => $this->file != null ? file_size(asset($this->answer_pdf_file)) : '0',
+            'answer_video_file' => $this->answer_video_file != null ? asset($this->answer_video_file) : '',
+            'answer_video_file_time' => $this->answer_video_file != null ? video_duration($this->answer_video_file) : "0" ,
             'created_at' => $this->created_at->format('Y-m-d')
         ];
     }

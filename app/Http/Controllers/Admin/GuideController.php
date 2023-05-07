@@ -240,40 +240,22 @@ class GuideController extends Controller
     public function addItems(Request $request)
     {
         $inputs = $request->all();
-
-        if ($request->has('file')) {
-            $file = $request->file;
-            $path = public_path('assets/uploads/guide/');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['file'] = $file_name;
+        if($request->hasFile('file')){
+            $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'photo');
         }
 
-        if ($request->has('answer_pdf_file')) {
-            $inputs['file_type'] = 'pdf';
-            $file = $request->answer_pdf_file;
-            $path = public_path('assets/uploads/guide/answers');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['answer_pdf_file'] = $file_name;
+        if($request->hasFile('answer_pdf_file')){
+            $inputs['answer_pdf_file'] = $this->saveImage($request->file, 'assets/uploads/guides/answers', 'photo');
         }
-        if ($request->has('answer_video_file')) {
-            $inputs['file_type'] = 'video';
-            $file = $request->answer_video_file;
-            $path = public_path('assets/uploads/guide/answers');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['answer_video_file'] = $file_name;
+
+        if($request->hasFile('answer_video_file')){
+            $inputs['answer_video_file'] = $this->saveImage($request->file, 'assets/uploads/guides/answers', 'photo');
+        }
+        if($request->hasFile('icon')){
+            $inputs['icon'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'photo');
         }
 
 
-        if ($request->has('icon')) {
-            $file = $request->icon;
-            $path = public_path('assets/uploads/icon/');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['icon'] = $file_name;
-        }
 
         if (Guide::create($inputs)) {
             return response()->json(['status' => 200]);
@@ -302,37 +284,21 @@ class GuideController extends Controller
         $items = Guide::find($id);
         $inputs = $request->all();
 
-        if ($request->has('file')) {
-            $file = $request->file;
-            $path = public_path('assets/uploads/guide/');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['file'] = $file_name;
+        if($request->hasFile('file')){
+            $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'photo');
         }
 
-        if ($request->has('answer_pdf_file')) {
-            $file = $request->answer_pdf_file;
-            $path = public_path('assets/uploads/guide/answers');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['answer_pdf_file'] = $file_name;
-        }
-        if ($request->has('answer_video_file')) {
-            $file = $request->answer_video_file;
-            $path = public_path('assets/uploads/guide/answers');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['answer_video_file'] = $file_name;
+        if($request->hasFile('answer_pdf_file')){
+            $inputs['answer_pdf_file'] = $this->saveImage($request->file, 'assets/uploads/guides/answers', 'photo');
         }
 
-
-        if ($request->has('icon')) {
-            $file = $request->icon;
-            $path = public_path('assets/uploads/icon/');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['icon'] = $file_name;
+        if($request->hasFile('answer_video_file')){
+            $inputs['answer_video_file'] = $this->saveImage($request->file, 'assets/uploads/guides/answers', 'photo');
         }
+        if($request->hasFile('icon')){
+            $inputs['icon'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'photo');
+        }
+
 
         if ($items->update($inputs)) {
             return response()->json(['status' => 200]);
