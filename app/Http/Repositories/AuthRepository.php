@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Repositories;
+
 use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Interfaces\AuthRepositoryInterface;
 use App\Http\Resources\AllExamResource;
@@ -38,13 +39,15 @@ use App\Models\VideoBasic;
 use App\Models\VideoParts;
 use App\Models\VideoResource;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
 
 
-class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
+class AuthRepository extends ResponseApi implements AuthRepositoryInterface
+{
 
 
     use FirebaseNotification;
@@ -179,7 +182,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
             $allNotification = Notification::whereHas('term', function ($term) {
                 $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
-            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->where(function ($q){
+            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->where(function ($q) {
                 $q->whereNull('user_id')->orWhere('user_id', '=', auth()->guard('user-api')->id());
             })->latest()->get();
 
@@ -238,49 +241,50 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
             if (is_numeric($errors)) {
 
                 $errors_arr = [
-                    405 => 'Failed,papel_sheet_exam_time_id does not exist',
+                    405 => 'Failed,paper_sheet_exam_time_id does not exist',
                 ];
 
                 $code = collect($validator->errors())->flatten(1)[0];
-                return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+                return self::returnResponseDataApi(null, $errors_arr[$errors] ?? 500, $code);
             }
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
-        $papelSheetExam = PapelSheetExam::whereHas('season', function ($season) {
-            $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
-        })->whereHas('term', function ($term) {
-            $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
-        })->where('id', '=', $id)->first();
+        $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) => $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+            ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+            ->where('season_id', '=', auth('user-api')->user()->season_id))->where('id', '=', $id)
+            ->first();
 
 
-        if (!$papelSheetExam) {
+        if (!$paperSheetExam) {
             return self::returnResponseDataApi(null, "لا يوجد اي امتحان ورقي متاح لك", 404);
         }
 
-        $ids = Section::orderBy('id','ASC')->pluck('id')->toArray();
+        $ids = Section::orderBy('id', 'ASC')->pluck('id')->toArray();
 
         foreach ($ids as $id) {
 
-            $sectionCheck = Section::where('id', '=',$id)->first();
+            $sectionCheck = Section::where('id', '=', $id)->first();
             $CheckCountSectionExam = PapelSheetExamUser::where('section_id', '=', $sectionCheck->id)
-                ->where('papel_sheet_exam_id', '=', $papelSheetExam->id)->count();
+                ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
+                ->count();
 
-            $userRegisterExamBefore = PapelSheetExamUser::where('papel_sheet_exam_id', '=', $papelSheetExam->id)
-                ->where('user_id', '=', Auth::guard('user-api')->id())->count();
+            $userRegisterExamBefore = PapelSheetExamUser::where('papel_sheet_exam_id', '=', $paperSheetExam->id)
+                ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->count();
 
             $sumCapacityOfSection = Section::sum('capacity');
-            $countExamId = PapelSheetExamUser::where('papel_sheet_exam_id', '=', $papelSheetExam->id)->count();
+            $countExamId = PapelSheetExamUser::where('papel_sheet_exam_id', '=', $paperSheetExam->id)
+                ->count();
 
             if ((int)$countExamId < (int)$sumCapacityOfSection) {
 
                 if ($CheckCountSectionExam < $sectionCheck->capacity) {
 
-                    // $section = Section::query()->skip($sectionCheck->id)->first();
-
                     if ($CheckCountSectionExam == $sectionCheck->capacity) {
-                        $section = Section::orderBy('id','ASC')->get()->except($sectionCheck->id)->where('id','>',$sectionCheck->id);
-                    }else{
+                        $section = Section::orderBy('id', 'ASC')->get()->except($sectionCheck->id)
+                            ->where('id', '>', $sectionCheck->id);
+                    } else {
                         $section = Section::where('id', '=', $id)->first();
                     }
 
@@ -290,33 +294,44 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
                         if ($userRegisterExamBefore > 0) {
 
-                            $section_register = PapelSheetExamUser::where('user_id','=',Auth::guard('user-api')->id())->where('papel_sheet_exam_id','=',$papelSheetExam->id)->first();
-                            return response()->json([
+                            $section_register = PapelSheetExamUser::where('user_id', '=', Auth::guard('user-api')->id())
+                                ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
+                                ->first();
 
-                                'data' => ['exam' => new PapelSheetExamTimeUserResource($papelSheetExam)],
-                                'message' => "تم التسجيل في الامتحان الورقي من قبل",
-                                'code' => 408, 'date_exam' => $papelSheetExam->date_exam,
-                                'address' =>  $section_register->sections->address,
-                                'section_name' => lang() == 'ar' ?  $section_register->sections->section_name_ar :  $section_register->sections->section_name_en,
 
-                            ]);
+//                            return response()->json([
+//
+//                                'data' => ['exam' => new PapelSheetExamTimeUserResource($paperSheetExam)],
+//                                'message' => "تم التسجيل في الامتحان الورقي من قبل",
+//                                'code' => 408, 'date_exam' => $paperSheetExam->date_exam,
+//                                'address' => $section_register->sections->address,
+//                                'section_name' => lang() == 'ar' ? $section_register->sections->section_name_ar : $section_register->sections->section_name_en,
+//
+//                            ]);
+
+                            $data['exam'] = new PapelSheetExamTimeUserResource($paperSheetExam);
+                            $data['section_name'] = lang() == 'ar' ? $section_register->sections->section_name_ar : $section_register->sections->section_name_en;
+                            $data['address'] = $section_register->sections->address;
+
+                            return self::returnResponseDataApiWithMultipleIndexes($data,"تم التسجيل في الامتحان الورقي من قبل",200);
+
 
                         } else {
 
-                            if (Carbon::now()->format('Y-m-d') <= $papelSheetExam->to) {
+                            if (Carbon::now()->format('Y-m-d') <= $paperSheetExam->to) {
                                 PapelSheetExamUser::create([
                                     'user_id' => Auth::guard('user-api')->id(),
                                     'section_id' => $section->id,
-                                    'papel_sheet_exam_id' => $papelSheetExam->id,
+                                    'papel_sheet_exam_id' => $paperSheetExam->id,
                                     'papel_sheet_exam_time_id' => $request->papel_sheet_exam_time_id,
                                 ]);
 
 
                                 //start push notification for user when register in exam
                                 $time_exam = PapelSheetExamTime::where('id', '=', $request->papel_sheet_exam_time_id)->first();
-                                $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $time_exam->from . 'وموعد الامتحان  ' . $section->section_name_ar . 'واسم القاعه  ' . $section->address . 'ومكان الامتحان  ' . $papelSheetExam->date_exam . 'تاريخ الامتحان', 'term_id' => $papelSheetExam->term_id], $papelSheetExam->season_id, Auth::guard('user-api')->id());
+                                $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $time_exam->from . 'وموعد الامتحان  ' . $section->section_name_ar . 'واسم القاعه  ' . $section->address . 'ومكان الامتحان  ' . $paperSheetExam->date_exam . 'تاريخ الامتحان', 'term_id' => $paperSheetExam->term_id], $paperSheetExam->season_id, Auth::guard('user-api')->id());
 
-                                return response()->json(['data' => ['exam' => new PapelSheetExamTimeUserResource($papelSheetExam)], 'message' => 'تم تسجيل بياناتك فى الامتحان', 'code' => 200, 'date_exam' => $papelSheetExam->date_exam, 'address' => $section->address, 'section_name' => lang() == 'ar' ? $section->section_name_ar : $section->section_name_en,]);
+                                return response()->json(['data' => ['exam' => new PapelSheetExamTimeUserResource($paperSheetExam)], 'message' => 'تم تسجيل بياناتك فى الامتحان', 'code' => 200, 'date_exam' => $paperSheetExam->date_exam, 'address' => $section->address, 'section_name' => lang() == 'ar' ? $section->section_name_ar : $section->section_name_en,]);
                             } else {
 
                                 return self::returnResponseDataApi(null, "!لقد تعديت اخر موعد لتسجيل الامتحان", 412);
@@ -332,20 +347,49 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
     }
 
+
+    public function paperSheetExamForStudentDetails(): JsonResponse{
+
+        $userRegisterExamBefore = PapelSheetExamUser::query()
+            ->where('user_id', '=', Auth::guard('user-api')->id())
+            ->latest()->first();
+
+
+        if($userRegisterExamBefore){
+
+            $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) =>
+            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+                ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+                    ->where('season_id', '=', auth('user-api')->user()->season_id))
+                ->where('id', '=',$userRegisterExamBefore->papel_sheet_exam_id)
+                ->first();
+
+
+            $data['nameOfExam'] = lang() == 'ar' ? $paperSheetExam->name_ar : $paperSheetExam->name_en;
+            $data['dateExam'] = $userRegisterExamBefore->papelSheetExam->date_exam;
+            $data['time'] = $userRegisterExamBefore->papelSheetExamTime->from;
+            $data['address'] = $userRegisterExamBefore->sections->address;
+            $data['section'] = lang() == 'ar' ? $userRegisterExamBefore->sections->section_name_ar : $userRegisterExamBefore->sections->section_name_en;
+
+            return self::returnResponseDataApi($data,"تم التسجيل في الامتحان الورقي من قبل", 201);
+
+        }else{
+            return self::returnResponseDataApi(null,"يجب الرجوع لصفحه تسجيل الامتحان الورقي", 200);
+        }
+
+
+    }
+
     public function paper_sheet_exam_show(): JsonResponse
     {
 
-        $papelSheetExam = PapelSheetExam::whereHas('season', function ($season) {
-            $season->where('season_id', '=', auth()->guard('user-api')->user()->season_id);
-        })->whereHas('term', function ($term) {
-            $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
-        })->whereDate('to', '>=', Carbon::now()->format('Y-m-d'))->first();
+        $paperSheetExam = PapelSheetExam::whereHas('season',  fn(Builder $builder) => $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))->whereHas('term',  fn(Builder $builder) => $builder->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id))->whereDate('to', '>=', Carbon::now()->format('Y-m-d'))->first();
 
-        if (!$papelSheetExam) {
+        if (!$paperSheetExam) {
             return self::returnResponseDataApi(null, "لا يوجد امتحان ورقي", 404);
         }
 
-        return self::returnResponseDataApi(new PapelSheetResource($papelSheetExam), "اهلا بك في الامتحان الورقي", 200);
+        return self::returnResponseDataApi(new PapelSheetResource($paperSheetExam), "اهلا بك في الامتحان الورقي", 200);
     }
 
 
@@ -412,8 +456,11 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
                 return self::returnResponseDataApi(null, "لا يوجد قائمه دروس لفتح اول درس", 404, 404);
             }
 
-            $subject_class_opened = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())->where('subject_class_id', '=', $subject_class->id);
-            $lesson_opened = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())->where('lesson_id', '=', $first_lesson->id);
+            $subject_class_opened = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('subject_class_id', '=', $subject_class->id);
+
+            $lesson_opened = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())
+                             ->where('lesson_id', '=', $first_lesson->id);
 
             if (!$subject_class_opened->exists() && !$lesson_opened->exists()) {
                 OpenLesson::create([
@@ -428,9 +475,9 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
 
             }
 
-            $life_exam = LifeExam::whereHas('term', function ($term) {
-                $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
-            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+            $life_exam = LifeExam::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+                ->where('season_id', '=', auth('user-api')->user()->season_id))
+                ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                 ->where('date_exam', '=', Carbon::now()->format('Y-m-d'))
                 ->first();
 
@@ -456,12 +503,17 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
             }
 
 
-            $classes = SubjectClass::whereHas('term', fn ($term) => $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id))->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
+            $classes = SubjectClass::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+                ->where('season_id', '=', auth('user-api')->user()->season_id))
+                ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+                ->get();
 
             $sliders = Slider::get();
-            $videos_resources = VideoResource::whereHas('term', function ($term) {
-                $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
-            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->latest()->get();
+            $videos_resources = VideoResource::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+                ->where('season_id', '=', auth('user-api')->user()->season_id))
+                ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+                ->latest()
+                ->get();
 
             $data['life_exam'] = $id;
             $data['sliders'] = SliderResource::collection($sliders);
@@ -469,8 +521,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
             $data['classes'] = SubjectClassNewResource::collection($classes);
             $data['videos_resources'] = VideoResourceResource::collection($videos_resources);
 
-
-            return self::returnResponseDataApiWithMultipleIndexes($data,"تم ارسال جميع بيانات الصفحه الرئيسيه",200);
+            return self::returnResponseDataApiWithMultipleIndexes($data, "تم ارسال جميع بيانات الصفحه الرئيسيه", 200);
 
         } catch (\Exception $exception) {
 
@@ -481,61 +532,65 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
     }
 
 
-    public function allClasses(): JsonResponse{
+    public function allClasses(): JsonResponse
+    {
 
-        $classes = SubjectClass::whereHas('term', function ($term){
-            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
-
-
-       return self::returnResponseDataApi(HomeAllClasses::collection($classes),"تم ارسال جميع الفصول بنجاح",200);
-
-    }
+        $classes = SubjectClass::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+            ->where('season_id', '=', auth('user-api')->user()->season_id))
+            ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+            ->get();
 
 
-    public function all_exams(): JsonResponse{
-
-        $allExams = AllExam::whereHas('term', function ($term){
-            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
-
-        return self::returnResponseDataApi(AllExamResource::collection($allExams),"تم الحصول علي جميع الامتحانات الشامله بنجاح",200);
+        return self::returnResponseDataApi(HomeAllClasses::collection($classes), "تم ارسال جميع الفصول بنجاح", 200);
 
     }
 
-    public function startYourJourney(Request $request): JsonResponse{
+
+    public function all_exams(): JsonResponse
+    {
+
+        $allExams = AllExam::whereHas('term',  fn(Builder $builder) => $builder->where('status', '=', 'active')
+            ->where('season_id', '=', auth('user-api')->user()->season_id))->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+            ->get();
+
+        return self::returnResponseDataApi(AllExamResource::collection($allExams), "تم الحصول علي جميع الامتحانات الشامله بنجاح", 200);
+
+    }
+
+    public function startYourJourney(Request $request): JsonResponse
+    {
 
 
-          $classes = SubjectClass::whereHas('term', function ($term){
-              $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-          })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+        $classes = SubjectClass::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+            ->where('season_id', '=', auth('user-api')->user()->season_id))
+            ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+            ->get();
 
-          return self::returnResponseDataApi(SubjectClassNewResource::collection($classes),"تم الحصول علي بيانات ابدء رحلتك بنجاح",200);
+        return self::returnResponseDataApi(SubjectClassNewResource::collection($classes), "تم الحصول علي بيانات ابدء رحلتك بنجاح", 200);
 
 
     }
 
-    public function videosResources(): JsonResponse{
+    public function videosResources(): JsonResponse
+    {
 
-        $resources = VideoResource::whereHas('term', function ($term){
-            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+        $resources = VideoResource::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id))->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
 
-        return self::returnResponseDataApi(VideoResourceResource::collection($resources),"تم الحصول علي بيانات المراجعه النهائيه بنجاح",200);
+        return self::returnResponseDataApi(VideoResourceResource::collection($resources), "تم الحصول علي بيانات المراجعه النهائيه بنجاح", 200);
 
     }
 
-    public function findExamByClassById($id): JsonResponse{
+    public function findExamByClassById($id): JsonResponse
+    {
 
         $class = SubjectClass::where('id', $id)->first();
-        if(!$class){
-
-            return self::returnResponseDataApi(null,"هذا الفصل غير موجود",404);
+        if (!$class) {
+            return self::returnResponseDataApi(null, "هذا الفصل غير موجود", 404);
         }
 
         $exams = $class->exams;
 
-       return self::returnResponseDataApi(OnlineExamNewResource::collection($exams),"تم ارسال جميع امتحانات الفصل بنجاح",200);
+        return self::returnResponseDataApi(OnlineExamNewResource::collection($exams), "تم ارسال جميع امتحانات الفصل بنجاح", 200);
     }
 
     public function add_device_token(Request $request)
@@ -673,7 +728,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
                 }
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
-            PhoneToken::where('token', '=',$request->token)->where('user_id', '=',auth('user-api')->id())->delete();
+
+            PhoneToken::where('token', '=', $request->token)->where('user_id', '=', auth('user-api')->id())->delete();
             auth()->guard('user-api')->logout();
             return self::returnResponseDataApi(null, "تم تسجيل الخروج بنجاح", 200);
 

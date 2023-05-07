@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 class AuthController extends Controller{
 
 
-    public $authRepositoryInterface;
+    public AuthRepositoryInterface $authRepositoryInterface ;
 
     public function __construct(AuthRepositoryInterface $authRepositoryInterface){
 
@@ -121,5 +121,11 @@ class AuthController extends Controller{
     {
 
         return $this->authRepositoryInterface->logout($request);
+    }
+
+    public function paperSheetExamForStudentDetails(): JsonResponse
+    {
+
+        return $this->authRepositoryInterface->paperSheetExamForStudentDetails();
     }
 }

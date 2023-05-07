@@ -33,4 +33,5 @@ interface AuthRepositoryInterface{
     public function add_notification(Request $request): JsonResponse;
     public function user_add_screenshot(): JsonResponse;
     public function logout(Request $request): JsonResponse;
+    public function paperSheetExamForStudentDetails(): JsonResponse;
 }
