@@ -192,27 +192,27 @@ class GuideController extends Controller
                             </button>
                        ';
                 })
-                ->editColumn('subject_class_id', function ($guides) {
-                    return '<td>' . $guides->subjectClass->title_ar . '</td>';
+                ->editColumn('subject_class_id', function ($items) {
+                    return '<td>' . @$items->subjectClass->title_ar . '</td>';
                 })
-                ->editColumn('lesson_id', function ($guides) {
-                    return '<td>' . $guides->lesson->title_ar . '</td>';
+                ->editColumn('lesson_id', function ($items) {
+                    return '<td>' . @$items->lesson->title_ar . '</td>';
                 })
-                ->editColumn('file', function ($guides) {
-                    if ($guides->file)
-                        return '<a href="' . asset('assets/uploads/guide/answers/'.$guides->file) . '">
+                ->editColumn('file', function ($items) {
+                    if ($items->file)
+                        return '<a href="' . asset('assets/uploads/guide/answers/'.$items->file) . '">
                                 لينك ملف المراجعة
                             </a>';
                 })
-                ->editColumn('answer_video_file', function ($guides) {
-                    if ($guides->answer_video_file)
-                        return '<a href="' . asset('assets/uploads/guide/answers/'.$guides->answer_video_file) . '">
+                ->editColumn('answer_video_file', function ($items) {
+                    if ($items->answer_video_file)
+                        return '<a href="' . asset('assets/uploads/guide/answers/'.$items->answer_video_file) . '">
                                 لينك الفيديو
                             </a>';
                 })
-                ->editColumn('answer_pdf_file', function ($guides) {
-                    if ($guides->answer_pdf_file)
-                        return '<a href="' . asset('assets/uploads/guide/answers/'.$guides->answer_pdf_file) . '">
+                ->editColumn('answer_pdf_file', function ($items) {
+                    if ($items->answer_pdf_file)
+                        return '<a href="' . asset('assets/uploads/guide/answers/'.$items->answer_pdf_file) . '">
                                 لينك الملف الورقي
                             </a>';
                 })

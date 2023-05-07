@@ -25,6 +25,7 @@ class CreateGuidesTable extends Migration
             $table->string('background_color')->nullable();
             $table->unsignedBigInteger('season_id')->nullable();
             $table->unsignedBigInteger('term_id')->nullable();
+            $table->unsignedBigInteger('subject_class_id')->nullable();
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('term_id')->references('id')->on('terms')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
