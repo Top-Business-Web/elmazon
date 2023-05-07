@@ -322,7 +322,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                                 $createPaperSheet->save();
 
 
-                                if($createPaperSheet->save()){
+                                if ($createPaperSheet->save()) {
                                     $time_exam = PapelSheetExamTime::where('id', '=', $request->papel_sheet_exam_time_id)->first();
                                     $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $time_exam->from . 'وموعد الامتحان  ' . $section->section_name_ar . 'واسم القاعه  ' . $section->address . 'ومكان الامتحان  ' . $paperSheetExam->date_exam . 'تاريخ الامتحان', 'term_id' => $paperSheetExam->term_id], $paperSheetExam->season_id, Auth::guard('user-api')->id());
 
@@ -335,26 +335,24 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
                                     return self::returnResponseDataApiWithMultipleIndexes($data, "تم تسجيل بياناتك في الامتحان", 200);
 
-                                }else{
-                                    return self::returnResponseDataApi(null, "يوجد خطاء ما اثناء تسجيل بيانات الامتحان الورقي", 500);
+                                     } else {
 
-                                }
+                                       return self::returnResponseDataApi(null, "يوجد خطاء ما اثناء تسجيل بيانات الامتحان الورقي", 500);
+                                  }
 
-
-                            } else {
+                              } else {
 
                                 return self::returnResponseDataApi(null, "!لقد تعديت اخر موعد لتسجيل الامتحان", 412);
-                            }
-                        }
-                    }
-                    break;
-                }
-            } else {
-                return self::returnResponseDataApi(null, "تم امتلاء القاعات لهذا الامتحان برجاء التواصل مع السيكرتاريه", 411);
-            }
-        }
+                          }
+                      }
+                  }
 
-    }
+             }
+          }else {
+                return self::returnResponseDataApi(null, "تم امتلاء القاعات لهذا الامتحان برجاء التواصل مع السيكرتاريه", 411);
+      }
+   }
+}
 
 
     public function paperSheetExamForStudentDetails(): JsonResponse
