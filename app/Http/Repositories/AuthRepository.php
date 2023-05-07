@@ -456,9 +456,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface {
             }
 
 
-            $classes = SubjectClass::whereHas('term', function ($term) {
-                $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
-            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
+            $classes = SubjectClass::whereHas('term', fn ($term) => $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id))->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
 
             $sliders = Slider::get();
             $videos_resources = VideoResource::whereHas('term', function ($term) {
