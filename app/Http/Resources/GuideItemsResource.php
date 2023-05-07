@@ -17,10 +17,9 @@ class GuideItemsResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => lang() == 'ar' ?$this->title_ar : $this->title_en,
-            'file_path' => $this->file != null ? asset('assets/uploads/guide/'.$this->file) : '',
+            'file_path' => $this->file != null ? asset('assets/uploads/guide/file'.$this->file) : '',
             'file_type' => $this->file_type,
-            'color' => $this->color,
-            'file_path_size' => $this->file != null ? file_size(asset('assets/uploads/guide/'.$this->file)) : '',
+            'file_path_size' => $this->file != null ? file_size(asset('assets/uploads/guide/file/'.$this->file)) : '',
             'answer_pdf_file' => $this->answer_pdf_file != null ? asset('assets/uploads/guide_answers/'.$this->answer_pdf_file) : '',
             'answer_pdf_file_size' => $this->file != null ? file_size(asset('assets/uploads/guide_answers/'.$this->answer_pdf_file)) : '0',
             'answer_video_file' => $this->answer_video_file != null ? asset('assets/uploads/guide_answers/'.$this->answer_video_file) : '',
