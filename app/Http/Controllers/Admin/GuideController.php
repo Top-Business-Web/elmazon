@@ -245,14 +245,14 @@ class GuideController extends Controller
         }
 
         if($request->hasFile('answer_pdf_file')){
-            $inputs['answer_pdf_file'] = $this->saveImage($request->file, 'assets/uploads/guides/answers', 'photo');
+            $inputs['answer_pdf_file'] = $this->saveImage($request->answer_pdf_file, 'assets/uploads/guides/answers', 'answer_pdf_file');
         }
 
         if($request->hasFile('answer_video_file')){
-            $inputs['answer_video_file'] = $this->saveImage($request->file, 'assets/uploads/guides/answers', 'photo');
+            $inputs['answer_video_file'] = $this->saveImage($request->answer_video_file, 'assets/uploads/guides/answers', 'answer_video_file');
         }
         if($request->hasFile('icon')){
-            $inputs['icon'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'photo');
+            $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guides/file', 'icon');
         }
 
 
@@ -285,18 +285,18 @@ class GuideController extends Controller
         $inputs = $request->all();
 
         if($request->hasFile('file')){
-            $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'photo');
+            $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'file');
         }
 
         if($request->hasFile('answer_pdf_file')){
-            $inputs['answer_pdf_file'] = $this->saveImage($request->file, 'assets/uploads/guides/answers', 'photo');
+            $inputs['answer_pdf_file'] = $this->saveImage($request->answer_pdf_file, 'assets/uploads/guides/answers', 'file');
         }
 
         if($request->hasFile('answer_video_file')){
-            $inputs['answer_video_file'] = $this->saveImage($request->file, 'assets/uploads/guides/answers', 'photo');
+            $inputs['answer_video_file'] = $this->saveImage($request->answer_video_file, 'assets/uploads/guides/answers', 'file');
         }
         if($request->hasFile('icon')){
-            $inputs['icon'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'photo');
+            $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guides/file', 'file');
         }
 
 
