@@ -55,6 +55,7 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('add-device-token',[AuthController::class,'add_device_token']);
         Route::post('papel-sheet-exam/user/{id}',[AuthController::class,'paper_sheet_exam']);
         Route::get('papel-sheet-exam/show',[AuthController::class,'paper_sheet_exam_show']);
+        Route::get('paper-sheet-exam/register-with-student-check-before',[AuthController::class,'paperSheetExamForStudentDetails']);
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
         Route::get('home-page/all-classes',[AuthController::class,'allClasses']);

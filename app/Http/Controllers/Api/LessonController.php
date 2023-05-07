@@ -14,6 +14,7 @@ use App\Models\Lesson;
 use App\Models\OpenLesson;
 use App\Models\SubjectClass;
 use App\Models\VideoBasic;
+use App\Models\VideoFilesUploads;
 use App\Models\VideoParts;
 use App\Models\VideoResource;
 use App\Models\VideoOpened;
@@ -185,7 +186,10 @@ class LessonController extends Controller
 
         if ($request->type == 'file') {
             $lesson = Lesson::where('id', '=', $id)->first();
-            $video = VideoParts::where('lesson_id', '=', $id)->where('type', '=', $request->file_type)->orderBy('id', 'ASC')->first();
+            $video = VideoParts::where('lesson_id', '=', $id)->where('type', '=',$request->file_type)->orderBy('id', 'ASC')->first();
+
+//            $videoUploadFiles = VideoFilesUploads::query()
+//                ->where()
 
             if (!$lesson) {
                 return self::returnResponseDataApi(null, "هذا الدرس غير موجود", 404, 404);
@@ -195,7 +199,8 @@ class LessonController extends Controller
             }
             $watched = VideoOpened::where('user_id', '=', Auth::guard('user-api')->id())->where('video_part_id', '=', $video->id);
             if ($watched->exists()) {
-                return response()->json(['data' => null, 'message' => 'Video watched with ' . Auth::guard('user-api')->user()->name . ' before', 'code' => 200]);
+
+                return self::returnResponseDataApi(null,"تم مشاهده هذا الفيديو من قبل",200);
 
             } else {
 
