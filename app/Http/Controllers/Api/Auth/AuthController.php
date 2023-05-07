@@ -19,13 +19,11 @@ class AuthController extends Controller{
 
     public function login(Request $request): JsonResponse
     {
-
         return $this->authRepositoryInterface->login($request);
     }
 
     public function addSuggest(Request $request): JsonResponse
     {
-
         return $this->authRepositoryInterface->addSuggest($request);
     }
 
