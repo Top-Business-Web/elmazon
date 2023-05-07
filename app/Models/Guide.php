@@ -19,6 +19,7 @@ class Guide extends Model
         'icon',
         'file_type',
         'color',
+        'background_color',
         'term_id',
         'season_id',
         'lesson_id',
