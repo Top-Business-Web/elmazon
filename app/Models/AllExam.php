@@ -14,6 +14,9 @@ class AllExam extends Model
     protected $fillable = [
         'name_ar',
         'name_en',
+        'title_result',
+        'description_result',
+        'image_result',
         'exam_type',
         'background_color',
         'pdf_file_upload',

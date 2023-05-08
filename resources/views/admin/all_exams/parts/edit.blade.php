@@ -108,6 +108,20 @@
                     <span class="btn btn-sm mt-4 colorInput" style="width: 100%">Preview</span>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="note" class="form-control-label">نصيحة</label>
+                    <input type="text" name="title_result" value="{{ $allExam->title_result }}" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label for="note" class="form-control-label">وصف النصيحة</label>
+                    <textarea name="description_result" class="form-control" rows="8">{{ $allExam->description_result }}</textarea>
+                </div>
+                <div class="col-md-4">
+                    <label for="note" class="form-control-label">صورة النصيحة</label>
+                    <input type="file" name="image_result" value="{{ $allExam->image_result }}" class="form-control">
+                </div>
+            </div>
             <hr>
             <div class="row">
                 <div class="col-md-9">

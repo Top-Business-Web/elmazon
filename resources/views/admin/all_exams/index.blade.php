@@ -32,7 +32,7 @@
                                 <th class="min-w-50px">وقت الامتحان</th>
                                 <th class="min-w-50px">المحاولات المسموحة</th>
                                 <th class="min-w-50px">الدرجة</th>
-{{--                                <th class="min-w-50px">ملاحظة</th>--}}
+                                <th class="min-w-50px">نصيحة</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -97,7 +97,7 @@
             {data: 'quize_minute', name: 'quize_minute'},
             {data: 'trying_number', name: 'trying_number'},
             {data: 'degree', name: 'degree'},
-            // {data: 'note', name: 'note'},
+            {data: 'title_result', name: 'title_result'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('allExam.index')}}', columns);

@@ -129,6 +129,20 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-4">
+                    <label for="name_ar" class="form-control-label"> نصيحة</label>
+                    <input type="text" class="form-control" value="{{ $onlineExam->title_result }}" name="title_result" style="text-align: center" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="name_ar" class="form-control-label">صورة النصيحة</label>
+                    <input type="file" class="form-control" name="image_result" {{ $onlineExam->image_result }} style="text-align: center">
+                </div>
+                <div class="col-md-4">
+                    <label for="name_en" class="form-control-label"> وصف النصيحة</label>
+                    <textarea class="form-control" name="description_result" rows="4" required>{{ $onlineExam->description_result }}</textarea>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <label class="control-label">التعليمات بالعربية</label>
                     <div class="form-group itemItems1">

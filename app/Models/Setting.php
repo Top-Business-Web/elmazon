@@ -16,7 +16,15 @@ class Setting extends Model
         'twitter_link',
         'instagram_link',
         'website_link',
+        'share_ar',
+        'share_en',
         'videos_resource_active',
+    ];
+
+
+    protected $casts = [
+        'share_ar' => 'json',
+        'share_en' => 'json',
     ];
 
 }
