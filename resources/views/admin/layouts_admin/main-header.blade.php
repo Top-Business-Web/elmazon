@@ -84,7 +84,7 @@
                             <div>
                                 <strong class="text-muted">{{ $log->admin->name }}</strong>
                                 <p class="mb-0 fs-13 text-muted">{{ $log->action }}</p>
-                                <div class="small text-muted">2020</div>
+                                <div class="small text-muted">{{ $log->created_at->format('Y-m-d') }}</div>
                             </div>
                         </a>
                         @endforeach
