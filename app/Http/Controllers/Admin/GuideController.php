@@ -36,7 +36,7 @@ class GuideController extends Controller
                             <a href="' . route('indexItem', $guides->id) . '" class="btn btn-pill btn-success-light addItem">اضافة عنصر</a>
                        ';
                 })
-                ->editColumn('color', function ($guides) {
+                ->editColumn('background_color', function ($guides) {
                     return '<input type="color" class="form-control" name="color"
                            value="'. $guides->color .'" disabled>';
                 })
@@ -196,27 +196,27 @@ class GuideController extends Controller
                             </button>
                        ';
                 })
-                ->editColumn('subject_class_id', function ($guides) {
-                    return '<td>' . $guides->subjectClass->title_ar . '</td>';
+                ->editColumn('subject_class_id', function ($items) {
+                    return '<td>' . @$items->subjectClass->title_ar . '</td>';
                 })
-                ->editColumn('lesson_id', function ($guides) {
-                    return '<td>' . $guides->lesson->title_ar . '</td>';
+                ->editColumn('lesson_id', function ($items) {
+                    return '<td>' . @$items->lesson->title_ar . '</td>';
                 })
-                ->editColumn('file', function ($guides) {
-                    if ($guides->file)
-                        return '<a href="' . asset('assets/uploads/guide/answers/'.$guides->file) . '">
+                ->editColumn('file', function ($items) {
+                    if ($items->file)
+                        return '<a href="' . asset('assets/uploads/guides/answers/'.$items->file) . '">
                                 لينك ملف المراجعة
                             </a>';
                 })
-                ->editColumn('answer_video_file', function ($guides) {
-                    if ($guides->answer_video_file)
-                        return '<a href="' . asset('assets/uploads/guide/answers/'.$guides->answer_video_file) . '">
+                ->editColumn('answer_video_file', function ($items) {
+                    if ($items->answer_video_file)
+                        return '<a href="' . asset('assets/uploads/guides/answers/'.$items->answer_video_file) . '">
                                 لينك الفيديو
                             </a>';
                 })
-                ->editColumn('answer_pdf_file', function ($guides) {
-                    if ($guides->answer_pdf_file)
-                        return '<a href="' . asset('assets/uploads/guide/answers/'.$guides->answer_pdf_file) . '">
+                ->editColumn('answer_pdf_file', function ($items) {
+                    if ($items->answer_pdf_file)
+                        return '<a href="' . asset('assets/uploads/guides/answers/'.$items->answer_pdf_file) . '">
                                 لينك الملف الورقي
                             </a>';
                 })
@@ -244,40 +244,22 @@ class GuideController extends Controller
     public function addItems(Request $request)
     {
         $inputs = $request->all();
-
-        if ($request->has('file')) {
-            $file = $request->file;
-            $path = public_path('assets/uploads/guide/');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['file'] = $file_name;
+        if($request->hasFile('file')){
+            $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'photo');
         }
 
-        if ($request->has('answer_pdf_file')) {
-            $inputs['file_type'] = 'pdf';
-            $file = $request->answer_pdf_file;
-            $path = public_path('assets/uploads/guide/answers');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['answer_pdf_file'] = $file_name;
+        if($request->hasFile('answer_pdf_file')){
+            $inputs['answer_pdf_file'] = $this->saveImage($request->answer_pdf_file, 'assets/uploads/guides/answers', 'answer_pdf_file');
         }
-        if ($request->has('answer_video_file')) {
-            $inputs['file_type'] = 'video';
-            $file = $request->answer_video_file;
-            $path = public_path('assets/uploads/guide/answers');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['answer_video_file'] = $file_name;
+
+        if($request->hasFile('answer_video_file')){
+            $inputs['answer_video_file'] = $this->saveImage($request->answer_video_file, 'assets/uploads/guides/answers', 'answer_video_file');
+        }
+        if($request->hasFile('icon')){
+            $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guides/file', 'icon');
         }
 
 
-        if ($request->has('icon')) {
-            $file = $request->icon;
-            $path = public_path('assets/uploads/icon/');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['icon'] = $file_name;
-        }
 
         if (Guide::create($inputs)) {
             return response()->json(['status' => 200]);
@@ -306,37 +288,21 @@ class GuideController extends Controller
         $items = Guide::find($id);
         $inputs = $request->all();
 
-        if ($request->has('file')) {
-            $file = $request->file;
-            $path = public_path('assets/uploads/guide/');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['file'] = $file_name;
+        if($request->hasFile('file')){
+            $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'file');
         }
 
-        if ($request->has('answer_pdf_file')) {
-            $file = $request->answer_pdf_file;
-            $path = public_path('assets/uploads/guide/answers');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['answer_pdf_file'] = $file_name;
-        }
-        if ($request->has('answer_video_file')) {
-            $file = $request->answer_video_file;
-            $path = public_path('assets/uploads/guide/answers');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['answer_video_file'] = $file_name;
+        if($request->hasFile('answer_pdf_file')){
+            $inputs['answer_pdf_file'] = $this->saveImage($request->answer_pdf_file, 'assets/uploads/guides/answers', 'file');
         }
 
-
-        if ($request->has('icon')) {
-            $file = $request->icon;
-            $path = public_path('assets/uploads/icon/');
-            $file_name = $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $inputs['icon'] = $file_name;
+        if($request->hasFile('answer_video_file')){
+            $inputs['answer_video_file'] = $this->saveImage($request->answer_video_file, 'assets/uploads/guides/answers', 'file');
         }
+        if($request->hasFile('icon')){
+            $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guides/file', 'file');
+        }
+
 
         if ($items->update($inputs)) {
             return response()->json(['status' => 200]);

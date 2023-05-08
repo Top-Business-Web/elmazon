@@ -28,9 +28,7 @@ class GuideController extends Controller
     }
 
     public function itemsByLesson($id,$lesson_id){
-        $guide_items = Guide::whereHas('term', function ($term){
-            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->where(['from_id'=>$id,'lesson_id'=>$lesson_id])->get();
+        $guide_items = Guide::where(['from_id'=>$id,'lesson_id'=>$lesson_id])->get();
 
         if($guide_items->count() > 0){
 

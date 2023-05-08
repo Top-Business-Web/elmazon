@@ -24,7 +24,7 @@ class UserResource extends JsonResource
             'season' => new SeasonResource($this->season),
             'term' => new TermResource(Term::where('status','=','active')->where('season_id','=',Auth::guard('user-api')->user()->season_id)->first()),
             'father_phone' => $this->father_phone,
-            'image' => $this->image != null ? asset('/users/'.$this->image) : asset('/default/avatar.jpg'),
+            'image' => $this->image != null ? asset('/users/'.$this->image) : asset('default/avatar2.jfif'),
             'user_status' => $this->user_status,
             'code' => $this->code,
             'date_start_code' => $this->date_start_code,

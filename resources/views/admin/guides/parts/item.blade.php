@@ -30,12 +30,8 @@
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">العنوان</th>
-                                <th class="min-w-50px">من</th>
                                 <th class="min-w-50px">الوحدة</th>
                                 <th class="min-w-50px">الدرس</th>
-                                <th class="min-w-50px">ملف المراجعة</th>
-                                <th class="min-w-50px">ملف الاجابة (ملف ورقي)</th>
-                                <th class="min-w-50px">ملف الاجابة (فيديو)</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -97,12 +93,8 @@
         var columns = [
             {data: 'id', name: 'id'},
             {data: 'title_ar', name: 'title_ar'},
-            {data: 'from_id', name: 'from_id'},
             {data: 'subject_class_id', name: 'subject_class_id'},
             {data: 'lesson_id', name: 'lesson_id'},
-            {data: 'file', name: 'file'},
-            {data: 'answer_pdf_file', name: 'answer_pdf_file'},
-            {data: 'answer_video_file', name: 'answer_video_file'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{ route('indexItem', $id) }}', columns);

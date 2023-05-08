@@ -61,25 +61,25 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="note" class="form-control-label">فصل</label>
                     <Select name="season_id" class="form-control">
                         <option selected disabled style="text-align: center">اختر فصل</option>
-                        @foreach($data['seasons'] as $season)
-                            <option value="{{ $season->id }}"
-                                    style="text-align: center">{{ $season->name_ar }}</option>
+                        @foreach ($data['seasons'] as $season)
+                            <option value="{{ $season->id }}" style="text-align: center">{{ $season->name_ar }}
+                            </option>
                         @endforeach
                     </Select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="note" class="form-control-label">تيرم</label>
                     <Select name="term_id" class="form-control">
                         <option selected disabled style="text-align: center">اختر تيرم</option>
                     </Select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="note" class="form-control-label">لون الخلفية</label>
-                    {{--                    <input type="color" class="form-control" value="{{ $allExam->background_color }}" name="background_color" required>--}}
+                    {{--                    <input type="color" class="form-control" value="{{ $allExam->background_color }}" name="background_color" required> --}}
                     <select name="background_color" id="colorSelect" class="form-control">
                         <option value="#FE7C04">#FE7C04</option>
                         <option value="#143A7B">#143A7B</option>
@@ -90,12 +90,27 @@
                     <span class="btn btn-sm mt-4 colorInput" style="width: 100%">Preview</span>
                 </div>
             </div>
-           <hr>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="note" class="form-control-label">نصيحة</label>
+                    <input type="text" name="title_result" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label for="note" class="form-control-label">وصف النصيحة</label>
+                    <textarea name="description_result" class="form-control" rows="8"></textarea>
+                </div>
+                <div class="col-md-4">
+                    <label for="note" class="form-control-label">صورة النصيحة</label>
+                    <input type="file" name="image_result" class="form-control">
+                </div>
+            </div>
+            <hr>
             <div class="row">
                 <div class="col-md-9">
                     <label class="control-label">التعليمات بالعربية</label>
                     <div class="form-group itemItems1">
-                        <input type="text" name="instruction_ar[]" class="form-control InputItemExtra1" value="">
+                        <input type="text" name="instruction_ar[]" class="form-control InputItemExtra1"
+                            value="">
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -108,7 +123,8 @@
                 <div class="col-md-9">
                     <label class="control-label">التعليمات بالانجليزية</label>
                     <div class="form-group itemItems2">
-                        <input type="text" name="instruction_en[]" class="form-control InputItemExtra2" value="">
+                        <input type="text" name="instruction_en[]" class="form-control InputItemExtra2"
+                            value="">
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -129,18 +145,19 @@
     $('.dropify').dropify()
 
 
-    $(document).ready(function () {
-        $('select[name="season_id"]').on('change', function () {
+    $(document).ready(function() {
+        $('select[name="season_id"]').on('change', function() {
             var season_id = $(this).val();
             if (season_id) {
                 $.ajax({
                     url: "{{ URL::to('terms/season/') }}/" + season_id,
                     type: "GET",
                     dataType: "json",
-                    success: function (data) {
+                    success: function(data) {
                         $('select[name="term_id"]').empty();
-                        $.each(data, function (key, value) {
-                            $('select[name="term_id"]').append('<option value="' + key + '">' + value + '</option>');
+                        $.each(data, function(key, value) {
+                            $('select[name="term_id"]').append('<option value="' +
+                                key + '">' + value + '</option>');
                         });
                     },
                 });
@@ -150,7 +167,7 @@
         });
     });
 
-    $("#exam_type").on('change', function () {
+    $("#exam_type").on('change', function() {
         let opt = $(this).find('option:selected').val();
         if (opt === 'pdf') {
             $('.pdfType').removeClass('d-none').prop('disabled', 'false');
@@ -158,11 +175,10 @@
             $('.pdfType').addClass('d-none').prop('disabled', 'ture');
         }
     })
-
 </script>
 
 <script>
-    $(document).on('click', '.delItem1', function () {
+    $(document).on('click', '.delItem1', function() {
         var Item = $('.InputItemExtra1').last();
         let issue = $('.Issue1');
         if (Item.val() === '' && $('.InputItemExtra1').length > 1) {
@@ -170,7 +186,7 @@
             Item.remove();
             issue.addClass('badge-success');
             issue.text('The element deleted');
-            setTimeout(function () {
+            setTimeout(function() {
                 $('.Issue1').html('');
             }, 3000)
         } else {
@@ -178,14 +194,15 @@
         }
     })
 
-    $(document).on('click', '.MoreItem1', function () {
+    $(document).on('click', '.MoreItem1', function() {
         var Item = $('.InputItemExtra1').last();
         if (Item.val() !== '') {
-            $('.itemItems1').append('<input type="text" name="instruction_ar[]" class="form-control InputItemExtra1 mt-3">')
+            $('.itemItems1').append(
+                '<input type="text" name="instruction_ar[]" class="form-control InputItemExtra1 mt-3">')
         }
     })
 
-    $(document).on('click', '.delItem2', function () {
+    $(document).on('click', '.delItem2', function() {
         var Item = $('.InputItemExtra2').last();
         let issue = $('.Issue2');
         if (Item.val() === '' && $('.InputItemExtra2').length > 1) {
@@ -193,7 +210,7 @@
             Item.remove();
             issue.addClass('badge-success');
             issue.text('The element deleted');
-            setTimeout(function () {
+            setTimeout(function() {
                 $('.Issue2').html('');
             }, 3000)
         } else {
@@ -201,14 +218,15 @@
         }
     })
 
-    $(document).on('click', '.MoreItem2', function () {
+    $(document).on('click', '.MoreItem2', function() {
         var Item = $('.InputItemExtra2').last();
         if (Item.val() !== '') {
-            $('.itemItems2').append('<input type="text" name="instruction_en[]" class="form-control InputItemExtra2 mt-3">')
+            $('.itemItems2').append(
+                '<input type="text" name="instruction_en[]" class="form-control InputItemExtra2 mt-3">')
         }
     })
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.colorInput').addClass('d-none');
 
         const colorSelect = document.querySelector('#colorSelect');

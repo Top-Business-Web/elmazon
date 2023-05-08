@@ -68,6 +68,10 @@ class AllExamController extends Controller
             $inputs['answer_video_file'] = saveFile('all_exams/videos_answers', $request->answer_video_file);
         } // end save file
 
+        if ($request->has('image_result')) {
+            $inputs['image_result'] = saveFile('all_exams/image_result', $request->image_result);
+        } // end save file
+
 
         if($allExam->create($inputs))
         {
@@ -118,6 +122,13 @@ class AllExamController extends Controller
                 unlink($allExam->answer_video_file);
             }
             $inputs['answer_video_file'] = saveFile('all_exams/videos_answers', $request->answer_video_file);
+        } // end save file
+
+        if ($request->has('image_result')) {
+            if (file_exists($allExam->image_result)) {
+                unlink($allExam->image_result);
+            }
+            $inputs['image_result'] = saveFile('all_exams/image_result', $request->image_result);
         } // end save file
 
 
