@@ -10,6 +10,7 @@ use App\Models\PapelSheetExamDegree;
 use App\Models\PapelSheetExamUser;
 use App\Models\Season;
 use App\Models\Term;
+use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -17,7 +18,7 @@ class PapelSheetExamController extends Controller
 {
     // Index START
 
-    use FirebaseNotification;
+    use FirebaseNotification , AdminLogs;
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -112,7 +113,7 @@ class PapelSheetExamController extends Controller
     {
         $inputs = $request->all();
         if ($papelSheetExam->create($inputs)) {
-
+            $this->adminLog('تم اضافة امتحان ورقي');
             $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
             return response()->json(['status' => 200]);
         } else {
@@ -137,6 +138,7 @@ class PapelSheetExamController extends Controller
     public function update(Request $request, PapelSheetExam $papelSheetExam)
     {
         if ($papelSheetExam->update($request->all())) {
+            $this->adminLog('تم تحديث امتحان ورقي');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -151,6 +153,7 @@ class PapelSheetExamController extends Controller
     {
         $papelSheetExam = PapelSheetExam::where('id', $request->id)->firstOrFail();
         $papelSheetExam->delete();
+        $this->adminLog('تم حذف امتحان ورقي');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminLogController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\LessonController;
@@ -66,6 +67,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::group(['middleware' => 'permission:الادمن'], function () {
         Route::resource('admins', AdminController::class);
         Route::POST('delete_admin', [AdminController::class, 'delete'])->name('delete_admin');
+        Route::get('/adminLog',[AdminLogController::class,'index'])->name('adminLog');
+        Route::post('/adminLogDelete',[AdminLogController::class,'delete'])->name('adminLogDelete');
     });
     Route::get('my_profile', [AdminController::class, 'myProfile'])->name('myProfile');
 

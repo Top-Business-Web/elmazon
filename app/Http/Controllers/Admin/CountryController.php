@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCountry;
 use App\Models\Country;
+use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class CountryController extends Controller
 {
+    use AdminLogs;
+
     // Index Start
     public function index(request $request)
     {
@@ -47,6 +50,7 @@ class CountryController extends Controller
         $inputs = $request->all();
 
         if (Country::create($inputs)) {
+            $this->adminLog('تم اضافة محافظة');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -68,7 +72,9 @@ class CountryController extends Controller
 
     public function update(StoreCountry $request, Country $country)
     {
+
         if ($country->update($request->all())) {
+            $this->adminLog('تم تحديث محافظة');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -83,6 +89,7 @@ class CountryController extends Controller
     {
         $countries = Country::where('id', $request->id)->firstOrFail();
         $countries->delete();
+        $this->adminLog('تم حذف محافظة');
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

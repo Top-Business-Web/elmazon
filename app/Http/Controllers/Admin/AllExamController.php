@@ -7,12 +7,14 @@ use App\Http\Requests\AllExamRequest;
 use App\Models\AllExam;
 use App\Models\Season;
 use App\Models\Term;
+use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class AllExamController extends Controller
 {
     // Index START
+    use AdminLogs;
 
     public function index(request $request)
     {
@@ -70,8 +72,10 @@ class AllExamController extends Controller
             $inputs['image_result'] = saveFile('all_exams/image_result', $request->image_result);
         } // end save file
 
+
         if($allExam->create($inputs))
         {
+            $this->adminLog('تم اضافة امتحان شامل');
             return response()->json(['status' => 200]);
         }
         else
@@ -127,7 +131,9 @@ class AllExamController extends Controller
             $inputs['image_result'] = saveFile('all_exams/image_result', $request->image_result);
         } // end save file
 
+
         if ($allExam->update($inputs)) {
+            $this->adminLog('تم تحديث امتحان شامل');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -142,6 +148,7 @@ class AllExamController extends Controller
     {
         $onlineExam = AllExam::where('id', $request->id)->firstOrFail();
         $onlineExam->delete();
+        $this->adminLog('تم حذف امتحان شامل');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

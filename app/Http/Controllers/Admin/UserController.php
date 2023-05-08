@@ -21,6 +21,7 @@ use App\Models\User;
 use App\Models\UserSubscribe;
 use App\Models\VideoParts;
 use App\Models\VideoOpened;
+use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Buglinjo\LaravelWebp\Exceptions\CwebpShellExecutionFailed;
 use Buglinjo\LaravelWebp\Exceptions\DriverIsNotSupportedException;
@@ -30,7 +31,7 @@ use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
-    use PhotoTrait;
+    use PhotoTrait , AdminLogs;
 
     // Index Start
     public function index(request $request)
@@ -78,6 +79,7 @@ class UserController extends Controller
         }
 
         if (User::create($inputs)) {
+            $this->adminLog('تم اضافة طالب جديد');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -116,6 +118,7 @@ class UserController extends Controller
         }
 
         if ($user->update($inputs)) {
+            $this->adminLog('تم تحديث طالب');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -227,6 +230,7 @@ class UserController extends Controller
     {
         $user = User::where('id', $request->id)->firstOrFail();
         $user->delete();
+        $this->adminLog('تم حذف طالب ');
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

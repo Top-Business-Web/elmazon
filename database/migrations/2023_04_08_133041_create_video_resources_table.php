@@ -24,8 +24,8 @@ class CreateVideoResourcesTable extends Migration
             $table->longText('video_link')->nullable();
             $table->unsignedBigInteger('season_id');
             $table->unsignedBigInteger('term_id');
-            $table->boolean('like_active')->default(false);
-            $table->boolean('view_active')->default(false);
+            $table->tinyInteger('like_active')->default(0);
+            $table->tinyInteger('view_active')->default(0);
             $table->timestamps();
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('term_id')->references('id')->on('terms')->cascadeOnUpdate()->cascadeOnDelete();

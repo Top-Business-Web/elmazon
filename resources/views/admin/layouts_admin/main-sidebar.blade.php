@@ -55,7 +55,7 @@
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('discount_coupons.index') }}">
                     <i class="fa fa-book-reader side-menu__icon"></i>
-                    <span class="side-menu__label">كوبونات الخضم</span>
+                    <span class="side-menu__label">كوبونات الخصم</span>
                 </a>
             </li>
         @endcan
@@ -336,6 +336,16 @@
                     <i class="fa fa-user-secret side-menu__icon"></i>
                     <span class="side-menu__label">
                         الادمن
+                    </span>
+                </a>
+            </li>
+        @endcan
+        @can('الادمن')
+            <li class="slide">
+                <a class="side-menu__item" href="{{ route('adminLog') }}">
+                    <i class="fa fa-user-secret side-menu__icon"></i>
+                    <span class="side-menu__label">
+                        سجلات الادمن
                     </span>
                 </a>
             </li>

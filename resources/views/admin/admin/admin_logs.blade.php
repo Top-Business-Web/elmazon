@@ -1,25 +1,15 @@
 @extends('admin.layouts_admin.master')
 
 @section('title')
-    الشاشات الافتتاحيه
+    {{ $setting->title ?? '' }} | سجلات الادمن
 @endsection
-@section('page_name')
-    الشاشات الافتتاحيه
-@endsection
+@section('page_name') سجلات الادمن  @endsection
 @section('content')
-
     <div class="row">
         <div class="col-md-12 col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title"></h3>
-                    <div class="">
-                        <button class="btn btn-secondary btn-icon text-white addBtn">
-									<span>
-										<i class="fe fe-plus"></i>
-									</span> اضافة
-                        </button>
-                    </div>
+                    <h3 class="card-title"> السجلات {{ $setting->title ?? '' }}</h3>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -27,10 +17,10 @@
                         <table class="table table-striped table-bordered text-nowrap w-100" id="dataTable">
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
-                                <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">الصورة</th>
-                                <th class="min-w-50px">العنوان</th>
-                                <th class="min-w-50px">الوصف</th>
+                                <th class="min-w-25px">ID</th>
+                                <th class="min-w-50px">اسم الادمن</th>
+                                <th class="min-w-125px">العملية</th>
+                                <th class="min-w-125px">الدور</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -46,20 +36,20 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">حذف</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">حذف بيانات</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <input id="delete_id" name="id" type="hidden">
-                        <p>هل أنت متأكد من عملية <الحذف></الحذف><span id="title" class="text-danger"></span></p>
+                        <p>هل انت متأكد من حذف البيانات التالية <span id="title" class="text-danger"></span>؟</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_delete_modal">
                             اغلاق
                         </button>
-                        <button type="button" class="btn btn-danger" id="delete_btn">حذف</button>
+                        <button type="button" class="btn btn-danger" id="delete_btn">حذف !</button>
                     </div>
                 </div>
             </div>
@@ -71,7 +61,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">المقدمه</h5>
+                        <h5 class="modal-title" id="example-Modal3">بيانات المشرف</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -90,20 +80,15 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'image', name: 'image'},
-            {data: 'title_ar', name: 'title_ar'},
-            {data: 'description_ar', name: 'description_ar'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
+            {data: 'admin_id', name: 'admin_id'},
+            {data: 'action', name: 'action'},
+            {data: 'role', name: 'role'},
+            {data: 'button', name: 'button', orderable: false, searchable: false},
         ]
-        showData('{{route('onBoarding.index')}}', columns);
+        showData('{{ route('adminLog') }}', columns);
+
         // Delete Using Ajax
-        destroyScript('{{route('onBoarding.destroy',':id')}}');
-        // Add Using Ajax
-        showAddModal('{{route('onBoarding.create')}}');
-        addScript();
-        // Add Using Ajax
-        showEditModal('{{route('onBoarding.edit',':id')}}');
-        editScript();
+        deleteScript('{{ route('adminLogDelete') }}');
+
     </script>
 @endsection
-

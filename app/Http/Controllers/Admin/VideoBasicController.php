@@ -7,13 +7,14 @@ use App\Models\CommentReplay;
 use App\Models\VideoBasic;
 use App\Models\Report;
 use App\Models\Comment;
+use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class VideoBasicController extends Controller
 {
-    use PhotoTrait;
+    use PhotoTrait , AdminLogs;
     // Index Start
     public function index(request $request)
     {
@@ -199,6 +200,7 @@ class VideoBasicController extends Controller
     {
         $comment_reply = CommentReplay::where('id', $request->id)->firstOrFail();
         $comment_reply->delete();
+        $this->adminLog('تم حذف الرد علي التعليق');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
@@ -207,6 +209,7 @@ class VideoBasicController extends Controller
     {
         $report_delete = Report::where('id', $request->id)->firstOrFail();
         $report_delete->delete();
+        $this->adminLog('تم حذف بلاغ');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
@@ -225,7 +228,7 @@ class VideoBasicController extends Controller
         $reply->teacher_id = auth('admin')->user()->id;
 
         $reply->save();
-
+        $this->adminLog('تم اضافة رد علي تعليق');
         return response()->json(['status' => 200]);
     }
 
@@ -260,6 +263,7 @@ class VideoBasicController extends Controller
             $inputs['video_link'] = $this->saveImage($request->video_link, 'videos_basics/', 'photo');
         }
         if (VideoBasic::create($inputs)) {
+            $this->adminLog('تم اضافة فيديو اساسيات');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -289,6 +293,7 @@ class VideoBasicController extends Controller
         }
 
         if ($videoBasic->update($inputs)) {
+            $this->adminLog('تم تعديل فيديو اساسيات');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -303,6 +308,7 @@ class VideoBasicController extends Controller
     {
         $terms = VideoBasic::where('id', $request->id)->firstOrFail();
         $terms->delete();
+        $this->adminLog('تم حذف فيديو اساسيات');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

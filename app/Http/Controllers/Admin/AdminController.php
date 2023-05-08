@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminRequest;
 use App\Models\Admin;
+use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +14,7 @@ use Yajra\DataTables\DataTables;
 
 class AdminController extends Controller
 {
-    use PhotoTrait;
+    use PhotoTrait, AdminLogs;
 
     public function index(request $request)
     {
@@ -51,7 +52,7 @@ class AdminController extends Controller
                 ->escapeColumns([])
                 ->make(true);
         } else {
-            return view('Admin/admin/index');
+            return view('admin/admin/index');
         }
     } // end for index
 
@@ -66,6 +67,7 @@ class AdminController extends Controller
                 unlink($admin->image);
             }
             $admin->delete();
+            $this->adminLog('تم حذف مشرف');
             return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
         }
     } // end of delete
@@ -74,14 +76,14 @@ class AdminController extends Controller
     {
         $admin = auth()->guard('admin')->user();
         $roleName = $admin->roles->pluck('name', 'name')->first();
-        return view('Admin.admin.profile', compact('admin', 'roleName'));
+        return view('admin.admin.profile', compact('admin', 'roleName'));
     } //end fun
 
 
     public function create()
     {
         $roles = Role::all();
-        return view('Admin/admin.parts.create', compact('roles'));
+        return view('admin/admin.parts.create', compact('roles'));
     }
 
     public function store(AdminRequest $request)
@@ -93,17 +95,19 @@ class AdminController extends Controller
         $inputs['password'] = Hash::make($request->password);
         $admin = Admin::create($inputs);
         $admin->assignRole($request->input('roles'));
-        if ($admin)
+        if ($admin) {
+            $this->adminLog('تم اضافة مشرف');
             return response()->json(['status' => 200]);
-        else
+        } else {
             return response()->json(['status' => 405]);
+        }
     }
 
     public function edit(Admin $admin)
     {
         $roles = Role::all();
         $adminRole = $admin->roles->pluck('id', 'id')->all();
-        return view('Admin/admin.parts.edit', compact('admin', 'roles', 'adminRole'));
+        return view('admin/admin.parts.edit', compact('admin', 'roles', 'adminRole'));
     }
 
     public function update(AdminRequest $request, $id)
@@ -125,9 +129,11 @@ class AdminController extends Controller
         $admin->update($inputs);
         \DB::table('model_has_roles')->where('model_id', $id)->delete();
         $admin->assignRole($request->input('roles'));
-        if ($admin)
+        if ($admin) {
+            $this->adminLog('تم تحديث مشرف');
             return response()->json(['status' => 200]);
-        else
+        } else {
             return response()->json(['status' => 405]);
+        }
     }
 }//end class

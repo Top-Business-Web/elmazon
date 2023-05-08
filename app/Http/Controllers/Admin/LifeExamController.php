@@ -9,14 +9,18 @@ use App\Http\Requests\StoreSubjectClasses;
 use App\Models\LifeExam;
 use App\Models\Season;
 use App\Models\Term;
+use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class LifeExamController extends Controller
 {
+    use AdminLogs;
+
     // Index Start
 
     use FirebaseNotification;
+
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -32,10 +36,10 @@ class LifeExamController extends Controller
                        ';
                 })
                 ->editColumn('term_id', function ($life_exams) {
-                    return '<td>'.$life_exams->term->name_ar.'</td>';
+                    return '<td>' . $life_exams->term->name_ar . '</td>';
                 })
                 ->editColumn('season_id', function ($life_exams) {
-                    return '<td>'.$life_exams->season->name_ar.'</td>';
+                    return '<td>' . $life_exams->season->name_ar . '</td>';
                 })
                 ->escapeColumns([])
                 ->make(true);
@@ -67,7 +71,8 @@ class LifeExamController extends Controller
 
         if (LifeExam::create($inputs)) {
 
-            $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
+            $this->adminLog('تم اضافة امتحان لايف');
+            $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id], $request->season_id);
 
             return response()->json(['status' => 200]);
         } else {
@@ -95,6 +100,7 @@ class LifeExamController extends Controller
         $inputs = $request->all();
 
         if ($lifeExam->update($inputs)) {
+            $this->adminLog('تم تحديث امتحان لايف');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -109,6 +115,7 @@ class LifeExamController extends Controller
     {
         $subject_class = lifeExam::where('id', $request->id)->firstOrFail();
         $subject_class->delete();
+        $this->adminLog('تم حذف امتحان لايف');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

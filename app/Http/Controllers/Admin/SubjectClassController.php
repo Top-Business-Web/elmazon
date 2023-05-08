@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSubjectClasses;
 use App\Models\SubjectClass;
 use App\Models\Term;
+use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -13,7 +14,7 @@ use App\Models\Season;
 
 class SubjectClassController extends Controller
 {
-    use PhotoTrait;
+    use PhotoTrait , AdminLogs;
 
     // Index Start
     public function index(Request $request)
@@ -104,6 +105,7 @@ class SubjectClassController extends Controller
         }
 
         if (SubjectClass::create($inputs)) {
+            $this->adminLog('تم اضافة وحدة جديدة');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -137,6 +139,7 @@ class SubjectClassController extends Controller
             $inputs['image'] = $filename;
         }
         if ($subjectsClass->update($inputs)) {
+            $this->adminLog('تم تحديث وحدة ');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -151,6 +154,7 @@ class SubjectClassController extends Controller
     {
         $subject_class = SubjectClass::where('id', $request->id)->firstOrFail();
         $subject_class->delete();
+        $this->adminLog('تم حذف وحدة');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

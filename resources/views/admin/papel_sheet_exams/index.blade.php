@@ -4,7 +4,7 @@
      امتحانات الورقية
 @endsection
 @section('page_name')
-    امتحان الورقية
+    امتحان ورقي
 @endsection
 @section('content')
 

@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AboutMe;
+use App\Models\AdminLog;
+use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
 
 class AboutMesController extends Controller
 {
+    use AdminLogs;
     // Index Start
     public function index()
     {
@@ -26,6 +29,7 @@ class AboutMesController extends Controller
 
 
         if ($about_me->update($inputs)) {
+            $this->adminLog('تم عمل تحديث عن المدرس');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 500]);
