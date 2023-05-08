@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\Instruction\InstructionController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\LessonDetails\LessonDetailsController;
 use App\Http\Controllers\Api\LifeExam\LifeExamController;
+use App\Http\Controllers\Api\LiveExam\LiveExamController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
 use App\Http\Controllers\Api\AllExamsUsersDegreeController;
 use App\Http\Controllers\Api\Notes\NoteController;
@@ -215,6 +216,18 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('exam-questions/{id}',[TestYourselfExamsController::class,'examQuestions']);
         Route::post('solve-exam/{id}',[TestYourselfExamsController::class,'solveExam']);
         Route::get('all-classes-with-lessons',[TestYourselfExamsController::class,'allClassesWithLessons']);
+
+    });
+
+
+
+    //start live exam
+    Route::group(['prefix' => 'live-exam','middleware' => 'jwt'], function (){
+        Route::get('all-of-questions/{id}',[LiveExamController::class,'allOfQuestions']);
+        Route::post('add-exam-by-student/{id}',[LiveExamController::class,'addLiveExamByStudent']);
+        Route::get('all-of-live-exams',[LiveExamController::class,'allOfLiveExams']);
+        Route::get('heroes/{id}',[LiveExamController::class,'allOfExamHeroes']);
+        Route::get('result/{id}',[LiveExamController::class,'resultOfLiveExam']);
 
     });
 
