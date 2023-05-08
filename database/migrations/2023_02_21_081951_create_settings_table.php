@@ -17,6 +17,13 @@ class CreateSettingsTable extends Migration
             $table->increments('id');
             $table->text('facebook_link');
             $table->text('youtube_link');
+            $table->text('twitter_link');
+            $table->text('instagram_link');
+            $table->text('website_link');
+            $table->json('share_ar');
+            $table->json('share_en');
+            $table->enum('lang',['not_active', 'active'])->default('not_active');
+            $table->enum('videos_resource_active',['not_active', 'active'])->default('not_active');
             $table->timestamps();
         });
     }
@@ -30,4 +37,11 @@ class CreateSettingsTable extends Migration
     {
         Schema::dropIfExists('settings');
     }
+
+    protected $casts = [
+
+        'share_ar' => 'json',
+        'share_en' => 'json',
+
+    ];
 }
