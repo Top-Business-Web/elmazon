@@ -181,20 +181,19 @@ class Payment extends Controller
     }
 
 
-    public function payment(Request $request){
+    public function payWithFawry(Request $request){
         $user = auth()->guard('user-api');
-        $payment = new PaymobPayment();
+        $payment = new FawryPayment();
         $response = $payment
-            ->setUserFirstName( "$user->name")
-            ->setUserId($user->id)
-            ->setUserLastName("$user->name")
-            ->setUserEmail($user->email)
-            ->setUserPhone("$user->phone")
-            ->setAmount(25)
+            ->setUserFirstName('odss')
+            ->setUserLastName('ddd')
+            ->setUserEmail('dddd@c.com')
+            ->setUserPhone('01016830875')
+            ->setAmount(550)
             ->pay();
 
-//        return $response;
-        return self::returnResponseDataApi(['payment_url' => $response['redirect_url']],"تم استلام لينك الدفع بنجاح ",200);
+        return $response;
+//        return self::returnResponseDataApi(['payment_url' => $response['redirect_url']],"تم استلام لينك الدفع بنجاح ",200);
 //        return $response['html'];
         //output
         //[
