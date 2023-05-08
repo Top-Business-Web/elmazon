@@ -374,7 +374,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 return self::returnResponseDataApi(null, "لا يوجد اي امتحان ورقي لك لالغائه", 404);
             }
 
-
         } catch (\Exception $exception) {
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
