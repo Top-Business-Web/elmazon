@@ -19,6 +19,7 @@ class VideoBasicResource extends JsonResource
             'id' => $this->id,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'time' => $this->time,
+            'size' => 1000,
             'background_color' => $this->background_color,
             'video_link' => asset('videos_basics/videos/'. $this->video_link),
             'created_at' => $this->created_at->format('Y-m-d'),

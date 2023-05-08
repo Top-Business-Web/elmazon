@@ -23,6 +23,9 @@ class AllExamNewResource extends JsonResource
             'answer_video_file' => $this->answer_video_file != null ? asset('all_exams/videos_answers/'. $this->answer_video_file) : null,
             'num_of_question' => $this->exam_type == 'online' ? $this->questions->count() : $this->pdf_num_questions,
             'total_time' => $this->quize_minute,
+            'exam_pdf_size' => 1000,
+            'answer_pdf_size' => 900,
+            'answer_video_size' => 500,
 
         ];
     }

@@ -20,6 +20,7 @@ class VideoPartNewResource extends JsonResource
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'link' =>  asset('videos/'. $this->link),
             'time' => $this->video_time,
+            'size' => 1000,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
 

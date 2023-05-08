@@ -29,6 +29,7 @@ class VideoResourceResource extends JsonResource
             'image' => asset('videos_resources/images/'.$this->image),
             'time' => $this->time ?? 0,
             'path_file' => $path,
+            'size' => 1000,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
         ];
