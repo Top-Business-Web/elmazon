@@ -24,7 +24,6 @@ class HomeAllClasses extends JsonResource
             'status' => OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('subject_class_id','=',$this->id)->count() > 0 ? 'opened' : 'lock',
             'title' => lang() == 'ar' ? $this->title_ar : $this->title_en,
             'num_of_lessons' => $this->lessons->count(),
-
         ];
     }
 }

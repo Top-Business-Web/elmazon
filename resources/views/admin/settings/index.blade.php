@@ -61,10 +61,12 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for=""> تفعيل اللغة الاجنبية :</label>
-                                    <select name="is_lang" class="form-control">
-                                        <option value="1" {{ $settings->is_lang == '1' ? 'selected' : '' }}>تفعيل
+                                    <select name="lang" class="form-control">
+                                        <option value="active" {{ $settings->is_lang == 'active' ? 'selected' : '' }}>تفعيل
                                         </option>
-                                        <option value="0" {{ $settings->is_lang == '0' ? 'selected' : '' }}> عدم تفعيل
+                                        <option value="not_active"
+                                            {{ $settings->is_lang == 'not_active' ? 'selected' : '' }}>
+                                            عدم تفعيل
                                         </option>
                                     </select>
                                 </div>
@@ -77,11 +79,48 @@
                                         <option value="active"
                                             {{ $settings->videos_resource_active == 'active' ? 'selected' : '' }}>تفعيل
                                         </option>
-                                        <option value="un_active"
-                                            {{ $settings->videos_resource_active == 'un_active' ? 'selected' : '' }}> عدم
+                                        <option value="not_active"
+                                            {{ $settings->videos_resource_active == 'not_active' ? 'selected' : '' }}> عدم
                                             تفعيل</option>
                                     </select>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <label class="control-label">عبارات دعوة الاصدقاء</label>
+                                    <div class="form-group itemItems">
+                                        {{-- @dd($share) --}}
+                                        @foreach ($settings->share_ar as $share)
+                                            <input type="text" name="share_ar[]" class="form-control InputItemExtra"
+                                                value="{{ $share }}">
+                                            <br>
+                                        @endforeach
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <button type="button" class=" mt-5 btn btn-primary MoreItem">المزيد</button>
+                                    <button type="button" class=" mt-5 btn btn-danger delItem">حذف</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <label class="control-label">Friends invitation phrases</label>
+                                    <div class="form-group itemItems1">
+                                        @foreach ($settings->share_en as $share)
+                                            {{-- @dd($share) --}}
+                                            <input type="text" name="share_en[]" class="form-control InputItemExtra1"
+                                                value="{{ $share }}">
+                                            <br>
+                                        @endforeach
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <button type="button" class=" mt-5 btn btn-primary MoreItem1">المزيد</button>
+                                    <button type="button" class=" mt-5 btn btn-danger delItem1">حذف</button>
+                                </div>
+                                <span class="badge Issue1 badge-danger"></span>
                             </div>
                         </div>
                         <div>
@@ -96,5 +135,60 @@
     @include('admin.layouts_admin.myAjaxHelper')
     <script>
         editScript();
+
+        $(document).on('click', '.delItem', function() {
+            var Item = $('.InputItemExtra').last();
+            if (Item.val() == '') {
+                Item.fadeOut();
+                Item.remove();
+                $('.Issue').removeClass('badge-danger').addClass('badge-success');
+                $('.Issue').html('The element deleted');
+                setTimeout(function() {
+                    $('.Issue').html('');
+                }, 3000)
+            } else {
+                $('.Issue').html('The element must be empty');
+                setTimeout(function() {
+                    $('.Issue').html('');
+                }, 3000)
+
+            }
+        })
+
+        $(document).on('click', '.MoreItem', function() {
+            var Item = $('.InputItemExtra').last();
+            if (Item.val() !== '') {
+                $('.itemItems').append(
+                    '<input type="text" name="share_ar[]" class="form-control InputItemExtra mt-3">')
+            }
+        })
+
+
+        $(document).on('click', '.delItem1', function() {
+            var Item = $('.InputItemExtra1').last();
+            if (Item.val() == '') {
+                Item.fadeOut();
+                Item.remove();
+                $('.Issue1').removeClass('badge-danger').addClass('badge-success');
+                $('.Issue1').html('The element deleted');
+                setTimeout(function() {
+                    $('.Issue1').html('');
+                }, 3000)
+            } else {
+                $('.Issue1').html('The element must be empty');
+                setTimeout(function() {
+                    $('.Issue').html('');
+                }, 3000)
+
+            }
+        })
+
+        $(document).on('click', '.MoreItem1', function() {
+            var Item = $('.InputItemExtra1').last();
+            if (Item.val() !== '') {
+                $('.itemItems1').append(
+                    '<input type="text" name="share_en[]" class="form-control InputItemExtra1 mt-3">')
+            }
+        })
     </script>
 @endsection

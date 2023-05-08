@@ -20,6 +20,7 @@ interface AuthRepositoryInterface{
 
 
     public function paper_sheet_exam(Request $request, $id);
+    public function latestPaperExamDelete(): JsonResponse;
     public function paper_sheet_exam_show(): JsonResponse;
     public function updateProfile(Request $request): JsonResponse;
 
@@ -33,4 +34,5 @@ interface AuthRepositoryInterface{
     public function add_notification(Request $request): JsonResponse;
     public function user_add_screenshot(): JsonResponse;
     public function logout(Request $request): JsonResponse;
+    public function paperSheetExamForStudentDetails(): JsonResponse;
 }

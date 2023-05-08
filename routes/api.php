@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\Instruction\InstructionController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\LessonDetails\LessonDetailsController;
 use App\Http\Controllers\Api\LifeExam\LifeExamController;
+use App\Http\Controllers\Api\LiveExam\LiveExamController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
 use App\Http\Controllers\Api\AllExamsUsersDegreeController;
 use App\Http\Controllers\Api\Notes\NoteController;
@@ -55,6 +56,8 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('add-device-token',[AuthController::class,'add_device_token']);
         Route::post('papel-sheet-exam/user/{id}',[AuthController::class,'paper_sheet_exam']);
         Route::get('papel-sheet-exam/show',[AuthController::class,'paper_sheet_exam_show']);
+        Route::get('paper-sheet-exam/register-with-student-check-before',[AuthController::class,'paperSheetExamForStudentDetails']);
+        Route::delete('paper-sheet-exam/latest-paper-exam-delete',[AuthController::class,'latestPaperExamDelete']);
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
         Route::get('home-page/all-classes',[AuthController::class,'allClasses']);
@@ -218,8 +221,23 @@ Route::group(['middleware' => 'lang'], function (){
     });
 
 
+
+    //start live exam
+    Route::group(['prefix' => 'live-exam','middleware' => 'jwt'], function (){
+        Route::get('all-of-questions/{id}',[LiveExamController::class,'allOfQuestions']);
+        Route::post('add-exam-by-student/{id}',[LiveExamController::class,'addLiveExamByStudent']);
+        Route::get('all-of-live-exams',[LiveExamController::class,'allOfLiveExams']);
+        Route::get('heroes/{id}',[LiveExamController::class,'allOfExamHeroes']);
+        Route::get('result/{id}',[LiveExamController::class,'resultOfLiveExam']);
+
+    });
+
+
 });
 
-    Route::post('/payments/pay',[Payment::class,'pay']);
-    Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
-    Route::get('/checkout',[Payment::class,'checkout']);
+
+        Route::post('/payments/pay',[Payment::class,'pay']);
+        Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
+        Route::get('/checkout',[Payment::class,'checkout']);
+       // Route::get('/payment/{}',[Payment::class,'payment']);
+

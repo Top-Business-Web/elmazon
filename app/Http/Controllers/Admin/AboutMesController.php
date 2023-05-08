@@ -14,7 +14,7 @@ class AboutMesController extends Controller
     // Index Start
     public function index()
     {
-        $about_me = AboutMe::all();
+        $about_me = AboutMe::find(1);
         return view('admin.about_mes.index', compact('about_me'));
     }
     // Index End

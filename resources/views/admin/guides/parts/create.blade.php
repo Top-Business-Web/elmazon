@@ -33,7 +33,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="head">لون الخلفية</label>
-                    <input type="color" class="form-control" name="color"
+                    <input type="background_color" class="form-control" name="background_color"
                            value="">
                 </div>
             </div>

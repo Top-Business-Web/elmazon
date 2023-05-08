@@ -94,8 +94,8 @@
                 name: 'id'
             },
             {
-                data: 'color',
-                name: 'color'
+                data: 'background_color',
+                name: 'background_color'
             },
             {
                 data: 'title_ar',
