@@ -20,6 +20,7 @@ interface AuthRepositoryInterface{
 
 
     public function paper_sheet_exam(Request $request, $id);
+    public function latestPaperExamDelete(): JsonResponse;
     public function paper_sheet_exam_show(): JsonResponse;
     public function updateProfile(Request $request): JsonResponse;
 

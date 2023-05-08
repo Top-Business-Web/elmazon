@@ -184,7 +184,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                 ->where(fn(Builder $builder) => $builder->whereNull('user_id')
-                ->orWhere('user_id', '=', auth()->guard('user-api')->id()))
+                    ->orWhere('user_id', '=', auth()->guard('user-api')->id()))
                 ->latest()
                 ->get();
 
@@ -337,24 +337,50 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
                                     return self::returnResponseDataApiWithMultipleIndexes($data, "تم تسجيل بياناتك في الامتحان", 200);
 
-                                     } else {
+                                } else {
 
-                                       return self::returnResponseDataApi(null, "يوجد خطاء ما اثناء تسجيل بيانات الامتحان الورقي", 500);
-                                  }
+                                    return self::returnResponseDataApi(null, "يوجد خطاء ما اثناء تسجيل بيانات الامتحان الورقي", 500);
+                                }
 
-                              } else {
+                            } else {
 
                                 return self::returnResponseDataApi(null, "!لقد تعديت اخر موعد لتسجيل الامتحان", 412);
-                          }
-                      }
-                  }
+                            }
+                        }
+                    }
 
-             }
-          }else {
-            return self::returnResponseDataApi(null, "تم امتلاء القاعات لهذا الامتحان برجاء التواصل مع السيكرتاريه", 411);
-      }
-   }
-}
+                }
+            } else {
+                return self::returnResponseDataApi(null, "تم امتلاء القاعات لهذا الامتحان برجاء التواصل مع السيكرتاريه", 411);
+            }
+        }
+    }
+
+
+    public function latestPaperExamDelete(): JsonResponse
+    {
+        try {
+
+            $paperSheetExamUser = PapelSheetExamUser::query()->latest()
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->first();
+
+            if($paperSheetExamUser){
+
+                $paperSheetExamUser->delete();
+                return self::returnResponseDataApi(null, "تم الغاء الامتحان الورقي بنجاح", 200);
+            }else{
+
+                return self::returnResponseDataApi(null, "لا يوجد اي امتحان ورقي لك لالغائه", 404);
+            }
+
+
+        } catch (\Exception $exception) {
+
+            return self::returnResponseDataApi(null, $exception->getMessage(), 500);
+        }
+
+    }
 
 
     public function paperSheetExamForStudentDetails(): JsonResponse
