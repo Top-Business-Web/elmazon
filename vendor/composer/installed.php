@@ -3,8 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-
-        'reference' => '5498a824aae1f09371cf32321d83f576773215b3',
+        'reference' => '99c7ae832b7588d96d02c36815f1ab0962d71979',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -35,6 +34,15 @@
             'reference' => 'add86b6a84786f17054b260ca067a8b697fc9d71',
             'type' => 'library',
             'install_path' => __DIR__ . '/../buglinjo/laravel-webp',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'clue/stream-filter' => array(
+            'pretty_version' => 'v1.6.0',
+            'version' => '1.6.0.0',
+            'reference' => 'd6169430c7731d8509da7aecd0af756a5747b78e',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../clue/stream-filter',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -434,9 +442,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-
-            'reference' => '5498a824aae1f09371cf32321d83f576773215b3',
-
+            'reference' => '99c7ae832b7588d96d02c36815f1ab0962d71979',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -577,6 +583,15 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
+        'moneyphp/money' => array(
+            'pretty_version' => 'v4.1.1',
+            'version' => '4.1.1.0',
+            'reference' => '9682220995ffd396843be5b4ee1e5f2c2d6ecee2',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../moneyphp/money',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'monolog/monolog' => array(
             'pretty_version' => '2.9.1',
             'version' => '2.9.1.0',
@@ -673,6 +688,24 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
+        'omnipay/common' => array(
+            'pretty_version' => 'v3.2.0',
+            'version' => '3.2.0.0',
+            'reference' => 'e278ff00676c05cd0f4aaaf6189a226f26ae056e',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../omnipay/common',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'omnipay/omnipay' => array(
+            'pretty_version' => 'v3.2.1',
+            'version' => '3.2.1.0',
+            'reference' => '38f66a0cc043ed51d6edf7956d6439a2f263501f',
+            'type' => 'metapackage',
+            'install_path' => NULL,
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'opis/closure' => array(
             'pretty_version' => '3.6.3',
             'version' => '3.6.3.0',
@@ -733,6 +766,80 @@
             'reference' => '19a6f8402747cc99350e1f340a851fa47fda4929',
             'type' => 'library',
             'install_path' => __DIR__ . '/../php-flasher/flasher-laravel',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'php-http/async-client-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '*',
+                1 => '1.0',
+            ),
+        ),
+        'php-http/client-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '*',
+                1 => '1.0',
+            ),
+        ),
+        'php-http/discovery' => array(
+            'pretty_version' => '1.18.0',
+            'version' => '1.18.0.0',
+            'reference' => '29ae6fae35f4116bbfe4c8b96ccc3f687eb07cd9',
+            'type' => 'composer-plugin',
+            'install_path' => __DIR__ . '/../php-http/discovery',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'php-http/guzzle7-adapter' => array(
+            'pretty_version' => '1.0.0',
+            'version' => '1.0.0.0',
+            'reference' => 'fb075a71dbfa4847cf0c2938c4e5a9c478ef8b01',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../php-http/guzzle7-adapter',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'php-http/httplug' => array(
+            'pretty_version' => '2.4.0',
+            'version' => '2.4.0.0',
+            'reference' => '625ad742c360c8ac580fcc647a1541d29e257f67',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../php-http/httplug',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'php-http/message' => array(
+            'pretty_version' => '1.14.0',
+            'version' => '1.14.0.0',
+            'reference' => '2ccee04a28c3d98eb3f2b85ce1e2fcff70c0e63b',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../php-http/message',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'php-http/message-factory' => array(
+            'pretty_version' => '1.1.0',
+            'version' => '1.1.0.0',
+            'reference' => '4d8778e1c7d405cbb471574821c1ff5b68cc8f57',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../php-http/message-factory',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'php-http/message-factory-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '1.0',
+            ),
+        ),
+        'php-http/promise' => array(
+            'pretty_version' => '1.1.0',
+            'version' => '1.1.0.0',
+            'reference' => '4c4c1f9b7289a2ec57cde7f1e9762a5789506f88',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../php-http/promise',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -860,6 +967,7 @@
             'dev_requirement' => false,
             'provided' => array(
                 0 => '1.0',
+                1 => '*',
             ),
         ),
         'psr/http-factory' => array(
@@ -875,6 +983,7 @@
             'dev_requirement' => false,
             'provided' => array(
                 0 => '1.0',
+                1 => '*',
             ),
         ),
         'psr/http-message' => array(
@@ -890,6 +999,7 @@
             'dev_requirement' => false,
             'provided' => array(
                 0 => '1.0',
+                1 => '*',
             ),
         ),
         'psr/log' => array(

@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 //    return view('admin.index');
 //});
 Route::get('/payments/verify/{payment?}',[Payment::class,'payment_verify'])->name('payment-verify');
+Route::get('/payments/payWithFawry',[Payment::class,'payWithFawry'])->name('payment-verify');
 
 
 //get all terms by season_id
