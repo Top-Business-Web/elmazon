@@ -52,6 +52,12 @@ class AuthController extends Controller{
         return $this->authRepositoryInterface->paper_sheet_exam($request,$id);
     }
 
+    public function latestPaperExamDelete(): JsonResponse{
+
+        return $this->authRepositoryInterface->latestPaperExamDelete();
+
+    }
+
     public function paper_sheet_exam_show(): JsonResponse
     {
 
