@@ -180,11 +180,13 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         try {
 
-            $allNotification = Notification::whereHas('term', function ($term) {
-                $term->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id);
-            })->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->where(function ($q) {
-                $q->whereNull('user_id')->orWhere('user_id', '=', auth()->guard('user-api')->id());
-            })->latest()->get();
+            $allNotification = Notification::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+                ->where('season_id', '=', auth('user-api')->user()->season_id))
+                ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+                ->where(fn(Builder $builder) => $builder->whereNull('user_id')
+                ->orWhere('user_id', '=', auth()->guard('user-api')->id()))
+                ->latest()
+                ->get();
 
             return self::returnResponseDataApi(NotificationResource::collection($allNotification), "تم ارسال اشعارات المستخدم بنجاح", 200);
 
@@ -349,7 +351,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
              }
           }else {
-                return self::returnResponseDataApi(null, "تم امتلاء القاعات لهذا الامتحان برجاء التواصل مع السيكرتاريه", 411);
+            return self::returnResponseDataApi(null, "تم امتلاء القاعات لهذا الامتحان برجاء التواصل مع السيكرتاريه", 411);
       }
    }
 }
@@ -724,8 +726,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             return self::returnResponseDataApi(null, "تم حظر ذلك المستخدم لانه تخطي 3 مرات من اخذ الاسكرين", 201);
 
         }
-
-
     }
 
     public function logout(Request $request): JsonResponse
