@@ -32,7 +32,6 @@ class AboutMe extends Model
         'experience_en' =>'json',
         'skills_ar' =>'json',
         'skills_en' =>'json',
+        'social' =>'json',
         ];
-
 }
-

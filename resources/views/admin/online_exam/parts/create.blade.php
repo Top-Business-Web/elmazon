@@ -104,6 +104,20 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-4">
+                    <label for="name_ar" class="form-control-label"> نصيحة</label>
+                    <input type="text" class="form-control" name="title_result" style="text-align: center" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="name_ar" class="form-control-label">صورة النصيحة</label>
+                    <input type="file" class="form-control" name="image_result" style="text-align: center" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="name_en" class="form-control-label"> وصف النصيحة</label>
+                    <textarea class="form-control" name="description_result" rows="4" required></textarea>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <label for="lesson" class="form-control-label typeName">الدرس</label>
                     <Select name="examable_id" class="form-control type_ajax_choose" required="required">
