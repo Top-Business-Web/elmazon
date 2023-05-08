@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTerm;
 use App\Models\Term;
 use App\Models\Season;
+use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class TermController extends Controller
 {
+    use AdminLogs;
     // Index Start
     public function index(request $request)
     {
@@ -71,6 +73,7 @@ class TermController extends Controller
     {
         $inputs = $request->all();
         if (Term::create($inputs)) {
+            $this->adminLog('تم اضافة ترم جديدة');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -91,9 +94,11 @@ class TermController extends Controller
             if($term->status == 'active')
             {
                 toastr('تم التفعيل');
+                $this->adminLog('تم تفعيل ترم');
 
             } else {
                 toastr('تم ألغاء التفعيل');
+                $this->adminLog('تم ألغاء ترم');
             }
             return redirect()->back();
 
@@ -119,6 +124,7 @@ class TermController extends Controller
     public function update(Request $request, Term $term)
     {
         if ($term->update($request->all())) {
+            $this->adminLog('تم تحديث ترم');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -133,6 +139,7 @@ class TermController extends Controller
     {
         $terms = Term::where('id', $request->id)->firstOrFail();
         $terms->delete();
+        $this->adminLog('تم حذف ترم');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

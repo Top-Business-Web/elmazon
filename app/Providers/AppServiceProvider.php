@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\AdminLog;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength('191');
+        View::share('logs',AdminLog::where('seen',0)->latest('created_at')->take(4)->get());
+        View::share('logsCount',AdminLog::where('seen',0)->get()->count());
     }
 }

@@ -11,13 +11,14 @@ use App\Models\Term;
 use App\Models\Season;
 use App\Models\Report;
 use App\Models\VideoResource;
+use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class VideoResourceController extends Controller
 {
-    use PhotoTrait;
+    use PhotoTrait , AdminLogs;
 
     // Index Start
     public function index(request $request)
@@ -224,7 +225,7 @@ class VideoResourceController extends Controller
         $reply->teacher_id = auth('admin')->user()->id;
 
         $reply->save();
-
+        $this->adminLog('تم اضافة رد علي تعليق');
         return response()->json(['status' => 200]);
     }
 
@@ -233,6 +234,7 @@ class VideoResourceController extends Controller
     {
         $comment_reply = CommentReplay::where('id', $request->id)->firstOrFail();
         $comment_reply->delete();
+        $this->adminLog('تم حذف رد علي تعليق');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
@@ -285,6 +287,7 @@ class VideoResourceController extends Controller
             $inputs['pdf_file'] = $this->saveImage($request->pdf_file, 'videos_resources/pdf', 'photo');
         }
         if (VideoResource::create($inputs)) {
+            $this->adminLog('تم اضافة فيديو مراجعة');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -348,6 +351,7 @@ class VideoResourceController extends Controller
         ]);
 
         if ($success) {
+            $this->adminLog('تم تعديل فيديو مراجعة');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -362,6 +366,7 @@ class VideoResourceController extends Controller
     {
         $terms = VideoResource::where('id', $request->id)->firstOrFail();
         $terms->delete();
+        $this->adminLog('تم حذف فيديو مراجعة');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

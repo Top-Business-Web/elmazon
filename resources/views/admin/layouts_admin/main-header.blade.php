@@ -76,18 +76,20 @@
                 <div class="dropdown d-md-flex message mr-2">
                     <a class="nav-link icon text-center" data-toggle="dropdown">
                         <i class="fe fe-bell"></i>
-                        <span class="nav-unread badge  badge-success badgetext">6</span>
+                        <span class="nav-unread badge  badge-success badgetext">{{ $logsCount }}</span>
                     </a>
                     <div style="width: 25rem !important" class="dropdown-menu dropdown-menu-left dropdown-menu-arrow">
-                        <a href="#" class="dropdown-item d-flex mt-2 pb-3">
+                        @foreach($logs as $log)
+                        <a href="{{ route('adminLog') }}" class="dropdown-item d-flex mt-2 pb-3">
                             <div>
-                                <strong class="text-muted"></strong>
-                                <p class="mb-0 fs-13 text-muted ">dasda</p>
+                                <strong class="text-muted">{{ $log->admin->name }}</strong>
+                                <p class="mb-0 fs-13 text-muted">{{ $log->action }}</p>
                                 <div class="small text-muted">2020</div>
                             </div>
                         </a>
+                        @endforeach
                         <div class="dropdown-divider"></div>
-                        <a href="" class="dropdown-item text-center">See all Messages</a>
+                        <a href="{{ route('adminLog') }}" class="dropdown-item text-center">See all Messages</a>
                     </div>
                 </div>
                 <!-- MESSAGE-BOX -->

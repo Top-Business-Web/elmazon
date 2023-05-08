@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestSlider;
 use App\Models\Slider;
+use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class SliderController extends Controller
 {
-    use PhotoTrait;
+    use PhotoTrait , AdminLogs;
     // Index Start
     public function index(request $request)
     {
@@ -66,6 +67,7 @@ class SliderController extends Controller
 
         }
         if(Slider::create($inputs)) {
+            $this->adminLog('تم اضافة سلايدر جديد');
             return response()->json(['status' => 200]);
         }
         else
@@ -113,6 +115,7 @@ class SliderController extends Controller
 
 
         if($slider->update($inputs)){
+            $this->adminLog('تم تحديث سلايدر ');
             return response()->json(['status' => 200]);
         }
         else
@@ -129,6 +132,7 @@ class SliderController extends Controller
     {
         $sliders = Slider::where('id', $request->id)->firstOrFail();
         $sliders->delete();
+        $this->adminLog('تم حذف سلايدر');
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

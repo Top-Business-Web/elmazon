@@ -6,12 +6,14 @@ use App\Exports\MotivationalExport;
 use App\Http\Controllers\Controller;
 use App\Imports\MotivationalImport;
 use App\Models\MotivationalSentences;
+use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class MotivationalSentencesController extends Controller
 {
+    use AdminLogs;
 
     // Index START
     public function index(request $request)
@@ -52,6 +54,7 @@ class MotivationalSentencesController extends Controller
     {
         $inputs = $request->all();
         if (MotivationalSentences::create($inputs)) {
+            $this->adminLog('تم اضافة جمل تحفيزية');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -73,6 +76,7 @@ class MotivationalSentencesController extends Controller
     public function update(Request $request, MotivationalSentences $motivational)
     {
         if ($motivational->update($request->all())) {
+            $this->adminLog('تم تحديث جمل تحفيزية');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -87,6 +91,7 @@ class MotivationalSentencesController extends Controller
     {
         $sentences = MotivationalSentences::where('id', $request->id)->firstOrFail();
         $sentences->delete();
+        $this->adminLog('تم حذف جمل تحفيزية');
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
@@ -94,15 +99,18 @@ class MotivationalSentencesController extends Controller
     public function motivationalExport()
     {
         return Excel::download(new MotivationalExport, 'Motivational.xlsx');
+
     } // end motivationalExport
 
     public function motivationalImport(Request $request)
     {
         $import = Excel::import(new MotivationalImport(), $request->exelFile);
-        if ($import)
+        if ($import) {
+            $this->adminLog('تم استيراد جمل تحفيزية');
             return response()->json(['status' => 200]);
-        else
+        } else {
             return response()->json(['status' => 500]);
+        }
     } // end question import
 
 }

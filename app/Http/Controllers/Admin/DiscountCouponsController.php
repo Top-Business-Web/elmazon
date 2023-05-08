@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\DiscountCoupon;
+use App\Traits\AdminLogs;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Stripe\Discount;
 
 class DiscountCouponsController extends Controller
 {
+    use AdminLogs;
     // Index Start
     public function index(request $request)
     {
@@ -75,7 +77,9 @@ class DiscountCouponsController extends Controller
     public function store(Request $request)
     {
         $inputs = $request->all();
+
         if (DiscountCoupon::create($inputs)) {
+            $this->adminLog('تم اضافة كود خصم جديد');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -98,7 +102,9 @@ class DiscountCouponsController extends Controller
 
     public function update(Request $request, DiscountCoupon $discount_coupon)
     {
+
         if ($discount_coupon->update($request->all())) {
+            $this->adminLog('تم تحديث كود خصم');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -113,6 +119,7 @@ class DiscountCouponsController extends Controller
     {
         $discount_coupon = DiscountCoupon::where('id', $request->id)->firstOrFail();
         $discount_coupon->delete();
+        $this->adminLog('تم حذف كود خصم');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 }

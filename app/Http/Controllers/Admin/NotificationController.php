@@ -8,6 +8,7 @@ use App\Http\Requests\StoreNotification;
 use App\Models\Notification;
 use App\Models\Season;
 use App\Models\Term;
+use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -15,7 +16,7 @@ use App\Models\User;
 
 class NotificationController extends Controller
 {
-    use FirebaseNotification, PhotoTrait;
+    use FirebaseNotification, PhotoTrait, AdminLogs;
 
     // Index Start
     public function index(request $request)
@@ -90,6 +91,7 @@ class NotificationController extends Controller
         $this->sendFirebaseNotification(['title' => $request->title, 'body' => $request->body, 'term_id' => $inputs['term_id']], $inputs['season_id'], $user->id, $inputs['image']);
 
         if (Notification::create($inputs)) {
+            $this->adminLog('تم اضافة اشعار');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -121,6 +123,7 @@ class NotificationController extends Controller
         }
 
         if ($notification->update($inputs)) {
+            $this->adminLog('تم تحديث اشعار');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -135,6 +138,7 @@ class NotificationController extends Controller
     {
         $notifications = Notification::where('id', $request->id)->firstOrFail();
         $notifications->delete();
+        $this->adminLog('تم حذف اشعار');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

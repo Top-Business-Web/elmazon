@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestMonthlyPlan;
 use App\Models\MonthlyPlan;
+use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class MonthlyPlanController extends Controller
 {
+    use AdminLogs;
 
     // Index START
 
@@ -53,6 +55,7 @@ class MonthlyPlanController extends Controller
     {
         $inputs = $request->all();
         if (MonthlyPlan::create($inputs)) {
+            $this->adminLog('تم اضافة خطة شهرية');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -74,6 +77,7 @@ class MonthlyPlanController extends Controller
     public function update(RequestMonthlyPlan $request, MonthlyPlan $monthlyPlan)
     {
         if ($monthlyPlan->update($request->all())) {
+            $this->adminLog('تم تحديث خطة شهرية');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -88,6 +92,7 @@ class MonthlyPlanController extends Controller
     {
         $monthlyPlan = MonthlyPlan::where('id', $request->id)->firstOrFail();
         $monthlyPlan->delete();
+        $this->adminLog('تم حذف خطة شهرية');
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

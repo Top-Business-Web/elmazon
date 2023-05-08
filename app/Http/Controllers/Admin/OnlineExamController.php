@@ -12,6 +12,7 @@ use App\Models\OnlineExamUser;
 use App\Models\SubjectClass;
 use App\Models\TextExamUser;
 use App\Models\VideoParts;
+use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -24,6 +25,7 @@ use App\Models\User;
 
 class OnlineExamController extends Controller
 {
+    use AdminLogs;
     // Index START
 
     public function index(request $request)
@@ -270,6 +272,7 @@ class OnlineExamController extends Controller
         } // end if
 
         if ($online_exam->create($inputs)) {
+            $this->adminLog('تم اضافة امتحان اونلاين');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -327,6 +330,7 @@ class OnlineExamController extends Controller
 
 
         if ($onlineExam->update($inputs)) {
+            $this->adminLog('تم تحديث امتحان اونلاين');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -342,6 +346,7 @@ class OnlineExamController extends Controller
     {
         $onlineExam = OnlineExam::where('id', $request->id)->firstOrFail();
         $onlineExam->delete();
+        $this->adminLog('تم حذف امتحان اونلاين');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }// Delete End
 

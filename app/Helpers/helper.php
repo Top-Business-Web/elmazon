@@ -1,5 +1,6 @@
 <?php
 //check current language
+use App\Models\AdminLog;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -41,8 +42,8 @@ if (!function_exists('file_size')) {
         $fileSize = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
         $httpResponseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        if($httpResponseCode == 200){
-            return (int) round($fileSize/1024);
+        if ($httpResponseCode == 200) {
+            return (int)round($fileSize / 1024);
         }
         return 0;
     }
@@ -61,17 +62,17 @@ if (!function_exists('video_duration')) {
     }
 }
 
+
 if (!function_exists('saveFile')) {
 
-    function saveFile($folder,$file): string
+    function saveFile($folder, $file): string
     {
         $path = public_path($folder);
-        $file_name = rand('1', '9999') . time()  . '.' . $file->getClientOriginalExtension();
+        $file_name = rand('1', '9999') . time() . '.' . $file->getClientOriginalExtension();
         $file->move($path, $file_name);
         return $file_name;
     }
 }
-
 
 if (!function_exists('getFromToFromMonthsList')) {
 

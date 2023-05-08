@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLesson;
 use App\Models\lesson;
 use App\Models\SubjectClass;
+use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\Season;
 
 class LessonController extends Controller
 {
+    use AdminLogs;
     // Index Start
     public function index(Request $request)
     {
@@ -118,7 +120,9 @@ class LessonController extends Controller
     public function store(Request $request)
     {
         $inputs = $request->all();
+
         if (Lesson::create($inputs)) {
+            $this->adminLog('تم اضافة درس');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -143,7 +147,9 @@ class LessonController extends Controller
 
     public function update(Lesson $lesson, Request $request)
     {
+
         if ($lesson->update($request->all())) {
+            $this->adminLog('تم تحديث درس');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -158,6 +164,7 @@ class LessonController extends Controller
     {
         $lessons = Lesson::where('id', $request->id)->firstOrFail();
         $lessons->delete();
+        $this->adminLog('تم حذف درس');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

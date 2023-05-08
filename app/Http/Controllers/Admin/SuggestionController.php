@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Suggestion;
+use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class SuggestionController extends Controller
 {
+    use AdminLogs;
     // Index START
 
     public function index(request $request)
@@ -81,6 +83,7 @@ class SuggestionController extends Controller
     {
         $suggestion = Suggestion::where('id', $request->id)->firstOrFail();
         $suggestion->delete();
+        $this->adminLog('تم حذف اقتراح');
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

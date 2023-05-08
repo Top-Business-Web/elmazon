@@ -13,6 +13,7 @@ use App\Models\Lesson;
 use App\Models\VideoRate;
 use App\Models\Report;
 use App\Models\VideoTotalView;
+use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,9 +23,7 @@ use Yajra\DataTables\DataTables;
 // fix
 class VideoPartController extends Controller
 {
-    use PhotoTrait;
-
-    use FirebaseNotification;
+    use FirebaseNotification , PhotoTrait , AdminLogs;
 
     // Index Start
     public function index(request $request)
@@ -162,6 +161,7 @@ class VideoPartController extends Controller
         $reply->teacher_id = auth('admin')->user()->id;
 
         $reply->save();
+        $this->adminLog('تم اضافة رد علي تعليق');
 
         return response()->json(['status' => 200]);
     }
@@ -206,6 +206,7 @@ class VideoPartController extends Controller
     {
         $comment_reply = CommentReplay::where('id', $request->id)->firstOrFail();
         $comment_reply->delete();
+        $this->adminLog('تم حذف رد علي تعليق');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
@@ -276,7 +277,7 @@ class VideoPartController extends Controller
                     'video_part_id' => $videoPart->id,
                 ]);
 //            $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
-
+                $this->adminLog('تم اضافة فيديو');
                 return response()->json(['status' => 200]);
             } else {
                 return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
@@ -341,6 +342,7 @@ class VideoPartController extends Controller
         $videoPart->lesson_id = $request->lesson_id;
 
         if ($videoPart->save()) {
+            $this->adminLog('تم تعديل فيديو');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
@@ -356,6 +358,7 @@ class VideoPartController extends Controller
     {
         $videoParts = VideoParts::where('id', $request->id)->firstOrFail();
         $videoParts->delete();
+        $this->adminLog('تم حذف فيديو');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

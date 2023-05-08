@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestAds;
 use App\Models\Ads;
+use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdsController extends Controller
 {
-    use PhotoTrait;
+    use PhotoTrait , AdminLogs;
     // Index START
 
     public function index(request $request)
@@ -99,7 +100,9 @@ class AdsController extends Controller
             }
 
         }
+
         if(Ads::create($inputs)) {
+            $this->adminLog('تم اضافة اعلان');
             return response()->json(['status' => 200]);
         }
         else
@@ -144,8 +147,8 @@ class AdsController extends Controller
             }
         }
 
-
         if($ad->update($inputs)){
+            $this->adminLog('تم تحديث اعلان');
             return response()->json(['status' => 200]);
         }
         else
@@ -162,6 +165,7 @@ class AdsController extends Controller
     {
         $sliders = Ads::where('id', $request->id)->firstOrFail();
         $sliders->delete();
+        $this->adminLog('تم حذف اعلان');
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

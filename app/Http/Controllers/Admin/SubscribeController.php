@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestSubscribe;
 use App\Models\Season;
+use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\Subscribe;
@@ -12,6 +13,7 @@ use App\Models\Term;
 
 class SubscribeController extends Controller
 {
+    use AdminLogs;
     // Index START
     public function index(request $request)
     {
@@ -63,6 +65,7 @@ class SubscribeController extends Controller
         }
 
         if (Subscribe::create($inputs)) {
+            $this->adminLog('تم اضافة باقة جديدة');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -98,6 +101,7 @@ class SubscribeController extends Controller
         }
 
         if ($subscribe->update($inputs)) {
+            $this->adminLog('تم تحديث باقة ');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -112,6 +116,7 @@ class SubscribeController extends Controller
     {
         $subject_class = Subscribe::where('id', $request->id)->firstOrFail();
         $subject_class->delete();
+        $this->adminLog('تم حذف باقة ');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

@@ -340,6 +340,16 @@
                 </a>
             </li>
         @endcan
+        @can('الادمن')
+            <li class="slide">
+                <a class="side-menu__item" href="{{ route('adminLog') }}">
+                    <i class="fa fa-user-secret side-menu__icon"></i>
+                    <span class="side-menu__label">
+                        سجلات الادمن
+                    </span>
+                </a>
+            </li>
+        @endcan
         @can('الادوار و الصلاحيات')
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('roles.index') }}">

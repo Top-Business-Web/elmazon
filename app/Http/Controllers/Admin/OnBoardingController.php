@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\OnBoarding;
+use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class OnBoardingController extends Controller
 {
-    use PhotoTrait;
+    use PhotoTrait , AdminLogs;
     // Index Start
     public function index(request $request)
     {
@@ -51,6 +52,7 @@ class OnBoardingController extends Controller
             $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/onBoarding/image', 'photo');
         }
         if(OnBoarding::create($inputs)) {
+            $this->adminLog('تم اضافة شاشات افتتاحيه');
             return response()->json(['status' => 200]);
         }
         else
@@ -85,6 +87,7 @@ class OnBoardingController extends Controller
         }
 
         if($onBoarding->update($inputs)){
+            $this->adminLog('تم تحديث شاشات افتتاحيه');
             return response()->json(['status' => 200]);
         }
         else
@@ -101,6 +104,7 @@ class OnBoardingController extends Controller
     {
         $on_boarding = OnBoarding::where('id', $request->id)->firstOrFail();
         $on_boarding->delete();
+        $this->adminLog('تم حذف شاشات افتتاحيه');
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

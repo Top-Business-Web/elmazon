@@ -12,6 +12,7 @@ use App\Models\Lesson;
 use App\Models\LifeExam;
 use App\Models\Question;
 use App\Models\SubjectClass;
+use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use App\Models\Season;
@@ -22,7 +23,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 class QuestionController extends Controller
 {
-    use PhotoTrait;
+    use PhotoTrait , AdminLogs;
 
     // Index Start
     public function index(request $request)
@@ -171,6 +172,7 @@ class QuestionController extends Controller
 
 
         if ($question->create($inputs)) {
+            $this->adminLog('تم اضافة سؤال جديد');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -260,6 +262,7 @@ class QuestionController extends Controller
 
 
         if ($question->update($inputs)) {
+            $this->adminLog('تم تحديث سؤال ');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -275,6 +278,7 @@ class QuestionController extends Controller
     {
         $questions = Question::where('id', $request->id)->firstOrFail();
         $questions->delete();
+        $this->adminLog('تم حذف سؤال');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
@@ -288,8 +292,10 @@ class QuestionController extends Controller
     public function questionImport(Request $request)
     {
         $import = Excel::import(new QuestionImport, $request->exelFile);
-        if ($import)
+        if ($import){
+            $this->adminLog('تم استيراد سؤال');
             return response()->json(['status' => 200]);
+        }
         else
             return response()->json(['status' => 500]);
     } // end question import

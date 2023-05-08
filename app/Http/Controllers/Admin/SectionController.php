@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\Section;
@@ -10,6 +11,7 @@ use App\Http\Requests\RequestSection;
 
 class SectionController extends Controller
 {
+    use AdminLogs;
     // Index Start
     public function index(request $request)
     {
@@ -48,6 +50,7 @@ class SectionController extends Controller
     {
         $inputs = $request->all();
         if (Section::create($inputs)) {
+            $this->adminLog('تم اضافة قاعة جديدة');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -70,6 +73,7 @@ class SectionController extends Controller
     public function update(Request $request, Section $section)
     {
         if ($section->update($request->all())) {
+            $this->adminLog('تم تحديث قاعة ');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -84,6 +88,7 @@ class SectionController extends Controller
     {
         $sections = Section::where('id', $request->id)->firstOrFail();
         $sections->delete();
+        $this->adminLog('تم حذف قاعة ');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 

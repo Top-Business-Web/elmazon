@@ -7,6 +7,7 @@ use App\Http\Requests\RequestGuide;
 use App\Models\Guide;
 use App\Models\Lesson;
 use App\Models\SubjectClass;
+use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Claims\Subject;
@@ -17,7 +18,7 @@ use App\Models\Season;
 class GuideController extends Controller
 {
 
-    use PhotoTrait;
+    use PhotoTrait , AdminLogs;
 
     // Index Start
     public function index(request $request)
@@ -124,6 +125,7 @@ class GuideController extends Controller
         }
 
         if (Guide::create($inputs)) {
+            $this->adminLog('تم اضافة مصادر ومراجع');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -157,6 +159,7 @@ class GuideController extends Controller
         }
 
         if ($guide->update($inputs)) {
+            $this->adminLog('تم تحديث مصادر ومراجع');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
@@ -172,6 +175,7 @@ class GuideController extends Controller
     {
         $guide = Guide::where('id', $request->id)->firstOrFail();
         $guide->delete();
+        $this->adminLog('تم حذف مصادر ومراجع');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
