@@ -59,7 +59,9 @@ class InstructionController extends Controller{
                     $user->degree = $theHighestDegree->full_degree;
                     $user->per = ($theHighestDegree->full_degree / $theHighestDegree->online_exam->degree) * 100;
                     $user->time_exam = $theHighestDegree->created_at->diffForHumans();
-                    $time = Timer::query()->where('online_exam_id','=',$exam->id)->where('user_id','=',$user->id)->latest()->first();
+                    $time = Timer::query()->where('online_exam_id','=',$exam->id)
+                        ->where('user_id','=',$user->id)->latest()->first();
+
                     $user->time = $time->timer;
                     $data['user'] = $user;
 

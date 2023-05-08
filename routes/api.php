@@ -226,18 +226,16 @@ Route::group(['middleware' => 'lang'], function (){
     Route::group(['prefix' => 'live-exam','middleware' => 'jwt'], function (){
         Route::get('all-of-questions/{id}',[LiveExamController::class,'allOfQuestions']);
         Route::post('add-exam-by-student/{id}',[LiveExamController::class,'addLiveExamByStudent']);
-        Route::get('all-of-live-exams',[LiveExamController::class,'allOfLiveExams']);
         Route::get('heroes/{id}',[LiveExamController::class,'allOfExamHeroes']);
         Route::get('result/{id}',[LiveExamController::class,'resultOfLiveExam']);
-
     });
 
+        Route::get('live-exam-all',[LiveExamController::class,'allOfLiveExamsStudent'])->middleware('jwt');
 
 });
 
-
-        Route::post('/payments/pay',[Payment::class,'pay']);
-        Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
-        Route::get('/checkout',[Payment::class,'checkout']);
-       // Route::get('/payment/{}',[Payment::class,'payment']);
+    Route::post('/payments/pay',[Payment::class,'pay']);
+    Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
+    Route::get('/checkout',[Payment::class,'checkout']);
+   // Route::get('/payment/{}',[Payment::class,'payment']);
 
