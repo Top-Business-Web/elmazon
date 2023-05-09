@@ -1,4 +1,4 @@
-    @extends('admin.layouts_admin.master')
+@extends('admin.layouts_admin.master')
 
     @section('title')
         الطلاب
