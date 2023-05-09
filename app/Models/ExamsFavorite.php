@@ -13,6 +13,7 @@ class ExamsFavorite extends Model
        'user_id',
        'online_exam_id',
        'all_exam_id',
+        'life_exam_id',
        'action'
     ];
 }
