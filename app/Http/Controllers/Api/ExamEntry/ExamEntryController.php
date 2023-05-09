@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\ExamEntry;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AllExamHeroesNewResource;
 use App\Http\Resources\AllExamResource;
+use App\Http\Resources\LiveExamHeroesResource;
 use App\Http\Resources\OnlineExamQuestionResource;
 use App\Http\Resources\OnlineExamResource;
 use App\Http\Resources\QuestionResource;
@@ -12,13 +14,16 @@ use App\Models\Answer;
 use App\Models\Degree;
 use App\Models\ExamDegreeDepends;
 use App\Models\ExamInstruction;
+use App\Models\LifeExam;
 use App\Models\OnlineExam;
 use App\Models\OnlineExamQuestion;
 use App\Models\OnlineExamUser;
 use App\Models\Question;
 use App\Models\TextExamUser;
 use App\Models\Timer;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -559,5 +564,85 @@ class ExamEntryController extends Controller
         }catch (\Exception $exception) {
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
+    }
+
+
+    public function examHeroesAll(): JsonResponse{
+
+
+        try {
+
+
+            $users = User::with(['exam_degree_depends' => fn(HasMany $q)=>
+            $q->where('exam_depends','=','yes')])
+                ->whereHas('exam_degree_depends', fn(Builder $builder)=>
+                $builder->where('exam_depends','=','yes'))
+                ->whereHas('season', fn(Builder $builder) =>
+                $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+                ->take(10)
+                ->withSum(
+                    ['exam_degree_depends' => function($query) {
+                        $query->where('exam_depends','=','yes');
+                    }], 'full_degree')
+                ->orderBy('exam_degree_depends_sum_full_degree','desc')
+                ->get();
+
+//            return $users;
+
+
+            $userCountExam = ExamDegreeDepends::query()
+                ->where('user_id','=', auth()->guard('user-api')->id())
+                ->where('exam_depends','=', 'yes')
+                ->count();
+
+            if($userCountExam > 0){
+
+                $usersIds = $users->pluck('id')->toArray();
+
+                foreach ($users as $user) {
+                    $user->ordered = (array_search($user->id,$usersIds)) + 1;
+                }
+
+
+                $allOfStudentsEnterExams = User::with(['exam_degree_depends' => fn(HasMany $q)=>
+                $q->where('exam_depends','=','yes')])
+                    ->whereHas('exam_degree_depends', fn(Builder $builder)=>
+                    $builder->where('exam_depends','=','yes'))
+                    ->whereHas('season', fn(Builder $builder) =>
+                    $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+                    ->withSum(
+                        ['exam_degree_depends' => function($query) {
+                            $query->where('exam_depends','=','yes');
+                        }], 'full_degree')
+                    ->orderBy('exam_degree_depends_sum_full_degree','desc')
+                    ->pluck('id')
+                    ->toArray();
+
+//             return $allOfStudentsEnterExams;
+
+
+                $checkStudentAuth = Auth::guard('user-api')->user();
+                $studentAuth = new AllExamHeroesNewResource($checkStudentAuth);
+                $studentAuth->ordered = (array_search($checkStudentAuth->id,$allOfStudentsEnterExams)) + 1;
+                $data['MyOrdered'] = $studentAuth;
+                $data['AllExamHeroes'] = AllExamHeroesNewResource::collection($users->take(10));
+
+                return self::returnResponseDataApi($data, "تم الحصول علي ابطال الامتحانات  بنجاح", 200);
+
+
+            }else{
+
+                return self::returnResponseDataApi(null, "يجب دخول امتحان واحد علي الاقل لاظهار ابطال المنصه", 403);
+
+            }
+
+
+
+        } catch (\Exception $exception) {
+
+            return self::returnResponseDataApi(null, $exception->getMessage(), 500);
+        }
+
+
     }
 }

@@ -232,6 +232,10 @@ Route::group(['middleware' => 'lang'], function (){
 
         Route::get('live-exam-all',[LiveExamController::class,'allOfLiveExamsStudent'])->middleware('jwt');
 
+        //exam heroes
+        Route::get('exam-heroes/all',[ExamEntryController::class,'examHeroesAll'])->middleware('jwt');
+
+
 });
 
     Route::post('/payments/pay',[Payment::class,'pay']);
