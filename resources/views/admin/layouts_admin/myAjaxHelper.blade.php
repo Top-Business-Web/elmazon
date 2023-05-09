@@ -123,8 +123,16 @@
         })
     }
 
-
-
+    // show Unvailable User Modal
+    function showUserModal(routeOfShow) {
+        $(document).on('click', '.userUnvilable', function() {
+            $('#modal-body-unvilable').html(loader)
+            $('#showUserUnvilable').modal('show')
+            setTimeout(function() {
+                $('#modal-body-unvilable').load(routeOfShow)
+            }, 250)
+        });
+    }
 
     // show Add Modal
     function showAddModal(routeOfShow) {

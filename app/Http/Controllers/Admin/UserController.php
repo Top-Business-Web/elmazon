@@ -2,42 +2,45 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreUser;
-use App\Http\Requests\UpdateUser;
-use App\Models\AllExam;
-use App\Models\Country;
-use App\Models\ExamDegreeDepends;
-use App\Models\OnlineExam;
-use App\Models\OnlineExamUser;
-use App\Models\OpenLesson;
-use App\Models\PapelSheetExam;
-use App\Models\PapelSheetExamDegree;
-use App\Models\PapelSheetExamUser;
-use App\Models\Season;
-use App\Models\Subscribe;
+use DateTime;
+use Carbon\Carbon;
 use App\Models\Term;
 use App\Models\User;
-use App\Models\UserSubscribe;
-use App\Models\VideoParts;
-use App\Models\VideoOpened;
+use App\Models\Season;
+use App\Models\AllExam;
+use App\Models\Country;
+use App\Models\Subscribe;
 use App\Traits\AdminLogs;
+use App\Models\OnlineExam;
+use App\Models\OpenLesson;
+use App\Models\VideoParts;
 use App\Traits\PhotoTrait;
+use App\Models\VideoOpened;
+use Illuminate\Http\Request;
+use App\Models\UserSubscribe;
+use App\Models\OnlineExamUser;
+use App\Models\PapelSheetExam;
+use App\Http\Requests\StoreUser;
+use Yajra\DataTables\DataTables;
+use App\Http\Requests\UpdateUser;
+use App\Models\ExamDegreeDepends;
+use App\Models\PapelSheetExamUser;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\PapelSheetExamDegree;
 use Buglinjo\LaravelWebp\Exceptions\CwebpShellExecutionFailed;
 use Buglinjo\LaravelWebp\Exceptions\DriverIsNotSupportedException;
 use Buglinjo\LaravelWebp\Exceptions\ImageMimeNotSupportedException;
-use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
-    use PhotoTrait , AdminLogs;
+    use PhotoTrait, AdminLogs;
 
     // Index Start
     public function index(request $request)
     {
         if ($request->ajax()) {
-            $users = User::get();
+            $users = User::select('*');
             return Datatables::of($users)
                 ->addColumn('action', function ($users) {
                     return '
@@ -50,6 +53,15 @@ class UserController extends Controller
                             <a href="' . route('printReport', $users->id) . '" data-id="' . $users->id . '" class="btn btn-pill btn-info-light reportPrint"> تقرير الطالب <i class="fa fa-file-excel"></i></a>
                        ';
                 })
+                // ->filter(function ($q) use ($request) {
+                //     if ($request->has('type')) {
+
+                //         return
+
+                //         // return UserSubscribe::whereIn('student_id', '=', $users)
+                //         //  ->where('month','<=', Carbon::now()->subMonth())->latest()->first();
+                //     }
+                // })
                 ->escapeColumns([])
                 ->make(true);
         } else {
@@ -123,10 +135,22 @@ class UserController extends Controller
         } else {
             return response()->json(['status' => 405]);
         }
-
     }
 
     // Edit End
+
+    // User Unvilable start
+
+    public function userUnvilable()
+    {
+        $unavailableUsers = UserSubscribe::where('updated_at', '<=', Carbon::now()->subMonth())
+            ->groupBy('student_id')
+            ->select('student_id', DB::raw('MAX(id) as id'), DB::raw('MAX(updated_at) as updated_at'))
+            ->get();
+        return view('admin.users.parts.user_unvilable', compact('unavailableUsers'));
+    }
+
+    // User Unvilable end
 
     // Subscripition View Start
 
@@ -177,14 +201,14 @@ class UserController extends Controller
         $price_in_center = Subscribe::whereIn('month', $month)
             ->where('season_id', $user->season_id)
             ->sum('price_out_center');
-//            ->get(['price_in_center', 'price_out_center']);
-//        dd($price_out_center,$price_in_center);
+        //            ->get(['price_in_center', 'price_out_center']);
+        //        dd($price_out_center,$price_in_center);
 
         $output = '';
-//        foreach ($price_out_center as $p) {
+        //        foreach ($price_out_center as $p) {
         $output .= '<option value="' . $price_in_center . '">' . ' السعر داخل السنتر ' . $price_in_center . '</option>';
         $output .= '<option value="' . $price_out_center . '">' . ' السعر خارج السنتر ' . $price_out_center . '</option>';
-//        }
+        //        }
 
         return $output;
     }
@@ -194,13 +218,13 @@ class UserController extends Controller
     public function printReport($id)
     {
         $user = User::findOrFail($id);
-        $term = Term::where('season_id',$user->season_id)
-            ->where('status','=','active')->first();
-        $lessonCount = OpenLesson::where('user_id',$user->id)
-            ->where('lesson_id','!=',null)->count('lesson_id');
+        $term = Term::where('season_id', $user->season_id)
+            ->where('status', '=', 'active')->first();
+        $lessonCount = OpenLesson::where('user_id', $user->id)
+            ->where('lesson_id', '!=', null)->count('lesson_id');
 
-        $classCount = OpenLesson::where('user_id',$user->id)
-            ->where('subject_class_id','!=',null)->count('subject_class_id');
+        $classCount = OpenLesson::where('user_id', $user->id)
+            ->where('subject_class_id', '!=', null)->count('subject_class_id');
 
         $videos = VideoOpened::where('user_id', $user->id)->with('video')->get();
         $video_ids = VideoOpened::where('user_id', $user->id)->pluck('video_part_id')->toArray();
@@ -221,7 +245,6 @@ class UserController extends Controller
             'classCount',
 
         ]));
-
     }
 
     // Destroy Start

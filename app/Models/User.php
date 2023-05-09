@@ -98,6 +98,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(UserSubscribe::class);
+    }
+
     public function papel_sheet_exam_degree(): HasOne{
 
         return $this->hasOne(PapelSheetExamDegree::class,'user_id','id');

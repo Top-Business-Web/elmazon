@@ -165,9 +165,10 @@
                                             {{-- @dd($about_me->qualifications_ar) --}}
                                             @if (isset($about_me->qualifications_ar))
                                                 @foreach ($about_me->qualifications_ar as $qualification_ar)
-                                                    <li> العنوان : {{ $qualification_ar['title'] }}</li>
-                                                    <li> الوصف : {{ $qualification_ar['desc'] }}</li>
-                                                    <li> السنة: {{ $qualification_ar['year'] }}</li>
+                                                    {{-- @dd($qualification_ar) --}}
+                                                    <li> العنوان : {{ $qualification_ar }}</li>
+                                                    <li> الوصف : {{ $qualification_ar }}</li>
+                                                    <li> السنة: {{ $qualification_ar }}</li>
                                                     <hr>
                                                 @endforeach
                                             @endif
@@ -186,9 +187,9 @@
                                             {{-- @dd($about_me->qualifications_ar) --}}
                                             @if (isset($about_me->qualifications_en))
                                                 @foreach ($about_me->qualifications_en as $qualification_en)
-                                                    <li> Title : {{ $qualification_en['title'] }}</li>
-                                                    <li> Desc : {{ $qualification_en['desc'] }}</li>
-                                                    <li> Year : {{ $qualification_en['year'] }}</li>
+                                                    <li> Title : {{ $qualification_en }}</li>
+                                                    <li> Desc : {{ $qualification_en }}</li>
+                                                    <li> Year : {{ $qualification_en }}</li>
                                                     <hr>
                                                 @endforeach
                                             @endif
@@ -223,8 +224,7 @@
                                                             <div class="col-md-6">
                                                                 <label for="">العنوان بالعربي</label>
                                                                 <input type="text" class="form-control"
-                                                                    value="{{ $qualification['title'] }}"
-                                                                    name="teacher_name_ar">
+                                                                    value="{{ $qualification }}" name="teacher_name_ar">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -233,8 +233,7 @@
                                                             <div class="col-md-6">
                                                                 <label for=""> السنة</label>
                                                                 <input type="text" class="form-control"
-                                                                    value="{{ $qualification['year'] }}"
-                                                                    name="qualification['year']">
+                                                                    value="{{ $qualification }}" name="qualification">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -242,7 +241,7 @@
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <label for="">وصف بالعربي</label>
-                                                                <textarea class="form-control" rows="8" name="department_ar">{{ $qualification['desc'] }}</textarea>
+                                                                <textarea class="form-control" rows="8" name="department_ar">{{ $qualification }}</textarea>
                                                             </div>
                                                         </div>
                                                 @endforeach
@@ -252,8 +251,7 @@
                                                             <div class="col-md-6">
                                                                 <label for="">Title</label>
                                                                 <input type="text" class="form-control"
-                                                                    value="{{ $qualification['title'] }}"
-                                                                    name="teacher_name_ar">
+                                                                    value="{{ $qualification }}" name="teacher_name_ar">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -262,8 +260,7 @@
                                                             <div class="col-md-6">
                                                                 <label for=""> Year</label>
                                                                 <input type="text" class="form-control"
-                                                                    value="{{ $qualification['year'] }}"
-                                                                    name="qualification['year']">
+                                                                    value="{{ $qualification }}" name="qualification">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -271,7 +268,7 @@
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <label for=""> Desc</label>
-                                                                <textarea class="form-control" rows="8" name="department_ar">{{ $qualification['desc'] }}</textarea>
+                                                                <textarea class="form-control" rows="8" name="department_ar">{{ $qualification }}</textarea>
                                                             </div>
                                                         </div>
                                                 @endforeach
@@ -294,7 +291,6 @@
         </div>
     </div>
 
-
     <div class="col-md-12">
         <div id="tab-3" class="tab-content">
             <div class="card">
@@ -307,11 +303,13 @@
                             <table class="table row table-borderless">
                                 <tbody class="col-lg-12 col-xl-4 p-0">
                                     <tr>
-                                        @if (isset($about_me->experience_ar))
-                                            @foreach ($about_me->experience_ar as $experience_ar)
-                                                <li> العنوان : {{ $experience_ar['title'] }}</li>
-                                                <li> الوصف : {{ $experience_ar['desc'] }}</li>
-                                                <li> السنة: {{ $experience_ar['year'] }}</li>
+                                        {{-- @dd($about_me->qualifications_ar) --}}
+                                        @if (isset($about_me->qualifications_ar))
+                                            @foreach ($about_me->qualifications_ar as $qualification_ar)
+                                                {{-- @dd($qualification_ar) --}}
+                                                <li> العنوان : {{ $qualification_ar }}</li>
+                                                <li> الوصف : {{ $qualification_ar }}</li>
+                                                <li> السنة: {{ $qualification_ar }}</li>
                                                 <hr>
                                             @endforeach
                                         @endif
@@ -320,119 +318,118 @@
                             </table>
                         </div>
                         <div class="media-heading">
-                            <h5><strong>Experience</strong></h5>
+                            <h5><strong>Qualifications</strong></h5>
                         </div>
                         <div class="table-responsive ">
                             <table class="table row table-borderless">
                                 <tbody class="col-lg-12 col-xl-4 p-0">
                                     <tr>
-                                        @if (isset($about_me->experience_en))
-                                            @foreach ($about_me->experience_en as $experience_en)
-                                                <li> Title : {{ $experience_en['title'] }}</li>
-                                                <li> Desc : {{ $experience_en['desc'] }}</li>
-                                                <li> Year: {{ $experience_en['year'] }}</li>
+                                    <tr>
+                                        {{-- @dd($about_me->qualifications_ar) --}}
+                                        @if (isset($about_me->qualifications_en))
+                                            @foreach ($about_me->qualifications_en as $qualification_en)
+                                                <li> Title : {{ $qualification_en }}</li>
+                                                <li> Desc : {{ $qualification_en }}</li>
+                                                <li> Year : {{ $qualification_en }}</li>
                                                 <hr>
                                             @endforeach
                                         @endif
                                     </tr>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <button class="btn btn-purple-gradient" data-toggle="modal" data-target="#editAbout">تعديل
+                        <button class="btn btn-purple-gradient" data-toggle="modal"
+                            data-target="#editQualifications">تعديل
                         </button>
+
+                        <!-- Modal Information -->
+                        <div class="modal fade bd-example-modal-lg" id="editQualifications" data-backdrop="static"
+                            tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="example-Modal3">تعديل الخبرة</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" id="modal-body">
+                                        <form action="{{ route('aboutMes.update', $about_me->id) }}">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $about_me->id }}">
+                                            @foreach ($about_me->qualifications_ar as $qualification)
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="">العنوان بالعربي</label>
+                                                            <input type="text" class="form-control"
+                                                                value="{{ $qualification }}" name="teacher_name_ar">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for=""> السنة</label>
+                                                            <input type="text" class="form-control"
+                                                                value="{{ $qualification }}" name="qualification">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="">وصف بالعربي</label>
+                                                            <textarea class="form-control" rows="8" name="department_ar">{{ $qualification }}</textarea>
+                                                        </div>
+                                                    </div>
+                                            @endforeach
+                                            @foreach ($about_me->qualifications_en as $qualification)
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="">Title</label>
+                                                            <input type="text" class="form-control"
+                                                                value="{{ $qualification }}" name="teacher_name_ar">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for=""> Year</label>
+                                                            <input type="text" class="form-control"
+                                                                value="{{ $qualification }}" name="qualification">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for=""> Desc</label>
+                                                            <textarea class="form-control" rows="8" name="department_ar">{{ $qualification }}</textarea>
+                                                        </div>
+                                                    </div>
+                                            @endforeach
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">اغلاق</button>
+                                                <button type="submit" class="btn btn-success"
+                                                    id="updateButton">تحديث</button>
+                                            </div>
+                                    </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <div class="col-md-12">
-        <div id="tab-4" class="tab-content">
-            <div class="card">
-                <div class="card-body">
-                    <div id="profile-log-switch">
-                        <div class="media-heading">
-                            <h5><strong>مهارات</strong></h5>
-                        </div>
-                        <div class="table-responsive ">
-                            <table class="table row table-borderless">
-                                <tbody class="col-lg-12 col-xl-4 p-0">
-                                    <tr>
-                                        @if (isset($about_me->skills_ar))
-                                            @foreach ($about_me->skills_ar as $skill_ar)
-                                                <li> العنوان : {{ $skill_ar['title'] }}</li>
-                                                <li> الوصف : {{ $skill_ar['desc'] }}</li>
-                                                <li> السنة: {{ $skill_ar['year'] }}</li>
-                                                <hr>
-                                            @endforeach
-                                        @endif
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="media-heading">
-                            <h5><strong>Skills</strong></h5>
-                        </div>
-                        <div class="table-responsive ">
-                            <table class="table row table-borderless">
-                                <tbody class="col-lg-12 col-xl-4 p-0">
-                                    <tr>
-                                        @if (isset($about_me->skills_en))
-                                            @foreach ($about_me->skills_en as $skill_en)
-                                                <li> Title : {{ $skill_en['title'] }}</li>
-                                                <li> Desc : {{ $skill_en['desc'] }}</li>
-                                                <li> Year: {{ $skill_en['year'] }}</li>
-                                                <hr>
-                                            @endforeach
-                                        @endif
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <button class="btn btn-purple-gradient" data-toggle="modal"
-                            data-target="#editAbout">تعديل</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-12">
-        <div id="tab-5" class="tab-content">
-            <div class="card">
-                <div class="card-body">
-                    <div id="profile-log-switch">
-                        <div class="media-heading">
-                            <h5><strong>مواقع التواصل</strong></h5>
-                        </div>
-                        <div class="table-responsive ">
-                            <table class="table row table-borderless">
-                                <tbody class="col-lg-12 col-xl-4 p-0">
-                                    <tr>
-                                        {{-- @dd($about_me->social) --}}
-                                        @if (isset($about_me->social))
-                                            @foreach ($about_me->social as $socials)
-                                                <li> فيسبوك : {{ $socials['facebook'] }}</li>
-                                                <li> انستجرام : {{ $socials['instagram'] }}</li>
-                                                <li> يوتيوب: {{ $socials['youtube'] }}</li>
-                                                <li> لينكد ان: {{ $socials['linkedin'] }}</li>
-                                                <hr>
-                                            @endforeach
-                                        @endif
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <button class="btn btn-purple-gradient" data-toggle="modal"
-                            data-target="#editAbout">تعديل</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    </div>
     @include('admin.layouts_admin.myAjaxHelper')
     <script>
         editScript();

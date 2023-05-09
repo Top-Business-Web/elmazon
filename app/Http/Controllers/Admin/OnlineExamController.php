@@ -264,7 +264,7 @@ class OnlineExamController extends Controller
         } // end save file
 
         if ($request->has('image_result')) {
-            $inputs['image_result'] = saveFile('online_exams/image_result', $request->image_result);
+            $inputs['image_result'] = saveFile('assets/uploads/online_exams/image_result', $request->image_result);
         } // end save file
 
         if ($request->examable_type == 'App\Models\Lesson') {
@@ -328,7 +328,7 @@ class OnlineExamController extends Controller
             if (file_exists($onlineExam->image_result)) {
                 unlink($onlineExam->image_result);
             }
-            $inputs['image_result'] = saveFile('online_exams/image_result', $request->image_result);
+            $inputs['image_result'] = saveFile('assets/uploads/online_exams/image_result', $request->image_result);
         } // end save file
 
         if ($request->examable_type == 'App\Models\Lesson') {

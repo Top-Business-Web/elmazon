@@ -85,6 +85,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::get('print/{id}', [UserController::class, 'printReport'])->name('printReport');
         Route::get('priceMonth', [UserController::class, 'priceMonth'])->name('priceMonth');
         Route::get('subscrView/{user}/view', [UserController::class, 'subscrView'])->name('subscrView');
+        Route::get('userUnvilable', [UserController::class, 'userUnvilable'])->name('userUnvilable');
     });
 
     #### Season ####
