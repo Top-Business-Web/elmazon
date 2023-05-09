@@ -38,6 +38,7 @@ use App\Http\Controllers\Admin\VideoResourceController;
 use App\Http\Controllers\Admin\VideoBasicPdfController;
 use App\Http\Controllers\Admin\AboutMesController;
 use App\Http\Controllers\Admin\DiscountCouponsController;
+use App\Http\Controllers\Admin\ExamSchedulesController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
@@ -322,6 +323,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Discount Coupons ####
     Route::resource('discount_coupons', DiscountCouponsController::class);
+
+    #### Exam Schedules ####
+    Route::resource('exam_schedules', ExamSchedulesController::class);
 
     #### roles ####
     Route::group(['middleware' => 'permission:الادوار و الصلاحيات'], function () {
