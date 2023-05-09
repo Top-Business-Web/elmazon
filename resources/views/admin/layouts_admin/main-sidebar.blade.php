@@ -51,6 +51,15 @@
         @endcan
 
         @can('الوحدات')
+            <li class="slide">
+                <a class="side-menu__item" href="{{ route('exam_schedules.index') }}">
+                    <i class="fa fa-book-reader side-menu__icon"></i>
+                    <span class="side-menu__label">جداول اامتحانات</span>
+                </a>
+            </li>
+        @endcan
+
+        @can('الوحدات')
             <!-- DISCOUNT -->
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('discount_coupons.index') }}">
