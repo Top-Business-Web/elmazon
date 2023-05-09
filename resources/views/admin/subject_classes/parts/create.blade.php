@@ -74,21 +74,27 @@
 </div>
 <script>
     $('.dropify').dropify()
-    $(".season_choose").click(function () {
-        var element = document.getElementById("type");
-        var value = $(element).find("option:selected").val();
-        var season = $('.seasonChoose').find("option:selected").val();
 
-        $.ajax({
-            url: '{{ route('examble_type') }}',
-            data: {
-                'id': value,
-                'season_id': season,
-            },
-            success: function (data) {
-                $('.type_ajax_choose').html(data);
+    $(document).ready(function () {
+        $('select[name="season_id"]').on('change', function () {
+            var season_id = $(this).val();
+            if (season_id) {
+                $.ajax({
+                    url: "{{ URL::to('terms/season/') }}/" + season_id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        $('select[name="term_id"]').empty();
+                        $.each(data, function (key, value) {
+                            $('select[name="term_id"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
+                    },
+                });
+            } else {
+                console.log('AJAX load did not work');
             }
-        })
-    })
+        });
+    });
+
 </script>
 

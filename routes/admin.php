@@ -214,7 +214,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::resource('papelSheetExam', PapelSheetExamController::class);
         Route::get('usersExamPapel/{id}', [PapelSheetExamController::class, 'usersExamPapel'])->name('usersExamPapel');
         Route::get('paperExamSheet/{id}', [PapelSheetExamController::class, 'paperExamSheet'])->name('paperExamSheet');
-        Route::post('paperExamSheetStore/{id}', [PapelSheetExamController::class, 'paperExamSheetStore'])->name('paperExamSheetStore');
+        Route::post('paperExamSheetStore', [PapelSheetExamController::class, 'paperExamSheetStore'])->name('paperExamSheetStore');
     });
 
     #### Phone Communications ####
