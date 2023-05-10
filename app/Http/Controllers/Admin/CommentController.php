@@ -30,14 +30,22 @@ class CommentController extends Controller
                     if ($comments->type == 'file') {
                         return '<img alt="image" onclick="window.open(this.src)" class="avatar avatar-md rounded-circle" src="' . asset('comments_upload_file/' . $comments->image) . '">';
                     } else {
-                        return 'No Image';
+                        return '____';
                     }
                 })
-                ->editColumn('video_part_id', function ($comments) {
-                    return $comments->video->name_ar;
-                })
+                // ->editColumn('video_part_id', function ($comments) {
+                //     return $comments->video->name_ar;
+                // })
                 ->editColumn('user_id', function ($comments) {
                     return $comments->user->name;
+                })
+                ->editColumn('type', function ($comments) {
+                    if($comments->type == 'text')
+                    return '<td>نص</td>';
+                    if($comments->type == 'image')
+                    return '<td>صورة</td>';
+                    else
+                    return '<td>فيديو</td>';
                 })
                 ->editColumn('audio', function ($comments) {
                     if ($comments->audio !== null) {
@@ -45,7 +53,14 @@ class CommentController extends Controller
                                 <source src="" type="audio/ogg">
                             </audio>';
                     } else {
-                        return 'No Audio';
+                        return '____';
+                    }
+                })
+                ->editColumn('comment', function ($comments) {
+                    if ($comments->comment !== null) {
+                        return '<td>'. $comments->comment .'</td>';
+                    } else {
+                        return '____';
                     }
                 })
                 ->escapeColumns([])
