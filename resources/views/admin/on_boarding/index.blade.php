@@ -53,7 +53,7 @@
                     </div>
                     <div class="modal-body">
                         <input id="delete_id" name="id" type="hidden">
-                        <p>هل أنت متأكد من عملية <الحذف></الحذف><span id="title" class="text-danger"></span></p>
+                        <p> هل أنت متأكد من عمليةالحذف <span id="title" class="text-danger"></span></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_delete_modal">

@@ -29,6 +29,27 @@ class SubscribeController extends Controller
                             </button>
                        ';
                 })
+                ->editColumn('term_id', function ($subscribes) {
+                    return '<td>'. $subscribes->term->name_ar .'</td>';
+                })
+                ->editColumn('season_id', function ($subscribes) {
+                    return '<td>'. $subscribes->season->name_ar .'</td>';
+                })
+                ->editColumn('free', function ($subscribes) {
+                    if($subscribes->free == 'yes')
+                    return '<td>نعم</td>';
+                    else
+                    return '<td>لا</td>';
+                })
+                ->editColumn('price_in_center', function ($subscribes) {
+                    return '<td><button class="btn btn-success">'. $subscribes->price_in_center .' EGB</button></td>';
+                })
+                ->editColumn('price_out_center', function ($subscribes) {
+                    return '<td><button class="btn btn-secondary">'. $subscribes->price_out_center .' EGB</button></td>';
+                })
+                ->editColumn('month', function ($subscribes) {
+                    return '<td><button class="btn btn-primary">'. date('F', mktime(0, 0, 0, $subscribes->month, 10)) .'</button></td>';
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCountry;
+use App\Models\City;
 use App\Models\Country;
 use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
@@ -29,6 +30,9 @@ class CountryController extends Controller
                        ';
                 })
                 ->escapeColumns([])
+                ->editColumn('city_id', function($countries) {
+                    return '<td>'. $countries->city->name_ar .'</td>';
+                })
                 ->make(true);
         } else {
             return view('admin.countries.index');
@@ -39,7 +43,8 @@ class CountryController extends Controller
     // Create Start
     public function create()
     {
-        return view('admin.countries.parts.create');
+        $data['cities'] = City::all();
+        return view('admin.countries.parts.create', compact('data'));
     }
     // Create End
 
@@ -63,8 +68,8 @@ class CountryController extends Controller
     // Edit Start
     public function edit(Country $country)
     {
-
-        return view('admin.countries.parts.edit', compact('country'));
+        $data['cities'] = City::all();
+        return view('admin.countries.parts.edit', compact('country', 'data'));
     }
     // Edit End
 

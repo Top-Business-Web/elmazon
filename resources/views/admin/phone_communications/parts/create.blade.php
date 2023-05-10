@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="phone" class="form-control-label">ألهاتف</label>
-                    <input type="number" class="form-control" min="11" name="phone">
+                    <input type="tel" class="form-control" name="phone" pattern="[0-9]{11}" required>
                 </div>
             </div>
             <div class="row">

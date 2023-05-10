@@ -23,13 +23,22 @@ class SliderController extends Controller
                     return '
                             <button type="button" data-id="' . $sliders->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
-                                    data-id="' . $sliders->id . '" data-title="' . $sliders->image . '">
+                                    data-id="' . $sliders->id . '" data-title="' . $sliders->link . '">
                                     <i class="fas fa-trash"></i>
                             </button>
                        ';
                 })
                 ->editColumn('file', function ($sliders) {
                     return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset($sliders->file) . '"/>';
+                })
+                ->editColumn('link', function ($sliders) {
+                    return '<td><a class="btn btn-success" href="'. $sliders->link .'">رابط الملف</a></td>';
+                })
+                ->editColumn('type', function ($sliders) {
+                    if($sliders->type == 'image')
+                    return '<td"><i class="fa fa-image"></i> صورة</td>';
+                    else
+                    return '<td><i class="fa fa-video"></i> فيديو</td>';
                 })
                 ->escapeColumns([])
                 ->make(true);
@@ -50,7 +59,7 @@ class SliderController extends Controller
 
     // Store Start
 
-    public function store(RequestSlider $request)
+    public function store(Request $request)
     {
         $inputs = $request->all();
         if($request->hasFile('file')){

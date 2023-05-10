@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\VideoBasicPdfController;
 use App\Http\Controllers\Admin\AboutMesController;
 use App\Http\Controllers\Admin\DiscountCouponsController;
 use App\Http\Controllers\Admin\ExamSchedulesController;
+use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
@@ -214,7 +215,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::resource('papelSheetExam', PapelSheetExamController::class);
         Route::get('usersExamPapel/{id}', [PapelSheetExamController::class, 'usersExamPapel'])->name('usersExamPapel');
         Route::get('paperExamSheet/{id}', [PapelSheetExamController::class, 'paperExamSheet'])->name('paperExamSheet');
-        Route::post('paperExamSheetStore/{id}', [PapelSheetExamController::class, 'paperExamSheetStore'])->name('paperExamSheetStore');
+        Route::post('paperExamSheetStore', [PapelSheetExamController::class, 'paperExamSheetStore'])->name('paperExamSheetStore');
     });
 
     #### Phone Communications ####
@@ -323,6 +324,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Discount Coupons ####
     Route::resource('discount_coupons', DiscountCouponsController::class);
+
+    #### City ####
+    Route::resource('city', CityController::class);
 
     #### Exam Schedules ####
     Route::resource('exam_schedules', ExamSchedulesController::class);

@@ -7,11 +7,24 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">{{ trans('admin.name_ar') }}</label>
-                    <input type="text" class="form-control" value="{{ $country->name_ar }}" name="name_ar">
+                    <input type="text" class="form-control" value="{{ $country->name_ar }}" name="name_ar" required>
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">{{ trans('admin.name_en') }}</label>
-                    <input type="text" class="form-control" value="{{ $country->name_en }}" name="name_en">
+                    <input type="text" class="form-control" value="{{ $country->name_en }}" name="name_en" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="city_id">مدينة</label>
+                    <Select name="city_id" class="form-control">
+                        <option selected disabled style="text-align: center">اختار الترم</option>
+                        @foreach ($data['cities'] as $city)
+                            <option value="{{ $city->id }}"
+                                    {{ $country->city_id == $city->id ? 'selected' : '' }} style="text-align: center">
+                                {{ $city->name_ar }}</option>
+                        @endforeach
+                    </Select>
                 </div>
             </div>
         </div>

@@ -81,16 +81,12 @@ class PapelSheetExamController extends Controller
 
     // Paper Exam Start
 
-    public function paperExamSheetStore(Request $request, PapelSheetExamDegree $papel_sheet_exam_degree)
+    public function paperExamSheetStore(Request $request)
     {
-        $inputs = $request->all();
-        if($papel_sheet_exam_degree->create($inputs)) {
-            toastr('تم الاضافة بنجاح');
-            return redirect('paperExamSheet');
-        }
-        else{
-            toastr('هناك خطأ ما');
-        }
+        $examSheetId = PapelSheetExamDegree::findOrFail($request->papel_sheet_exam_id);
+        dd($examSheetId);
+        $examSheetId->update(['degree' => $request->degree]);
+        return response()->json(['status' => 200, 'message' => 'تم اضافه الدرجه بنجاح']);
     }
 
     // Paper Exam End

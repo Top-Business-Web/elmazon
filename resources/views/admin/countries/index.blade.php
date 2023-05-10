@@ -28,7 +28,8 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">{{ trans('admin.name_en') }}</th>
+                                <th class="min-w-50px">الدولة</th>
+                                <th class="min-w-50px">مدينة</th>
                                 <th class="min-w-50px rounded-end">{{ trans('admin.actions') }}</th>
                             </tr>
                             </thead>
@@ -88,7 +89,8 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'name_en', name: 'name_en'},
+            {data: 'name_ar', name: 'name_ar'},
+            {data: 'city_id', name: 'city_id'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('countries.index')}}', columns);

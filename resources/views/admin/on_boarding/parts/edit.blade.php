@@ -1,5 +1,5 @@
 <div class="modal-body">
-    <form id="updateForm" class="updateForm" method="POST" action="{{ route('onBoarding.update', $slider->id) }}">
+    <form id="updateForm" class="updateForm" method="POST" action="{{ route('onBoarding.update', $onBoarding->id) }}">
         @csrf
         @method('PUT')
         <input type="hidden" value="{{ $onBoarding->id }}" name="id">
@@ -7,19 +7,19 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="type" class="form-control-label"> العنوان باللغة العربية</label>
-                    <input class="form-control" name="title_ar" value="{{$onBoarding->title_ar}}" />
+                    <input class="form-control" name="title_ar" value="{{$onBoarding->title_ar}}" required />
                 </div>
                 <div class="col-md-12">
                     <label for="type" class="form-control-label"> العنوان باللغة الانجليزية</label>
-                    <input class="form-control" name="title_en" value="{{$onBoarding->title_en}}" />
+                    <input class="form-control" name="title_en" value="{{$onBoarding->title_en}}" required />
                 </div>
                 <div class="col-md-12">
                     <label for="type" class="form-control-label">الوصف باللغة العربية</label>
-                    <input class="form-control" name="description_ar" value="{{$onBoarding->description_ar}}" />
+                    <input class="form-control" name="description_ar" value="{{$onBoarding->description_ar}}" required />
                 </div>
                 <div class="col-md-12">
                     <label for="type" class="form-control-label">الوصف باللغة الانجليزية</label>
-                    <input class="form-control" name="description_en" value="{{$onBoarding->description_en}}" />
+                    <input class="form-control" name="description_en" value="{{$onBoarding->description_en}}" required />
                 </div>
             </div>
             <div class="row">
