@@ -22,7 +22,7 @@ class SettingController extends Controller
     // Index End
 
     // Update Start
-    public function update(RequestSetting $request)
+    public function update(Request $request)
     {
         $settings = Setting::findOrFail($request->id);
 

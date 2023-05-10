@@ -27,6 +27,9 @@ class SectionController extends Controller
                             </button>
                        ';
                 })
+                ->editColumn('capacity', function($sections) {
+                    return '<td><button class="btn btn-primary">'. $sections->capacity .'</button></td>';
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {

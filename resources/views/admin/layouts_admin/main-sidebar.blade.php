@@ -282,10 +282,10 @@
 
         @can('ملفات ورقية')
             <li class="slide">
-                <a class="side-menu__item" href="{{ route('pdf.index') }}">
-                    <i class="fa fa-file-pdf side-menu__icon"></i>
+                <a class="side-menu__item" href="">
+                    <i class="fa fa-globe side-menu__icon"></i>
                     <span class="side-menu__label">
-                        ملفات ورقية
+                        المدن
                     </span>
                 </a>
             </li>
@@ -311,10 +311,10 @@
         @endcan
         @can('المدن')
             <li class="slide">
-                <a class="side-menu__item" href="{{ route('countries.index') }}">
+                <a class="side-menu__item" href="{{ route('city.index') }}">
                     <i class="fa fa-globe side-menu__icon"></i>
                     <span class="side-menu__label">
-                        المدن
+                        الدول
                     </span>
                 </a>
             </li>

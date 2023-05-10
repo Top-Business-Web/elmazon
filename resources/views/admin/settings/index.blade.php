@@ -25,14 +25,14 @@
                                 <div class="form-group">
                                     <label for="facebook">فيسبوك :</label>
                                     <input type="text" name="facebook_link" value="{{ $settings->facebook_link }}"
-                                        class="form-control" />
+                                        class="form-control" required />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">يوتيوب :</label>
                                     <input type="text" name="youtube_link" value="{{ $settings->youtube_link }}"
-                                        value="" class="form-control" />
+                                        value="" class="form-control" required />
                                 </div>
                             </div>
                         </div>
@@ -41,27 +41,27 @@
                                 <div class="form-group">
                                     <label for="twitter">تويتر :</label>
                                     <input type="text" name="twitter_link" value="{{ $settings->twitter_link }}"
-                                        class="form-control" />
+                                        class="form-control" required />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">انستجرام :</label>
                                     <input type="text" name="instagram_link" value="{{ $settings->instagram_link }}"
-                                        value="" class="form-control" />
+                                        value="" class="form-control" required />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">لينك الموقع :</label>
                                     <input type="text" name="website_link" value="{{ $settings->website_link }}"
-                                        value="" class="form-control" />
+                                        value="" class="form-control" required />
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for=""> تفعيل اللغة الاجنبية :</label>
-                                    <select name="lang" class="form-control">
+                                    <select name="lang" class="form-control" required>
                                         <option value="active" {{ $settings->is_lang == 'active' ? 'selected' : '' }}>تفعيل
                                         </option>
                                         <option value="not_active"
@@ -75,7 +75,7 @@
                                 <div class="form-group">
                                     <label for=""> تفعيل فيدوهات المراجع :</label>
 
-                                    <select name="videos_resource_active" class="form-control">
+                                    <select name="videos_resource_active" class="form-control" required>
                                         <option value="active"
                                             {{ $settings->videos_resource_active == 'active' ? 'selected' : '' }}>تفعيل
                                         </option>

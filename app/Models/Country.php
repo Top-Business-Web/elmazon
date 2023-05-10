@@ -9,7 +9,11 @@ class Country extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name_ar',
+        'name_en',
+        'city_id'
+    ];
 
     public function city(){
 

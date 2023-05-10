@@ -33,8 +33,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="head">لون الخلفية</label>
-                    <input type="background_color" class="form-control" name="background_color"
-                           value="">
+                    <input type="color" class="form-control" name="background_color"
+                           value="" required>
                 </div>
             </div>
             <div class="row">
@@ -50,7 +50,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="section_name_ar" class="form-control-label">مرجع</label>
-                    <input type="file" name="file" class="form-control" />
+                    <input type="file" name="file" class="form-control" required />
                 </div>
             </div>
             <div class="row">

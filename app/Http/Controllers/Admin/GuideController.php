@@ -146,7 +146,7 @@ class GuideController extends Controller
 
     // Update start
 
-    public function update(Guide $guide, RequestGuide $request)
+    public function update(Guide $guide, Request $request)
     {
         $inputs = $request->all();
 
