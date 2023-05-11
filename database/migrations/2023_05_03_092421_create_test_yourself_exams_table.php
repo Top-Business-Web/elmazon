@@ -16,6 +16,7 @@ class CreateTestYourselfExamsTable extends Migration
         Schema::create('test_yourself_exams', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->enum('questions_type',array('low','mid','high'));
+            $table->integer('total_degree');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('lesson_id')->nullable();
             $table->unsignedBigInteger('subject_class_id')->nullable();

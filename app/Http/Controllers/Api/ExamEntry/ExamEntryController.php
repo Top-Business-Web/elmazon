@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Api\ExamEntry;
-
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllExamHeroesNewResource;
 use App\Http\Resources\AllExamResource;
@@ -32,7 +31,7 @@ use Illuminate\Support\Facades\Validator;
 class ExamEntryController extends Controller
 {
 
-    public function all_questions_by_online_exam(Request $request,$id)
+    public function all_questions_by_online_exam(Request $request,$id): JsonResponse
     {
 
         try {
@@ -71,14 +70,17 @@ class ExamEntryController extends Controller
                     ->first();
 
                 if (!$onlineExam) {
+
                     return self::returnResponseDataApi(null, "الامتحان غير موجود", 404);
-                }
-                if (isset($onlineExam)) {
+                }else{
                     return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam), "تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان", 200);
+
                 }
+
             } elseif ($request->exam_type == 'subject_class') {
 
-                $onlineExam = OnlineExam::whereHas('term', fn(Builder $builder) =>
+                $onlineExam = OnlineExam::query()
+                    ->whereHas('term', fn(Builder $builder) =>
                 $builder->where('status', '=', 'active')
                     ->where('season_id', '=', auth('user-api')->user()->season_id))
                     ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
@@ -88,10 +90,11 @@ class ExamEntryController extends Controller
 
                 if (!$onlineExam) {
                     return self::returnResponseDataApi(null, "الامتحان غير موجود", 404);
-                }
-                if (isset($onlineExam)) {
+                }else{
                     return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam), "تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان", 200);
+
                 }
+
             } elseif ($request->exam_type == 'lesson') {
 
                 $onlineExam = OnlineExam::whereHas('term', fn(Builder $builder) =>
@@ -104,10 +107,11 @@ class ExamEntryController extends Controller
 
                 if (!$onlineExam) {
                     return self::returnResponseDataApi(null, "الامتحان غير موجود", 404);
-                }
-                if (isset($onlineExam)) {
+                }else{
                     return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam), "تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان", 200);
+
                 }
+
             } else {
                 if ($request->exam_type == 'full_exam') {
 
@@ -120,10 +124,9 @@ class ExamEntryController extends Controller
 
                     if (!$full_exam) {
                         return self::returnResponseDataApi(null, "الامتحان الشامل غير موجود", 404);
-                    }
-                    if (isset($full_exam)) {
-
+                    }else{
                         return self::returnResponseDataApi(new OnlineExamQuestionResource($full_exam), "تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان", 200);
+
                     }
                 }
 
@@ -635,7 +638,6 @@ class ExamEntryController extends Controller
                 return self::returnResponseDataApi(null, "يجب دخول امتحان واحد علي الاقل لاظهار ابطال المنصه", 403);
 
             }
-
 
 
         } catch (\Exception $exception) {

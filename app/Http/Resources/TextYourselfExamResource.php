@@ -16,23 +16,15 @@ class TextYourselfExamResource extends JsonResource
      */
     public function toArray($request)
     {
-        if($this->lesson_id != null){
 
-            $lesson = Lesson::query()->where('id','=',$this->lesson_id)->first();
-            $questions = $lesson->questions()->where('difficulty','=',$this->questions_type)->get()->shuffle()->all();
-
-        }else{
-
-            $class = SubjectClass::query()->where('id','=',$this->subject_class_id)->first();
-            $questions = $class->questions()->where('difficulty','=',$this->questions_type)->get()->shuffle()->all();
-        }
         return [
 
             'id' => $this->id,
             'questions_type' => $this->questions_type,
             'total_time' => (int)$this->total_time,
+            'exam_degree' => $this->total_degree,
             'num_of_questions' => (int)$this->num_of_questions,
-            'questions' => QuestionResource::collection($questions),
+            'questions' => QuestionResource::collection($this->questions),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
 

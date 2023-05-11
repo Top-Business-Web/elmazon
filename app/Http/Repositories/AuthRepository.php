@@ -252,8 +252,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
-        $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) => $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-            ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+        $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) =>
+        $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+            ->whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))->where('id', '=', $id)
             ->first();
 
@@ -267,19 +269,22 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         foreach ($ids as $id) {
 
             $sectionCheck = Section::where('id', '=', $id)->first();
-            $CheckCountSectionExam = PapelSheetExamUser::where('section_id', '=', $sectionCheck->id)
+            $CheckCountSectionExam = PapelSheetExamUser::query()
+            ->where('section_id', '=', $sectionCheck->id)
                 ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
                 ->count();
 
-            $userRegisterExamBefore = PapelSheetExamUser::where('papel_sheet_exam_id', '=', $paperSheetExam->id)
+            $userRegisterExamBefore = PapelSheetExamUser::query()
+            ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
                 ->where('user_id', '=', Auth::guard('user-api')->id())
                 ->count();
 
             $sumCapacityOfSection = Section::sum('capacity');
-            $countExamId = PapelSheetExamUser::where('papel_sheet_exam_id', '=', $paperSheetExam->id)
+            $countExamId = PapelSheetExamUser::query()
+            ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
                 ->count();
 
-            if ((int)$countExamId < (int)$sumCapacityOfSection) {
+            if ($countExamId < $sumCapacityOfSection) {
 
                 if ($CheckCountSectionExam < $sectionCheck->capacity) {
 
@@ -433,10 +438,13 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function paper_sheet_exam_show(): JsonResponse
     {
 
-        $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) => $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-            ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+        $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) =>
+        $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+            ->whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
-            ->whereDate('to', '>=', Carbon::now()->format('Y-m-d'))->first();
+            ->whereDate('to', '>=', Carbon::now()->format('Y-m-d'))
+            ->first();
 
         if (!$paperSheetExam) {
             return self::returnResponseDataApi(null, "لا يوجد امتحان ورقي", 404);
@@ -528,7 +536,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             }
 
-            $life_exam = LifeExam::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+            $life_exam = LifeExam::whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                 ->where('date_exam', '=', Carbon::now()->format('Y-m-d'))
@@ -556,13 +565,15 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             }
 
 
-            $classes = SubjectClass::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+            $classes = SubjectClass::whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                 ->get();
 
             $sliders = Slider::get();
-            $videos_resources = VideoResource::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+            $videos_resources = VideoResource::whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                 ->latest()

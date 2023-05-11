@@ -243,3 +243,6 @@ Route::group(['middleware' => 'lang'], function (){
     Route::get('/checkout',[Payment::class,'checkout']);
    // Route::get('/payment/{}',[Payment::class,'payment']);
 
+    /*
+     * {{elmazon_l.com}}/test-yourself-exams/solve-exam/1
+     */
