@@ -140,4 +140,9 @@ class AuthController extends Controller{
 
         return $this->authRepositoryInterface->inviteYourFriends();
     }
+    public function examCountdown(): JsonResponse
+    {
+
+        return $this->authRepositoryInterface->examCountdown();
+    }
 }

@@ -36,4 +36,5 @@ interface AuthRepositoryInterface{
     public function logout(Request $request): JsonResponse;
     public function paperSheetExamForStudentDetails(): JsonResponse;
     public function inviteYourFriends(): JsonResponse;
+    public function examCountdown(): JsonResponse;
 }
