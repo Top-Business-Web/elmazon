@@ -9,18 +9,7 @@ class Setting extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'is_lang',
-        'facebook_link',
-        'youtube_link',
-        'twitter_link',
-        'instagram_link',
-        'website_link',
-        'share_ar',
-        'share_en',
-        'videos_resource_active',
-    ];
-
+    protected $guarded = [];
 
     protected $casts = [
         'share_ar' => 'json',
