@@ -134,4 +134,15 @@ class AuthController extends Controller{
 
         return $this->authRepositoryInterface->paperSheetExamForStudentDetails();
     }
+
+    public function inviteYourFriends(): JsonResponse
+    {
+
+        return $this->authRepositoryInterface->inviteYourFriends();
+    }
+    public function examCountdown(): JsonResponse
+    {
+
+        return $this->authRepositoryInterface->examCountdown();
+    }
 }

@@ -29,7 +29,6 @@ class Setting extends Model
         'videos_resource_active',
     ];
 
-
     protected $casts = [
         'share_ar' => 'json',
         'share_en' => 'json',
