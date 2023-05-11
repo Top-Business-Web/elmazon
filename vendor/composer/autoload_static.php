@@ -950,6 +950,7 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'App\\Models\\Section' => __DIR__ . '/../..' . '/app/Models/Section.php',
         'App\\Models\\Setting' => __DIR__ . '/../..' . '/app/Models/Setting.php',
         'App\\Models\\Slider' => __DIR__ . '/../..' . '/app/Models/Slider.php',
+        'App\\Models\\SocialMedia' => __DIR__ . '/../..' . '/app/Models/SocialMedia.php',
         'App\\Models\\SubjectClass' => __DIR__ . '/../..' . '/app/Models/SubjectClass.php',
         'App\\Models\\Subscribe' => __DIR__ . '/../..' . '/app/Models/Subscribe.php',
         'App\\Models\\Suggestion' => __DIR__ . '/../..' . '/app/Models/Suggestion.php',
