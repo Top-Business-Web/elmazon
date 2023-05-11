@@ -15,19 +15,12 @@ class CreateQualificationsTable extends Migration
     {
         Schema::create('qualifications', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('teacher_name_ar')->comment('اسم المدرس بالعربي');
-            $table->string('teacher_name_en')->comment('اسم المدرس بالانجليزي');
-            $table->string('department_ar')->comment('اسم التخصص بالعربي');
-            $table->string('department_en')->comment('اسم التخصص بالانجليزي');
-
             $table->enum('type',['qualifications','experience','skills']);
-
             $table->text('qualifications_title_ar');
             $table->text('qualifications_title_en');
             $table->text('qualifications_description_ar');
             $table->text('qualifications_description_en');
             $table->string('qualifications_year')->nullable();
-
 
             $table->text('experience_title_ar');
             $table->text('experience_title_en');
