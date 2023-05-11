@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AboutMe extends Model
+class Qualification extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'teacher_name_ar',
         'teacher_name_en',
@@ -20,7 +19,9 @@ class AboutMe extends Model
         'experience_en',
         'skills_ar',
         'skills_en',
-        'social'
+        'facebook_link',
+        'youtube_link',
+        'instagram_link'
 
 
     ];
@@ -32,6 +33,5 @@ class AboutMe extends Model
         'experience_en' =>'json',
         'skills_ar' =>'json',
         'skills_en' =>'json',
-        'social' =>'json',
-        ];
+    ];
 }
