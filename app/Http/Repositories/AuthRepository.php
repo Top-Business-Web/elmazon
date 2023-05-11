@@ -181,7 +181,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         try {
 
-            $allNotification = Notification::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+            $allNotification = Notification::whereHas('term', fn(Builder $builder)
+            => $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                 ->where(fn(Builder $builder) => $builder->whereNull('user_id')
@@ -253,7 +254,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
-        $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) => $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+        $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) =>
+        $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
             ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))->where('id', '=', $id)
             ->first();
@@ -397,7 +399,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         /*
          اذا كان يوجد امتحان ورقي متاح للطالب
         */
-        $paperSheetCheckExam = PapelSheetExam::whereHas('season', fn(Builder $builder) => $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+        $paperSheetCheckExam = PapelSheetExam::whereHas('season', fn(Builder $builder) =>
+        $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
             ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
             ->whereDate('to', '>=', Carbon::now()->format('Y-m-d'))
@@ -412,7 +415,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             if ($userRegisterExamBefore && Carbon::now()->format('Y-m-d') <= $userRegisterExamBefore->papelSheetExam->date_exam) {
 
-                $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) => $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+                $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) =>
+                $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
                     ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
                         ->where('season_id', '=', auth('user-api')->user()->season_id))
                     ->where('id', '=', $userRegisterExamBefore->papel_sheet_exam_id)
@@ -437,7 +441,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function paper_sheet_exam_show(): JsonResponse
     {
 
-        $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) => $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+        $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) =>
+        $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
             ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
             ->whereDate('to', '>=', Carbon::now()->format('Y-m-d'))
@@ -533,22 +538,22 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             }
 
-            $life_exam = LifeExam::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+            $life_exam = LifeExam::whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                 ->where('date_exam', '=', Carbon::now()->format('Y-m-d'))
                 ->first();
 
 
-            if (!$life_exam) {
-                $id = null;
-            } else {
+            if ($life_exam) {
 
                 $now = Carbon::now();
                 $start = Carbon::createFromTimeString($life_exam->time_start);
                 $end = Carbon::createFromTimeString($life_exam->time_end);
 
-                $degree_depends = ExamDegreeDepends::where('user_id', '=', Auth::guard('user-api')->id())
+                $degree_depends = ExamDegreeDepends::query()
+                    ->where('user_id', '=', Auth::guard('user-api')->id())
                     ->where('life_exam_id', '=', $life_exam->id);
 
                 if ($now->isBetween($start, $end)) {
@@ -556,18 +561,23 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 } elseif ($degree_depends->exists()) {
                     $id = null;
                 } else {
+
                     $id = null;
                 }
+            } else {
+                $id = null;
             }
 
 
-            $classes = SubjectClass::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+            $classes = SubjectClass::whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                 ->get();
 
             $sliders = Slider::get();
-            $videos_resources = VideoResource::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+            $videos_resources = VideoResource::whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                 ->latest()
@@ -593,7 +603,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function allClasses(): JsonResponse
     {
 
-        $classes = SubjectClass::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+        $classes = SubjectClass::whereHas('term', fn(Builder $builder) =>
+        $builder->where('status', '=', 'active')
             ->where('season_id', '=', auth('user-api')->user()->season_id))
             ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
             ->get();
@@ -607,8 +618,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function all_exams(): JsonResponse
     {
 
-        $allExams = AllExam::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
-            ->where('season_id', '=', auth('user-api')->user()->season_id))->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+        $allExams = AllExam::whereHas('term', fn(Builder $builder) =>
+        $builder->where('status', '=', 'active')
+            ->where('season_id', '=', auth('user-api')->user()->season_id))
+            ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
             ->get();
 
         return self::returnResponseDataApi(AllExamResource::collection($allExams), "تم الحصول علي جميع الامتحانات الشامله بنجاح", 200);
@@ -619,7 +632,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     {
 
 
-        $classes = SubjectClass::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+        $classes = SubjectClass::whereHas('term', fn(Builder $builder) =>
+        $builder->where('status', '=', 'active')
             ->where('season_id', '=', auth('user-api')->user()->season_id))
             ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
             ->get();
@@ -632,7 +646,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function videosResources(): JsonResponse
     {
 
-        $resources = VideoResource::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')->where('season_id', '=', auth('user-api')->user()->season_id))->where('season_id', '=', auth()->guard('user-api')->user()->season_id)->get();
+        $resources = VideoResource::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+            ->where('season_id', '=', auth('user-api')->user()->season_id))
+            ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+            ->get();
 
         return self::returnResponseDataApi(VideoResourceResource::collection($resources), "تم الحصول علي بيانات المراجعه النهائيه بنجاح", 200);
 
@@ -729,7 +746,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         if ($user_screen->count() == 0) {
             $user_screen_shot = UserScreenShot::create([
-
                 'user_id' => Auth::guard('user-api')->id(),
                 'count_screen_shots' => 1,
             ]);
@@ -807,42 +823,40 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     }
 
 
-    public function examCountdown(): JsonResponse{
+    public function examCountdown(): JsonResponse
+    {
 
         $examSchedule = ExamSchedule::query()
-           ->whereHas('term', fn(Builder $builder) =>
-           $builder->where('status', '=', 'active')
-               ->where('season_id', '=', auth('user-api')->user()->season_id))
-               ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
-               ->first();
+            ->whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
+                ->where('season_id', '=', auth('user-api')->user()->season_id))
+            ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+            ->first();
 
-        if($examSchedule){
+        if ($examSchedule) {
             $toDate = Carbon::now();
             $fromDate = Carbon::parse($examSchedule->date);
 
             $days = $toDate->diffInDays($fromDate);
             $months = $toDate->diffInMonths($fromDate);
-            $hours = $toDate->diffInHours($fromDate,true);
+            $hours = $toDate->diffInHours($fromDate, true);
 
 
-            $data['image'] = $examSchedule->image != null ? asset('exam_schedules/'.$examSchedule->image) : asset('exam_schedules/default/default.png');
+            $data['image'] = $examSchedule->image != null ? asset('exam_schedules/' . $examSchedule->image) : asset('exam_schedules/default/default.png');
             $data['title'] = lang() == 'ar' ? $examSchedule->title_ar : $examSchedule->title_en;
             $data['description'] = lang() == 'ar' ? $examSchedule->description_ar : $examSchedule->description_en;
             $data['date_exam'] = $examSchedule->date;
             $data['months'] = $months;
-            $data['days'] =  $days;
-            $data['hours'] =  $hours;
+            $data['days'] = $days;
+            $data['hours'] = $hours;
 
             return self::returnResponseDataApi($data, "تم الحصول علي معلومات مشاركه الاصدقاء بنجاح", 200);
 
-        }else{
+        } else {
 
             return self::returnResponseDataApi(null, "لا يوجد اي عد تنازلي للسنه الدراسيه لهذا الطالب الي الان", 201);
 
         }
-
-
-
 
     }
 

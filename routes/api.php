@@ -233,7 +233,6 @@ Route::group(['middleware' => 'lang'], function (){
     });
 
         Route::get('live-exam-all',[LiveExamController::class,'allOfLiveExamsStudent'])->middleware('jwt');
-
         //exam heroes
         Route::get('exam-heroes/all',[ExamEntryController::class,'examHeroesAll'])->middleware('jwt');
 
@@ -245,6 +244,4 @@ Route::group(['middleware' => 'lang'], function (){
     Route::get('/checkout',[Payment::class,'checkout']);
    // Route::get('/payment/{}',[Payment::class,'payment']);
 
-    /*
-     * {{elmazon_l.com}}/test-yourself-exams/solve-exam/1
-     */
+
