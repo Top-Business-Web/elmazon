@@ -16,7 +16,8 @@ class ExamDegreeDepends extends Model
         'all_exam_id',
         'full_degree',
         'exam_depends',
-        'life_exam_id'
+        'life_exam_id',
+        'test_yourself_exam_id'
     ];
 
     public function online_exam(){
