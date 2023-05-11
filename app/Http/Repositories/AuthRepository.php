@@ -20,6 +20,7 @@ use App\Http\Resources\VideoBasicResource;
 use App\Http\Resources\VideoResourceResource;
 use App\Models\AllExam;
 use App\Models\ExamDegreeDepends;
+use App\Models\ExamSchedule;
 use App\Models\Lesson;
 use App\Models\LifeExam;
 use App\Models\Notification;
@@ -799,10 +800,49 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     {
 
         $setting = Setting::query()->first();
-
         $data['share'] = lang() == 'ar' ? $setting->share_ar : $setting->share_en;
 
         return self::returnResponseDataApi($data, "تم الحصول علي معلومات مشاركه الاصدقاء بنجاح", 200);
+
+    }
+
+
+    public function examCountdown(): JsonResponse{
+
+        $examSchedule = ExamSchedule::query()
+           ->whereHas('term', fn(Builder $builder) =>
+           $builder->where('status', '=', 'active')
+               ->where('season_id', '=', auth('user-api')->user()->season_id))
+               ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+               ->first();
+
+        if($examSchedule){
+            $toDate = Carbon::now();
+            $fromDate = Carbon::parse($examSchedule->date);
+
+            $days = $toDate->diffInDays($fromDate);
+            $months = $toDate->diffInMonths($fromDate);
+            $hours = $toDate->diffInHours($fromDate,true);
+
+
+            $data['image'] = $examSchedule->image != null ? asset('exam_schedules/'.$examSchedule->image) : asset('exam_schedules/default/default.png');
+            $data['title'] = lang() == 'ar' ? $examSchedule->title_ar : $examSchedule->title_en;
+            $data['description'] = lang() == 'ar' ? $examSchedule->description_ar : $examSchedule->description_en;
+            $data['date_exam'] = $examSchedule->date;
+            $data['months'] = $months;
+            $data['days'] =  $days;
+            $data['hours'] =  $hours;
+
+            return self::returnResponseDataApi($data, "تم الحصول علي معلومات مشاركه الاصدقاء بنجاح", 200);
+
+        }else{
+
+            return self::returnResponseDataApi(null, "لا يوجد اي عد تنازلي للسنه الدراسيه لهذا الطالب الي الان", 201);
+
+        }
+
+
+
 
     }
 

@@ -14,7 +14,8 @@ class CreateExamSchedulesTable extends Migration
     public function up()
     {
         Schema::create('exam_schedules', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->longText('image')->nullable();
             $table->string('title_ar');
             $table->string('title_en');
             $table->text('description_ar');
@@ -22,9 +23,8 @@ class CreateExamSchedulesTable extends Migration
             $table->date('date');
             $table->unsignedBigInteger('term_id');
             $table->unsignedBigInteger('season_id');
-
-            $table->foreign('term_id')->references('id')->on('terms');
-            $table->foreign('season_id')->references('id')->on('seasons');
+            $table->foreign('term_id')->references('id')->on('terms')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

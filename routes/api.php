@@ -70,6 +70,7 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('/payments/paymob____',[Payment::class,'pay_']);
         Route::post('user-add-screenshot',[AuthController::class,'user_add_screenshot']);
         Route::get('invite-your-friends',[AuthController::class,'inviteYourFriends']);
+        Route::get('exam-countdown',[AuthController::class,'examCountdown']);
     });
   });
 
