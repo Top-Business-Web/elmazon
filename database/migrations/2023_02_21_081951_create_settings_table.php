@@ -19,6 +19,7 @@ class CreateSettingsTable extends Migration
             $table->string('teacher_name_en')->comment('اسم المدرس بالانجليزي');
             $table->string('department_ar')->comment('اسم التخصص بالعربي');
             $table->string('department_en')->comment('اسم التخصص بالانجليزي');
+            $table->longText('teacher_image')->nullable();
             $table->text('facebook_link');
             $table->text('whatsapp_link');
             $table->text('youtube_link');
