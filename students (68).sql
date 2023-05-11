@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `about_mes`
+-- Table structure for table `qualifications`
 --
 
 CREATE TABLE `about_mes` (
@@ -39,7 +39,7 @@ CREATE TABLE `about_mes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `about_mes`
+-- Dumping data for table `qualifications`
 --
 
 INSERT INTO `about_mes` (`id`, `teacher_name`, `department`, `qualifications`, `experience`, `skills`, `created_at`, `updated_at`) VALUES
