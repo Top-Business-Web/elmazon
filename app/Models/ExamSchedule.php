@@ -8,7 +8,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ExamSchedule extends Model
 {
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'image',
+        'title_ar',
+        'title_en',
+        'description_ar',
+        'description_en',
+        'date',
+        'term_id',
+        'season_id',
+    ];
 
     public function term(): BelongsTo
     {
