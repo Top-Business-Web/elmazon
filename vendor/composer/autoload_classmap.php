@@ -265,6 +265,7 @@ return array(
     'App\\Models\\Section' => $baseDir . '/app/Models/Section.php',
     'App\\Models\\Setting' => $baseDir . '/app/Models/Setting.php',
     'App\\Models\\Slider' => $baseDir . '/app/Models/Slider.php',
+    'App\\Models\\SocialMedia' => $baseDir . '/app/Models/SocialMedia.php',
     'App\\Models\\SubjectClass' => $baseDir . '/app/Models/SubjectClass.php',
     'App\\Models\\Subscribe' => $baseDir . '/app/Models/Subscribe.php',
     'App\\Models\\Suggestion' => $baseDir . '/app/Models/Suggestion.php',

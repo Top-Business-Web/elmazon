@@ -21,9 +21,6 @@ class CreateQualificationsTable extends Migration
             $table->text('description_en');
             $table->string('year')->nullable();
             $table->enum('type',['qualifications','experience','skills']);
-            $table->text('facebook_link');
-            $table->text('youtube_link');
-            $table->text('instagram_link');
             $table->timestamps();
         });
     }
