@@ -16,4 +16,6 @@ class SocialMedia extends Model
         'instagram_link'
 
     ];
+
+    //social media of teacher
 }
