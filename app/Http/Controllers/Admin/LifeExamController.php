@@ -10,11 +10,13 @@ use App\Models\LifeExam;
 use App\Models\Season;
 use App\Models\Term;
 use App\Traits\AdminLogs;
+use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class LifeExamController extends Controller
 {
+    use PhotoTrait;
     use AdminLogs;
 
     // Index Start
@@ -66,6 +68,14 @@ class LifeExamController extends Controller
     public function store(Request $request)
     {
         $inputs = $request->all();
+
+        if($request->hasFile('answer_pdf_file')){
+            $inputs['answer_pdf_file'] = $this->saveImage($request->answer_pdf_file, 'answer_pdf_file', 'photo');
+        }
+
+        if($request->hasFile('answer_video_file')){
+            $inputs['answer_video_file'] = $this->saveImage($request->answer_video_file, 'answer_video_file', 'photo');
+        }
 
 //        return $inputs;
 

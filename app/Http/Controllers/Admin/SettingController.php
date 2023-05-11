@@ -8,9 +8,11 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\Setting;
 use App\Http\Requests\RequestSetting;
+use App\Traits\PhotoTrait;
 
 class SettingController extends Controller
 {
+    use PhotoTrait;
     use AdminLogs;
 
     // Index Start
@@ -28,6 +30,14 @@ class SettingController extends Controller
 
         $inputs = $request->all();
 
+        if ($request->hasFile('teacher_image')) {
+            if (file_exists($settings->teacher_image)) {
+                unlink($settings->teacher_image);
+            }
+            $inputs['teacher_image'] = $this->saveImage($request->teacher_image, 'teacher_image', 'photo');
+        }
+
+        // dd($inputs);
         if ($settings->update($inputs)){
             $this->adminLog('تم تحديث الاعدادات');
             return response()->json(['status' => 200]);
