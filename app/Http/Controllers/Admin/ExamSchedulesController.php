@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\ExamSchedule;
 use App\Models\Term;
 use App\Models\Season;
+use App\Traits\PhotoTrait;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 
 class ExamSchedulesController extends Controller
 {
+    use PhotoTrait;
     // Index Start
     public function index(request $request)
     {
@@ -55,6 +57,10 @@ class ExamSchedulesController extends Controller
     {
         $inputs = $request->all();
 
+        if($request->hasFile('image')){
+            $inputs['image'] = $this->saveImage($request->image, 'exam_schedules', 'photo');
+        }
+
         if (ExamSchedule::create($inputs)) {
             return response()->json(['status' => 200]);
         } else {
@@ -78,6 +84,9 @@ class ExamSchedulesController extends Controller
     public function update(Request $request, ExamSchedule $exam_schedule)
     {
 
+        if($request->hasFile('image')){
+            $inputs['image'] = $this->saveImage($request->image, 'exam_schedules', 'photo');
+        }
         if ($exam_schedule->update($request->all())) {
             return response()->json(['status' => 200]);
         } else {
