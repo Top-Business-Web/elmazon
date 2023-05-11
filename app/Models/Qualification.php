@@ -13,12 +13,22 @@ class Qualification extends Model
         'teacher_name_en',
         'department_ar',
         'department_en',
-        'qualifications_ar',
-        'qualifications_en',
-        'experience_ar',
-        'experience_en',
-        'skills_ar',
-        'skills_en',
+        'type',
+        'qualifications_title_ar',
+        'qualifications_title_en',
+        'qualifications_description_ar',
+        'qualifications_description_en',
+        'qualifications_year',
+        'experience_title_ar',
+        'experience_title_en',
+        'experience_description_ar',
+        'experience_description_en',
+        'experience_year',
+        'skills_title_ar',
+        'skills_title_en',
+        'skills_description_ar',
+        'skills_description_en',
+        'skills_year',
         'facebook_link',
         'youtube_link',
         'instagram_link'
@@ -26,12 +36,5 @@ class Qualification extends Model
 
     ];
 
-    protected $casts = [
-        'qualifications_ar' =>'json',
-        'qualifications_en' =>'json',
-        'experience_ar' =>'json',
-        'experience_en' =>'json',
-        'skills_ar' =>'json',
-        'skills_en' =>'json',
-    ];
+
 }

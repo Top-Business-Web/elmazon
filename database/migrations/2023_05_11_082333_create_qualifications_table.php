@@ -19,12 +19,30 @@ class CreateQualificationsTable extends Migration
             $table->string('teacher_name_en')->comment('اسم المدرس بالانجليزي');
             $table->string('department_ar')->comment('اسم التخصص بالعربي');
             $table->string('department_en')->comment('اسم التخصص بالانجليزي');
-            $table->json('qualifications_ar')->comment('المؤهلات بالعربي');
-            $table->json('qualifications_en')->comment('المؤهلات بالانجليزي');
-            $table->json('experience_ar');
-            $table->json('experience_en');
-            $table->json('skills_ar')->comment('المهارات بالعربي');
-            $table->json('skills_en')->comment('المهارات بالانجليزي');
+
+            $table->enum('type',['qualifications','experience','skills']);
+
+            $table->text('qualifications_title_ar');
+            $table->text('qualifications_title_en');
+            $table->text('qualifications_description_ar');
+            $table->text('qualifications_description_en');
+            $table->string('qualifications_year')->nullable();
+
+
+            $table->text('experience_title_ar');
+            $table->text('experience_title_en');
+            $table->text('experience_description_ar');
+            $table->text('experience_description_en');
+            $table->string('experience_year')->nullable();
+
+
+            $table->text('skills_title_ar');
+            $table->text('skills_title_en');
+            $table->text('skills_description_ar');
+            $table->text('skills_description_en');
+            $table->string('skills_year')->nullable();
+
+
             $table->text('facebook_link');
             $table->text('youtube_link');
             $table->text('instagram_link');
