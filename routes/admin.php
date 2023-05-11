@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\MotivationalSentencesController;
 use App\Http\Controllers\Admin\OnBoardingController;
+use App\Http\Controllers\Admin\QualificationController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SeasonController;
 use App\Http\Controllers\Admin\SubjectClassController;
@@ -36,7 +37,6 @@ use App\Http\Controllers\Admin\PapelSheetExamController;
 use App\Http\Controllers\Admin\VideoBasicController;
 use App\Http\Controllers\Admin\VideoResourceController;
 use App\Http\Controllers\Admin\VideoBasicPdfController;
-use App\Http\Controllers\Admin\AboutMesController;
 use App\Http\Controllers\Admin\DiscountCouponsController;
 use App\Http\Controllers\Admin\ExamSchedulesController;
 use App\Http\Controllers\Admin\CityController;
@@ -320,7 +320,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::resource('videoBasicPdf', VideoBasicPdfController::class)->middleware('permission:الفيديوهات الاساسية ملفات ورقية');
 
     #### About Mes ####
-    Route::resource('aboutMes', AboutMesController::class);
+    Route::resource('qualification', QualificationController::class);
+    Route::post('qualificationDelete', [QualificationController::class,'delete'])->name('qualificationDelete');
 
     #### Discount Coupons ####
     Route::resource('discount_coupons', DiscountCouponsController::class);

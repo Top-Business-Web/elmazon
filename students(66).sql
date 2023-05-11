@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `about_mes`
+-- Table structure for table `qualifications`
 --
 
 DROP TABLE IF EXISTS `about_mes`;

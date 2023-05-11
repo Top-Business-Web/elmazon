@@ -251,7 +251,7 @@
         @endcan
         @can('الاعدادات')
             <li class="slide">
-                <a class="side-menu__item" href="{{ route('aboutMes.index') }}">
+                <a class="side-menu__item" href="{{ route('qualification.index') }}">
                     <i class="fa fa-person-booth side-menu__icon"></i>
                     <span class="side-menu__label">
                          معلومات عن الاستاذ
@@ -282,7 +282,7 @@
 
         @can('ملفات ورقية')
             <li class="slide">
-                <a class="side-menu__item" href="">
+                <a class="side-menu__item" href="{{ route('countries.index') }}">
                     <i class="fa fa-globe side-menu__icon"></i>
                     <span class="side-menu__label">
                         المدن
