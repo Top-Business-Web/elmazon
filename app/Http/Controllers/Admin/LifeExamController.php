@@ -109,6 +109,14 @@ class LifeExamController extends Controller
     {
         $inputs = $request->all();
 
+        if($request->hasFile('answer_pdf_file')){
+            $inputs['answer_pdf_file'] = $this->saveImage($request->answer_pdf_file, 'answer_pdf_file', 'photo');
+        }
+
+        if($request->hasFile('answer_video_file')){
+            $inputs['answer_video_file'] = $this->saveImage($request->answer_video_file, 'answer_video_file', 'photo');
+        }
+
         if ($lifeExam->update($inputs)) {
             $this->adminLog('تم تحديث امتحان لايف');
             return response()->json(['status' => 200]);

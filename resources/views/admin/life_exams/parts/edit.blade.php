@@ -55,6 +55,16 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-6">
+                    <label for="answer_video_file" class="form-control-label">ملف فيديو اجابة</label>
+                    <input type="file" class="form-control" name="answer_video_file">
+                </div>
+                <div class="col-md-6">
+                    <label for="answer_pdf_file" class="form-control-label">ملف ورقي اجابة</label>
+                    <input type="file" class="form-control" name="answer_pdf_file">
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-4">
                     <label for="time_start" class="form-control-label">وقت الامتحان</label>
                     <input type="number" style="text-align: center" value="{{ $lifeExam->quiz_minute}}" class="form-control" name="quiz_minute" required>
