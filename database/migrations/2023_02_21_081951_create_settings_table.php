@@ -15,11 +15,18 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('teacher_name_ar')->comment('اسم المدرس بالعربي');
+            $table->string('teacher_name_en')->comment('اسم المدرس بالانجليزي');
+            $table->string('department_ar')->comment('اسم التخصص بالعربي');
+            $table->string('department_en')->comment('اسم التخصص بالانجليزي');
             $table->text('facebook_link');
+            $table->text('whatsapp_link');
             $table->text('youtube_link');
-            $table->text('twitter_link');
-            $table->text('instagram_link');
+            $table->text('twitter_link')->nullable();
+            $table->text('instagram_link')->nullable();
             $table->text('website_link');
+            $table->text('sms');
+            $table->text('messenger');
             $table->json('share_ar');
             $table->json('share_en');
             $table->enum('lang',['not_active', 'active'])->default('not_active');

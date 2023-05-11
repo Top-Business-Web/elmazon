@@ -9,10 +9,6 @@ class Qualification extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'teacher_name_ar',
-        'teacher_name_en',
-        'department_ar',
-        'department_en',
         'type',
         'qualifications_title_ar',
         'qualifications_title_en',
