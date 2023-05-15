@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Interfaces\AuthRepositoryInterface;
@@ -8,14 +7,12 @@ use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller{
 
-
     public AuthRepositoryInterface $authRepositoryInterface ;
 
     public function __construct(AuthRepositoryInterface $authRepositoryInterface){
 
         $this->authRepositoryInterface = $authRepositoryInterface;
     }
-
 
     public function login(Request $request): JsonResponse
     {
