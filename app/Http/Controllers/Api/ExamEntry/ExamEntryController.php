@@ -10,7 +10,6 @@ use App\Http\Resources\OnlineExamResource;
 use App\Http\Resources\QuestionResource;
 use App\Models\AllExam;
 use App\Models\Answer;
-use App\Models\Degree;
 use App\Models\ExamDegreeDepends;
 use App\Models\ExamInstruction;
 use App\Models\LifeExam;
@@ -189,10 +188,6 @@ class ExamEntryController extends Controller
                     ->where('user_id', '=', Auth::guard('user-api')->id())
                     ->get();
 
-                $all_degrees = Degree::query()
-                    ->where('online_exam_id', '=', $exam->id)
-                    ->where('user_id', '=', Auth::guard('user-api')->id())
-                    ->get();
 
                 $depends = ExamDegreeDepends::query()
                     ->where('online_exam_id', '=', $exam->id)
@@ -222,10 +217,6 @@ class ExamEntryController extends Controller
                     ->where('user_id', '=', Auth::guard('user-api')->id())
                     ->get();
 
-                $all_degrees = Degree::query()
-                    ->where('all_exam_id', '=', $exam->id)
-                    ->where('user_id', '=', Auth::guard('user-api')->id())
-                    ->get();
 
                 $depends = ExamDegreeDepends::query()
                     ->where('all_exam_id', '=', $exam->id)
@@ -254,9 +245,7 @@ class ExamEntryController extends Controller
                         foreach ($text_exam_users as $text_exam_user) {
                             $text_exam_user->delete();
                         }
-                        foreach ($all_degrees as $all_degree) {
-                            $all_degree->delete();
-                        }
+
                     }
 
                     for ($i = 0; $i < count($request->details); $i++) {

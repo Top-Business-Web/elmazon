@@ -18,16 +18,25 @@ class VideoPartDetailsNewResource extends JsonResource
      */
     public function toArray($request){
 
-        $user_watch_video = VideoOpened::where('video_part_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first();
-        $video_rate = VideoRate::where('video_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first();
+        $user_watch_video = VideoOpened::where('video_part_id','=',$this->id)
+            ->where('user_id','=',Auth::guard('user-api')->id())->first();
+
+        $video_rate = VideoRate::where('video_id','=',$this->id)
+            ->where('user_id','=',Auth::guard('user-api')->id())->first();
+
         $like_video_count = VideoRate::where('video_id','=',$this->id)->where('action','=','like')->count();
+
+//        $totalProgress = VideoOpened::where('video_part_id','=',$this->id)
+//            ->where('user_id','=',Auth::guard('user-api')->id());
 
         return [
 
             'id' => $this->id,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'status' => !$user_watch_video ? 'lock' :  ($user_watch_video->status == 'opened' ? 'opened': 'watched'),
-             'subscribe' => 'access',
+            'subscribe' => 'access',
+            'progress' =>  VideoOpened::where('video_part_id','=',$this->id)
+                ->where('user_id','=',Auth::guard('user-api')->id())->exists() ? (($user_watch_video->minutes / $this->video_time ) * 100) : 0,
             'link' =>  asset('videos/'. $this->link),
             'time' => $this->video_time,
             'rate' =>  $video_rate ? $video_rate->action : 'no_rate',

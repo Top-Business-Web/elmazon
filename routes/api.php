@@ -56,7 +56,9 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('add-device-token',[AuthController::class,'add_device_token']);
         Route::post('papel-sheet-exam/user/{id}',[AuthController::class,'paper_sheet_exam']);
         Route::get('papel-sheet-exam/show',[AuthController::class,'paper_sheet_exam_show']);
-        Route::get('paper-sheet-exam/register-with-student-check-before',[AuthController::class,'paperSheetExamForStudentDetails']);
+        Route::get('paper-sheet-exam/register-with-student-check-before',[AuthController::class,
+            'paperSheetExamForStudentDetails']);
+
         Route::delete('paper-sheet-exam/latest-paper-exam-delete',[AuthController::class,'latestPaperExamDelete']);
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
@@ -161,7 +163,9 @@ Route::group(['middleware' => 'lang'], function (){
 
     });
 
-    Route::post('access-end-time/exam/{id}',[ExamEntryController::class,'access_end_time_for_exam'])->middleware('jwt');
+    Route::post('access-end-time/exam/{id}',[ExamEntryController::class,'access_end_time_for_exam'])
+        ->middleware('jwt');
+
     Route::get('reports/student-report',[ReportController::class,'student_report'])->middleware('jwt');
     Route::post('user-rate-video/{id}',[App\Http\Controllers\Api\VideoRate\VideoRateController::class,'user_rate_video'])->middleware('jwt');
 
