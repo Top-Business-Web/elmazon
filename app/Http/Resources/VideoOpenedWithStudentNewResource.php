@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Models\VideoOpened;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class VideoPartNewResource extends JsonResource
+class VideoOpenedWithStudentNewResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,6 +22,9 @@ class VideoPartNewResource extends JsonResource
             'link' =>  asset('videos/'. $this->link),
             'time' => (int)$this->video_time,
             'size' => 1000,
+             'videoOpened' => new VideoOpenedResource(VideoOpened::query()
+                 ->where('video_part_id','=',$this->id)
+                 ->where('user_id','=',auth('user-api')->id())->first()),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
 

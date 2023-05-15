@@ -8,6 +8,8 @@ use App\Http\Resources\LessonResource;
 use App\Http\Resources\OnlineExamResource;
 use App\Http\Resources\SubjectClassNewResource;
 use App\Http\Resources\VideoDetailsResource;
+use App\Http\Resources\VideoOpenedWithStudentNewResource;
+use App\Http\Resources\VideoPartNewResource;
 use App\Http\Resources\VideoPartResource;
 use App\Models\Comment;
 use App\Models\Lesson;
@@ -31,14 +33,20 @@ class LessonController extends Controller
     public function allVideos($id): \Illuminate\Http\JsonResponse
     {
 
+        $lesson = Lesson::query()
+        ->where('id', '=', $id)
+            ->first();
 
-        $lesson = Lesson::where('id', '=', $id)->first();
         if (!$lesson) {
 
             return self::returnResponseDataApi(null, "هذا الدرس غير موجود", 404, 404);
         }
 
-        $videos = VideoParts::where('lesson_id', '=', $id)->orderBy('ordered', 'ASC')->get();
+        $videos = VideoParts::query()
+        ->where('lesson_id', '=', $id)
+            ->orderBy('ordered', 'ASC')
+            ->get();
+
         $videos = VideoPartResource::collection($videos);
         $exams = OnlineExamResource::collection($lesson->exams);
         return self::returnResponseDataApi(compact('videos', 'exams'), "تم ارسال جميع الفيديوهات التابعه للدرس بنجاح ", 200);
@@ -50,17 +58,24 @@ class LessonController extends Controller
     {
 
         if ($type == 'video_part') {
-            $userWatchVideoBefore = VideoTotalView::query()->where('user_id', '=', Auth::guard('user-api')->id())
-                ->where('video_part_id', '=', $video->id)->first();
+
+        $userWatchVideoBefore = VideoTotalView::query()
+            ->where('user_id', '=', Auth::guard('user-api')->id())
+            ->where('video_part_id', '=', $video->id)
+            ->first();
 
         } elseif ($type == 'video_basic') {
 
-            $userWatchVideoBefore = VideoTotalView::query()->where('user_id', '=', Auth::guard('user-api')->id())
-                ->where('video_basic_id', '=', $video->id)->first();
+            $userWatchVideoBefore = VideoTotalView::query()
+                ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('video_basic_id', '=', $video->id)
+                ->first();
 
         } else {
-            $userWatchVideoBefore = VideoTotalView::query()->where('user_id', '=', Auth::guard('user-api')->id())
-                ->where('video_resource_id', '=', $video->id)->first();
+            $userWatchVideoBefore = VideoTotalView::query()
+                ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('video_resource_id', '=', $video->id)
+                ->first();
         }
 
         if (!$userWatchVideoBefore) {
@@ -77,7 +92,11 @@ class LessonController extends Controller
     {
 
         if ($request->type == 'video_part') {
-            $video = VideoParts::where('id', '=', $id)->first();
+
+            $video = VideoParts::query()
+            ->where('id', '=', $id)
+                ->first();
+
             if (!$video) {
                 return self::returnResponseDataApi(null, "فيديو الشرح غير موجود", 404, 404);
             }
@@ -88,7 +107,10 @@ class LessonController extends Controller
 
         } elseif ($request->type == 'video_basic') {
 
-            $video = VideoBasic::where('id', '=', $id)->first();
+            $video = VideoBasic::query()
+            ->where('id', '=', $id)
+                ->first();
+
             if (!$video) {
                 return self::returnResponseDataApi(null, "فيديو الاساسيات غير موجود", 404, 404);
             }
@@ -97,7 +119,11 @@ class LessonController extends Controller
 
         } elseif ($request->type == 'video_resource') {
 
-            $video = VideoResource::query()->where('id', '=', $id)->where('type', '=', 'video')->first();
+            $video = VideoResource::query()
+                ->where('id', '=', $id)
+                ->where('type', '=', 'video')
+                ->first();
+
             if (!$video) {
                 return self::returnResponseDataApi(null, "فيديو المراجعه غير موجود", 404, 404);
             }
@@ -116,22 +142,37 @@ class LessonController extends Controller
     {
 
         if (request()->type == 'video_part') {
-            $video = VideoParts::where('id', '=', $id)->first();
+
+            $video = VideoParts::query()
+            ->where('id', '=', $id)
+                ->first();
+
             if (!$video) {
                 return self::returnResponseDataApi(null, "فيديو الشرح غير موجود", 404, 404);
             }
 
-            $comments = Comment::where('video_part_id', '=', $video->id)->latest()->paginate(4);
+            $comments = Comment::query()
+            ->where('video_part_id', '=', $video->id)
+                ->latest()
+                ->paginate(4);
+
             $comments = CommentResource::collection($comments)->response()->getData(true);
 
         } elseif (request()->type == 'video_basic') {
 
-            $video = VideoBasic::where('id', '=', $id)->first();
+            $video = VideoBasic::query()
+            ->where('id', '=', $id)
+                ->first();
+
             if (!$video) {
                 return self::returnResponseDataApi(null, "فيديو الاساسيات غير موجود", 404, 404);
             }
 
-            $comments = Comment::where('video_basic_id', '=', $video->id)->latest()->paginate(4);
+            $comments = Comment::query()
+            ->where('video_basic_id', '=', $video->id)
+                ->latest()
+                ->paginate(4);
+
             $comments = CommentResource::collection($comments)->response()->getData(true);
 
         } elseif (request()->type == 'video_resource') {
@@ -141,7 +182,11 @@ class LessonController extends Controller
                 return self::returnResponseDataApi(null, "فيديو المراجعه غير موجود", 404, 404);
             }
 
-            $comments = Comment::where('video_resource_id', '=', $video->id)->latest()->paginate(4);
+            $comments = Comment::query()
+            ->where('video_resource_id', '=', $video->id)
+                ->latest()
+                ->paginate(4);
+
             $comments = CommentResource::collection($comments)->response()->getData(true);
 
         } else {
@@ -158,13 +203,11 @@ class LessonController extends Controller
     {
 
         $rules = [
-            'type' => 'required|in:file,subject_class',
-            'file_type' => 'nullable|in:video,pdf,audio',
+            'type' => 'required|in:lesson,subject_class',
         ];
         $validator = Validator::make($request->all(), $rules, [
 
             'type.in' => 406,
-            'file_type.in' => 407,
         ]);
 
         if ($validator->fails()) {
@@ -173,8 +216,7 @@ class LessonController extends Controller
 
                 $errors_arr = [
 
-                    406 => 'Failed,The type must be an video or subject_class',
-                    407 => 'Failed,The file type must be an video or audio or pdf',
+                    406 => 'Failed,The type must be an lesson or subject_class',
                 ];
 
                 $code = collect($validator->errors())->flatten(1)[0];
@@ -184,12 +226,17 @@ class LessonController extends Controller
         }
 
 
-        if ($request->type == 'file') {
-            $lesson = Lesson::where('id', '=', $id)->first();
-            $video = VideoParts::where('lesson_id', '=', $id)->where('type', '=',$request->file_type)->orderBy('id', 'ASC')->first();
+        if ($request->type == 'lesson') {
 
-//            $videoUploadFiles = VideoFilesUploads::query()
-//                ->where()
+            $lesson = Lesson::query()
+            ->where('id', '=', $id)
+                ->first();
+
+            $video = VideoParts::query()
+            ->where('lesson_id', '=',$id)
+                ->orderBy('id', 'ASC')
+                ->first();
+
 
             if (!$lesson) {
                 return self::returnResponseDataApi(null, "هذا الدرس غير موجود", 404, 404);
@@ -197,26 +244,68 @@ class LessonController extends Controller
             if (!$video) {
                 return self::returnResponseDataApi(null, "لا يوجد قائمه فيديوهات لفتح اول فيديو", 404, 404);
             }
-            $watched = VideoOpened::where('user_id', '=', Auth::guard('user-api')->id())->where('video_part_id', '=', $video->id);
-            if ($watched->exists()) {
 
-                return self::returnResponseDataApi(null,"تم مشاهده هذا الفيديو من قبل",200);
 
-            } else {
+            $checkLessonIfOpenedOrClosed = OpenLesson::query()
+                ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('lesson_id', '=', $lesson->id)
+                ->exists();
 
-                $watch = VideoOpened::create([
-                    'user_id' => Auth::guard('user-api')->id(),
-                    'video_part_id' => $video->id,
-                ]);
+            if($checkLessonIfOpenedOrClosed){
+                $videoUploadAllFiles = VideoFilesUploads::query()
+                    ->where('video_part_id','=',$video->id)
+                    ->get();//List of all pdf and audios of video part
 
-                return response()->json(['data' => $watch, 'message' => 'Video opened now  ' . Auth::guard('user-api')->user()->name, 'code' => 200]);
+
+                $watched = VideoOpened::query()
+                    ->where('user_id', '=', Auth::guard('user-api')->id())
+                    ->where('video_part_id', '=', $video->id)
+                    ->exists();
+
+                if ($watched) {
+                    return self::returnResponseDataApi(null,"تم مشاهده هذا الفيديو من قبل",201);
+
+                }elseif(count($video->videoFileUpload) == 0){
+
+                    return self::returnResponseDataApi(null,"ناسف لعدم فتح اول فيديو تابع لهذا الدرس بمتعلقاته لان الفيديو غير مسجل به متعلقات",203);
+
+                } else {
+
+                    VideoOpened::create([
+                        'user_id' => Auth::guard('user-api')->id(),
+                        'video_part_id' => $video->id,
+                        'type' => 'video'
+                    ]);
+
+                    foreach ($videoUploadAllFiles as $videoUploadAllFile) {
+
+                        VideoOpened::create([
+                            'user_id' => Auth::guard('user-api')->id(),
+                            'video_upload_file_pdf_id' => $videoUploadAllFile->file_type == 'pdf' ? $videoUploadAllFile->id : null,
+                            'video_upload_file_audio_id' => $videoUploadAllFile->file_type == 'audio' ? $videoUploadAllFile->id : null,
+                            'type' => $videoUploadAllFile->file_type == 'pdf' ? 'pdf' : 'audio',
+                            'status' => 'watched',
+                        ]);
+                    }
+
+                    return self::returnResponseDataApi(null,"تم فتح اول فيديو بمتعلقاته التابع لهذا الدرس الان",200);
+
+                }//end access first video
+
+            }else{
+
+                return self::returnResponseDataApi(null,"هذا الدرس مغلق الي الان ناسف لعدم فتح اول فيديو بمتعلقاته في هذا الدرس",423);
             }
 
-            //end access first video
+
         } else {
 
-            $subject_class = SubjectClass::first();
-            $first_lesson = Lesson::where('subject_class_id', '=', $subject_class->id)->first();
+            $subject_class = SubjectClass::query()
+            ->first();
+
+            $first_lesson = Lesson::query()
+            ->where('subject_class_id', '=', $subject_class->id)
+                ->first();
 
             if (!$subject_class) {
                 return self::returnResponseDataApi(null, "لا يوجد فصول برجاء ادخال عدد من الفصول لفتح اول فصل من القائمه", 404, 404);
@@ -226,13 +315,20 @@ class LessonController extends Controller
                 return self::returnResponseDataApi(null, "لا يوجد قائمه دروس لفتح اول درس", 404, 404);
             }
 
-            $subject_class_opened = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())->where('subject_class_id', '=', $subject_class->id);
-            $lesson_opened = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())->where('lesson_id', '=', $first_lesson->id);
+            $subject_class_opened = OpenLesson::query()
+            ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('subject_class_id', '=', $subject_class->id);
+
+            $lesson_opened = OpenLesson::query()
+            ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('lesson_id', '=', $first_lesson->id);
 
             if ($subject_class_opened->exists() && $lesson_opened->exists()) {
-                return response()->json(['data' => null, 'message' => 'تم فتح اول فصل واول درس تابع لهذا الفصل من قبل', 'code' => 201]);
+
+                return self::returnResponseDataApi(null,"تم فتح اول فصل واول درس تابع لهذا الفصل من قبل",202);
 
             } else {
+
                 OpenLesson::create([
                     'user_id' => Auth::guard('user-api')->id(),
                     'subject_class_id' => $subject_class->id,
@@ -243,29 +339,24 @@ class LessonController extends Controller
                     'lesson_id' => $first_lesson->id,
                 ]);
 
-                return response()->json(['data' => null, 'message' => 'تم فتح اول فصل واول درس تابع لهذا الفصل ', 'code' => 200]);
+                return self::returnResponseDataApi(null,"تم فتح اول فصل واول درس تابع لهذا الفصل",202);
+
             }
-
-            //end open first video =============================================================================================================
-
-
         }
 
-    }
+    }//end access first subject_class and first lesson and first video and  all files of video
 
     public function accessNextVideo(Request $request, $id)
     {
 
 
         $rules = [
-            'type' => 'required|in:file,lesson,subject_class',
-            'file_type' => 'nullable|in:video,pdf,audio',
+            'type' => 'required|in:video,lesson,subject_class',
 
         ];
         $validator = Validator::make($request->all(), $rules, [
 
             'type.in' => 406,
-            'file_type.in' => 407,
 
         ]);
 
@@ -276,7 +367,6 @@ class LessonController extends Controller
                 $errors_arr = [
 
                     406 => 'Failed,The type must be an video or lesson or subject_class',
-                    407 => 'Failed,The file type must be an video or audio or pdf',
 
                 ];
 
@@ -287,15 +377,20 @@ class LessonController extends Controller
         }
 
 
-        if ($request->type == 'file') {
+        if ($request->type == 'video') {
 
-            $video = VideoParts::where('id', '=', $id)->where('type', '=', $request->file_type)->first();
+            $video = VideoParts::query()
+            ->where('id', '=', $id)
+                ->first();
+
             if (!$video) {
                 return self::returnResponseDataApi(null, "هذا الفيديو او المرفق غير موجود", 404, 404);
             } else {
 
-                $videoOpenedByUser = VideoOpened::where('user_id', '=', Auth::guard('user-api')->id())
-                    ->where('video_part_id', '=', $video->id)->first();
+                $videoOpenedByUser = VideoOpened::query()
+                ->where('user_id', '=', Auth::guard('user-api')->id())
+                    ->where('video_part_id', '=', $video->id)
+                    ->first();
 
                 if ($videoOpenedByUser) {
                     $videoOpenedByUser->update(['status' => 'watched']);
@@ -305,17 +400,22 @@ class LessonController extends Controller
                 }
 
 
-                $nextFileToWatch = VideoParts::query()->orderBy('id', 'ASC')->where('type', '=', $request->file_type)
-                    ->where('lesson_id', '=', $video->lesson_id)->orderBy('id', 'ASC')
+                $nextFileToWatch = VideoParts::query()
+                    ->orderBy('id', 'ASC')
+                    ->where('lesson_id', '=',$video->lesson_id)
+                    ->orderBy('id', 'ASC')
                     ->get()
                     ->except($videoOpenedByUser->video_part_id)
-                    ->where('id', '>', $videoOpenedByUser->video_part_id)->first();
+                    ->where('id', '>', $videoOpenedByUser->video_part_id)
+                    ->first();
 
 
                 if ($nextFileToWatch) {
 
-                    $watched = VideoOpened::query()->where('user_id', '=', Auth::guard('user-api')->id())
-                        ->where('video_part_id', '=', $nextFileToWatch->id)->first();
+                    $watched = VideoOpened::query()
+                        ->where('user_id', '=', Auth::guard('user-api')->id())
+                        ->where('video_part_id', '=', $nextFileToWatch->id)
+                        ->first();
 
                     if (!$watched) {
                         VideoOpened::create([
@@ -338,29 +438,71 @@ class LessonController extends Controller
 
         } elseif ($request->type == 'lesson') {
 
-            $lesson = Lesson::where('id', '=', $id)->first();
+
+            $lesson = Lesson::query()
+            ->where('id', '=', $id)
+                ->first();
+
             if (!$lesson) {
                 return self::returnResponseDataApi(null, "هذا الدرس غير موجود", 404, 404);
             }
 
-            $opened_lesson = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())->where('lesson_id', '=', $lesson->id)->first();
-            $next_lesson = Lesson::orderBy('id', 'ASC')->get()->except($id)->where('id', '>', $id)->first();
+            $opened_lesson = OpenLesson::query()
+            ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('lesson_id', '=', $lesson->id)
+                ->first();
+
+            $next_lesson = Lesson::query()
+            ->orderBy('id', 'ASC')->get()
+                ->except($id)
+                ->where('id', '>', $id)
+                ->first();
+
+
+            $videosIds = VideoParts::query()
+                ->where('lesson_id','=',$lesson->id)
+                ->pluck('id')
+                 ->toArray();//example [1,2,3,4,5]
+
+            $sumMinutesOfAllVideosBelongsTiThisLesson = VideoParts::query()
+                ->where('lesson_id','=',$lesson->id)
+                ->sum('video_time');// example 20 minutes
+
+            $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
+                ->whereIn('video_part_id',$videosIds)
+                ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->sum('minutes');//example 20 minutes
+
+
+            $total = number_format((((int)$sumAllOfMinutesVideosStudentAuth / (int)$sumMinutesOfAllVideosBelongsTiThisLesson) * 100),2);
+
             if ($next_lesson) {
-                $next_lesson_open = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())
-                    ->where('lesson_id', '=', $next_lesson->id)->first();
 
-                if (!$opened_lesson) {
-                    return self::returnResponseDataApi(null, "يجب مشاهده الدرس السابق اولا", 500);
+                if($total < 65){
+
+                    return self::returnResponseDataApi(null, "يجب مشاهده 65% من محتوي ذلك الدرس اولا لفتح الدرس التالي", 403);
+
+                }else{
+
+                    $next_lesson_open = OpenLesson::query()
+                        ->where('user_id', '=', Auth::guard('user-api')->id())
+                        ->where('lesson_id', '=', $next_lesson->id)
+                        ->first();
+
+                    if (!$opened_lesson) {
+                        return self::returnResponseDataApi(null, "يجب مشاهده الدرس السابق اولا", 500);
+
+                    }
+                    if (!$next_lesson_open) {
+                        OpenLesson::create([
+                            'user_id' => Auth::guard('user-api')->id(),
+                            'lesson_id' => $next_lesson->id,
+                        ]);
+                    }
+
+                    return self::returnResponseDataApi(new LessonResource($next_lesson), "تم الوصول الي الدرس التالي", 200);
 
                 }
-                if (!$next_lesson_open) {
-                    OpenLesson::create([
-                        'user_id' => Auth::guard('user-api')->id(),
-                        'lesson_id' => $next_lesson->id,
-                    ]);
-                }
-
-                return self::returnResponseDataApi(new LessonResource($next_lesson), "تم الوصول الي الدرس التالي", 200);
 
             } else {
                 return self::returnResponseDataApi(null, "تم الوصول للدرس الاخير ولا يوجد اي دروس اخري لفتحها", 500);
@@ -368,35 +510,173 @@ class LessonController extends Controller
 
         } else {
 
-            $subject_class = SubjectClass::where('id', '=', $id)->first();
+
+            $subject_class = SubjectClass::query()
+            ->where('id', '=', $id)
+                ->first();
+
             if (!$subject_class) {
                 return self::returnResponseDataApi(null, "هذا الفصل غير موجود", 404, 404);
             }
 
 
-            $opened_subject_class = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())->where('subject_class_id', '=', $subject_class->id)->first();
-            $next_subject_class = SubjectClass::orderBy('id', 'ASC')->get()->except($id)->where('id', '>', $id)->first();
-            if ($next_subject_class) {
-                $next_subject_class_open = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())
-                    ->where('subject_class_id', '=', $next_subject_class->id)->first();
+            $opened_subject_class = OpenLesson::query()
+            ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('subject_class_id', '=', $subject_class->id)
+                ->first();
 
-                if (!$opened_subject_class) {
-                    return self::returnResponseDataApi(null, "يجب مشاهده الوحده السابقه اولا", 500);
 
-                }
-                if (!$next_subject_class_open) {
-                    OpenLesson::create([
-                        'user_id' => Auth::guard('user-api')->id(),
-                        'subject_class_id' => $next_subject_class->id,
-                    ]);
-                }
+            $next_subject_class = SubjectClass::query()
+            ->orderBy('id', 'ASC')->get()
+                ->except($id)->where('id', '>', $id)
+                ->first();
 
-                return self::returnResponseDataApi(new SubjectClassNewResource($next_subject_class), "تم الوصول الي الدرس التالي", 200);
 
-            } else {
-                return self::returnResponseDataApi(null, "تم الوصول للفصل الاخير ولا يوجد اي فصل اخر لفتحه", 500);
+            //start check total watched of student for this subject_class
+             $Ids = Lesson::query()
+                 ->where('subject_class_id', '=', $subject_class->id)
+                 ->pluck('id')->toArray();// ids of lessons belongs to subject class * example [1,2,3,4,5,6]
+
+
+            $allOfLessons = Lesson::query()
+                ->whereIn('id',$Ids)->get();
+
+            $totalOfMinutesVideos = [];
+            $totalOfMinutesUserWatched = [];
+
+            foreach ($allOfLessons as $lesson){
+
+                $videosIds = VideoParts::query()
+                    ->where('lesson_id','=',$lesson->id)
+                    ->pluck('id')
+                    ->toArray();//example [1,2,3,4,5]
+
+                $sumMinutesOfAllVideosBelongsTiThisLesson = VideoParts::query()
+                    ->where('lesson_id','=',$lesson->id)
+                    ->sum('video_time');// example 20 minutes
+
+                $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
+                    ->whereIn('video_part_id',$videosIds)
+                    ->where('user_id', '=', Auth::guard('user-api')->id())
+                    ->sum('minutes');//example 20 minutes
+
+                $totalOfMinutesVideos[] =  (int)$sumMinutesOfAllVideosBelongsTiThisLesson;
+                $totalOfMinutesUserWatched[] = (int)$sumAllOfMinutesVideosStudentAuth;
+
             }
+
+//            dd( $totalOfMinutesVideos,$totalOfMinutesUserWatched);
+
+            $total = number_format(((array_sum($totalOfMinutesUserWatched) / array_sum($totalOfMinutesVideos)) * 100),2);
+
+            //end check total watched of student for this subject_class
+            if($total < 65){
+
+                return self::returnResponseDataApi(null, "يجب مشاهده 65% من محتوي ذلك الفصل اولا لفتح الفصل التالي", 403);
+
+            }else{
+                if ($next_subject_class) {
+
+                    $next_subject_class_open = OpenLesson::query()
+                        ->where('user_id', '=', Auth::guard('user-api')->id())
+                        ->where('subject_class_id', '=', $next_subject_class->id)
+                        ->first();
+
+                    if (!$opened_subject_class) {
+                        return self::returnResponseDataApi(null, "يجب مشاهده الوحده السابقه اولا", 500);
+
+                    }
+                    if (!$next_subject_class_open) {
+                        OpenLesson::create([
+                            'user_id' => Auth::guard('user-api')->id(),
+                            'subject_class_id' => $next_subject_class->id,
+                        ]);
+                    }
+
+                    return self::returnResponseDataApi(new SubjectClassNewResource($next_subject_class), "تم الوصول الي الدرس التالي", 200);
+
+                } else {
+                    return self::returnResponseDataApi(null, "تم الوصول للفصل الاخير ولا يوجد اي فصل اخر لفتحه", 500);
+                }
+            }
+
         }//end else condition
+
+    }
+
+
+    public function updateMinuteVideo(Request $request,$id): JsonResponse{
+
+        $rules = ['minutes' => 'required|integer|gte:1'];
+
+
+        $validator = Validator::make($request->all(), $rules, ['minutes.gte' => 406]);
+
+        if ($validator->fails()) {
+            $errors = collect($validator->errors())->flatten(1)[0];
+            if (is_numeric($errors)) {
+
+                $errors_arr = [
+
+                    406 => 'Failed,The minutes must be greater than or equal 1',
+
+                ];
+
+                $code = collect($validator->errors())->flatten(1)[0];
+                return self::returnResponseDataApi(null, $errors_arr[$errors] ?? 500, $code);
+            }
+            return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
+        }
+
+        $video = VideoParts::query()
+            ->where('id','=',$id)->first();
+
+        if(!$video){
+
+            return self::returnResponseDataApi(null, "فيديو الشرح غير موجود", 404,404);
+        }else{
+
+            $videoOpened = VideoOpened::query()
+                ->where('video_part_id','=',$video->id)
+                ->first();
+
+              if($request->minutes > $video->video_time){
+
+                  if($video->video_time ==  $videoOpened->minutes){
+
+                      return self::returnResponseDataApi(
+                          new VideoOpenedWithStudentNewResource($video),
+                          "تم استكمال مشاهده الفيديو من قبل",
+                          420
+                      );
+
+                  }else{
+                      return self::returnResponseDataApi(
+                          new VideoOpenedWithStudentNewResource($video),
+                          "عدد الدقائق المدخله بالطلب اكبر من عدد دقائق هذا الفيديو!",
+                          419
+                      );
+                  }
+
+              }elseif ($video->video_time ==  $videoOpened->minutes){
+
+                  return self::returnResponseDataApi(
+                      new VideoOpenedWithStudentNewResource($video),
+                      "تم استكمال مشاهده الفيديو من قبل",
+                      420
+                  );
+
+              }else{
+
+                  $videoOpened->update(['minutes' => $request->minutes]);
+                  return self::returnResponseDataApi(
+                      new VideoOpenedWithStudentNewResource($video),
+                      "تم تحديث عدد دقائق الفيديو بنجاح",
+                      200
+                  );
+              }
+        }
+
 
     }
 }
