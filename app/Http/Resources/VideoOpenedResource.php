@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class VideoPartNewResource extends JsonResource
+class VideoOpenedResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,12 +17,10 @@ class VideoPartNewResource extends JsonResource
         return [
 
             'id' => $this->id,
-            'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
-            'link' =>  asset('videos/'. $this->link),
-            'time' => (int)$this->video_time,
-            'size' => 1000,
-            'created_at' => $this->created_at->format('Y-m-d'),
-            'updated_at' => $this->created_at->format('Y-m-d'),
+            'minutes' => $this->minutes,
+            'status' => $this->status,
+            'type' => $this->type,
+            'user' => $this->user->name,
 
         ];
     }

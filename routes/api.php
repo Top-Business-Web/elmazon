@@ -95,10 +95,13 @@ Route::group(['middleware' => 'lang'], function (){
 
 
         //access videos
-        Route::post('{id}',[LessonController::class,'accessFirstVideo']);
+        Route::post('{id?}',[LessonController::class,'accessFirstVideo']);
         Route::post('access-next-video/{id}',[LessonController::class,'accessNextVideo']);
 
     });
+
+    Route::post('video-update-time/{id}',[LessonController::class,'updateMinuteVideo'])
+        ->middleware('jwt');
 
     Route::group(['prefix' => 'plans','middleware' => ['jwt']], function (){
         Route::get('all',[MonthlyPlanController::class,'all_plans']);
