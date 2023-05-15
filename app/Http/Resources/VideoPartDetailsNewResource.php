@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use App\Models\VideoOpened;
 use App\Models\VideoRate;
-use App\Models\VideoWatch;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,16 +17,21 @@ class VideoPartDetailsNewResource extends JsonResource
      */
     public function toArray($request){
 
-        $user_watch_video = VideoOpened::where('video_part_id','=',$this->id)
-            ->where('user_id','=',Auth::guard('user-api')->id())->first();
+        $user_watch_video = VideoOpened::query()
+        ->where('video_part_id','=',$this->id)
+            ->where('user_id','=',Auth::guard('user-api')->id())
+            ->first();
 
-        $video_rate = VideoRate::where('video_id','=',$this->id)
-            ->where('user_id','=',Auth::guard('user-api')->id())->first();
+        $video_rate = VideoRate::query()
+        ->where('video_id','=',$this->id)
+            ->where('user_id','=',Auth::guard('user-api')->id())
+            ->first();
 
-        $like_video_count = VideoRate::where('video_id','=',$this->id)->where('action','=','like')->count();
+        $like_video_count = VideoRate::query()
+        ->where('video_id','=',$this->id)
+            ->where('action','=','like')
+            ->count();
 
-//        $totalProgress = VideoOpened::where('video_part_id','=',$this->id)
-//            ->where('user_id','=',Auth::guard('user-api')->id());
 
         return [
 
@@ -38,7 +42,7 @@ class VideoPartDetailsNewResource extends JsonResource
             'progress' =>  VideoOpened::where('video_part_id','=',$this->id)
                 ->where('user_id','=',Auth::guard('user-api')->id())->exists() ? (($user_watch_video->minutes / $this->video_time ) * 100) : 0,
             'link' =>  asset('videos/'. $this->link),
-            'time' => $this->video_time,
+            'time' => (int)$this->video_time,
             'rate' =>  $video_rate ? $video_rate->action : 'no_rate',
             'total_watch' => (int)$this->video_watches->count(),
             'total_like' => (int)$like_video_count,
