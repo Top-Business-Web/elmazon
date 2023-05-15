@@ -28,7 +28,8 @@ class SubjectClassNewResource extends JsonResource
         return [
 
             'id' => $this->id,
-            'status' => OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('subject_class_id','=',$this->id)->count() > 0 ? 'opened' : 'lock',
+            'status' => OpenLesson::where('user_id','=',Auth::guard('user-api')->id())
+                ->where('subject_class_id','=',$this->id)->first() ? 'opened' : 'lock',
             'image' => $this->image == null ? asset('classes/default/def.jpg') : asset('classes/' . $this->image),
             'background_color' => $this->background_color,
             'title' => lang() == 'ar' ? $this->title_ar : $this->title_en,

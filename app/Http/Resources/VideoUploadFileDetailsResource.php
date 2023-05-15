@@ -19,7 +19,6 @@ class VideoUploadFileDetailsResource extends JsonResource
     public function toArray($request)
     {
 
-        //($user_watch_video->status == 'opened' ? 'opened': 'watched')
         return [
 
             'id' => $this->id,
