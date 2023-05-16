@@ -40,6 +40,7 @@ use App\Http\Controllers\Admin\DiscountCouponsController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -328,4 +329,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Auth ####
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
+
 });
+Route::get('login-odoo', [Controller::class, 'loginOdoo']);
