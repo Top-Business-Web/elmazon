@@ -560,8 +560,7 @@ class ExamEntryController extends Controller
     }
 
 
-    public function examHeroesAll(): JsonResponse{
-
+    public function examHeroesAll(){
 
         try {
 
@@ -569,6 +568,8 @@ class ExamEntryController extends Controller
             $day_heroes = User::dayOfExamsHeroes();
 
             $week_heroes = User::weekOfExamsHeroes();
+
+//            return $day_heroes;
 
             $month_heroes = User::monthOfExamsHeroes();
 
@@ -580,37 +581,54 @@ class ExamEntryController extends Controller
 
             if($userCountExam > 0){
 
+                //all students entry exams
                 $allOfStudentsEnterExams = User::allOfStudentsEnterExams();
 
+                //list of ids from exam students [day,week,month]
                 $examsStudentsDayHeroesIds = $day_heroes->pluck('id')->toArray();
                 $examsStudentsWeekHeroesIds = $week_heroes->pluck('id')->toArray();
                 $examsStudentsMonthHeroesIds = $month_heroes->pluck('id')->toArray();
 
 
+                //all ordered of students from all exams
                 foreach ($day_heroes as $day_hero) {
                     $day_hero->ordered = (array_search($day_hero->id,$examsStudentsDayHeroesIds)) + 1;
+                    $day_hero->degree = ($day_hero->exam_degree_depends_sum_full_degree / $day_hero->exam_degree_depends_count);
+                    $day_hero->exams_total_degree = (($day_hero->online_exams_total_degrees_sum_degree + $day_hero->all_exams_total_degrees_sum_degree) / $day_hero->exam_degree_depends_count);
                 }
 
+                //online_exams_total_degrees_sum_degree
 
                 foreach ($week_heroes as $week_hero) {
                     $week_hero->ordered = (array_search($week_hero->id,$examsStudentsWeekHeroesIds)) + 1;
+                    $week_hero->degree = ($week_hero->exam_degree_depends_sum_full_degree / $week_hero->exam_degree_depends_count);
+                     $week_hero->exams_total_degree = (($week_hero->online_exams_total_degrees_sum_degree +  $week_hero->all_exams_total_degrees_sum_degree) / $week_hero->exam_degree_depends_count);
+
                 }
 
                 foreach ($month_heroes as $month_hero) {
                     $month_hero->ordered = (array_search($month_hero->id,$examsStudentsMonthHeroesIds)) + 1;
+                    $month_hero->degree = ($month_hero->exam_degree_depends_sum_full_degree / $month_hero->exam_degree_depends_count);
+                    $month_hero->exams_total_degree = (($month_hero->online_exams_total_degrees_sum_degree +  $month_hero->all_exams_total_degrees_sum_degree) /$month_hero->exam_degree_depends_count);
+
                 }
 
 
-                $checkStudentAuth = Auth::guard('user-api')->user();
-                $studentAuth = new AllExamHeroesNewResource($checkStudentAuth);
-                $studentAuth->ordered = (array_search($checkStudentAuth->id,$allOfStudentsEnterExams)) + 1;
-                $data['MyOrdered'] = $studentAuth;
+                //my ordered
+                $auth = User::myOrderedFromExamsHeroes();
 
 
-                //all of exams heroes
-                $data['day_heroes'] = AllExamHeroesNewResource::collection($day_heroes->take(10));
-                $data['week_heroes'] = AllExamHeroesNewResource::collection($week_heroes->take(10));
-                $data['month_heroes'] = AllExamHeroesNewResource::collection($month_heroes->take(10));
+                $studentAuth = new AllExamHeroesNewResource($auth);
+                $studentAuth->ordered = (array_search(Auth::guard('user-api')->id(),$allOfStudentsEnterExams)) + 1;
+                $studentAuth->degree = ($auth->exam_degree_depends_sum_full_degree / $auth->exam_degree_depends_count);
+                $studentAuth->exams_total_degree = (($auth->online_exams_total_degrees_sum_degree +  $auth->all_exams_total_degrees_sum_degree) /$auth->exam_degree_depends_count);
+
+
+                //all exams heroes
+                $data['auth'] = $studentAuth;
+                $data['day_heroes'] = AllExamHeroesNewResource::collection($day_heroes);
+                $data['week_heroes'] = AllExamHeroesNewResource::collection($week_heroes);
+                $data['month_heroes'] = AllExamHeroesNewResource::collection($month_heroes);
 
                 return self::returnResponseDataApi($data, "تم الحصول علي ابطال الامتحانات  بنجاح", 200);
 
@@ -618,9 +636,7 @@ class ExamEntryController extends Controller
             }else{
 
                 return self::returnResponseDataApi(null, "يجب دخول امتحان واحد علي الاقل لاظهار ابطال المنصه", 403);
-
             }
-
 
         } catch (\Exception $exception) {
 
