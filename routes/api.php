@@ -52,6 +52,7 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('logout',[AuthController::class,'logout']);
         Route::get('getProfile',[AuthController::class,'getProfile']);
         Route::post('add-suggest',[AuthController::class,'addSuggest']);
+        Route::post('notification-update-status/{id}',[AuthController::class,'notificationUpdateStatus']);
         Route::get('all-notifications',[AuthController::class,'allNotifications']);
         Route::post('add-device-token',[AuthController::class,'add_device_token']);
         Route::post('papel-sheet-exam/user/{id}',[AuthController::class,'paper_sheet_exam']);

@@ -142,4 +142,10 @@ class AuthController extends Controller{
 
         return $this->authRepositoryInterface->examCountdown();
     }
+
+    public function notificationUpdateStatus($id): JsonResponse
+    {
+
+        return $this->authRepositoryInterface->notificationUpdateStatus($id);
+    }
 }
