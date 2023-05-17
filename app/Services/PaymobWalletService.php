@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Http\Controllers\Controller;
+use App\Models\PaymentLog;
 use Illuminate\Support\Facades\Http;
 use Nafezly\Payments\Exceptions\MissingPaymentInfoException;
 
-class PaymobWalletService
+class PaymobWalletService extends Controller
 {
     private $paymob_api_key;
     private $paymob_wallet_integration_id;
@@ -28,7 +30,7 @@ class PaymobWalletService
      * @return void
      * @throws MissingPaymentInfoException
      */
-    public function pay($amount = null, $user_id = null, $user_first_name = null, $user_last_name = null, $user_email = null, $user_phone = null, $source = null)
+    public function pay($request, $amount = null, $user_id = null, $user_first_name = null, $user_last_name = null, $user_email = null, $user_phone = null, $source = null)
     {
 //        $this->setPassedVariablesToGlobal($amount,$user_id,$user_first_name,$user_last_name,$user_email,$user_phone,$source);
 //        $required_fields = ['amount', 'user_first_name', 'user_last_name', 'user_email', 'user_phone'];
@@ -80,12 +82,19 @@ class PaymobWalletService
                 ],
                 "payment_token"=>$get_url_token['token']
             ])->json();
-//        dd($get_url_token['token']);
-        return [
-            'payment_id'=>$get_order['id'],
-            'html' => $get_pay_link['iframe_redirection_url'],
-            'redirect_url'=>$get_pay_link['redirect_url']
-        ];
+//        dd($get_pay_link);
+        $inputs = $request->all();
+        $inputs['user_id'] = $user_id;
+        $payment = PaymentLog::create(
+            ['payment_id'=>$get_pay_link['id'],'request_variables'=> $inputs,'payment_type'=>'wallet']
+        );
+//        dd($payment->request_variables);
+        return self::returnResponseDataApi(['payment_url' => $get_pay_link['redirect_url']],"تم استلام لينك الدفع بنجاح ",200);
+//        return [
+//            'payment_id'=>$get_order['id'],
+//            'html' => $get_pay_link['iframe_redirection_url'],
+//            'redirect_url'=>$get_pay_link['redirect_url']
+//        ];
     }
 
 

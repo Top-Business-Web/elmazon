@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\PaymentLog;
 use App\Models\Subscribe;
 use App\Models\UserSubscribe;
 use App\Services\PaymentService;
@@ -128,6 +129,26 @@ class Payment extends Controller
         $response = request()->query();
 
         if($response['success'] == true){
+
+            $payment = PaymentLog::where('paymet_id',$response['id'])->first();
+            foreach ($payment->request_variables['subscribes_ids'] as  $item){
+                $subscribe_item = Subscribe::find($item);
+                UserSubscribe::create([
+                    'price' => $subscribe_item->price_in_center,
+                    'month' => $subscribe_item->month,
+                    'year' => $subscribe_item->year,
+                    'student_id' =>  $payment->request_variables['user_id'],
+                ]);
+                array_push($months,$subscribe_item->month);
+            }  //
+
+            $user = User::find($payment->request_variables['user_id']);
+            $subscribed_months = getFromToMonthsList($user->date_start_code, $user->date_end_code);
+//        dd($months,$subscribed_months);
+            $months_to_subscribe = sort(array_merge($months,$subscribed_months));
+            $dates = getFromToFromMonthsList($months_to_subscribe);
+
+//            return response()->json(["data"=>'',"errors"=>'','message'=>"Payment Successfully.",'code'=>200],200);
 //            dd(Session::get('items_posts'));
 //            foreach (Session::get('items_posts')['subscribes_ids'] as  $item){
 //                $subscribe_item = Subscribe::find($item);
@@ -182,7 +203,7 @@ class Payment extends Controller
     }
 
 
-    public function payWithPaymobVisa($name,$amount,$email,$user_id,$phone){
+    public function payWithPaymobVisa($request,$name,$amount,$email,$user_id,$phone){
         $user = auth()->guard('user-api');
         $payment = new PaymobPayment();
         $response = $payment
@@ -194,9 +215,12 @@ class Payment extends Controller
             ->setAmount($amount*100)
             ->pay();
 
-        return $response;
-//        return self::returnResponseDataApi(['payment_url' => $response['redirect_url']],"تم استلام لينك الدفع بنجاح ",200);
-        return $response;
+//        return $response;
+
+        PaymentLog::create(
+            ['payment_id'=>$response['payment_id'],'request_variables'=>$request->all(),'payment_type'=>'visa']
+        );
+        return self::returnResponseDataApi(['payment_url' => $response['redirect_url']],"تم استلام لينك الدفع بنجاح ",200);
         //output
         //[
         //    'payment_id'=>"", // refrence code that should stored in your orders table
@@ -222,16 +246,16 @@ class Payment extends Controller
         //]
     }
 
-    public function go_pay(Request $request,$payment)
+    public function go_pay(Request $request)
     {
         $user = auth()->guard('user-api')->user();
 //        dd($user);
-        switch ($payment) {
+        switch ($request->payment_method) {
             case "wallet":
-                return (new PaymobWalletService())->pay($request->amount*100,$user->id,$user->name,$user->name,$user->email??"email@pay.com",$user->phone,null);
+                return (new PaymobWalletService())->pay($request,$request->amount*100,$user->id,$user->name,$user->name,$user->email??"email@pay.com",$user->phone,null);
                 break;
             case "visa":
-                return $this->payWithPaymobVisa($user->name,$request->amount*100,$user->id,$user->email??"email@pay.com",$user->phone);
+                return $this->payWithPaymobVisa($request,$user->name,$request->amount*100,$user->id,$user->email??"email@pay.com",$user->phone);
                 break;
             case "green":
                 echo "Your favorite color is green!";
