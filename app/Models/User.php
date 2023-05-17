@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -134,6 +136,111 @@ class User extends Authenticatable implements JWTSubject
 
         return $this->hasMany(ExamsFavorite::class,'user_id','id');
     }
+
+
+    /*
+     * start scopes
+     */
+
+
+    public function scopeDayOfExamsHeroes($query){
+
+        return $query->with(['exam_degree_depends' => fn(HasMany $q)=>
+        $q->where('exam_depends','=','yes')])
+            ->whereHas('exam_degree_depends', fn(Builder $builder)=>
+            $builder->where('exam_depends','=','yes')
+                ->whereDay('created_at','=',Carbon::now()->format('d'))
+                ->whereYear('created_at','=',Carbon::now()->format('Y'))
+
+            )
+            ->whereHas('season', fn(Builder $builder) =>
+            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+            ->take(10)
+            ->withSum(
+                ['exam_degree_depends' => function($query) {
+                    $query->where('exam_depends','=','yes')
+                        ->whereDay('created_at','=',Carbon::now()->format('d'))
+                        ->whereYear('created_at','=',Carbon::now()->format('Y'));
+                }], 'full_degree')
+            ->orderBy('exam_degree_depends_sum_full_degree','desc')
+            ->get();
+
+    }
+
+
+    public function scopeWeekOfExamsHeroes($query){
+
+        return $query->with(['exam_degree_depends' => fn(HasMany $q)=>
+        $q->where('exam_depends','=','yes')])
+            ->whereHas('exam_degree_depends', fn(Builder $builder)=>
+            $builder->where('exam_depends','=','yes')
+                ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+                ->whereYear('created_at','=',Carbon::now()->format('Y'))
+
+            )
+            ->whereHas('season', fn(Builder $builder) =>
+            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+            ->take(10)
+            ->withSum(
+                ['exam_degree_depends' => function($query) {
+                    $query->where('exam_depends','=','yes') ->whereDay('created_at','=',Carbon::now()->format('d'))
+                        ->whereYear('created_at','=',Carbon::now()->format('Y'));
+                }], 'full_degree')
+            ->orderBy('exam_degree_depends_sum_full_degree','desc')
+            ->get();
+
+    }
+
+
+    public function scopeMonthOfExamsHeroes($query){
+
+        return $query->with(['exam_degree_depends' => fn(HasMany $q)=>
+        $q->where('exam_depends','=','yes')])
+            ->whereHas('exam_degree_depends', fn(Builder $builder)=>
+            $builder->where('exam_depends','=','yes')
+                ->whereMonth('created_at',Carbon::now()->format('m'))
+                ->whereYear('created_at','=',Carbon::now()->format('Y'))
+
+            )
+            ->whereHas('season', fn(Builder $builder) =>
+            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+            ->take(10)
+            ->withSum(
+                ['exam_degree_depends' => function($query) {
+                    $query->where('exam_depends','=','yes') ->whereDay('created_at','=',Carbon::now()->format('d'))
+                        ->whereYear('created_at','=',Carbon::now()->format('Y'));
+                }], 'full_degree')
+            ->orderBy('exam_degree_depends_sum_full_degree','desc')
+            ->get();
+
+    }
+
+
+    public function scopeAllOfStudentsEnterExams($query){
+
+        return $query->with(['exam_degree_depends' => fn(HasMany $q)=>
+
+        $q->where('exam_depends','=','yes')])
+            ->whereHas('exam_degree_depends', fn(Builder $builder)=>
+            $builder->where('exam_depends','=','yes')
+                ->whereYear('created_at','=',Carbon::now()->format('Y'))
+
+            )
+            ->whereHas('season', fn(Builder $builder) =>
+            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+            ->take(10)
+            ->withSum(
+                ['exam_degree_depends' => function($query) {
+                    $query->where('exam_depends','=','yes')->whereYear('created_at','=',Carbon::now()->format('Y'));
+                }], 'full_degree')
+            ->orderBy('exam_degree_depends_sum_full_degree','desc')
+            ->pluck('id')
+            ->toArray();
+
+
+    }
+
+
 
 
 

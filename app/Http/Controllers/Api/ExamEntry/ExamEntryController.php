@@ -20,6 +20,7 @@ use App\Models\Question;
 use App\Models\TextExamUser;
 use App\Models\Timer;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
@@ -565,21 +566,11 @@ class ExamEntryController extends Controller
         try {
 
 
-            $users = User::with(['exam_degree_depends' => fn(HasMany $q)=>
-            $q->where('exam_depends','=','yes')])
-                ->whereHas('exam_degree_depends', fn(Builder $builder)=>
-                $builder->where('exam_depends','=','yes'))
-                ->whereHas('season', fn(Builder $builder) =>
-                $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-                ->take(10)
-                ->withSum(
-                    ['exam_degree_depends' => function($query) {
-                        $query->where('exam_depends','=','yes');
-                    }], 'full_degree')
-                ->orderBy('exam_degree_depends_sum_full_degree','desc')
-                ->get();
+            $day_heroes = User::dayOfExamsHeroes();
 
-//            return $users;
+            $week_heroes = User::weekOfExamsHeroes();
+
+            $month_heroes = User::monthOfExamsHeroes();
 
 
             $userCountExam = ExamDegreeDepends::query()
@@ -589,35 +580,37 @@ class ExamEntryController extends Controller
 
             if($userCountExam > 0){
 
-                $usersIds = $users->pluck('id')->toArray();
+                $allOfStudentsEnterExams = User::allOfStudentsEnterExams();
 
-                foreach ($users as $user) {
-                    $user->ordered = (array_search($user->id,$usersIds)) + 1;
+                $examsStudentsDayHeroesIds = $day_heroes->pluck('id')->toArray();
+                $examsStudentsWeekHeroesIds = $week_heroes->pluck('id')->toArray();
+                $examsStudentsMonthHeroesIds = $month_heroes->pluck('id')->toArray();
+
+
+                foreach ($day_heroes as $day_hero) {
+                    $day_hero->ordered = (array_search($day_hero->id,$examsStudentsDayHeroesIds)) + 1;
                 }
 
 
-                $allOfStudentsEnterExams = User::with(['exam_degree_depends' => fn(HasMany $q)=>
-                $q->where('exam_depends','=','yes')])
-                    ->whereHas('exam_degree_depends', fn(Builder $builder)=>
-                    $builder->where('exam_depends','=','yes'))
-                    ->whereHas('season', fn(Builder $builder) =>
-                    $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-                    ->withSum(
-                        ['exam_degree_depends' => function($query) {
-                            $query->where('exam_depends','=','yes');
-                        }], 'full_degree')
-                    ->orderBy('exam_degree_depends_sum_full_degree','desc')
-                    ->pluck('id')
-                    ->toArray();
+                foreach ($week_heroes as $week_hero) {
+                    $week_hero->ordered = (array_search($week_hero->id,$examsStudentsWeekHeroesIds)) + 1;
+                }
 
-//             return $allOfStudentsEnterExams;
+                foreach ($month_heroes as $month_hero) {
+                    $month_hero->ordered = (array_search($month_hero->id,$examsStudentsMonthHeroesIds)) + 1;
+                }
 
 
                 $checkStudentAuth = Auth::guard('user-api')->user();
                 $studentAuth = new AllExamHeroesNewResource($checkStudentAuth);
                 $studentAuth->ordered = (array_search($checkStudentAuth->id,$allOfStudentsEnterExams)) + 1;
                 $data['MyOrdered'] = $studentAuth;
-                $data['AllExamHeroes'] = AllExamHeroesNewResource::collection($users->take(10));
+
+
+                //all of exams heroes
+                $data['day_heroes'] = AllExamHeroesNewResource::collection($day_heroes->take(10));
+                $data['week_heroes'] = AllExamHeroesNewResource::collection($week_heroes->take(10));
+                $data['month_heroes'] = AllExamHeroesNewResource::collection($month_heroes->take(10));
 
                 return self::returnResponseDataApi($data, "تم الحصول علي ابطال الامتحانات  بنجاح", 200);
 
