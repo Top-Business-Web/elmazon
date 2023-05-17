@@ -344,4 +344,3 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
 
 });
-Route::get('login-odoo', [Controller::class, 'loginOdoo']);
