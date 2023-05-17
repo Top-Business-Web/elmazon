@@ -139,14 +139,14 @@ class Payment extends Controller
                     'year' => $subscribe_item->year,
                     'student_id' =>  $payment->request_variables['user_id'],
                 ]);
-                array_push($months,$subscribe_item->month);
+//                array_push($months,$subscribe_item->month);
             }  //
 
-            $user = User::find($payment->request_variables['user_id']);
-            $subscribed_months = getFromToMonthsList($user->date_start_code, $user->date_end_code);
-//        dd($months,$subscribed_months);
-            $months_to_subscribe = sort(array_merge($months,$subscribed_months));
-            $dates = getFromToFromMonthsList($months_to_subscribe);
+//            $user = User::find($payment->request_variables['user_id']);
+//            $subscribed_months = getFromToMonthsList($user->date_start_code, $user->date_end_code);
+////        dd($months,$subscribed_months);
+//            $months_to_subscribe = sort(array_merge($months,$subscribed_months));
+//            $dates = getFromToFromMonthsList($months_to_subscribe);
 
 //            return response()->json(["data"=>'',"errors"=>'','message'=>"Payment Successfully.",'code'=>200],200);
 //            dd(Session::get('items_posts'));
