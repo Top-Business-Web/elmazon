@@ -130,7 +130,7 @@ class Payment extends Controller
 
         if($response['success'] == true){
 
-            $payment = PaymentLog::where('paymet_id',$response['id'])->first();
+            $payment = PaymentLog::where('payment_id',$response['id'])->first();
             foreach ($payment->request_variables['subscribes_ids'] as  $item){
                 $subscribe_item = Subscribe::find($item);
                 UserSubscribe::create([
