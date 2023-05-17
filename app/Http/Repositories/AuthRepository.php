@@ -24,6 +24,7 @@ use App\Models\ExamSchedule;
 use App\Models\Lesson;
 use App\Models\LifeExam;
 use App\Models\Notification;
+use App\Models\NotificationSeenStudent;
 use App\Models\OpenLesson;
 use App\Models\PapelSheetExam;
 use App\Models\PapelSheetExamTime;
@@ -856,6 +857,53 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             return self::returnResponseDataApi(null, "لا يوجد اي عد تنازلي للسنه الدراسيه لهذا الطالب الي الان", 201);
 
+        }
+
+    }
+
+
+    public function notificationUpdateStatus($id): JsonResponse{
+
+        try {
+
+            $notification = Notification::query()
+                ->where('id','=',$id)->first();
+
+            if(!$notification){
+
+                return self::returnResponseDataApi(null, "هذا الاشعار غير موجود", 404,404);
+            }
+
+            $notificationSeenBefore = NotificationSeenStudent::query()
+                ->where('student_id','=',Auth::guard('user-api')->id())
+                ->where('notification_id','=',$notification->id)
+                ->first();
+
+            if(!$notificationSeenBefore){
+
+                $notificationSeen = NotificationSeenStudent::create([
+                    'student_id' => Auth::guard('user-api')->id(),
+                    'notification_id' => $notification->id,
+                ]);
+
+                if($notificationSeen->save()){
+                    return self::returnResponseDataApi(new NotificationResource($notification), "تم تحديث حاله الاشعار بنجاح", 200);
+                }else{
+
+                    return self::returnResponseDataApi(null, "يوجد خطاء ما اثناء تحديث حاله الاشعار", 500);
+
+                }
+
+            }else{
+
+                return self::returnResponseDataApi(new NotificationResource($notification), "تم تحديث حاله الاشعار من قبل", 201);
+
+            }
+
+
+        } catch (\Exception $exception) {
+
+            return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
 
     }
