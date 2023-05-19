@@ -1,15 +1,19 @@
 <?php
+
 namespace App\Http\Controllers\Api\Auth;
+
 use App\Http\Controllers\Controller;
 use App\Http\Interfaces\AuthRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
-class AuthController extends Controller{
+class AuthController extends Controller
+{
 
-    public AuthRepositoryInterface $authRepositoryInterface ;
+    public AuthRepositoryInterface $authRepositoryInterface;
 
-    public function __construct(AuthRepositoryInterface $authRepositoryInterface){
+    public function __construct(AuthRepositoryInterface $authRepositoryInterface)
+    {
 
         $this->authRepositoryInterface = $authRepositoryInterface;
     }
@@ -43,13 +47,14 @@ class AuthController extends Controller{
     }
 
 
-    public function paper_sheet_exam(Request $request,$id)
+    public function paper_sheet_exam(Request $request, $id)
     {
 
-        return $this->authRepositoryInterface->paper_sheet_exam($request,$id);
+        return $this->authRepositoryInterface->paper_sheet_exam($request, $id);
     }
 
-    public function latestPaperExamDelete(): JsonResponse{
+    public function latestPaperExamDelete(): JsonResponse
+    {
 
         return $this->authRepositoryInterface->latestPaperExamDelete();
 
@@ -74,28 +79,33 @@ class AuthController extends Controller{
         return $this->authRepositoryInterface->home_page();
     }
 
-    public function allClasses(): JsonResponse{
+    public function allClasses(): JsonResponse
+    {
 
         return $this->authRepositoryInterface->allClasses();
     }
 
-    public function all_exams(): JsonResponse{
+    public function all_exams(): JsonResponse
+    {
 
         return $this->authRepositoryInterface->all_exams();
     }
 
-    public function findExamByClassById($id): JsonResponse{
+    public function findExamByClassById($id): JsonResponse
+    {
 
         return $this->authRepositoryInterface->findExamByClassById($id);
 
     }
 
-    public function startYourJourney(Request $request): JsonResponse{
+    public function startYourJourney(Request $request): JsonResponse
+    {
 
         return $this->authRepositoryInterface->startYourJourney($request);
     }
 
-    public function videosResources(): JsonResponse{
+    public function videosResources(): JsonResponse
+    {
 
         return $this->authRepositoryInterface->videosResources();
 
@@ -137,6 +147,7 @@ class AuthController extends Controller{
 
         return $this->authRepositoryInterface->inviteYourFriends();
     }
+
     public function examCountdown(): JsonResponse
     {
 
@@ -148,4 +159,5 @@ class AuthController extends Controller{
 
         return $this->authRepositoryInterface->notificationUpdateStatus($id);
     }
+
 }
