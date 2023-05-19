@@ -10,6 +10,7 @@ use App\Models\CommentReplay;
 use App\Models\VideoBasic;
 use App\Models\VideoParts;
 use App\Models\VideoResource;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -18,10 +19,12 @@ class CommentController extends Controller
 {
 
 
-    public function videoAddComment(Request $request)
+    public function videoAddComment(Request $request): JsonResponse
     {
 
-        $validatedData = Validator::make($request->all(), [
+        try {
+
+        $rules = [
 
             'video_part_id' => 'nullable|exists:video_parts,id',
             'video_basic_id' => 'nullable|exists:video_basics,id',
@@ -30,17 +33,30 @@ class CommentController extends Controller
             'type' => 'required|in:file,text,audio',
             'audio' => 'nullable',
             'image' => 'nullable|mimes:jpg,png,jpeg'
-        ],
-        [
-            'video_part_id.exists' => 'رقم فيديو الشرح غير موجود',
-            'video_basic_id.exists' => 'رقم فيديو الاساسيات غير موجود',
-            'video_resource_id.exists' => 'رقم فيديو المراجعه غير موجود',
-            'type.in' => 'نوع التعليق يجب ان يكون file or text or audio',
-            'image.mimes' => 'jpg,png,jpeg الملف المرفق يجب ان يكون من نوع '
+        ];
+
+        $validator = Validator::make($request->all(), $rules, [
+            'image.mimes' => 407,
+            'type.in' => 408
         ]);
-        if ($validatedData->fails()) {
-            return self::returnResponseDataApi(null, $validatedData->errors()->first(), 422, 422);
+
+        if ($validator->fails()) {
+
+            $errors = collect($validator->errors())->flatten(1)[0];
+            if (is_numeric($errors)) {
+
+                $errors_arr = [
+                    407 => 'Failed,The image type must be an jpg or jpeg or png.',
+                    408 => 'Failed,The type of comment must be an file or text or audio',
+
+                ];
+
+                $code = collect($validator->errors())->flatten(1)[0];
+                return self::returnResponseDataApi(null, $errors_arr[$errors] ?? 500, $code);
+            }
+            return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
+
 
 
         if ($image = $request->file('image')) {
@@ -82,19 +98,35 @@ class CommentController extends Controller
 
 
         if ($add_comment->save()) {
+
             return self::returnResponseDataApi(new CommentResource($add_comment), "تم التعليق بنجاح", 200);
+
+        }else{
+
+            return self::returnResponseDataApi(null, "يوجد خطاء ما اثناء اضافه التعليق", 500);
+        }
+
+        }catch (\Exception $exception) {
+
+            return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
 
     }
 
-    public function commentAddReplay(Request $request, $id)
+    public function commentAddReplay(Request $request, $id): JsonResponse
     {
 
-        $comment = Comment::where('id', '=', $id)->first();
+        $comment = Comment::query()
+            ->where('id', '=', $id)
+            ->first();
+
         if (!$comment) {
 
             return self::returnResponseDataApi(null, "هذا التعليق غير موجود", 404, 404);
         }
+
+        try {
+
 
         $rules = [
             'replay' => 'nullable',
@@ -119,23 +151,27 @@ class CommentController extends Controller
                 ];
 
                 $code = collect($validator->errors())->flatten(1)[0];
-                return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+                return self::returnResponseDataApi(null, $errors_arr[$errors] ?? 500, $code);
             }
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
         if ($image = $request->file('image')) {
+
             $destinationPath = 'comments_upload_file/';
             $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $file);
             $request['image'] = "$file";
 
         } elseif ($audio = $request->file('audio')) {
+
             $audioPath = 'comments_upload_file/';
             $audioUpload = date('YmdHis') . "." . $audio->getClientOriginalExtension();
             $audio->move($audioPath, $audioUpload);
             $request['audio'] = "$audioUpload";
+
         } else {
+
             $replay = $request->replay;
         }
 
@@ -155,32 +191,62 @@ class CommentController extends Controller
         ]);
 
 
-        if (isset($comment_replay)) {
+        if ($comment_replay->save()) {
             return self::returnResponseDataApi(new CommentReplayResource($comment_replay), "تم الرد علي التعليق بنجاح", 200);
 
+        }else{
+
+            return self::returnResponseDataApi(null, "لم يتم الرد علي التعليق يوجد خطاء ما", 500);
+        }
+
+        }catch (\Exception $exception) {
+
+            return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
     }
 
-    public function updateComment(Request $request, $id)
+    public function updateComment(Request $request,$id): JsonResponse
     {
 
-        $commentCheck = Comment::where('id', '=',$id)->first();
+        $commentCheck = Comment::query()
+        ->where('id', '=',$id)
+            ->first();
+
         if (!$commentCheck) {
             return self::returnResponseDataApi(null, "هذا التعليق غير موجود", 404, 404);
         }
 
-        $validator = Validator::make($request->all(), [
+
+        try {
+
+        $rules = [
+
             'comment' => 'nullable',
             'type' => 'required|in:file,text,audio',
             'audio' => 'nullable',
             'image' => 'nullable|mimes:jpg,png,jpeg'
-        ],
-            [
-                'type.in' => 'نوع التعليق يجب ان يكون file or text or audio',
-                'image.mimes' => 'jpg,png,jpeg الملف المرفق يجب ان يكون من نوع '
-            ]);
+        ];
+
+        $validator = Validator::make($request->all(), $rules, [
+            'image.mimes' => 407,
+            'type.in' => 408
+        ]);
+
         if ($validator->fails()) {
-            return self::returnResponseDataApi(null,$validator->errors()->first(),422, 422);
+
+            $errors = collect($validator->errors())->flatten(1)[0];
+            if (is_numeric($errors)) {
+
+                $errors_arr = [
+                    407 => 'Failed,The image type must be an jpg or jpeg or png.',
+                    408 => 'Failed,The type of comment must be an file or text or audio',
+
+                ];
+
+                $code = collect($validator->errors())->flatten(1)[0];
+                return self::returnResponseDataApi(null, $errors_arr[$errors] ?? 500, $code);
+            }
+            return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
 
@@ -216,18 +282,28 @@ class CommentController extends Controller
 
             if ($commentCheck->save()) {
                 return self::returnResponseDataApi(new CommentResource($commentCheck), "تم تحديث التعليق بنجاح", 200);
+            }else{
+
+                return self::returnResponseDataApi(null, "لم يتم تحديث التعليق يوجد خطاء ما", 500);
             }
 
         } else {
             return self::returnResponseDataApi(null, "ليس لديك صلاحيه لتعديل هذا التعليق", 403);
         }
 
+        }catch (\Exception $exception) {
+
+            return self::returnResponseDataApi(null, $exception->getMessage(), 500);
+        }
     }
 
-    public function deleteComment($id)
+    public function deleteComment($id): JsonResponse
     {
 
-        $comment = Comment::where('id', '=', $id)->first();
+        $comment = Comment::query()
+        ->where('id', '=', $id)
+            ->first();
+
         if (!$comment) {
 
             return self::returnResponseDataApi(null, "هذا التعليق غير موجود", 404, 404);
@@ -235,22 +311,28 @@ class CommentController extends Controller
         if ($comment->user_id == Auth::guard('user-api')->id()) {
             $comment->delete();
 
+            return self::returnResponseDataApi(null, "تم حذف التعليق بنجاح", 200);
+
         } else {
             return self::returnResponseDataApi(null, "ليس لديك صلاحيه لمسح هذا التعليق", 403);
         }
-        return self::returnResponseDataApi(null, "تم حذف التعليق بنجاح", 200);
 
     }
 
 
-    public function updateReplay(Request $request, $id)
+    public function updateReplay(Request $request, $id): JsonResponse
     {
 
-        $replay = CommentReplay::where('id', '=', $id)->first();
+        $replay = CommentReplay::query()
+        ->where('id', '=', $id)
+            ->first();
+
         if (!$replay) {
 
             return self::returnResponseDataApi(null, "هذا الرد غير موجود", 404, 404);
         }
+
+        try {
 
         $rules = [
             'comment' => 'nullable',
@@ -311,29 +393,37 @@ class CommentController extends Controller
                 'type' => $request->type,
             ]);
 
+            return self::returnResponseDataApi(new CommentReplayResource($replay), "تم تعديل الرد بنجاح", 200);
+
+
         } else {
             return self::returnResponseDataApi(null, "ليس لديك صلاحيه لتعديل هذا الرد", 403);
         }
 
-        if (isset($replay)) {
-            return self::returnResponseDataApi(new CommentReplayResource($replay), "تم تعديل الرد بنجاح", 200);
+        }catch (\Exception $exception) {
+
+            return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
     }
 
-    public function deleteReplay($id)
+    public function deleteReplay($id): JsonResponse
     {
 
-        $replay = CommentReplay::where('id', '=', $id)->first();
+        $replay = CommentReplay::query()
+        ->where('id', '=', $id)
+            ->first();
+
         if (!$replay) {
             return self::returnResponseDataApi(null, "هذا الرد غير موجود", 404, 404);
         }
         if ($replay->student_id == Auth::guard('user-api')->id()) {
+
             $replay->delete();
+            return self::returnResponseDataApi(null, "تم حذف الرد بنجاح", 200);
 
         } else {
             return self::returnResponseDataApi(null, "ليس لديك صلاحيه لمسح هذا الرد", 403);
         }
-        return self::returnResponseDataApi(null, "تم حذف الرد بنجاح", 200);
 
     }
 }
