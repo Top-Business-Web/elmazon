@@ -265,12 +265,9 @@ class VideoResourceController extends Controller
         $data['terms'] = Term::all();
         return view('admin.video_resource.parts.create', compact('data'));
     }
-    // Create End
 
-    // Store Start
 
-    public function store(Request $request)
-    {
+    public function store(StoreVideoResource $request){
         $inputs = $request->all();
 
         if ($request->hasFile('image')) {
@@ -294,10 +291,6 @@ class VideoResourceController extends Controller
         }
     }
 
-    // Store End
-
-
-    // Edit Start
 
     public function edit(VideoResource $videoResource)
     {
@@ -307,9 +300,6 @@ class VideoResourceController extends Controller
     }
 
 
-    // Edit End
-
-    // Update Start
 
     public function update(Request  $request, VideoResource $videoResource)
     {
@@ -358,9 +348,6 @@ class VideoResourceController extends Controller
         }
     }
 
-    // Update End
-
-    // Destroy Start
 
     public function destroy(Request $request)
     {

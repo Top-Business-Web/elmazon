@@ -21,6 +21,7 @@ use App\Models\UserSubscribe;
 use App\Models\OnlineExamUser;
 use App\Models\PapelSheetExam;
 use App\Http\Requests\StoreUser;
+use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
 use App\Http\Requests\UpdateUser;
 use App\Models\ExamDegreeDepends;
@@ -68,23 +69,20 @@ class UserController extends Controller
             return view('admin.users.index');
         }
     }
-    // Index End
 
-    // Create Start
     public function create()
     {
         $data['seasons'] = Season::get();
         $data['countries'] = Country::get();
         return view('admin.users.parts.create')->with($data);
     }
-    // Create End
 
-    // Store Start
 
     public function store(Request $request)
     {
         $inputs = $request->all();
         $inputs['user_status'] = 'active';
+        $inputs['password'] = Hash::make('123456');
 
         if ($request->has('image')) {
             $inputs['image'] = $this->saveImage($request->image, 'user', 'photo');
@@ -98,10 +96,7 @@ class UserController extends Controller
         } // Create End
     }
 
-    // Store End
 
-
-    // Edit Start
     public function edit(User $user)
     {
         $data['seasons'] = Season::get();

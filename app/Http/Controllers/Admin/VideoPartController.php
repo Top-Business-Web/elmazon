@@ -15,6 +15,7 @@ use App\Models\Report;
 use App\Models\VideoTotalView;
 use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -106,10 +107,6 @@ class VideoPartController extends Controller
         }
     }
 
-    // Report End
-
-    // Video Part Comment
-
     public function indexCommentVideo(Request $request, $id)
     {
         if ($request->ajax()) {
@@ -146,7 +143,7 @@ class VideoPartController extends Controller
         return view('admin.videopart.parts.store_comment', compact('id'));
     }
 
-    // Save Comment
+
     public function storeReplyVideo(Request $request)
     {
         $parentComment = Comment::find($request->id);
@@ -166,7 +163,7 @@ class VideoPartController extends Controller
         return response()->json(['status' => 200]);
     }
 
-    // Video Part Comment Reply
+
 
     public function indexCommentVideoReply(Request $request, $id)
     {
@@ -219,75 +216,45 @@ class VideoPartController extends Controller
         return view('admin.videopart.parts.create', compact('lessons'));
     }
 
-    // Create End
 
-    // Store start
 
-    public function store(Request $request)
+    public function store(StoreVideoPart $request): JsonResponse
     {
-//        $last_orderd = DB::table('video_parts')->orderBy('id', 'DESC')->first()->ordered;
-        $videoPart = new VideoParts();
-        $file = $request->file('link');
-        $file_name = '';
-
-        if ($request->hasFile('link')) {
-
-            $extension = $file->getClientOriginalExtension();
-            $allowed_file_types = ['pdf', 'mp3', 'mp4'];
-
-            if (in_array($extension, $allowed_file_types)) {
-                $file_name = $file->getClientOriginalName();
-
-                if ($extension == 'pdf') {
-                    $file->move('videos_basics/pdf/', $file_name);
-                    $videoPart->type = 'pdf';
-                } elseif ($extension == 'mp3') {
-                    $file->move('videos_basics/pdf/', $file_name);
-                    $videoPart->type = 'audio';
-                } elseif ($extension == 'mp4') {
-                    $file->move('videos_basics/', $file_name);
-                    $videoPart->type = 'video';
-                }
-
-                $videoPart->link = $file_name;
-            } else {
-                return response()->json(['status' => 405, 'message' => 'Invalid file type']);
-            }
 
 
-            $videoPart->name_ar = $request->name_ar;
-            $videoPart->name_en = $request->name_en;
-            $videoPart->note = $request->note;
-            $videoPart->month = $request->month;
-            $videoPart->video_time = $request->video_time;
-            $videoPart->lesson_id = $request->lesson_id;
-            $videoPart->background_color = $request->background_color;
-//        $videoPart->ordered = $last_orderd + 1;
+        if ($video = $request->file('link')) {
 
-            if ($videoPart->save()) {
-
-
-                VideoFilesUploads::create([
-                    'name_ar' => $videoPart->name_ar,
-                    'name_en' => $videoPart->name_en,
-                    'background_color' => $videoPart->background_color, // default
-                    'file_link' => $videoPart->link,
-                    'month' => $videoPart->month,
-                    'file_type' => $videoPart->type,
-                    'video_part_id' => $videoPart->id,
-                ]);
-//            $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
-                $this->adminLog('تم اضافة فيديو');
-                return response()->json(['status' => 200]);
-            } else {
-                return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
-            }
+            $destinationPath = 'videos/';
+            $videoPart= date('YmdHis') . "." . $video->getClientOriginalExtension();
+            $video->move($destinationPath, $videoPart);
+            $request['link'] = "$videoPart";
         }
+
+
+        $videoPartCreate = VideoParts::create([
+
+            'name_ar' => $request->name_ar,
+            'name_en' => $request->name_en,
+            'background_color' => $request->background_color,
+            'month' => $request->month,
+            'note' => $request->note,
+            'lesson_id' => $request->lesson_id,
+            'link' => $videoPart ?? null,
+            'video_time' => $request->video_time,
+
+        ]);
+
+        if($videoPartCreate->save()){
+
+            $this->adminLog('تم اضافة فيديو');
+            return response()->json(['status' => 200]);
+
+        }else{
+            return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
+        }
+
     }
 
-// Store End
-
-// Edit start
 
     public function edit(VideoParts $videosPart)
     {
@@ -295,76 +262,61 @@ class VideoPartController extends Controller
         return view('admin.videopart.parts.edit', compact('videosPart', 'lessons'));
     }
 
-// Edit End
 
-// Update start
 
-    public function update(Request $request, $id)
+    public function update(StoreVideoPart $request,$id): JsonResponse
     {
-        $videoPart = VideoParts::find($id);
 
-        if (!$videoPart) {
-            return response()->json(['status' => 404, 'message' => 'Record not found']);
-        }
+        $videPartUpdate = VideoParts::query()
+            ->find($id);
 
-        $file = $request->file('link');
-        $file_name = '';
+        if ($video = $request->file('link')) {
 
-        if ($request->hasFile('link')) {
-            $extension = $file->getClientOriginalExtension();
-            $allowed_file_types = ['pdf', 'mp3', 'mp4'];
+            $destinationPath = 'videos/';
+            $videoPart= date('YmdHis') . "." . $video->getClientOriginalExtension();
+            $video->move($destinationPath, $videoPart);
+            $request['link'] = "$videoPart";
 
-            if (in_array($extension, $allowed_file_types)) {
-                $file_name = $file->getClientOriginalName();
 
-                if ($extension == 'pdf') {
-                    $file->move('videos_basics/pdf/', $file_name);
-                    $videoPart->type = 'pdf';
-                } elseif ($extension == 'mp3') {
-                    $file->move('videos_basics/pdf/', $file_name);
-                    $videoPart->type = 'audio';
-                } elseif ($extension == 'mp4') {
-                    $file->move('videos_basics/', $file_name);
-                    $videoPart->type = 'video';
-                }
+            if(file_exists(public_path('videos/'.$videPartUpdate->link))){
 
-                $videoPart->link = $file_name;
-            } else {
-                return response()->json(['status' => 405, 'message' => 'Invalid file type']);
+                unlink(public_path('videos/'.$videPartUpdate->link));
             }
         }
 
-        $videoPart->name_ar = $request->name_ar;
-        $videoPart->name_en = $request->name_en;
-        $videoPart->note = $request->note;
-        $videoPart->month = $request->month;
-        $videoPart->video_time = $request->video_time;
-        $videoPart->lesson_id = $request->lesson_id;
+        $videPartUpdate->update([
 
-        if ($videoPart->save()) {
-            $this->adminLog('تم تعديل فيديو');
+            'name_ar' => $request->name_ar,
+            'name_en' => $request->name_en,
+            'background_color' => $request->background_color,
+            'month' => $request->month,
+            'note' => $request->note,
+            'lesson_id' => $request->lesson_id,
+            'link' => $request->file('link') == null ? $videPartUpdate->link : $videoPart ,
+            'video_time' => $request->video_time,
+
+        ]);
+
+        if($videPartUpdate->save()){
+
+            $this->adminLog('تم تعديل بيانات الفيديو');
             return response()->json(['status' => 200]);
-        } else {
-            return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
+
+        }else{
+            return response()->json(['status' => 405, 'message' => 'Failed to update']);
         }
     }
 
 
-// Update end
 
-// Destroy Start
+    public function destroy(Request $request): JsonResponse{
 
-    public function destroy(Request $request)
-    {
         $videoParts = VideoParts::where('id', $request->id)->firstOrFail();
         $videoParts->delete();
         $this->adminLog('تم حذف فيديو');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-// Destroy End
-
-// Drag Start
 
     public function updateItems(Request $request)
     {

@@ -21,6 +21,7 @@ use App\Models\VideoParts;
 use App\Models\VideoResource;
 use App\Models\VideoOpened;
 use App\Models\VideoTotalView;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -459,6 +460,7 @@ class LessonController extends Controller
                 ->first();
 
 
+            //start sum total of minutes to compare between video minutes and total user watch
             $videosIds = VideoParts::query()
                 ->where('lesson_id','=',$lesson->id)
                 ->pluck('id')
@@ -466,15 +468,17 @@ class LessonController extends Controller
 
             $sumMinutesOfAllVideosBelongsTiThisLesson = VideoParts::query()
                 ->where('lesson_id','=',$lesson->id)
-                ->sum('video_time');// example 20 minutes
+                ->pluck('video_time')
+                ->toArray();// example 130 seconds
 
             $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
                 ->whereIn('video_part_id',$videosIds)
                 ->where('user_id', '=', Auth::guard('user-api')->id())
-                ->sum('minutes');//example 20 minutes
+                ->pluck('minutes')
+                ->toArray();//example 120 seconds
 
 
-            $total = number_format((((int)$sumAllOfMinutesVideosStudentAuth / (int)$sumMinutesOfAllVideosBelongsTiThisLesson) * 100),2);
+             $total = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfAllVideosBelongsTiThisLesson)) * 100),2);
 
             if ($next_lesson) {
 
@@ -553,23 +557,23 @@ class LessonController extends Controller
 
                 $sumMinutesOfAllVideosBelongsTiThisLesson = VideoParts::query()
                     ->where('lesson_id','=',$lesson->id)
-                    ->sum('video_time');// example 20 minutes
+                    ->pluck('video_time')
+                     ->toArray();// example 20 minutes
 
                 $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
                     ->whereIn('video_part_id',$videosIds)
                     ->where('user_id', '=', Auth::guard('user-api')->id())
-                    ->sum('minutes');//example 20 minutes
+                    ->pluck('minutes')
+                ->toArray();//example 20 minutes
 
-                $totalOfMinutesVideos[] =  (int)$sumMinutesOfAllVideosBelongsTiThisLesson;
-                $totalOfMinutesUserWatched[] = (int)$sumAllOfMinutesVideosStudentAuth;
+                $totalOfMinutesVideos[] =  $sumMinutesOfAllVideosBelongsTiThisLesson;
+                $totalOfMinutesUserWatched[] = $sumAllOfMinutesVideosStudentAuth;
 
             }
 
-//            dd( $totalOfMinutesVideos,$totalOfMinutesUserWatched);
 
-            $total = number_format(((array_sum($totalOfMinutesUserWatched) / array_sum($totalOfMinutesVideos)) * 100),2);
+            $total = number_format(((getAllSecondsFromTimes($totalOfMinutesUserWatched) / getAllSecondsFromTimes($totalOfMinutesVideos)) * 100),2);
 
-            //end check total watched of student for this subject_class
             if($total < 65){
 
                 return self::returnResponseDataApi(null, "يجب مشاهده 65% من محتوي ذلك الفصل اولا لفتح الفصل التالي", 403);

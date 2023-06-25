@@ -3,68 +3,69 @@
         @csrf
         @method('PUT')
         <input type="hidden" value="{{ $videosPart->id }}" name="id">
+
         <div class="form-group">
             <input type="hidden" name="ordered" value="" />
-            <div class="row">
-                <div class="col-md-6">
+            <div class="row mb-3">
+                <div class="col-md-12">
                     <label for="name_ar" class="form-control-label">الاسم باللغة العربية</label>
-                    <input type="text" class="form-control" value="{{ $videosPart->name_ar }}" name="name_ar" required>
+                    <input type="text" class="form-control" name="name_ar" value="{{$videosPart->name_ar}}">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label">الاسم باللغة الانجليزية</label>
-                    <input type="text" class="form-control" value="{{ $videosPart->name_en }}" name="name_en" required>
+                    <input type="text" class="form-control" name="name_en" value="{{$videosPart->name_en}}">
                 </div>
             </div>
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="lesson_id" class="form-control-label">درس</label>
-                    <Select name="lesson_id" class="form-control user_choose" required>
+                    <Select name="lesson_id" class="form-control user_choose">
                         <option selected disabled style="text-align: center">اختار درس</option>
                         {{--                        <option value="" style="text-align: center">فيديوهات عامة</option>--}}
                         @foreach($lessons as $lesson)
                             <option value="{{ $lesson->id }}"
-                                    {{ $videosPart->lesson_id == $lesson->id ? 'selected' : '' }}
                                     style="text-align: center">{{ $lesson->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>
                 <div class="col-md-6">
                     <label for="head">شهر</label>
-                    <select name="month" class="form-control" id="signup_birth_month" required>
+                    <select name="month" class="form-control" id="signup_birth_month" >
                         <option value="" style="text-align: center">اختر شهر</option>
                         <?php for ($i = 1; $i <= 12; $i++){
-                            echo '<option style="text-align: center" '. ($videosPart->month == $i ? 'selected' : '') .' value="' . $i . '">' . date( 'F', strtotime( " $i/12/10" ) ) . '</option>';
+                            echo '<option style="text-align: center" value="' . $i . '">' . date( 'F', strtotime( "$i/12/10" ) ) . '</option>';
                         }?>
                     </select>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <label for="type" class="form-control-label">النوع</label>
-                    <select class="form-control type" id="type" name="type" required>
-                        <option value="1" {{ $videosPart->type == 'pdf' ? 'selected' : '' }}>ملف ورقي</option>
-                        <option value="2" {{ $videosPart->type == 'audio' ? 'selected' : '' }}>صوت</option>
-                        <option value="3" {{ $videosPart->type == 'video' ? 'selected' : '' }}>فيديو</option>
-                    </select>
-                </div>
-                <div class="col-md-4 video_link">
-                    <label for="video_link" class="form-control-label">لينك</label>
-                    <input type="file" name="link" value="{{ $videosPart->link }}" class="form-control"
+
+            <div class="row mb-3">
+
+
+                <div class="col-md-12 video_link">
+                    <label for="video_link" class="form-control-label">ارفاق ملف *</label>
+                    <input type="file" name="link" class="form-control"
                            data-default-file=""/>
                 </div>
-                <div class="col-md-4 video_date" hidden>
+
+                <div class="col-md-12 video_link mt-3">
+                    <label for="video_link" class="form-control-label">مسار فيديو مثال (Youtube)*</label>
+                    <input type="text" name="youtube_link" class="form-control" value="{{$videosPart->youtube_link}}"/>
+                </div>
+
+                <div class="col-md-12 video_date mt-3">
                     <label for="video_date" class="form-control-label">وقت الفيديو</label>
-                    <input type="text" id="date_video" value="{{ $videosPart->video_time }}" class="form-control" name="video_time">
+                    <input type="text" id="date_video" class="form-control" name="video_time" value="{{$videosPart->video_time}}">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <label for="background_color" class="form-control-label">لون الخلفية</label>
-                    <input type="color" id="background_color" class="form-control" name="background_color" value="{{ $videosPart->background_color }}" required>
+                    <input type="color" id="background_color" class="form-control" name="background_color">
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label">ملاحظة</label>
-                    <textarea class="form-control" name="note" rows="10">{{ $videosPart->note }}</textarea>
+                    <textarea class="form-control" name="note" rows="10"></textarea>
                 </div>
             </div>
         </div>
