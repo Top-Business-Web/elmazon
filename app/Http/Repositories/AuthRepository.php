@@ -90,7 +90,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 return self::returnResponseDataApi(null, "الطالب غير مفعل برجاء التواصل مع السيكرتاريه", 408);
             }
             $user = Auth::guard('user-api')->user();
-            $user->update(['login_status' => 1]);
             $user['token'] = $token;
 
             return self::returnResponseDataApi(new UserResource($user), "تم تسجيل الدخول بنجاح", 200);

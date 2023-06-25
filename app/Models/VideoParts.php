@@ -24,8 +24,6 @@ class VideoParts extends Model
         'note',
         'lesson_id',
         'link',
-        'type',
-        'video_time',
         'like_active',
         'video_time'
 

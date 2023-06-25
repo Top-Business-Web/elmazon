@@ -104,3 +104,23 @@ if (!function_exists('getFromToMonthsList')) {
 }
 
 
+
+if (!function_exists('getAllSecondsFromTimes')) {
+
+    function getAllSecondsFromTimes($times): int
+    {
+
+        $total_seconds = array_reduce($times, function($carry, $time) {
+            return $carry + strtotime("1970-01-01 $time UTC") - strtotime("1970-01-01 00:00:00 UTC");
+        });
+
+        $total_time = gmdate("H:i:s", $total_seconds);
+
+
+        $time_string = $total_time;
+        $seconds = strtotime("1970-01-01 $time_string UTC") - strtotime("1970-01-01 00:00:00 UTC");
+
+        return $seconds;
+    }
+
+}

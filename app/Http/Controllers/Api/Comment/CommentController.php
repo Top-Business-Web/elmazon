@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Api\Comment;
-
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CommentReplayResource;
 use App\Http\Resources\CommentResource;
@@ -17,8 +16,6 @@ use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
-
-
     public function videoAddComment(Request $request): JsonResponse
     {
 

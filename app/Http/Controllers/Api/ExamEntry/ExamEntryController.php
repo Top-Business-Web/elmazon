@@ -560,7 +560,8 @@ class ExamEntryController extends Controller
     }
 
 
-    public function examHeroesAll(){
+    public function examHeroesAll(): JsonResponse
+    {
 
         try {
 
@@ -569,7 +570,6 @@ class ExamEntryController extends Controller
 
             $week_heroes = User::weekOfExamsHeroes();
 
-//            return $day_heroes;
 
             $month_heroes = User::monthOfExamsHeroes();
 
