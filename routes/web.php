@@ -25,18 +25,18 @@ Route::get('/payments/payWithFawry',[Payment::class,'payWithFawry'])->name('paym
 //get all terms by season_id
 Route::get('terms/season/{id}',[\App\Http\Controllers\Admin\TermController::class,'getAllTermsBySeason'])->middleware('auth:admin');
 
-Route::get('get-minutes', function (){
-
-    $video_part_time = \App\Models\VideoParts::query()
-        ->find(1)->video_part_time;
-
-    $total_watch = \App\Models\VideoOpened::query()
-        ->find(29)->total_watch;
-
-    $timeDifference = Carbon::parse($total_watch)->diffInSeconds(Carbon::parse($video_part_time));
-    $total = $timeDifference;
-
-
-    return $total;
-
-});
+//Route::get('get-minutes', function (){
+//
+//    $video_part_time = \App\Models\VideoParts::query()
+//        ->find(1)->video_part_time;
+//
+//    $total_watch = \App\Models\VideoOpened::query()
+//        ->find(29)->total_watch;
+//
+//    $timeDifference = Carbon::parse($total_watch)->diffInSeconds(Carbon::parse($video_part_time));
+//    $total = $timeDifference;
+//
+//
+//    return $total;
+//
+//});

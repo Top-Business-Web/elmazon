@@ -611,7 +611,7 @@ class LessonController extends Controller
 
     public function updateMinuteVideo(Request $request,$id): JsonResponse{
 
-        $rules = ['minutes' => 'required|integer|gte:1'];
+        $rules = ['minutes' => 'required|date_format:H:i:s'];
 
 
         $validator = Validator::make($request->all(), $rules, ['minutes.gte' => 406]);
