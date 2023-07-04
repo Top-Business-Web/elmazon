@@ -22,6 +22,7 @@ class CommentResource extends JsonResource
             'audio' => $this->audio != null ? asset('comments_upload_file/'. $this->audio) : 'No audio',
             'image' => $this->image != null ? asset('comments_upload_file/'. $this->image) : 'No image',
             'type' => $this->type,
+            'time' => $this->created_at->diffForHumans(),
             'user' => new UserResource($this->user),
             'replies' => CommentReplayResource::collection($this->replays),
             'created_at' => $this->created_at->format('Y-m-d'),
