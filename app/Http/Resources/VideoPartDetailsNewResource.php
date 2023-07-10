@@ -47,6 +47,7 @@ class VideoPartDetailsNewResource extends JsonResource
             'total_watch' => (int)$this->video_watches->count(),
             'total_like' => (int)$like_video_count,
             'like_active' => $this->like_active,
+            'video_minutes' => $this->video_time,
             'view_active' => $this->view_active,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
