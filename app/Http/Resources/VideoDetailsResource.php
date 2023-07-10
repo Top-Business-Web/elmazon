@@ -70,6 +70,7 @@ class VideoDetailsResource extends JsonResource
             'total_like' => (int)$like_video_count,
             'like_active' => $this->like_active,
             'view_active' => $this->view_active,
+            'video_minutes' => $this->video_time,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
 
