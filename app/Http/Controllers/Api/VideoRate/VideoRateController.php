@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Validator;
 class VideoRateController extends Controller{
 
 
-    public function user_rate_video($id,Request $request){
+    public function user_rate_video($id,Request $request): \Illuminate\Http\JsonResponse
+    {
 
         $video = VideoParts::where('id','=',$id)->first();
         if(!$video){
