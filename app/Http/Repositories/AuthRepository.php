@@ -595,8 +595,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
-
-
     }
 
 

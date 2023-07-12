@@ -15,11 +15,7 @@ class VideoResourceResource extends JsonResource
     public function toArray($request)
     {
 
-        if($this->video_link != null){
-            $path = asset('videos_resources/videos/'. $this->video_link);
-        }else{
-            $path = asset('videos_resources/all_pdf_uploads/'.$this->pdf_file);
-        }
+
         return  [
 
             'id' => $this->id,
@@ -28,7 +24,7 @@ class VideoResourceResource extends JsonResource
             'background_color' => $this->background_color,
             'image' => asset('videos_resources/images/'.$this->image),
             'time' => $this->time ?? 0,
-            'path_file' => $path,
+            'path_file' => $this->video_link != null ? asset('videos_resources/videos/'. $this->video_link) : asset('videos_resources/all_pdf_uploads/'.$this->pdf_file),
             'size' => 1000,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
