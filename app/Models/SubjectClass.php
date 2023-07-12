@@ -80,4 +80,6 @@ class SubjectClass extends Model
         return $this->hasManyThrough(VideoParts::class,Lesson::class,'subject_class_id','lesson_id','id','id');
     }
 
+
+
 }
