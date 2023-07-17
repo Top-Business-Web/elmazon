@@ -19,8 +19,7 @@ class SubjectClassNewResource extends JsonResource
     public function toArray($request)
     {
 
-        $totalWatch = VideoOpened::where([
-             'user_id' => auth('user-api')->id(),
+        $totalWatch = VideoOpened::where(['user_id' => auth('user-api')->id(),
              'status' => 'watched',
             'type' => 'video'
         ])->count();
