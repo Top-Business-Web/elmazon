@@ -7,7 +7,6 @@
     {{  '  تقرير الطالب :  '. $user->name  }}
 @endsection
 @section('content')
-
     <div class="main-content">
 
         <div class="page-content">
@@ -55,7 +54,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="styled-table col-md-8">
+                                    <div class="styled-table col-md-12">
                                         <table class="styled-table">
                                             <thead class="thead-dark">
                                             <tr>
@@ -87,11 +86,12 @@
                                             </tfoot>
                                         </table>
                                     </div>
-                                    <div class="col-4">
-                                        <div>
-                                            <h3 class="">معلومات الانجازات</h3>
+                                </div>
+
+                                <div class="col-12">
+                                    <div>
+                                        <h3 class="">معلومات الانجازات</h3>
                                         <canvas id="myChart"></canvas>
-                                        </div>
                                     </div>
                                 </div>
                                 <hr>

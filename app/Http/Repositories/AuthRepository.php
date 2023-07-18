@@ -257,7 +257,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
-        $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) =>
+        $paperSheetExam = PapelSheetExam::query()
+        ->whereHas('season', fn(Builder $builder) =>
         $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
             ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))->where('id', '=', $id)
@@ -268,11 +269,14 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             return self::returnResponseDataApi(null, "لا يوجد اي امتحان ورقي متاح لك", 404);
         }
 
-        $ids = Section::orderBy('id', 'ASC')->pluck('id')->toArray();
+        $ids = Section::query()
+        ->orderBy('id', 'ASC')
+            ->pluck('id')
+            ->toArray();
 
         foreach ($ids as $id) {
 
-            $sectionCheck = Section::where('id', '=', $id)->first();
+            $sectionCheck = Section::query()->where('id', '=', $id)->first();
             $CheckCountSectionExam = PapelSheetExamUser::query()
                 ->where('section_id', '=', $sectionCheck->id)
                 ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
@@ -293,10 +297,13 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 if ($CheckCountSectionExam < $sectionCheck->capacity) {
 
                     if ($CheckCountSectionExam == $sectionCheck->capacity) {
-                        $section = Section::orderBy('id', 'ASC')->get()->except($sectionCheck->id)
+
+                        $section = Section::query()
+                            ->orderBy('id', 'ASC')->get()->except($sectionCheck->id)
                             ->where('id', '>', $sectionCheck->id);
                     } else {
-                        $section = Section::where('id', '=', $id)->first();
+                        $section = Section::query()
+                        ->where('id', '=', $id)->first();
                     }
 
                     if (Auth::guard('user-api')->user()->center == 'out') {
@@ -310,9 +317,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                                 ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
                                 ->first();
 
-                            $timeOfPaperSheetExamUser = PapelSheetExamTime::query()
-                            ->where('id', '=', $request->papel_sheet_exam_time_id)
-                                ->first();
+                            $timeOfPaperSheetExamUser = PapelSheetExamTime::query()->where('id', '=', $request->papel_sheet_exam_time_id)->first();
 
 
                             $data['nameOfExam'] = lang() == 'ar' ? $paperSheetExam->name_ar : $paperSheetExam->name_en;
@@ -333,10 +338,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                                 $createPaperSheet->papel_sheet_exam_time_id = $request->papel_sheet_exam_time_id;
                                 $createPaperSheet->save();
 
-
                                 if ($createPaperSheet->save()) {
                                     $time_exam = PapelSheetExamTime::query()->where('id', '=', $request->papel_sheet_exam_time_id)->first();
                                     $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $time_exam->from . 'وموعد الامتحان  ' . $section->section_name_ar . 'واسم القاعه  ' . $section->address . 'ومكان الامتحان  ' . $paperSheetExam->date_exam . 'تاريخ الامتحان', 'term_id' => $paperSheetExam->term_id], $paperSheetExam->season_id, Auth::guard('user-api')->id());
+
                                     $data['nameOfExam'] = lang() == 'ar' ? $paperSheetExam->name_ar : $paperSheetExam->name_en;
                                     $data['dateExam'] = $paperSheetExam->date_exam;
                                     $data['time'] = $time_exam->from;
