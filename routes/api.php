@@ -214,6 +214,7 @@ Route::group(['middleware' => 'lang'], function (){
     Route::group(['prefix' => 'notes','middleware' => 'jwt'], function (){
         Route::post('note-add-by-student',[NoteController::class,'noteAddByStudent']);
         Route::get('note-all-by-date',[NoteController::class,'noteAllByDate']);
+        Route::get('dates-of-notes',[NoteController::class,'datesOfNotes']);
         Route::delete('note-delete/{id}',[NoteController::class,'noteDelete']);
 
     });
