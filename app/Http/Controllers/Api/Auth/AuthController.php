@@ -155,7 +155,6 @@ class AuthController extends Controller
 
     public function notificationUpdateStatus($id): JsonResponse
     {
-
         return $this->authRepositoryInterface->notificationUpdateStatus($id);
     }
 
