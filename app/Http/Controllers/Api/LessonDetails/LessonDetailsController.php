@@ -31,7 +31,7 @@ class LessonDetailsController extends Controller{
             return self::returnResponseDataApi(null,"هذا الدرس غير موجود",404,404);
         }
 
-        $videos = VideoParts::query()->where('lesson_id','=',$lesson->id)->where('type','=','video')->get();
+        $videos = VideoParts::query()->where('lesson_id','=',$lesson->id)->get();
 
         return self::returnResponseDataApi(VideoPartDetailsNewResource::collection($videos),"تم الحصول علي جميع فيديوهات الشرح بنجاح",200);
 
