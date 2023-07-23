@@ -196,7 +196,6 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('all-exams-by-videoId/{id}',[LessonDetailsController::class,'allExamsByVideoId']);
         Route::get('all-exams-by-lessonId/{id}',[LessonDetailsController::class,'allExamsByLessonId']);
         Route::get('exam-details-by-examId/{id}',[LessonDetailsController::class,'examDetailsByExamId']);
-
     });
 
 
