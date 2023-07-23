@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 interface AuthRepositoryInterface{
 
-
     public function login(Request $request): JsonResponse;
 
     public function addSuggest(Request $request): JsonResponse;

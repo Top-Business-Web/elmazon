@@ -24,7 +24,9 @@ class VideoDetailsResource extends JsonResource
             $video_rate = VideoRate::query()->where('video_id','=',$this->id)
                 ->where('user_id','=',Auth::guard('user-api')->id())->first();
 
-            $like_video_count = VideoRate::query()->where('video_id','=',$this->id)->where('action','=','like')->count();
+            $like_video_count = VideoRate::query()->where('video_id','=',$this->id)
+                ->where('action','=','like')->count();
+
             $favorite = VideoFavorite::query()->where('video_part_id','=',$this->id)
                 ->where('user_id','=',Auth::guard('user-api')->id())->first();
 
