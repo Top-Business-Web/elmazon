@@ -181,7 +181,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         try {
 
-            $allNotification = Notification::whereHas('term', fn(Builder $builder)
+            $allNotification = Notification::query()
+            ->whereHas('term', fn(Builder $builder)
             => $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
@@ -203,7 +204,9 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function communication(): JsonResponse
     {
         try {
-            $setting = Setting::first();
+            $setting = Setting::query()
+                ->latest()
+            ->first();
 
             return self::returnResponseDataApi(new CommunicationResource($setting), "تم الحصول علي بيانات التواصل مع السكيرتاريه", 200);
 
@@ -254,7 +257,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
-        $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) =>
+        $paperSheetExam = PapelSheetExam::query()
+        ->whereHas('season', fn(Builder $builder) =>
         $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
             ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))->where('id', '=', $id)
@@ -265,11 +269,14 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             return self::returnResponseDataApi(null, "لا يوجد اي امتحان ورقي متاح لك", 404);
         }
 
-        $ids = Section::orderBy('id', 'ASC')->pluck('id')->toArray();
+        $ids = Section::query()
+        ->orderBy('id', 'ASC')
+            ->pluck('id')
+            ->toArray();
 
         foreach ($ids as $id) {
 
-            $sectionCheck = Section::where('id', '=', $id)->first();
+            $sectionCheck = Section::query()->where('id', '=', $id)->first();
             $CheckCountSectionExam = PapelSheetExamUser::query()
                 ->where('section_id', '=', $sectionCheck->id)
                 ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
@@ -290,10 +297,13 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 if ($CheckCountSectionExam < $sectionCheck->capacity) {
 
                     if ($CheckCountSectionExam == $sectionCheck->capacity) {
-                        $section = Section::orderBy('id', 'ASC')->get()->except($sectionCheck->id)
+
+                        $section = Section::query()
+                            ->orderBy('id', 'ASC')->get()->except($sectionCheck->id)
                             ->where('id', '>', $sectionCheck->id);
                     } else {
-                        $section = Section::where('id', '=', $id)->first();
+                        $section = Section::query()
+                        ->where('id', '=', $id)->first();
                     }
 
                     if (Auth::guard('user-api')->user()->center == 'out') {
@@ -306,7 +316,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                                 ->where('user_id', '=', Auth::guard('user-api')->id())
                                 ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
                                 ->first();
-                            $timeOfPaperSheetExamUser = PapelSheetExamTime::where('id', '=', $request->papel_sheet_exam_time_id)->first();
+
+                            $timeOfPaperSheetExamUser = PapelSheetExamTime::query()->where('id', '=', $request->papel_sheet_exam_time_id)->first();
 
 
                             $data['nameOfExam'] = lang() == 'ar' ? $paperSheetExam->name_ar : $paperSheetExam->name_en;
@@ -317,11 +328,9 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
                             return self::returnResponseDataApiWithMultipleIndexes($data, "تم تسجيل بياناتك في الامتحان الورقي من قبل", 201);
 
-
                         } else {
 
                             if (Carbon::now()->format('Y-m-d') <= $paperSheetExam->to) {
-
                                 $createPaperSheet = new PapelSheetExamUser();
                                 $createPaperSheet->user_id = Auth::guard('user-api')->id();
                                 $createPaperSheet->section_id = $section->id;
@@ -329,11 +338,9 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                                 $createPaperSheet->papel_sheet_exam_time_id = $request->papel_sheet_exam_time_id;
                                 $createPaperSheet->save();
 
-
                                 if ($createPaperSheet->save()) {
-                                    $time_exam = PapelSheetExamTime::where('id', '=', $request->papel_sheet_exam_time_id)->first();
+                                    $time_exam = PapelSheetExamTime::query()->where('id', '=', $request->papel_sheet_exam_time_id)->first();
                                     $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $time_exam->from . 'وموعد الامتحان  ' . $section->section_name_ar . 'واسم القاعه  ' . $section->address . 'ومكان الامتحان  ' . $paperSheetExam->date_exam . 'تاريخ الامتحان', 'term_id' => $paperSheetExam->term_id], $paperSheetExam->season_id, Auth::guard('user-api')->id());
-
 
                                     $data['nameOfExam'] = lang() == 'ar' ? $paperSheetExam->name_ar : $paperSheetExam->name_en;
                                     $data['dateExam'] = $paperSheetExam->date_exam;
@@ -344,12 +351,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                                     return self::returnResponseDataApiWithMultipleIndexes($data, "تم تسجيل بياناتك في الامتحان", 200);
 
                                 } else {
-
                                     return self::returnResponseDataApi(null, "يوجد خطاء ما اثناء تسجيل بيانات الامتحان الورقي", 500);
                                 }
 
                             } else {
-
                                 return self::returnResponseDataApi(null, "!لقد تعديت اخر موعد لتسجيل الامتحان", 412);
                             }
                         }
@@ -547,7 +552,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
 
             if ($life_exam) {
-
                 $now = Carbon::now();
                 $start = Carbon::createFromTimeString($life_exam->time_start);
                 $end = Carbon::createFromTimeString($life_exam->time_end);
@@ -561,13 +565,11 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 } elseif ($degree_depends->exists()) {
                     $id = null;
                 } else {
-
                     $id = null;
                 }
             } else {
                 $id = null;
             }
-
 
             $classes = SubjectClass::whereHas('term', fn(Builder $builder) =>
             $builder->where('status', '=', 'active')
@@ -616,7 +618,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function all_exams(): JsonResponse
     {
 
-        $allExams = AllExam::whereHas('term', fn(Builder $builder) =>
+        $allExams = AllExam::query()
+        ->whereHas('term', fn(Builder $builder) =>
         $builder->where('status', '=', 'active')
             ->where('season_id', '=', auth('user-api')->user()->season_id))
             ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
@@ -630,7 +633,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     {
 
 
-        $classes = SubjectClass::whereHas('term', fn(Builder $builder) =>
+        $classes = SubjectClass::query()
+        ->whereHas('term', fn(Builder $builder) =>
         $builder->where('status', '=', 'active')
             ->where('season_id', '=', auth('user-api')->user()->season_id))
             ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
@@ -644,7 +648,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function videosResources(): JsonResponse
     {
 
-        $resources = VideoResource::whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
+        $resources = VideoResource::query()
+        ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
             ->where('season_id', '=', auth('user-api')->user()->season_id))
             ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
             ->get();
@@ -656,13 +661,12 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function findExamByClassById($id): JsonResponse
     {
 
-        $class = SubjectClass::where('id', $id)->first();
+        $class = SubjectClass::query()->where('id', $id)->first();
         if (!$class) {
             return self::returnResponseDataApi(null, "هذا الفصل غير موجود", 404);
         }
 
         $exams = $class->exams;
-
         return self::returnResponseDataApi(OnlineExamNewResource::collection($exams), "تم ارسال جميع امتحانات الفصل بنجاح", 200);
     }
 
@@ -739,8 +743,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
     public function user_add_screenshot(): JsonResponse
     {
-
-        $user_screen = UserScreenShot::where('user_id', '=', Auth::guard('user-api')->id());
+        $user_screen = UserScreenShot::query()->where('user_id', '=', Auth::guard('user-api')->id());
 
         if ($user_screen->count() == 0) {
             $user_screen_shot = UserScreenShot::create([
@@ -758,13 +761,13 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             }
         } elseif ($user_screen->first()->count_screen_shots < 2) {
 
-            $user_screen_before = UserScreenShot::where('user_id', '=', Auth::guard('user-api')->id())->first();
+            $user_screen_before = UserScreenShot::query()->where('user_id', '=', Auth::guard('user-api')->id())->first();
             $user_screen_before->update(['count_screen_shots' => $user_screen_before->count_screen_shots += 1]);
             return self::returnResponseDataApi(null, "تم اخذ اسكرين شوت بالتطبيق بواسطه اليوزر", 200);
 
         } else {
 
-            $user = User::where('id', '=', Auth::guard('user-api')->id())->first();
+            $user = User::query()->where('id', '=', Auth::guard('user-api')->id())->first();
             $user->update(['user_status' => 'not_active', 'login_status' => 0,]);
 
             return self::returnResponseDataApi(null, "تم حظر ذلك المستخدم لانه تخطي 3 مرات من اخذ الاسكرين", 201);
@@ -799,7 +802,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
 
-            PhoneToken::where('token', '=', $request->token)->where('user_id', '=', auth('user-api')->id())->delete();
+            PhoneToken::query()->where('token', '=', $request->token)->where('user_id', '=', auth('user-api')->id())->delete();
             auth()->guard('user-api')->logout();
             return self::returnResponseDataApi(null, "تم تسجيل الخروج بنجاح", 200);
 
@@ -851,9 +854,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             return self::returnResponseDataApi($data, "تم الحصول علي معلومات مشاركه الاصدقاء بنجاح", 200);
 
         } else {
-
             return self::returnResponseDataApi(null, "لا يوجد اي عد تنازلي للسنه الدراسيه لهذا الطالب الي الان", 201);
-
         }
 
     }
@@ -886,17 +887,12 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 if($notificationSeen->save()){
                     return self::returnResponseDataApi(new NotificationResource($notification), "تم تحديث حاله الاشعار بنجاح", 200);
                 }else{
-
                     return self::returnResponseDataApi(null, "يوجد خطاء ما اثناء تحديث حاله الاشعار", 500);
-
                 }
-
             }else{
 
                 return self::returnResponseDataApi(new NotificationResource($notification), "تم تحديث حاله الاشعار من قبل", 201);
-
             }
-
 
         } catch (\Exception $exception) {
 

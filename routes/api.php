@@ -57,9 +57,7 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('add-device-token',[AuthController::class,'add_device_token']);
         Route::post('papel-sheet-exam/user/{id}',[AuthController::class,'paper_sheet_exam']);
         Route::get('papel-sheet-exam/show',[AuthController::class,'paper_sheet_exam_show']);
-        Route::get('paper-sheet-exam/register-with-student-check-before',[AuthController::class,
-            'paperSheetExamForStudentDetails']);
-
+        Route::get('paper-sheet-exam/register-with-student-check-before',[AuthController::class, 'paperSheetExamForStudentDetails']);
         Route::delete('paper-sheet-exam/latest-paper-exam-delete',[AuthController::class,'latestPaperExamDelete']);
         Route::post('update-profile',[AuthController::class,'updateProfile']);
         Route::get('home-page',[AuthController::class,'home_page']);
@@ -71,7 +69,6 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('all-subscribes',[SubscribeController::class,'all']);
         Route::post('/payments/pay',[Payment::class,'pay']);
         Route::post('/payments/go_pay',[Payment::class,'go_pay']);
-
         Route::post('/payments/paymob____',[Payment::class,'pay_']);
         Route::post('user-add-screenshot',[AuthController::class,'user_add_screenshot']);
         Route::get('invite-your-friends',[AuthController::class,'inviteYourFriends']);
@@ -105,82 +102,80 @@ Route::group(['middleware' => 'lang'], function (){
 
     });
 
-    Route::post('video-update-time/{id}',[LessonController::class,'updateMinuteVideo'])
-        ->middleware('jwt');
+        Route::post('video-update-time/{id}',[LessonController::class,'updateMinuteVideo'])
+            ->middleware('jwt');
 
-    Route::group(['prefix' => 'plans','middleware' => ['jwt']], function (){
-        Route::get('all',[MonthlyPlanController::class,'all_plans']);
-
-    });
-
-    Route::group(['prefix' => 'guide','middleware' => ['jwt']], function (){
-        Route::get('sources_references/all',[GuideController::class,'index']);
-        Route::get('sources_references/by-lesson/{id}/{lesson_id}',[GuideController::class,'itemsByLesson']);
-
-    });
-
-    Route::group(['prefix' => 'video','middleware' => 'jwt'], function (){
-        //update and delete comment and replay
-        Route::post('comment/update/{id}',[CommentController::class,'updateComment']);
-        Route::delete('comment/delete/{id}',[CommentController::class,'deleteComment']);
-        Route::post('replay/update/{id}',[CommentController::class,'updateReplay']);
-        Route::delete('replay/delete/{id}',[CommentController::class,'deleteReplay']);
-    });
-
-    Route::group(['prefix' => 'ExamEntry','middleware' => ['jwt']], function (){
-        Route::get('all-of-questions/{id}',[ExamEntryController::class,'all_questions_by_online_exam']);
-    });
-
-
-    //start Exam entry controller
-    Route::group(['prefix' => 'ExamEntry','middleware' => ['jwt']], function (){
-
-        Route::post('exam/{id}',[ExamEntryController::class,'online_exam_by_user']);
-         Route::get('exam-degree-depends-with-student/{id}',[ExamEntryController::class,'degreesDependsWithStudent']);
-    });
-
-
-    Route::group(['prefix' => 'degrees','middleware' => ['jwt']], function (){
-
-        Route::get('all-exams-degrees',[DegreeController::class,'degrees']);
-//        Route::get('depends/exam/{id}',[DegreeController::class,'degrees_depends']);
+        Route::group(['prefix' => 'plans','middleware' => ['jwt']], function (){
+            Route::get('all',[MonthlyPlanController::class,'all_plans']);
 
         });
 
-    Route::get('ads',[AdsController::class,'index'])->middleware('jwt');
-    Route::get('on-boarding',[OnBoardingController::class,'index']);
-    //exam details
+        Route::group(['prefix' => 'guide','middleware' => ['jwt']], function (){
+            Route::get('sources_references/all',[GuideController::class,'index']);
+            Route::get('sources_references/by-lesson/{id}/{lesson_id}',[GuideController::class,'itemsByLesson']);
 
-    Route::middleware('jwt')->group(function (){
-        Route::get('exam-degree/details',[AllExamsUsersDegreeController::class,'all_exams_details']);
-        Route::get('exam-degree/heroes',[AllExamsUsersDegreeController::class,'all_exams_heroes']);
-        Route::post('access-end-time/exam/{id}',[ExamEntryController::class,'access_end_time_for_exam']);
+        });
 
-    });
+        Route::group(['prefix' => 'video','middleware' => 'jwt'], function (){
+            //update and delete comment and replay
+            Route::post('comment/update/{id}',[CommentController::class,'updateComment']);
+            Route::delete('comment/delete/{id}',[CommentController::class,'deleteComment']);
+            Route::post('replay/update/{id}',[CommentController::class,'updateReplay']);
+            Route::delete('replay/delete/{id}',[CommentController::class,'deleteReplay']);
+        });
 
-    Route::middleware('jwt')->group(function (){
-        Route::get('life-exam/access-first-question/{id}',[LifeExamController::class,'access_first_question']);
-        Route::get('live-exam/{id}',[LifeExamController::class,'access_live_exam']);
-        Route::post('life-exam/add-life-exam/{id}',[LifeExamController::class,'add_life_exam_with_student']);
-        Route::post('live-exam/add-live-exam/{id}',[LifeExamController::class,'solve_live_exam_with_student']);
-
-    });
-
-    Route::post('access-end-time/exam/{id}',[ExamEntryController::class,'access_end_time_for_exam'])
-        ->middleware('jwt');
-
-    Route::get('reports/student-report',[ReportController::class,'student_report'])->middleware('jwt');
-    Route::post('user-rate-video/{id}',[App\Http\Controllers\Api\VideoRate\VideoRateController::class,'user_rate_video'])->middleware('jwt');
+        Route::group(['prefix' => 'ExamEntry','middleware' => ['jwt']], function (){
+            Route::get('all-of-questions/{id}',[ExamEntryController::class,'all_questions_by_online_exam']);
+        });
 
 
-    //Added by eng islam mohammed
-    Route::group(['prefix' => 'report','middleware' => 'jwt'], function (){
+        //start Exam entry controller
+        Route::group(['prefix' => 'ExamEntry','middleware' => ['jwt']], function (){
+            Route::post('exam/{id}',[ExamEntryController::class,'online_exam_by_user']);
+             Route::get('exam-degree-depends-with-student/{id}',[ExamEntryController::class,'degreesDependsWithStudent']);
+        });
 
-        Route::post('student-add-report',[ReportStudentController::class,'studentAddReport']);
-        Route::get('all-by-student',[ReportStudentController::class,'allByStudent']);
-        Route::delete('delete/{id}',[ReportStudentController::class,'delete']);
 
-    });
+        Route::group(['prefix' => 'degrees','middleware' => ['jwt']], function (){
+            Route::get('all-exams-degrees',[DegreeController::class,'degrees']);
+    //        Route::get('depends/exam/{id}',[DegreeController::class,'degrees_depends']);
+
+            });
+
+        Route::get('ads',[AdsController::class,'index'])->middleware('jwt');
+        Route::get('on-boarding',[OnBoardingController::class,'index']);
+        //exam details
+
+        Route::middleware('jwt')->group(function (){
+            Route::get('exam-degree/details',[AllExamsUsersDegreeController::class,'all_exams_details']);
+            Route::get('exam-degree/heroes',[AllExamsUsersDegreeController::class,'all_exams_heroes']);
+            Route::post('access-end-time/exam/{id}',[ExamEntryController::class,'access_end_time_for_exam']);
+
+        });
+
+        Route::middleware('jwt')->group(function (){
+            Route::get('life-exam/access-first-question/{id}',[LifeExamController::class,'access_first_question']);
+            Route::get('live-exam/{id}',[LifeExamController::class,'access_live_exam']);
+            Route::post('life-exam/add-life-exam/{id}',[LifeExamController::class,'add_life_exam_with_student']);
+            Route::post('live-exam/add-live-exam/{id}',[LifeExamController::class,'solve_live_exam_with_student']);
+
+        });
+
+        Route::post('access-end-time/exam/{id}',[ExamEntryController::class,'access_end_time_for_exam'])
+            ->middleware('jwt');
+
+        Route::get('reports/student-report',[ReportController::class,'student_report'])->middleware('jwt');
+        Route::post('user-rate-video/{id}',[App\Http\Controllers\Api\VideoRate\VideoRateController::class,'user_rate_video'])->middleware('jwt');
+
+
+        //Added by eng islam mohammed
+        Route::group(['prefix' => 'report','middleware' => 'jwt'], function (){
+
+            Route::post('student-add-report',[ReportStudentController::class,'studentAddReport']);
+            Route::get('all-by-student',[ReportStudentController::class,'allByStudent']);
+            Route::delete('delete/{id}',[ReportStudentController::class,'delete']);
+
+        });
 
     Route::group(['prefix' => 'favorite','middleware' => 'jwt'], function (){
 
@@ -219,6 +214,7 @@ Route::group(['middleware' => 'lang'], function (){
     Route::group(['prefix' => 'notes','middleware' => 'jwt'], function (){
         Route::post('note-add-by-student',[NoteController::class,'noteAddByStudent']);
         Route::get('note-all-by-date',[NoteController::class,'noteAllByDate']);
+        Route::get('dates-of-notes',[NoteController::class,'datesOfNotes']);
         Route::delete('note-delete/{id}',[NoteController::class,'noteDelete']);
 
     });
@@ -249,9 +245,9 @@ Route::group(['middleware' => 'lang'], function (){
 
 });
 
-    Route::post('/payments/pay',[Payment::class,'pay']);
-    Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
-    Route::get('/checkout',[Payment::class,'checkout']);
-   // Route::get('/payment/{}',[Payment::class,'payment']);
+        Route::post('/payments/pay',[Payment::class,'pay']);
+        Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
+        Route::get('/checkout',[Payment::class,'checkout']);
+       // Route::get('/payment/{}',[Payment::class,'payment']);
 
 

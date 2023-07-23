@@ -40,7 +40,7 @@ class VideoPartDetailsNewResource extends JsonResource
             'status' => !$user_watch_video ? 'lock' :  ($user_watch_video->status == 'opened' ? 'opened': 'watched'),
             'subscribe' => 'access',
             'progress' =>  VideoOpened::where('video_part_id','=',$this->id)
-                ->where('user_id','=',Auth::guard('user-api')->id())->exists() ? (($user_watch_video->minutes / $this->video_time ) * 100) : 0,
+                ->where('user_id','=',Auth::guard('user-api')->id())->exists() ? round((( strtotime($user_watch_video->minutes) - strtotime('TODAY')) / (strtotime( $this->video_time) - strtotime('TODAY'))) * 100 ,2) : 0,
             'link' =>  asset('videos/'. $this->link),
             'time' => (int)$this->video_time,
             'rate' =>  $video_rate ? $video_rate->action : 'no_rate',

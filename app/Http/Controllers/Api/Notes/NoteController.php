@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Notes;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FilterNotesDateResource;
 use App\Http\Resources\MonthlyPlanResource;
 use App\Http\Resources\NoteResource;
 use App\Models\MonthlyPlan;
@@ -114,10 +115,31 @@ class NoteController extends Controller{
 
     }
 
+    public function datesOfNotes(): JsonResponse
+    {
+
+        $dates = Note::query()
+        ->where('user_id','=',Auth::guard('user-api')->id())
+            ->select('id','note_date','user_id')
+            ->get();
+
+        if($dates->count() > 0){
+
+            return self::returnResponseDataApi(FilterNotesDateResource::collection($dates),"تم الحصول علي جميع تواريخ ملاحظات الطالب", 200);
+        }else{
+
+            return self::returnResponseDataApi(null,"لا يوجد اي سجلات توارخ لملاحظات ذلك الطالب", 419);
+        }
+
+
+    }
+
 
     public function noteDelete($id): JsonResponse{
 
-       $note = Note::where('id','=',$id)->first();
+       $note = Note::query()
+        ->where('id','=',$id)
+           ->first();
 
        if(!$note){
            return self::returnResponseDataApi(null,"الملاحظه غير موجوده", 404,404);
