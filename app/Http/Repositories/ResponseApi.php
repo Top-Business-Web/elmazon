@@ -6,7 +6,7 @@ use Illuminate\Http\JsonResponse;
 
 class ResponseApi{
 
-    public static function returnResponseDataApi($data=null,string $message,int $code,int $status = 200): \Illuminate\Http\JsonResponse
+    public static function returnResponseDataApi($data=null,string $message,int $code,int $status = 200): JsonResponse
     {
 
         return response()->json([
