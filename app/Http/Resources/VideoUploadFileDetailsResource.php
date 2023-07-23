@@ -32,7 +32,7 @@ class VideoUploadFileDetailsResource extends JsonResource
                 ->where('user_id','=',Auth::guard('user-api')->id())
                 ->first() ? 'lock' :  'opened'),
             'subscribe' => 'access',
-            'link' =>  asset('video_files/pdf/'. $this->file_link),
+            'link' =>  $this->file_type == 'pdf' ? asset('video_files/pdf/'. $this->file_link) : asset('video_files/audios/'. $this->file_link),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
 
