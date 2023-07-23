@@ -24,4 +24,6 @@ class VideoOpenedResource extends JsonResource
 
         ];
     }
+
+    //end
 }
