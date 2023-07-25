@@ -17,7 +17,7 @@ class SliderResource extends JsonResource
         return [
 
             'id' => $this->id,
-            'file' => $this->link.'/'.$this->file,
+            'file' => asset('sliders/'.$this->file),
             'type' => $this->type,
             'link' => $this->link,
             'created_at' => $this->created_at->format('Y-m-d'),
@@ -26,5 +26,4 @@ class SliderResource extends JsonResource
         ];
     }
 }
-
-//update sliders now
+//update sliders
