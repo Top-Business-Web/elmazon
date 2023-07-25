@@ -26,3 +26,5 @@ class SliderResource extends JsonResource
         ];
     }
 }
+
+//update sliders now
