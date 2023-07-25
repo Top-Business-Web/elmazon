@@ -18,7 +18,7 @@ class UserFullDegreeDetailsNewResource extends JsonResource
 
             'id' => $this->id,
             'name' => $this->name,
-            'image' => $this->image != null ? asset('/users/'.$this->image) : asset('/default/avatar.jpg'),
+            'image' => $this->image != null ? asset('/users/'.$this->image) : asset('/default/avatar2.jfif'),
             'degree' => $this->degree,
             'per' => $this->per,
             'total_time' => (int)$this->time,
