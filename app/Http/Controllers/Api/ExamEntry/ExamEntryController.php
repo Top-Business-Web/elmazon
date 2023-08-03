@@ -138,8 +138,7 @@ class ExamEntryController extends Controller
         }
     }
 
-    public function online_exam_by_user(Request $request, $id): JsonResponse
-    {
+    public function online_exam_by_user(Request $request, $id): JsonResponse{
 
         try {
 
@@ -301,7 +300,6 @@ class ExamEntryController extends Controller
                     }
 
                     if ($request->exam_type == 'full_exam') {
-
                         Timer::create([
                             'all_exam_id' => $exam->id,
                             'user_id' => Auth::guard('user-api')->id(),
@@ -347,8 +345,14 @@ class ExamEntryController extends Controller
                             ->latest()
                             ->first();
 
+                        $total_trying = Timer::query()
+                            ->where('all_exam_id', '=', $exam->id)
+                            ->where('user_id', '=', Auth::guard('user-api')->id())
+                            ->count();
+
                         $data['degree'] =  $sumDegree."/".$exam->degree;
                         $data['ordered'] = 1;
+                        $data['trying_number'] =  $total_trying;
                         $data['motivational_word'] = "ممتاز بس فيه أحسن ";
                         $data['num_of_correct_questions'] = $numOfCorrectQuestions;
                         $data['num_of_mistake_questions'] = $numOfUnCorrectQtQuestions;
@@ -407,8 +411,14 @@ class ExamEntryController extends Controller
                             ->latest()
                             ->first();
 
+                        $total_trying = Timer::query()
+                            ->where('online_exam_id', '=', $exam->id)
+                            ->where('user_id', '=', Auth::guard('user-api')->id())
+                            ->count();
+
                         $data['degree'] =  $sumDegree."/".$exam->degree;
                         $data['ordered'] = 1;
+                        $data['trying_number'] =  $total_trying;
                         $data['motivational_word'] = "ممتاز بس فيه أحسن ";
                         $data['num_of_correct_questions'] = $numOfCorrectQuestions;
                         $data['num_of_mistake_questions'] = $numOfUnCorrectQtQuestions;
