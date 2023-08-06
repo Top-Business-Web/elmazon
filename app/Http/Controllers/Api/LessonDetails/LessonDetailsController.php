@@ -98,11 +98,16 @@ class LessonDetailsController extends Controller{
     public function examDetailsByExamId($id): JsonResponse{
 
 
-        $exam = OnlineExam::where('id','=',$id)->first();
+        $video = VideoParts::query()
+            ->where('id','=',$id)
+            ->first();
 
-        if(!$exam){
-            return self::returnResponseDataApi(null,"هذا الامتحان غير موجود",404,404);
+        if(!$video){
+            return self::returnResponseDataApi(null,"فيديو الشرح غير موجود",404,404);
         }
+
+        $exam = OnlineExam::query()->where('video_id','=',$video->id)->first();
+
 
         $degree = ExamDegreeDepends::query()
             ->where('user_id','=',Auth::guard('user-api')->id())
