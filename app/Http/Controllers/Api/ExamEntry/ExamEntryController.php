@@ -85,7 +85,7 @@ class ExamEntryController extends Controller
                     ->where('season_id', '=', auth('user-api')->user()->season_id))
                     ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                     ->where('id', '=', $id)
-                    ->where('type', '=', 'subject_class')
+                    ->where('type', '=', 'class')
                     ->first();
 
                 if (!$onlineExam) {
