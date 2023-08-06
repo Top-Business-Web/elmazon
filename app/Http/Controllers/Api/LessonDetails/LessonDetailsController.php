@@ -99,13 +99,16 @@ class LessonDetailsController extends Controller{
 
 
         $exam = OnlineExam::where('id','=',$id)->first();
+
         if(!$exam){
             return self::returnResponseDataApi(null,"هذا الامتحان غير موجود",404,404);
         }
 
-        $degree = ExamDegreeDepends::query()->where('user_id','=',Auth::guard('user-api')->id())
+        $degree = ExamDegreeDepends::query()
+            ->where('user_id','=',Auth::guard('user-api')->id())
                   ->where('online_exam_id','=',$exam->id)
-                  ->latest()->first();
+                   ->where('exam_depends','=','yes')
+                  ->first();
 
         if(!$degree){
             return self::returnResponseDataApi(null,"يجب انت تمتحن اولا لاظهار تقيمك في الامتحان",201);
@@ -118,22 +121,27 @@ class LessonDetailsController extends Controller{
 
             $onlineExamUserCorrectAnswers  = OnlineExamUser::query()
                 ->where('user_id','=',Auth::guard('user-api')->id())
-                ->where('online_exam_id','=',$exam->id)->where('status','=','solved')
+                ->where('online_exam_id','=',$exam->id)
+                ->where('status','=','solved')
                 ->count();
 
             $onlineExamUserMistakeAnswers  = OnlineExamUser::query()
                 ->where('user_id','=',Auth::guard('user-api')->id())
-                ->where('online_exam_id','=',$exam->id)->where('status','=','un_correct')
+                ->where('online_exam_id','=',$exam->id)
+                ->where('status','=','un_correct')
                 ->orWhere('status','=','leave')
                 ->count();
 
 
 
-            $tryingNumber = Timer::query()->where('user_id','=',Auth::guard('user-api')->id())
-                ->where('online_exam_id','=',$exam->id)->count();
+            $tryingNumber = Timer::query()
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->where('online_exam_id','=',$exam->id)
+                ->count();
 
 
             $data['full_degree']     = ($degree->full_degree) . " / " . $exam->degree;
+            $data['motivational_word'] = "ممتاز بس فيه أحسن ";
             $data['correct_numbers'] =  $onlineExamUserCorrectAnswers;
             $data['mistake_numbers'] =  $onlineExamUserMistakeAnswers;
             $data['trying_numbers']  =  $tryingNumber;

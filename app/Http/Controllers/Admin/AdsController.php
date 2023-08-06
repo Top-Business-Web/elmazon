@@ -13,7 +13,6 @@ use Yajra\DataTables\Facades\DataTables;
 class AdsController extends Controller
 {
     use PhotoTrait , AdminLogs;
-    // Index START
 
     public function index(request $request)
     {
@@ -29,7 +28,8 @@ class AdsController extends Controller
                             </button>
                        ';
                 })
-                ->editColumn('image', function ($sliders) {
+                
+                ->editColumn('file', function ($sliders) {
                     return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset($sliders->file) . '"/>';
                 })
                 ->editColumn('status', function ($ads) {
@@ -51,9 +51,9 @@ class AdsController extends Controller
 
     // Activate
 
-    public function activateAds($id)
-    {
-        $ads = Ads::where('id', $id)->first();
+    public function activateAds($id){
+
+        $ads = Ads::query()->where('id', $id)->first();
 
         if ($ads->update([
             'status' => $ads->status == 'true' ? 'false' : 'true'
@@ -66,23 +66,18 @@ class AdsController extends Controller
             {
                 toastr('تم ألغاء التفعيل');
             }
-
             return view('admin.ads.index');
         }
     }
 
-    // Activate
 
-    // Start Create
 
     public function create()
     {
         return view('admin.ads.parts.create');
     }
 
-    // Create End
 
-    // Store Start
 
     public function store(RequestAds $request)
     {
@@ -111,15 +106,11 @@ class AdsController extends Controller
         }
     }
 
-    // Store End
-    // Edit Start
 
     public function edit(Ads $ad)
     {
         return view('admin.ads.parts.edit', compact('ad'));
     }
-
-    // Edit End
 
     // Update Start
 
@@ -157,9 +148,6 @@ class AdsController extends Controller
         }
     }
 
-    // Update End
-
-    // Destroy Start
 
     public function destroy(Request $request)
     {
@@ -169,5 +157,4 @@ class AdsController extends Controller
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Delete End
 }

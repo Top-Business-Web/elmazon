@@ -18,7 +18,8 @@ class QuestionsNewResource extends JsonResource
     public function toArray($request)
     {
 
-        $answerStudent = OnlineExamUser::where('user_id','=',Auth::guard('user-api')->id())
+        $answerStudent = OnlineExamUser::query()
+        ->where('user_id','=',Auth::guard('user-api')->id())
             ->where('question_id','=',$this->id)
             ->whereHas('question', function ($q){
                 $q->where('question_type','=','choice');
@@ -26,7 +27,9 @@ class QuestionsNewResource extends JsonResource
             ->first();
 
         if($this->question_type == 'text'){
-            $textExamUser = TextExamUser::query()->where('user_id','=',Auth::guard('user-api')->id())
+
+            $textExamUser = TextExamUser::query()
+                ->where('user_id','=',Auth::guard('user-api')->id())
                 ->where('question_id','=',$this->id)
                 ->whereHas('question', function ($q){$q->where('question_type','=','text');
                 })->first();
@@ -48,8 +51,8 @@ class QuestionsNewResource extends JsonResource
 
         return [
 
-            'id' => $this->id,
-            'question' => $this->file_type == 'text' ? $this->question : asset('/question_images/'.$this->image),
+             'id' => $this->id,
+             'question' => $this->file_type == 'text' ? $this->question : asset('/question_images/'.$this->image),
              'answer_user' => $this->question_type == 'choice' ? ($answerStudent->answer_id ?? null): $answerTextWithUser,
             'answer_user_type' => ($this->question_type == 'choice' ? 'id' : $textExamUser->answer_type),
             'question_type' => $this->question_type,
