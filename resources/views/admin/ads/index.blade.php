@@ -92,7 +92,7 @@
         var columns = [
             {data: 'id', name: 'id'},
             {data: 'link', name: 'link'},
-            {data: 'image', name: 'image'},
+            {data: 'file', name: 'file'},
             {data: 'type', name: 'type'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false},

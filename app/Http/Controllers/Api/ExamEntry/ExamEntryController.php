@@ -235,7 +235,6 @@ class ExamEntryController extends Controller
             if (!$depends) {
 
                 if ($count_trying < $trying) {
-
                     if ($count_trying > 0) {
 
                         foreach ($online_exam_users as $online_exam_user) {
@@ -245,7 +244,6 @@ class ExamEntryController extends Controller
                         foreach ($text_exam_users as $text_exam_user) {
                             $text_exam_user->delete();
                         }
-
                     }
 
                     for ($i = 0; $i < count($request->details); $i++) {
@@ -295,7 +293,6 @@ class ExamEntryController extends Controller
                                 'answer_type' => 'text',
                                 'status' => (isset($request->details[$i]['answer']) || isset($request->details[$i]['image']) || isset($request->details[$i]['audio'])) ? 'solved' : 'leave',
                             ]);
-
                         }
                     }
 
