@@ -355,6 +355,7 @@ class ExamEntryController extends Controller
                         $data['num_of_mistake_questions'] = $numOfUnCorrectQtQuestions;
                         $data['num_of_leave_questions'] =   $numOfLeaveQuestions;
                         $data['total_time_take'] = $totalTime->timer;
+                        $data['total_time_exam'] = $exam->quize_minute;
                         $data['title_result'] = $exam->title_result;
                         $data['description_result'] = $exam->description_result;
                         $data['image_result'] = $exam->image_result == null ? asset('all_exam_result_images/default/default.png') :
@@ -421,6 +422,7 @@ class ExamEntryController extends Controller
                         $data['num_of_mistake_questions'] = $numOfUnCorrectQtQuestions;
                         $data['num_of_leave_questions'] =   $numOfLeaveQuestions;
                         $data['total_time_take'] = (int)$totalTime->timer;
+                        $data['total_time_exam'] = $exam->quize_minute;
                         $data['title_result'] = $exam->title_result;
                         $data['description_result'] = $exam->description_result;
                         $data['image_result'] = $exam->image_result == null ? asset('online_exam_result_images/default/default.png') : asset('online_exam_result_images/images/'. $exam->image_result);
