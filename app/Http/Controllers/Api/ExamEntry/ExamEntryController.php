@@ -350,7 +350,7 @@ class ExamEntryController extends Controller
                         $data['degree'] =  $sumDegree."/".$exam->degree;
                         $data['ordered'] = 1;
                         $data['exam_id'] =  $exam->id;
-                        $data['exam_type'] =  $request->exam_type;
+                        $data['exam_type'] =  $request->exam_type == 'video' || $request->exam_type == 'subject_class' || $request->exam_type == 'lesson' ? 'online_exam' : 'full_exam';
                         $data['trying_number'] =  $total_trying;
                         $data['motivational_word'] = "ممتاز بس فيه أحسن ";
                         $data['num_of_correct_questions'] = $numOfCorrectQuestions;
@@ -419,7 +419,7 @@ class ExamEntryController extends Controller
                         $data['degree'] =  $sumDegree."/".$exam->degree;
                         $data['ordered'] = 1;
                         $data['exam_id'] =  $exam->id;
-                        $data['exam_type'] =  $request->exam_type;
+                        $data['exam_type'] =  $request->exam_type == 'video' || $request->exam_type == 'subject_class' || $request->exam_type == 'lesson' ? 'online_exam' : 'full_exam';
                         $data['trying_number'] =  $total_trying;
                         $data['motivational_word'] = "ممتاز بس فيه أحسن ";
                         $data['num_of_correct_questions'] = $numOfCorrectQuestions;
