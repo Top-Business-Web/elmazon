@@ -263,8 +263,8 @@ class ExamEntryController extends Controller
                                 'question_id' => $request->details[$i]['question'],
                                 'answer_id' => $request->details[$i]['answer'],
                                 'online_exam_id' => $exam->id,
-                                'status' => isset($answer) ? $answer->answer_status == "correct" ? "solved" : "un_correct" : "leave",
-                                'degree' => $answer->answer_status == "correct" ? $question->degree : 0,
+                                'status' => $request->details[$i]['answer'] == null ? "leave"  : ($answer->answer_status == "correct" ? "solved" : "un_correct"),
+                                'degree' => $request->details[$i]['answer'] == null ? 0 : ($answer->answer_status == "correct" ? $question->degree : 0) ,
                             ]);
 
                         } else {
@@ -287,7 +287,7 @@ class ExamEntryController extends Controller
                                 'user_id' => auth()->id(),
                                 'question_id' => $request->details[$i]['question'],
                                 'online_exam_id' => $exam->id,
-                                'answer' => isset($request->details[$i]['answer']) ? $request->details[$i]['answer'] : null,
+                                'answer' => $request->details[$i]['answer'] ?? null,
                                 'image' => $file ?? null,
                                 'audio' => $fileAudio ?? null,
                                 'answer_type' => 'text',
@@ -350,6 +350,7 @@ class ExamEntryController extends Controller
                         $data['degree'] =  $sumDegree."/".$exam->degree;
                         $data['ordered'] = 1;
                         $data['exam_id'] =  $exam->id;
+                        $data['exam_type'] =  $request->exam_type;
                         $data['trying_number'] =  $total_trying;
                         $data['motivational_word'] = "ممتاز بس فيه أحسن ";
                         $data['num_of_correct_questions'] = $numOfCorrectQuestions;
@@ -418,6 +419,7 @@ class ExamEntryController extends Controller
                         $data['degree'] =  $sumDegree."/".$exam->degree;
                         $data['ordered'] = 1;
                         $data['exam_id'] =  $exam->id;
+                        $data['exam_type'] =  $request->exam_type;
                         $data['trying_number'] =  $total_trying;
                         $data['motivational_word'] = "ممتاز بس فيه أحسن ";
                         $data['num_of_correct_questions'] = $numOfCorrectQuestions;
