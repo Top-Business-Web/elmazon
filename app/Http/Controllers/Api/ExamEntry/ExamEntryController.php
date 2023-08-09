@@ -64,7 +64,6 @@ class ExamEntryController extends Controller
                 $onlineExam = OnlineExam::query()
                     ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
                         ->where('season_id', '=', auth('user-api')->user()->season_id))
-                    ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                     ->where('id', '=', $id)
                     ->where('type', '=', 'video')
                     ->first();
@@ -83,7 +82,6 @@ class ExamEntryController extends Controller
                     ->whereHas('term', fn(Builder $builder) =>
                 $builder->where('status', '=', 'active')
                     ->where('season_id', '=', auth('user-api')->user()->season_id))
-                    ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                     ->where('id', '=', $id)
                     ->where('type', '=', 'class')
                     ->first();
@@ -100,7 +98,6 @@ class ExamEntryController extends Controller
                 $onlineExam = OnlineExam::whereHas('term', fn(Builder $builder) =>
                 $builder->where('status', '=', 'active')
                     ->where('season_id', '=', auth('user-api')->user()->season_id))
-                    ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                     ->where('id', '=', $id)
                     ->where('type', '=', 'lesson')
                     ->first();
@@ -118,7 +115,6 @@ class ExamEntryController extends Controller
                     $full_exam = AllExam::whereHas('term', fn(Builder $builder) => $builder
                         ->where('status', '=', 'active')
                         ->where('season_id', '=', auth('user-api')->user()->season_id))
-                        ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                         ->where('id', '=', $id)
                         ->first();
 
@@ -166,11 +162,20 @@ class ExamEntryController extends Controller
 
             if ($request->exam_type == 'video' || $request->exam_type == 'subject_class' || $request->exam_type == 'lesson') {
 
+                if( $request->exam_type == 'subject_class'){
 
-                $exam = OnlineExam::query()
-                    ->where('id', $id)
-                    ->where('type', '=', $request->exam_type)
-                    ->first();
+                    $exam = OnlineExam::query()
+                        ->where('id',$id)
+                        ->where('type', '=', 'class')
+                        ->first();
+                }else{
+
+                    $exam = OnlineExam::query()
+                        ->where('id',$id)
+                        ->where('type', '=', $request->exam_type)
+                        ->first();
+                }
+
 
                 $count_trying = Timer::query()
                     ->where('online_exam_id', '=', $exam->id)
@@ -199,6 +204,7 @@ class ExamEntryController extends Controller
                     return self::returnResponseDataApi(null, "الامتحان غير موجود", 404);
                 }
             } else {
+
                 $exam = AllExam::query()
                     ->where('id',$id)
                     ->first();
@@ -262,7 +268,8 @@ class ExamEntryController extends Controller
                                 'user_id' => Auth::id(),
                                 'question_id' => $request->details[$i]['question'],
                                 'answer_id' => $request->details[$i]['answer'],
-                                'online_exam_id' => $exam->id,
+                                'online_exam_id' => $request->exam_type == 'full_exam' ? null : $exam->id,
+                                'all_exam_id' => $request->exam_type == 'full_exam' ? $exam->id : null,
                                 'status' => $request->details[$i]['answer'] == null ? "leave"  : ($answer->answer_status == "correct" ? "solved" : "un_correct"),
                                 'degree' => $request->details[$i]['answer'] == null ? 0 : ($answer->answer_status == "correct" ? $question->degree : 0) ,
                             ]);
@@ -297,6 +304,8 @@ class ExamEntryController extends Controller
                     }
 
                     if ($request->exam_type == 'full_exam') {
+
+
                         Timer::create([
                             'all_exam_id' => $exam->id,
                             'user_id' => Auth::guard('user-api')->id(),
@@ -329,7 +338,6 @@ class ExamEntryController extends Controller
                             ->where('user_id', Auth::guard('user-api')->id())
                             ->where('all_exam_id', '=', $exam->id)
                             ->where('status','=','un_correct')->count();
-
 
                         $numOfLeaveQuestions = OnlineExamUser::query()
                             ->where('user_id', Auth::guard('user-api')->id())
@@ -445,6 +453,7 @@ class ExamEntryController extends Controller
             }
 
         } catch (\Exception $exception) {
+
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
 

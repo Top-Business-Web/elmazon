@@ -40,3 +40,4 @@ Route::get('terms/season/{id}',[\App\Http\Controllers\Admin\TermController::clas
 //    return $total;
 //
 //});
+
