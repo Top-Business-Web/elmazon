@@ -10,12 +10,12 @@ class ResponseApi{
     {
 
         return response()->json([
-
             'data' => $data,
             'message' => $message,
             'code' => $code,
 
         ],$status);
+
 
     }
 

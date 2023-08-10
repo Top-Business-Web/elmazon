@@ -94,6 +94,11 @@ class OnlineExam extends Model
         return $this->belongsTo(Lesson::class,'lesson_id','id');
     }
 
+    public function class(): BelongsTo
+    {
+        return $this->belongsTo(SubjectClass::class,'class_id','id');
+    }
+
 
     //relation online_exams  with user
     public function users(): BelongsToMany{
