@@ -1,38 +1,86 @@
 <?php
 
 namespace App\Http\Controllers\Api\DegreeOfExamsDetails;
-
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllExamDegreeDetailsResource;
 use App\Http\Resources\LessonExamDegreeDetailsResource;
 use App\Http\Resources\SubjectClassExamDegreeDetailsResource;
 use App\Http\Resources\VideoExamDegreeDetailsResource;
 use App\Models\AllExam;
+use App\Models\ExamDegreeDepends;
 use App\Models\Lesson;
 use App\Models\OnlineExam;
 use App\Models\SubjectClass;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class DegreeExamsDetailsController extends Controller{
 
 
-    public function allExamsDegreeDetails(): JsonResponse{
+    public function allExamsDegreeDetails(){
 
         $allExams = AllExam::AllExamDegreeDetailsForStudent();
-        return self::returnResponseDataApi(AllExamDegreeDetailsResource::collection($allExams),"تم الحصول علي جميع درجات الامتحانات الشامله",200);
+
+
+        $degreeDependsFullDegree = ExamDegreeDepends::query()
+            ->whereHas('all_exam',fn(Builder $builder) =>
+            $builder->where('user_id','=',Auth::guard('user-api')->id()))
+            ->where('exam_depends','=','yes')
+            ->pluck('full_degree')
+            ->toArray();
+
+
+        $degreeOfAllExam = AllExam::query()
+            ->whereHas('exam_degree_depends',fn(Builder $builder) =>
+            $builder ->where('exam_depends','=','yes')
+                ->where('user_id','=',Auth::guard('user-api')->id()))
+            ->pluck('degree')
+            ->toArray();
+
+
+        $data['degrees']  = AllExamDegreeDetailsResource::collection($allExams);
+        $data['total_per'] =  number_format((array_sum($degreeDependsFullDegree) / array_sum($degreeOfAllExam)) * 100,2);
+        $data['motivational_word'] = "ممتاز بس فيه أحسن ";
+
+        return self::returnResponseDataApi($data,"تم الحصول علي جميع درجات الامتحانات الشامله",200);
 
     }
 
-    public function classDegreeDetails($id): JsonResponse{
+    public function classDegreeDetails($id){
 
         $class = SubjectClass::find($id);
         if(!$class){
             return self::returnResponseDataApi(null,"هذا الفصل غير موجود",404);
         }
 
+        $degreeDependsFullDegree = ExamDegreeDepends::query()
+            ->whereHas('online_exam',fn(Builder $builder) =>
+            $builder->where('class_id','=',$class->id))
+            ->where('user_id','=',Auth::guard('user-api')->id())
+            ->where('exam_depends','=','yes')
+            ->pluck('full_degree')
+            ->toArray();
+
+
+        $degreeOfAllExam = OnlineExam::query()
+            ->whereHas('exam_degree_depends',fn(Builder $builder) =>
+            $builder ->where('exam_depends','=','yes')
+                ->where('user_id','=',Auth::guard('user-api')->id()))
+            ->whereHas('class',fn(Builder $builder) =>
+            $builder->where('class_id','=',$class->id))
+            ->pluck('degree')
+            ->toArray();
+
+
         $onlineExams =  OnlineExam::OnlineExamSubjectClassDegreeDetails($class);
-        return self::returnResponseDataApi(SubjectClassExamDegreeDetailsResource::collection($onlineExams),"تم الحصول علي جميع درجات امتحانات هذا الفصل للطالب",200);
+        $data['degrees']  = SubjectClassExamDegreeDetailsResource::collection($onlineExams);
+        $data['total_per'] =  number_format((array_sum($degreeDependsFullDegree) / array_sum($degreeOfAllExam)) * 100,2);
+        $data['motivational_word'] = "ممتاز بس فيه أحسن ";
+
+        return self::returnResponseDataApi($data,"تم الحصول علي جميع درجات امتحانات هذا الفصل للطالب",200);
 
     }
 
@@ -45,20 +93,75 @@ class DegreeExamsDetailsController extends Controller{
             return self::returnResponseDataApi(null,"هذا الدرس غير موجود",404);
         }
 
+
+        $degreeDependsFullDegree = ExamDegreeDepends::query()
+
+            ->whereHas('online_exam',fn(Builder $builder) =>
+            $builder->whereHas('video',fn(Builder $builder)=>
+            $builder->where('lesson_id','=',$lesson->id)
+            ))
+
+            ->where('user_id','=',Auth::guard('user-api')->id())
+            ->where('exam_depends','=','yes')
+            ->pluck('full_degree')
+            ->toArray();
+
+
+        $degreeOfAllExam = OnlineExam::query()
+            ->whereHas('video',fn(Builder $builder)=>
+            $builder->where('lesson_id','=',$lesson->id)
+            )
+
+            ->whereHas('exam_degree_depends',fn(Builder $builder) =>
+            $builder ->where('exam_depends','=','yes')
+                ->where('user_id','=',Auth::guard('user-api')->id()))
+
+            ->pluck('degree')
+            ->toArray();
+
+
         $onlineExams =  OnlineExam::OnlineExamLessonVideosDegreeDetails($lesson);
-        return self::returnResponseDataApi(VideoExamDegreeDetailsResource::collection($onlineExams),"تم الحصول علي جميع درجات امتحانات فيديوهات الشرح لهذا الدرس بنجاح",200);
+        $data['degrees']  = VideoExamDegreeDetailsResource::collection($onlineExams);
+        $data['total_per'] =  number_format((array_sum($degreeDependsFullDegree) / array_sum($degreeOfAllExam)) * 100,2);
+        $data['motivational_word'] = "ممتاز بس فيه أحسن ";
+        return self::returnResponseDataApi($data,"تم الحصول علي جميع درجات امتحانات فيديوهات الشرح لهذا الدرس بنجاح",200);
 
     }
 
-    public function lessonDegreeDetails($id): JsonResponse{
+    public function lessonDegreeDetails($id){
 
         $lesson = Lesson::find($id);
         if(!$lesson){
             return self::returnResponseDataApi(null,"هذا الدرس غير موجود",404);
         }
-        $onlineExams =  OnlineExam::OnlineExamLessonDegreeDetails($lesson);
-        return self::returnResponseDataApi(LessonExamDegreeDetailsResource::collection($onlineExams),"تم الحصول علي جميع درجات امتحانات الدرس بنجاح",200);
 
+
+        $degreeDependsFullDegree = ExamDegreeDepends::query()
+            ->whereHas('online_exam',fn(Builder $builder) =>
+            $builder->where('lesson_id','=',$lesson->id))
+            ->where('user_id','=',Auth::guard('user-api')->id())
+            ->where('exam_depends','=','yes')
+            ->pluck('full_degree')
+            ->toArray();
+
+
+
+        $degreeOfAllExam = OnlineExam::query()
+            ->whereHas('exam_degree_depends',fn(Builder $builder) =>
+            $builder ->where('exam_depends','=','yes')
+                ->where('user_id','=',Auth::guard('user-api')->id()))
+            ->whereHas('lesson',fn(Builder $builder) =>
+            $builder->where('lesson_id','=',$lesson->id))
+            ->pluck('degree')
+            ->toArray();
+
+
+        $onlineExams =  OnlineExam::OnlineExamLessonDegreeDetails($lesson);
+        $data['degrees']  = LessonExamDegreeDetailsResource::collection($onlineExams);
+        $data['total_per'] =  number_format((array_sum($degreeDependsFullDegree) / array_sum($degreeOfAllExam)) * 100,2);
+        $data['motivational_word'] = "ممتاز بس فيه أحسن ";
+
+        return self::returnResponseDataApi($data,"تم الحصول علي جميع درجات امتحانات الدرس بنجاح",200);
 
     }
 }

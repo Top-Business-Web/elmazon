@@ -34,7 +34,6 @@ class SubjectClassExamDegreeDetailsResource extends JsonResource
             'percentage' => ($degreeDependsFullDegree->full_degree / $degreeOfAllExam->degree) * 100,
             'degree' =>  $degreeDependsFullDegree->full_degree."/".$degreeOfAllExam->degree,
 
-
         ];
     }
 }

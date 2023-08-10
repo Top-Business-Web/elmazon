@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Repositories;
-
 use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Interfaces\AuthRepositoryInterface;
 use App\Http\Resources\AllExamResource;
