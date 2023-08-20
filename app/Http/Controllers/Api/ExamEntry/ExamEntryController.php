@@ -597,6 +597,8 @@ class ExamEntryController extends Controller
 
             $month_heroes = User::monthOfExamsHeroes();
 
+            $last_month_heroes = User::lastMonthOfExamsHeroes();
+
 
             $userCountExam = ExamDegreeDepends::query()
                 ->where('user_id','=', auth()->guard('user-api')->id())
@@ -612,6 +614,7 @@ class ExamEntryController extends Controller
                 $examsStudentsDayHeroesIds = $day_heroes->pluck('id')->toArray();
                 $examsStudentsWeekHeroesIds = $week_heroes->pluck('id')->toArray();
                 $examsStudentsMonthHeroesIds = $month_heroes->pluck('id')->toArray();
+                $examsStudentsLastMonthHeroesIds = $last_month_heroes->pluck('id')->toArray();
 
 
                 //all ordered of students from all exams
@@ -638,6 +641,14 @@ class ExamEntryController extends Controller
                 }
 
 
+                foreach ($last_month_heroes as $last_month_hero) {
+                    $last_month_hero->ordered = (array_search($last_month_hero->id,$examsStudentsMonthHeroesIds)) + 1;
+                    $last_month_hero->degree = ($last_month_hero->exam_degree_depends_sum_full_degree / $last_month_hero->exam_degree_depends_count);
+                    $last_month_hero->exams_total_degree = (($last_month_hero->online_exams_total_degrees_sum_degree +  $last_month_hero->all_exams_total_degrees_sum_degree) /$last_month_hero->exam_degree_depends_count);
+
+                }
+
+
                 //my ordered
                 $auth = User::myOrderedFromExamsHeroes();
 
@@ -652,7 +663,8 @@ class ExamEntryController extends Controller
                 $data['auth'] = $studentAuth;
                 $data['day_heroes'] = AllExamHeroesNewResource::collection($day_heroes);
                 $data['week_heroes'] = AllExamHeroesNewResource::collection($week_heroes);
-                $data['month_heroes'] = AllExamHeroesNewResource::collection($month_heroes);
+                $data['current_month_heroes'] = AllExamHeroesNewResource::collection($month_heroes);
+                $data['last_month_heroes'] = AllExamHeroesNewResource::collection($last_month_heroes);
 
                 return self::returnResponseDataApi($data, "تم الحصول علي ابطال الامتحانات  بنجاح", 200);
 
