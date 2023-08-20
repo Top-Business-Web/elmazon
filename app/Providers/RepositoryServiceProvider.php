@@ -19,6 +19,7 @@ class RepositoryServiceProvider extends ServiceProvider
      *
      * @return void
      */
+
     public function register(){
 
         $this->app->bind(AuthRepositoryInterface::class,AuthRepository::class);

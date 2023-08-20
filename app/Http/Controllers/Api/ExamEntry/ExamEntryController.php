@@ -652,7 +652,6 @@ class ExamEntryController extends Controller
                 //my ordered
                 $auth = User::myOrderedFromExamsHeroes();
 
-
                 $studentAuth = new AllExamHeroesNewResource($auth);
                 $studentAuth->ordered = (array_search(Auth::guard('user-api')->id(),$allOfStudentsEnterExams)) + 1;
                 $studentAuth->degree = ($auth->exam_degree_depends_sum_full_degree / $auth->exam_degree_depends_count);
