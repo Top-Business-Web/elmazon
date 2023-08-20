@@ -24,7 +24,6 @@ class DegreeExamsDetailsController extends Controller{
 
         $allExams = AllExam::AllExamDegreeDetailsForStudent();
 
-
         $degreeDependsFullDegree = ExamDegreeDepends::query()
             ->whereHas('all_exam',fn(Builder $builder) =>
             $builder->where('user_id','=',Auth::guard('user-api')->id()))
@@ -64,7 +63,6 @@ class DegreeExamsDetailsController extends Controller{
             ->pluck('full_degree')
             ->toArray();
 
-
         $degreeOfAllExam = OnlineExam::query()
             ->whereHas('exam_degree_depends',fn(Builder $builder) =>
             $builder ->where('exam_depends','=','yes')
@@ -79,7 +77,6 @@ class DegreeExamsDetailsController extends Controller{
         $data['degrees']  = SubjectClassExamDegreeDetailsResource::collection($onlineExams);
         $data['total_per'] =  number_format((array_sum($degreeDependsFullDegree) / array_sum($degreeOfAllExam)) * 100,2);
         $data['motivational_word'] = "ممتاز بس فيه أحسن ";
-
         return self::returnResponseDataApi($data,"تم الحصول علي جميع درجات امتحانات هذا الفصل للطالب",200);
 
     }
@@ -143,7 +140,6 @@ class DegreeExamsDetailsController extends Controller{
             ->where('exam_depends','=','yes')
             ->pluck('full_degree')
             ->toArray();
-
 
 
         $degreeOfAllExam = OnlineExam::query()
