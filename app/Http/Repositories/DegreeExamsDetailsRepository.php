@@ -92,6 +92,9 @@ class DegreeExamsDetailsRepository extends ResponseApi implements DegreeExamsDet
                 ->whereHas('online_exam')
                 ->where('user_id','=',Auth::guard('user-api')->id())
                 ->where('exam_depends','=','yes')
+                ->whereHas('online_exam', fn(Builder $builder)=>
+                $builder->where('type','=','class')
+                )
                 ->pluck('full_degree')
                 ->toArray();
 
@@ -164,6 +167,10 @@ class DegreeExamsDetailsRepository extends ResponseApi implements DegreeExamsDet
                 $builder->whereHas('video'))
                 ->where('user_id','=',Auth::guard('user-api')->id())
                 ->where('exam_depends','=','yes')
+                ->whereHas('online_exam', fn(Builder $builder)=>
+
+                $builder->where('type','=','video')
+                )
                 ->pluck('full_degree')
                 ->toArray();
 
@@ -234,6 +241,11 @@ class DegreeExamsDetailsRepository extends ResponseApi implements DegreeExamsDet
                 ->whereHas('online_exam')
                 ->where('user_id','=',Auth::guard('user-api')->id())
                 ->where('exam_depends','=','yes')
+                ->whereHas('online_exam', fn(Builder $builder)=>
+
+                $builder->where('type','=','lesson')
+                )
+
                 ->pluck('full_degree')
                 ->toArray();
 
