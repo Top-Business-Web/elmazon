@@ -17,10 +17,15 @@ class VideoExamDegreeDetailsResource extends JsonResource
      */
     public function toArray($request)
     {
-        $degreeDependsFullDegree = ExamDegreeDepends::query()->where('online_exam_id','=',$this->id)
-            ->where('user_id','=',Auth::guard('user-api')->id())->where('exam_depends','=','yes')->first();
+        $degreeDependsFullDegree = ExamDegreeDepends::query()
+            ->where('online_exam_id','=',$this->id)
+            ->where('user_id','=',Auth::guard('user-api')->id())
+            ->where('exam_depends','=','yes')
+            ->first();
 
-        $degreeOfAllExam = OnlineExam::query()->where('id','=',$this->id)->first();
+        $degreeOfAllExam = OnlineExam::query()
+            ->where('id','=',$this->id)
+            ->first();
 
 
         return [
@@ -30,8 +35,6 @@ class VideoExamDegreeDetailsResource extends JsonResource
             'background_color' => $this->background_color,
             'percentage' => ($degreeDependsFullDegree->full_degree / $degreeOfAllExam->degree) * 100,
             'degree' =>  $degreeDependsFullDegree->full_degree."/".$degreeOfAllExam->degree,
-
-
         ];
 
     }
