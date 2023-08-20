@@ -417,7 +417,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         } else {
 
-            if ($userRegisterExamBefore && Carbon::now()->format('Y-m-d') <= $userRegisterExamBefore->papelSheetExam->date_exam) {
+            if ($userRegisterExamBefore) {
 
                 $paperSheetExam = PapelSheetExam::whereHas('season', fn(Builder $builder) =>
                 $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
