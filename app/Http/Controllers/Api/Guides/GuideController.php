@@ -28,6 +28,7 @@ class GuideController extends Controller
     }
 
     public function itemsByLesson($id,$lesson_id){
+
         $guide_items = Guide::where(['from_id'=>$id,'lesson_id'=>$lesson_id])->get();
 
         if($guide_items->count() > 0){
