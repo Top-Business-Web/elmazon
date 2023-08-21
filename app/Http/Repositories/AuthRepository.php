@@ -826,6 +826,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function examCountdown(): JsonResponse
     {
 
+
         $examSchedule = ExamSchedule::query()
             ->whereHas('term', fn(Builder $builder) =>
             $builder->where('status', '=', 'active')
@@ -834,20 +835,22 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             ->first();
 
         if ($examSchedule) {
-            $toDate = Carbon::now();
-            $fromDate = Carbon::parse($examSchedule->date);
 
-            $days = $toDate->diffInDays($fromDate);
-            $months = $toDate->diffInMonths($fromDate);
-            $hours = $toDate->diffInHours($fromDate, true);
+            $timeFirst  = strtotime(now());
+            $timeSecond = strtotime($examSchedule->date_time);
+            $differenceInSeconds = $timeSecond - $timeFirst;
 
+
+            $months = floor($differenceInSeconds /2592000);
+            $hours = floor(( $differenceInSeconds %86400)/3600);
+            $days = floor(( $differenceInSeconds %2592000)/86400);
 
             $data['image'] = $examSchedule->image != null ? asset('exam_schedules/' . $examSchedule->image) : asset('exam_schedules/default/default.png');
             $data['title'] = lang() == 'ar' ? $examSchedule->title_ar : $examSchedule->title_en;
             $data['description'] = lang() == 'ar' ? $examSchedule->description_ar : $examSchedule->description_en;
-            $data['date_exam'] = $examSchedule->date;
+            $data['date_exam'] = Carbon::parse($examSchedule->date_time)->format('Y-m-d');
             $data['months'] = $months;
-            $data['days'] = $days;
+            $data['days'] =   $days;
             $data['hours'] = $hours;
 
             return self::returnResponseDataApi($data, "تم الحصول علي معلومات مشاركه الاصدقاء بنجاح", 200);

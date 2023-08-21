@@ -20,7 +20,7 @@ class CreateExamSchedulesTable extends Migration
             $table->string('title_en');
             $table->text('description_ar');
             $table->text('description_en');
-            $table->date('date');
+            $table->timestamp('date_time');
             $table->unsignedBigInteger('term_id');
             $table->unsignedBigInteger('season_id');
             $table->foreign('term_id')->references('id')->on('terms')->cascadeOnUpdate()->cascadeOnDelete();
