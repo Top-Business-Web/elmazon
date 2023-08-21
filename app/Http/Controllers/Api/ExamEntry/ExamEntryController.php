@@ -3,26 +3,17 @@
 namespace App\Http\Controllers\Api\ExamEntry;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllExamHeroesNewResource;
-use App\Http\Resources\AllExamResource;
-use App\Http\Resources\LiveExamHeroesResource;
 use App\Http\Resources\OnlineExamQuestionResource;
-use App\Http\Resources\OnlineExamResource;
-use App\Http\Resources\QuestionResource;
 use App\Models\AllExam;
 use App\Models\Answer;
 use App\Models\ExamDegreeDepends;
-use App\Models\ExamInstruction;
-use App\Models\LifeExam;
 use App\Models\OnlineExam;
-use App\Models\OnlineExamQuestion;
 use App\Models\OnlineExamUser;
 use App\Models\Question;
 use App\Models\TextExamUser;
 use App\Models\Timer;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -441,7 +432,6 @@ class ExamEntryController extends Controller
                         $data['description_result'] = $exam->description_result;
                         $data['image_result'] = $exam->image_result == null ? asset('online_exam_result_images/default/default.png') : asset('online_exam_result_images/images/'. $exam->image_result);
 
-
                     }
                     return self::returnResponseDataApiWithMultipleIndexes($data,"تم اداء الامتحان بنجاح وارسال تفاصيل نتيجه الطالب",200);
 
@@ -640,14 +630,12 @@ class ExamEntryController extends Controller
 
                 }
 
-
                 foreach ($last_month_heroes as $last_month_hero) {
-                    $last_month_hero->ordered = (array_search($last_month_hero->id,$examsStudentsMonthHeroesIds)) + 1;
+                    $last_month_hero->ordered = (array_search($last_month_hero->id,$examsStudentsLastMonthHeroesIds)) + 1;
                     $last_month_hero->degree = ($last_month_hero->exam_degree_depends_sum_full_degree / $last_month_hero->exam_degree_depends_count);
                     $last_month_hero->exams_total_degree = (($last_month_hero->online_exams_total_degrees_sum_degree +  $last_month_hero->all_exams_total_degrees_sum_degree) /$last_month_hero->exam_degree_depends_count);
 
                 }
-
 
                 //my ordered
                 $auth = User::myOrderedFromExamsHeroes();
@@ -666,7 +654,6 @@ class ExamEntryController extends Controller
                 $data['last_month_heroes'] = AllExamHeroesNewResource::collection($last_month_heroes);
 
                 return self::returnResponseDataApi($data, "تم الحصول علي ابطال الامتحانات  بنجاح", 200);
-
 
             }else{
 

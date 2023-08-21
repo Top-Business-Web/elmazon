@@ -36,7 +36,6 @@ class GuideController extends Controller
             return self::returnResponseDataApi(GuideItemsResource::collection($guide_items),"تم وصل الدليل كامل ",200);
 
         }else{
-
             return self::returnResponseDataApi(null,"لا يوجد بيانات في الدليل الي الان ",405);
         }
 
