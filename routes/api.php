@@ -250,3 +250,11 @@ Route::group(['middleware' => 'lang'], function (){
        // Route::get('/payment/{}',[Payment::class,'payment']);
 
 
+      /*
+
+        1- Add new attribute center to api get profile and auth student
+        2- Add import students excel in dashboard elmazone
+        3- update model exam schedule in dashboard (create,update)
+        4- support kidsstation in sync database offline to online and uploads project and database
+
+       */
