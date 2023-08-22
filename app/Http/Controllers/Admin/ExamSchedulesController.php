@@ -7,13 +7,14 @@ use App\Models\ExamSchedule;
 use App\Models\Term;
 use App\Models\Season;
 use App\Traits\PhotoTrait;
+use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 
 class ExamSchedulesController extends Controller
 {
     use PhotoTrait;
-    // Index Start
+
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -29,10 +30,10 @@ class ExamSchedulesController extends Controller
                         ';
                 })
                 ->editColumn('season_id', function ($exam_schedules) {
-                    return '<td>' . $exam_schedules->season->name_ar . '</td>';
+                    return $exam_schedules->season->name_ar;
                 })
                 ->editColumn('term_id', function ($exam_schedules) {
-                    return '<td>' . $exam_schedules->term->name_ar . '</td>';
+                    return $exam_schedules->term->name_ar;
                 })
                 ->escapeColumns([])
                 ->make(true);
@@ -40,20 +41,16 @@ class ExamSchedulesController extends Controller
             return view('admin.exam_schedules.index');
         }
     }
-    // Index End
 
-    // Create Start
     public function create()
     {
         $data['seasons'] = Season::get();
         $data['terms'] = Term::get();
         return view('admin.exam_schedules.parts.create', compact('data'));
     }
-    // Create End
 
-    // Store Start
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -68,20 +65,16 @@ class ExamSchedulesController extends Controller
         }
     }
 
-    // Store End
 
-    // Edit Start
     public function edit(ExamSchedule $exam_schedule)
     {
         $data['seasons'] = Season::get();
         $data['terms'] = Term::get();
         return view('admin.exam_schedules.parts.edit', compact('exam_schedule', 'data'));
     }
-    // Edit End
 
-    // Update Start
 
-    public function update(Request $request, ExamSchedule $exam_schedule)
+    public function update(Request $request, ExamSchedule $exam_schedule): JsonResponse
     {
 
         if($request->hasFile('image')){
@@ -94,10 +87,6 @@ class ExamSchedulesController extends Controller
         }
     }
 
-    // Edit End
-
-    // Destroy Start
-
     public function destroy(Request $request)
     {
         $exam_schedule = ExamSchedule::where('id', $request->id)->firstOrFail();
@@ -105,6 +94,5 @@ class ExamSchedulesController extends Controller
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Destroy End
 
 }

@@ -8,8 +8,8 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="">صورة :</label>
-                    <input type="file" name="image" class="dropify" value=""
-                           data-default-file="{{ asset($exam_schedule->image) }}" required/>
+                    <input type="file" name="image" class="dropify"
+                           data-default-file="{{ asset($exam_schedule->image) }}" />
                 </div>
                 <span class="form-text text-danger text-center">
                     Recomended : 2048 X 1200 to up Px <br>
@@ -49,7 +49,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="name_ar" class="form-control-label">التاريخ</label>
-                    <input type="date" class="form-control" value="{{ $exam_schedule->date }}" name="date" required>
+                    <input type="datetime-local" class="form-control" value="{{ $exam_schedule->date_time }}" name="date_time" required>
                 </div>
             </div>
             <div class="row">

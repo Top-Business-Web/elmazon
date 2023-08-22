@@ -112,8 +112,8 @@
                 name: 'term_id'
             },
             {
-                data: 'date',
-                name: 'date'
+                data: 'date_time',
+                name: 'date_time'
             },
             {
                 data: 'action',
