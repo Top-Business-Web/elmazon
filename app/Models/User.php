@@ -295,72 +295,24 @@ class User extends Authenticatable implements JWTSubject
 
             ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
             ->get();
-
     }
 
 
-    public function scopeAllOfStudentsEnterExams($query)
+
+    public function onlineExams(): BelongsToMany
     {
 
-        return $query->with([
-
-        'exam_degree_depends' => fn(HasMany $q) =>
-
-           $q->where('exam_depends', '=', 'yes')
-        ])
-          ->whereHas('exam_degree_depends', fn(Builder $builder) =>
-
-          $builder->where('exam_depends', '=', 'yes')
-              ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-          )->whereHas('season', fn(Builder $builder) =>
-            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-            ->take(10)
-              ->withSum([
-            'exam_degree_depends' => function ($query) {
-            $query->where('exam_depends', '=', 'yes');
-            }],'full_degree')
-            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
-            ->pluck('id')
-            ->toArray();
+        return $this->belongsToMany(OnlineExam::class, 'exam_degree_depends', 'user_id', 'online_exam_id', 'id', 'id')->where('exam_depends','=','yes');
     }
 
 
+    public function allExams(): BelongsToMany
+    {
 
-    public function scopeMyOrderedFromExamsHeroes($auth){
-
-        return $auth->with([
-            'exam_degree_depends' => fn(HasMany $q) =>
-
-            $q->where('exam_depends', '=', 'yes')
-            ])
-            ->whereHas('exam_degree_depends', fn(Builder $builder) =>
-
-            $builder->where('exam_depends', '=', 'yes')
-                ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-            )->whereHas('season', fn(Builder $builder) =>
-
-            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-            ->take(10)
-            ->withSum([
-                'exam_degree_depends' => function ($query) {
-                    $query->where('exam_depends', '=', 'yes');
-
-                }],'full_degree')
-            ->withSum(['online_exams_total_degrees'], 'degree')
-            ->withSum(['all_exams_total_degrees'], 'degree')
-            -> withCount([
-                'exam_degree_depends' =>  function($query){
-
-                    $query->where('exam_depends', '=', 'yes');
-
-                } ])
-            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
-            ->where('id','=',Auth::guard('user-api')->id())
-            ->first();
-
-
+        return $this->belongsToMany(AllExam::class, 'exam_degree_depends', 'user_id', 'all_exam_id', 'id', 'id')->where('exam_depends','=','yes');
 
     }
+
 
 
 }
