@@ -168,134 +168,134 @@ class User extends Authenticatable implements JWTSubject
      */
 
 
-    public function scopeDayOfExamsHeroes($query)
-    {
-
-        return $query->with(['exam_degree_depends' => fn(HasMany $q) =>
-
-             $q->where('exam_depends', '=', 'yes')
-
-            ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
-            $builder->where('exam_depends', '=', 'yes')
-                ->whereDay('created_at', '=', Carbon::now()->format('d'))
-                ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-
-            )
-            ->whereHas('season', fn(Builder $builder) =>
-            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-            ->take(10)
-            ->withSum(
-                ['exam_degree_depends' => function ($query) {
-                    $query->where('exam_depends', '=', 'yes');
-                }], 'full_degree')
-            ->withSum(['online_exams_total_degrees'], 'degree')
-            ->withSum(['all_exams_total_degrees'], 'degree')
-            ->withCount([
-                'exam_degree_depends' =>  function($query){
-
-                    $query->where('exam_depends', '=', 'yes');
-                }])
-            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
-            ->get();
-
-    }
-
-
-    public function scopeWeekOfExamsHeroes($query)
-    {
-
-        return $query->with(['exam_degree_depends' => fn(HasMany $q) =>
-        $q->where('exam_depends', '=', 'yes')])
-            ->whereHas('exam_degree_depends', fn(Builder $builder) =>
-            $builder->where('exam_depends', '=', 'yes')
-                ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-                ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-
-            )
-            ->whereHas('season', fn(Builder $builder) =>
-            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-            ->take(10)
-            ->withSum(
-                ['exam_degree_depends' => function ($query) {
-                    $query->where('exam_depends', '=', 'yes');
-                }], 'full_degree')
-            ->withSum(['online_exams_total_degrees'], 'degree')
-            ->withSum(['all_exams_total_degrees'], 'degree')
-            ->withCount([
-
-                'exam_degree_depends' =>  function($query){
-
-                $query->where('exam_depends', '=', 'yes');
-           } ])
-            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
-            ->get();
-
-    }
-
-
-    public function scopeMonthOfExamsHeroes($query)
-    {
-
-        return $query->with(['exam_degree_depends' => fn(HasMany $q) =>
-        $q->where('exam_depends', '=', 'yes')])
-            ->whereHas('exam_degree_depends', fn(Builder $builder) =>
-            $builder->where('exam_depends', '=', 'yes')
-                ->whereMonth('created_at', Carbon::now()->format('m'))
-                ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-
-            )
-            ->whereHas('season', fn(Builder $builder) =>
-            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-            ->take(10)
-            ->withSum(
-                ['exam_degree_depends' => function ($query) {
-                    $query->where('exam_depends', '=', 'yes');
-                }], 'full_degree')
-            ->withSum(['online_exams_total_degrees'], 'degree')
-            ->withSum(['all_exams_total_degrees'], 'degree')
-            ->withCount([
-
-                'exam_degree_depends' =>  function($query){
-
-                    $query->where('exam_depends', '=', 'yes');
-                } ])
-
-            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
-            ->get();
-
-    }
-
-
-    public function scopeLastMonthOfExamsHeroes($query)
-    {
-
-        return $query->with(['exam_degree_depends' => fn(HasMany $q) =>
-        $q->where('exam_depends', '=', 'yes')])
-            ->whereHas('exam_degree_depends', fn(Builder $builder) =>
-            $builder->where('exam_depends', '=', 'yes')
-                ->whereMonth('created_at', Carbon::now()->subMonth()->format('m'))
-                ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-
-            )
-            ->whereHas('season', fn(Builder $builder) =>
-            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-            ->take(10)
-            ->withSum(
-                ['exam_degree_depends' => function ($query) {
-                    $query->where('exam_depends', '=', 'yes');
-                }], 'full_degree')
-            ->withSum(['online_exams_total_degrees'], 'degree')
-            ->withSum(['all_exams_total_degrees'], 'degree')
-            ->withCount([
-
-                'exam_degree_depends' =>  function($query){
-
-                    $query->where('exam_depends', '=', 'yes');
-                } ])
-
-            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
-            ->get();
-    }
+//    public function scopeDayOfExamsHeroes($query)
+//    {
+//
+//        return $query->with(['exam_degree_depends' => fn(HasMany $q) =>
+//
+//             $q->where('exam_depends', '=', 'yes')
+//
+//            ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
+//            $builder->where('exam_depends', '=', 'yes')
+//                ->whereDay('created_at', '=', Carbon::now()->format('d'))
+//                ->whereYear('created_at', '=', Carbon::now()->format('Y'))
+//
+//            )
+//            ->whereHas('season', fn(Builder $builder) =>
+//            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+//            ->take(10)
+//            ->withSum(
+//                ['exam_degree_depends' => function ($query) {
+//                    $query->where('exam_depends', '=', 'yes');
+//                }], 'full_degree')
+//            ->withSum(['online_exams_total_degrees'], 'degree')
+//            ->withSum(['all_exams_total_degrees'], 'degree')
+//            ->withCount([
+//                'exam_degree_depends' =>  function($query){
+//
+//                    $query->where('exam_depends', '=', 'yes');
+//                }])
+//            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
+//            ->get();
+//
+//    }
+//
+//
+//    public function scopeWeekOfExamsHeroes($query)
+//    {
+//
+//        return $query->with(['exam_degree_depends' => fn(HasMany $q) =>
+//        $q->where('exam_depends', '=', 'yes')])
+//            ->whereHas('exam_degree_depends', fn(Builder $builder) =>
+//            $builder->where('exam_depends', '=', 'yes')
+//                ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+//                ->whereYear('created_at', '=', Carbon::now()->format('Y'))
+//
+//            )
+//            ->whereHas('season', fn(Builder $builder) =>
+//            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+//            ->take(10)
+//            ->withSum(
+//                ['exam_degree_depends' => function ($query) {
+//                    $query->where('exam_depends', '=', 'yes');
+//                }], 'full_degree')
+//            ->withSum(['online_exams_total_degrees'], 'degree')
+//            ->withSum(['all_exams_total_degrees'], 'degree')
+//            ->withCount([
+//
+//                'exam_degree_depends' =>  function($query){
+//
+//                $query->where('exam_depends', '=', 'yes');
+//           } ])
+//            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
+//            ->get();
+//
+//    }
+//
+//
+//    public function scopeMonthOfExamsHeroes($query)
+//    {
+//
+//        return $query->with(['exam_degree_depends' => fn(HasMany $q) =>
+//        $q->where('exam_depends', '=', 'yes')])
+//            ->whereHas('exam_degree_depends', fn(Builder $builder) =>
+//            $builder->where('exam_depends', '=', 'yes')
+//                ->whereMonth('created_at', Carbon::now()->format('m'))
+//                ->whereYear('created_at', '=', Carbon::now()->format('Y'))
+//
+//            )
+//            ->whereHas('season', fn(Builder $builder) =>
+//            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+//            ->take(10)
+//            ->withSum(
+//                ['exam_degree_depends' => function ($query) {
+//                    $query->where('exam_depends', '=', 'yes');
+//                }], 'full_degree')
+//            ->withSum(['online_exams_total_degrees'], 'degree')
+//            ->withSum(['all_exams_total_degrees'], 'degree')
+//            ->withCount([
+//
+//                'exam_degree_depends' =>  function($query){
+//
+//                    $query->where('exam_depends', '=', 'yes');
+//                } ])
+//
+//            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
+//            ->get();
+//
+//    }
+//
+//
+//    public function scopeLastMonthOfExamsHeroes($query)
+//    {
+//
+//        return $query->with(['exam_degree_depends' => fn(HasMany $q) =>
+//        $q->where('exam_depends', '=', 'yes')])
+//            ->whereHas('exam_degree_depends', fn(Builder $builder) =>
+//            $builder->where('exam_depends', '=', 'yes')
+//                ->whereMonth('created_at', Carbon::now()->subMonth()->format('m'))
+//                ->whereYear('created_at', '=', Carbon::now()->format('Y'))
+//
+//            )
+//            ->whereHas('season', fn(Builder $builder) =>
+//            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+//            ->take(10)
+//            ->withSum(
+//                ['exam_degree_depends' => function ($query) {
+//                    $query->where('exam_depends', '=', 'yes');
+//                }], 'full_degree')
+//            ->withSum(['online_exams_total_degrees'], 'degree')
+//            ->withSum(['all_exams_total_degrees'], 'degree')
+//            ->withCount([
+//
+//                'exam_degree_depends' =>  function($query){
+//
+//                    $query->where('exam_depends', '=', 'yes');
+//                } ])
+//
+//            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
+//            ->get();
+//    }
 
 
 
