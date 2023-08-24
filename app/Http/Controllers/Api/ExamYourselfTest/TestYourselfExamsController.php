@@ -248,12 +248,12 @@ class TestYourselfExamsController extends Controller{
                 ->first();
 
             if ($testYourselfExamStudentCheck) {
+
                 $testExamUserCorrectAnswers = OnlineExamUser::query()
                     ->where('user_id', '=', Auth::guard('user-api')->id())
                     ->where('test_yourself_exam_id', '=',$testYourselfExam->id)
                     ->where('status', '=', 'solved')
                     ->count();
-
 
                 $testExamUserLeaveAnswers = OnlineExamUser::query()
                     ->where('user_id', '=', Auth::guard('user-api')->id())
@@ -348,8 +348,6 @@ class TestYourselfExamsController extends Controller{
 
             }
         }
-
-
 
     }
 }
