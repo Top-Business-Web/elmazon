@@ -711,13 +711,15 @@ class ExamEntryController extends Controller
         ->first();
 
 
+        $heroesDaysIds = collect($this->dayHeroesAll())->pluck('id')->toArray();
+
         if(!is_null($examsDepends)){
 
             $authStudent = Auth::guard('user-api')->user();
             $authData['id'] = $authStudent->id;
             $authData['name'] = $authStudent->name;
             $authData['country'] = lang() == 'ar'?$authStudent->country->name_ar : $authStudent->country->name_en;
-            $authData['ordered'] = 2;
+            $authData['ordered'] = (array_search($authStudent->id,$heroesDaysIds)) + 1;
             $authData['student_total_degrees'] = (int)$examsDepends->exam_degree_depends_sum_full_degree;
             $authData['exams_total_degree'] = (int)$examsDepends->online_exams_sum_degree + $examsDepends->all_exams_sum_degree;
             $authData['image'] = $authStudent->image != null ? asset('/users/'.$authStudent->image) : asset('/default/avatar2.jfif');
@@ -754,6 +756,7 @@ class ExamEntryController extends Controller
             ->withSum(['allExams'], 'degree')
             ->first();
 
+        $heroesWeekIds = collect($this->weekHeroesAll())->pluck('id')->toArray();
 
         if(!is_null($examsDepends)){
 
@@ -761,7 +764,7 @@ class ExamEntryController extends Controller
             $authData['id'] = $authStudent->id;
             $authData['name'] = $authStudent->name;
             $authData['country'] = lang() == 'ar'?$authStudent->country->name_ar : $authStudent->country->name_en;
-            $authData['ordered'] = 2;
+            $authData['ordered'] = (array_search($authStudent->id,$heroesWeekIds)) + 1;
             $authData['student_total_degrees'] = (int)$examsDepends->exam_degree_depends_sum_full_degree;
             $authData['exams_total_degree'] = (int)$examsDepends->online_exams_sum_degree + $examsDepends->all_exams_sum_degree;
             $authData['image'] = $authStudent->image != null ? asset('/users/'.$authStudent->image) : asset('/default/avatar2.jfif');
@@ -797,6 +800,7 @@ class ExamEntryController extends Controller
             ->withSum(['allExams'], 'degree')
             ->first();
 
+        $heroesCurrentMonthIds = collect($this->currentMonthHeroesAll())->pluck('id')->toArray();
 
         if(!is_null($examsDepends)){
 
@@ -804,7 +808,7 @@ class ExamEntryController extends Controller
             $authData['id'] = $authStudent->id;
             $authData['name'] = $authStudent->name;
             $authData['country'] = lang() == 'ar'?$authStudent->country->name_ar : $authStudent->country->name_en;
-            $authData['ordered'] = 2;
+            $authData['ordered'] = (array_search($authStudent->id,$heroesCurrentMonthIds)) + 1;
             $authData['student_total_degrees'] = (int)$examsDepends->exam_degree_depends_sum_full_degree;
             $authData['exams_total_degree'] = (int)$examsDepends->online_exams_sum_degree + $examsDepends->all_exams_sum_degree;
             $authData['image'] = $authStudent->image != null ? asset('/users/'.$authStudent->image) : asset('/default/avatar2.jfif');
@@ -841,6 +845,7 @@ class ExamEntryController extends Controller
             ->withSum(['allExams'], 'degree')
             ->first();
 
+        $heroesLastMonthIds = collect($this->lastMonthHeroesAll())->pluck('id')->toArray();
 
         if(!is_null($examsDepends)){
 
@@ -848,7 +853,7 @@ class ExamEntryController extends Controller
             $authData['id'] = $authStudent->id;
             $authData['name'] = $authStudent->name;
             $authData['country'] = lang() == 'ar'?$authStudent->country->name_ar : $authStudent->country->name_en;
-            $authData['ordered'] = 2;
+            $authData['ordered'] = (array_search($authStudent->id,$heroesLastMonthIds)) + 1;
             $authData['student_total_degrees'] = (int)$examsDepends->exam_degree_depends_sum_full_degree;
             $authData['exams_total_degree'] = (int)$examsDepends->online_exams_sum_degree + $examsDepends->all_exams_sum_degree;
             $authData['image'] = $authStudent->image != null ? asset('/users/'.$authStudent->image) : asset('/default/avatar2.jfif');
@@ -885,6 +890,7 @@ class ExamEntryController extends Controller
             ->withSum(['allExams'], 'degree')
             ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
             ->get();
+
 
         $listOfStudentsIds = $students->pluck('id')->toArray();
 
