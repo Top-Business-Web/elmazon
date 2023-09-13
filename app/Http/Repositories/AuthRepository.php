@@ -826,7 +826,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function examCountdown(): JsonResponse
     {
 
-
         $examSchedule = ExamSchedule::query()
             ->whereHas('term', fn(Builder $builder) =>
             $builder->where('status', '=', 'active')
