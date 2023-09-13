@@ -299,8 +299,8 @@ class TestYourselfExamsController extends Controller{
                         'question_id' => $request->details[$i]['question'],
                         'answer_id' => $request->details[$i]['answer'],
                         'test_yourself_exam_id' => $testYourselfExam->id,
-                        'status' => isset($answer) ? $answer->answer_status == "correct" ? "solved" : "un_correct" : "leave",
-                        'degree' => $answer->answer_status == "correct" ? $question->degree : 0,
+                        'status' => $answer != null ? ($answer->answer_status == "correct" ? "solved" : "un_correct") : "leave",
+                        'degree' =>  $answer != null ? ($answer->answer_status == "correct" ? $question->degree : 0) : 0,
                     ]);
 
                     $arrayOfDegreeTestExam[] =  $testExamStudentCreate->degree;
