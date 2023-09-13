@@ -267,7 +267,6 @@ class TestYourselfExamsController extends Controller{
                     ->where('user_id', '=', Auth::guard('user-api')->id())
                     ->where('test_yourself_exam_id', '=',$testYourselfExam->id)
                     ->where('status', '=', 'un_correct')
-                    ->orWhere('status', '=', 'leave')
                     ->count();
 
 
@@ -343,7 +342,6 @@ class TestYourselfExamsController extends Controller{
                         ->where('user_id', '=', Auth::guard('user-api')->id())
                         ->where('test_yourself_exam_id', '=',$testYourselfExam->id)
                         ->where('status', '=', 'un_correct')
-                        ->orWhere('status', '=', 'leave')
                         ->count();
 
 
@@ -358,7 +356,6 @@ class TestYourselfExamsController extends Controller{
                     return self::returnResponseDataApiWithMultipleIndexes($data, "تم اداء الامتحان بنجاح", 200);
 
                 }
-
 
             }
         }
