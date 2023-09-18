@@ -20,6 +20,8 @@
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">الطالب</th>
+                                <th class="min-w-50px">المحافظه</th>
+                                <th class="min-w-50px">الكود</th>
                                 <th class="min-w-50px">الاقتراح</th>
                                 <th class="min-w-50px">الصورة</th>
                                 <th class="min-w-50px">الصوت</th>
@@ -84,6 +86,8 @@
         var columns = [
             {data: 'id', name: 'id'},
             {data: 'user_id', name: 'user_id'},
+            {data: 'country_id', name: 'country_id'},
+            {data: 'code', name: 'code'},
             {data: 'suggestion', name: 'suggestion'},
             {data: 'image', name: 'image'},
             {data: 'audio', name: 'audio'},
