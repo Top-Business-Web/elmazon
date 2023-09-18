@@ -44,7 +44,11 @@ Route::get('terms/season/{id}',[\App\Http\Controllers\Admin\TermController::clas
 
 /*
 
+  1- Create Api to add like in (Video_part,Video_basic,video_resource)
+  2- Edit in api Make exam with yourself when add list of questions in api equal the exam questions length
 
+
+  1- Taxi supported for mobile application in api in multiple links
 
 
  */

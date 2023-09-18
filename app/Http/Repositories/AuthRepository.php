@@ -231,7 +231,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     }
 
 
-    public function paper_sheet_exam(Request $request, $id)
+    public function paper_sheet_exam(Request $request,$id)
     {
 
         $rules = [
@@ -512,8 +512,12 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         try {
 
-            $subject_class = SubjectClass::first();
-            $first_lesson = Lesson::where('subject_class_id', '=', $subject_class->id)->first();
+            $subject_class = SubjectClass::query()
+            ->first();
+
+            $first_lesson = Lesson::query()
+            ->where('subject_class_id', '=', $subject_class->id)
+                ->first();
 
             if (!$subject_class) {
                 return self::returnResponseDataApi(null, "لا يوجد فصول برجاء ادخال عدد من الفصول لفتح اول فصل من القائمه", 404, 404);
@@ -526,7 +530,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $subject_class_opened = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())
                 ->where('subject_class_id', '=', $subject_class->id);
 
-            $lesson_opened = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())
+            $lesson_opened = OpenLesson::query()
+            ->where('user_id', '=', Auth::guard('user-api')->id())
                 ->where('lesson_id', '=', $first_lesson->id);
 
             if (!$subject_class_opened->exists() && !$lesson_opened->exists()) {
@@ -542,7 +547,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             }
 
-            $life_exam = LifeExam::whereHas('term', fn(Builder $builder) =>
+            $life_exam = LifeExam::query()
+            ->whereHas('term', fn(Builder $builder) =>
             $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
@@ -570,14 +576,17 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 $id = null;
             }
 
-            $classes = SubjectClass::whereHas('term', fn(Builder $builder) =>
+            $classes = SubjectClass::query()
+            ->whereHas('term', fn(Builder $builder) =>
             $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                 ->get();
 
-            $sliders = Slider::get();
-            $videos_resources = VideoResource::whereHas('term', fn(Builder $builder) =>
+            $sliders = Slider::query()->get();
+
+            $videos_resources = VideoResource::query()
+            ->whereHas('term', fn(Builder $builder) =>
             $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
