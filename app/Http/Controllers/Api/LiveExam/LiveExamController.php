@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\LiveExam;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ChooseLiveExamResource;
 use App\Http\Resources\ExamQuestionsNewResource;
 use App\Http\Resources\HeroesExamResource;
 use App\Http\Resources\LifeExamResource;
@@ -19,6 +20,7 @@ use App\Models\OnlineExamUser;
 use App\Models\Question;
 use App\Models\Timer;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -120,8 +122,8 @@ class LiveExamController extends Controller
                     'question_id' => $request->details[$i]['question'],
                     'answer_id' => $request->details[$i]['answer'],
                     'life_exam_id' => $liveExam->id,
-                    'status' => isset($answer) ? $answer->answer_status == "correct" ? "solved" : "un_correct" : "leave",
-                    'degree' => $answer->answer_status == "correct" ? $question->degree : 0,
+                    'status' => $request->details[$i]['answer'] == null ? "leave"  : ($answer->answer_status == "correct" ? "solved" : "un_correct"),
+                    'degree' => $request->details[$i]['answer'] == null ? 0 : ($answer->answer_status == "correct" ? $question->degree : 0) ,
                 ]);
 
                 $arrayOfDegree[] = $examStudentCreate->degree;
@@ -164,7 +166,6 @@ class LiveExamController extends Controller
     public function allOfLiveExamsStudent(): JsonResponse
     {
 
-
         $allOfLiveExams = LifeExam::query()
             ->whereHas('term', fn(Builder $builder) =>
             $builder->where('status', '=', 'active')
@@ -180,6 +181,24 @@ class LiveExamController extends Controller
     }
 
 
+    public function choose_live_exam(): JsonResponse
+    {
+
+        $allOfLiveExams = LifeExam::query()
+            ->whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
+                ->where('season_id', '=', auth('user-api')->user()->season_id))
+            ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+            ->whereHas('exams_degree_depends', fn(Builder $builder) =>
+            $builder->where('user_id', '=', Auth::guard('user-api')->id()))
+            ->get();
+
+        return self::returnResponseDataApi(ChooseLiveExamResource::collection($allOfLiveExams), "تم جلب جميع الامتحانات الايف  بنجاح", 200);
+
+
+    }
+
+
     public function allOfExamHeroes($id): JsonResponse
     {
 
@@ -190,29 +209,11 @@ class LiveExamController extends Controller
                 ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
                     ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
-                ->where('id', '=', $id)
+                ->where('id', '=',$id)
                 ->first();
 
             if (!$liveExamHeroes) {
                 return self::returnResponseDataApi(null, "الامتحان الايف غير موجود", 404);
-            }
-
-
-            $users = User::with(['exam_degree_depends_user' => function($q) use($liveExamHeroes){
-                $q->where('life_exam_id', '=', $liveExamHeroes->id)
-                ->orderBy('full_degree', 'desc');
-            }])->whereHas('exam_degree_depends_user', fn(Builder $builder) => $builder->where('life_exam_id', '=', $liveExamHeroes->id)
-                ->orderBy('full_degree', 'desc'))
-                ->whereHas('season', fn(Builder $builder) => $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-                ->take(10)
-                ->get()
-                ->sortByDesc('exam_degree_depends_user.full_degree');
-
-
-            $usersIds = $users->pluck('id')->toArray();
-
-            foreach ($users as $user) {
-                $user->ordered = (array_search($user->id,$usersIds)) + 1;
             }
 
             $liveExmDegreeCheck = ExamDegreeDepends::query()
@@ -220,20 +221,11 @@ class LiveExamController extends Controller
                 ->where('life_exam_id', '=', $liveExamHeroes->id)
                 ->first();
 
-            $allOfStudentEnterLifeExam = User::with(['exam_degree_depends_user' => function($q) use($liveExamHeroes) {
-            $q->where('life_exam_id', '=', $liveExamHeroes->id);
-                 }])
-                ->whereHas('exam_degree_depends_user', fn(Builder $builder) => $builder->where('life_exam_id', '=', $liveExamHeroes->id))
-                ->pluck('id')
-                ->toArray();
-
 
             if ($liveExmDegreeCheck) {
-                $checkStudentAuth = Auth::guard('user-api')->user();
-                $studentAuth = new LiveExamHeroesResource($checkStudentAuth);
-                $studentAuth->ordered = (array_search($checkStudentAuth->id, $allOfStudentEnterLifeExam)) + 1;
-                $data['MyOrdered'] = $studentAuth;
-                $data['AllExamHeroes'] = LiveExamHeroesResource::collection($users->take(10));
+
+                $data['MyOrdered'] = $this->getStudentExamHero($liveExamHeroes->id,$liveExamHeroes->degree);
+                $data['AllExamHeroes'] =  $this->getAllExamHeroes($liveExamHeroes->id,$liveExamHeroes->degree);
 
                 return self::returnResponseDataApi($data, "تم الحصول علي ابطال الامتحانات الايف بنجاح", 200);
 
@@ -241,8 +233,6 @@ class LiveExamController extends Controller
 
                 return self::returnResponseDataApi(null, "انت لم تؤدي هذا الامتحان برجاء الامتحان اولا لاظهار ابطال المنصه", 403);
             }
-
-//            return self::returnResponseDataApi(LiveExamHeroesResource::collection($users),"تم الحصول علي ابطال الامتحانات الايف بنجاح",200);
 
 
         } catch (\Exception $exception) {
@@ -255,7 +245,7 @@ class LiveExamController extends Controller
     public function resultOfLiveExam($id): JsonResponse
     {
 
-        //Live exam find by id with query
+
         $liveExam = LifeExam::query()
             ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
@@ -267,7 +257,7 @@ class LiveExamController extends Controller
             return self::returnResponseDataApi(null, "الامتحان الايف غير موجود", 404);
         }
 
-        //start check if user enter live exam or not
+
         $liveExamStudentCheck = ExamDegreeDepends::query()
             ->where('life_exam_id', '=', $liveExam->id)
             ->where('user_id', '=', Auth::guard('user-api')->id())
@@ -276,7 +266,6 @@ class LiveExamController extends Controller
         if ($liveExamStudentCheck) {
 
 
-            //start count all status of answer questions of student auth
             $liveExamUserCorrectAnswers = OnlineExamUser::query()
                 ->where('user_id', '=', Auth::guard('user-api')->id())
                 ->where('life_exam_id', '=', $liveExam->id)
@@ -297,10 +286,7 @@ class LiveExamController extends Controller
                 ->where('status', '=', 'leave')
                 ->count();
 
-           //end count all status of answer questions of student auth
 
-
-            //start ordered student auth
             $allOfStudentEnterLifeExam = User::with(['exam_degree_depends_user' => fn(HasOne $q) =>
             $q->where('life_exam_id', '=', $liveExam->id)])
                 ->whereHas('exam_degree_depends_user', fn(Builder $builder) =>
@@ -312,10 +298,8 @@ class LiveExamController extends Controller
             $checkStudentAuth = Auth::guard('user-api')->user();
             $studentAuth = new LiveExamHeroesResource($checkStudentAuth);
             $studentAuth->ordered = (array_search($checkStudentAuth->id, $allOfStudentEnterLifeExam)) + 1;
-            //end ordered student auth
 
 
-            //start response of screen degree exam live
             $data['ordered'] = $studentAuth->ordered;
             $data['motivational_word'] = "ممتاز بس فيه أحسن ";
             $data['student_per'] = (($liveExamStudentCheck->full_degree / $liveExam->degree) * 100) . "%";
@@ -331,6 +315,74 @@ class LiveExamController extends Controller
             return self::returnResponseDataApi(null, "انت لم تؤدي هذا الامتحان برجاء الامتحان اولا لاظهار ابطال المنصه", 403);
 
         }
+    }
+
+
+    final public function getStudentExamHero($live_exam_id,$degree_of_exam): array
+    {
+
+
+        $student = User::with(['exam_degree_depends_user' => function($q) use($live_exam_id){
+            $q->where('life_exam_id', '=', $live_exam_id);
+        }])->whereHas('exam_degree_depends_user', fn(Builder $builder) =>
+        $builder->where('life_exam_id', '=', $live_exam_id))
+            ->whereHas('season', fn(Builder $builder) =>
+            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+            ->first();
+
+
+          $heroesDaysIds = collect($this->getAllExamHeroes($live_exam_id,$degree_of_exam))->pluck('id')->toArray();
+
+
+            $authStudent = Auth::guard('user-api')->user();
+            $authData['id'] = $authStudent->id;
+            $authData['name'] = $authStudent->name;
+            $authData['country'] = lang() == 'ar'? $authStudent->country->name_ar : $authStudent->country->name_en;
+            $authData['ordered'] = (array_search($authStudent->id,$heroesDaysIds)) + 1;
+            $authData['student_total_degrees'] =  (int)$student->exam_degree_depends_user->full_degree;
+            $authData['exams_total_degree'] = (int)$degree_of_exam;
+            $authData['image'] = $authStudent->image != null ? asset('/users/'.$authStudent->image) : asset('/default/avatar2.jfif');
+
+            return $authData;
+
+    }
+
+
+    final public function getAllExamHeroes($live_exam_id,$degree_of_exam): array
+    {
+
+        $students =   User::with(['exam_degree_depends_user' => function($q) use($live_exam_id){
+            $q->where('life_exam_id', '=', $live_exam_id)
+                ->orderBy('full_degree', 'desc');
+        }])->whereHas('exam_degree_depends_user', fn(Builder $builder) =>
+        $builder->where('life_exam_id', '=', $live_exam_id)
+            ->orderBy('full_degree', 'desc'))
+            ->whereHas('season', fn(Builder $builder) =>
+            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+            ->take(10)
+            ->get()
+            ->sortByDesc('exam_degree_depends_user.full_degree');
+
+
+        $listOfStudentsIds = $students->pluck('id')->toArray();
+
+
+              $data = [];
+              foreach ($students as $student){
+
+                $studentsData['id'] = $student->id;
+                $studentsData['name'] = $student->name;
+                $studentsData['country'] = lang() == 'ar'?$student->country->name_ar : $student->country->name_en;
+                $studentsData['ordered'] = (array_search($student->id,$listOfStudentsIds)) + 1;
+                $studentsData['student_total_degrees'] = (int)$student->exam_degree_depends_user->full_degree;
+                $studentsData['exams_total_degree'] = (int)$degree_of_exam;
+                $studentsData['image'] = $student->image != null ? asset('/users/'.$student->image) : asset('/default/avatar2.jfif');
+                $data[] = $studentsData;
+            }
+
+            return $data;
+
+
     }
 
 

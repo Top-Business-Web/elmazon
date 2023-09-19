@@ -121,6 +121,8 @@ class User extends Authenticatable implements JWTSubject
     }
 
 
+
+
     public function exam_degree_depends_user(): HasOne
     {
 
@@ -135,6 +137,8 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany(OnlineExam::class, 'online_exam_users', 'user_id', 'online_exam_id', 'id', 'id');
 
     }
+
+
 
 
 

@@ -238,6 +238,7 @@ Route::group(['middleware' => 'lang'], function (){
     });
 
         Route::get('live-exam-all',[LiveExamController::class,'allOfLiveExamsStudent'])->middleware('jwt');
+        Route::get('live-exam-all/choose-live-exam',[LiveExamController::class,'choose_live_exam'])->middleware('jwt');
         //exam heroes
         Route::get('exam-heroes/all',[ExamEntryController::class,'examHeroesAll'])->middleware('jwt');
 
