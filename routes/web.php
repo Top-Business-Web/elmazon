@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Payment;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,3 +53,11 @@ Route::get('terms/season/{id}',[\App\Http\Controllers\Admin\TermController::clas
 
 
  */
+
+
+Route::get('update-exam-degree-depends', function (){
+
+    DB::table('exam_degree_depends')->update(['created_at' => Carbon::now()]);
+    return "Done update";
+
+});
