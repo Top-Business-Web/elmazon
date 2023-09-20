@@ -68,9 +68,9 @@
                                             @foreach($videos as $video)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $video->video->name_ar }}</td>
+                                                    <td>{{ $video->video->name_ar ?? '' }}</td>
                                                     <td class="text-end">{{ $video->created_at->format('Y-m-d') }}</td>
-                                                    <td>{{ $video->video->video_time . ' دقيقة ' }}</td>
+                                                    <td>{{ $video->minutes ?? '' . ' دقيقة ' }}</td>
                                                 </tr>
                                             @endforeach
                                             </tbody>
@@ -81,7 +81,7 @@
                                             </td>
                                             <td></td>
                                             <td>مجموع دقائق المشاهده :
-                                                {{ $videoMin . ' دقيقة ' }}
+                                                {{ $totalTimeFormatted }}
                                             </td>
                                             </tfoot>
                                         </table>
