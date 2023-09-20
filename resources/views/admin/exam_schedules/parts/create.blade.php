@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="name_ar" class="form-control-label">التاريخ</label>
-                    <input type="date" class="form-control" value="" name="date" required>
+                    <input type="datetime-local" class="form-control"  name="date_time" required>
                 </div>
             </div>
             <div class="row">

@@ -5,17 +5,17 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم باللغة العربية</label>
-                    <input type="text" class="form-control" name="name_ar" required>
+                    <input type="text" class="form-control" name="name_ar">
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم باللغة الانجليزية</label>
-                    <input type="text" class="form-control" name="name_en" required>
+                    <input type="text" class="form-control" name="name_en">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الصف</label>
-                    <Select name="season_id" class="form-control" required>
+                    <Select name="season_id" class="form-control">
                         <option selected disabled style="text-align: center">اختار الصف</option>
                         @foreach ($data['seasons'] as $season)
                             <option value="{{ $season->id }}" style="text-align: center">{{ $season->name_ar }}</option>
@@ -41,11 +41,11 @@
                 </div>
                 <div class="col-md-4">
                     <label for="time" class="form-control-label">الوقت</label>
-                    <input type="number" class="form-control time_video" name="time" required>
+                    <input type="text" class="form-control time_video" name="time">
                 </div>
                 <div class="col-md-4">
                     <label for="">النوع :</label>
-                    <select class="form-control" name="type" id="type_choose" required>
+                    <select class="form-control" name="type" id="type_choose">
                         <option style="text-align: center" value="video">فيديو</option>
                         <option style="text-align: center" value="pdf">ملف ورقي</option>
                     </select>

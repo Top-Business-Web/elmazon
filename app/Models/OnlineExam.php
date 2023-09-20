@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -94,6 +95,11 @@ class OnlineExam extends Model
         return $this->belongsTo(Lesson::class,'lesson_id','id');
     }
 
+    public function class(): BelongsTo
+    {
+        return $this->belongsTo(SubjectClass::class,'class_id','id');
+    }
+
 
     //relation online_exams  with user
     public function users(): BelongsToMany{
@@ -129,13 +135,28 @@ class OnlineExam extends Model
     //start degree details
     public function scopeOnlineExamSubjectClassDegreeDetails($query,$class){
 
-       return $query->where('class_id','=',$class->id)->whereHas('term', function ($term){
-            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-        })->whereHas('exam_degree_depends', function ($q){
-            $q->where('user_id','=', auth('user-api')->id())->where('exam_depends','=','yes');
-        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+        return $query->where('class_id','=',$class->id)
+            ->whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
+                ->where('season_id','=',auth('user-api')->user()->season_id)
+            )->whereHas('exam_degree_depends', function ($q){
+                $q->where('user_id','=', auth('user-api')->id())->where('exam_depends','=','yes');
+            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)
+            ->get();
     }
 
+
+    public function scopeOnlineExamSubjectClasses($query,$ids){
+
+        return $query->whereIn('class_id',$ids)
+            ->whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
+                ->where('season_id','=',auth('user-api')->user()->season_id)
+            )->whereHas('exam_degree_depends', function ($q){
+            $q->where('user_id','=', auth('user-api')->id())->where('exam_depends','=','yes');
+        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)
+        ->get();
+    }
 
     public function scopeOnlineExamLessonVideosDegreeDetails($query,$lesson){
 
@@ -149,13 +170,48 @@ class OnlineExam extends Model
     }
 
 
+
+
     public function scopeOnlineExamLessonDegreeDetails($query,$lesson){
 
-        return $query->where('lesson_id','=',$lesson->id)->whereHas('term', function ($term){
-            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-        })->whereHas('exam_degree_depends', function ($q){
-            $q->where('user_id','=', auth('user-api')->id())->where('exam_depends','=','yes');
-        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
+        return $query->where('lesson_id','=',$lesson->id)
+            ->whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
+                ->where('season_id','=',auth('user-api')->user()->season_id))
+            ->whereHas('exam_degree_depends',fn(Builder $builder)=>
+            $builder->where('user_id','=', auth('user-api')->id())
+                ->where('exam_depends','=','yes')
+            )->where('season_id','=',auth()->guard('user-api')->user()->season_id)
+            ->get();
+    }
+
+
+    public function scopeOnlineExamAllLessons($query,$ids){
+
+        return $query->whereIn('lesson_id',$ids)
+            ->whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
+                ->where('season_id','=',auth('user-api')->user()->season_id))
+            ->whereHas('exam_degree_depends',fn(Builder $builder)=>
+            $builder->where('user_id','=', auth('user-api')->id())
+                ->where('exam_depends','=','yes')
+            )->where('season_id','=',auth()->guard('user-api')->user()->season_id)
+            ->get();
+    }
+
+
+
+    public function scopeOnlineExamLessons($query,$ids){
+
+        return $query->whereIn('video_id',$ids)
+            ->whereHas('term', fn(Builder $builder) =>
+            $builder->where('status', '=', 'active')
+                ->where('season_id','=',auth('user-api')->user()->season_id))
+            ->whereHas('exam_degree_depends', function ($q){
+                $q->where('user_id','=', auth('user-api')->id())
+                    ->where('exam_depends','=','yes');
+            })->where('season_id','=',auth()->guard('user-api')->user()->season_id)
+            ->get();
     }
 
 

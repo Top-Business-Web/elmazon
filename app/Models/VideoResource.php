@@ -18,6 +18,7 @@ class VideoResource extends Model
         'background_color',
         'time',
         'video_link',
+        'youtube_link',
         'type',
         'pdf_file',
         'season_id',

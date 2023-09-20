@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Api\Instruction;
-
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllExamNewResource;
 use App\Http\Resources\InstructionNewResource;
@@ -48,19 +47,24 @@ class InstructionController extends Controller{
                     return self::returnResponseDataApi(null, "الامتحان الاونلاين غير موجود", 404);
                 }
 
-                $theHighestDegree = ExamDegreeDepends::query()->where('online_exam_id','=',$exam->id)
+                $theHighestDegree = ExamDegreeDepends::query()
+                    ->where('online_exam_id','=',$exam->id)
                     ->where('exam_depends','=','yes')
                     ->orderBy('full_degree','desc')
                     ->latest()
                     ->first();
 
                 if($theHighestDegree){
+
                     $user =  new UserFullDegreeDetailsNewResource($theHighestDegree->user);
                     $user->degree = $theHighestDegree->full_degree;
                     $user->per = ($theHighestDegree->full_degree / $theHighestDegree->online_exam->degree) * 100;
                     $user->time_exam = $theHighestDegree->created_at->diffForHumans();
-                    $time = Timer::query()->where('online_exam_id','=',$exam->id)
-                        ->where('user_id','=',$user->id)->latest()->first();
+                    $time = Timer::query()
+                        ->where('online_exam_id','=',$exam->id)
+                        ->where('user_id','=',$user->id)
+                        ->latest()
+                        ->first();
 
                     $user->time = $time->timer;
                     $data['user'] = $user;
@@ -73,7 +77,6 @@ class InstructionController extends Controller{
                     $data['user'] = null;
                     $data['details'] = new InstructionNewResource($exam);
                     return self::returnResponseDataApiWithMultipleIndexes($data, "تم الحصول علي بيانات ارشادات الامتحان الاونلاين بنجاح", 201);
-
 
                 }
 

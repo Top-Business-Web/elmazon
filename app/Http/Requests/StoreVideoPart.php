@@ -11,7 +11,7 @@ class StoreVideoPart extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,18 +21,19 @@ class StoreVideoPart extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name_ar' => 'required',
             'name_en' => 'required',
             'lesson_id' => 'required',
-            'link' => 'required|mimes:mp4',
-            'video_time' => 'required',
+            'link' => 'nullable|mimes:mp4',
+            'youtube_link' => 'nullable',
+            'video_time' => 'required|date_format:H:i:s',
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'link.mimes' => 'يجب ان يكون الملف فيديو',

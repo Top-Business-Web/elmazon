@@ -17,13 +17,14 @@ class TestExamAnswerStudentResource extends JsonResource
     public function toArray($request)
     {
 
-        $answerStudent = OnlineExamUser::where('user_id','=',Auth::guard('user-api')->id())
+        $answerStudent = OnlineExamUser::query()
+        ->where('user_id','=',Auth::guard('user-api')->id())
             ->where('question_id','=',$this->id)
+            ->where('test_yourself_exam_id','=',$request->id)
             ->whereHas('question', function ($q){
                 $q->where('question_type','=','choice');
             })
             ->first();
-
 
         return [
 
@@ -38,7 +39,6 @@ class TestExamAnswerStudentResource extends JsonResource
             'answers' =>  QuestionAnswersNewResource::collection($this->answers),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
-
         ];
     }
 }

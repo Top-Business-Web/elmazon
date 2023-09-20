@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class ReportController extends Controller{
 
 
-    public $reportRepositoryInterface;
+    public ReportRepositoryInterface $reportRepositoryInterface;
 
     public function __construct(ReportRepositoryInterface $reportRepositoryInterface)
     {

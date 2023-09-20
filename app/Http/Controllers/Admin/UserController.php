@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\MotivationalExport;
+use App\Exports\StudentsExport;
+use App\Imports\MotivationalImport;
+use App\Imports\StudentsImport;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\Term;
@@ -21,6 +25,8 @@ use App\Models\UserSubscribe;
 use App\Models\OnlineExamUser;
 use App\Models\PapelSheetExam;
 use App\Http\Requests\StoreUser;
+use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 use App\Http\Requests\UpdateUser;
 use App\Models\ExamDegreeDepends;
@@ -68,23 +74,20 @@ class UserController extends Controller
             return view('admin.users.index');
         }
     }
-    // Index End
 
-    // Create Start
     public function create()
     {
         $data['seasons'] = Season::get();
         $data['countries'] = Country::get();
         return view('admin.users.parts.create')->with($data);
     }
-    // Create End
 
-    // Store Start
 
     public function store(Request $request)
     {
         $inputs = $request->all();
         $inputs['user_status'] = 'active';
+        $inputs['password'] = Hash::make('123456');
 
         if ($request->has('image')) {
             $inputs['image'] = $this->saveImage($request->image, 'user', 'photo');
@@ -98,10 +101,7 @@ class UserController extends Controller
         } // Create End
     }
 
-    // Store End
 
-
-    // Edit Start
     public function edit(User $user)
     {
         $data['seasons'] = Season::get();
@@ -247,7 +247,6 @@ class UserController extends Controller
         ]));
     }
 
-    // Destroy Start
 
     public function destroy(Request $request)
     {
@@ -257,5 +256,24 @@ class UserController extends Controller
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Destroy End
+
+
+    //added by islam mohamed
+    public function studentsExport(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        return Excel::download(new StudentsExport(), 'Students.xlsx');
+
+    }
+
+    public function  studentsImport(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $import = Excel::import(new StudentsImport(), $request->exelFile);
+        if ($import) {
+            $this->adminLog('تم استيراد ملف جديد لبيانات الطلبه');
+            return response()->json(['status' => 200]);
+        } else {
+            return response()->json(['status' => 500]);
+        }
+    }
+
 }

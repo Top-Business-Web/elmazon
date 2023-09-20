@@ -17,6 +17,7 @@ use App\Models\OnlineExamQuestion;
 use App\Models\OnlineExamUser;
 use App\Models\Question;
 use App\Models\SubjectClass;
+use App\Models\TestYourSelfExamQuestions;
 use App\Models\TestYourselfExams;
 use App\Models\TextExamUser;
 use Illuminate\Database\Eloquent\Builder;
@@ -248,12 +249,12 @@ class TestYourselfExamsController extends Controller{
                 ->first();
 
             if ($testYourselfExamStudentCheck) {
+
                 $testExamUserCorrectAnswers = OnlineExamUser::query()
                     ->where('user_id', '=', Auth::guard('user-api')->id())
                     ->where('test_yourself_exam_id', '=',$testYourselfExam->id)
                     ->where('status', '=', 'solved')
                     ->count();
-
 
                 $testExamUserLeaveAnswers = OnlineExamUser::query()
                     ->where('user_id', '=', Auth::guard('user-api')->id())
@@ -266,7 +267,6 @@ class TestYourselfExamsController extends Controller{
                     ->where('user_id', '=', Auth::guard('user-api')->id())
                     ->where('test_yourself_exam_id', '=',$testYourselfExam->id)
                     ->where('status', '=', 'un_correct')
-                    ->orWhere('status', '=', 'leave')
                     ->count();
 
 
@@ -282,74 +282,83 @@ class TestYourselfExamsController extends Controller{
 
             } else {
 
-                $arrayOfDegreeTestExam = [];
+                $total_question_count = TestYourSelfExamQuestions::query()
+                    ->where('exam_id','=',$testYourselfExam->id)
+                    ->count();
 
-                for ($i = 0; $i < count($request->details); $i++) {
+                if(count($request->details) > $total_question_count){
 
-                    $question = Question::query()
-                        ->where('id', '=', $request->details[$i]['question'])
-                        ->first();
+                    return self::returnResponseDataApi(null, "عدد الاسئله االمجاوب عليها اكبر من عدد اسئله الامتحان", 415);
 
-                    $answer = Answer::query()
-                        ->where('id', '=', $request->details[$i]['answer'])
-                        ->first();
+                }else{
 
-                    $testExamStudentCreate = OnlineExamUser::create([
-                        'user_id' => Auth::guard('user-api')->id(),
-                        'question_id' => $request->details[$i]['question'],
-                        'answer_id' => $request->details[$i]['answer'],
+                    $arrayOfDegreeTestExam = [];
+
+                    for ($i = 0; $i < count($request->details); $i++) {
+
+                        $question = Question::query()
+                            ->where('id', '=', $request->details[$i]['question'])
+                            ->first();
+
+                        $answer = Answer::query()
+                            ->where('id', '=', $request->details[$i]['answer'])
+                            ->first();
+
+                        $testExamStudentCreate = OnlineExamUser::create([
+                            'user_id' => Auth::guard('user-api')->id(),
+                            'question_id' => $request->details[$i]['question'],
+                            'answer_id' => $request->details[$i]['answer'],
+                            'test_yourself_exam_id' => $testYourselfExam->id,
+                            'status' => $answer != null ? ($answer->answer_status == "correct" ? "solved" : "un_correct") : "leave",
+                            'degree' =>  $answer != null ? ($answer->answer_status == "correct" ? $question->degree : 0) : 0,
+                        ]);
+
+                        $arrayOfDegreeTestExam[] =  $testExamStudentCreate->degree;
+                    }
+
+
+                    $resultOfDegreeTestExam = ExamDegreeDepends::create([
                         'test_yourself_exam_id' => $testYourselfExam->id,
-                        'status' => isset($answer) ? $answer->answer_status == "correct" ? "solved" : "un_correct" : "leave",
-                        'degree' => $answer->answer_status == "correct" ? $question->degree : 0,
+                        'user_id' => Auth::guard('user-api')->id(),
+                        'full_degree' => array_sum($arrayOfDegreeTestExam),
                     ]);
 
-                    $arrayOfDegreeTestExam[] =  $testExamStudentCreate->degree;
+
+                    $testExamUserCorrectAnswers = OnlineExamUser::query()
+                        ->where('user_id', '=', Auth::guard('user-api')->id())
+                        ->where('test_yourself_exam_id', '=',$testYourselfExam->id)
+                        ->where('status', '=', 'solved')
+                        ->count();
+
+
+                    $testExamUserLeaveAnswers = OnlineExamUser::query()
+                        ->where('user_id', '=', Auth::guard('user-api')->id())
+                        ->where('test_yourself_exam_id', '=',$testYourselfExam->id)
+                        ->where('status', '=', 'leave')
+                        ->count();
+
+
+                    $testExamUserMistakeAnswers = OnlineExamUser::query()
+                        ->where('user_id', '=', Auth::guard('user-api')->id())
+                        ->where('test_yourself_exam_id', '=',$testYourselfExam->id)
+                        ->where('status', '=', 'un_correct')
+                        ->count();
+
+
+                    $data['per'] = (($resultOfDegreeTestExam->full_degree / $testYourselfExam->total_degree) * 100) . "%";
+                    $data['motivational_word'] = "ممتاز بس فيه احسن";
+                    $data['student_degree'] = ($resultOfDegreeTestExam->full_degree) . " / " . $testYourselfExam->total_degree;
+                    $data['num_of_correct_questions'] =  $testExamUserCorrectAnswers;
+                    $data['num_of_mistake_questions'] =  $testExamUserMistakeAnswers;
+                    $data['num_of_leave_questions'] = $testExamUserLeaveAnswers;
+                    $data['exam_questions'] = new TestExamQuestionsStudentResource($testYourselfExam);
+
+                    return self::returnResponseDataApiWithMultipleIndexes($data, "تم اداء الامتحان بنجاح", 200);
+
                 }
-
-
-                $resultOfDegreeTestExam = ExamDegreeDepends::create([
-                    'test_yourself_exam_id' => $testYourselfExam->id,
-                    'user_id' => Auth::guard('user-api')->id(),
-                    'full_degree' => array_sum($arrayOfDegreeTestExam),
-                ]);
-
-
-                $testExamUserCorrectAnswers = OnlineExamUser::query()
-                    ->where('user_id', '=', Auth::guard('user-api')->id())
-                    ->where('test_yourself_exam_id', '=',$testYourselfExam->id)
-                    ->where('status', '=', 'solved')
-                    ->count();
-
-
-                $testExamUserLeaveAnswers = OnlineExamUser::query()
-                    ->where('user_id', '=', Auth::guard('user-api')->id())
-                    ->where('test_yourself_exam_id', '=',$testYourselfExam->id)
-                    ->where('status', '=', 'leave')
-                    ->count();
-
-
-                $testExamUserMistakeAnswers = OnlineExamUser::query()
-                    ->where('user_id', '=', Auth::guard('user-api')->id())
-                    ->where('test_yourself_exam_id', '=',$testYourselfExam->id)
-                    ->where('status', '=', 'un_correct')
-                    ->orWhere('status', '=', 'leave')
-                    ->count();
-
-
-                $data['per'] = (($resultOfDegreeTestExam->full_degree / $testYourselfExam->total_degree) * 100) . "%";
-                $data['motivational_word'] = "ممتاز بس فيه احسن";
-                $data['student_degree'] = ($resultOfDegreeTestExam->full_degree) . " / " . $testYourselfExam->total_degree;
-                $data['num_of_correct_questions'] =  $testExamUserCorrectAnswers;
-                $data['num_of_mistake_questions'] =  $testExamUserMistakeAnswers;
-                $data['num_of_leave_questions'] = $testExamUserLeaveAnswers;
-                $data['exam_questions'] = new TestExamQuestionsStudentResource($testYourselfExam);
-
-                return self::returnResponseDataApiWithMultipleIndexes($data, "تم اداء الامتحان بنجاح", 200);
 
             }
         }
-
-
 
     }
 }

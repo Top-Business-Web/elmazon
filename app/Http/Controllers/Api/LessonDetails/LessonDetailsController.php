@@ -31,7 +31,7 @@ class LessonDetailsController extends Controller{
             return self::returnResponseDataApi(null,"هذا الدرس غير موجود",404,404);
         }
 
-        $videos = VideoParts::query()->where('lesson_id','=',$lesson->id)->where('type','=','video')->get();
+        $videos = VideoParts::query()->where('lesson_id','=',$lesson->id)->get();
 
         return self::returnResponseDataApi(VideoPartDetailsNewResource::collection($videos),"تم الحصول علي جميع فيديوهات الشرح بنجاح",200);
 
@@ -98,14 +98,22 @@ class LessonDetailsController extends Controller{
     public function examDetailsByExamId($id): JsonResponse{
 
 
-        $exam = OnlineExam::where('id','=',$id)->first();
-        if(!$exam){
-            return self::returnResponseDataApi(null,"هذا الامتحان غير موجود",404,404);
+        $video = VideoParts::query()
+            ->where('id','=',$id)
+            ->first();
+
+        if(!$video){
+            return self::returnResponseDataApi(null,"فيديو الشرح غير موجود",404,404);
         }
 
-        $degree = ExamDegreeDepends::query()->where('user_id','=',Auth::guard('user-api')->id())
+        $exam = OnlineExam::query()->where('video_id','=',$video->id)->first();
+
+
+        $degree = ExamDegreeDepends::query()
+            ->where('user_id','=',Auth::guard('user-api')->id())
                   ->where('online_exam_id','=',$exam->id)
-                  ->latest()->first();
+                   ->where('exam_depends','=','yes')
+                  ->first();
 
         if(!$degree){
             return self::returnResponseDataApi(null,"يجب انت تمتحن اولا لاظهار تقيمك في الامتحان",201);
@@ -118,22 +126,27 @@ class LessonDetailsController extends Controller{
 
             $onlineExamUserCorrectAnswers  = OnlineExamUser::query()
                 ->where('user_id','=',Auth::guard('user-api')->id())
-                ->where('online_exam_id','=',$exam->id)->where('status','=','solved')
+                ->where('online_exam_id','=',$exam->id)
+                ->where('status','=','solved')
                 ->count();
 
             $onlineExamUserMistakeAnswers  = OnlineExamUser::query()
                 ->where('user_id','=',Auth::guard('user-api')->id())
-                ->where('online_exam_id','=',$exam->id)->where('status','=','un_correct')
+                ->where('online_exam_id','=',$exam->id)
+                ->where('status','=','un_correct')
                 ->orWhere('status','=','leave')
                 ->count();
 
 
 
-            $tryingNumber = Timer::query()->where('user_id','=',Auth::guard('user-api')->id())
-                ->where('online_exam_id','=',$exam->id)->count();
+            $tryingNumber = Timer::query()
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->where('online_exam_id','=',$exam->id)
+                ->count();
 
 
             $data['full_degree']     = ($degree->full_degree) . " / " . $exam->degree;
+            $data['motivational_word'] = "ممتاز بس فيه أحسن ";
             $data['correct_numbers'] =  $onlineExamUserCorrectAnswers;
             $data['mistake_numbers'] =  $onlineExamUserMistakeAnswers;
             $data['trying_numbers']  =  $tryingNumber;

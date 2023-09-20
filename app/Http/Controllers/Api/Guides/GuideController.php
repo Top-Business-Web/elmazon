@@ -27,15 +27,15 @@ class GuideController extends Controller
 
     }
 
-    public function itemsByLesson($id,$lesson_id){
-        $guide_items = Guide::where(['from_id'=>$id,'lesson_id'=>$lesson_id])->get();
+    public function itemsByLesson($id,$class_id){
+
+        $guide_items = Guide::where(['from_id'=>$id,'subject_class_id'=>$class_id])->get();
 
         if($guide_items->count() > 0){
 
             return self::returnResponseDataApi(GuideItemsResource::collection($guide_items),"تم وصل الدليل كامل ",200);
 
         }else{
-
             return self::returnResponseDataApi(null,"لا يوجد بيانات في الدليل الي الان ",405);
         }
 

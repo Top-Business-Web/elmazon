@@ -11,7 +11,6 @@ use Yajra\DataTables\Facades\DataTables;
 class SuggestionController extends Controller
 {
     use AdminLogs;
-    // Index START
 
     public function index(request $request)
     {
@@ -26,14 +25,19 @@ class SuggestionController extends Controller
                             </button>
                        ';
                 })
+                ->addColumn('country_id', function ($suggestions) {
+                  return $suggestions->user->country->name_ar;
+                })
+                ->addColumn('code', function ($suggestions) {
+                    return $suggestions->user->code;
+                })
                 ->editColumn('user_id', function ($suggestions) {
                         return '<td>'. $suggestions->user->name .'</td>';
                 })
                 ->editColumn('suggestion', function ($suggestions) {
                     if($suggestions->audio) {
                         return '<td>'. ($suggestions->suggestion ? $suggestions->suggestion : '____') .'</td>';
-                    }
-                    else
+                    } else
                     {
                         return '____';
                     }
@@ -43,8 +47,7 @@ class SuggestionController extends Controller
                         return '<a class="badge badge-danger" href="' . asset('suggestions_uploads/audios/'.$suggestions->audio) . '">
                                 '. ($suggestions->audio ? 'لينك الصوت' : '____') .'
                             </a>';
-                    else
-                    {
+                    else {
                         return '____';
                     }
                 })
@@ -53,8 +56,7 @@ class SuggestionController extends Controller
                         return '<a class="badge badge-secondary" href="' . asset('suggestions_uploads/images/'.$suggestions->image) . '">
                                 '. ($suggestions->image ? 'لينك الصورة' : '____') .'
                             </a>';
-                    else
-                    {
+                    else {
                         return '____';
                     }
                 })
@@ -75,9 +77,6 @@ class SuggestionController extends Controller
         }
     }
 
-    // End Index
-
-    // Delete Start
 
     public function destroy(Request $request)
     {
@@ -87,5 +86,5 @@ class SuggestionController extends Controller
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Delete End
+
 }

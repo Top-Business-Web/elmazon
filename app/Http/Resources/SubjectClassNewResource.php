@@ -19,24 +19,25 @@ class SubjectClassNewResource extends JsonResource
     public function toArray($request)
     {
 
-        $totalWatch = VideoOpened::where([
-             'user_id' => auth('user-api')->id(),
-             'status' => 'watched'
+        $totalWatch = VideoOpened::where(['user_id' => auth('user-api')->id(),
+             'status' => 'watched',
+            'type' => 'video'
         ])->count();
 
 
         return [
 
             'id' => $this->id,
-            'status' => OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('subject_class_id','=',$this->id)->count() > 0 ? 'opened' : 'lock',
+            'status' => OpenLesson::where('user_id','=',Auth::guard('user-api')->id())
+                ->where('subject_class_id','=',$this->id)->first() ? 'opened' : 'lock',
             'image' => $this->image == null ? asset('classes/default/def.jpg') : asset('classes/' . $this->image),
             'background_color' => $this->background_color,
             'title' => lang() == 'ar' ? $this->title_ar : $this->title_en,
             'name' => lang() == 'ar' ? $this->name_ar : $this->name_en,
-            'total_watch' =>  $this->videos->count() == 0 ? 0 : (int)number_format(($totalWatch / $this->videos->count()) * 100,2),
+            'total_watch' =>  (double)$this->videos->count() == 0 ? 0.00 : (double)number_format(($totalWatch / $this->videos->count()) * 100,2),
             'num_of_lessons' => $this->lessons->count(),
             'num_of_videos' => $this->videos->count(),
-            'total_times' => $this->videos->sum('video_time'),
+            'total_times' => getAllSecondsFromTimes($this->videos->pluck('video_time')->toArray()),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
             'exams' => OnlineExamNewResource::collection($this->exams),

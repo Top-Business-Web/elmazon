@@ -1,4 +1,5 @@
 <?php
+
 return [
     #PAYMOB
     'PAYMOB_API_KEY' => env('PAYMOB_API_KEY'),
@@ -31,7 +32,7 @@ return [
     'FAWRY_SECRET' => env('FAWRY_SECRET'),
     'FAWRY_MERCHANT' => env('FAWRY_MERCHANT'),
     'FAWRY_DISPLAY_MODE' => env('FAWRY_DISPLAY_MODE',"POPUP"),//required allowed values [POPUP, INSIDE_PAGE, SIDE_PAGE , SEPARATED]
-    'FAWRY_PAY_MODE'=>env('FAWRY_PAY_MODE',"CARD"),//allowed values ['CashOnDelivery', 'PayAtFawry', 'MWALLET', 'CARD' , 'VALU']
+    'FAWRY_PAY_MODE'=>env('FAWRY_PAY_MODE',"MWALLET"),//allowed values ['CashOnDelivery', 'PayAtFawry', 'MWALLET', 'CARD' , 'VALU']
 
     #PayPal
     'PAYPAL_CLIENT_ID' => env('PAYPAL_CLIENT_ID'),
@@ -61,7 +62,7 @@ return [
     'OPAY_BASE_URL'=>env('OPAY_BASE_URL',"https://sandboxapi.opaycheckout.com"),//https://api.opaycheckout.com for production
 
 
-    #PAYMOB_WALLET (vodaphone-cash,orange-money,etisalat-cash,we-cash,meza-wallet) - test phone 01010101010 ,PIN & OTP IS 123456
+    #PAYMOB_WALLET (vodafone-cash,orange-money,etisalat-cash,we-cash,meza-wallet) - test phone 01010101010 ,PIN & OTP IS 123456
     'PAYMOB_WALLET_INTEGRATION_ID'=>env('PAYMOB_WALLET_INTEGRATION_ID'),
 
     #Paytabs
@@ -74,6 +75,6 @@ return [
     'VERIFY_ROUTE_NAME' => "payment-verify",
     'APP_NAME'=>env('APP_NAME'),
 
-    
+
 
 ];

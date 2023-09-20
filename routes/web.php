@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Payment;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,3 +24,31 @@ Route::get('/payments/payWithFawry',[Payment::class,'payWithFawry'])->name('paym
 
 //get all terms by season_id
 Route::get('terms/season/{id}',[\App\Http\Controllers\Admin\TermController::class,'getAllTermsBySeason'])->middleware('auth:admin');
+
+//Route::get('get-minutes', function (){
+//
+//    $video_part_time = \App\Models\VideoParts::query()
+//        ->find(1)->video_part_time;
+//
+//    $total_watch = \App\Models\VideoOpened::query()
+//        ->find(29)->total_watch;
+//
+//    $timeDifference = Carbon::parse($total_watch)->diffInSeconds(Carbon::parse($video_part_time));
+//    $total = $timeDifference;
+//
+//
+//    return $total;
+//
+//});
+
+
+/*
+
+  1- Create Api to add like in (Video_part,Video_basic,video_resource)
+  2- Edit in api Make exam with yourself when add list of questions in api equal the exam questions length
+
+
+  1- Taxi supported for mobile application in api in multiple links
+
+
+ */

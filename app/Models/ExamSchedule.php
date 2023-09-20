@@ -14,7 +14,7 @@ class ExamSchedule extends Model
         'title_en',
         'description_ar',
         'description_en',
-        'date',
+        'date_time',
         'term_id',
         'season_id',
     ];

@@ -61,17 +61,13 @@ class MotivationalSentencesController extends Controller
         }
     }
 
-    // Store END
 
-    // Edit START
 
     public function edit(MotivationalSentences $motivational)
     {
         return view('admin.motivational_sentences.parts.edit', compact('motivational'));
     }
-    // Edit END
 
-    // Update START
 
     public function update(Request $request, MotivationalSentences $motivational)
     {
@@ -83,9 +79,6 @@ class MotivationalSentencesController extends Controller
         }
     }
 
-    // Update END
-
-    // Delete START
 
     public function destroy(Request $request)
     {
@@ -95,14 +88,14 @@ class MotivationalSentencesController extends Controller
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Delete END
-    public function motivationalExport()
+
+    public function motivationalExport(): \Symfony\Component\HttpFoundation\BinaryFileResponse
     {
         return Excel::download(new MotivationalExport, 'Motivational.xlsx');
 
-    } // end motivationalExport
+    }
 
-    public function motivationalImport(Request $request)
+    public function motivationalImport(Request $request): \Illuminate\Http\JsonResponse
     {
         $import = Excel::import(new MotivationalImport(), $request->exelFile);
         if ($import) {
@@ -111,6 +104,6 @@ class MotivationalSentencesController extends Controller
         } else {
             return response()->json(['status' => 500]);
         }
-    } // end question import
+    }
 
 }

@@ -43,6 +43,7 @@ use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -88,6 +89,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::get('priceMonth', [UserController::class, 'priceMonth'])->name('priceMonth');
         Route::get('subscrView/{user}/view', [UserController::class, 'subscrView'])->name('subscrView');
         Route::get('userUnvilable', [UserController::class, 'userUnvilable'])->name('userUnvilable');
+        Route::get('studentsExport', [UserController::class, 'studentsExport'])->name('studentsExport');
+        Route::post('studentsImport', [UserController::class, 'studentsImport'])->name('studentsImport');
+
     });
 
     #### Season ####
@@ -171,9 +175,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::get('videoPart/comment/create/{id}', [VideoPartController::class, 'indexCommentVideoCreate'])->name('indexCommentVideoCreate');
         Route::post('videoPart/comment/reply', [VideoPartController::class, 'storeReplyVideo'])->name('storeReplyVideo');
         Route::delete('videoPart/commentReply/delete/{id}', [VideoPartController::class, 'deleteCommentVideoReply'])->name('deleteCommentVideoReply');
-
         Route::get('video_part/{id}/reports', [VideoPartController::class, 'reportPart'])->name('reportPart');
-
         Route::post('/video_part/likeActive', [VideoPartController::class, 'likeActive'])->name('likeActive');
         Route::post('video_part/viewActive', [VideoPartController::class, 'viewActive'])->name('viewActive');
     });
@@ -341,4 +343,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Auth ####
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
+
 });

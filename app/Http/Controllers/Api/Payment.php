@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\PaymentLog;
 use App\Models\Subscribe;
 use App\Models\UserSubscribe;
 use App\Services\PaymentService;
+use App\Services\PaymobWalletService;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -127,6 +129,26 @@ class Payment extends Controller
         $response = request()->query();
 
         if($response['success'] == true){
+
+            $payment = PaymentLog::where('payment_id',$response['id'])->first();
+            foreach ($payment->request_variables['subscribes_ids'] as  $item){
+                $subscribe_item = Subscribe::find($item);
+                UserSubscribe::create([
+                    'price' => $subscribe_item->price_in_center,
+                    'month' => $subscribe_item->month,
+                    'year' => $subscribe_item->year,
+                    'student_id' =>  $payment->request_variables['user_id'],
+                ]);
+//                array_push($months,$subscribe_item->month);
+            }  //
+
+//            $user = User::find($payment->request_variables['user_id']);
+//            $subscribed_months = getFromToMonthsList($user->date_start_code, $user->date_end_code);
+////        dd($months,$subscribed_months);
+//            $months_to_subscribe = sort(array_merge($months,$subscribed_months));
+//            $dates = getFromToFromMonthsList($months_to_subscribe);
+
+//            return response()->json(["data"=>'',"errors"=>'','message'=>"Payment Successfully.",'code'=>200],200);
 //            dd(Session::get('items_posts'));
 //            foreach (Session::get('items_posts')['subscribes_ids'] as  $item){
 //                $subscribe_item = Subscribe::find($item);
@@ -181,20 +203,24 @@ class Payment extends Controller
     }
 
 
-    public function payWithFawry(Request $request){
+    public function payWithPaymobVisa($request,$name,$amount,$email,$user_id,$phone){
         $user = auth()->guard('user-api');
-        $payment = new FawryPayment();
+        $payment = new PaymobPayment();
         $response = $payment
-            ->setUserFirstName('odss')
-            ->setUserLastName('ddd')
-            ->setUserEmail('dddd@c.com')
-            ->setUserPhone('01016830875')
-            ->setAmount(550)
+            ->setUserFirstName($name)
+            ->setUserLastName($name)
+            ->setUserEmail($email)
+            ->setUserPhone($phone)
+            ->setUserId($user_id)
+            ->setAmount($amount*100)
             ->pay();
 
-        return $response;
-//        return self::returnResponseDataApi(['payment_url' => $response['redirect_url']],"تم استلام لينك الدفع بنجاح ",200);
-//        return $response['html'];
+//        return $response;
+
+        PaymentLog::create(
+            ['payment_id'=>$response['payment_id'],'request_variables'=>$request->all(),'payment_type'=>'visa']
+        );
+        return self::returnResponseDataApi(['payment_url' => $response['redirect_url']],"تم استلام لينك الدفع بنجاح ",200);
         //output
         //[
         //    'payment_id'=>"", // refrence code that should stored in your orders table
@@ -205,8 +231,8 @@ class Payment extends Controller
     }
 
     public function payment_verify(Request $request){
-        dd($request);
-        $payment = new KashierPayment();
+//        dd($request);
+        $payment = new PaymobWalletPayment();
         $response = $payment->verify($request);
 
 
@@ -219,5 +245,26 @@ class Payment extends Controller
         //    'process_data'=>""//payment response
         //]
     }
+
+    public function go_pay(Request $request)
+    {
+        $user = auth()->guard('user-api')->user();
+//        dd($user);
+        switch ($request->payment_method) {
+            case "wallet":
+                return (new PaymobWalletService())->pay($request,$request->amount*100,$user->id,$user->name,$user->name,$user->email??"email@pay.com",$user->phone,null);
+                break;
+            case "visa":
+                return $this->payWithPaymobVisa($request,$user->name,$request->amount*100,$user->id,$user->email??"email@pay.com",$user->phone);
+                break;
+            case "green":
+                echo "Your favorite color is green!";
+                break;
+            default:
+                return $this->paymentService->pay($request);
+        }
+
+    }
+
 
 }

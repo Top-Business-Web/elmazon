@@ -18,18 +18,21 @@ class VideoUploadFileDetailsResource extends JsonResource
      */
     public function toArray($request)
     {
-        $user_watch_video = VideoOpened::where('video_upload_file_pdf_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first();
 
-        //($user_watch_video->status == 'opened' ? 'opened': 'watched')
         return [
 
             'id' => $this->id,
             'name'  => lang() == 'ar' ? $this->name_ar : $this->name_en,
             'type' => $this->file_type,
             'background_color' => $this->background_color,
-            'status' => !$user_watch_video ? 'lock' :  'watched',
+            'status' => $this->file_type == 'pdf' ? (!VideoOpened::where('video_upload_file_pdf_id','=',$this->id)
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->first() ? 'lock' :  'opened') :
+                (!VideoOpened::where('video_upload_file_audio_id','=',$this->id)
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->first() ? 'lock' :  'opened'),
             'subscribe' => 'access',
-            'link' =>  asset('video_files/pdf/'. $this->file_link),
+            'link' =>  $this->file_type == 'pdf' ? asset('video_files/pdf/'. $this->file_link) : asset('video_files/audios/'. $this->file_link),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
 

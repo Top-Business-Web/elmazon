@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="phone" class="form-control-label">الصورة</label>
-                    <input type="file" class="form-control dropify" data-default-file="{{ asset($onBoarding->image) }}" min="11" name="file">
+                    <input type="file" class="form-control dropify" data-default-file="{{ asset($onBoarding->image) }}" min="11" name="image">
                 </div>
             </div>
         </div>

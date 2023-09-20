@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -10,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -45,17 +48,17 @@ class User extends Authenticatable implements JWTSubject
     ];
 
 
+    public function season(): BelongsTo
+    {
 
-
-    public function season(): BelongsTo{
-
-        return $this->belongsTo(Season::class,'season_id','id');
+        return $this->belongsTo(Season::class, 'season_id', 'id');
     }
 
 
-    public function country(): BelongsTo{
+    public function country(): BelongsTo
+    {
 
-        return $this->belongsTo(Country::class,'country_id','id');
+        return $this->belongsTo(Country::class, 'country_id', 'id');
     }
 
     public function suggestion(): HasMany
@@ -63,7 +66,8 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Suggestion::class, 'user_id', 'id');
     }
 
-    public function onlineExam(): BelongsToMany{
+    public function onlineExam(): BelongsToMany
+    {
 
         return $this->belongsToMany(OnlineExam::class, 'online_exam_users');
     }
@@ -93,46 +97,224 @@ class User extends Authenticatable implements JWTSubject
         return $this->getKey();
     }
 
-    public function getJWTCustomClaims():array
+    public function getJWTCustomClaims(): array
     {
         return [];
     }
 
-    public function subscriptions()
+    public function subscriptions(): HasMany
     {
         return $this->hasMany(UserSubscribe::class);
     }
 
-    public function papel_sheet_exam_degree(): HasOne{
+    public function papel_sheet_exam_degree(): HasOne
+    {
 
-        return $this->hasOne(PapelSheetExamDegree::class,'user_id','id');
+        return $this->hasOne(PapelSheetExamDegree::class, 'user_id', 'id');
     }
 
 
-    public function exam_degree_depends(): HasMany{
+    public function exam_degree_depends(): HasMany
+    {
 
-        return $this->hasMany(ExamDegreeDepends::class,'user_id','id');
+        return $this->hasMany(ExamDegreeDepends::class, 'user_id', 'id');
     }
 
 
-    public function exam_degree_depends_user(): HasOne{
 
-        return $this->hasOne(ExamDegreeDepends::class,'user_id','id');
+
+    public function exam_degree_depends_user(): HasOne
+    {
+
+        return $this->hasOne(ExamDegreeDepends::class, 'user_id', 'id');
     }
-
 
 
     //relation user with online_exams
-    public function online_exams(): BelongsToMany{
+    public function online_exams(): BelongsToMany
+    {
 
-        return $this->belongsToMany(OnlineExam::class,'online_exam_users','user_id','online_exam_id','id','id');
+        return $this->belongsToMany(OnlineExam::class, 'online_exam_users', 'user_id', 'online_exam_id', 'id', 'id');
 
     }
 
 
-    public function exams_favorites(): HasMany{
 
-        return $this->hasMany(ExamsFavorite::class,'user_id','id');
+
+
+    //sum total degree of online exam
+    public function online_exams_total_degrees(): BelongsToMany
+    {
+
+        return $this->belongsToMany(OnlineExam::class, 'exam_degree_depends', 'user_id', 'online_exam_id', 'id', 'id');
+
+    }
+
+
+
+    //sum total degree of all exam
+    public function all_exams_total_degrees(): BelongsToMany
+    {
+
+        return $this->belongsToMany(AllExam::class, 'exam_degree_depends', 'user_id', 'all_exam_id', 'id', 'id');
+
+    }
+
+    public function exams_favorites(): HasMany
+    {
+
+        return $this->hasMany(ExamsFavorite::class, 'user_id', 'id');
+    }
+
+
+    /*
+     * start scopes
+     */
+
+
+//    public function scopeDayOfExamsHeroes($query)
+//    {
+//
+//        return $query->with(['exam_degree_depends' => fn(HasMany $q) =>
+//
+//             $q->where('exam_depends', '=', 'yes')
+//
+//            ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
+//            $builder->where('exam_depends', '=', 'yes')
+//                ->whereDay('created_at', '=', Carbon::now()->format('d'))
+//                ->whereYear('created_at', '=', Carbon::now()->format('Y'))
+//
+//            )
+//            ->whereHas('season', fn(Builder $builder) =>
+//            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+//            ->take(10)
+//            ->withSum(
+//                ['exam_degree_depends' => function ($query) {
+//                    $query->where('exam_depends', '=', 'yes');
+//                }], 'full_degree')
+//            ->withSum(['online_exams_total_degrees'], 'degree')
+//            ->withSum(['all_exams_total_degrees'], 'degree')
+//            ->withCount([
+//                'exam_degree_depends' =>  function($query){
+//
+//                    $query->where('exam_depends', '=', 'yes');
+//                }])
+//            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
+//            ->get();
+//
+//    }
+//
+//
+//    public function scopeWeekOfExamsHeroes($query)
+//    {
+//
+//        return $query->with(['exam_degree_depends' => fn(HasMany $q) =>
+//        $q->where('exam_depends', '=', 'yes')])
+//            ->whereHas('exam_degree_depends', fn(Builder $builder) =>
+//            $builder->where('exam_depends', '=', 'yes')
+//                ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+//                ->whereYear('created_at', '=', Carbon::now()->format('Y'))
+//
+//            )
+//            ->whereHas('season', fn(Builder $builder) =>
+//            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+//            ->take(10)
+//            ->withSum(
+//                ['exam_degree_depends' => function ($query) {
+//                    $query->where('exam_depends', '=', 'yes');
+//                }], 'full_degree')
+//            ->withSum(['online_exams_total_degrees'], 'degree')
+//            ->withSum(['all_exams_total_degrees'], 'degree')
+//            ->withCount([
+//
+//                'exam_degree_depends' =>  function($query){
+//
+//                $query->where('exam_depends', '=', 'yes');
+//           } ])
+//            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
+//            ->get();
+//
+//    }
+//
+//
+//    public function scopeMonthOfExamsHeroes($query)
+//    {
+//
+//        return $query->with(['exam_degree_depends' => fn(HasMany $q) =>
+//        $q->where('exam_depends', '=', 'yes')])
+//            ->whereHas('exam_degree_depends', fn(Builder $builder) =>
+//            $builder->where('exam_depends', '=', 'yes')
+//                ->whereMonth('created_at', Carbon::now()->format('m'))
+//                ->whereYear('created_at', '=', Carbon::now()->format('Y'))
+//
+//            )
+//            ->whereHas('season', fn(Builder $builder) =>
+//            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+//            ->take(10)
+//            ->withSum(
+//                ['exam_degree_depends' => function ($query) {
+//                    $query->where('exam_depends', '=', 'yes');
+//                }], 'full_degree')
+//            ->withSum(['online_exams_total_degrees'], 'degree')
+//            ->withSum(['all_exams_total_degrees'], 'degree')
+//            ->withCount([
+//
+//                'exam_degree_depends' =>  function($query){
+//
+//                    $query->where('exam_depends', '=', 'yes');
+//                } ])
+//
+//            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
+//            ->get();
+//
+//    }
+//
+//
+//    public function scopeLastMonthOfExamsHeroes($query)
+//    {
+//
+//        return $query->with(['exam_degree_depends' => fn(HasMany $q) =>
+//        $q->where('exam_depends', '=', 'yes')])
+//            ->whereHas('exam_degree_depends', fn(Builder $builder) =>
+//            $builder->where('exam_depends', '=', 'yes')
+//                ->whereMonth('created_at', Carbon::now()->subMonth()->format('m'))
+//                ->whereYear('created_at', '=', Carbon::now()->format('Y'))
+//
+//            )
+//            ->whereHas('season', fn(Builder $builder) =>
+//            $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
+//            ->take(10)
+//            ->withSum(
+//                ['exam_degree_depends' => function ($query) {
+//                    $query->where('exam_depends', '=', 'yes');
+//                }], 'full_degree')
+//            ->withSum(['online_exams_total_degrees'], 'degree')
+//            ->withSum(['all_exams_total_degrees'], 'degree')
+//            ->withCount([
+//
+//                'exam_degree_depends' =>  function($query){
+//
+//                    $query->where('exam_depends', '=', 'yes');
+//                } ])
+//
+//            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
+//            ->get();
+//    }
+
+
+
+    public function onlineExams(): BelongsToMany
+    {
+
+        return $this->belongsToMany(OnlineExam::class, 'exam_degree_depends', 'user_id', 'online_exam_id', 'id', 'id')->where('exam_depends','=','yes');
+    }
+
+
+    public function allExams(): BelongsToMany
+    {
+
+        return $this->belongsToMany(AllExam::class, 'exam_degree_depends', 'user_id', 'all_exam_id', 'id', 'id')->where('exam_depends','=','yes');
+
     }
 
 
