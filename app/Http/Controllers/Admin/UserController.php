@@ -27,6 +27,7 @@ use App\Models\PapelSheetExam;
 use App\Http\Requests\StoreUser;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use Stripe\Capability;
 use Yajra\DataTables\DataTables;
 use App\Http\Requests\UpdateUser;
 use App\Models\ExamDegreeDepends;
@@ -37,6 +38,7 @@ use App\Models\PapelSheetExamDegree;
 use Buglinjo\LaravelWebp\Exceptions\CwebpShellExecutionFailed;
 use Buglinjo\LaravelWebp\Exceptions\DriverIsNotSupportedException;
 use Buglinjo\LaravelWebp\Exceptions\ImageMimeNotSupportedException;
+use function Clue\StreamFilter\fun;
 
 class UserController extends Controller
 {
@@ -226,9 +228,29 @@ class UserController extends Controller
         $classCount = OpenLesson::where('user_id', $user->id)
             ->where('subject_class_id', '!=', null)->count('subject_class_id');
 
-        $videos = VideoOpened::where('user_id', $user->id)->with('video')->get();
-        $video_ids = VideoOpened::where('user_id', $user->id)->pluck('video_part_id')->toArray();
-        $videoMin = VideoParts::whereIn('id', $video_ids)->sum('video_time');
+        $videos = VideoOpened::where('user_id', $user->id)
+            ->where('type', 'video')
+            ->with('video')->get();
+
+        $videoMin = VideoOpened::query()
+            ->where('user_id', $user->id)
+            ->where('type', 'video')
+            ->get('minutes');
+
+        $totalTime = Carbon::parse('00:00:00');
+
+        foreach ($videoMin as $timeValue) {
+            // Parse the time value into a Carbon instance
+            $timeCarbon = Carbon::parse($timeValue->minutes);
+
+            // Add the hours, minutes, and seconds to the total time
+            $totalTime->addHours($timeCarbon->hour);
+            $totalTime->addMinutes($timeCarbon->minute);
+            $totalTime->addSeconds($timeCarbon->second);
+        }
+
+        $totalTimeFormatted = $totalTime->format('H:i:s');
+
         $exams = ExamDegreeDepends::where('user_id', '=', $user->id)
             ->where('exam_depends', '=', 'yes')->get();
         $paperExams = PapelSheetExamDegree::where('user_id', '=', $user->id)->get();
@@ -237,12 +259,12 @@ class UserController extends Controller
             'user',
             'videos',
             'exams',
-            'videoMin',
             'subscriptions',
             'paperExams',
             'term',
             'lessonCount',
             'classCount',
+            'totalTimeFormatted'
 
         ]));
     }
@@ -257,7 +279,6 @@ class UserController extends Controller
     }
 
 
-
     //added by islam mohamed
     public function studentsExport(): \Symfony\Component\HttpFoundation\BinaryFileResponse
     {
@@ -265,7 +286,7 @@ class UserController extends Controller
 
     }
 
-    public function  studentsImport(Request $request): \Illuminate\Http\JsonResponse
+    public function studentsImport(Request $request): \Illuminate\Http\JsonResponse
     {
         $import = Excel::import(new StudentsImport(), $request->exelFile);
         if ($import) {
