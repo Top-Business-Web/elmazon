@@ -614,7 +614,7 @@ class ExamEntryController extends Controller
      }
 
 
-    final public function day(): array
+    final public function day(): ?array
     {
 
         $examsDepends = User::with(['exam_degree_depends' => fn(HasMany $q) =>
@@ -653,13 +653,13 @@ class ExamEntryController extends Controller
 
         }else{
 
-           return ['data' => null, 'message' => "لا يوجد اي امتحانات للطالب اليوم", 'code' => 425];
+           return null;
         }
 
     }
 
 
-    final public function week(): array
+    final public function week():  ?array
     {
 
         $examsDepends = User::with(['exam_degree_depends' => fn(HasMany $q) =>
@@ -697,13 +697,13 @@ class ExamEntryController extends Controller
 
         }else{
 
-            return ['data' => null, 'message' => "لا يوجد اي امتحانات للطالب في هذا الاسبوع", 'code' => 425];
+            return null;
 
         }
 
     }
 
-    final public function currentMonth(): array
+    final public function currentMonth():  ?array
     {
 
         $examsDepends = User::with(['exam_degree_depends' => fn(HasMany $q) =>
@@ -741,14 +741,14 @@ class ExamEntryController extends Controller
 
         }else{
 
-            return ['data' => null, 'message' => "لا يوجد اي امتحانات للطالب في الشهر الحالي", 'code' => 425];
+            return null;
 
         }
 
     }
 
 
-    final public function lastMonth(): array
+    final public function lastMonth():  ?array
     {
 
         $examsDepends = User::with(['exam_degree_depends' => fn(HasMany $q) =>
@@ -786,7 +786,7 @@ class ExamEntryController extends Controller
 
         }else{
 
-            return ['data' => null, 'message' => "لا يوجد اي امتحانات للطالب في الشهر السابق", 'code' => 425];
+            return null;
         }
 
     }
