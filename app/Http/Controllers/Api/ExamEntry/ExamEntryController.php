@@ -617,7 +617,9 @@ class ExamEntryController extends Controller
     final public function day(): ?array
     {
 
-        $examsDepends = User::with(['exam_degree_depends' => fn(HasMany $q) =>
+        $examsDepends = User::query()
+            ->where('id','=',auth('user-api')->id())
+        ->with(['exam_degree_depends' => fn(HasMany $q) =>
         $q->where('exam_depends', '=', 'yes')
         ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
 
@@ -662,7 +664,9 @@ class ExamEntryController extends Controller
     final public function week():  ?array
     {
 
-        $examsDepends = User::with(['exam_degree_depends' => fn(HasMany $q) =>
+        $examsDepends = User::query()
+            ->where('id','=',auth('user-api')->id())
+        ->with(['exam_degree_depends' => fn(HasMany $q) =>
         $q->where('exam_depends', '=', 'yes')
         ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
 
@@ -706,7 +710,9 @@ class ExamEntryController extends Controller
     final public function currentMonth():  ?array
     {
 
-        $examsDepends = User::with(['exam_degree_depends' => fn(HasMany $q) =>
+        $examsDepends = User::query()
+            ->where('id','=',auth('user-api')->id())
+            ->with(['exam_degree_depends' => fn(HasMany $q) =>
         $q->where('exam_depends', '=', 'yes')
         ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
 
@@ -751,7 +757,9 @@ class ExamEntryController extends Controller
     final public function lastMonth():  ?array
     {
 
-        $examsDepends = User::with(['exam_degree_depends' => fn(HasMany $q) =>
+        $examsDepends = User::query()
+            ->where('id','=',auth('user-api')->id())
+            ->with(['exam_degree_depends' => fn(HasMany $q) =>
         $q->where('exam_depends', '=', 'yes')
         ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
 
