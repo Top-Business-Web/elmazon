@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Validator;
 class ExamEntryController extends Controller
 {
 
-    public function all_questions_by_online_exam(Request $request,$id): JsonResponse
+    public function all_questions_by_online_exam(Request $request,$id)
     {
 
         try {
