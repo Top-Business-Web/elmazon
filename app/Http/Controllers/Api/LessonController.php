@@ -347,7 +347,7 @@ class LessonController extends Controller
 
     }//end access first subject_class and first lesson and first video and  all files of video
 
-    public function accessNextVideo(Request $request, $id)
+    public function accessNextVideo(Request $request, $id): JsonResponse
     {
 
 

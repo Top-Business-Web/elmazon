@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ExamEntryController extends Controller
@@ -153,9 +154,9 @@ class ExamEntryController extends Controller
             }
 
 
-            if ($request->exam_type == 'video' || $request->exam_type == 'subject_class' || $request->exam_type == 'lesson') {
+            if (in_array(request()->exam_type,['video','subject_class','lesson'])) {
 
-                if( $request->exam_type == 'subject_class'){
+                if(request()->exam_type == 'subject_class'){
 
                     $exam = OnlineExam::query()
                         ->where('id',$id)
@@ -165,7 +166,7 @@ class ExamEntryController extends Controller
 
                     $exam = OnlineExam::query()
                         ->where('id',$id)
-                        ->where('type', '=', $request->exam_type)
+                        ->where('type', '=',request()->exam_type)
                         ->first();
                 }
 
@@ -243,40 +244,41 @@ class ExamEntryController extends Controller
                         foreach ($text_exam_users as $text_exam_user) {
                             $text_exam_user->delete();
                         }
+
                     }
 
-                    for ($i = 0; $i < count($request->details); $i++) {
+                    for ($i = 0; $i < count(request()->details); $i++) {
 
                         $question = Question::query()
-                            ->where('id', '=', $request->details[$i]['question'])
+                            ->where('id', '=',request()->details[$i]['question'])
                             ->first();
 
                         $answer = Answer::query()
-                            ->where('id', '=', $request->details[$i]['answer'])
+                            ->where('id', '=',request()->details[$i]['answer'])
                             ->first();
 
                         if ($question->question_type == 'choice') {
 
                             OnlineExamUser::create([
                                 'user_id' => Auth::id(),
-                                'question_id' => $request->details[$i]['question'],
-                                'answer_id' => $request->details[$i]['answer'],
-                                'online_exam_id' => $request->exam_type == 'full_exam' ? null : $exam->id,
-                                'all_exam_id' => $request->exam_type == 'full_exam' ? $exam->id : null,
-                                'status' => $request->details[$i]['answer'] == null ? "leave"  : ($answer->answer_status == "correct" ? "solved" : "un_correct"),
-                                'degree' => $request->details[$i]['answer'] == null ? 0 : ($answer->answer_status == "correct" ? $question->degree : 0) ,
+                                'question_id' => request()->details[$i]['question'],
+                                'answer_id' => request()->details[$i]['answer'],
+                                'online_exam_id' => request()->exam_type == 'full_exam' ? null : $exam->id,
+                                'all_exam_id' => request()->exam_type == 'full_exam' ? $exam->id : null,
+                                'status' => request()->details[$i]['answer'] == null ? "leave"  : ($answer->answer_status == "correct" ? "solved" : "un_correct"),
+                                'degree' => request()->details[$i]['answer'] == null ? 0 : ($answer->answer_status == "correct" ? $question->degree : 0) ,
                             ]);
 
                         } else {
 
-                            $image = $request->details[$i]['image'] ?? null;
+                            $image = request()->details[$i]['image'] ?? null;
                             if (isset($image) && $image != "") {
                                 $destinationPath = 'text_user_exam_files/images/';
                                 $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
                                 $image->move($destinationPath, $file);
                             }
 
-                            $audio = $request->details[$i]['audio'] ?? null;
+                            $audio = request()->details[$i]['audio'] ?? null;
                             if (isset($audio) && $audio != "") {
                                 $audioPath = 'text_user_exam_files/audios/';
                                 $fileAudio = date('YmdHis') . "." . $audio->getClientOriginalExtension();
@@ -285,24 +287,24 @@ class ExamEntryController extends Controller
 
                             TextExamUser::create([
                                 'user_id' => auth()->id(),
-                                'question_id' => $request->details[$i]['question'],
+                                'question_id' => request()->details[$i]['question'],
                                 'online_exam_id' => $exam->id,
-                                'answer' => $request->details[$i]['answer'] ?? null,
+                                'answer' => request()->details[$i]['answer'] ?? null,
                                 'image' => $file ?? null,
                                 'audio' => $fileAudio ?? null,
                                 'answer_type' => 'text',
-                                'status' => (isset($request->details[$i]['answer']) || isset($request->details[$i]['image']) || isset($request->details[$i]['audio'])) ? 'solved' : 'leave',
+                                'status' => (isset(request()->details[$i]['answer']) || isset(request()->details[$i]['image']) || isset(request()->details[$i]['audio'])) ? 'solved' : 'leave',
                             ]);
                         }
                     }
 
-                    if ($request->exam_type == 'full_exam') {
+                    if (request()->exam_type == 'full_exam') {
 
 
                         Timer::create([
                             'all_exam_id' => $exam->id,
                             'user_id' => Auth::guard('user-api')->id(),
-                            'timer' => $request->timer,
+                            'timer' => request()->timer,
                             ]);
 
                         $sumDegree = OnlineExamUser::query()
@@ -325,17 +327,20 @@ class ExamEntryController extends Controller
                         $numOfCorrectQuestions = OnlineExamUser::query()
                             ->where('user_id', Auth::guard('user-api')->id())
                             ->where('all_exam_id', '=', $exam->id)
-                            ->where('status','=','solved')->count();
+                            ->where('status','=','solved')
+                            ->count();
 
                         $numOfUnCorrectQtQuestions = OnlineExamUser::query()
                             ->where('user_id', Auth::guard('user-api')->id())
                             ->where('all_exam_id', '=', $exam->id)
-                            ->where('status','=','un_correct')->count();
+                            ->where('status','=','un_correct')
+                            ->count();
 
                         $numOfLeaveQuestions = OnlineExamUser::query()
                             ->where('user_id', Auth::guard('user-api')->id())
                             ->where('all_exam_id', '=', $exam->id)
-                            ->where('status','=','leave')->count();
+                            ->where('status','=','leave')
+                            ->count();
 
                         $totalTime = Timer::query()
                             ->where('user_id', Auth::guard('user-api')->id())
@@ -351,8 +356,8 @@ class ExamEntryController extends Controller
                         $data['degree'] =  $sumDegree."/".$exam->degree;
                         $data['ordered'] = 1;
                         $data['exam_id'] =  $exam->id;
-                        $data['exam_name'] =  $request->exam_type == 'video' || $request->exam_type == 'subject_class' || $request->exam_type == 'lesson' ? 'online_exam' : 'full_exam';
-                        $data['exam_type'] = $request->exam_type;
+                        $data['exam_name'] =  in_array(request()->exam_type,['video','subject_class','lesson'])  ? 'online_exam' : 'full_exam';
+                        $data['exam_type'] = request()->exam_type;
                         $data['trying_number'] =  $total_trying;
                         $data['motivational_word'] = "ممتاز بس فيه أحسن ";
                         $data['num_of_correct_questions'] = $numOfCorrectQuestions;
@@ -421,8 +426,8 @@ class ExamEntryController extends Controller
                         $data['degree'] =  $sumDegree."/".$exam->degree;
                         $data['ordered'] = 1;
                         $data['exam_id'] =  $exam->id;
-                        $data['exam_name'] =  $request->exam_type == 'video' || $request->exam_type == 'subject_class' || $request->exam_type == 'lesson' ? 'online_exam' : 'full_exam';
-                        $data['exam_type'] = $request->exam_type;
+                        $data['exam_name'] =  in_array(request()->exam_type,['video','subject_class','lesson']) ? 'online_exam' : 'full_exam';
+                        $data['exam_type'] = request()->exam_type;
                         $data['trying_number'] =  $total_trying;
                         $data['motivational_word'] = "ممتاز بس فيه أحسن ";
                         $data['num_of_correct_questions'] = $numOfCorrectQuestions;
@@ -492,7 +497,10 @@ class ExamEntryController extends Controller
 
         } else {
             if ($request->type == 'full_exam') {
-                $exam = AllExam::where('id', $id)->first();
+
+                $exam = AllExam::query()
+                ->where('id', $id)->first();
+
                 if (!$exam) {
                     return self::returnResponseDataApi(null, "الامتحان ال موجود", 404);
                 }
@@ -501,7 +509,6 @@ class ExamEntryController extends Controller
                     'all_exam_id' => $exam->id,
                     'user_id' => Auth::guard('user-api')->id(),
                     'timer' => $request->timer,
-
                 ]);
                 return self::returnResponseDataApi(null, "تم اضافه محاوله جديده للامتحان الشامل", 200);
 
@@ -556,7 +563,11 @@ class ExamEntryController extends Controller
             }else{
 
                 if($request->exam_type == 'full_exam')
-                    $exam = AllExam::where('id','=',$id)->first();
+
+                    $exam = AllExam::query()
+                           ->where('id','=',$id)
+                         ->first();
+
                 if(!$exam){
                     return self::returnResponseDataApi(null,"الامتحان الشامل غير موجود",404,404);
                 }

@@ -33,6 +33,7 @@ class VideoUploadFileDetailsResource extends JsonResource
                 ->first() ? 'lock' :  'opened'),
             'subscribe' => 'access',
             'link' =>  $this->file_type == 'pdf' ? asset('video_files/pdf/'. $this->file_link) : asset('video_files/audios/'. $this->file_link),
+            'image_of_subject_class' => $this->video_part->lesson->subject_class->image == null ? asset('classes/default/def.jpg') : asset('classes/' . $this->video_part->lesson->subject_class->image),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
 
