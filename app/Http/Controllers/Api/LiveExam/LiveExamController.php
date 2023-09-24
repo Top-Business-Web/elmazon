@@ -322,7 +322,9 @@ class LiveExamController extends Controller
     {
 
 
-        $student = User::with(['exam_degree_depends_user' => function($q) use($live_exam_id){
+        $student = User::query()
+            ->where('id','=',auth('user-api')->id())
+            ->with(['exam_degree_depends_user' => function($q) use($live_exam_id){
             $q->where('life_exam_id', '=', $live_exam_id);
         }])->whereHas('exam_degree_depends_user', fn(Builder $builder) =>
         $builder->where('life_exam_id', '=', $live_exam_id))
