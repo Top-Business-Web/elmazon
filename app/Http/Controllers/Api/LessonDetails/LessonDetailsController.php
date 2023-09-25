@@ -95,7 +95,7 @@ class LessonDetailsController extends Controller{
     }
 
 
-    public function examDetailsByExamId($id): JsonResponse{
+    public function examDetailsByExamId($id){
 
 
         $video = VideoParts::query()
@@ -107,6 +107,7 @@ class LessonDetailsController extends Controller{
         }
 
         $exam = OnlineExam::query()->where('video_id','=',$video->id)->first();
+
 
 
         $degree = ExamDegreeDepends::query()
@@ -130,11 +131,11 @@ class LessonDetailsController extends Controller{
                 ->where('status','=','solved')
                 ->count();
 
-            $onlineExamUserMistakeAnswers  = OnlineExamUser::query()
+            return $onlineExamUserMistakeAnswers  = OnlineExamUser::query()
                 ->where('user_id','=',Auth::guard('user-api')->id())
                 ->where('online_exam_id','=',$exam->id)
                 ->where('status','=','un_correct')
-                ->count();
+                ->get();
 
 
 
@@ -145,14 +146,14 @@ class LessonDetailsController extends Controller{
                 ->count();
 
 
-            $data['full_degree']     = ($degree->full_degree) . " / " . $exam->degree;
-            $data['motivational_word'] = "ممتاز بس فيه أحسن ";
-            $data['correct_numbers'] =  $onlineExamUserCorrectAnswers;
-            $data['mistake_numbers'] =  $onlineExamUserMistakeAnswers;
-            $data['trying_numbers']  =  $tryingNumber;
-            $data['exam_questions']  = new ExamQuestionsNewResource($exam);
-
-            return self::returnResponseDataApiWithMultipleIndexes($data,"تم الحصول علي تفاصيل الامتحان بنجاح",200);
+//            $data['full_degree']     = ($degree->full_degree) . " / " . $exam->degree;
+//            $data['motivational_word'] = "ممتاز بس فيه أحسن ";
+//            $data['correct_numbers'] =  $onlineExamUserCorrectAnswers;
+//            $data['mistake_numbers'] =  $onlineExamUserMistakeAnswers;
+//            $data['trying_numbers']  =  $tryingNumber;
+//            $data['exam_questions']  = new ExamQuestionsNewResource($exam);
+//
+//            return self::returnResponseDataApiWithMultipleIndexes($data,"تم الحصول علي تفاصيل الامتحان بنجاح",200);
 
         }
 
