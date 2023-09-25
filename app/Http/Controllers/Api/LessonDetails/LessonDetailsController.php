@@ -133,8 +133,10 @@ class LessonDetailsController extends Controller{
             $onlineExamUserMistakeAnswers  = OnlineExamUser::query()
                 ->where('user_id','=',Auth::guard('user-api')->id())
                 ->where('online_exam_id','=',$exam->id)
-                ->where('status','=','un_correct')
-                ->orWhere('status','=','leave')
+                ->where('status', function ($q){
+                    $q->where('status','=','un_correct')
+                        ->orWhere('status','=','leave');
+                })
                 ->count();
 
 
