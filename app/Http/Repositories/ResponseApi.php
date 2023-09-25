@@ -12,7 +12,6 @@ class ResponseApi{
             'data' => $data,
             'message' => $message,
             'code' => $code,
-
         ],$status);
 
 
