@@ -162,12 +162,22 @@ class ExamEntryController extends Controller
                         ->where('id',$id)
                         ->where('type', '=', 'class')
                         ->first();
+
+                    if (!$exam) {
+                        return self::returnResponseDataApi(null, "امتحان الفصل غير موجود", 404,404);
+                    }
+
                 }else{
 
                     $exam = OnlineExam::query()
                         ->where('id',$id)
                         ->where('type', '=',request()->exam_type)
                         ->first();
+
+                    if (!$exam) {
+                        return self::returnResponseDataApi(null, "امتحان الفيديو او الدرس غير موجود", 404,404);
+                    }
+
                 }
 
 
@@ -176,17 +186,6 @@ class ExamEntryController extends Controller
                     ->where('user_id', '=', Auth::guard('user-api')->id())
                     ->count();
 
-                $online_exam_users = OnlineExamUser::query()
-                    ->where('online_exam_id', '=', $exam->id)
-                    ->where('user_id', '=', Auth::guard('user-api')->id())
-                    ->get();
-
-
-                $text_exam_users = TextExamUser::query()
-                    ->where('online_exam_id', '=', $exam->id)
-                    ->where('user_id', '=', Auth::guard('user-api')->id())
-                    ->get();
-
 
                 $depends = ExamDegreeDepends::query()
                     ->where('online_exam_id', '=', $exam->id)
@@ -194,9 +193,7 @@ class ExamEntryController extends Controller
                     ->where('exam_depends', '=', 'yes')
                     ->first();
 
-                if (!$exam) {
-                    return self::returnResponseDataApi(null, "الامتحان غير موجود", 404);
-                }
+
             } else {
 
                 $exam = AllExam::query()
@@ -207,16 +204,6 @@ class ExamEntryController extends Controller
                     ->where('all_exam_id', '=', $exam->id)
                     ->where('user_id', '=', Auth::guard('user-api')->id())
                     ->count();
-
-                $online_exam_users = OnlineExamUser::query()
-                    ->where('all_exam_id', '=', $exam->id)
-                    ->where('user_id', '=', Auth::guard('user-api')->id())
-                    ->get();
-
-                $text_exam_users = TextExamUser::where('all_exam_id', '=', $exam->id)
-                    ->where('user_id', '=', Auth::guard('user-api')->id())
-                    ->get();
-
 
                 $depends = ExamDegreeDepends::query()
                     ->where('all_exam_id', '=', $exam->id)
@@ -232,20 +219,21 @@ class ExamEntryController extends Controller
 
             $trying = $exam->trying_number;//trying number of exam
 
+
             if (!$depends) {
 
                 if ($count_trying < $trying) {
-                    if ($count_trying > 0) {
 
-                        foreach ($online_exam_users as $online_exam_user) {
-                            $online_exam_user->delete();
-                        }
+                     /*
+                     * start create new trying number for student
+                     */
 
-                        foreach ($text_exam_users as $text_exam_user) {
-                            $text_exam_user->delete();
-                        }
+                  $timer =  Timer::create([
+                        'online_exam_id' => $exam->id,
+                        'user_id' => Auth::guard('user-api')->id(),
+                        'timer' => request()->timer,
+                    ]);
 
-                    }
 
                     for ($i = 0; $i < count(request()->details); $i++) {
 
@@ -260,6 +248,7 @@ class ExamEntryController extends Controller
                         if ($question->question_type == 'choice') {
 
                             OnlineExamUser::create([
+                                'timer_id' =>   $timer->id,
                                 'user_id' => Auth::id(),
                                 'question_id' => request()->details[$i]['question'],
                                 'answer_id' => request()->details[$i]['answer'],
@@ -286,6 +275,7 @@ class ExamEntryController extends Controller
                             }
 
                             TextExamUser::create([
+                                'timer_id' =>   $timer->id,
                                 'user_id' => auth()->id(),
                                 'question_id' => request()->details[$i]['question'],
                                 'online_exam_id' => $exam->id,
@@ -296,10 +286,9 @@ class ExamEntryController extends Controller
                                 'status' => (isset(request()->details[$i]['answer']) || isset(request()->details[$i]['image']) || isset(request()->details[$i]['audio'])) ? 'solved' : 'leave',
                             ]);
                         }
-                    }
+                    }//end foreach loop to create question and answers of users (choice and questions text)
 
                     if (request()->exam_type == 'full_exam') {
-
 
                         Timer::create([
                             'all_exam_id' => $exam->id,
@@ -310,9 +299,11 @@ class ExamEntryController extends Controller
                         $sumDegree = OnlineExamUser::query()
                             ->where('user_id', Auth::guard('user-api')->id())
                             ->where('all_exam_id', '=', $exam->id)
+                            ->where('timer_id', '=',$timer->id)
                             ->sum('degree');
 
                         ExamDegreeDepends::create([
+                            'timer_id' => $timer->id,
                             'user_id' => auth('user-api')->id(),
                             'all_exam_id' => $exam->id,
                             'full_degree' => $sumDegree,
@@ -327,18 +318,21 @@ class ExamEntryController extends Controller
                         $numOfCorrectQuestions = OnlineExamUser::query()
                             ->where('user_id', Auth::guard('user-api')->id())
                             ->where('all_exam_id', '=', $exam->id)
+                            ->where('timer_id', '=',$timer->id)
                             ->where('status','=','solved')
                             ->count();
 
                         $numOfUnCorrectQtQuestions = OnlineExamUser::query()
                             ->where('user_id', Auth::guard('user-api')->id())
                             ->where('all_exam_id', '=', $exam->id)
+                            ->where('timer_id', '=',$timer->id)
                             ->where('status','=','un_correct')
                             ->count();
 
                         $numOfLeaveQuestions = OnlineExamUser::query()
                             ->where('user_id', Auth::guard('user-api')->id())
                             ->where('all_exam_id', '=', $exam->id)
+                            ->where('timer_id', '=',$timer->id)
                             ->where('status','=','leave')
                             ->count();
 
@@ -373,18 +367,16 @@ class ExamEntryController extends Controller
 
                     } else {
 
-                        Timer::create([
-                            'online_exam_id' => $exam->id,
-                            'user_id' => Auth::guard('user-api')->id(),
-                            'timer' => $request->timer,
-                            ]);
+
 
                         $sumDegree = OnlineExamUser::query()
                             ->where('user_id', Auth::guard('user-api')->id())
+                            ->where('timer_id', '=',$timer->id)
                             ->where('online_exam_id', '=', $exam->id)
                             ->sum('degree');
 
                         ExamDegreeDepends::create([
+                            'timer_id' => $timer->id,
                             'user_id' => auth('user-api')->id(),
                             'online_exam_id' => $exam->id,
                             'full_degree' => $sumDegree,
@@ -398,11 +390,13 @@ class ExamEntryController extends Controller
 
                         $numOfCorrectQuestions = OnlineExamUser::query()
                             ->where('user_id', Auth::guard('user-api')->id())
+                            ->where('timer_id', '=',$timer->id)
                             ->where('online_exam_id', '=', $exam->id)
                             ->where('status','=','solved')->count();
 
                         $numOfUnCorrectQtQuestions = OnlineExamUser::query()
                             ->where('user_id', Auth::guard('user-api')->id())
+                            ->where('timer_id', '=',$timer->id)
                             ->where('online_exam_id', '=', $exam->id)
                             ->where('status','=','un_correct')->count();
 
@@ -410,6 +404,7 @@ class ExamEntryController extends Controller
                         $numOfLeaveQuestions = OnlineExamUser::query()
                             ->where('user_id', Auth::guard('user-api')->id())
                             ->where('online_exam_id', '=', $exam->id)
+                            ->where('timer_id', '=',$timer->id)
                             ->where('status','=','leave')->count();
 
                         $totalTime = Timer::query()
@@ -541,44 +536,65 @@ class ExamEntryController extends Controller
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
 
-            if($request->exam_type == 'video' || $request->exam_type == 'subject_class' || $request->exam_type == 'lesson'){
+            if(in_array(request()->exam_type,['video','subject_class','lesson'])){
 
                 $exam = OnlineExam::query()
                     ->where('id','=',$id)
                     ->first();
 
+
                 if(!$exam){
                     return self::returnResponseDataApi(null,"هذا الامتحان غير موجود",404,404);
-                }
+                } else{
 
-                $exam_degree_depends = ExamDegreeDepends::query()
-                    ->where('online_exam_id','=',$exam->id)
-                    ->where('user_id', Auth::guard('user-api')->id())
-                    ->orderBy('full_degree','DESC')
-                    ->first();
+                    $exam_degree_depends = ExamDegreeDepends::query()
+                        ->where('online_exam_id','=',$exam->id)
+                        ->where('user_id', Auth::guard('user-api')->id())
+                        ->orderBy('full_degree','DESC')
+                        ->first();
 
-                $exam_degree_depends->update(['exam_depends' => 'yes']);
-                return self::returnResponseDataApi(null,"تم اعتماد درجه الاونلاين بنجاح",200);
+
+                   if(!$exam_degree_depends){
+                        return self::returnResponseDataApi(null,"يرجي ادخال هذا الامتحان اولا لاعتماد اعلي درجه",404,404);
+
+                    }else{
+
+                        $exam_degree_depends->update(['exam_depends' => 'yes']);
+                        return self::returnResponseDataApi(null,"تم اعتماد درجه الاونلاين بنجاح",200);
+                    }
+
+                }//end else condition
+
 
             }else{
 
-                if($request->exam_type == 'full_exam')
+                if(request()->exam_type == 'full_exam')
 
-                    $exam = AllExam::query()
-                           ->where('id','=',$id)
-                         ->first();
+                $exam = AllExam::query()
+                       ->where('id','=',$id)
+                     ->first();
 
                 if(!$exam){
                     return self::returnResponseDataApi(null,"الامتحان الشامل غير موجود",404,404);
-                }
-                $exam_degree_depends = ExamDegreeDepends::query()
-                    ->where('all_exam_id','=',$exam->id)
-                    ->where('user_id', Auth::guard('user-api')->id())
-                    ->orderBy('full_degree','DESC')
-                    ->first();
+                }else{
 
-                $exam_degree_depends->update(['exam_depends' => 'yes']);
-                return self::returnResponseDataApi(null,"تم اعتماد درجه الامتحان الشامل بنجاح",200);
+                    $exam_degree_depends = ExamDegreeDepends::query()
+                        ->where('all_exam_id','=',$exam->id)
+                        ->where('user_id', Auth::guard('user-api')->id())
+                        ->orderBy('full_degree','DESC')
+                        ->first();
+
+                    if(!$exam_degree_depends){
+                        return self::returnResponseDataApi(null,"يرجي ادخال الامتحان الشامل اولا لاعتماد اعلي درجه",404,404);
+
+                    }else{
+
+                        $exam_degree_depends->update(['exam_depends' => 'yes']);
+                        return self::returnResponseDataApi(null,"تم اعتماد درجه الامتحان الشامل بنجاح",200);
+                    }
+
+                }
+
             }
 
         }catch (\Exception $exception) {

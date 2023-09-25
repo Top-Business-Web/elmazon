@@ -13,6 +13,7 @@ class TextExamUser extends Model
     protected $fillable = [
 
         'user_id',
+        'timer_id',
         'question_id',
         'online_exam_id',
         'all_exam_id',

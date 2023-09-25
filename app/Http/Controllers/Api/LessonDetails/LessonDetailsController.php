@@ -94,7 +94,7 @@ class LessonDetailsController extends Controller{
 
     }
 
-
+    //Details of student exam
     public function examDetailsByExamId($id): JsonResponse{
 
 
@@ -108,12 +108,16 @@ class LessonDetailsController extends Controller{
 
         $exam = OnlineExam::query()->where('video_id','=',$video->id)->first();
 
+        if(!$exam){
+            return self::returnResponseDataApi(null,"هذا الامتحان غير موجود",404,404);
+        }
 
         $degree = ExamDegreeDepends::query()
             ->where('user_id','=',Auth::guard('user-api')->id())
                   ->where('online_exam_id','=',$exam->id)
                    ->where('exam_depends','=','yes')
                   ->first();
+
 
         if(!$degree){
             return self::returnResponseDataApi(null,"يجب انت تمتحن اولا لاظهار تقيمك في الامتحان",201);
@@ -127,18 +131,21 @@ class LessonDetailsController extends Controller{
             $onlineExamUserCorrectAnswers  = OnlineExamUser::query()
                 ->where('user_id','=',Auth::guard('user-api')->id())
                 ->where('online_exam_id','=',$exam->id)
+                ->where('timer_id', '=',$degree->timer_id)
                 ->where('status','=','solved')
                 ->count();
 
             $onlineExamUserMistakeAnswers  = OnlineExamUser::query()
                 ->where('user_id','=',Auth::guard('user-api')->id())
                 ->where('online_exam_id','=',$exam->id)
+                ->where('timer_id', '=',$degree->timer_id)
                 ->where('status','=','un_correct')
                 ->count();
 
             $onlineExamUserLeaveAnswers  = OnlineExamUser::query()
                 ->where('user_id','=',Auth::guard('user-api')->id())
                 ->where('online_exam_id','=',$exam->id)
+                ->where('timer_id', '=',$degree->timer_id)
                 ->where('status','=','leave')
                 ->count();
 
