@@ -13,6 +13,7 @@ class ExamDegreeDepends extends Model
     protected $fillable = [
 
         'user_id',
+        'timer_id',
         'online_exam_id',
         'all_exam_id',
         'full_degree',
@@ -41,5 +42,8 @@ class ExamDegreeDepends extends Model
 
         return $this->belongsTo(User::class,'user_id','id');
     }
+
+
+
 
 }

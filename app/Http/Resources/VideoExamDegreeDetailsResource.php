@@ -33,7 +33,7 @@ class VideoExamDegreeDetailsResource extends JsonResource
             'id' => $this->id,
             'name' => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'background_color' => $this->background_color,
-            'percentage' => ($degreeDependsFullDegree->full_degree / $degreeOfAllExam->degree) * 100,
+            'percentage' => (float)number_format(($degreeDependsFullDegree->full_degree / $degreeOfAllExam->degree) * 100,2),
             'degree' =>  $degreeDependsFullDegree->full_degree."/".$degreeOfAllExam->degree,
         ];
 
