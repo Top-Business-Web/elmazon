@@ -134,10 +134,13 @@ class LessonDetailsController extends Controller{
                 ->where('user_id','=',Auth::guard('user-api')->id())
                 ->where('online_exam_id','=',$exam->id)
                 ->where('status','=','un_correct')
-                ->orWhere('status','=','leave')
                 ->count();
 
-
+            $onlineExamUserLeaveAnswers  = OnlineExamUser::query()
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->where('online_exam_id','=',$exam->id)
+                ->where('status','=','leave')
+                ->count();
 
             $tryingNumber = Timer::query()
                 ->where('user_id','=',Auth::guard('user-api')->id())
@@ -148,7 +151,7 @@ class LessonDetailsController extends Controller{
             $data['full_degree']     = ($degree->full_degree) . " / " . $exam->degree;
             $data['motivational_word'] = "ممتاز بس فيه أحسن ";
             $data['correct_numbers'] =  $onlineExamUserCorrectAnswers;
-            $data['mistake_numbers'] =  $onlineExamUserMistakeAnswers;
+            $data['mistake_numbers'] =  ($onlineExamUserMistakeAnswers + $onlineExamUserLeaveAnswers);
             $data['trying_numbers']  =  $tryingNumber;
             $data['exam_questions']  = new ExamQuestionsNewResource($exam);
 
