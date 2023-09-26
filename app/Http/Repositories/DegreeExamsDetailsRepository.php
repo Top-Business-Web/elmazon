@@ -309,12 +309,29 @@ class DegreeExamsDetailsRepository extends ResponseApi implements DegreeExamsDet
                 ->toArray();
 
 
-            $onlineExams =  OnlineExam::OnlineExamLessonDegreeDetails($lesson);
-            $data['degrees']  = LessonExamDegreeDetailsResource::collection($onlineExams);
-            $data['total_per'] =  number_format((array_sum($degreeDependsFullDegree) / array_sum($degreeOfAllExam)) * 100,2);
-            $data['motivational_word'] = "ممتاز بس فيه أحسن ";
 
-            return self::returnResponseDataApi($data,"تم الحصول علي جميع درجات امتحانات الدرس بنجاح",200);
+
+            $depends = ExamDegreeDepends::query()
+                ->whereHas('online_exam',fn(Builder $builder) =>
+                $builder->where('lesson_id','=',$lesson->id))
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->where('exam_depends','=','yes')
+                ->first();
+
+
+            if(!$depends){
+
+                return self::returnResponseDataApi(null,"يجب دخول هذا الدرس لاظهار درجاتي وتقيماتي",419);
+
+            }else {
+                $onlineExams = OnlineExam::OnlineExamLessonDegreeDetails($lesson);
+                $data['degrees'] = LessonExamDegreeDetailsResource::collection($onlineExams);
+                $data['total_per'] = number_format((array_sum($degreeDependsFullDegree) / array_sum($degreeOfAllExam)) * 100, 2);
+                $data['motivational_word'] = "ممتاز بس فيه أحسن ";
+
+                return self::returnResponseDataApi($data, "تم الحصول علي جميع درجات امتحانات الدرس بنجاح", 200);
+
+            }
 
         }else{
 
@@ -344,13 +361,29 @@ class DegreeExamsDetailsRepository extends ResponseApi implements DegreeExamsDet
                 ->toArray();
 
 
-            $onlineExams =  OnlineExam::onlineExamAllLessons($lessonsIds);
-            $data['degrees']  = LessonExamDegreeDetailsResource::collection($onlineExams);
-            $data['total_per'] =  number_format((array_sum($degreeDependsFullDegree) / array_sum($degreeOfAllExam)) * 100,2);
-            $data['motivational_word'] = "ممتاز بس فيه أحسن ";
+            $depends = ExamDegreeDepends::query()
+                ->whereHas('online_exam')
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->where('exam_depends','=','yes')
+                ->whereHas('online_exam', fn(Builder $builder)=>
 
-            return self::returnResponseDataApi($data,"تم الحصول علي جميع درجات امتحانات الدروس",200);
+                $builder->where('type','=','lesson')
+                )->first();
 
+            if(!$depends){
+
+                return self::returnResponseDataApi(null,"يجب دخول درس واحد علي الاقل لاظهار درجاتي وتقيماتي",419);
+
+            }else {
+
+                $onlineExams = OnlineExam::onlineExamAllLessons($lessonsIds);
+                $data['degrees'] = LessonExamDegreeDetailsResource::collection($onlineExams);
+                $data['total_per'] = number_format((array_sum($degreeDependsFullDegree) / array_sum($degreeOfAllExam)) * 100, 2);
+                $data['motivational_word'] = "ممتاز بس فيه أحسن ";
+
+                return self::returnResponseDataApi($data, "تم الحصول علي جميع درجات امتحانات الدروس", 200);
+
+            }
         }
 
     }
