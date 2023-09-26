@@ -39,12 +39,27 @@ class DegreeExamsDetailsRepository extends ResponseApi implements DegreeExamsDet
             ->pluck('degree')
             ->toArray();
 
+        $depends = ExamDegreeDepends::query()
+            ->where('all_exam_id', '!=', null)
+            ->where('user_id', '=', Auth::guard('user-api')->id())
+            ->where('exam_depends', '=', 'yes')
+            ->first();
 
-        $data['degrees']  = AllExamDegreeDetailsResource::collection($allExams);
-        $data['total_per'] =  number_format((array_sum($degreeDependsFullDegree) / array_sum($degreeOfAllExam)) * 100,2);
-        $data['motivational_word'] = "ممتاز بس فيه أحسن ";
+        if(!$depends){
 
-        return self::returnResponseDataApi($data,"تم الحصول علي جميع درجات الامتحانات الشامله",200);
+            return self::returnResponseDataApi(null,"يجب دخول امتحان شامل علي الاقل لاظهار درجاتي وتقيماتي",419);
+
+        }else{
+
+            $data['degrees']  = AllExamDegreeDetailsResource::collection($allExams);
+            $data['total_per'] =  number_format((array_sum($degreeDependsFullDegree) / array_sum($degreeOfAllExam)) * 100,2);
+            $data['motivational_word'] = "ممتاز بس فيه أحسن ";
+
+            return self::returnResponseDataApi($data,"تم الحصول علي جميع درجات الامتحانات الشامله",200);
+        }
+
+
+
 
     }
 
