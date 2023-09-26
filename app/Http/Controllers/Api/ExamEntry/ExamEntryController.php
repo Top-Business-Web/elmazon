@@ -452,6 +452,7 @@ class ExamEntryController extends Controller
     }
 
 
+    //access end time for exam
     public function access_end_time_for_exam(Request $request, $id)
     {
 
