@@ -38,7 +38,7 @@ class MotivationalExport implements FromCollection , WithHeadings ,WithColumnWid
     public function collection(): Collection
 
     {
-        return MotivationalSentences::select('id','title_ar','title_en','percentage')->get();
+        return MotivationalSentences::query()->select('id','title_ar','title_en','percentage')->get();
 
     }
 

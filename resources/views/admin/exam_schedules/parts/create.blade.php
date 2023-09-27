@@ -7,7 +7,7 @@
                 <div class="form-group">
                     <label for="">صورة :</label>
                     <input type="file" name="image" class="dropify" value=""
-                           data-default-file="" required/>
+                           data-default-file=""/>
                 </div>
                 <span class="form-text text-danger text-center">
                     Recomended : 2048 X 1200 to up Px <br>
@@ -17,17 +17,18 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="title_ar" class="form-control-label">العنوان بالعربية</label>
-                    <input type="text" class="form-control" value="" name="title_ar" required>
+                    <input type="text" class="form-control" value="" name="title_ar">
                 </div>
                 <div class="col-md-6">
                     <label for="title_en" class="form-control-label">العنوان بالانجليزية</label>
-                    <input type="text" class="form-control" value="" name="title_en" required>
+                    <input type="text" class="form-control" value="" name="title_en">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الصف</label>
-                    <Select name="season_id" class="form-control" required>
+                    <Select name="season_id" class="form-control">
+                        <option disabled selected>اختر</option>
                         @foreach ($data['seasons'] as $season)
                             <option value="{{ $season->id }}" style="text-align: center">{{ $season->name_ar }}</option>
                         @endforeach
@@ -35,7 +36,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الترم</label>
-                    <Select name="term_id" class="form-control" required>
+                    <Select name="term_id" class="form-control">
                         @foreach ($data['terms'] as $term)
                             <option value="{{ $term->id }}" style="text-align: center">
                                 {{ $term->name_ar }}</option>
@@ -46,7 +47,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="name_ar" class="form-control-label">التاريخ</label>
-                    <input type="datetime-local" class="form-control"  name="date_time" required>
+                    <input type="datetime-local" class="form-control"  name="date_time">
                 </div>
             </div>
             <div class="row">

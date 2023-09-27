@@ -2,10 +2,10 @@
     <form id="addForm" class="addForm" method="POST" action="{{ route('discount_coupons.store') }}">
         @csrf
         <div class="form-group">
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col-md-6">
                     <label for="coupon" class="form-control-label">كوبون</label>
-                    <input type="text" class="form-control" name="coupon" required>
+                    <input type="text" class="form-control" name="coupon">
                 </div>
                 <div class="col-md-6">
                     <label for="discount_type" class="form-control-label">نوع الخصم</label>
@@ -15,33 +15,26 @@
                     </select>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col-md-12">
                     <label for="discount_amount" class="form-control-label">كمية الخصم</label>
-                    <input type="number" class="form-control" name="discount_amount" required>
+                    <input type="number" class="form-control" name="discount_amount">
                 </div>
             </div>
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col-md-6">
-                    <label for="valid_from" class="form-control-label">صالح من تاريخ</label>
-                    <input type="date" class="form-control" name="valid_from" required>
+                    <label for="valid_from" class="form-control-label">تاريخ بدايه صلاحيه الخصم</label>
+                    <input type="date" class="form-control" name="valid_from">
                 </div>
                 <div class="col-md-6">
-                    <label for="valid_to" class="form-control-label">صالح  لل</label>
-                    <input type="date" class="form-control" name="valid_to" required>
+                    <label for="valid_to" class="form-control-label">تاريخ نهايه صلاحيه الخصم</label>
+                    <input type="date" class="form-control" name="valid_to">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <label for="is_enabled" class="form-control-label">متاح</label>
-                    <select name="is_enabled" class="form-control">
-                        <option value="1">نعم</option>
-                        <option value="0">لا</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
+            <div class="row mt-3">
+                <div class="col-md-12">
                     <label for="total_usage" class="form-control-label">مجموع الاستخدام</label>
-                    <input type="number" class="form-control" name="total_usage" required>
+                    <input type="number" class="form-control" name="total_usage">
                 </div>
             </div>
         </div>

@@ -7,13 +7,14 @@ use App\Http\Requests\StoreTerm;
 use App\Models\Term;
 use App\Models\Season;
 use App\Traits\AdminLogs;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class TermController extends Controller
 {
     use AdminLogs;
-    // Index Start
+
     public function index(request $request)
     {
         $terms = Term::select('*');
@@ -54,22 +55,16 @@ class TermController extends Controller
         }
     }
 
-    // Index End
 
-
-
-    // Create Start
 
     public function create()
     {
         $data['seasons'] = Season::all();
         return view('admin.terms.parts.create', compact('data'));
     }
-    // Create End
 
-    // Store Start
 
-    public function store(Request $request)
+    public function store(StoreTerm $request): JsonResponse
     {
         $inputs = $request->all();
         if (Term::create($inputs)) {
@@ -80,13 +75,13 @@ class TermController extends Controller
         }
     }
 
-    // Store End
 
-    // Activate
 
-    public function activate($id)
-    {
-        $term = Term::where('id', $id)->first();
+    public function activate($id){
+
+        $term = Term::query()
+        ->where('id', $id)
+            ->first();
 
         if ($term->update([
             'status' => $term->status == 'active' ? 'not_active' : 'active'
@@ -102,13 +97,10 @@ class TermController extends Controller
             }
             return redirect()->back();
 
-
         }
     }
 
-    // Activate
 
-    // Edit Start
 
     public function edit(Term $term)
     {
@@ -117,11 +109,7 @@ class TermController extends Controller
     }
 
 
-    // Edit End
-
-    // Update Start
-
-    public function update(Request $request, Term $term)
+    public function update(StoreTerm $request, Term $term): JsonResponse
     {
         if ($term->update($request->all())) {
             $this->adminLog('تم تحديث ترم');
@@ -131,22 +119,21 @@ class TermController extends Controller
         }
     }
 
-    // Update End
 
-    // Destroy Start
-
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
-        $terms = Term::where('id', $request->id)->firstOrFail();
+        $terms = Term::query()->where('id', $request->id)->firstOrFail();
         $terms->delete();
         $this->adminLog('تم حذف ترم');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    public function getAllTermsBySeason($id){
+    public function getAllTermsBySeason($id): array
+    {
 
-        $terms = Term::where('season_id','=',$id)->pluck('name_ar','id')->toArray();
-        return $terms;
+        return Term::query()
+        ->where('season_id','=',$id)->pluck('name_ar','id')
+            ->toArray();
     }
 
     // Destroy End

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreVideoFileUploadRequest;
 use App\Http\Requests\StoreVideoPart;
 use App\Models\Comment;
 use App\Models\CommentReplay;
@@ -19,26 +20,27 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Omnipay\Common\Item;
 use Yajra\DataTables\DataTables;
 
-// fix
+
 class VideoPartController extends Controller
 {
     use FirebaseNotification , PhotoTrait , AdminLogs;
 
-    // Index Start
+
     public function index(request $request)
     {
         if ($request->ajax()) {
             $videoParts = VideoParts::get();
-            // $comment = Comment::where()->get();
+
             return Datatables::of($videoParts)
                 ->addColumn('action', function ($videoParts) {
                     return '
-                            <button type="button" data-id="' . $videoParts->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                            <button type="button" data-id="' . $videoParts->id . '" class="btn btn-pill btn-info-light editBtn">تعديل</button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
                                     data-id="' . $videoParts->id . '" data-title="' . ' ' . $videoParts->name_ar . ' ' . '">
-                                    <i class="fas fa-trash"></i>
+                                    حذف
                             </button>
                              <button type="button" data-id="' . $videoParts->id . '" class="btn btn-pill btn-info-light addFile"><i class="fa fa-file"></i>الملحقات ' . $videoParts->videoFileUpload->count() . ' </button>
                             <a href="' . route('indexCommentVideo', $videoParts->id) . '" data-id="' . $videoParts->id . '" class="btn btn-pill btn-success-light"> تعليقات ' . $videoParts->comment->count() . ' <i class="fa fa-comment"></i></a>
@@ -75,9 +77,7 @@ class VideoPartController extends Controller
         }
     }
 
-    // Index End
 
-    // Report Start
     public function reportPart(Request $request, $id)
     {
         $reports = Report::where('video_part_id', $id)->get();
@@ -198,8 +198,8 @@ class VideoPartController extends Controller
         }
     }
 
-    // Delete comment Reply
-    public function deleteCommentVideoReply(Request $request)
+
+    public function deleteCommentVideoReply(Request $request): JsonResponse
     {
         $comment_reply = CommentReplay::where('id', $request->id)->firstOrFail();
         $comment_reply->delete();
@@ -207,8 +207,6 @@ class VideoPartController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-
-    // Create start
 
     public function create()
     {
@@ -220,7 +218,6 @@ class VideoPartController extends Controller
 
     public function store(StoreVideoPart $request): JsonResponse
     {
-
 
         if ($video = $request->file('link')) {
 
@@ -235,7 +232,6 @@ class VideoPartController extends Controller
 
             'name_ar' => $request->name_ar,
             'name_en' => $request->name_en,
-            'background_color' => $request->background_color,
             'month' => $request->month,
             'note' => $request->note,
             'lesson_id' => $request->lesson_id,
@@ -288,7 +284,6 @@ class VideoPartController extends Controller
 
             'name_ar' => $request->name_ar,
             'name_en' => $request->name_en,
-            'background_color' => $request->background_color,
             'month' => $request->month,
             'note' => $request->note,
             'lesson_id' => $request->lesson_id,
@@ -318,7 +313,7 @@ class VideoPartController extends Controller
     }
 
 
-    public function updateItems(Request $request)
+    public function updateItems(Request $request): JsonResponse
     {
         $input = $request->all();
 
@@ -333,16 +328,16 @@ class VideoPartController extends Controller
         }
 
         return response()->json(['status' => 'success']);
-    }// Drag End
+    }
 
 
     public function showFiles(Request $request, $id)
     {
         $files = VideoFilesUploads::where('video_part_id', '=', $id)->get();
         return view('admin.videopart.parts.files', compact('id', 'files'));
-    } // Show Files
+    }
 
-    public function modifyFiles(Request $request, $id)
+    public function modifyFiles(StoreVideoFileUploadRequest $request, $id): JsonResponse
     {
 
         if ($request->has('file_link')) {
@@ -360,21 +355,21 @@ class VideoPartController extends Controller
         VideoFilesUploads::create([
             'name_ar' => $request->name_ar,
             'name_en' => $request->name_en,
-            'background_color' => $request->background_color, // default
+            'background_color' => $request->background_color,
             'file_link' => $file_name,
             'file_type' => $request->type,
             'video_part_id' => $id,
         ]);
 
         return response()->json(['status' => 200]);
-    } // Modify Files
+    }
 
-    public function deleteFiles(Request $request)
+    public function deleteFiles(Request $request): JsonResponse
     {
         $id = $request->id;
         VideoFilesUploads::find($id)->delete();
         return response()->json(['status' => 'تم الحذف بنجاح']);
-    } // Delete Files
+    }
 
     public function likeActive(Request $request)
     {

@@ -8,6 +8,7 @@ use App\Models\SubjectClass;
 use App\Models\Term;
 use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\Season;
@@ -16,7 +17,6 @@ class SubjectClassController extends Controller
 {
     use PhotoTrait , AdminLogs;
 
-    // Index Start
     public function index(Request $request)
     {
         $subjects_classes_list = SubjectClass::select('*');
@@ -43,7 +43,7 @@ class SubjectClassController extends Controller
                            value="' . $subjects_classes->background_color . '" disabled>';
                 })
                 ->editColumn('image', function ($subjects_classes) {
-                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset('subject_class/' . $subjects_classes->image) . '"/>';
+                    return '<img style="width:60px;border-radius:30px" onclick="window.open(this.src)" src="' . asset('classes/' . $subjects_classes->image) . '"/>';
                 })
                 ->editColumn('term_id', function ($subjects_classes) {
                     return '<td>' . $subjects_classes->term->name_ar . '</td>';
@@ -58,9 +58,9 @@ class SubjectClassController extends Controller
         }
     }
 
-    // Index End
 
-    public function seasonSort(Request $request)
+
+    public function seasonSort(Request $request): string
     {
 
         $season = $request->id;
@@ -79,7 +79,7 @@ class SubjectClassController extends Controller
 
     }
 
-    // Create Start
+
 
     public function create()
     {
@@ -88,11 +88,9 @@ class SubjectClassController extends Controller
         return view('admin.subject_classes.parts.create', compact('terms', 'seasons'));
     }
 
-    // Create End
 
-    // Store Start
 
-    public function store(Request $request)
+    public function store(StoreSubjectClasses $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -100,7 +98,7 @@ class SubjectClassController extends Controller
             $file = $request->file('image');
             $filename = $file->getClientOriginalName();
 
-            $file->move('subject_class/', $filename);
+            $file->move('classes/', $filename);
             $inputs['image'] = $filename;
         }
 
@@ -112,22 +110,16 @@ class SubjectClassController extends Controller
         }
     }
 
-    // Store End
-
-    // Edit Start
 
     public function edit(SubjectClass $subjectsClass)
     {
-        $seasons = Season::get();
-        $terms = Term::get();
+        $seasons = Season::query()->get();
+        $terms = Term::query()->get();
         return view('admin.subject_classes.parts.edit', compact('subjectsClass', 'terms', 'seasons'));
     }
 
-    // Edit End
 
-    // Update Start
-
-    public function update(SubjectClass $subjectsClass, StoreSubjectClasses $request)
+    public function update(SubjectClass $subjectsClass, StoreSubjectClasses $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -146,11 +138,8 @@ class SubjectClassController extends Controller
         }
     }
 
-    // Update End
 
-    // Destroy Start
-
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         $subject_class = SubjectClass::where('id', $request->id)->firstOrFail();
         $subject_class->delete();
@@ -158,5 +147,5 @@ class SubjectClassController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Destroy End
+
 }

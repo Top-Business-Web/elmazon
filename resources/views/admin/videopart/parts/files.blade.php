@@ -5,39 +5,35 @@
         <input type="hidden" value="{{ $id }}" name="id">
         <div class="form-group">
             <input type="hidden" name="ordered" value=""/>
-            <div class="row">
-                <div class="col-md-6">
+            <div class="row mt-3">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar">الاسم بالعربية</label>
-                    <input type="text" class="form-control" id="name_ar" name="name_ar" placeholder="الاسم بالعربي"
-                           required>
+                    <input type="text" class="form-control" id="name_ar" name="name_ar" placeholder="الاسم بالعربي">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_en">الاسم بالانجليزية</label>
-                    <input type="text" class="form-control" id="name_en" name="name_en" placeholder="الاسم بالانجليزية"
-                           required>
+                    <input type="text" class="form-control" id="name_en" name="name_en" placeholder="الاسم بالانجليزية">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4 video_link">
+            <div class="row mt-3">
+                <div class="col-md-12 video_link">
                     <label for="video_link" class="form-control-label">الملف</label>
                     <input type="file" name="file_link" value="" class="form-control"
-                           data-default-file="" required="required"/>
+                           data-default-file="" />
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="type" class="form-control-label">نوع الملف</label>
-                    <select class="form-control type" id="type" name="type" required="required">
+                    <select class="form-control type" id="type" name="type">
                         <option value="pdf">ملف ورقي</option>
                         <option value="audio">صوت</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="background_color" class="form-control-label">لون الخلفية</label>
                     <input type="color" id="background_color" class="form-control" name="background_color" value="">
                 </div>
             </div>
-            <div class="row">
 
-            </div>
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-success" id="updateButton">اضافة</button>

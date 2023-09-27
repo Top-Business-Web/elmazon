@@ -56,10 +56,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <label for="background_color" class="form-control-label">لون الخلفية</label>
-                    <input type="color" id="background_color" class="form-control" name="background_color">
-                </div>
+
                 <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label">ملاحظة</label>
                     <textarea class="form-control" name="note" rows="10"></textarea>

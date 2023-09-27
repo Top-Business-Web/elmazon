@@ -19,7 +19,6 @@ class VideoParts extends Model
     protected $fillable = [
         'name_ar',
         'name_en',
-        'background_color',
         'month',
         'note',
         'lesson_id',

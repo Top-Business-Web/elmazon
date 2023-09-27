@@ -6,35 +6,41 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="title_ar" class="form-control-label">العنوان بالعربية</label>
-                    <input type="text" class="form-control" value="" name="title_ar" required>
+                    <input type="text" class="form-control" value="" name="title_ar">
                 </div>
                 <div class="col-md-6">
                     <label for="title_en" class="form-control-label">العنوان بالانجليزية</label>
-                    <input type="text" class="form-control" value="" name="title_en" required>
+                    <input type="text" class="form-control" value="" name="title_en">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم بالعربية</label>
-                    <input type="text" class="form-control" value="" name="name_ar" required>
+                    <input type="text" class="form-control" value="" name="name_ar">
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
-                    <input type="text" class="form-control" value="" name="name_en" required>
+                    <input type="text" class="form-control" value="" name="name_en">
                 </div>
             </div>
+
+
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الصف</label>
-                    <Select name="season_id" class="form-control" required>
+                    <Select name="season_id" class="form-control">
+                        <option disabled selected>اختر</option>
                         @foreach ($seasons as $season)
                             <option value="{{ $season->id }}" style="text-align: center">{{ $season->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>
+
+
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الترم</label>
-                    <Select name="term_id" class="form-control" required>
+                    <Select name="term_id" class="form-control">
+                        <option disabled>اختر</option>
                         @foreach ($terms as $term)
                             <option value="{{ $term->id }}" style="text-align: center">
                                 {{ $term->name_ar }}</option>
@@ -46,7 +52,7 @@
                 <div class="col-md-6">
                     <label for="head">لون الخلفية</label>
                     <input type="color" class="form-control" name="background_color"
-                           value="" required>
+                           value="">
                 </div>
                 <div class="col-md-6">
                     <label for="note" class="form-control-label">ملاحظة</label>

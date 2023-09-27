@@ -3,19 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreVideoBasicRequest;
 use App\Models\CommentReplay;
 use App\Models\VideoBasic;
 use App\Models\Report;
 use App\Models\Comment;
 use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class VideoBasicController extends Controller
 {
     use PhotoTrait , AdminLogs;
-    // Index Start
+
     public function index(request $request)
     {
         $video_basics = VideoBasic::all();
@@ -24,10 +26,10 @@ class VideoBasicController extends Controller
             return Datatables::of($video_basics)
                 ->addColumn('action', function ($video_basics) {
                     return '
-                            <button type="button" data-id="' . $video_basics->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                            <button type="button" data-id="' . $video_basics->id . '" class="btn btn-pill btn-info-light editBtn">تعديل</button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
                                     data-id="' . $video_basics->id . '" data-title="' . $video_basics->name_ar . '">
-                                    <i class="fas fa-trash"></i>
+                                   حذف
                             </button>
                              <a href="' . route('indexComment', $video_basics->id) . '" data-id="' . $video_basics->id . '" class="btn btn-pill btn-success-light"> تعليقات '. $video_basics->comment->count() .' <i class="fa fa-comment"></i></a>
                              <a href="' . route('reportBasic', $video_basics->id) . '" data-id="' . $video_basics->id . '" class="btn btn-pill btn-danger-light"> بلاغات '. $video_basics->report->count() .' <i class="fe fe-book"></i></a>
@@ -85,9 +87,7 @@ class VideoBasicController extends Controller
         }
     }
 
-    // Index End
 
-    // Report Start
     public function reportBasic(Request $request, $id)
     {
 
@@ -119,9 +119,7 @@ class VideoBasicController extends Controller
         }
     }
 
-    // Report End
 
-    // Video Basic Comment
 
     public function indexComment(Request $request, $id)
     {
@@ -154,13 +152,12 @@ class VideoBasicController extends Controller
         }
     }
 
-    // Create Comment
+
     public function indexCommentCreate($id)
     {
         return view('admin.video_basic.parts.store_comment', compact('id'));
     }
 
-    // Video Basic Comment Reply
 
     public function indexCommentReply(Request $request, $id)
     {
@@ -195,8 +192,8 @@ class VideoBasicController extends Controller
         }
     }
 
-    // Delete comment Reply
-    public function deleteCommentReply(Request $request)
+
+    public function deleteCommentReply(Request $request): JsonResponse
     {
         $comment_reply = CommentReplay::where('id', $request->id)->firstOrFail();
         $comment_reply->delete();
@@ -204,8 +201,7 @@ class VideoBasicController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Delete comment Reply
-    public function deleteReport(Request $request)
+    public function deleteReport(Request $request): JsonResponse
     {
         $report_delete = Report::where('id', $request->id)->firstOrFail();
         $report_delete->delete();
@@ -213,7 +209,7 @@ class VideoBasicController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Save Comment
+
     public function storeReply(Request $request)
     {
         $parentComment = Comment::find($request->id);
@@ -233,7 +229,6 @@ class VideoBasicController extends Controller
     }
 
 
-    // // Video Basic Comment Reply
 
     public function videoBasicCommentReply($id)
     {
@@ -241,22 +236,18 @@ class VideoBasicController extends Controller
             ->OrWhere('teacher_id', $id)
             ->orderByDesc('created_at')
             ->get();
-        //        return $users;
+
         return view('admin.video_basic.parts.comment_reply', compact('users'));
     }
 
-
-    // Create Start
 
     public function create()
     {
         return view('admin.video_basic.parts.create');
     }
-    // Create End
 
-    // Store Start
 
-    public function store(Request $request)
+    public function store(StoreVideoBasicRequest $request): JsonResponse
     {
         $inputs = $request->all();
         if ($request->hasFile('video_link')) {
@@ -270,10 +261,8 @@ class VideoBasicController extends Controller
         }
     }
 
-    // Store End
 
 
-    // Edit Start
 
     public function edit(VideoBasic $videoBasic)
     {
@@ -281,11 +270,7 @@ class VideoBasicController extends Controller
     }
 
 
-    // Edit End
-
-    // Update Start
-
-    public function update(Request $request, VideoBasic $videoBasic)
+    public function update(StoreVideoBasicRequest $request, VideoBasic $videoBasic): JsonResponse
     {
         $inputs = $request->all();
         if ($request->hasFile('video_link')) {
@@ -300,11 +285,8 @@ class VideoBasicController extends Controller
         }
     }
 
-    // Update End
 
-    // Destroy Start
-
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         $terms = VideoBasic::where('id', $request->id)->firstOrFail();
         $terms->delete();
@@ -312,7 +294,6 @@ class VideoBasicController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Destroy End
 
 
     public function likeActive(Request $request)

@@ -11,11 +11,11 @@
                 </div>
                 <div class="col-md-12">
                     <label for="name_ar" class="form-control-label">الجملة بالعربية</label>
-                    <textarea rows="7" class="form-control" name="title_ar" required></textarea>
+                    <textarea rows="7" class="form-control" name="title_ar"></textarea>
                 </div>
                 <div class="col-md-12">
                     <label for="name_en" class="form-control-label">الجملة بالانجليزية</label>
-                    <textarea rows="7" class="form-control" name="title_en" required></textarea>
+                    <textarea rows="7" class="form-control" name="title_en"></textarea>
                 </div>
             </div>
         </div>

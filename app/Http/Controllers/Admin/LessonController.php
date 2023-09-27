@@ -7,6 +7,7 @@ use App\Http\Requests\StoreLesson;
 use App\Models\lesson;
 use App\Models\SubjectClass;
 use App\Traits\AdminLogs;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\Season;
@@ -14,7 +15,7 @@ use App\Models\Season;
 class LessonController extends Controller
 {
     use AdminLogs;
-    // Index Start
+
     public function index(Request $request)
     {
 
@@ -48,10 +49,8 @@ class LessonController extends Controller
         return view('admin.lessons.index', compact('subjectClass', 'seasons'));
     }
 
-    // Index End fun
 
-
-    public function seasonSort(Request $request)
+    public function seasonSort(Request $request): string
     {
         $season = $request->id;
         $subjects = SubjectClass::where('season_id', $season)->get();
@@ -70,7 +69,6 @@ class LessonController extends Controller
     }
 
 
-    // Create Start
 
     public function create()
     {
@@ -78,30 +76,28 @@ class LessonController extends Controller
         $subjects_classes = SubjectClass::get();
         return view('admin.lessons.parts.create', compact('subjects_classes', 'seasons'));
     }
-    // Create End
 
-    // Show Unit
 
-    public function showUnit(Request $request)
-    {
+    public function showUnit(Request $request){
+
         if ($request->ajax()) {
             $output = '<option value="" style="text-align: center">اختار</option>';
             if ($request->id == 1) {
-                $first_levels = SubjectClass::where('season_id', $request->id)->get();
+                $first_levels = SubjectClass::query()->where('season_id', $request->id)->get();
                 foreach ($first_levels as $first_level) {
                     if ($first_level->term->status == 'active') {
                         $output .= '<option value="' . $first_level->id . '" style="text-align: center">' . $first_level->name_ar . '</option>';
                     }
                 }
             } else if ($request->id == 2) {
-                $second_levels = SubjectClass::where('season_id', $request->id)->get();
+                $second_levels = SubjectClass::query()->where('season_id', $request->id)->get();
                 foreach ($second_levels as $second_level) {
                     if ($second_level->term->status == 'active') {
                         $output .= '<option value="' . $second_level->id . '" style="text-align: center">' . $second_level->name_ar . '</option>';
                     }
                 }
             } else if ($request->id == 3) {
-                $third_levels = SubjectClass::where('season_id', $request->id)->get();
+                $third_levels = SubjectClass::query()->where('season_id', $request->id)->get();
                 foreach ($third_levels as $third_level) {
                     if ($third_level->term->status == 'active') {
                         $output .= '<option value="' . $third_level->id . '" style="text-align: center">' . $third_level->name_ar . '</option>';
@@ -113,11 +109,9 @@ class LessonController extends Controller
         }
     }
 
-    // Show Unit
 
-    // Store Start
 
-    public function store(Request $request)
+    public function store(StoreLesson $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -129,23 +123,17 @@ class LessonController extends Controller
         }
     }
 
-    // Store Start
-
-
-    // Edit Start
-
     public function edit(Lesson $lesson)
     {
+        $subjects = SubjectClass::query()->pluck('id')->toArray();
+
         $seasons = Season::get();
         $subjects_classes = SubjectClass::get();
-        return view('admin.lessons.parts.edit', compact('lesson', 'subjects_classes', 'seasons'));
+        return view('admin.lessons.parts.edit', compact('lesson', 'subjects_classes', 'seasons','subjects'));
     }
 
-    // Edit End
 
-    // Update Start
-
-    public function update(Lesson $lesson, Request $request)
+    public function update(Lesson $lesson,StoreLesson $request): JsonResponse
     {
 
         if ($lesson->update($request->all())) {
@@ -156,11 +144,8 @@ class LessonController extends Controller
         }
     }
 
-    // Update End
 
-    // Destroy Start
-
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         $lessons = Lesson::where('id', $request->id)->firstOrFail();
         $lessons->delete();
@@ -168,5 +153,4 @@ class LessonController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Destroy End
 }

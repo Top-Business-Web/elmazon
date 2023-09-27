@@ -9,19 +9,19 @@
         </div>
         <div class="form-group">
             <label for="name" class="form-control-label">الاسم</label>
-            <input type="text" class="form-control" name="name" id="name" required="required">
+            <input type="text" class="form-control" name="name" id="name">
         </div>
         <div class="form-group">
             <label for="email" class="form-control-label">الايميل</label>
-            <input type="text" class="form-control" name="email" id="email" required="required">
+            <input type="text" class="form-control" name="email" id="email">
         </div>
         <div class="form-group">
             <label for="password" class="form-control-label">كلمة المرور</label>
-            <input type="password" class="form-control" name="password" id="password" required="required">
+            <input type="password" class="form-control" name="password" id="password">
         </div>
         <div class="form-group">
             <label for="roles" class="form-check-label">الدور</label>
-            <select class="form-control" name="roles" required="required">
+            <select class="form-control" name="roles">
                 <option selected disabled>اختر دور</option>
                 @foreach($roles as $role)
                     <option class="form-control" value="{{ $role->id }}">{{ $role->name }}</option>

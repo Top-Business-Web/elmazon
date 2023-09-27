@@ -15,7 +15,7 @@
                     <h3 class="card-title"></h3>
                     <form action="" class="d-flex" method="get">
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-6">
                                 <label for="">الصف</label>
                                 <select name="season_id" id="season_id" class="form-control season_id">
                                     <option value="">كل الصفوف</option>

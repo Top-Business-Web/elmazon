@@ -5,11 +5,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
-                    <input type="text" class="form-control" name="name_ar" required>
+                    <input type="text" class="form-control" name="name_ar">
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزي</label>
-                    <input type="text" class="form-control" name="name_en" required>
+                    <input type="text" class="form-control" name="name_en">
                 </div>
             </div>
         </div>
