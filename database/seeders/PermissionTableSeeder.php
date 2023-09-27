@@ -46,6 +46,7 @@ class PermissionTableSeeder extends Seeder
             'التعليقات',
             'الاعلانات',
             'الادمن',
+            'الكوبونات',
             'الادوار و الصلاحيات',
         ];
 

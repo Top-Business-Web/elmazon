@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DiscountCouponRequest;
 use App\Models\DiscountCoupon;
 use App\Traits\AdminLogs;
+use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
-use Stripe\Discount;
 
 class DiscountCouponsController extends Controller
 {
     use AdminLogs;
-    // Index Start
+
     public function index(request $request)
     {
         $discount_coupons = DiscountCoupon::all();
@@ -62,19 +63,14 @@ class DiscountCouponsController extends Controller
         }
     }
 
-    // Index End
-
-     // Create Start
 
      public function create()
      {
          return view('admin.discount_coupons.parts.create');
      }
-     // Create End
 
-     // Store Start
 
-    public function store(Request $request)
+    public function store(DiscountCouponRequest $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -86,9 +82,6 @@ class DiscountCouponsController extends Controller
         }
     }
 
-    // Store End
-
-    // Edit Start
 
     public function edit(DiscountCoupon $discount_coupon)
     {
@@ -96,11 +89,7 @@ class DiscountCouponsController extends Controller
     }
 
 
-    // Edit End
-
-    // Update Start
-
-    public function update(Request $request, DiscountCoupon $discount_coupon)
+    public function update(DiscountCouponRequest $request,DiscountCoupon $discount_coupon): JsonResponse
     {
 
         if ($discount_coupon->update($request->all())) {
@@ -111,11 +100,8 @@ class DiscountCouponsController extends Controller
         }
     }
 
-    // Update End
 
-    // Destroy Start
-
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         $discount_coupon = DiscountCoupon::where('id', $request->id)->firstOrFail();
         $discount_coupon->delete();

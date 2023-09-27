@@ -5,17 +5,17 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
-                    <input type="text" class="form-control" name="name_ar" required>
+                    <input type="text" class="form-control" name="name_ar">
                 </div>
                 <div class="col-md-6">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزي</label>
-                    <input type="text" class="form-control" name="name_en" required>
+                    <input type="text" class="form-control" name="name_en">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <label for="city_id" class="form-control-label">مدينة</label>
-                    <Select name="city_id" class="form-control" required>
+                    <label for="city_id" class="form-control-label">اختر الدوله</label>
+                    <Select name="city_id" class="form-control">
                         @foreach ($data['cities'] as $city)
                             <option value="{{ $city->id }}" style="text-align: center" style="text-align: center">{{ $city->name_ar }}</option>
                         @endforeach

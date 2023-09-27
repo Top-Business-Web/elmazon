@@ -22,7 +22,7 @@
         <div class="form-group">
             <label for="roles" class="form-check-label">الدور</label>
             @if($admin->id == 1)
-                <select class="form-control" name="roles" required="required">
+                <select class="form-control" name="roles">
                     <option disabled>اختر دور</option>
                     {{--                @foreach($roles as $role)--}}
                     <option class="form-control"
@@ -33,7 +33,7 @@
                     {{--                @endforeach--}}
                 </select>
             @else
-                <select class="form-control" name="roles" required="required">
+                <select class="form-control" name="roles">
                     <option disabled>اختر دور</option>
                     @foreach($roles as $role)
                         <option class="form-control"

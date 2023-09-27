@@ -326,7 +326,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::post('qualificationDelete', [QualificationController::class,'delete'])->name('qualificationDelete');
 
     #### Discount Coupons ####
-    Route::resource('discount_coupons', DiscountCouponsController::class);
+    Route::resource('discount_coupons', DiscountCouponsController::class)->middleware('permission:الكوبونات');
 
     #### City ####
     Route::resource('city', CityController::class);

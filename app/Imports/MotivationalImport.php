@@ -3,21 +3,34 @@
 namespace App\Imports;
 
 use App\Models\MotivationalSentences;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 
-class MotivationalImport implements ToModel , WithHeadingRow
+class MotivationalImport implements ToCollection, WithHeadingRow
 
 {
-    public function model(array $row): MotivationalSentences
-    {
-//        dd($row);
-        return new MotivationalSentences([
-            'title_ar'    => $row['title_ar'],
-            'title_en'    => $row['title_en'],
-            'percentage' => $row['percentage'],
-        ]);
+
+    public function collection(Collection $collection){
+
+        DB::table('motivational_sentences')->delete();
+        for ($i = 0; $i < count($collection); $i++) {
+
+            MotivationalSentences::query()
+                ->updateOrCreate([
+                    'percentage' => $collection[$i]['percentage'],
+                ],[
+                    'title_ar'    => $collection[$i]['title_ar'],
+                    'title_en'    => $collection[$i]['title_en'],
+                    'percentage' => $collection[$i]['percentage'],
+                ]);
+        }
     }
 
 }

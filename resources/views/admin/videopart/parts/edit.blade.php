@@ -21,20 +21,20 @@
                     <label for="lesson_id" class="form-control-label">درس</label>
                     <Select name="lesson_id" class="form-control user_choose">
                         <option selected disabled style="text-align: center">اختار درس</option>
-                        {{--                        <option value="" style="text-align: center">فيديوهات عامة</option>--}}
                         @foreach($lessons as $lesson)
-                            <option value="{{ $lesson->id }}"
-                                    style="text-align: center">{{ $lesson->name_ar }}</option>
+                            <option value="{{ $lesson->id }}" style="text-align: center" {{$videosPart->lesson_id == $lesson->id ? 'selected' : ''}}>{{ $lesson->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>
+
+
                 <div class="col-md-6">
                     <label for="head">شهر</label>
                     <select name="month" class="form-control" id="signup_birth_month" >
                         <option value="" style="text-align: center">اختر شهر</option>
-                        <?php for ($i = 1; $i <= 12; $i++){
-                            echo '<option style="text-align: center" value="' . $i . '">' . date( 'F', strtotime( "$i/12/10" ) ) . '</option>';
-                        }?>
+                        @for ($i = 1; $i <= 12; $i++){
+                            <option style="text-align: center" value="{{$i}}" {{$videosPart->month == $i ? 'selected' : ''}}> {{date( 'F', strtotime( "$i/12/10" ) )}}</option>
+                        @endfor
                     </select>
                 </div>
             </div>
@@ -59,10 +59,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <label for="background_color" class="form-control-label">لون الخلفية</label>
-                    <input type="color" id="background_color" class="form-control" name="background_color">
-                </div>
+
                 <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label">ملاحظة</label>
                     <textarea class="form-control" name="note" rows="10"></textarea>

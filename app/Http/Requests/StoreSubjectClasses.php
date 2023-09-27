@@ -11,7 +11,7 @@ class StoreSubjectClasses extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,15 +21,40 @@ class StoreSubjectClasses extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
-        return [
-            'name_ar' => 'required',
-            'name_en' => 'required',
-            'term_id' => 'required',
-            'season_id' => 'required',
-            'note' => 'required',
-            'image' => 'image|nullable',
-        ];
+
+        if (request()->isMethod('post')) {
+
+            $rules = [
+                'title_ar' => 'required',
+                'title_en' => 'required',
+                'name_ar' => 'required',
+                'name_en' => 'required',
+                'term_id' => 'required',
+                'season_id' => 'required',
+                'background_color' => 'required',
+                'note' => 'nullable',
+                'image' => 'image|nullable',
+
+            ];
+
+        }elseif (request()->isMethod('PUT')) {
+
+            $rules = [
+                'title_ar' => 'required',
+                'title_en' => 'required',
+                'name_ar' => 'required',
+                'name_en' => 'required',
+                'term_id' => 'required',
+                'season_id' => 'required',
+                'background_color' => 'required',
+                'note' => 'nullable',
+                'image' => 'image|nullable',
+
+            ];
+        }
+
+        return $rules;
     }
 }

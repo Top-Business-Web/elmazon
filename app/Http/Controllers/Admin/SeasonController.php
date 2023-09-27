@@ -11,13 +11,14 @@ use App\Models\Season;
 use App\Models\SubjectClass;
 use App\Models\Term;
 use App\Models\VideoParts;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class SeasonController extends Controller
 {
 
-    // Index START
+
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -39,20 +40,15 @@ class SeasonController extends Controller
         }
     }
 
-    // End Index
 
-    // Create START
 
     public function create()
     {
         return view('admin.seasons.parts.create');
     }
 
-    // Create END
 
-    // Store START
-
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $inputs = $request->all();
         if (Season::create($inputs)) {
@@ -62,17 +58,11 @@ class SeasonController extends Controller
         }
     }
 
-    // Store END
-
-    // Edit START
-
     public function edit(Season $season)
     {
         return view('admin.seasons.parts.edit', compact('season'));
     }
-    // Edit END
 
-    // Update START
 
     public function update(Request $request, Season $season)
     {
@@ -83,9 +73,7 @@ class SeasonController extends Controller
         }
     }
 
-    // Update END
 
-    // Delete START
 
     public function destroy(Request $request)
     {
@@ -94,10 +82,6 @@ class SeasonController extends Controller
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Delete END
-
-
-    // Season Term START
 
     public function seasonTerm(Request $request)
     {
@@ -121,20 +105,16 @@ class SeasonController extends Controller
             return view('admin.seasons.season_term',compact('id'));
         }
     }
-    // Season Term END
 
-    // Season Term Store START
 
     public function seasonTermCreate($id)
     {
         return view('admin.seasons.season_term.create', compact('id'));
     }
 
-    // Season Term Store END
 
-    // Season Term Store START
 
-    public function seasonTermStore(Request $request, $id)
+    public function seasonTermStore(Request $request, $id): JsonResponse
     {
         $inputs = $request->all();
         if (Term::create($inputs)->where('season_id', $id)) {
@@ -144,9 +124,6 @@ class SeasonController extends Controller
         }
     }
 
-    // Season Term Store END
-
-    // Season Term Edit START
 
     public function seasonTermEdit($id)
     {
@@ -154,13 +131,11 @@ class SeasonController extends Controller
         return view('admin.seasons.season_term.edit', compact('id', 'term'));
     }
 
-    // Season Term Edit END
 
-    // Season Term Update START
 
-    public function seasonTermUpdate(Request $request,Term $term)
+    public function seasonTermUpdate(Request $request,Term $term): JsonResponse
     {
-//        return $request;
+
         if ($term->update($request->all())) {
             return response()->json(['status' => 200]);
         } else {
@@ -168,9 +143,6 @@ class SeasonController extends Controller
         }
     }
 
-    // Season Term Update END
-
-    // Delete START
 
     public function seasonTermDelete(Request $request)
     {
@@ -179,9 +151,7 @@ class SeasonController extends Controller
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Delete END
 
-    // Term SubjectClass START
 
     public function termSubjectClass(Request $request)
     {
@@ -205,9 +175,7 @@ class SeasonController extends Controller
             return view('admin.seasons.term_subjectClass',compact('id'));
         }
     }
-    // Term SubjectClass END
 
-    // Season Term Store START
 
     public function termSubjectClassCreate($id)
     {
@@ -215,11 +183,9 @@ class SeasonController extends Controller
         return view('admin.seasons.term_subject.create', compact('id', 'data'));
     }
 
-    // Season Term Store END
 
-    // Season Term Store START
 
-    public function termSubjectClassStore(Request $request, $id)
+    public function termSubjectClassStore(Request $request, $id): JsonResponse
     {
         $inputs = $request->all();
         if (SubjectClass::create($inputs)->where('term_id', $id)) {
@@ -229,9 +195,7 @@ class SeasonController extends Controller
         }
     }
 
-    // Season Term Store END
 
-    // SubjectClass Lesson START
 
     public function subjectClassLesson(Request $request)
     {
@@ -255,9 +219,6 @@ class SeasonController extends Controller
             return view('admin.seasons.subjectClass_lesson',compact('id'));
         }
     }
-    // SubjectClass Lesson END
-
-    // Lesson VideoParts START
 
     public function lessonVideoPart(Request $request)
     {
@@ -281,14 +242,15 @@ class SeasonController extends Controller
             return view('admin.seasons.lessonVideoParts',compact('id'));
         }
     }
-    // Lesson VideoParts END
 
-    // VideoParts Comment START
 
     public function videoPartComment(Request $request)
     {
         if ($request->ajax()) {
-            $comments = Comment::where('video_part_id', $request->id)->get();
+            $comments = Comment::query()
+            ->where('video_part_id', $request->id)
+                ->get();
+
             return Datatables::of($comments)
                 ->addColumn('action', function ($comments) {
                     return '
@@ -310,9 +272,7 @@ class SeasonController extends Controller
             return view('admin.seasons.video_part_comments',compact('id'));
         }
     }
-    // VideoParts Comment END
 
-    // Comment ReplayComment START
 
     public function commentReplayComment(Request $request)
     {
@@ -335,6 +295,6 @@ class SeasonController extends Controller
             return view('admin.seasons.comment_reply_comment',compact('id'));
         }
     }
-    // VideoParts Comment END
+
 
 }

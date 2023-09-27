@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ExamScheduleRequest;
 use App\Models\ExamSchedule;
 use App\Models\Term;
 use App\Models\Season;
@@ -50,7 +51,7 @@ class ExamSchedulesController extends Controller
     }
 
 
-    public function store(Request $request): JsonResponse
+    public function store(ExamScheduleRequest $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -74,7 +75,7 @@ class ExamSchedulesController extends Controller
     }
 
 
-    public function update(Request $request, ExamSchedule $exam_schedule): JsonResponse
+    public function update(ExamScheduleRequest $request,ExamSchedule $exam_schedule): JsonResponse
     {
 
         if($request->hasFile('image')){

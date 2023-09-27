@@ -48,6 +48,14 @@ class MotivationalSentencesController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        $request->validate([
+
+            'title_ar' => 'required',
+            'title_en' => 'required',
+            'percentage' => 'required|unique:motivational_sentences,percentage'
+        ]);
+
+
         $inputs = $request->all();
         if (MotivationalSentences::create($inputs)) {
             $this->adminLog('تم اضافة جمل تحفيزية');
@@ -67,6 +75,13 @@ class MotivationalSentencesController extends Controller
 
     public function update(Request $request, MotivationalSentences $motivational): JsonResponse
     {
+        $request->validate([
+
+            'title_ar' => 'required',
+            'title_en' => 'required',
+            'percentage' => 'required|unique:motivational_sentences,percentage,' . request()->id
+        ]);
+
         if ($motivational->update($request->all())) {
             $this->adminLog('تم تحديث جمل تحفيزية');
             return response()->json(['status' => 200]);
@@ -78,6 +93,7 @@ class MotivationalSentencesController extends Controller
 
     public function destroy(Request $request)
     {
+
         $sentences = MotivationalSentences::where('id', $request->id)->firstOrFail();
         $sentences->delete();
         $this->adminLog('تم حذف جمل تحفيزية');

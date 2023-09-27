@@ -64,7 +64,7 @@
                 <div class="col-md-12">
                     <label for="">الصورة :</label>
                     <input type="file" name="image" class="dropify"
-                           data-default-file="{{ asset('subject_class/'.$subjectsClass->image) }}"/>
+                           data-default-file="{{ asset('classes/'.$subjectsClass->image) }}"/>
 
                     <span class="form-text text-danger text-center"> Recomended : 2048 X 1200 to up Px <br> Extension :
                         png, gif, jpeg,

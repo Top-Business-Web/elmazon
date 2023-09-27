@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCountry;
 use App\Models\City;
 use App\Models\Country;
 use App\Traits\AdminLogs;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -14,7 +15,6 @@ class CountryController extends Controller
 {
     use AdminLogs;
 
-    // Index Start
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -38,19 +38,15 @@ class CountryController extends Controller
             return view('admin.countries.index');
         }
     }
-    // Index End
 
-    // Create Start
     public function create()
     {
         $data['cities'] = City::all();
         return view('admin.countries.parts.create', compact('data'));
     }
-    // Create End
 
-    // Store Start
 
-    public function store(StoreCountry $request)
+    public function store(StoreCountry $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -62,22 +58,16 @@ class CountryController extends Controller
         }
     }
 
-    // Store End
 
-
-    // Edit Start
     public function edit(Country $country)
     {
         $data['cities'] = City::all();
         return view('admin.countries.parts.edit', compact('country', 'data'));
     }
-    // Edit End
 
-    // Update Start
 
-    public function update(StoreCountry $request, Country $country)
+    public function update(StoreCountry $request, Country $country): JsonResponse
     {
-
         if ($country->update($request->all())) {
             $this->adminLog('تم تحديث محافظة');
             return response()->json(['status' => 200]);
@@ -86,9 +76,6 @@ class CountryController extends Controller
         }
     }
 
-    // Edit End
-
-    // Destroy Start
 
     public function destroy(Request $request)
     {
@@ -98,5 +85,5 @@ class CountryController extends Controller
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Destroy End
+
 }

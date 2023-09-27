@@ -6,28 +6,22 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreLesson extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+
+    public function rules(): array
     {
         return [
-            'name_ar',
-            'name_en',
-            'note',
-            'subject_class_id'
+            'title_ar' => 'required',
+            'title_en' => 'required',
+            'name_ar' => 'required',
+            'name_en' => 'required',
+            'background_color' => 'required',
+            'subject_class_id' => 'required'
         ];
     }
 }

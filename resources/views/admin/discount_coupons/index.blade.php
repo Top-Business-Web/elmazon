@@ -29,13 +29,13 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">كوبون</th>
+                                <th class="min-w-50px">كوبون الخصم</th>
                                 <th class="min-w-50px">نوع الخصم</th>
-                                <th class="min-w-50px">كمية الخصم</th>
-                                <th class="min-w-50px">صالح من تاريخ</th>
-                                <th class="min-w-50px">صالحة لل</th>
+                                <th class="min-w-50px">قيمه الخصم</th>
+                                <th class="min-w-50px">تاريخ بدايه صلاحيه الخصم</th>
+                                <th class="min-w-50px">تاريخ نهايه صلاحيه الخصم</th>
                                 <th class="min-w-50px">متاح</th>
-                                <th class="min-w-50px">مجموع الاستخدام</th>
+                                <th class="min-w-50px">اجمالي الطلاب مستخدمي الكوبون</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>

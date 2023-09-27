@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CityRequest;
 use App\Models\City;
 use App\Traits\AdminLogs;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -12,7 +14,7 @@ class CityController extends Controller
 {
 
     use AdminLogs;
-    // Index Start
+
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -33,18 +35,13 @@ class CityController extends Controller
             return view('admin.cities.index');
         }
     }
-    // Index End
 
-    // Create Start
     public function create()
     {
         return view('admin.cities.parts.create');
     }
-    // Create End
 
-    // Store Start
-
-    public function store(Request $request)
+    public function store(CityRequest $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -56,18 +53,13 @@ class CityController extends Controller
         }
     }
 
-    // Store End
 
-     // Edit Start
      public function edit(City $city)
      {
          return view('admin.cities.parts.edit', compact('city'));
      }
-     // Edit End
 
-     // Update Start
-
-     public function update(Request $request, City $city)
+     public function update(CityRequest $request, City $city): JsonResponse
      {
 
          if ($city->update($request->all())) {
@@ -78,10 +70,6 @@ class CityController extends Controller
          }
      }
 
-     // Edit End
-
-     // Destroy Start
-
      public function destroy(Request $request)
      {
          $citites = City::where('id', $request->id)->firstOrFail();
@@ -90,5 +78,5 @@ class CityController extends Controller
          return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
      }
 
-     // Destroy End
+
 }

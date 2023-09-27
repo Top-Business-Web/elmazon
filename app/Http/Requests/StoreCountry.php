@@ -11,7 +11,7 @@ class StoreCountry extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,11 +21,12 @@ class StoreCountry extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
            'name_ar' => 'required',
            'name_en' => 'required',
+           'city_id' => 'required',
         ];
     }
 }
