@@ -7,15 +7,16 @@ use App\Http\Controllers\Controller;
 use App\Imports\MotivationalImport;
 use App\Models\MotivationalSentences;
 use App\Traits\AdminLogs;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Yajra\DataTables\DataTables;
 
 class MotivationalSentencesController extends Controller
 {
     use AdminLogs;
 
-    // Index START
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -37,20 +38,15 @@ class MotivationalSentencesController extends Controller
         }
     }
 
-    // End Index
 
-    // Create START
 
     public function create()
     {
         return view('admin.motivational_sentences.parts.create');
     }
 
-    // Create END
 
-    // Store START
-
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $inputs = $request->all();
         if (MotivationalSentences::create($inputs)) {
@@ -69,7 +65,7 @@ class MotivationalSentencesController extends Controller
     }
 
 
-    public function update(Request $request, MotivationalSentences $motivational)
+    public function update(Request $request, MotivationalSentences $motivational): JsonResponse
     {
         if ($motivational->update($request->all())) {
             $this->adminLog('تم تحديث جمل تحفيزية');
@@ -89,7 +85,8 @@ class MotivationalSentencesController extends Controller
     }
 
 
-    public function motivationalExport(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    // \Symfony\Component\HttpFoundation\
+    public function motivationalExport(): BinaryFileResponse
     {
         return Excel::download(new MotivationalExport, 'Motivational.xlsx');
 
