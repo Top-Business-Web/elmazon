@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\MotivationalExport;
-use App\Exports\StudentsExport;
-use App\Imports\MotivationalImport;
-use App\Imports\StudentsImport;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\Term;
 use App\Models\User;
 use App\Models\Season;
+use Stripe\Capability;
 use App\Models\AllExam;
 use App\Models\Country;
 use App\Models\Subscribe;
@@ -24,21 +21,25 @@ use Illuminate\Http\Request;
 use App\Models\UserSubscribe;
 use App\Models\OnlineExamUser;
 use App\Models\PapelSheetExam;
+use App\Exports\StudentsExport;
+use App\Imports\StudentsImport;
 use App\Http\Requests\StoreUser;
-use Illuminate\Support\Facades\Hash;
-use Maatwebsite\Excel\Facades\Excel;
-use Stripe\Capability;
 use Yajra\DataTables\DataTables;
 use App\Http\Requests\UpdateUser;
 use App\Models\ExamDegreeDepends;
 use App\Models\PapelSheetExamUser;
 use Illuminate\Support\Facades\DB;
+use App\Exports\MotivationalExport;
+use App\Imports\MotivationalImport;
+use function Clue\StreamFilter\fun;
 use App\Http\Controllers\Controller;
 use App\Models\PapelSheetExamDegree;
+use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\UserUpdateRequest;
 use Buglinjo\LaravelWebp\Exceptions\CwebpShellExecutionFailed;
 use Buglinjo\LaravelWebp\Exceptions\DriverIsNotSupportedException;
 use Buglinjo\LaravelWebp\Exceptions\ImageMimeNotSupportedException;
-use function Clue\StreamFilter\fun;
 
 class UserController extends Controller
 {
@@ -85,7 +86,7 @@ class UserController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(StoreUser $request)
     {
         $inputs = $request->all();
         $inputs['user_status'] = 'active';
@@ -119,7 +120,7 @@ class UserController extends Controller
      * @throws ImageMimeNotSupportedException
      * @throws DriverIsNotSupportedException
      */
-    public function update(Request $request, User $user)
+    public function update(UserUpdateRequest $request, User $user)
     {
 
         $inputs = $request->except('id');
