@@ -208,7 +208,57 @@
         editScript();
 
         showEdit('{{ route('answer',':id') }}');
-        addAnswer();
+    //     function addAnswer() {
+    //     $(document).on('buttonAnswer', 'Form#addForm', function(e) {
+    //         e.preventDefault();
+    //         var formData = new FormData(this);
+    //         var url = $('#addForm').attr('action');
+    //         $.ajax({
+    //             url: url,
+    //             type: 'POST',
+    //             data: formData,
+    //             beforeSend: function() {
+    //                 $('#addButton').html('<span class="spinner-border spinner-border-sm mr-2" ' +
+    //                     ' ></span> <span style="margin-left: 4px;">انتظر ..</span>').attr(
+    //                     'disabled', true);
+    //             },
+    //             success: function(data) {
+    //                 if (data.status == 200) {
+    //                     $('#dataTable').DataTable().ajax.reload();
+    //                     toastr.success('1تم الاضافة بنجاح');
+    //                 } else if (data.status == 407) {
+    //                     toastr.error('يجب ان تضيف اربعة اجوبة فقط');
+    //                 }
+    //                  else if (data.status == 405) {
+    //                     toastr.error(data.mymessage);
+    //                 } else
+    //                     toastr.error('هناك خطأ ما ..');
+    //                 $('#addButton').html(`اضافة`).attr('disabled', false);
+    //                 $('#editOrCreate').modal('hide')
+    //             },
+    //             error: function(data) {
+    //                 if (data.status === 500) {
+    //                     toastr.error('هناك خطأ ما ..');
+    //                 } else if (data.status === 422) {
+    //                     var errors = $.parseJSON(data.responseText);
+    //                     $.each(errors, function(key, value) {
+    //                         if ($.isPlainObject(value)) {
+    //                             $.each(value, function(key, value) {
+    //                                 toastr.error(value, 'خطأ');
+    //                             });
+    //                         }
+    //                     });
+    //                 } else
+    //                     toastr.error('هناك خطأ ما ..');
+    //                 $('#addButton').html(`اضافة`).attr('disabled', false);
+    //             }, //end error method
+
+    //             cache: false,
+    //             contentType: false,
+    //             processData: false
+    //         });
+    //     });
+    // }
 
         $(document).ready(function () {
             $('.exportExel').on('click', function () {
