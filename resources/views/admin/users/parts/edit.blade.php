@@ -19,12 +19,12 @@
                 <div class="col-md-6 mt-8">
                     <label for="name" class="form-control-label">اسم الطالب</label>
                     <input type="text" class="form-control" placeholder="اسم الطالب" name="name"
-                           required="required" value="{{ $user->name }}">
+                            value="{{ $user->name }}">
                     <div class="row">
                         <div class="col-7">
                             <label for="code" class="form-control-label">كود الطالب</label>
                             <input type="text" class="form-control CodeStudent" placeholder="كود الطالب" name="code"
-                                   disabled  required="required" value="{{ $user->code }}">
+                                   disabled  value="{{ $user->code }}">
                             <input type="hidden" class="form-control CodeStudent" placeholder="كود الطالب" name="code" value="{{ $user->code }}">
                         </div>
                         <div class="col-5">
@@ -46,18 +46,18 @@
                 <div class="col-md-6">
                     <label for="phone" class="form-control-label">رقم الهاتف</label>
                     <input type="text" class="form-control phoneInput" value="{{ $user->phone }}" name="phone" placeholder="201XXXXXXXXX"
-                           required="required">
+                           >
                 </div>
                 <div class="col-md-6">
                     <label for="father_phone" class="form-control-label">رقم هاتف ولي الامر</label>
                     <input type="text" class="form-control" value="{{ $user->father_phone }}" name="father_phone" placeholder="201XXXXXXXXX"
-                           required="required">
+                           >
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <label for="name" class="form-control-label">الصف الدراسي</label>
-                    <select class="form-control SeasonSelect" name="season_id" required="required">
+                    <select class="form-control SeasonSelect" name="season_id">
                         <option value="" data-name="" disabled>اختار الصف</option>
                         @foreach($seasons as $season)
                             <option
@@ -70,7 +70,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="country_id" class="form-control-label">المحافظة</label>
-                    <select class="form-control" name="country_id" required="required">
+                    <select class="form-control" name="country_id">
                         <option value="" disabled>اختار المحافظة</option>
                         @foreach($countries as $country)
                             <option
@@ -86,12 +86,12 @@
                 <div class="col-md-6">
                     <label for="date_start_code" class="form-control-label">تاريخ بداية الاشتراك</label>
                     <input type="date" class="form-control" value="{{ $user->date_start_code }}" name="date_start_code" placeholder="تاريخ بداية الاشتراك"
-                           required="required">
+                           >
                 </div>
                 <div class="col-md-6">
                     <label for="date_end_code" class="form-control-label">تاريخ نهاية الاشتراك</label>
                     <input type="date" class="form-control" value="{{ $user->date_end_code }}" name="date_end_code" placeholder="تاريخ نهاية الاشتراك"
-                           required="required">
+                           >
                 </div>
             </div>
         </div>
