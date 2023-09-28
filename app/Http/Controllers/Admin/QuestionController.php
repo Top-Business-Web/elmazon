@@ -2,28 +2,31 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\QuestionExport;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\RequestQuestion;
-use App\Imports\QuestionImport;
-use App\Models\AllExam;
+use App\Models\Term;
 use App\Models\Answer;
 use App\Models\Lesson;
+use App\Models\Season;
+use App\Models\AllExam;
 use App\Models\LifeExam;
 use App\Models\Question;
-use App\Models\SubjectClass;
 use App\Traits\AdminLogs;
-use App\Traits\PhotoTrait;
-use Illuminate\Http\Request;
-use App\Models\Season;
-use App\Models\Term;
 use App\Models\VideoParts;
+use App\Traits\PhotoTrait;
+use App\Models\SubjectClass;
+use Illuminate\Http\Request;
+use App\Exports\QuestionExport;
+use App\Imports\QuestionImport;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\RequestQuestion;
 use Yajra\DataTables\Facades\DataTables;
+use App\Http\Requests\QuestionStoreRequest;
+use App\Http\Requests\QuestionUpdateRequest;
 
 class QuestionController extends Controller
 {
-    use PhotoTrait , AdminLogs;
+    use PhotoTrait, AdminLogs;
 
     // Index Start
     public function index(request $request)
@@ -52,7 +55,6 @@ class QuestionController extends Controller
                         return 'وحده';
                     else if ($questions->type == 'life_exam')
                         return 'امتحان لايف';
-
                 })
                 ->editColumn('question', function ($questions) {
                     return \Str::limit($questions->question, 50);
@@ -99,18 +101,14 @@ class QuestionController extends Controller
                 if ($subjectClass) {
                     $data = Lesson::whereIn('subject_class_id', $subjectClass)
                         ->pluck('name_ar', 'id')->toArray();
-
                 }
             } else if ($request->type == 'App\Models\SubjectClass') {
 
                 $data = SubjectClass::where('season_id', $request->season)
                     ->where('term_id', $request->term)
                     ->pluck('name_ar', 'id')->toArray();
-
-
             } else if ($request->type == 'App\Models\VideoParts') {
                 $data = videoParts::pluck('name_ar', 'id')->toArray();
-
             } else if ($request->type == 'App\Models\AllExam') {
                 $data = AllExam::where('season_id', $request->season)
                     ->where('term_id', $request->term)
@@ -126,7 +124,6 @@ class QuestionController extends Controller
                 return $data;
             }
         }
-
     }
 
     // Examble Type End
@@ -144,12 +141,14 @@ class QuestionController extends Controller
 
     // Store Start
 
-    public function store(Request $request, Question $question)
+    public function store(QuestionStoreRequest $request, Question $question)
     {
         $inputs = $request->all();
 
-        if ($request->has('image')) {
-            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/questions', 'photo');
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('assets/uploads/questions', 'public');
+
+            $inputs['image'] = $imagePath;
             $inputs['question'] = null;
             $inputs['file_type'] = 'image';
             $inputs['question_type'] = 'choice';
@@ -179,9 +178,9 @@ class QuestionController extends Controller
         }
     }
 
-// Store End
+    // Store End
 
-// Show Start
+    // Show Start
 
     public
     function answer($id)
@@ -190,32 +189,42 @@ class QuestionController extends Controller
         return view('admin.questions.parts.answers', compact('question'));
     }
 
-// Show End
+    // Show End
 
-// Add Answer Start
+    // Add Answer Start
 
-    public
-    function addAnswer(Request $request)
+    public function addAnswer(Request $request)
     {
-        $answers = $request->answer;
-
-        foreach ($answers as $key => $value) {
-            Answer::create([
-                'answer' => $value,
-                'question_id' => $request->question_id,
-                'answer_status' => ($request->answer_status == $key) ? 'correct' : 'un_correct',
-                'answer_number' => $key
-            ]);
-
+        if (count($request->answer) !== 4) {
+            return response()->json(['status' => 407]);
         }
+        $alphabeticIndexes = ['E', 'A', 'B', 'C', 'D'];
+        DB::beginTransaction();
 
-        return response()->json(['status' => 200]);
+        try {
+            Answer::where('question_id', $request->question_id)->delete();
+            foreach ($request->answer as $key => $value) {
+                Answer::create([
+                    'answer' => $value,
+                    'question_id' => $request->question_id,
+                    'answer_status' => ($request->answer_status == $key) ? 'correct' : 'un_correct',
+                    'answer_number' => $alphabeticIndexes[$key]
+                ]);
+            }
+            DB::commit();
 
+            return response()->json(['status' => 200]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['status' => 500, 'error' => 'Internal Server Error']);
+        }
     }
 
-// Add Answer End
 
-// Edit Start
+
+    // Add Answer End
+
+    // Edit Start
 
     public
     function edit(Question $question)
@@ -225,12 +234,12 @@ class QuestionController extends Controller
         return view('admin.questions.parts.edit', compact('question', 'seasons', 'terms'));
     }
 
-// Edit End
+    // Edit End
 
-// Update Start
+    // Update Start
 
     public
-    function update(Request $request, Question $question)
+    function update(QuestionUpdateRequest $request, Question $question)
     {
 
         $inputs = $request->all();
@@ -239,7 +248,8 @@ class QuestionController extends Controller
             if (file_exists($question->image)) {
                 unlink($question->image);
             }
-            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/question', 'photo');
+            $imagePath = $request->file('image')->store('assets/uploads/questions', 'public');
+            $inputs['image'] = $imagePath;
             $inputs['question'] = null;
             $inputs['file_type'] = 'image';
             $inputs['question_type'] = 'choice';
@@ -269,9 +279,9 @@ class QuestionController extends Controller
         }
     }
 
-// Update End
+    // Update End
 
-// Destroy Start
+    // Destroy Start
 
     public
     function destroy(Request $request)
@@ -282,7 +292,7 @@ class QuestionController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-// Delete End
+    // Delete End
 
     public function questionExport()
     {
@@ -292,11 +302,10 @@ class QuestionController extends Controller
     public function questionImport(Request $request)
     {
         $import = Excel::import(new QuestionImport, $request->exelFile);
-        if ($import){
+        if ($import) {
             $this->adminLog('تم استيراد سؤال');
             return response()->json(['status' => 200]);
-        }
-        else
+        } else
             return response()->json(['status' => 500]);
     } // end question import
 

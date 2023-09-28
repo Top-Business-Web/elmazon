@@ -5,11 +5,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <label class="form-check-label" for="degree">الدرجة</label>
-                    <input class="form-control" name="degree" type="number" required="required"/>
+                    <input class="form-control" name="degree" type="number"/>
                 </div>
                 <div class="col-md-6">
                     <label class="form-check-label" for="degree">درجة الصعوبة</label>
-                   <select class="form-control" name="difficulty" required="required">
+                   <select class="form-control" name="difficulty">
                        <option value="low" class="form-control">سهل</option>
                        <option value="mid" class="form-control">متوسط</option>
                        <option value="high" class="form-control">صعب</option>
@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="season" class="form-control-label">الصف</label>
-                    <Select name="season_id" class="form-control seasonChoose" required="required">
+                    <Select name="season_id" class="form-control seasonChoose">
                         <option selected disabled style="text-align: center">اختار الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
@@ -35,7 +35,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="term" class="form-control-label">الترم</label>
-                    <Select name="term_id" class="form-control user_choose" required="required">
+                    <Select name="term_id" class="form-control user_choose">
                         <option selected disabled style="text-align: center">اختار الصف</option>
                     </Select>
                 </div>
@@ -43,7 +43,7 @@
             <div class="row d-none choseExamp">
                 <div class="col-md-6 ">
                     <label for="type" class="form-control-label ">النوع</label>
-                    <Select name="examable_type" id="type" class="form-control type_choose" required="required">
+                    <Select name="examable_type" id="type" class="form-control type_choose">
                         <option selected disabled style="text-align: center">اختار النوع</option>
                         <option value="App\Models\Lesson" style="text-align: center">درس</option>
                         <option value="App\Models\SubjectClass" style="text-align: center">الوحدة</option>
@@ -54,7 +54,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="lesson" class="form-control-label typeName">الدرس</label>
-                    <Select name="examable_id" class="form-control type_ajax_choose" required="required">
+                    <Select name="examable_id" class="form-control type_ajax_choose">
                     </Select>
                 </div>
             </div>

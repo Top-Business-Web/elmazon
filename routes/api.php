@@ -167,8 +167,9 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('reports/student-report',[ReportController::class,'student_report'])->middleware('jwt');
         Route::post('user-rate-video/{id}',[App\Http\Controllers\Api\VideoRate\VideoRateController::class,'user_rate_video'])->middleware('jwt');
 
+        Route::get('print/{id}', [LessonController::class, 'printReport'])->name('printReport');
 
-        //Added by eng islam mohammed
+
         Route::group(['prefix' => 'report','middleware' => 'jwt'], function (){
 
             Route::post('student-add-report',[ReportStudentController::class,'studentAddReport']);

@@ -5,7 +5,7 @@
 [![Made With Love](https://img.shields.io/badge/Made%20With-Love-orange.svg)](https://github.com/chetanraj/awesome-github-badges)
 
 Payment Helper of Payment Gateways ( PayPal - Paymob - Fawry - Thawani - WeAccept - Kashier - Hyperpay - Tap - Opay - Paytabs - Vodafone Cash - Orange Money - Meza Wallet - Etisalat Cash)
-![payment-gateways.jpg](https://github.com/nafezly/payments/blob/master/payment-gateways.jpg?raw=true&v=2)
+![payment-gateways.jpg](https://github.com/nafezly/payments/blob/master/payment-gateways.jpg?raw=true&v=6)
 
 
 ## Supported gateways
@@ -20,12 +20,18 @@ Payment Helper of Payment Gateways ( PayPal - Paymob - Fawry - Thawani - WeAccep
 - [Tap](https://www.tap.company/)
 - [Opay](https://www.opaycheckout.com/)
 - [Paytabs](https://site.paytabs.com/)
+- [Binance](https://www.binance.com/en)
+- [PerfectMoney](https://PerfectMoney.com/)
+- [NowPayments](https://NowPayments.io/)
+- [Payeer](https://payeer.com)
+- [Telr](https://telr.com)
+- [Clickpay](https://clickpay.com.sa/)
 - [E Wallets (Vodafone Cash - Orange Money - Meza Wallet - Etisalat Cash)](https://paymob.com/)
 
 ## Installation
 
 ```jsx
-composer require nafezly/payments
+composer require nafezly/payments dev-master
 ```
 
 ## Publish Vendor Files
@@ -113,15 +119,51 @@ return [
     'PAYTABS_CHECKOUT_LANG' => env('PAYTABS_CHECKOUT_LANG',"AR"),
     'PAYTABS_CURRENCY'=>env('PAYTABS_CURRENCY',"EGP"),
 
-    'VERIFY_ROUTE_NAME' => "payment-verify",
+    
+    #Binance
+    'BINANCE_API'=>env('BINANCE_API'),
+    'BINANCE_SECRET'=>env('BINANCE_SECRET'),
+
+
+    #NowPayments
+    'NOWPAYMENTS_API_KEY'=>env('NOWPAYMENTS_API_KEY'),
+
+
+    #Payeer
+    'PAYEER_MERCHANT_ID'=>env('PAYEER_MERCHANT_ID'),
+    'PAYEER_API_KEY'=>env('PAYEER_API_KEY'),
+    'PAYEER_ADDITIONAL_API_KEY'=>env('PAYEER_ADDITIONAL_API_KEY'),
+
+
+    #Perfectmoney
+    /*
+    *please 
+    *1- create POST route /payments/verify/{payment} and put it before your verify route 
+    *2- put it into app/Http/Middleware/VerifyCsrfToken.php middleware inside except array
+    */
+    'PERFECT_MONEY_ID'=>env('PERFECT_MONEY_ID','UXXXXXXX'),
+    'PERFECT_MONEY_PASSPHRASE'=>env('PERFECT_MONEY_PASSPHRASE'),
+
+    #TELR
+    'TELR_MERCHANT_ID'=>env('TELR_MERCHANT_ID'),
+    'TELR_API_KEY'=>env('TELR_API_KEY'),
+    'TELR_MODE'=>env('TELR_MODE','test'),//test,live
+
+
+    #CLICKPAY
+    'CLICKPAY_SERVER_KEY'=>env('CLICKPAY_SERVER_KEY'),
+    'CLICKPAY_PROFILE_ID'=>env('CLICKPAY_PROFILE_ID')
+
+    'VERIFY_ROUTE_NAME' => "verify-payment",
     'APP_NAME'=>env('APP_NAME'),
+    //and more config for another payment gateways
 ];
 ```
 
-## Web.php MUST Have Route with name “payment-verify”
+## Web.php MUST Have Route with name “verify-payment”
 
 ```php
-Route::get('/payments/verify/{payment?}',[FrontController::class,'payment_verify'])->name('payment-verify');
+Route::get('/payments/verify/{payment?}',[FrontController::class,'payment_verify'])->name('verify-payment');
 ```
 
 ## How To Use
@@ -186,23 +228,7 @@ and the factory will return the payment instance for you , use it as you want ;)
 	$source = null
 );;
 ```
-## Available Classes
-
-```php
-
-use Nafezly\Payments\Classes\FawryPayment;
-use Nafezly\Payments\Classes\HyperPayPayment;
-use Nafezly\Payments\Classes\KashierPayment;
-use Nafezly\Payments\Classes\PaymobPayment;
-use Nafezly\Payments\Classes\PayPalPayment;
-use Nafezly\Payments\Classes\ThawaniPayment;
-use Nafezly\Payments\Classes\TapPayment;
-use Nafezly\Payments\Classes\OpayPayment;
-use Nafezly\Payments\Classes\PaytabsPayment;
-use Nafezly\Payments\Classes\PaymobWalletPayment;
-```
-
-## Test Cards
+## Some Test Cards
 
 - [Thawani](https://docs.thawani.om/docs/thawani-ecommerce-api/ZG9jOjEyMTU2Mjc3-thawani-test-card)
 - [Kashier](https://developers.kashier.io/payment/testing)

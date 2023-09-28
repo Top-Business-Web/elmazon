@@ -12,7 +12,20 @@ class Question extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'question',
+        'difficulty',
+        'type',
+        'image',
+        'file_type',
+        'question_type',
+        'degree',
+        'note',
+        'season_id',
+        'term_id',
+        'examable_type',
+        'examable_id'
+    ];
 
     public function answers(): HasMany{
 
