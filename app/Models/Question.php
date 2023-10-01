@@ -23,8 +23,7 @@ class Question extends Model
         'note',
         'season_id',
         'term_id',
-        'examable_type',
-        'examable_id'
+
     ];
 
     public function answers(): HasMany{
