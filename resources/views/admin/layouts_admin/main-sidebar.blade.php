@@ -376,7 +376,8 @@
             </li>
         @endcan
 
-            {{-- اسئله الامتحانات--}}
+
+            {{--exam questions--}}
             @can('اسئله الامتحانات')
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('online_exam_questions.index') }}">
