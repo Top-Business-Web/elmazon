@@ -28,11 +28,10 @@ class QuestionStoreRequest extends FormRequest
             'difficulty' => 'required',
             'image' => 'nullable',
             'degree' => 'required|numeric',
-            'note' => 'required',
+            'question_type' => 'required',
             'season_id' => 'required',
             'term_id' => 'required',
             'examable_type' => 'required',
-            'examable_id' => 'required'
         ];
     }
 
@@ -42,10 +41,10 @@ class QuestionStoreRequest extends FormRequest
             'difficulty.required' => 'مستوى الصعوبة مطلوب',
             'degree.required' => 'الدرجة مطلوبة',
             'note.required' => 'الملاحظة مطلوبة',
+            'question_type.required' => 'نوع السؤال مطلوب',
             'season_id.required' => 'الفصل مطلوب',
             'term_id.required' => 'الترم مطلوب',
             'examable_type.required' => 'نوع المثال مطلوب',
-            'examable_id.required' => 'معرف المثال مطلوب'
         ];
     }
 }

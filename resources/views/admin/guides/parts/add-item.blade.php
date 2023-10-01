@@ -6,17 +6,17 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="section_name_ar" class="form-control-label">العنوان بالعربية</label>
-                    <input type="text" class="form-control" name="title_ar" required>
+                    <input type="text" class="form-control" name="title_ar">
                 </div>
                 <div class="col-md-6">
                     <label for="section_name_en" class="form-control-label">العنوان بالانجليزية</label>
-                    <input type="text" class="form-control" name="title_en" required>
+                    <input type="text" class="form-control" name="title_en">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الوحدة</label>
-                    <Select name="subject_class_id" id="subject_id" class="form-control subject_id" required>
+                    <Select name="subject_class_id" id="subject_id" class="form-control subject_id">
                         <option selected disabled style="text-align: center">اختار الوحدة</option>
                         @foreach($subjects as $subject)
                             <option value="{{ $subject->id }}"
@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="">الدرس</label>
-                    <select name="lesson_id" id="lesson_id" class="form-control lesson_id" required>
+                    <select name="lesson_id" id="lesson_id" class="form-control lesson_id">
                         <option value="" style="text-align: center">الكل</option>
                     </select>
                 </div>
@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="name_ar" class="form-control-label">النوع</label>
-                    <Select name="file_type" id="file_type" class="form-control file_type" required>
+                    <Select name="file_type" id="file_type" class="form-control file_type">
                         <option selected disabled style="text-align: center">اختار النوع</option>
                         <option style="text-align: center" value="video">فيديو</option>
                         <option style="text-align: center" value="pdf">ملف ورقي</option>
@@ -44,7 +44,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <label for="file" class="form-control-label">ملف المراجعة</label>
-                   <input type="file" name="file" class="form-control"  required/>
+                   <input type="file" name="file" class="form-control"/>
                 </div>
                 <div class="col-md-4">
                     <label for="answer_pdf_file" class="form-control-label">ملف الاجابة (ملف ورقي)</label>

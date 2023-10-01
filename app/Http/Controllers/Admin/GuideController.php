@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\RequestGuide;
+use App\Models\Term;
 use App\Models\Guide;
 use App\Models\Lesson;
-use App\Models\SubjectClass;
+use App\Models\Season;
 use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
+use App\Models\SubjectClass;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Claims\Subject;
 use Yajra\DataTables\DataTables;
-use App\Models\Term;
-use App\Models\Season;
+use Tymon\JWTAuth\Claims\Subject;
+use App\Http\Requests\RequestGuide;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\GuideStoreRequest;
+use App\Http\Requests\GuideUpdateRequest;
+use App\Http\Requests\AddItemStoreRequest;
 
 class GuideController extends Controller
 {
@@ -112,7 +115,7 @@ class GuideController extends Controller
 
     // Store Start
 
-    public function store(Request $request)
+    public function store(GuideStoreRequest $request)
     {
         $inputs = $request->all();
 
@@ -146,7 +149,7 @@ class GuideController extends Controller
 
     // Update start
 
-    public function update(Guide $guide, Request $request)
+    public function update(Guide $guide, GuideUpdateRequest $request)
     {
         $inputs = $request->all();
 
@@ -241,7 +244,7 @@ class GuideController extends Controller
 
     // StoreItem Start
 
-    public function addItems(Request $request)
+    public function addItems(AddItemStoreRequest $request)
     {
         $inputs = $request->all();
         if($request->hasFile('file')){
