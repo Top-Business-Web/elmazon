@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Qualification;
 use App\Models\AdminLog;
 use App\Traits\AdminLogs;
 use Illuminate\Http\Request;
+use App\Models\Qualification;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\QualificationStoreRequest;
 
 class QualificationController extends Controller
 {
@@ -28,14 +29,21 @@ class QualificationController extends Controller
         return view('admin.qualifications.parts.edit', compact('qualification'));
     }
 
-    public function store(Request $request)
+    public function store(QualificationStoreRequest $request)
     {
-
-        $inputs = $request->all();
-        Qualification::create($inputs);
-
-        return redirect()->route('qualification.index')->with('success', 'تم الاضافة بنجاح');
+        try {
+            $data = $request->all();
+            Qualification::create($data);
+            return redirect()
+                ->route('qualification.index')
+                ->with('success', 'تم الإضافة بنجاح');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'حدث خطأ أثناء إضافة السجل. يُرجى المحاولة مرة أخرى.');
+        }
     }
+
 
     // Update Start
     public function update(Request $request)
@@ -50,7 +58,7 @@ class QualificationController extends Controller
         } else {
             return response()->json(['status' => 500]);
         }
-    }// Update End
+    } // Update End
 
     public function delete(Request $request)
     {

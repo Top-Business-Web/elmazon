@@ -7,17 +7,17 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="section_name_ar" class="form-control-label">العنوان بالعربية</label>
-                    <input type="text" class="form-control" value="{{ $guide->title_ar }}" name="title_ar" required>
+                    <input type="text" class="form-control" value="{{ $guide->title_ar }}" name="title_ar">
                 </div>
                 <div class="col-md-6">
                     <label for="section_name_en" class="form-control-label">العنوان بالانجليزية</label>
-                    <input type="text" class="form-control" value="{{ $guide->title_en }}" name="title_en" required>
+                    <input type="text" class="form-control" value="{{ $guide->title_en }}" name="title_en">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الصف</label>
-                    <Select name="season_id" id="season_id" class="form-control season_id" required>
+                    <Select name="season_id" id="season_id" class="form-control season_id">
                         <option selected disabled style="text-align: center">اختار الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}" {{ $guide->season_id == $season->id ? 'selected' : '' }}
@@ -27,8 +27,8 @@
                 </div>
                 <div class="col-md-6">
                     <label for="">الترم</label>
-                    <select name="term_id" id="term_id" class="form-control term_id" required>
-                        <option value="" style="text-align: center">الكل</option>
+                    <select name="term_id" id="term_id" class="form-control term_id">
+                        <option value="{{ $guide->term_id }}" style="text-align: center" >{{ $guide->term->name_ar }}</option>
                     </select>
                 </div>
             </div>
@@ -43,12 +43,12 @@
                 <div class="col-md-6">
                     <label for="section_name_ar" class="form-control-label">الوصف بالعربية</label>
                     <textarea class="form-control" name="description_ar" rows="8"
-                              required>{{ $guide->description_ar }}</textarea>
+                              >{{ $guide->description_ar }}</textarea>
                 </div>
                 <div class="col-md-6">
                     <label for="section_name_en" class="form-control-label">الوصف بالانجليزية</label>
                     <textarea class="form-control" name="description_en" rows="8"
-                              required>{{ $guide->description_en }}</textarea>
+                              >{{ $guide->description_en }}</textarea>
                 </div>
             </div>
             <div class="row">

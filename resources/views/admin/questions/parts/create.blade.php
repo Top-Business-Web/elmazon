@@ -15,12 +15,19 @@
                        <option value="high" class="form-control">صعب</option>
                    </select>
                 </div>
+                <div class="col-md-12">
+                    <label class="form-check-label" for="degree">نوع السؤال</label>
+                   <select class="form-control" name="question_type">
+                       <option value="text" style="text-align: center" class="form-control">نص</option>
+                       <option value="choice" style="text-align: center" class="form-control">اختيار</option>
+                   </select>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <label for="name_ar" class="form-control-label">السؤال</label>
-                    <textarea class="form-control" rows="5" name="question"></textarea>
-                </div>
+                    <textarea id="questionTextarea" class="form-control" rows="5" name="question"></textarea>
+                </div>                
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -41,7 +48,7 @@
                 </div>
             </div>
             <div class="row d-none choseExamp">
-                <div class="col-md-6 ">
+                <div class="col-md-12">
                     <label for="type" class="form-control-label ">النوع</label>
                     <Select name="examable_type" id="type" class="form-control type_choose">
                         <option selected disabled style="text-align: center">اختار النوع</option>
@@ -52,11 +59,11 @@
                         <option value="App\Models\LifeExam" style="text-align: center">امتحان لايف</option>
                     </Select>
                 </div>
-                <div class="col-md-6">
+                {{-- <div class="col-md-6">
                     <label for="lesson" class="form-control-label typeName">الدرس</label>
                     <Select name="examable_id" class="form-control type_ajax_choose">
                     </Select>
-                </div>
+                </div> --}}
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -65,9 +72,8 @@
                 </div>
                 <div class="col-md-6">
                     <label for="">الصورة :</label>
-                    <input type="file" name="image" class="dropify"
-                           data-default-file=""/>
-                </div>
+                    <input type="file" name="image" class="dropify" data-default-file="" id="image">
+                </div>                
             </div>
         </div>
         <div class="modal-footer">
@@ -138,5 +144,17 @@
             }
         });
     });
+
+// Get the textarea and image elements by their IDs
+var textarea = document.getElementById("questionTextarea");
+        var image = document.getElementById("image");
+        
+        textarea.addEventListener("input", function () {
+            image.disabled = true;
+        });
+        image.addEventListener("click", function () {
+            textarea.disabled = true;
+        });
+
 
 </script>

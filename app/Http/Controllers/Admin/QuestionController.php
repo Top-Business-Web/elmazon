@@ -41,7 +41,7 @@ class QuestionController extends Controller
                                     data-id="' . $questions->id . '" data-title="' . $questions->question . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                            <button type="button" data-id="' . $questions->id . '" class="btn btn-pill btn-success-light editBtnAnswer">الاجابة</button>
+                            <button type="button" '.($questions->question_type == 'text' ? 'hidden' : '').' data-id="' . $questions->id . '" class="btn btn-pill btn-success-light editBtnAnswer">الاجابة</button>
                        ';
                 })
                 ->editColumn('type', function ($questions) {
