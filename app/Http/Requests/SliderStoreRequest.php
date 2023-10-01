@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RequestPhoneCommunication extends FormRequest
+class SliderStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,17 +24,20 @@ class RequestPhoneCommunication extends FormRequest
     public function rules()
     {
         return [
-            'phone' => 'required|min:11|max:11',
-            'note' => 'nullable',
+            'file' => 'required|mimes:png,jpg',
+            'link' => 'required|url',
+            'type' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'phone.required' => 'رقم الهاتف مطلوب',
-            'phone.min' => 'رقم الهاتف 11 على الاقل',
-            'phone.max' => 'رقم الهاتف لا يجب ان يكون اكثر من 11 رقم',
+            'file.required' => 'الملف طلوب',
+            'file.mimes' => 'الملف يجب ان يكون بصيغة jpg, png',
+            'link.required' => 'الرابط مطلوب',
+            'link.url' => 'يجب ان يكون رابط صحيح',
+            'type.required' => 'النوع مطلوب',
         ];
     }
 }

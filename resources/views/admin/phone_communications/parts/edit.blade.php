@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="phone" class="form-control-label">ألهاتف</label>
-                    <input type="tel" class="form-control" value="{{ $phoneCommunication->phone }}" name="phone" pattern="[0-9]{11}" required>
+                    <input type="tel" class="form-control" value="{{ $phoneCommunication->phone }}" name="phone">
                 </div>
             </div>
             <div class="row">

@@ -91,7 +91,7 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'title', name: 'title'},
+            {data: 'title_ar', name: 'title_ar'},
             {data: 'start', name: 'start'},
             {data: 'end', name: 'end'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
@@ -101,7 +101,7 @@
         destroyScript('{{route('monthlyPlans.destroy',':id')}}');
         // Add Using Ajax
         showAddModal('{{route('monthlyPlans.create')}}');
-        addScript();
+        addScriptPlan();
         // Add Using Ajax
         showEditModal('{{route('monthlyPlans.edit',':id')}}');
         editScript();

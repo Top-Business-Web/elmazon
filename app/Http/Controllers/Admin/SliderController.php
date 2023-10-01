@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\RequestSlider;
 use App\Models\Slider;
 use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\RequestSlider;
+use App\Http\Requests\SliderStoreRequest;
+use App\Http\Requests\SliderUpdateRequest;
 
 class SliderController extends Controller
 {
@@ -59,7 +61,7 @@ class SliderController extends Controller
 
     // Store Start
 
-    public function store(Request $request)
+    public function store(SliderStoreRequest $request)
     {
         $inputs = $request->all();
         if($request->hasFile('file')){
@@ -98,7 +100,7 @@ class SliderController extends Controller
 
     // Update Start
 
-    public function update(RequestSlider $request, Slider $slider)
+    public function update(SliderUpdateRequest $request, Slider $slider)
     {
 
         $inputs = $request->all();

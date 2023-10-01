@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\RequestMonthlyPlan;
-use App\Models\MonthlyPlan;
+use App\Models\Term;
+use App\Models\Season;
 use App\Traits\AdminLogs;
+use App\Models\MonthlyPlan;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\Facades\DataTables;
+use App\Http\Requests\RequestMonthlyPlan;
+use App\Http\Requests\MonthlyPlanStoreRequest;
+use App\Http\Requests\MonthlyPlanUpdateRequest;
 
 class MonthlyPlanController extends Controller
 {
@@ -43,7 +47,9 @@ class MonthlyPlanController extends Controller
 
     public function create()
     {
-        return view('admin.monthly_plans.parts.create');
+        $data['seasons'] = Season::query()->select('id', 'name_ar')->get();
+        $data['terms'] = Term::query()->select('id', 'name_ar')->get();
+        return view('admin.monthly_plans.parts.create', compact('data'));
     }
 
     // Create END
@@ -51,9 +57,19 @@ class MonthlyPlanController extends Controller
 
     // Store START
 
-    public function store(RequestMonthlyPlan $request)
+    public function store(MonthlyPlanStoreRequest $request)
     {
         $inputs = $request->all();
+        $existingPlan = MonthlyPlan::where('season_id', $inputs['season_id'])
+            ->where('term_id', $inputs['term_id'])
+            ->where('start', $inputs['start'])
+            ->where('end', $inputs['end'])
+            ->first();
+
+        if ($existingPlan) {
+            return response()->json(['status' => 405, 'errors' => ['plan' => ['This plan already exists.']]], 405);
+        }
+
         if (MonthlyPlan::create($inputs)) {
             $this->adminLog('تم اضافة خطة شهرية');
             return response()->json(['status' => 200]);
@@ -62,19 +78,22 @@ class MonthlyPlanController extends Controller
         }
     }
 
+
     // Store END
 
     // Edit START
 
     public function edit(MonthlyPlan $monthlyPlan)
     {
-        return view('admin.monthly_plans.parts.edit', compact('monthlyPlan'));
+        $data['seasons'] = Season::query()->select('id', 'name_ar')->get();
+        $data['terms'] = Term::query()->select('id', 'name_ar')->get();
+        return view('admin.monthly_plans.parts.edit', compact('monthlyPlan', 'data'));
     }
     // Edit END
 
     // Update START
 
-    public function update(RequestMonthlyPlan $request, MonthlyPlan $monthlyPlan)
+    public function update(MonthlyPlanUpdateRequest $request, MonthlyPlan $monthlyPlan)
     {
         if ($monthlyPlan->update($request->all())) {
             $this->adminLog('تم تحديث خطة شهرية');
