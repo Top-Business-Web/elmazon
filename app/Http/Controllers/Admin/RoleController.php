@@ -19,17 +19,13 @@ class RoleController extends Controller
             $roles = Role::latest()->get();
             return DataTables::of($roles)
                 ->addColumn('action', function ($roles) {
-                    if ($roles->id == 1) {
-                        return '<span class="badge badge-success">الدور لديه جميع الصلاحيات ولا يمكن تعديله</span>';
-                    } else {
-                        return '
+                    return '
                             <button type="button" data-id="' . $roles->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
                                     data-id="' . $roles->id . '" data-title="' . $roles->name . '">
                                     <i class="fas fa-trash"></i>
                             </button>
                        ';
-                    }
                 })
                 ->editColumn('image', function ($roles) {
                     return '
@@ -90,7 +86,7 @@ class RoleController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'permission' => 'required',
-        ],[
+        ], [
             'name.required' => 'الاسم مطلوب',
         ]);
 
