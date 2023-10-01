@@ -26,7 +26,7 @@ class AddItemStoreRequest extends FormRequest
         return [
             'title_ar' => 'required',
             'title_en' => 'required',
-            'subject_class' => 'required',
+            'subject_class_id' => 'required',
             'lesson_id' => 'required',
             'file_type' => 'required',
             'file' => 'required',
@@ -40,7 +40,7 @@ class AddItemStoreRequest extends FormRequest
         return [
             'title_ar.required' => 'العنوان بالعربي مطلوب',
             'title_en.required' => 'العنوان بالانجليزي مطلوب',
-            'subject_class.required' => 'الوحدة مطلوب',
+            'subject_class_id.required' => 'الوحدة مطلوب',
             'lesson_id.required' => 'الدرس مطلوب',
             'file_type.required' => 'نوع الملف مطلوب',
             'file.required' => 'الملف مطلوب',
