@@ -3,11 +3,11 @@
         @csrf
         <div class="form-group">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label class="form-check-label" for="degree">الدرجة</label>
                     <input class="form-control" name="degree" type="number"/>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label class="form-check-label" for="degree">درجة الصعوبة</label>
                    <select class="form-control" name="difficulty">
                        <option value="low" class="form-control">سهل</option>
@@ -15,22 +15,22 @@
                        <option value="high" class="form-control">صعب</option>
                    </select>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12 mt-3">
                     <label class="form-check-label" for="degree">نوع السؤال</label>
                    <select class="form-control" name="question_type">
-                       <option value="text" style="text-align: center" class="form-control">نص</option>
-                       <option value="choice" style="text-align: center" class="form-control">اختيار</option>
+                       <option value="text" style="text-align: center" class="form-control">مقالي</option>
+                       <option value="choice" style="text-align: center" class="form-control">اختياري</option>
                    </select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">السؤال</label>
                     <textarea id="questionTextarea" class="form-control" rows="5" name="question"></textarea>
-                </div>                
+                </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label for="season" class="form-control-label">الصف</label>
                     <Select name="season_id" class="form-control seasonChoose">
                         <option selected disabled style="text-align: center">اختار الصف</option>
@@ -40,7 +40,7 @@
                         @endforeach
                     </Select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label for="term" class="form-control-label">الترم</label>
                     <Select name="term_id" class="form-control user_choose">
                         <option selected disabled style="text-align: center">اختار الصف</option>
@@ -48,32 +48,28 @@
                 </div>
             </div>
             <div class="row d-none choseExamp">
-                <div class="col-md-12">
-                    <label for="type" class="form-control-label ">النوع</label>
-                    <Select name="examable_type" id="type" class="form-control type_choose">
-                        <option selected disabled style="text-align: center">اختار النوع</option>
-                        <option value="App\Models\Lesson" style="text-align: center">درس</option>
-                        <option value="App\Models\SubjectClass" style="text-align: center">الوحدة</option>
-                        <option value="App\Models\VideoParts" style="text-align: center">الفيديو</option>
-                        <option value="App\Models\AllExam" style="text-align: center">امتحان شامل</option>
-                        <option value="App\Models\LifeExam" style="text-align: center">امتحان لايف</option>
+                <div class="col-md-12 mt-3">
+                    <label for="type" class="form-control-label ">القسم</label>
+                    <Select name="type" id="type" class="form-control type_choose">
+                        <option selected disabled style="text-align: center">اختر قسم للسؤال</option>
+                        <option value="lesson" style="text-align: center">درس</option>
+                        <option value="subject_class" style="text-align: center">الوحدة</option>
+                        <option value="video" style="text-align: center">الفيديو</option>
+                        <option value="all_exam" style="text-align: center">امتحان شامل</option>
+                        <option value="life_exam" style="text-align: center">امتحان لايف</option>
                     </Select>
                 </div>
-                {{-- <div class="col-md-6">
-                    <label for="lesson" class="form-control-label typeName">الدرس</label>
-                    <Select name="examable_id" class="form-control type_ajax_choose">
-                    </Select>
-                </div> --}}
+
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label for="lesson" class="form-control-label">ملاحظة</label>
                     <textarea class="form-control" rows="8" name="note"></textarea>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label for="">الصورة :</label>
                     <input type="file" name="image" class="dropify" data-default-file="" id="image">
-                </div>                
+                </div>
             </div>
         </div>
         <div class="modal-footer">
@@ -148,7 +144,7 @@
 // Get the textarea and image elements by their IDs
 var textarea = document.getElementById("questionTextarea");
         var image = document.getElementById("image");
-        
+
         textarea.addEventListener("input", function () {
             image.disabled = true;
         });

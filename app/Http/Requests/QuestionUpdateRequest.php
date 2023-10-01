@@ -11,7 +11,7 @@ class QuestionUpdateRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,31 +21,27 @@ class QuestionUpdateRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'question' => 'nullable',
             'difficulty' => 'required',
             'image' => 'nullable',
             'degree' => 'required|numeric',
-            'note' => 'required',
             'season_id' => 'required',
             'term_id' => 'required',
-            'examable_type' => 'required',
-            'examable_id' => 'required'
+
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'difficulty.required' => 'مستوى الصعوبة مطلوب',
             'degree.required' => 'الدرجة مطلوبة',
-            'note.required' => 'الملاحظة مطلوبة',
             'season_id.required' => 'الفصل مطلوب',
             'term_id.required' => 'الترم مطلوب',
-            'examable_type.required' => 'نوع المثال مطلوب',
-            'examable_id.required' => 'معرف المثال مطلوب'
+
         ];
     }
 }

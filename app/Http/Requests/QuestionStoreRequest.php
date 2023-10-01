@@ -11,7 +11,7 @@ class QuestionStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,7 +21,7 @@ class QuestionStoreRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'question' => 'nullable',
@@ -31,11 +31,10 @@ class QuestionStoreRequest extends FormRequest
             'question_type' => 'required',
             'season_id' => 'required',
             'term_id' => 'required',
-            'examable_type' => 'required',
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'difficulty.required' => 'مستوى الصعوبة مطلوب',
@@ -44,7 +43,6 @@ class QuestionStoreRequest extends FormRequest
             'question_type.required' => 'نوع السؤال مطلوب',
             'season_id.required' => 'الفصل مطلوب',
             'term_id.required' => 'الترم مطلوب',
-            'examable_type.required' => 'نوع المثال مطلوب',
         ];
     }
 }
