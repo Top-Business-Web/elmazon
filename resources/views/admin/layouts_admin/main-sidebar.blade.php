@@ -376,6 +376,19 @@
             </li>
         @endcan
 
+            {{-- اسئله الامتحانات--}}
+            @can('اسئله الامتحانات')
+            <li class="slide">
+                <a class="side-menu__item" href="{{ route('online_exam_questions.index') }}">
+                    <i class="icon icon-question side-menu__icon"></i>
+                    <span class="side-menu__label">
+
+                        اسئله الامتحانات
+                    </span>
+                </a>
+            </li>
+            @endcan
+
         @can('الكوبونات')
             <!-- DISCOUNT -->
             <li class="slide">

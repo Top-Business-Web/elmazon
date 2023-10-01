@@ -43,7 +43,7 @@ class LifeExam extends Model
         return $this->belongsTo(Term::class,'term_id','id');
     }
 
-    //start relation many to many life exam has many questions
+
 
     public function questions(): BelongsToMany{
 
