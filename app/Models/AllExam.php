@@ -4,7 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 
 class AllExam extends Model
@@ -36,41 +39,44 @@ class AllExam extends Model
     protected $casts = ['instruction_ar'=> 'json','instruction_en' => 'json'];
 
 
-    public function season(){
+    public function season(): BelongsTo
+    {
 
         return $this->belongsTo(Season::class,'season_id','id');
     }
 
 
-    public function term(){
+    public function term(): BelongsTo
+    {
 
         return $this->belongsTo(Term::class,'term_id','id');
     }
 
 
-    public function instruction(){
+    public function instruction(): HasOne
+    {
 
         return $this->hasOne(ExamInstruction::class,'all_exam_id', 'id');
     }
 
 
-    public function questions(){
+    public function questions(): BelongsToMany
+    {
 
         return $this->belongsToMany(Question::class,'online_exam_questions', 'all_exam_id','question_id','id','id')->inRandomOrder();
     }
 
-    public function degrees(){
 
-        return $this->hasMany(Degree::class,'online_exam_id','id');
-    }
 
-    public function exam_degree_depends(){
+    public function exam_degree_depends(): HasMany
+    {
 
         return $this->hasMany(ExamDegreeDepends::class,'all_exam_id','id');
     }
 
 
-    public function subject_class(){
+    public function subject_class(): BelongsTo
+    {
 
         return $this->belongsTo(SubjectClass::class,'subject_id','id');
     }

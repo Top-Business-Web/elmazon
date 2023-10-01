@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\MotivationalSentencesController;
 use App\Http\Controllers\Admin\OnBoardingController;
+use App\Http\Controllers\Admin\OnlineExamQuestionController;
 use App\Http\Controllers\Admin\QualificationController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SeasonController;
@@ -182,6 +183,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### Audio ####
     Route::resource('audio', AudioController::class)->middleware('permission:اقسام الفيديوهات');
+
+
+    #### Exam Questions ================================ ####
+    Route::resource('online_exam_questions', OnlineExamQuestionController::class)->middleware('permission:اسئله الامتحانات');
+    Route::post('online_exam_question_delete', [OnlineExamQuestionController::class, 'delete'])->name('online_exam_question_delete');
+    Route::get('getAllExamsByType', [OnlineExamQuestionController::class, 'getAllExamsByType'])->name('getAllExamsByType');
+    Route::get('getAllQuestionsByExamType', [OnlineExamQuestionController::class, 'getAllQuestionsByExamType'])->name('getAllQuestionsByExamType');
+
 
     #### Monthly Plans ####
     Route::resource('monthlyPlans', MonthlyPlanController::class)->middleware('permission:الخطة الشهرية');
