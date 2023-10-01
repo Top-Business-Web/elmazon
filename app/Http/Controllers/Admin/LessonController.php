@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLesson;
-use App\Models\lesson;
+use App\Models\Lesson;
 use App\Models\SubjectClass;
 use App\Traits\AdminLogs;
 use Illuminate\Http\JsonResponse;
