@@ -5,20 +5,20 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="type" class="form-control-label">النوع</label>
-                    <select class="form-control" name="type" style="text-align: center" required>
+                    <select class="form-control" name="type" style="text-align: center">
                         <option style="text-align: center" value="0">صورة</option>
                         <option style="text-align: center" value="1">فيديو</option>
                     </select>
                 </div>
                 <div class="col-md-6">
                     <label for="type" class="form-control-label">اللينك</label>
-                   <input class="form-control" name="link" required />
+                   <input class="form-control" name="link" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <label for="phone" class="form-control-label">الصورة</label>
-                    <input type="file" class="form-control dropify" min="11" name="file" required>
+                    <input type="file" class="form-control dropify" min="11" name="file">
                 </div>
             </div>
         </div>

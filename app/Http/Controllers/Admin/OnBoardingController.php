@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\OnBoarding;
 use App\Traits\AdminLogs;
+use App\Models\OnBoarding;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\OnBoardingStoreRequest;
+use App\Http\Requests\OnBoardingUpdateRequest;
 
 class OnBoardingController extends Controller
 {
@@ -41,7 +43,7 @@ class OnBoardingController extends Controller
 
 
 
-    public function store(Request $request)
+    public function store(OnBoardingStoreRequest $request)
     {
         $inputs = $request->all();
         if($request->hasFile('image')){
@@ -65,7 +67,7 @@ class OnBoardingController extends Controller
     }
 
 
-    public function update(Request $request, OnBoarding $onBoarding)
+    public function update(OnBoardingUpdateRequest $request, OnBoarding $onBoarding)
     {
 
         $inputs = $request->all();
