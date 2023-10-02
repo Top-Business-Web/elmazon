@@ -101,7 +101,6 @@ class OnlineExam extends Model
     }
 
 
-    //relation online_exams  with user
     public function users(): BelongsToMany{
 
         return $this->belongsToMany(User::class,'online_exam_users','online_exam_id','user_id','id','id');
@@ -113,8 +112,6 @@ class OnlineExam extends Model
 
         return $this->hasMany(ExamsFavorite::class,'online_exam_id','id');
     }
-
-
 
 
     /*
@@ -214,10 +211,4 @@ class OnlineExam extends Model
             ->get();
     }
 
-
-    //end degree details
-
-    /*
-     * end scopes
-     */
 }
