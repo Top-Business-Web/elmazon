@@ -91,14 +91,7 @@ class AllExam extends Model
     * start scopes
     */
 
-    public function scopeAllExamFavorite($query){
 
-        return $query->whereHas('exams_favorites', function ($q){
-            $q->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','favorite');
-        })->whereHas('term', function ($term){
-            $term->where('status', '=', 'active')->where('season_id','=',auth('user-api')->user()->season_id);
-        })->where('season_id','=',auth()->guard('user-api')->user()->season_id)->get();
-    }
 
 
     public function scopeAllExamDegreeDetailsForStudent($query){

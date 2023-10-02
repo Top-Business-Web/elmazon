@@ -20,10 +20,6 @@ class VideoBasic extends Model
     ];
 
 
-    public function videoBasicPdf(){
-        return $this->hasMany(VideoBasicPdfUploads::class);
-    }
-
 
 
     public function video_favorites(): HasMany{
@@ -36,20 +32,15 @@ class VideoBasic extends Model
    */
 
 
-    public function scopeBasicFavorite($query){
 
-        return $query->whereHas('video_favorites', function ($q){
-            $q->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','favorite');
-        })->get();
-    }
 
-    public function report()
+    public function report(): HasMany
     {
 
         return $this->hasMany(Report::class,'video_basic_id','id');
     }
 
-    public function comment()
+    public function comment(): HasMany
     {
         return $this->hasMany(Comment::class, 'video_part_id', 'id');
     }

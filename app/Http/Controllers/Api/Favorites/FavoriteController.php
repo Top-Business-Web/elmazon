@@ -447,17 +447,6 @@ class FavoriteController extends Controller
             $all_exam_favorites[] = $examData;
         }
 
-
-
-//        $data['online_exams'] = OnlineExamNewResource::collection(OnlineExam::onlineExamFavorite());
-//        $data['all_exams'] = AllExamNewResource::collection(AllExam::allExamFavorite());
-//        $data['live_exams'] = LiveExamFavoriteResource::collection(LifeExam::liveExamFavorite());
-//        $data['video_basics'] = VideoBasicResource::collection(VideoBasic::basicFavorite());
-//        $data['video_resources'] = VideoResourceResource::collection(VideoResource::resourceFavorite());
-//        $data['video_parts'] = VideoPartNewResource::collection(VideoParts::favorite());
-
-
-
         return self::returnResponseDataApi(compact('all_video_favorites','all_exam_favorites'), 'تم الحصول علي جميع المفضله للطالب', 200);
     }
 }
