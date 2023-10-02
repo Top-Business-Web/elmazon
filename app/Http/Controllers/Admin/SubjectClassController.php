@@ -127,7 +127,7 @@ class SubjectClassController extends Controller
             $file = $request->file('image');
             $filename = $file->getClientOriginalName();
 
-            $file->move('subject_class/', $filename);
+            $file->move('classes/', $filename);
             $inputs['image'] = $filename;
         }
         if ($subjectsClass->update($inputs)) {

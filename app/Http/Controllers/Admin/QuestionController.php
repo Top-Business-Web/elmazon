@@ -18,6 +18,7 @@ use App\Exports\QuestionExport;
 use App\Imports\QuestionImport;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\RequestQuestion;
 use Yajra\DataTables\Facades\DataTables;
@@ -41,7 +42,7 @@ class QuestionController extends Controller
                                     data-id="' . $questions->id . '" data-title="' . $questions->question . '">
                                     <i class="fas fa-trash"></i>
                             </button>
-                            <button type="button" '.($questions->question_type == 'text' ? 'hidden' : '').' data-id="' . $questions->id . '" class="btn btn-pill btn-success-light editBtnAnswer">الاجابة</button>
+                            <button type="button" ' . ($questions->question_type == 'text' ? 'hidden' : '') . ' data-id="' . $questions->id . '" class="btn btn-pill btn-success-light editBtnAnswer">الاجابة</button>
                        ';
                 })
                 ->editColumn('type', function ($questions) {
@@ -186,7 +187,8 @@ class QuestionController extends Controller
     function answer($id)
     {
         $question = Question::findOrFail($id);
-        return view('admin.questions.parts.answers', compact('question'));
+        $answers = Answer::query()->select('id', 'answer', 'answer_status')->where('question_id', $id)->get();
+        return view('admin.questions.parts.answers', compact('question', 'answers'));
     }
 
     // Show End
@@ -194,34 +196,36 @@ class QuestionController extends Controller
     // Add Answer Start
 
     public function addAnswer(Request $request)
-    {
-        if (count($request->answer) !== 4) {
-            return response()->json(['status' => 407]);
-        }
-        $alphabeticIndexes = ['E', 'A', 'B', 'C', 'D'];
-        DB::beginTransaction();
-
-        try {
-            Answer::where('question_id', $request->question_id)->delete();
-            foreach ($request->answer as $key => $value) {
-                Answer::create([
-                    'answer' => $value,
-                    'question_id' => $request->question_id,
-                    'answer_status' => ($request->answer_status == $key) ? 'correct' : 'un_correct',
-                    'answer_number' => $alphabeticIndexes[$key]
-                ]);
+{
+    DB::beginTransaction();
+        $questionId = $request->question_id;
+        $answers = $request->answer;
+        $answerStatus = $request->answer_status;
+        $existingAnswers = Answer::where('question_id', $questionId)->get();
+        if ($existingAnswers->count() > 0) {
+            foreach($existingAnswers as $answer){
+                foreach ($answers as $key => $value) {
+                    if ($answer->answer_number == $key) {
+                        $answer->update([
+                            'answer' => $value,
+                            'answer_status' => ($answerStatus == $key) ? 'correct' : 'un_correct',
+                        ]);
+                    }
+                }
             }
-            DB::commit();
-
-            return response()->json(['status' => 200]);
-        } catch (\Exception $e) {
-            DB::rollback();
-            return response()->json(['status' => 500, 'error' => 'Internal Server Error']);
-        }
-    }
-
-
-
+            } else {
+                foreach ($answers as $key => $value) {
+                    Answer::create([
+                        'answer' => $value,
+                        'question_id' => $questionId,
+                        'answer_status' => ($answerStatus == $key) ? 'correct' : 'un_correct',
+                        'answer_number' => $key,
+                    ]);
+                } 
+            }
+        DB::commit();
+        return response()->json(['status' => 200]);
+}
     // Add Answer End
 
     // Edit Start
