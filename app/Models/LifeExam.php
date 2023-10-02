@@ -61,16 +61,7 @@ class LifeExam extends Model
         return $this->hasMany(ExamDegreeDepends::class,'life_exam_id','id');
     }
 
-    public function scopeLiveExamFavorite($query){
 
-        return $query->whereHas('exams_favorites', fn(Builder $builder)=>
-        $builder->where('user_id','=',Auth::guard('user-api')->id())
-            ->where('action','=','favorite'))->whereHas('term', fn(Builder $builder)=>
-        $builder->where('status', '=', 'active')
-            ->where('season_id','=',auth('user-api')->user()->season_id))
-            ->where('season_id','=',auth()->guard('user-api')->user()->season_id)
-            ->get();
-    }
 
 
 }

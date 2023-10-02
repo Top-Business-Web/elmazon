@@ -98,20 +98,4 @@ class VideoParts extends Model
 
 
 
-    /*
-     * start scopes
-     */
-
-
-    public function scopeFavorite($query)
-    {
-
-        return $query->whereHas('video_favorites', function ($q) {
-            $q->where('user_id', '=', Auth::guard('user-api')->id())->where('action', '=', 'favorite');
-        })->get();
-    }
-
-    /*
-     * end scopes
-     */
 }

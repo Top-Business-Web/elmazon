@@ -24,7 +24,6 @@ class OnlineExamNewResource extends JsonResource
              'background_color' => $this->background_color,
             'exams_favorite' => !ExamsFavorite::where('online_exam_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first()
             || ExamsFavorite::where('online_exam_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','un_favorite')->first() ? 'un_favorite' : 'favorite',
-
             'pdf_exam_upload' => $this->pdf_file_upload != null ? asset('online_exams/pdf_file_uploads/'. $this->pdf_file_upload) : null,
             'answer_pdf_file' => $this->answer_pdf_file != null ? asset('online_exams/pdf_answers/'. $this->answer_pdf_file) : null,
             'answer_video_file' => $this->answer_video_file != null ? asset('online_exams/videos_answers/'. $this->answer_video_file) : null,
