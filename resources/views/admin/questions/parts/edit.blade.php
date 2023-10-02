@@ -48,32 +48,27 @@
             <div class="row d-none choseExamp">
                 <div class="col-md-6 ">
                     <label for="type" class="form-control-label ">النوع</label>
-                    <Select name="examable_type" id="type" class="form-control type_choose"
+                    <Select name="type" id="type" class="form-control type_choose"
                             required="required">
                         <option disabled style="text-align: center">اختار النوع</option>
-                        <option value="App\Models\Lesson"
-                                {{ $question->examable_type == 'App\Models\Lesson' ? 'selected' : '' }}
+                        <option value="lesson"
+                                {{ $question->type == 'lesson' ? 'selected' : '' }}
                                 style="text-align: center">درس</option>
-                        <option value="App\Models\SubjectClass"
-                                {{ $question->examable_type == 'App\Models\SubjectClass' ? 'selected' : '' }}
+                        <option value="subject_class"
+                                {{ $question->type == 'subject_class' ? 'selected' : '' }}
                                 style="text-align: center">الوحدة</option>
-                        <option value="App\Models\VideoParts"
-                                {{ $question->examable_type == 'App\Models\VideoParts' ? 'selected' : '' }}
+                        <option value="video"
+                                {{ $question->type == 'video' ? 'selected' : '' }}
                                 style="text-align: center">الفيديو</option>
-                        <option value="App\Models\AllExam"
-                                {{ $question->examable_type == 'App\Models\AllExam' ? 'selected' : '' }}
+                        <option value="all_exam"
+                                {{ $question->type == 'all_exam' ? 'selected' : '' }}
                                 style="text-align: center">امتحان شامل</option>
-                        <option value="App\Models\LifeExam"
-                                {{ $question->examable_type == 'App\Models\LifeExam' ? 'selected' : '' }}
+                        <option value="life_exam"
+                                {{ $question->type == 'life_exam' ? 'selected' : '' }}
                                 style="text-align: center">امتحان لايف</option>
                     </Select>
                 </div>
-                <div class="col-md-6">
-                    <label for="lesson" class="form-control-label typeName">الدرس</label>
-                    <Select name="examable_id" class="form-control type_ajax_choose" required="required">
-                        <option value="{{ $question->examable_id }}">{{ $question->examable_id }}</option>
-                    </Select>
-                </div>
+
             </div>
             <div class="row">
                 <div class="col-md-6">

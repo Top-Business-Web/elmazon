@@ -42,4 +42,7 @@ class MainController extends Controller
 
         return view('admin.index')->with($data);
     }
+
+
+
 }

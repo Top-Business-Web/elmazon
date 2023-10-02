@@ -53,6 +53,7 @@ class ExamSchedulesController extends Controller
 
     public function store(ExamScheduleRequest $request): JsonResponse
     {
+
         $inputs = $request->all();
 
         if($request->hasFile('image')){

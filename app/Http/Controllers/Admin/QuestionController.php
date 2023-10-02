@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\Validator;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Requests\RequestQuestion;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\QuestionStoreRequest;
 use App\Http\Requests\QuestionUpdateRequest;
@@ -29,7 +28,7 @@ class QuestionController extends Controller
 {
     use PhotoTrait, AdminLogs;
 
-    // Index Start
+
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -86,50 +85,9 @@ class QuestionController extends Controller
             return view('admin.questions.index');
         }
     }
-    // Index End
 
-    // Examble Type Start
 
-    public function examble_type(Request $request)
-    {
-        if ($request->ajax()) {
-            if ($request->type == 'App\Models\Lesson') {
 
-                $subjectClass = SubjectClass::where('season_id', $request->season)
-                    ->where('term_id', $request->term)
-                    ->pluck('id', 'id')->toArray();
-
-                if ($subjectClass) {
-                    $data = Lesson::whereIn('subject_class_id', $subjectClass)
-                        ->pluck('name_ar', 'id')->toArray();
-                }
-            } else if ($request->type == 'App\Models\SubjectClass') {
-
-                $data = SubjectClass::where('season_id', $request->season)
-                    ->where('term_id', $request->term)
-                    ->pluck('name_ar', 'id')->toArray();
-            } else if ($request->type == 'App\Models\VideoParts') {
-                $data = videoParts::pluck('name_ar', 'id')->toArray();
-            } else if ($request->type == 'App\Models\AllExam') {
-                $data = AllExam::where('season_id', $request->season)
-                    ->where('term_id', $request->term)
-                    ->pluck('name_ar', 'id')->toArray();
-            } else if ($request->type == 'App\Models\LifeExam') {
-                $data = LifeExam::where('season_id', $request->season)
-                    ->where('term_id', $request->term)
-                    ->pluck('name_ar', 'id')->toArray();
-            }
-            if (!$data) {
-                return response()->json(['' => 'لايوجد بيانات']);
-            } else {
-                return $data;
-            }
-        }
-    }
-
-    // Examble Type End
-
-    // Create Start
 
     public function create()
     {
@@ -138,11 +96,8 @@ class QuestionController extends Controller
         return view('admin.questions.parts.create', compact('seasons', 'terms'));
     }
 
-    // Create End
 
-    // Store Start
-
-    public function store(QuestionStoreRequest $request, Question $question)
+    public function store(QuestionStoreRequest $request): \Illuminate\Http\JsonResponse
     {
         $inputs = $request->all();
 
@@ -152,48 +107,28 @@ class QuestionController extends Controller
             $inputs['image'] = $imagePath;
             $inputs['question'] = null;
             $inputs['file_type'] = 'image';
-            $inputs['question_type'] = 'choice';
-        } else {
-            $inputs['question_type'] = 'text';
-            $inputs['file_type'] = 'text';
         }
 
-        if ($request->examable_type == 'App\Models\Lesson') {
-            $inputs['type'] = 'lesson';
-        } elseif ($request->examable_type == 'App\Models\SubjectClass') {
-            $inputs['type'] = 'subject_class';
-        } elseif ($request->examable_type == 'App\Models\VideoParts') {
-            $inputs['type'] = 'video';
-        } elseif ($request->examable_type == 'App\Models\AllExam') {
-            $inputs['type'] = 'all_exam';
-        } elseif ($request->examable_type == 'App\Models\LifeExam') {
-            $inputs['type'] = 'life_exam';
-        }
+        $question = Question::create($inputs);
 
-
-        if ($question->create($inputs)) {
+        if ($question->save()) {
             $this->adminLog('تم اضافة سؤال جديد');
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
         }
+
     }
 
-    // Store End
-
-    // Show Start
-
-    public
-    function answer($id)
+    public function answer($id)
     {
         $question = Question::findOrFail($id);
         $answers = Answer::query()->select('id', 'answer', 'answer_status')->where('question_id', $id)->get();
         return view('admin.questions.parts.answers', compact('question', 'answers'));
     }
 
-    // Show End
 
-    // Add Answer Start
+
 
     public function addAnswer(Request $request)
 {
@@ -232,18 +167,15 @@ class QuestionController extends Controller
 
     public
     function edit(Question $question)
+
     {
         $seasons = Season::get();
         $terms = Term::get();
         return view('admin.questions.parts.edit', compact('question', 'seasons', 'terms'));
     }
 
-    // Edit End
 
-    // Update Start
-
-    public
-    function update(QuestionUpdateRequest $request, Question $question)
+    public function update(QuestionUpdateRequest $request, Question $question): \Illuminate\Http\JsonResponse
     {
 
         $inputs = $request->all();
@@ -256,22 +188,6 @@ class QuestionController extends Controller
             $inputs['image'] = $imagePath;
             $inputs['question'] = null;
             $inputs['file_type'] = 'image';
-            $inputs['question_type'] = 'choice';
-        } else {
-            $inputs['question_type'] = 'text';
-            $inputs['file_type'] = 'text';
-        }
-
-        if ($request->examable_type == 'App\Models\Lesson') {
-            $inputs['type'] = 'lesson';
-        } elseif ($request->examable_type == 'App\Models\SubjectClass') {
-            $inputs['type'] = 'subject_class';
-        } elseif ($request->examable_type == 'App\Models\VideoParts') {
-            $inputs['type'] = 'video';
-        } elseif ($request->examable_type == 'App\Models\AllExam') {
-            $inputs['type'] = 'all_exam';
-        } elseif ($request->examable_type == 'App\Models\LifeExam') {
-            $inputs['type'] = 'life_exam';
         }
 
 
@@ -283,12 +199,8 @@ class QuestionController extends Controller
         }
     }
 
-    // Update End
 
-    // Destroy Start
-
-    public
-    function destroy(Request $request)
+    public function destroy(Request $request)
     {
         $questions = Question::where('id', $request->id)->firstOrFail();
         $questions->delete();
@@ -296,14 +208,13 @@ class QuestionController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Delete End
 
-    public function questionExport()
+    public function questionExport(): \Symfony\Component\HttpFoundation\BinaryFileResponse
     {
         return Excel::download(new QuestionExport, 'question.xlsx');
-    } // end question Export
+    }
 
-    public function questionImport(Request $request)
+    public function questionImport(Request $request): \Illuminate\Http\JsonResponse
     {
         $import = Excel::import(new QuestionImport, $request->exelFile);
         if ($import) {
@@ -311,6 +222,6 @@ class QuestionController extends Controller
             return response()->json(['status' => 200]);
         } else
             return response()->json(['status' => 500]);
-    } // end question import
+    }
 
 }

@@ -24,6 +24,8 @@
                     <input type="text" class="form-control" value="" name="title_en">
                 </div>
             </div>
+
+
             <div class="row">
                 <div class="col-md-6">
                     <label for="name_ar" class="form-control-label">الصف</label>

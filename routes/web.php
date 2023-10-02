@@ -26,6 +26,7 @@ Route::get('/payments/payWithFawry',[Payment::class,'payWithFawry'])->name('paym
 //get all terms by season_id
 Route::get('terms/season/{id}',[\App\Http\Controllers\Admin\TermController::class,'getAllTermsBySeason'])->middleware('auth:admin');
 
+
 //Route::get('get-minutes', function (){
 //
 //    $video_part_time = \App\Models\VideoParts::query()

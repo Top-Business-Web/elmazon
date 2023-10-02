@@ -49,32 +49,32 @@ class OnlineExam extends Model
 
 
 
-    public function season(){
+    public function season(): BelongsTo
+    {
 
         return $this->belongsTo(Season::class,'season_id','id');
     }
 
 
-    public function term(){
+    public function term(): BelongsTo
+    {
 
         return $this->belongsTo(Term::class,'term_id','id');
     }
 
-    public function instruction(){
+    public function instruction(): HasOne
+    {
 
         return $this->hasOne(ExamInstruction::class,'online_exam_id', 'id');
     }
 
-    public function questions(){
+    public function questions(): BelongsToMany
+    {
 
         return $this->belongsToMany(Question::class,'online_exam_questions', 'online_exam_id','question_id','id','id')->inRandomOrder();
     }
 
 
-    public function degrees(){
-
-        return $this->hasMany(Degree::class,'online_exam_id','id');
-    }
 
 
     public function video() :BelongsTo{
@@ -90,7 +90,7 @@ class OnlineExam extends Model
 
 
 
-    public function lesson()
+    public function lesson(): BelongsTo
     {
         return $this->belongsTo(Lesson::class,'lesson_id','id');
     }
