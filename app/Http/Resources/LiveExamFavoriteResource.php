@@ -27,7 +27,6 @@ class LiveExamFavoriteResource extends JsonResource
                 ->where('action','=','un_favorite')->first() ? 'un_favorite' : 'favorite',
             'answer_video_file' => $this->answer_video_file != null ? asset('live_exam_file_uploads/videos/'. $this->answer_video_file) : null,
 
-
         ];
     }
 }

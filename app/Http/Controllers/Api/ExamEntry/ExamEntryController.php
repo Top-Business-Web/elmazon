@@ -224,9 +224,9 @@ class ExamEntryController extends Controller
 
                 if ($count_trying < $trying) {
 
-                     /*
-                     * start create new trying number for student
-                     */
+                 /*
+                 * start create new trying number for student
+                 */
 
                   $timer =  Timer::create([
                         'online_exam_id' => $exam->id,
