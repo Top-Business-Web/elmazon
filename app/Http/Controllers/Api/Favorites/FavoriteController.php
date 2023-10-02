@@ -425,6 +425,8 @@ class FavoriteController extends Controller
                 'life_exams.answer_video_file as life_exam_answer_video_file',
                 'online_exams.pdf_num_questions as online_exam_pdf_num_questions',
                 'all_exams.pdf_num_questions as all_exam_pdf_num_questions',
+                'online_exams.pdf_file_upload as online_exam_pdf_file_upload',
+                'all_exams.pdf_file_upload as all_exam_pdf_file_upload',
 
             )
             ->get();
@@ -434,6 +436,7 @@ class FavoriteController extends Controller
         foreach ($exam_favorites as $exam_favorite){
 
             $examData['id'] = $exam_favorite->id;
+            $examData['pdf_file_upload'] = $exam_favorite->online_exam_name != null  ?  ($exam_favorite->online_exam_type == 'pdf' ? asset('online_exams/pdf_file_uploads/'. $exam_favorite->online_exam_pdf_file_upload) : null ) :  ($exam_favorite->all_exam_name != null  ?  ($exam_favorite->all_exam_type == 'pdf' ? asset('all_exams/pdf_file_uploads/'. $exam_favorite->all_exam_pdf_file_upload) : null ) : null);
             $examData['image'] = $exam_favorite->online_exam_name != null  ?  ($exam_favorite->online_exam_type == 'online' ? asset('default/exam.png') : asset('default/pdf.png')) :  ($exam_favorite->all_exam_name != null  ? ($exam_favorite->all_exam_type == 'all_exam' ? asset('default/exam.png') : asset('default/pdf.png')) : asset('default/exam.png'));
             $examData['num_of_questions'] = $exam_favorite->online_exam_name != null  ?  ($exam_favorite->online_exam_type == 'online' ? DB::table('online_exam_questions')->where('online_exam_id','=',$exam_favorite->online_exam_id)->count() : $exam_favorite->online_exam_pdf_num_questions) :  ($exam_favorite->all_exam_name != null  ?  ($exam_favorite->all_exam_type == 'all_exam' ? DB::table('online_exam_questions')->where('all_exam_id','=',$exam_favorite->all_exam_id)->count() : $exam_favorite->all_exam_pdf_num_questions) : DB::table('online_exam_questions')->where('life_exam_id','=',$exam_favorite->life_exam_id)->count());
             $examData['answer_pdf_file'] = $exam_favorite->online_exam_name != null  ?  asset('online_exams/pdf_answers/'. $exam_favorite->online_exam_answer_pdf_file) :  ($exam_favorite->all_exam_name != null  ?  asset('all_exams/pdf_answers/'. $exam_favorite->all_exam_answer_pdf_file) : null);
@@ -446,6 +449,17 @@ class FavoriteController extends Controller
             $examData['exam_id'] = $exam_favorite->online_exam_name != null  ?  $exam_favorite->online_exam_id :  ($exam_favorite->all_exam_name != null  ?  $exam_favorite->all_exam_id : $exam_favorite->life_exam_id);
             $all_exam_favorites[] = $examData;
         }
+
+
+
+//        $data['online_exams'] = OnlineExamNewResource::collection(OnlineExam::onlineExamFavorite());
+//        $data['all_exams'] = AllExamNewResource::collection(AllExam::allExamFavorite());
+//        $data['live_exams'] = LiveExamFavoriteResource::collection(LifeExam::liveExamFavorite());
+//        $data['video_basics'] = VideoBasicResource::collection(VideoBasic::basicFavorite());
+//        $data['video_resources'] = VideoResourceResource::collection(VideoResource::resourceFavorite());
+//        $data['video_parts'] = VideoPartNewResource::collection(VideoParts::favorite());
+
+
 
         return self::returnResponseDataApi(compact('all_video_favorites','all_exam_favorites'), 'تم الحصول علي جميع المفضله للطالب', 200);
     }
