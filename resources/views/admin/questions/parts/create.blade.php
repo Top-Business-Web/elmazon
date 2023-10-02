@@ -26,8 +26,10 @@
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">السؤال</label>
-                    <textarea id="questionTextarea" class="form-control" rows="5" name="question"></textarea>
-                </div>
+
+                    <textarea id="questionTextarea" class="ckeditor form-control" rows="5" name="question"></textarea>
+                </div>                
+
             </div>
             <div class="row">
                 <div class="col-md-6 mt-3">
@@ -64,9 +66,12 @@
             <div class="row">
                 <div class="col-md-6 mt-3">
                     <label for="lesson" class="form-control-label">ملاحظة</label>
-                    <textarea class="form-control" rows="8" name="note"></textarea>
+                    <textarea id="mytextarea" class="ckeditor form-control" rows="8" name="note"></textarea>
                 </div>
-                <div class="col-md-6 mt-3">
+
+                <div id="editor"></div>
+                <div class="col-md-6">
+
                     <label for="">الصورة :</label>
                     <input type="file" name="image" class="dropify" data-default-file="" id="image">
                 </div>
@@ -78,9 +83,11 @@
         </div>
     </form>
 </div>
-
+<script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
 <script>
-
+     $(document).ready(function () {
+        $('.ckeditor').ckeditor();
+    });
     $('.dropify').dropify();
 
     $(document).ready(function () {

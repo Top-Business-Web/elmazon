@@ -7,18 +7,26 @@
                 <div class="col-lg-12">
                     <div id="inputFormRow">
                         <div class="input-group mb-3">
+                            <input type="hidden" name="answer_number[]" class="form-control">
+                            <textarea name="answer[أ]" class="ckeditor form-control m-input" rows="1">{{ @$answers[0]['answer'] }}</textarea>
+                            <input type="radio" name="answer_status" {{ @$answers[0]['answer_status'] == 'correct' ? 'checked' : '' }} value="أ" class="form-control check_class">
+                        </div>
+                        <div class="input-group mb-3">
                             <input type="hidden" name="answer_number[1]" class="form-control">
-                            <input type="text" name="answer[1]" class="form-control m-input">
-                            <div class="input-group-append">
-                                <button id="removeRow" type="button" class="btn btn-danger">ازالة</button>
-                            </div>
-                            <input type="radio" name="answer_status"
-                                   value="1" class="form-control check_class" required>
+                            <textarea name="answer[ب]" class="ckeditor form-control m-input" rows="1">{{ @$answers[1]['answer'] }}</textarea>
+                            <input type="radio" name="answer_status" {{ @$answers[1]['answer_status'] == 'correct' ? 'checked' : '' }} value="ب" class="form-control check_class">
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="hidden" name="answer_number[1]" class="form-control">
+                            <textarea name="answer[ج]" class="ckeditor form-control m-input" rows="1">{{ @$answers[2]['answer'] }}</textarea>
+                            <input type="radio" name="answer_status" {{ @$answers[2]['answer_status'] == 'correct' ? 'checked' : '' }} value="ج" class="form-control check_class">
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="hidden" name="answer_number[1]" class="form-control">
+                            <textarea name="answer[د]" class="ckeditor form-control m-input" rows="1">{{ @$answers[3]['answer'] }}</textarea>
+                            <input type="radio" name="answer_status" {{ @$answers[3]['answer_status'] == 'correct' ? 'checked' : '' }} value="د" class="form-control check_class">
                         </div>
                     </div>
-
-                    <div id="newRow"></div>
-                    <button id="addRow" type="button" class="btn btn-info addAnswer">اضافة اجابة</button>
                 </div>
             </div>
         </div>
@@ -28,41 +36,43 @@
         </div>
     </form>
 </div>
-
+<script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
 <script type="text/javascript">
-
-    var i = 1;
-    // add row
-    $("#addRow").click(function () {
-
-        ++i;
-        var html = '';
-        html += '<div id="inputFormRow">';
-        html += '<div class="input-group mb-3">';
-        html += '<input type="hidden" name="answer_number[' + i + ']" class="form-control">';
-        html += '<input type="text" name="answer[' + i + ']" data-num=""  class="form-control m-input answerInput" autocomplete="off">';
-        html += '<div class="input-group-append">';
-        html += '<button id="removeRow" type="button" class="btn btn-danger">ازالة</button>';
-        html += '</div>';
-        html += '<input type="radio" name="answer_status" value="' + i + '" class="form-control check_class"></span>';
-        html += '</div>';
-
-        // var answerLength =  $('.answerInput').length();
-        var answer = $('.answerInput');
-
-        if (answer.last().val() !== '' && answer.length < 3) {
-            $('#newRow').append(html);
-            var numQuestion = answer.length;
-            $('')
-        }
-
+$(document).ready(function () {
+        $('.ckeditor').ckeditor();
     });
 
 
-    // remove row
-    $(document).on('click', '#removeRow', function () {
-        $(this).closest('#inputFormRow').remove();
-    });
+// var i = 1;
+// // add row
+// $("#addRow").click(function () {
+//     ++i;
+//     var html = '';
+//     html += '<div id="inputFormRow">';
+//     html += '<div class="input-group mb-3">';
+//     html += '<input type="hidden" name="answer_number[' + i + ']" class="form-control">';
+//     html += '<textarea name="answer[' + i + ']" data-num="" class="ckeditor form-control m-input answerInput" autocomplete="off"></textarea>'; // Changed input to textarea
+//     html += '<div class="input-group-append">';
+//     html += '<button id="removeRow" type="button" class="btn btn-danger">ازالة</button>';
+//     html += '</div>';
+//     html += '<input type="radio" name="answer_status" value="' + i + '" class="form-control check_class"></span>';
+//     html += '</div>';
+    
+//     // var answerLength = $('.answerInput').length();
+//     var answer = $('.answerInput');
+
+//     if (answer.last().val() !== '' && answer.length < 3) {
+//         $('#newRow').append(html);
+//         var numQuestion = answer.length;
+//         $('')
+//     }
+// });
+
+// // remove row
+// $(document).on('click', '#removeRow', function () {
+//     $(this).closest('#inputFormRow').remove();
+// });
+
 
 
 </script>
