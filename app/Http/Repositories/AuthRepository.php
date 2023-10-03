@@ -195,7 +195,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
     }
-
+// abdo
     public function communication(): JsonResponse
     {
         try {

@@ -27,6 +27,7 @@ class CreateSettingsTable extends Migration
             $table->text('instagram_link')->nullable();
             $table->text('website_link')->nullable();
             $table->text('sms');
+            $table->string('sms_message');
             $table->text('messenger');
             $table->json('share_ar');
             $table->json('share_en');
