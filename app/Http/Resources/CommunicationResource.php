@@ -26,6 +26,7 @@ class CommunicationResource extends JsonResource
             'whatsapp_link' => $this->whatsapp_link,
             'messenger' => $this->messenger,
             'sms' => $this->sms,
+            'sms_message' => $this->sms_message,
             'phones' => PhoneCommunication::query()->get(),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d')
