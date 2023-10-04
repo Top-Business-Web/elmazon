@@ -342,7 +342,7 @@ class FavoriteController extends Controller
 
                     }
 
-                }//end else step
+                }
             }
         } catch (\Exception $exception) {
 
@@ -355,6 +355,17 @@ class FavoriteController extends Controller
     public function favoriteAll(): JsonResponse
     {
 
+       $all_video_favorites = $this->getAllVideosFavorites();
+       $all_exam_favorites = $this->getAllExamFavorites();
+
+        return self::returnResponseDataApi(compact('all_video_favorites','all_exam_favorites'), 'تم الحصول علي جميع المفضله للطالب', 200);
+    }
+
+
+
+    final public function getAllVideosFavorites(): array
+    {
+
 
         $video_favorites = DB::table('video_favorites')
             ->leftJoin('video_parts','video_parts.id','=','video_part_id')
@@ -362,21 +373,7 @@ class FavoriteController extends Controller
             ->leftJoin('video_basics','video_basics.id','=','video_basic_id')
             ->where('user_id','=',auth('user-api')->id())
             ->where('action','=','favorite')
-            ->select(
-                'video_favorites.id',
-                'video_parts.name_ar as video_part_name',
-                'video_resources.name_ar as video_resource_name',
-                'video_basics.name_ar as video_basic_name',
-                'video_parts.link as video_part_link',
-                'video_resources.video_link as video_resource_link',
-                'video_basics.video_link as video_basic_link',
-                'video_parts.video_time as video_part_time',
-                'video_resources.time as video_resource_time',
-                'video_basics.time as video_basic_time',
-                'video_favorites.video_part_id',
-                'video_favorites.video_resource_id',
-                'video_favorites.video_basic_id',
-            )
+            ->select('video_favorites.id', 'video_parts.name_ar as video_part_name', 'video_resources.name_ar as video_resource_name', 'video_basics.name_ar as video_basic_name', 'video_parts.link as video_part_link', 'video_resources.video_link as video_resource_link', 'video_basics.video_link as video_basic_link', 'video_parts.video_time as video_part_time', 'video_resources.time as video_resource_time', 'video_basics.time as video_basic_time', 'video_favorites.video_part_id', 'video_favorites.video_resource_id', 'video_favorites.video_basic_id')
             ->get();
 
         $all_video_favorites = [];
@@ -393,9 +390,15 @@ class FavoriteController extends Controller
         }
 
 
+        return $all_video_favorites;
+
+    }
 
 
-        //start exams
+
+    final public function getAllExamFavorites(): array
+    {
+
 
         $exam_favorites = DB::table('exams_favorites')
             ->leftJoin('online_exams','online_exams.id','=','online_exam_id')
@@ -403,32 +406,7 @@ class FavoriteController extends Controller
             ->leftJoin('life_exams','life_exams.id','=','life_exam_id')
             ->where('user_id','=',auth('user-api')->id())
             ->where('action','=','favorite')
-            ->select(
-                'exams_favorites.id',
-                'online_exams.name_ar as online_exam_name',
-                'all_exams.name_ar as all_exam_name',
-                'life_exams.name_ar as life_exam_name',
-                'exams_favorites.online_exam_id',
-                'exams_favorites.all_exam_id',
-                'exams_favorites.life_exam_id',
-                'online_exams.exam_type as online_exam_type',
-                'all_exams.exam_type as all_exam_type',
-                'online_exams.background_color as online_exam_background_color',
-                'all_exams.background_color as all_exam_background_color',
-                'online_exams.quize_minute as online_exam_minutes',
-                'all_exams.quize_minute as all_exam_minutes',
-                'life_exams.quiz_minute as life_exam_minutes',
-                'online_exams.answer_pdf_file as online_exam_answer_pdf_file',
-                'online_exams.answer_video_file as online_exam_answer_video_file',
-                'all_exams.answer_pdf_file as all_exam_answer_pdf_file',
-                'all_exams.answer_video_file as all_exam_answer_video_file',
-                'life_exams.answer_video_file as life_exam_answer_video_file',
-                'online_exams.pdf_num_questions as online_exam_pdf_num_questions',
-                'all_exams.pdf_num_questions as all_exam_pdf_num_questions',
-                'online_exams.pdf_file_upload as online_exam_pdf_file_upload',
-                'all_exams.pdf_file_upload as all_exam_pdf_file_upload',
-
-            )
+            ->select('exams_favorites.id', 'online_exams.name_ar as online_exam_name','all_exams.name_ar as all_exam_name', 'life_exams.name_ar as life_exam_name', 'exams_favorites.online_exam_id', 'exams_favorites.all_exam_id', 'exams_favorites.life_exam_id', 'online_exams.exam_type as online_exam_type', 'all_exams.exam_type as all_exam_type', 'online_exams.background_color as online_exam_background_color', 'all_exams.background_color as all_exam_background_color', 'online_exams.quize_minute as online_exam_minutes', 'all_exams.quize_minute as all_exam_minutes', 'life_exams.quiz_minute as life_exam_minutes', 'online_exams.answer_pdf_file as online_exam_answer_pdf_file', 'online_exams.answer_video_file as online_exam_answer_video_file', 'all_exams.answer_pdf_file as all_exam_answer_pdf_file', 'all_exams.answer_video_file as all_exam_answer_video_file', 'life_exams.answer_video_file as life_exam_answer_video_file', 'online_exams.pdf_num_questions as online_exam_pdf_num_questions', 'all_exams.pdf_num_questions as all_exam_pdf_num_questions', 'online_exams.pdf_file_upload as online_exam_pdf_file_upload', 'all_exams.pdf_file_upload as all_exam_pdf_file_upload', 'online_exams.type as online_exam_category_exam')
             ->get();
 
 
@@ -436,6 +414,7 @@ class FavoriteController extends Controller
         foreach ($exam_favorites as $exam_favorite){
 
             $examData['id'] = $exam_favorite->id;
+            $examData['exam_category_type'] = $exam_favorite->online_exam_name != null  ?  ($exam_favorite->online_exam_category_exam == 'class' ? 'subject_class' :  $exam_favorite->online_exam_category_exam) :  ($exam_favorite->all_exam_name != null  ?  "full_exam" : null);
             $examData['pdf_file_upload'] = $exam_favorite->online_exam_name != null  ?  ($exam_favorite->online_exam_type == 'pdf' ? asset('online_exams/pdf_file_uploads/'. $exam_favorite->online_exam_pdf_file_upload) : null ) :  ($exam_favorite->all_exam_name != null  ?  ($exam_favorite->all_exam_type == 'pdf' ? asset('all_exams/pdf_file_uploads/'. $exam_favorite->all_exam_pdf_file_upload) : null ) : null);
             $examData['image'] = $exam_favorite->online_exam_name != null  ?  ($exam_favorite->online_exam_type == 'online' ? asset('default/exam.png') : asset('default/pdf.png')) :  ($exam_favorite->all_exam_name != null  ? ($exam_favorite->all_exam_type == 'all_exam' ? asset('default/exam.png') : asset('default/pdf.png')) : asset('default/exam.png'));
             $examData['num_of_questions'] = $exam_favorite->online_exam_name != null  ?  ($exam_favorite->online_exam_type == 'online' ? DB::table('online_exam_questions')->where('online_exam_id','=',$exam_favorite->online_exam_id)->count() : $exam_favorite->online_exam_pdf_num_questions) :  ($exam_favorite->all_exam_name != null  ?  ($exam_favorite->all_exam_type == 'all_exam' ? DB::table('online_exam_questions')->where('all_exam_id','=',$exam_favorite->all_exam_id)->count() : $exam_favorite->all_exam_pdf_num_questions) : DB::table('online_exam_questions')->where('life_exam_id','=',$exam_favorite->life_exam_id)->count());
@@ -450,17 +429,7 @@ class FavoriteController extends Controller
             $all_exam_favorites[] = $examData;
         }
 
+        return $all_exam_favorites;
 
-
-//        $data['online_exams'] = OnlineExamNewResource::collection(OnlineExam::onlineExamFavorite());
-//        $data['all_exams'] = AllExamNewResource::collection(AllExam::allExamFavorite());
-//        $data['live_exams'] = LiveExamFavoriteResource::collection(LifeExam::liveExamFavorite());
-//        $data['video_basics'] = VideoBasicResource::collection(VideoBasic::basicFavorite());
-//        $data['video_resources'] = VideoResourceResource::collection(VideoResource::resourceFavorite());
-//        $data['video_parts'] = VideoPartNewResource::collection(VideoParts::favorite());
-
-
-
-        return self::returnResponseDataApi(compact('all_video_favorites','all_exam_favorites'), 'تم الحصول علي جميع المفضله للطالب', 200);
     }
 }
