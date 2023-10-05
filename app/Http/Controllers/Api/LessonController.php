@@ -645,30 +645,36 @@ class LessonController extends Controller
                 ->where('video_part_id','=',$video->id)
                 ->first();
 
-              if($request->minutes > $video->video_time){
 
-                  if($video->video_time ==  $videoOpened->minutes){
+            if(!$videoOpened){
+                return self::returnResponseDataApi(null, "يجب فتح هذا الفيديو اولا لتحديث المشاهده للطالب", 403,403);
 
-                      return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم استكمال مشاهده الفيديو من قبل", 420);
+            }else{
 
-                  }else{
-                      return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "عدد الدقائق المدخله بالطلب اكبر من عدد دقائق هذا الفيديو!", 419);
-                  }
+                if($request->minutes > $video->video_time){
 
-              }elseif ($video->video_time ==  $videoOpened->minutes){
+                    if($video->video_time ==  $videoOpened->minutes){
 
-                  return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم استكمال مشاهده الفيديو من قبل", 420);
+                        return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم استكمال مشاهده الفيديو من قبل", 420);
 
-              }else{
+                    }else{
+                        return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "عدد الدقائق المدخله بالطلب اكبر من عدد دقائق هذا الفيديو!", 419);
+                    }
 
-                  if(!$videoOpened){
-                      return self::returnResponseDataApi(null, "يجب فتح هذا الفيديو اولا لتحديث المشاهده للطالب", 403,403);
+                }elseif ($video->video_time ==  $videoOpened->minutes){
 
-                  }
+                    return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم استكمال مشاهده الفيديو من قبل", 420);
 
-                  $videoOpened->update(['minutes' => $request->minutes]);
-                  return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم تحديث عدد دقائق الفيديو بنجاح", 200);
-              }
+                }else{
+
+
+                    $videoOpened->update(['minutes' => $request->minutes]);
+                    return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم تحديث عدد دقائق الفيديو بنجاح", 200);
+                }
+            }
+
+
+
         }
 
 
