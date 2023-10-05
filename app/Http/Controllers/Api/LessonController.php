@@ -462,7 +462,7 @@ class LessonController extends Controller
 
             //start sum total of minutes to compare between video minutes and total user watch
             $videosIds = VideoParts::query()
-                ->where('lesson_id','=',$lesso->id)
+                ->where('lesson_id','=',$lesson->id)
                 ->pluck('id')
                  ->toArray();//example [1,2,3,4,5]
 
