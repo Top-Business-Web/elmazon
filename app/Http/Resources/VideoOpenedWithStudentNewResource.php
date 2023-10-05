@@ -20,7 +20,7 @@ class VideoOpenedWithStudentNewResource extends JsonResource
             'id' => $this->id,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'link' =>  asset('videos/'. $this->link),
-            'time' => (int)$this->video_time,
+            'time' => $this->video_time,
             'size' => 1000,
              'videoOpened' => new VideoOpenedResource(VideoOpened::query()
                  ->where('video_part_id','=',$this->id)
@@ -30,4 +30,4 @@ class VideoOpenedWithStudentNewResource extends JsonResource
 
         ];
     }
-}
+}//update class
