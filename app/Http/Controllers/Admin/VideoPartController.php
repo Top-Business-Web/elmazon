@@ -66,9 +66,19 @@ class VideoPartController extends Controller
                                     <label class="tgl-btn" dir="ltr" for="view-' . $videoParts->id . '"></label>';
                 })
                 ->editColumn('link', function ($videoParts) {
-                    return '<a target="_blank" href="' . asset('videos/' . $videoParts->link) . '">
+
+                    if($videoParts->is_youtube == true){
+
+                        return '<a target="_blank" href="' . $videoParts->youtube_link . '">
                                 <span class="badge badge-secondary">لينك الفيديو</span>
                             </a>';
+                    }else{
+
+                        return '<a target="_blank" href="' . asset('videos/' . $videoParts->link) . '">
+                                <span class="badge badge-secondary">لينك الفيديو</span>
+                            </a>';
+                    }
+
                 })
                 ->escapeColumns([])
                 ->make(true);
@@ -235,6 +245,8 @@ class VideoPartController extends Controller
             'note' => $request->note,
             'lesson_id' => $request->lesson_id,
             'link' => $videoPart ?? null,
+            'youtube_link' => $request->youtube_link,
+            'is_youtube' => $request->youtube_link != null ? 1 : 0,
             'video_time' => $request->video_time,
 
         ]);

@@ -24,6 +24,8 @@ class VideoParts extends Model
         'lesson_id',
         'link',
         'like_active',
+        'youtube_link',
+        'is_youtube',
         'video_time'
 
     ];

@@ -30,7 +30,7 @@ class StoreVideoPart extends FormRequest
                 'name_ar' => 'required',
                 'name_en' => 'required',
                 'lesson_id' => 'required',
-                'link' => 'required',
+                'link' => 'nullable',
                 'youtube_link' => 'nullable',
                 'video_time' => 'required|date_format:H:i:s',
 

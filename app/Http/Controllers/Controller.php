@@ -38,4 +38,22 @@ class Controller extends BaseController
 
 
 
+    public function saveImageInFolder($filePathLink,$folder): ?string
+    {
+
+        if ($filePathLink != null) {
+
+            $file = $filePathLink;
+            $folderPath = $folder;
+            $link = date('YmdHis') . "." . time().rand(1,4000).$file->getClientOriginalExtension();
+            $file->move($folderPath,$link);
+
+            return $link;
+        }else{
+
+            return null;
+        }
+    }
+
+
 }
