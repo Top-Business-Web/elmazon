@@ -17,6 +17,8 @@ class VideoBasic extends Model
         'background_color',
         'time',
         'video_link',
+        'youtube_link',
+        'is_youtube',
     ];
 
 

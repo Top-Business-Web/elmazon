@@ -8,6 +8,7 @@ use App\Models\CommentReplay;
 use App\Models\VideoBasic;
 use App\Models\Report;
 use App\Models\Comment;
+use App\Models\VideoResource;
 use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use Illuminate\Http\JsonResponse;
@@ -44,10 +45,19 @@ class VideoBasicController extends Controller
                         <label class="tgl-btn" dir="ltr" for="view-' . $video_basics->id . '"></label>';
                 })
                 ->editColumn('video_link', function ($video_basics) {
-                    if ($video_basics->video_link)
-                        return '<a href="' . asset($video_basics->video_link) . '">
-                                ' . $video_basics->video_link . '
+                    if ($video_basics->is_youtube == false){
+
+                        return '<a href="' . asset('videos_basics/videos/'.$video_basics->video_link) . '">
+                              اضغط لتشغبل الفيديو
                             </a>';
+                    }else{
+
+                        return '<a href="' . $video_basics->youtube_link . '">
+                                                            اضغط لتشغبل الفيديو
+
+                            </a>';
+                    }
+
                 })
                 ->editColumn('background_color', function ($video_basics) {
                     return '<input type="color" class="form-control" name="background_color"
@@ -249,15 +259,31 @@ class VideoBasicController extends Controller
 
     public function store(StoreVideoBasicRequest $request): JsonResponse
     {
-        $inputs = $request->all();
-        if ($request->hasFile('video_link')) {
-            $inputs['video_link'] = $this->saveImage($request->video_link, 'videos_basics/', 'photo');
+
+        if ($request->file('video_link')) {
+
+            $videoBasicLink = $this->saveImageInFolder($request->file('video_link'),'videos_basics/videos');
         }
-        if (VideoBasic::create($inputs)) {
+
+
+        $videoBasicCreate = VideoBasic::create([
+            'name_ar' => $request->name_ar,
+            'name_en' => $request->name_en,
+            'background_color' => $request->background_color,
+            'time' => $request->time,
+            'video_link' =>   $videoBasicLink ?? null,
+            'youtube_link' => $request->youtube_link ?? null,
+            'is_youtube' => $request->youtube_link != null ? 1 : 0,
+
+        ]);
+
+        if($videoBasicCreate->save()){
+
             $this->adminLog('تم اضافة فيديو اساسيات');
             return response()->json(['status' => 200]);
-        } else {
-            return response()->json(['status' => 405]);
+
+        }else{
+            return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
         }
     }
 
@@ -272,16 +298,31 @@ class VideoBasicController extends Controller
 
     public function update(StoreVideoBasicRequest $request, VideoBasic $videoBasic): JsonResponse
     {
-        $inputs = $request->all();
-        if ($request->hasFile('video_link')) {
-            $inputs['video_link'] = $this->saveImage($request->video_link, 'videos_basics/', 'photo');
+
+        if ($request->file('video_link')) {
+
+            $videoBasicLink = $this->saveImageInFolder($request->file('video_link'),'videos_basics/videos');
         }
 
-        if ($videoBasic->update($inputs)) {
+
+        $videoBasic->update([
+            'name_ar' => $request->name_ar,
+            'name_en' => $request->name_en,
+            'background_color' => $request->background_color,
+            'time' => $request->time,
+            'video_link' =>   $request->file('video_link') != null ? $videoBasicLink : $videoBasic->video_link,
+            'youtube_link' => $request->youtube_link ??$videoBasic->youtube_link,
+            'is_youtube' => $request->youtube_link != null ? 1 : 0,
+
+        ]);
+
+        if($videoBasic->save()){
+
             $this->adminLog('تم تعديل فيديو اساسيات');
             return response()->json(['status' => 200]);
-        } else {
-            return response()->json(['status' => 405]);
+
+        }else{
+            return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
         }
     }
 

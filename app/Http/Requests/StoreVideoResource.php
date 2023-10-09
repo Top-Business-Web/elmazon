@@ -23,18 +23,41 @@ class StoreVideoResource extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name_ar' => 'required',
-            'name_en' => 'required',
-            'image' => 'image:required',
-            'background_color' => 'required',
-            'time' => 'required',
-            'video_link' => 'nullable',
-            'type' => 'required',
-            'pdf_file' => 'nullable',
-            'season_id' => 'required',
-            'term_id' => 'required',
-        ];
+
+
+        if (request()->isMethod('post')) {
+
+            $rules = [
+                'name_ar' => 'required',
+                'name_en' => 'required',
+                'image' => 'required_if:type,video',
+                'background_color' => 'required',
+                'time' => 'required_if:type,video',
+                'video_link' => 'nullable',
+                'type' => 'required',
+                'pdf_file' => 'required_if:type,pdf',
+                'season_id' => 'required',
+                'term_id' => 'required',
+
+            ];
+
+        }elseif (request()->isMethod('PUT')) {
+
+            $rules = [
+                'name_ar' => 'required',
+                'name_en' => 'required',
+                'image' => 'nullable',
+                'background_color' => 'required',
+                'time' => 'required_if:type,video',
+                'video_link' => 'nullable',
+                'type' => 'required',
+                'pdf_file' => 'required_if:type,pdf',
+                'season_id' => 'required',
+                'term_id' => 'required',
+            ];
+        }
+
+        return $rules;
     }
 
     public function messages(): array

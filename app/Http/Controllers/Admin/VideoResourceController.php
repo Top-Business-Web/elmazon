@@ -10,9 +10,11 @@ use App\Models\CommentReplay;
 use App\Models\Term;
 use App\Models\Season;
 use App\Models\Report;
+use App\Models\VideoParts;
 use App\Models\VideoResource;
 use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -35,10 +37,10 @@ class VideoResourceController extends Controller
             return Datatables::of($video_resource)
                 ->addColumn('action', function ($video_resource) {
                     return '
-                            <button type="button" data-id="' . $video_resource->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                            <button type="button" data-id="' . $video_resource->id . '" class="btn btn-pill btn-info-light editBtn">تعديل</button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
                                     data-id="' . $video_resource->id . '" data-title="' . $video_resource->name_ar . '">
-                                    <i class="fas fa-trash"></i>
+                                   حذف
                             </button>
                             <a href="' . route('indexCommentResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-success-light"> تعليقات '. $video_resource->comment->count() .' <i class="fa fa-comment"></i></a>
                             <a href="' . route('ReportVideosResource', $video_resource->id) . '" data-id="' . $video_resource->id . '" class="btn btn-pill btn-danger-light"> بلاغات '. $video_resource->report->count() .' <i class="fe fe-book"></i></a>
@@ -61,19 +63,16 @@ class VideoResourceController extends Controller
                            value="' . $video_resource->background_color . '" disabled>';
                 })
                 ->editColumn('video_link', function ($video_resource) {
-                    if ($video_resource->video_link) {
-                        return '<a href="' . asset($video_resource->video_link) . '">'
-                            . ($video_resource->video_link ? $video_resource->video_link : '____') .
-                            '</a>';
+                    if ($video_resource->is_youtube == false) {
+                        return '<a href="' . asset('videos_resources/videos/'.$video_resource->video_link) . '">اضغط للوصول للفيديو</a>';
                     } else {
-                        return '____';
+                        return '<a href="' .$video_resource->youtube_link . '">اضغط للوصول للفيديو</a>';
+
                     }
                 })
                 ->editColumn('pdf_file', function ($video_resource) {
                     if ($video_resource->pdf_file)
-                        return '<a href="' . asset($video_resource->pdf_file) . '">'
-                               . ($video_resource->pdf_file ? $video_resource->pdf_file : '____') .
-                            '</a>';
+                        return '<a href="' . asset('videos_resources/pdf/'.$video_resource->pdf_file) . '">اضغط للوصول للملف الورقي</a>';
                     else
                     {
                         return '____';
@@ -99,9 +98,7 @@ class VideoResourceController extends Controller
         }
     }
 
-    // Index End
 
-    // Report Start
     public function ReportVideosResource(Request $request, $id)
     {
         $reports = Report::where('video_resource_id', $id)->get();
@@ -131,9 +128,6 @@ class VideoResourceController extends Controller
         }
     }
 
-    // Report End
-
-    // index comment
 
     public function indexCommentResource(Request $request,$id)
     {
@@ -166,7 +160,6 @@ class VideoResourceController extends Controller
         }
     }
 
-    // Video Part Comment
 
     public function indexCommentResourceReply(Request $request,$id)
     {
@@ -210,7 +203,7 @@ class VideoResourceController extends Controller
         return view('admin.video_resource.parts.store_comment', compact('id'));
     }
 
-    // Store Comment
+
     public function storeReplyVideo(Request $request)
     {
         $parentComment = Comment::find($request->id);
@@ -257,7 +250,6 @@ class VideoResourceController extends Controller
     }
 
 
-    // Create Start
 
     public function create()
     {
@@ -266,28 +258,49 @@ class VideoResourceController extends Controller
         return view('admin.video_resource.parts.create', compact('data'));
     }
 
-
     public function store(StoreVideoResource $request){
-        $inputs = $request->all();
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = $file->getClientOriginalName();
+        if ($request->file('image')) {
 
-            $file->move('videos_resources/images', $filename);
-            $inputs['image'] = $filename;
+            $imageLink = $this->saveImageInFolder($request->file('image'),'videos_resources/images');
         }
 
-        if ($request->type == 'video') {
-            $inputs['video_link'] = $this->saveImage($request->video_link, 'videos_resources/videos', 'photo');
-        } else {
-            $inputs['pdf_file'] = $this->saveImage($request->pdf_file, 'videos_resources/pdf', 'photo');
+
+        if ($request->file('video_link')) {
+
+            $videoResourceLink = $this->saveImageInFolder($request->file('video_link'),'videos_resources/videos');
+
         }
-        if (VideoResource::create($inputs)) {
-            $this->adminLog('تم اضافة فيديو مراجعة');
+
+
+        if ($request->file('pdf_file')) {
+
+            $pdfLink = $this->saveImageInFolder($request->file('pdf_file'), 'videos_resources/pdf');
+
+        }
+
+        $videoResourceCreate = VideoResource::create([
+            'name_ar' => $request->name_ar,
+            'name_en' => $request->name_en,
+            'image' => $imageLink ?? null,
+            'pdf_file' => $pdfLink ?? null,
+            'background_color' => $request->background_color,
+            'time' => $request->time,
+            'season_id' => $request->season_id,
+            'term_id' => $request->term_id,
+            'video_link' => $videoResourceLink ?? null,
+            'youtube_link' => $request->youtube_link ?? null,
+            'is_youtube' => $request->youtube_link != null ? 1 : 0,
+
+        ]);
+
+        if($videoResourceCreate->save()){
+
+            $this->adminLog('تم اضافة فيديو');
             return response()->json(['status' => 200]);
-        } else {
-            return response()->json(['status' => 405]);
+
+        }else{
+            return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
         }
     }
 
@@ -301,55 +314,55 @@ class VideoResourceController extends Controller
 
 
 
-    public function update(Request  $request, VideoResource $videoResource)
+    public function update(StoreVideoResource  $request, VideoResource $videoResource): JsonResponse
     {
 
-        if ($image = $request->hasFile('image')) {
+        if ($request->file('image')) {
 
-            $name = time() . rand(1,3000) .  $request->file('image')->getClientOriginalName();
-            $image->move('videos_resources/images/',$name);
-            $request->image = $name;
-        }
-
-        if ($request->type == 'video') {
-            if ($videoLink = $request->hasFile('video_link')) {
-                $videoName = time() . rand(1,3000) .  $request->file('video_link')->getClientOriginalName();
-                $request->file('video_link')->move('videos_resources/videos/',$videoName);
-                $request->video_link = $videoName;
-            }
-        }
-
-        if ($request->type == 'pdf') {
-            if ($pdfFile = $request->hasFile('pdf_file')) {
-                $pdfName = time() . rand(1,3000) .  $request->file('pdf_file')->getClientOriginalName();
-                $request->file('pdf_file')->move('videos_resources/pdf/',$pdfName);
-                $request->pdf_file = $pdfName;
-            }
+            $imageLink = $this->saveImageInFolder($request->file('image'),'videos_resources/images');
         }
 
 
-        $success = $videoResource->update([
+        if ($request->file('video_link')) {
+
+            $videoResourceLink = $this->saveImageInFolder($request->file('video_link'),'videos_resources/videos');
+
+        }
+
+
+        if ($request->file('pdf_file')) {
+
+            $pdfLink = $this->saveImageInFolder($request->file('pdf_file'), 'videos_resources/pdf');
+
+        }
+
+        $videoResource->update([
             'name_ar' => $request->name_ar,
             'name_en' => $request->name_en,
+            'image' =>  $request->file('image') != null ? $imageLink :  $videoResource->image,
+            'pdf_file' => $request->file('pdf_file') != null ? $pdfLink :   $videoResource->pdf_file,
             'background_color' => $request->background_color,
-            'type' => $request->type,
-            'image' => $request->hasFile('image') != null ? $name :  $videoResource->image,
+            'time' => $request->time,
             'season_id' => $request->season_id,
-            'video_link' => $request->video_link,
-            'pdf_file' => $request->pdf_file,
             'term_id' => $request->term_id,
+            'video_link' => $request->file('video_link') != null ? $videoResourceLink : $videoResource->video_link,
+            'youtube_link' => $request->youtube_link ?? $videoResource->youtube_link,
+            'is_youtube' => $request->youtube_link != null ? 1 : 0,
+
         ]);
 
-        if ($success) {
-            $this->adminLog('تم تعديل فيديو مراجعة');
+        if($videoResource->save()){
+
+            $this->adminLog('تم تعديل فيديو الشرح');
             return response()->json(['status' => 200]);
-        } else {
-            return response()->json(['status' => 405]);
+
+        }else{
+            return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
         }
     }
 
 
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         $terms = VideoResource::where('id', $request->id)->firstOrFail();
         $terms->delete();
@@ -357,8 +370,6 @@ class VideoResourceController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-
-    // Destroy End
 
     public function likeActive(Request $request)
     {

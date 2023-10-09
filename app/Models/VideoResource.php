@@ -19,6 +19,7 @@ class VideoResource extends Model
         'time',
         'video_link',
         'youtube_link',
+        'is_youtube',
         'type',
         'pdf_file',
         'season_id',
