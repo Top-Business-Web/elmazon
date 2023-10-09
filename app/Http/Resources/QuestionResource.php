@@ -28,4 +28,4 @@ class QuestionResource extends JsonResource
 
         ];
     }
-}
+}//last update question resource
