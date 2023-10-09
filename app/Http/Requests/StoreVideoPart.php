@@ -23,20 +23,65 @@ class StoreVideoPart extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name_ar' => 'required',
-            'name_en' => 'required',
-            'lesson_id' => 'required',
-            'link' => 'nullable|mimes:mp4',
-            'youtube_link' => 'nullable',
-            'video_time' => 'required|date_format:H:i:s',
-        ];
+
+        if (request()->isMethod('post')) {
+
+            $rules = [
+                'name_ar' => 'required',
+                'name_en' => 'required',
+                'lesson_id' => 'required',
+                'link' => 'required',
+                'youtube_link' => 'nullable',
+                'video_time' => 'required|date_format:H:i:s',
+
+            ];
+
+        }elseif (request()->isMethod('PUT')) {
+
+            $rules = [
+                'name_ar' => 'required',
+                'name_en' => 'required',
+                'lesson_id' => 'required',
+                'link' => 'nullable',
+                'youtube_link' => 'nullable',
+                'video_time' => 'required|date_format:H:i:s',
+
+
+            ];
+        }
+
+        return $rules;
     }
 
     public function messages(): array
     {
-        return [
-            'link.mimes' => 'يجب ان يكون الملف فيديو',
-        ];
+
+
+        if (request()->isMethod('post')) {
+
+            $messages = [
+                'name_ar.required' => 'عنوان فيديو الشرح باللغه العربيه مطلوب',
+                'name_en.required' => 'عنوان فيديو الشرح باللغه الانجليزيه مطلوب',
+                'link.required' => 'مسار الفيديو مطلوب',
+                'video_time.required' => 'توقيت الفيديو مطلوب',
+                'lesson_id.required' => 'اختر درس معين لاضافه الفيديو',
+
+            ];
+
+        }elseif (request()->isMethod('PUT')) {
+
+            $messages = [
+                'name_ar.required' => 'عنوان فيديو الشرح باللغه العربيه مطلوب',
+                'name_en.required' => 'عنوان فيديو الشرح باللغه الانجليزيه مطلوب',
+                'video_time.required' => 'توقيت الفيديو مطلوب',
+                'lesson_id.required' => 'اختر درس معين لاضافه الفيديو',
+
+            ];
+        }
+
+        return $messages;
+
+
+
     }
 }

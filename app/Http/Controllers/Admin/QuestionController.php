@@ -156,7 +156,7 @@ class QuestionController extends Controller
                         'answer_status' => ($answerStatus == $key) ? 'correct' : 'un_correct',
                         'answer_number' => $key,
                     ]);
-                } 
+                }
             }
         DB::commit();
         return response()->json(['status' => 200]);
@@ -165,8 +165,7 @@ class QuestionController extends Controller
 
     // Edit Start
 
-    public
-    function edit(Question $question)
+    public function edit(Question $question)
 
     {
         $seasons = Season::get();

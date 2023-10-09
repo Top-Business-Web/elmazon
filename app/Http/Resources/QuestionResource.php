@@ -17,7 +17,7 @@ class QuestionResource extends JsonResource
         return [
 
             'id' => $this->id,
-            'question' => $this->file_type == 'text' ? $this->question : asset('/question_images/'.$this->image),
+            'question' => $this->file_type == 'text' ?  strip_tags(str_replace('</p>', '',$this->question)) : asset('/question_images/'.$this->image),
             'question_type' => $this->question_type,
             'file_type' => $this->file_type,
             'degree' => $this->degree,

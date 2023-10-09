@@ -53,10 +53,10 @@ class UserController extends Controller
             return Datatables::of($users)
                 ->addColumn('action', function ($users) {
                     return '
-                            <button type="button" data-id="' . $users->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                            <button type="button" data-id="' . $users->id . '" class="btn btn-pill btn-info-light editBtn">تعديل</button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
                                     data-id="' . $users->id . '" data-title="' . $users->name . '">
-                                    <i class="fas fa-trash"></i>
+                                    حذف
                             </button>
                             <button type="button" data-id="' . $users->id . '" class="btn btn-pill btn-success-light renew">تجديد الاشتراك</i></button>
                             <a href="' . route('printReport', $users->id) . '" data-id="' . $users->id . '" class="btn btn-pill btn-info-light reportPrint"> تقرير الطالب <i class="fa fa-file-excel"></i></a>
