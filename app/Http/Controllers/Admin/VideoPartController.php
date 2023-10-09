@@ -229,7 +229,6 @@ class VideoPartController extends Controller
 
 
         $videoPartCreate = VideoParts::create([
-
             'name_ar' => $request->name_ar,
             'name_en' => $request->name_en,
             'month' => $request->month,

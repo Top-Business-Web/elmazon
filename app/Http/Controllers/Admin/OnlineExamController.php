@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OnlineExamRequest;
-use App\Models\Degree;
 use App\Models\ExamDegreeDepends;
 use App\Models\Lesson;
 use App\Models\OnlineExam;
@@ -58,9 +57,6 @@ class OnlineExamController extends Controller
         }
     }
 
-    // End Index
-
-    // Index Question START
 
     public function indexQuestion(request $request, $id)
     {
@@ -83,9 +79,7 @@ class OnlineExamController extends Controller
         }
     }
 
-    // End Question Index
 
-    // Add Question
 
     public function addQuestion(Request $request)
     {
@@ -99,9 +93,6 @@ class OnlineExamController extends Controller
     }
 
 
-    // End Add Question
-
-    // Start Store
 
     public function create()
     {
@@ -110,23 +101,7 @@ class OnlineExamController extends Controller
         return view('admin.online_exam.parts.create', compact('seasons', 'terms'));
     }
 
-    // Store End
 
-    // Question Start
-
-    //    public function indexQuestion(Request $request)
-    //    {
-    //        $exam = OnlineExam::find($request->id);
-    //        $questions = Question::where('season_id', $exam->season_id)
-    //            ->where('term_id', $exam->term_id)
-    //            ->get();
-    //        $online_questions_ids = OnlineExamQuestion::where(['online_exam_id' => $request->id])->pluck('question_id')->toArray();
-    //        return view('admin.online_exam.parts.questions', compact('questions', 'exam', 'online_questions_ids'));
-    //    }
-
-    // Question End
-
-    // User Exam Start
 
     public function usersExam(Request $request)
     {
@@ -140,9 +115,7 @@ class OnlineExamController extends Controller
         return view('admin.online_exam.parts.text_exam_users', compact('exam', 'users'));
     }
 
-    // User Exam End
 
-    // Paper Exam Start
 
     public function paperExam($user_id, $exam_id)
     {
@@ -163,7 +136,7 @@ class OnlineExamController extends Controller
         $exam_depends_for_user = ExamDegreeDepends::where('online_exam_id', $exam_id)->where('user_id', '=', $user_id)
             ->where('exam_depends', '=', 'yes')->first();
 
-        //        return $text_exam_users_completed;
+
         return view(
             'admin.online_exam.parts.exam_paper',
             compact(
@@ -193,14 +166,13 @@ class OnlineExamController extends Controller
         return response()->json(['status' => 200, 'message' => 'تم اعتماد درجه الامتحان للطالب بنجاح']);
     }
 
-    // Select Term
+
     public function selectTerm(Request $request)
     {
         $terms = Term::where('season_id', $request->season_id)->pluck('name_ar', 'id')->toArray();
         return $terms;
     }
 
-    // Delete Question
 
     public function deleteQuestion(Request $request)
     {
@@ -208,14 +180,12 @@ class OnlineExamController extends Controller
         $questions->delete();
     }
 
-    // Delete Question
 
-    // Examble Type Start
 
     public function examble_type(Request $request)
     {
         if ($request->ajax()) {
-            if ($request->type == 'App\Models\Lesson') {
+            if ($request->type == 'lesson') {
 
                 $subjectClass = SubjectClass::where('season_id', $request->season)
                     ->where('term_id', $request->term)
@@ -225,12 +195,12 @@ class OnlineExamController extends Controller
                     $data = Lesson::whereIn('subject_class_id', $subjectClass)
                         ->pluck('name_ar', 'id')->toArray();
                 }
-            } else if ($request->type == 'App\Models\SubjectClass') {
+            } else if ($request->type == 'class') {
 
                 $data = SubjectClass::where('season_id', $request->season)
                     ->where('term_id', $request->term)
                     ->pluck('name_ar', 'id')->toArray();
-            } else if ($request->type == 'App\Models\VideoParts') {
+            } else if ($request->type == 'video') {
                 $data = videoParts::pluck('name_ar', 'id')->toArray();
             }
             if (!$data) {
@@ -241,42 +211,39 @@ class OnlineExamController extends Controller
         }
     }
 
-    // Examble Type End
 
-    // Store End
-
-    public
-    function store(OnlineExamRequest $request, OnlineExam $online_exam)
+    public function store(OnlineExamRequest $request,OnlineExam $online_exam)
     {
-        //        dd(file_size(asset('online_exams/pdf_answers/1.pdf')));
+
         $inputs = $request->all();
-        //        dd($request->pdf_file_upload);
+
         if ($request->has('pdf_file_upload')) {
             $inputs['pdf_file_upload'] = saveFile('online_exams/pdf_file_uploads', $request->pdf_file_upload);
-        } // end save file
+        }
 
         if ($request->has('answer_pdf_file')) {
             $inputs['answer_pdf_file'] = saveFile('online_exams/pdf_answers', $request->answer_pdf_file);
-        } // end save file
+        }
 
         if ($request->has('answer_video_file')) {
             $inputs['answer_video_file'] = saveFile('online_exams/videos_answers', $request->answer_video_file);
-        } // end save file
+        }
 
         if ($request->has('image_result')) {
             $inputs['image_result'] = saveFile('assets/uploads/online_exams/image_result', $request->image_result);
-        } // end save file
+        }
 
-        if ($request->examable_type == 'App\Models\Lesson') {
+        if ($request->examable_type == 'lesson') {
             $inputs['type'] = 'lesson';
             $inputs['lesson_id'] = $request->examable_id;
-        } elseif ($request->examable_type == 'App\Models\class') {
+        } elseif ($request->examable_type == 'class') {
             $inputs['type'] = 'class';
             $inputs['class_id'] = $request->examable_id;
-        } elseif ($request->examable_type == 'App\Models\VideoParts') {
+        } elseif ($request->examable_type == 'video') {
             $inputs['type'] = 'video';
             $inputs['video_id'] = $request->examable_id;
-        } // end if
+        }
+
 
         if ($online_exam->create($inputs)) {
             $this->adminLog('تم اضافة امتحان اونلاين');
@@ -284,10 +251,9 @@ class OnlineExamController extends Controller
         } else {
             return response()->json(['status' => 405]);
         }
-    } // Store End
+    }
 
-    public
-    function edit(OnlineExam $onlineExam)
+    public function edit(OnlineExam $onlineExam)
     {
         $seasons = Season::all();
         $terms = Term::all();
@@ -296,8 +262,7 @@ class OnlineExamController extends Controller
 
     // Update Start
 
-    public
-    function update(OnlineExamRequest $request, OnlineExam $onlineExam)
+    public function update(OnlineExamRequest $request, OnlineExam $onlineExam)
     {
 
         $inputs = $request->all();
@@ -308,14 +273,14 @@ class OnlineExamController extends Controller
                 unlink($onlineExam->pdf_file_upload);
             }
             $inputs['pdf_file_upload'] = saveFile('online_exams/pdf_file_uploads', $request->pdf_file_upload);
-        } // end save file
+        }
 
         if ($request->has('answer_pdf_file')) {
             if (file_exists($onlineExam->answer_pdf_file)) {
                 unlink($onlineExam->answer_pdf_file);
             }
             $inputs['answer_pdf_file'] = saveFile('online_exams/pdf_answers', $request->answer_pdf_file);
-        } // end save file
+        }
 
         if ($request->has('answer_video_file')) {
             if (file_exists($onlineExam->answer_pdf_file)) {
@@ -355,8 +320,7 @@ class OnlineExamController extends Controller
 
     // Destroy Start
 
-    public
-    function destroy(Request $request)
+    public function destroy(Request $request)
     {
         $onlineExam = OnlineExam::where('id', $request->id)->firstOrFail();
         $onlineExam->delete();

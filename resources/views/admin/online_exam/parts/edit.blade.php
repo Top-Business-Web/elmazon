@@ -18,12 +18,12 @@
 
 
             <div class="row d-none pdfType">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="pdf_num_questions" class="form-control-label">عدد الاسئلة</label>
                     <input type="number" class="form-control" name="pdf_num_questions"
                            value="{{ $onlineExam->pdf_num_questions }}" style="text-align: center">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="pdf_file_upload" class="form-control-label">ملف الpdf</label>
                     <input type="file" class="form-control" name="pdf_file_upload"
                            value="{{ $onlineExam->pdf_file_upload }}" style="text-align: center">
@@ -32,12 +32,12 @@
 
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="answer_pdf_file" class="form-control-label">ملف الاجابات pdf</label>
                     <input type="file" class="form-control" name="answer_pdf_file"
                            value="{{ $onlineExam->answer_pdf_file }}" style="text-align: center">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="answer_video_file" class="form-control-label">الاجابات فيديو</label>
                     <input type="file" class="form-control" name="answer_video_file"
                            value="{{ $onlineExam->answer_video_file }}" style="text-align: center">
@@ -46,23 +46,23 @@
 
 
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">الدرجة</label>
                     <input type="number" class="form-control" name="degree" value="{{ $onlineExam->degree }}"
                            style="text-align: center" required>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-12 mt-3">
                     <label for="date_exam" class="form-control-label">موعد الامتحان</label>
                     <input type="date" class="form-control" name="date_exam" value="{{ $onlineExam->date_exam }}"
                            style="text-align: center" required>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label"> وقت الامتحان</label>
                     <input type="number" class="form-control" name="quize_minute"
                            value="{{ $onlineExam->quize_minute }}" style="text-align: center"
                            placeholder="الوقت بالدقائق" required>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label"> عدد المحاولات </label>
                     <input type="number" class="form-control" name="trying_number"
                            value="{{ $onlineExam->trying_number }}" style="text-align: center"
@@ -71,12 +71,12 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
                     <input type="text" class="form-control" value="{{ $onlineExam->name_ar }}" name="name_ar"
                            style="text-align: center" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
                     <input type="text" class="form-control" value="{{ $onlineExam->name_en }}" name="name_en"
                            style="text-align: center" required>
@@ -84,7 +84,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">الصف</label>
                     <select name="season_id"
                             class="form-control selectSeason" @selected( old('season_id',$onlineExam->season_id))  required>
@@ -95,7 +95,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">تيرم</label>
                     <select name="term_id"
                             class="form-control selectTerm" @selected( old('term_id',$onlineExam->term_id)) required>
@@ -105,7 +105,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="type" class="form-control-label">النوع</label>
                     <Select name="examable_type" id="type" class="form-control type_choose"
                             required="required" @selected( old('examable_type',$onlineExam->type))>
@@ -115,11 +115,11 @@
                         <option value="App\Models\VideoParts" style="text-align: center">الفيديو</option>
                     </Select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">لون الخلفية</label>
                     <input type="color" class="form-control" value="{{ $onlineExam->background_color }}" name="background_color" required>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12 mt-3">
                     <label for="lesson" class="form-control-label typeName">الدرس</label>
                     <Select name="examable_id" class="form-control type_ajax_choose" required="required">
                         <option value="{{ $onlineExam->term_id ?? $onlineExam->class_id ?? $onlineExam->video_id }}">
@@ -129,21 +129,21 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label"> نصيحة</label>
                     <input type="text" class="form-control" value="{{ $onlineExam->title_result }}" name="title_result" style="text-align: center" required>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">صورة النصيحة</label>
                     <input type="file" class="form-control" name="image_result" {{ $onlineExam->image_result }} style="text-align: center">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label"> وصف النصيحة</label>
                     <textarea class="form-control" name="description_result" rows="4" required>{{ $onlineExam->description_result }}</textarea>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label class="control-label">التعليمات بالعربية</label>
                     <div class="form-group itemItems1">
                         @if($onlineExam->instruction_ar != null)
@@ -161,7 +161,7 @@
                 <span class="badge Issue1 badge-danger"></span>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label class="control-label">التعليمات بالانجليزية</label>
                     <div class="form-group itemItems2">
                         @if($onlineExam->instruction_en != null)

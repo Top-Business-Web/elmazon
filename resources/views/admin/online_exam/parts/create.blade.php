@@ -3,9 +3,9 @@
         @csrf
         <div class="form-group">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">نوع الامتحان</label>
-                    <select name="exam_type" class="form-control" id="exam_type" required="required">
+                    <select name="exam_type" class="form-control" id="exam_type">
                         <option value="" selected disabled>اختر نوع الامتحان</option>
                         <option value="pdf">PDF</option>
                         <option value="online">Online</option>
@@ -15,11 +15,11 @@
 
 
             <div class="row d-none pdfType">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="pdf_num_questions" class="form-control-label">عدد الاسئلة</label>
                     <input type="number" class="form-control" name="pdf_num_questions" style="text-align: center">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="pdf_file_upload" class="form-control-label">ملف الpdf</label>
                     <input type="file" class="form-control" name="pdf_file_upload" style="text-align: center">
                 </div>
@@ -27,53 +27,53 @@
 
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="answer_pdf_file" class="form-control-label">ملف الاجابات pdf</label>
-                    <input type="file" class="form-control" name="answer_pdf_file" style="text-align: center" required>
+                    <input type="file" class="form-control" name="answer_pdf_file" style="text-align: center">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="answer_video_file" class="form-control-label">الاجابات فيديو</label>
-                    <input type="file" class="form-control" name="answer_video_file" style="text-align: center" required>
+                    <input type="file" class="form-control" name="answer_video_file" style="text-align: center">
                 </div>
             </div>
 
 
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">الدرجة</label>
-                    <input type="number" class="form-control" name="degree" style="text-align: center" required >
+                    <input type="number" class="form-control" name="degree" style="text-align: center">
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-12 mt-3">
                     <label for="date_exam" class="form-control-label">موعد الامتحان</label>
-                    <input type="date" class="form-control" name="date_exam" style="text-align: center" required>
+                    <input type="date" class="form-control" name="date_exam" style="text-align: center">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label"> وقت الامتحان</label>
                     <input type="number" class="form-control" name="quize_minute" style="text-align: center"
-                           placeholder="الوقت بالدقائق" required>
+                           placeholder="الوقت بالدقائق">
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label"> عدد المحاولات </label>
                     <input type="number" class="form-control" value="" name="trying_number" style="text-align: center"
-                           placeholder="عدد المحاولات" required>
+                           placeholder="عدد المحاولات">
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
-                    <input type="text" class="form-control" name="name_ar" style="text-align: center" required>
+                    <input type="text" class="form-control" name="name_ar" style="text-align: center">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
-                    <input type="text" class="form-control" name="name_en" style="text-align: center" required>
+                    <input type="text" class="form-control" name="name_en" style="text-align: center">
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">الصف</label>
-                    <Select name="season_id" class="form-control selectSeason" required>
+                    <Select name="season_id" class="form-control selectSeason">
                         <option selected disabled style="text-align: center">اختر الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
@@ -81,70 +81,70 @@
                         @endforeach
                     </Select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">تيرم</label>
-                    <Select name="term_id" class="form-control selectTerm" required>
+                    <Select name="term_id" class="form-control selectTerm">
                         <option selected disabled style="text-align: center">اختر تيرم</option>
                     </Select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="type" class="form-control-label">النوع</label>
-                    <Select name="examable_type" id="type" class="form-control type_choose" required="required">
+                    <Select name="examable_type" id="type" class="form-control type_choose">
                         <option selected disabled style="text-align: center">اختار النوع</option>
-                        <option value="App\Models\Lesson" style="text-align: center">درس</option>
-                        <option value="App\Models\SubjectClass" style="text-align: center">فصل</option>
-                        <option value="App\Models\VideoParts" style="text-align: center">الفيديو</option>
+                        <option value="lesson" style="text-align: center">درس</option>
+                        <option value="class" style="text-align: center">فصل</option>
+                        <option value="video" style="text-align: center">الفيديو</option>
                     </Select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">لون الخلفية</label>
-                    <input type="color" class="form-control" value="" name="background_color" required>
+                    <input type="color" class="form-control" value="" name="background_color">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <label for="name_ar" class="form-control-label"> نصيحة</label>
-                    <input type="text" class="form-control" name="title_result" style="text-align: center" required>
+                <div class="col-md-12 mt-3">
+                    <label for="name_ar" class="form-control-label"> عنوان النصيحه </label>
+                    <input type="text" class="form-control" name="title_result" style="text-align: center">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">صورة النصيحة</label>
-                    <input type="file" class="form-control" name="image_result" style="text-align: center" required>
+                    <input type="file" class="form-control" name="image_result" style="text-align: center">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label"> وصف النصيحة</label>
-                    <textarea class="form-control" name="description_result" rows="4" required></textarea>
+                    <textarea class="form-control" name="description_result" rows="4"></textarea>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="lesson" class="form-control-label typeName">الدرس</label>
-                    <Select name="examable_id" class="form-control type_ajax_choose" required="required">
+                    <Select name="examable_id" class="form-control type_ajax_choose">
                     </Select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label class="control-label">التعليمات بالعربية</label>
                     <div class="form-group itemItems1">
                         <input type="text" name="instruction_ar[]" class="form-control InputItemExtra1" value="">
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <button type="button" class=" mt-5 btn btn-primary MoreItem1">المزيد</button>
                     <button type="button" class=" mt-5 btn btn-danger delItem1">حذف</button>
                 </div>
                 <span class="badge Issue1 badge-danger"></span>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label class="control-label">التعليمات بالانجليزية</label>
                     <div class="form-group itemItems2">
                         <input type="text" name="instruction_en[]" class="form-control InputItemExtra2" value="">
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <button type="button" class=" mt-5 btn btn-primary MoreItem2">المزيد</button>
                     <button type="button" class=" mt-5 btn btn-danger delItem2">حذف</button>
                 </div>

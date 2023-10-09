@@ -120,6 +120,7 @@ class OnlineExamQuestionController extends Controller{
         if(in_array(request()->exam_type,['video','lesson','class'])){
 
             $exam = OnlineExam::query()
+                ->where('exam_type','=','online')
                 ->where('season_id','=',request()->season_id)
                 ->where('term_id','=',request()->term_id)
                 ->where('type','=',request()->exam_type)
