@@ -45,7 +45,8 @@ class VideoPartDetailsNewResource extends JsonResource
 //                round((( strtotime($user_watch_video->minutes) - strtotime('TODAY')) / (strtotime($this->video_time) - strtotime('TODAY'))) * 100 ,2) : 0,
 
         'progress' => 0,
-            'link' =>  asset('videos/'. $this->link),
+            'link' =>  $this->is_youtube == true ? $this->youtube_link :asset('videos/'. $this->link),
+            'is_youtube' =>  $this->is_youtube,
             'time' => (int)$this->video_time,
             'rate' =>  $video_rate ? $video_rate->action : 'no_rate',
             'total_watch' => (int)$this->video_watches->count(),
