@@ -60,8 +60,9 @@ class VideoDetailsResource extends JsonResource
 
             'id'            => $this->id,
             'name'          => lang() == 'ar' ?$this->name_ar : $this->name_en,
-            'link'          =>   request()->type == 'video_basic' ||  request()->type == 'video_resource' ? request()->type == 'video_basic' ? asset('videos_basics/videos/'. $this->video_link) : asset('videos_resources/videos/'. $this->video_link) : asset('videos/'. $this->link),
+            'link'          =>   request()->type == 'video_basic' ||  request()->type == 'video_resource' ? request()->type == 'video_basic' ? ($this->is_youtube == true ? $this->youtube_link : asset('videos_basics/videos/'. $this->video_link)) : ($this->is_youtube == true ? $this->youtube_link : asset('videos_resources/videos/'. $this->video_link)) : ($this->is_youtube == true ? $this->youtube_link : asset('videos/'. $this->link)),
             'rate'          =>  $video_rate ? $video_rate->action : 'dislike',
+            'is_youtube'          =>  $this->is_youtube,
             'favorite'      => $favorite ? $favorite->action : 'un_favorite',
             'total_watch'   => $total_views,
             'total_like'    => $like_video_count,
