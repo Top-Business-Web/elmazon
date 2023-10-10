@@ -215,13 +215,13 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         try {
             $user = Auth::guard('user-api')->user();
             $user['token'] = $request->bearerToken();
-    
+
             return self::returnResponseDataApi(new UserResource($user), "تم الحصول على بيانات الطالب بنجاح", 200);
         } catch (\Exception $exception) {
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
     }
-    
+
 
 
 
@@ -498,6 +498,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         try {
 
             $subject_class = SubjectClass::query()
+                ->whereHas('term', fn (Builder $builder) =>
+                $builder->where('status', '=', 'active')
+                    ->where('season_id', '=', auth('user-api')->user()->season_id))
+                ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                 ->first();
 
             $first_lesson = Lesson::query()
@@ -512,7 +516,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 return self::returnResponseDataApi(null, "لا يوجد قائمه دروس لفتح اول درس", 404, 404);
             }
 
-            $subject_class_opened = OpenLesson::where('user_id', '=', Auth::guard('user-api')->id())
+            $subject_class_opened = OpenLesson::query()
+            ->where('user_id', '=', Auth::guard('user-api')->id())
                 ->where('subject_class_id', '=', $subject_class->id);
 
             $lesson_opened = OpenLesson::query()
@@ -531,34 +536,34 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ]);
             }
 
-            $life_exam = LifeExam::query()
-                ->whereHas('term', fn (Builder $builder) =>
-                $builder->where('status', '=', 'active')
-                    ->where('season_id', '=', auth('user-api')->user()->season_id))
-                ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
-                ->where('date_exam', '=', Carbon::now()->format('Y-m-d'))
-                ->first();
-
-
-            if ($life_exam) {
-                $now = Carbon::now();
-                $start = Carbon::createFromTimeString($life_exam->time_start);
-                $end = Carbon::createFromTimeString($life_exam->time_end);
-
-                $degree_depends = ExamDegreeDepends::query()
-                    ->where('user_id', '=', Auth::guard('user-api')->id())
-                    ->where('life_exam_id', '=', $life_exam->id);
-
-                if ($now->isBetween($start, $end)) {
-                    $id = $life_exam->id;
-                } elseif ($degree_depends->exists()) {
-                    $id = null;
-                } else {
-                    $id = null;
-                }
-            } else {
-                $id = null;
-            }
+//            $life_exam = LifeExam::query()
+//                ->whereHas('term', fn (Builder $builder) =>
+//                $builder->where('status', '=', 'active')
+//                    ->where('season_id', '=', auth('user-api')->user()->season_id))
+//                ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+//                ->where('date_exam', '=', Carbon::now()->format('Y-m-d'))
+//                ->first();
+//
+//
+//            if ($life_exam) {
+//                $now = Carbon::now();
+//                $start = Carbon::createFromTimeString($life_exam->time_start);
+//                $end = Carbon::createFromTimeString($life_exam->time_end);
+//
+//                $degree_depends = ExamDegreeDepends::query()
+//                    ->where('user_id', '=', Auth::guard('user-api')->id())
+//                    ->where('life_exam_id', '=', $life_exam->id);
+//
+//                if ($now->isBetween($start, $end)) {
+//                    $id = $life_exam->id;
+//                } elseif ($degree_depends->exists()) {
+//                    $id = null;
+//                } else {
+//                    $id = null;
+//                }
+//            } else {
+//                $id = null;
+//            }
 
             $classes = SubjectClass::query()
                 ->whereHas('term', fn (Builder $builder) =>
@@ -577,7 +582,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->latest()
                 ->get();
 
-            $data['life_exam'] = $id;
+            $data['life_exam'] = null;
             $data['sliders'] = SliderResource::collection($sliders);
             $data['videos_basics'] = VideoBasicResource::collection(VideoBasic::get());
             $data['classes'] = SubjectClassNewResource::collection($classes);
@@ -594,7 +599,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function allClasses(): JsonResponse
     {
 
-        $classes = SubjectClass::whereHas('term', fn (Builder $builder) =>
+        $classes = SubjectClass::query()
+        ->whereHas('term', fn (Builder $builder) =>
         $builder->where('status', '=', 'active')
             ->where('season_id', '=', auth('user-api')->user()->season_id))
             ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
