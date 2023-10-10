@@ -695,7 +695,155 @@ class LessonController extends Controller
 
                     $videoOpened->update(['minutes' => $request->minutes]);
 
-                       //start open next video
+
+               /*
+                * start update next subject_class ==========================================================================================================================
+                */
+
+                    $idOfSubjectClass =  $video->lesson->subject_class_id;
+
+                    $subject_class = SubjectClass::query()
+                        ->where('id', '=', $idOfSubjectClass)
+                        ->first();
+
+
+                    $next_subject_class = SubjectClass::query()
+                        ->orderBy('id', 'ASC')->get()
+                        ->except( $idOfSubjectClass)->where('id', '>', $idOfSubjectClass)
+                        ->first();
+
+
+                    $Ids = Lesson::query()
+                        ->where('subject_class_id', '=', $subject_class->id)
+                        ->pluck('id')->toArray();// ids of lessons belongs to subject class * example [1,2,3,4,5,6]
+
+
+                    $allOfLessons = Lesson::query()
+                        ->whereIn('id',$Ids)->get();
+
+                    $totalOfMinutesVideos = [];
+                    $totalOfMinutesUserWatched = [];
+
+                    foreach ($allOfLessons as $lesson){
+
+                        $videosIds = VideoParts::query()
+                            ->where('lesson_id','=',$lesson->id)
+                            ->pluck('id')
+                            ->toArray();//example [1,2,3,4,5]
+
+                        $sumMinutesOfAllVideosBelongsTiThisLesson = VideoParts::query()
+                            ->where('lesson_id','=',$lesson->id)
+                            ->pluck('video_time')
+                            ->toArray();// example 20 minutes
+
+                        $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
+                            ->whereIn('video_part_id',$videosIds)
+                            ->where('user_id', '=', Auth::guard('user-api')->id())
+                            ->pluck('minutes')
+                            ->toArray();//example 20 minutes
+
+                        $totalOfMinutesVideos[] =  $sumMinutesOfAllVideosBelongsTiThisLesson;
+                        $totalOfMinutesUserWatched[] = $sumAllOfMinutesVideosStudentAuth;
+
+                    }
+
+
+                    $total = number_format(((getAllSecondsFromTimes($totalOfMinutesUserWatched) / getAllSecondsFromTimes($totalOfMinutesVideos)) * 100),2);
+
+                    if($total >= 65){
+
+                        if ($next_subject_class) {
+
+                            $next_subject_class_open = OpenLesson::query()
+                                ->where('user_id', '=', Auth::guard('user-api')->id())
+                                ->where('subject_class_id', '=', $next_subject_class->id)
+                                ->first();
+
+
+                            if (!$next_subject_class_open) {
+                                OpenLesson::create([
+                                    'user_id' => Auth::guard('user-api')->id(),
+                                    'subject_class_id' => $next_subject_class->id,
+                                ]);
+                            }
+
+                            return self::returnResponseDataApi(new SubjectClassNewResource($next_subject_class), "تم الوصول الي الدرس التالي", 200);
+
+                        }
+                    }
+
+
+                /*
+                * end update next subject_class ==========================================================================================================================
+                */
+
+                    /*
+                * start update next lesson ==========================================================================================================================
+                */
+
+
+                    $lesson = Lesson::query()
+                        ->where('id', '=',$video->lesson_id)
+                        ->first();
+
+                    $next_lesson = Lesson::query()
+                        ->orderBy('id', 'ASC')->get()
+                        ->except($video->lesson_id)
+                        ->where('id', '>', $video->lesson_id)
+                        ->first();
+
+
+                    //start sum total of minutes to compare between video minutes and total user watch
+                    $videosIds = VideoParts::query()
+                        ->where('lesson_id','=',$lesson->id)
+                        ->pluck('id')
+                        ->toArray();//example [1,2,3,4,5]
+
+                    $sumMinutesOfAllVideosBelongsTiThisLesson = VideoParts::query()
+                        ->where('lesson_id','=',$lesson->id)
+                        ->pluck('video_time')
+                        ->toArray();// example 130 seconds
+
+                    $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
+                        ->whereIn('video_part_id',$videosIds)
+                        ->where('user_id', '=', Auth::guard('user-api')->id())
+                        ->pluck('minutes')
+                        ->toArray();//example 120 seconds
+
+
+                    $total = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfAllVideosBelongsTiThisLesson)) * 100),2);
+
+                    if ($next_lesson) {
+
+                        if($total >= 65){
+
+                            $next_lesson_open = OpenLesson::query()
+                                ->where('user_id', '=', Auth::guard('user-api')->id())
+                                ->where('lesson_id', '=', $next_lesson->id)
+                                ->first();
+
+                            if (!$next_lesson_open) {
+                                OpenLesson::create([
+                                    'user_id' => Auth::guard('user-api')->id(),
+                                    'lesson_id' => $next_lesson->id,
+                                ]);
+                            }
+                        }
+                    }//if find next lesson
+
+
+
+                    /*
+                      * end update next lesson ==========================================================================================================================
+                      */
+
+
+
+
+                    /*
+                   * start update next video ==========================================================================================================================
+                   */
+
                         $videoOpenedByUser = VideoOpened::query()
                             ->where('user_id', '=', Auth::guard('user-api')->id())
                             ->where('video_part_id', '=', $video->id)
@@ -703,13 +851,12 @@ class LessonController extends Controller
 
                         if ($videoOpenedByUser) {
 
-                            //sum minutes of video
                             $sumMinutesOfVideo = VideoParts::query()
                                 ->where('id','=',$id)
                                 ->pluck('video_time')
                                 ->toArray();// example 130 seconds
 
-                            //sum watched for user auth in this video
+
                             $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
                                 ->where('video_part_id','=',$id)
                                 ->where('user_id', '=', Auth::guard('user-api')->id())
@@ -717,7 +864,7 @@ class LessonController extends Controller
                                 ->toArray();//example 120 seconds
 
 
-                            // total per watched in this video
+
                             $total = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfVideo)) * 100),2);
 
                             if($total >= 65){
@@ -727,6 +874,7 @@ class LessonController extends Controller
                             }
 
                         } else {
+
                             return self::returnResponseDataApi(null, "يجب فتح الملف السابق", 415, 200);
                         }
 
@@ -753,7 +901,7 @@ class LessonController extends Controller
                                     'video_part_id' => $nextFileToWatch->id,
                                 ]);
 
-                            }
+                            }//end if
 
                         } else {
 
@@ -763,7 +911,10 @@ class LessonController extends Controller
 
                         return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم تحديث عدد دقائق الفيديو بنجاح", 200);
 
-                      //end open next video
+
+                    /*
+                   * end update next video ==========================================================================================================================
+                   */
 
                 }
 
