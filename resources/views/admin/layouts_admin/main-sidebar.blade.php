@@ -229,16 +229,16 @@
         @endcan
 
 
-        @can('الفيديوهات الاساسية ملفات ورقية')
-            <li class="slide">
-                <a class="side-menu__item" href="{{ route('videoBasicPdf.index') }}">
-                    <i class="icon icon-control-play side-menu__icon"></i>
-                    <span class="side-menu__label">
-                        الملفات الورقيه لفيديوهات الاساسيات
-                    </span>
-                </a>
-            </li>
-        @endcan
+{{--        @can('الفيديوهات الاساسية ملفات ورقية')--}}
+{{--            <li class="slide">--}}
+{{--                <a class="side-menu__item" href="{{ route('videoBasicPdf.index') }}">--}}
+{{--                    <i class="icon icon-control-play side-menu__icon"></i>--}}
+{{--                    <span class="side-menu__label">--}}
+{{--                        الملفات الورقيه لفيديوهات الاساسيات--}}
+{{--                    </span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
+{{--        @endcan--}}
 
 
 
