@@ -720,11 +720,7 @@ class LessonController extends Controller
                             // total per watched in this video
                             $total = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfVideo)) * 100),2);
 
-                            if($total < 65.00){
-
-                                return self::returnResponseDataApi(null, "يجب مشاهده 65% من محتوي ذلك الفيديو اولا لفتح الفيديو التالي", 403);
-
-                            }else{
+                            if($total >= 65){
 
                                 $videoOpenedByUser->update(['status' => 'watched']);
 
@@ -770,7 +766,6 @@ class LessonController extends Controller
                       //end open next video
 
                 }
-
 
             }
 
