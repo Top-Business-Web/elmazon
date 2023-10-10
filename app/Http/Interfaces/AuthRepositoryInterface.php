@@ -26,7 +26,7 @@ interface AuthRepositoryInterface{
 
     public function updateProfile(Request $request): JsonResponse;
 
-    public function home_page(): \Illuminate\Http\JsonResponse;
+    public function home_page(): JsonResponse;
 
     public function allClasses(): JsonResponse;
 

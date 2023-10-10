@@ -373,7 +373,7 @@ class LessonController extends Controller
                 ];
 
                 $code = collect($validator->errors())->flatten(1)[0];
-                return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+                return self::returnResponseDataApi(null, $errors_arr[$errors] ?? 500, $code);
             }
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
@@ -395,7 +395,33 @@ class LessonController extends Controller
                     ->first();
 
                 if ($videoOpenedByUser) {
-                    $videoOpenedByUser->update(['status' => 'watched']);
+
+                    //sum minutes of video
+                    $sumMinutesOfVideo = VideoParts::query()
+                        ->where('id','=',$id)
+                        ->pluck('video_time')
+                        ->toArray();// example 130 seconds
+
+                     //sum watched for user auth in this video
+                    $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
+                        ->where('video_part_id','=',$id)
+                        ->where('user_id', '=', Auth::guard('user-api')->id())
+                        ->pluck('minutes')
+                        ->toArray();//example 120 seconds
+
+
+                    // total per watched in this video
+                    $total = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfVideo)) * 100),2);
+
+                    if($total < 65.00){
+
+                        return self::returnResponseDataApi(null, "يجب مشاهده 65% من محتوي ذلك الفيديو اولا لفتح الفيديو التالي", 403);
+
+                    }else{
+
+                        $videoOpenedByUser->update(['status' => 'watched']);
+
+                    }
 
                 } else {
                     return self::returnResponseDataApi(null, "يجب فتح الملف السابق", 415, 200);
@@ -411,27 +437,27 @@ class LessonController extends Controller
                     ->where('id', '>', $videoOpenedByUser->video_part_id)
                     ->first();
 
-
                 if ($nextFileToWatch) {
 
-                    $watched = VideoOpened::query()
-                        ->where('user_id', '=', Auth::guard('user-api')->id())
-                        ->where('video_part_id', '=', $nextFileToWatch->id)
-                        ->first();
+                        $watched = VideoOpened::query()
+                            ->where('user_id', '=', Auth::guard('user-api')->id())
+                            ->where('video_part_id', '=', $nextFileToWatch->id)
+                            ->first();
 
-                    if (!$watched) {
-                        VideoOpened::create([
-                            'user_id' => Auth::guard('user-api')->id(),
-                            'video_part_id' => $nextFileToWatch->id,
-                        ]);
+                        if (!$watched) {
+                            VideoOpened::create([
+                                'user_id' => Auth::guard('user-api')->id(),
+                                'video_part_id' => $nextFileToWatch->id,
+                            ]);
 
-                        return self::returnResponseDataApi(null, "تم اكتمال مشاهده هذا الملف وتم فتح الملف الذي يليه بنجاح", 200);
+                            return self::returnResponseDataApi(null, "تم اكتمال مشاهده هذا الملف وتم فتح الملف الذي يليه بنجاح", 200);
 
-                    } else {
-                        return self::returnResponseDataApi(null, "تم فتح الملف الذي يلي هذا الملف من قبل", 417);
-                    }
+                        } else {
+                            return self::returnResponseDataApi(null, "تم فتح الملف الذي يلي هذا الملف من قبل", 417);
+                        }
 
                 } else {
+
                     return self::returnResponseDataApi(null, "تم الوصول للملف الاخير من هذا النوع للملف", 418);
 
                 }
@@ -667,16 +693,88 @@ class LessonController extends Controller
 
                 }else{
 
-
                     $videoOpened->update(['minutes' => $request->minutes]);
-                    return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم تحديث عدد دقائق الفيديو بنجاح", 200);
+
+                       //start open next video
+                        $videoOpenedByUser = VideoOpened::query()
+                            ->where('user_id', '=', Auth::guard('user-api')->id())
+                            ->where('video_part_id', '=', $video->id)
+                            ->first();
+
+                        if ($videoOpenedByUser) {
+
+                            //sum minutes of video
+                            $sumMinutesOfVideo = VideoParts::query()
+                                ->where('id','=',$id)
+                                ->pluck('video_time')
+                                ->toArray();// example 130 seconds
+
+                            //sum watched for user auth in this video
+                            $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
+                                ->where('video_part_id','=',$id)
+                                ->where('user_id', '=', Auth::guard('user-api')->id())
+                                ->pluck('minutes')
+                                ->toArray();//example 120 seconds
+
+
+                            // total per watched in this video
+                            $total = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfVideo)) * 100),2);
+
+                            if($total < 65.00){
+
+                                return self::returnResponseDataApi(null, "يجب مشاهده 65% من محتوي ذلك الفيديو اولا لفتح الفيديو التالي", 403);
+
+                            }else{
+
+                                $videoOpenedByUser->update(['status' => 'watched']);
+
+                            }
+
+                        } else {
+                            return self::returnResponseDataApi(null, "يجب فتح الملف السابق", 415, 200);
+                        }
+
+
+                        $nextFileToWatch = VideoParts::query()
+                            ->orderBy('id', 'ASC')
+                            ->where('lesson_id', '=',$video->lesson_id)
+                            ->orderBy('id', 'ASC')
+                            ->get()
+                            ->except($videoOpenedByUser->video_part_id)
+                            ->where('id', '>', $videoOpenedByUser->video_part_id)
+                            ->first();
+
+                        if ($nextFileToWatch) {
+
+                            $watched = VideoOpened::query()
+                                ->where('user_id', '=', Auth::guard('user-api')->id())
+                                ->where('video_part_id', '=', $nextFileToWatch->id)
+                                ->first();
+
+                            if (!$watched) {
+                                VideoOpened::create([
+                                    'user_id' => Auth::guard('user-api')->id(),
+                                    'video_part_id' => $nextFileToWatch->id,
+                                ]);
+
+                            }
+
+                        } else {
+
+                            return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم تحديث وقت هذا الفيديو وتم الوصول للملف الاخير للدرس التابع له الفيديو", 418);
+
+                        }
+
+                        return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم تحديث عدد دقائق الفيديو بنجاح", 200);
+
+                      //end open next video
+
                 }
+
+
             }
 
+        }//end else
 
-
-        }
-
-
-    }
+    }//end function
 }
