@@ -893,7 +893,8 @@ class LessonController extends Controller
 
                     $Ids = Lesson::query()
                         ->where('subject_class_id', '=', $subject_class->id)
-                        ->pluck('id')->toArray();// ids of lessons belongs to subject class * example [1,2,3,4,5,6]
+                        ->pluck('id')
+                        ->toArray();// ids of lessons belongs to subject class * example [1,2,3,4,5,6]
 
 
                     $allOfLessons = Lesson::query()
@@ -939,14 +940,14 @@ class LessonController extends Controller
 
 
                     $listOfSecondsOfAllVideosWatched = [];
-                    for ($i = 0 ; $i < count( $totalOfMinutesUserWatched);$i++){
+                    for ($i = 0 ; $i <  sizeof(array_filter($totalOfMinutesUserWatched));$i++){
 
                         $listOfSecondsOfAllVideosWatched[] = getAllSecondsFromTimes($totalOfMinutesUserWatched[$i]);
 
                     }
 
 
-                    $totalMinutesOfAllClasses = (( array_sum($listOfSecondsOfAllVideosWatched) / array_sum($listOfSecondsOfAllVideos)) * 100);
+                    $totalMinutesOfAllClasses =  number_format(((array_sum($listOfSecondsOfAllVideosWatched) / array_sum($listOfSecondsOfAllVideos)) * 100),2);
 
 
                     if($totalMinutesOfAllClasses >= 65){
