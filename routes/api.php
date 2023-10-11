@@ -98,7 +98,6 @@ Route::group(['middleware' => 'lang'], function (){
 
         //access videos
         Route::post('{id?}',[LessonController::class,'accessFirstVideo']);
-        Route::post('access-next-video/{id}',[LessonController::class,'accessNextVideo']);
 
     });
 
