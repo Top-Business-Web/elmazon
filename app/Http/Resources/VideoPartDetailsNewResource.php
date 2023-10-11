@@ -63,7 +63,7 @@ class VideoPartDetailsNewResource extends JsonResource
             'is_youtube' =>  $this->is_youtube,
             'rate' =>  $video_rate ? $video_rate->action : 'no_rate',
             'total_watch' =>  $user_watch_video->minutes ?? 0,
-            'total_like' => (int)$like_video_count,
+            'total_like' =>   $like_video_count,
             'like_active' => $this->like_active,
             'video_minutes' => $this->video_time,
             'background_image' => asset('videos/images/'. $this->background_image),

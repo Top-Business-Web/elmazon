@@ -27,6 +27,28 @@ class LessonNewResource extends JsonResource
 
 
         $videos_count = VideoParts::where('lesson_id','=',$this->id)->count();
+
+
+        //start sum total of minutes to compare between video minutes and total user watch
+        $videosIds = VideoParts::query()
+            ->where('lesson_id','=',$this->id)
+            ->pluck('id')
+            ->toArray();//example [1,2,3,4,5]
+
+        $sumMinutesOfAllVideosBelongsTiThisLesson = VideoParts::query()
+            ->where('lesson_id','=',$this->id)
+            ->pluck('video_time')
+            ->toArray();// example 130 seconds
+
+        $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
+            ->where('minutes','!=',null)
+            ->whereIn('video_part_id',$videosIds)
+            ->where('user_id', '=', Auth::guard('user-api')->id())
+            ->pluck('minutes')
+            ->toArray();//example 120 seconds
+
+
+
         return [
 
             'id' => $this->id,
@@ -36,8 +58,8 @@ class LessonNewResource extends JsonResource
             'note' => $this->note,
             'status' => OpenLesson::where('user_id','=',Auth::guard('user-api')->id())->where('lesson_id','=',$this->id)->count() > 0 ? 'opened' : 'lock',
             'num_of_videos' => $videos_count,
-            'total_watch' =>  $videos_count == 0 ? 0 : (int)number_format(($totalWatch / $videos_count) * 100,2),
-            'total_times' => VideoParts::where('lesson_id','=',$this->id)->sum('video_time'),
+            'total_watch' =>  !empty( $sumAllOfMinutesVideosStudentAuth) ? getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) : 0,
+            'total_times' => !empty($sumMinutesOfAllVideosBelongsTiThisLesson) ? getAllSecondsFromTimes($sumMinutesOfAllVideosBelongsTiThisLesson) : 0,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
 
