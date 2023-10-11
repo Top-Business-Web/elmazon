@@ -299,6 +299,8 @@ class VideoPartController extends Controller
             'note' => $request->note,
             'lesson_id' => $request->lesson_id,
             'link' => $request->file('link') == null ? $videPartUpdate->link : $videoPart ,
+            'youtube_link' => $request->youtube_link ?? null,
+            'is_youtube' => $request->youtube_link != null ? 1 : 0,
             'video_time' => $request->video_time,
 
         ]);
