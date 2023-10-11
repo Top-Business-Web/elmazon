@@ -25,7 +25,7 @@ class LessonDetailsController extends Controller{
 
     public function allVideoByLessonId($id): JsonResponse{
 
-        $lesson = Lesson::where('id','=',$id)->first();
+        $lesson = Lesson::query()->where('id','=',$id)->first();
         if(!$lesson){
 
             return self::returnResponseDataApi(null,"هذا الدرس غير موجود",404,404);

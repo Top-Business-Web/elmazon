@@ -140,7 +140,7 @@ class LessonController extends Controller
 
     }
 
-    public function videoComments($id): \Illuminate\Http\JsonResponse
+    public function videoComments($id): JsonResponse
     {
 
         if (request()->type == 'video_part') {
@@ -222,7 +222,7 @@ class LessonController extends Controller
                 ];
 
                 $code = collect($validator->errors())->flatten(1)[0];
-                return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+                return self::returnResponseDataApi(null, $errors_arr[$errors] ?? 500, $code);
             }
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
@@ -571,7 +571,6 @@ class LessonController extends Controller
 
 
 
-
                 /*
               * start update next subject_class ==========================================================================================================================
               */
@@ -676,8 +675,6 @@ class LessonController extends Controller
                     /*
                     * end update next subject_class ==========================================================================================================================
                     */
-
-
 
                 }
 
