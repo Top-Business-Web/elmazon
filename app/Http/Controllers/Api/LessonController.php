@@ -322,28 +322,30 @@ class LessonController extends Controller
                 ->where('subject_class_id', '=', $subject_class->id);
 
             $lesson_opened = OpenLesson::query()
-            ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('user_id', '=', Auth::guard('user-api')->id())
                 ->where('lesson_id', '=', $first_lesson->id);
 
-            if ($subject_class_opened->exists() && $lesson_opened->exists()) {
 
-                return self::returnResponseDataApi(null,"تم فتح اول فصل واول درس تابع لهذا الفصل من قبل",202);
-
-            } else {
+            if(!$subject_class_opened->exists()){
 
                 OpenLesson::create([
                     'user_id' => Auth::guard('user-api')->id(),
                     'subject_class_id' => $subject_class->id,
                 ]);
+            }
 
+
+            if(!$lesson_opened->exists()){
                 OpenLesson::create([
                     'user_id' => Auth::guard('user-api')->id(),
                     'lesson_id' => $first_lesson->id,
                 ]);
 
-                return self::returnResponseDataApi(null,"تم فتح اول فصل واول درس تابع لهذا الفصل",202);
-
             }
+
+
+            return self::returnResponseDataApi(null,"تم فتح الفصل واول درس لهذا الفصل بنجاح",200);
+
         }
 
     }//end access first subject_class and first lesson and first video and  all files of video
