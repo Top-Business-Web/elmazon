@@ -303,6 +303,7 @@ class LessonController extends Controller
         } else {
 
             $subject_class = SubjectClass::query()
+                ->where('id','=',$id)
             ->first();
 
             $first_lesson = Lesson::query()
@@ -342,7 +343,6 @@ class LessonController extends Controller
                 ]);
 
             }
-
 
             return self::returnResponseDataApi(null,"تم فتح الفصل واول درس لهذا الفصل بنجاح",200);
 
