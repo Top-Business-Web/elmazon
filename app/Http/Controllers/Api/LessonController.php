@@ -743,17 +743,20 @@ class LessonController extends Controller
                         ->toArray();// example 130 seconds
 
                     $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
+                        ->where('minutes','!=',null)
                         ->whereIn('video_part_id',$videosIds)
                         ->where('user_id', '=', Auth::guard('user-api')->id())
                         ->pluck('minutes')
                         ->toArray();//example 120 seconds
 
 
-                    $total = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfAllVideosBelongsTiThisLesson)) * 100),2);
+                    $totalMinutesOfAllLessons = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfAllVideosBelongsTiThisLesson)) * 100),2);
+
+
 
                     if ($next_lesson) {
 
-                        if($total >= 65){
+                        if($totalMinutesOfAllLessons >= 65){
 
                             $next_lesson_open = OpenLesson::query()
                                 ->where('user_id', '=', Auth::guard('user-api')->id())
@@ -802,9 +805,10 @@ class LessonController extends Controller
 
 
 
-                            $total = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfVideo)) * 100),2);
+                            $totalMinutesOfAllVideos = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfVideo)) * 100),2);
 
-                            if($total >= 65){
+
+                            if($totalMinutesOfAllVideos >= 65){
 
                                 $videoOpenedByUser->update(['status' => 'watched']);
 
@@ -892,12 +896,12 @@ class LessonController extends Controller
                         ->pluck('id')->toArray();// ids of lessons belongs to subject class * example [1,2,3,4,5,6]
 
 
-
                     $allOfLessons = Lesson::query()
                         ->whereIn('id',$Ids)->get();
 
                     $totalOfMinutesVideos = [];
                     $totalOfMinutesUserWatched = [];
+
 
                     foreach ($allOfLessons as $lesson){
 
@@ -911,11 +915,14 @@ class LessonController extends Controller
                             ->pluck('video_time')
                             ->toArray();// example 20 minutes
 
+
                         $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
+                            ->where('minutes','!=',null)
                             ->whereIn('video_part_id',$videosIds)
                             ->where('user_id', '=', Auth::guard('user-api')->id())
                             ->pluck('minutes')
                             ->toArray();//example 20 minutes
+
 
                         $totalOfMinutesVideos[] =  $sumMinutesOfAllVideosBelongsTiThisLesson;
                         $totalOfMinutesUserWatched[] = $sumAllOfMinutesVideosStudentAuth;
@@ -923,9 +930,26 @@ class LessonController extends Controller
                     }
 
 
-                    $total = number_format(((getAllSecondsFromTimes($totalOfMinutesUserWatched) / getAllSecondsFromTimes($totalOfMinutesVideos)) * 100),2);
+                    $listOfSecondsOfAllVideos = [];
+                    for ($i = 0 ; $i < count($totalOfMinutesVideos);$i++){
 
-                    if($total >= 65){
+                        $listOfSecondsOfAllVideos[] = getAllSecondsFromTimes($totalOfMinutesVideos[$i]);
+
+                    }
+
+
+                    $listOfSecondsOfAllVideosWatched = [];
+                    for ($i = 0 ; $i < count( $totalOfMinutesUserWatched);$i++){
+
+                        $listOfSecondsOfAllVideosWatched[] = getAllSecondsFromTimes($totalOfMinutesUserWatched[$i]);
+
+                    }
+
+
+                    $totalMinutesOfAllClasses = (( array_sum($listOfSecondsOfAllVideosWatched) / array_sum($listOfSecondsOfAllVideos)) * 100);
+
+
+                    if($totalMinutesOfAllClasses >= 65){
 
                         if ($next_subject_class) {
 
@@ -961,4 +985,9 @@ class LessonController extends Controller
         }//end else
 
     }//end function
+
+
+
+
+
 }
