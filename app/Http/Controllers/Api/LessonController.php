@@ -939,6 +939,7 @@ class LessonController extends Controller
                     }
 
 
+                    //filter array can not empty of seconds
                     $listOfSecondsOfAllVideosWatched = [];
                     for ($i = 0 ; $i <  sizeof(array_filter($totalOfMinutesUserWatched));$i++){
 
