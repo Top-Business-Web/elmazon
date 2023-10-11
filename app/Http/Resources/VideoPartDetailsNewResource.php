@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\VideoOpened;
+use App\Models\VideoParts;
 use App\Models\VideoRate;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -33,23 +34,35 @@ class VideoPartDetailsNewResource extends JsonResource
             ->count();
 
 
+
+        $sumMinutesOfVideo = VideoParts::query()
+            ->where('id','=',$this->id)
+            ->pluck('video_time')
+            ->toArray();// example 130 seconds
+
+
+        $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
+            ->where('video_part_id','=',$this->id)
+            ->where('user_id', '=', Auth::guard('user-api')->id())
+            ->pluck('minutes')
+            ->toArray();//example 120 seconds
+
+
+
+        $totalMinutesOfAllVideos = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfVideo)) * 100),2);
+
+
         return [
 
             'id' => $this->id,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'status' => !$user_watch_video ? 'lock' :  ($user_watch_video->status == 'opened' ? 'opened': 'watched'),
             'subscribe' => 'access',
-//            'progress' =>  VideoOpened::query()
-//                            ->where('video_part_id','=',$this->id)
-//                              ->where('user_id','=',Auth::guard('user-api')->id())->exists() ?
-//                round((( strtotime($user_watch_video->minutes) - strtotime('TODAY')) / (strtotime($this->video_time) - strtotime('TODAY'))) * 100 ,2) : 0,
-
-        'progress' => 0,
+             'progress' =>  $totalMinutesOfAllVideos,
             'link' =>  $this->is_youtube == true ? $this->youtube_link :asset('videos/'. $this->link),
             'is_youtube' =>  $this->is_youtube,
-            'time' => (int)$this->video_time,
             'rate' =>  $video_rate ? $video_rate->action : 'no_rate',
-            'total_watch' => (int)$this->video_watches->count(),
+            'total_watch' =>  $user_watch_video->minutes,
             'total_like' => (int)$like_video_count,
             'like_active' => $this->like_active,
             'video_minutes' => $this->video_time,
