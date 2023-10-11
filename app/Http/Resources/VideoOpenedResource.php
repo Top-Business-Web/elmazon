@@ -20,6 +20,7 @@ class VideoOpenedResource extends JsonResource
             'minutes' => $this->minutes,
             'status' => $this->status,
             'type' => $this->type,
+            'lesson_id' => $this->video->lesson->id,
             'user' => $this->user->name,
 
         ];
