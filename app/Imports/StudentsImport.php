@@ -8,8 +8,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
-class StudentsImport implements ToCollection, WithHeadingRow
+class StudentsImport implements ToCollection, WithHeadingRow,WithMapping
 {
 
    public function generateUniqueCode(): string
@@ -34,6 +36,7 @@ class StudentsImport implements ToCollection, WithHeadingRow
 
     public function collection(Collection $collection){
 
+//       dd($collection);
         for ($i = 0; $i < count($collection); $i++) {
 
             User::query()
@@ -56,4 +59,17 @@ class StudentsImport implements ToCollection, WithHeadingRow
         }
     }
 
+
+    public function map($row): array
+    {
+
+        if(gettype($row['birth_date']) == 'integer'){
+
+            $row['birth_date'] = Date::excelToDateTimeObject($row['birth_date'])->format('Y-m-d');
+            $row['date_start_code'] = Date::excelToDateTimeObject($row['date_start_code'])->format('Y-m-d');
+            $row['date_end_code'] = Date::excelToDateTimeObject($row['date_end_code'])->format('Y-m-d');
+        }
+
+        return $row;
+    }
 }
