@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use App\Models\Term;
 use App\Models\User;
 use App\Models\Season;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Stripe\Capability;
 use App\Models\AllExam;
 use App\Models\Country;
@@ -24,6 +26,7 @@ use App\Models\PapelSheetExam;
 use App\Exports\StudentsExport;
 use App\Imports\StudentsImport;
 use App\Http\Requests\StoreUser;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Yajra\DataTables\DataTables;
 use App\Http\Requests\UpdateUser;
 use App\Models\ExamDegreeDepends;
@@ -62,15 +65,7 @@ class UserController extends Controller
                             <a href="' . route('printReport', $users->id) . '" data-id="' . $users->id . '" class="btn btn-pill btn-info-light reportPrint"> تقرير الطالب <i class="fa fa-file-excel"></i></a>
                        ';
                 })
-                // ->filter(function ($q) use ($request) {
-                //     if ($request->has('type')) {
 
-                //         return
-
-                //         // return UserSubscribe::whereIn('student_id', '=', $users)
-                //         //  ->where('month','<=', Carbon::now()->subMonth())->latest()->first();
-                //     }
-                // })
                 ->escapeColumns([])
                 ->make(true);
         } else {
@@ -86,7 +81,7 @@ class UserController extends Controller
     }
 
 
-    public function store(StoreUser $request)
+    public function store(StoreUser $request): JsonResponse
     {
         $inputs = $request->all();
         $inputs['user_status'] = 'active';
@@ -111,16 +106,8 @@ class UserController extends Controller
         $data['countries'] = Country::get();
         return view('admin.users.parts.edit', compact('user'))->with($data);
     }
-    // Edit End
 
-    // Update Start
-
-    /**
-     * @throws CwebpShellExecutionFailed
-     * @throws ImageMimeNotSupportedException
-     * @throws DriverIsNotSupportedException
-     */
-    public function update(UserUpdateRequest $request, User $user)
+    public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
 
         $inputs = $request->except('id');
@@ -140,9 +127,6 @@ class UserController extends Controller
         }
     }
 
-    // Edit End
-
-    // User Unvilable start
 
     public function userUnvilable()
     {
@@ -153,9 +137,7 @@ class UserController extends Controller
         return view('admin.users.parts.user_unvilable', compact('unavailableUsers'));
     }
 
-    // User Unvilable end
 
-    // Subscripition View Start
 
     public function subscrView(User $user)
     {
@@ -165,11 +147,9 @@ class UserController extends Controller
         return view('admin.users.parts.subscription_renewal', compact('user', 'months', 'months_user'));
     }
 
-    // Subscripition View End
 
-    // Subscripition Renewal Start
 
-    public function subscr_renew(Request $request, User $user)
+    public function subscr_renew(Request $request, User $user): RedirectResponse
     {
 
         $user = User::findOrFail($request->id);
@@ -190,9 +170,9 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    // Subscripition Renewal End
 
-    public function priceMonth(Request $request)
+
+    public function priceMonth(Request $request): string
     {
         $user = User::find($request->id);
 
@@ -204,20 +184,15 @@ class UserController extends Controller
         $price_in_center = Subscribe::whereIn('month', $month)
             ->where('season_id', $user->season_id)
             ->sum('price_out_center');
-        //            ->get(['price_in_center', 'price_out_center']);
-        //        dd($price_out_center,$price_in_center);
 
         $output = '';
-        //        foreach ($price_out_center as $p) {
         $output .= '<option value="' . $price_in_center . '">' . ' السعر داخل السنتر ' . $price_in_center . '</option>';
         $output .= '<option value="' . $price_out_center . '">' . ' السعر خارج السنتر ' . $price_out_center . '</option>';
-        //        }
 
         return $output;
     }
 
 
-    // print report
     public function printReport($id)
     {
         $user = User::findOrFail($id);
@@ -280,14 +255,13 @@ class UserController extends Controller
     }
 
 
-    //added by islam mohamed
-    public function studentsExport(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    public function studentsExport(): BinaryFileResponse
     {
         return Excel::download(new StudentsExport(), 'Students.xlsx');
 
     }
 
-    public function studentsImport(Request $request): \Illuminate\Http\JsonResponse
+    public function studentsImport(Request $request): JsonResponse
     {
         $import = Excel::import(new StudentsImport(), $request->exelFile);
         if ($import) {

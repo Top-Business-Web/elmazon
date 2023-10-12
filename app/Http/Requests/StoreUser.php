@@ -7,24 +7,9 @@ use Illuminate\Validation\Rule;
 
 class StoreUser extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules(): array
     {
-//        dd(request()->all());
         return [
             'name' => 'required',
             'email' => "nullable",
@@ -33,7 +18,7 @@ class StoreUser extends FormRequest
             'birth_date' => 'required',
             'country_id' => 'required',
             'phone' => 'required|unique:users,phone,'.$this->id,
-            'father_phone' => 'required',
+            'father_phone' => 'nullable',
             'image' => 'nullable|image',
             'code' => 'required|unique:users,code,'.$this->id,
             'date_start_code' => 'required|date|before:date_end_code',
@@ -49,7 +34,6 @@ class StoreUser extends FormRequest
             'code.required' => 'كود الطالب مطلوب',
             'birth_date.required' => 'تاريخ الميلاد مطلوب',
             'phone.required' => 'رقم الهاتف مطلوب',
-            'father_phone.required' => 'رقم هاتف ولي الأمر مطلوب',
             'country_id.required' => 'المحافظة مطلوب',
             'date_start_code.required' => 'تاريخ بداية الاشتراك مطلوب',
             'date_end_code.required' => 'تاريخ نهاية الاشتراك مطلوب',
