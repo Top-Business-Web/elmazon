@@ -42,6 +42,7 @@ class VideoPartDetailsNewResource extends JsonResource
 
 
         $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
+            ->where('minutes','!=',null)
             ->where('video_part_id','=',$this->id)
             ->where('user_id', '=', Auth::guard('user-api')->id())
             ->pluck('minutes')
@@ -58,7 +59,7 @@ class VideoPartDetailsNewResource extends JsonResource
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'status' => !$user_watch_video ? 'lock' :  ($user_watch_video->status == 'opened' ? 'opened': 'watched'),
             'subscribe' => 'access',
-            'progress' =>   !empty($sumAllOfMinutesVideosStudentAuth) ? $totalMinutesOfAllVideos : 0,
+            'progress' =>  !empty($sumAllOfMinutesVideosStudentAuth) ? $totalMinutesOfAllVideos : 0,
             'link' =>  $this->is_youtube == true ? $this->youtube_link :asset('videos/'. $this->link),
             'is_youtube' =>  $this->is_youtube,
             'rate' =>  $video_rate ? $video_rate->action : 'no_rate',
