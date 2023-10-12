@@ -19,18 +19,26 @@ class QuestionExport implements FromCollection , WithHeadings ,WithColumnWidths
     {
         return [
             'A' => 10,
-            'B' => 100,
-            'C' => 30,
-            'D' => 40,
+            'B' => 120,
+            'C' => 15,
+            'D' => 10,
+            'E' => 70,
+            'F' => 10,
+            'G' => 10,
+            'H' => 10,
         ];
     }
     public function headings(): array
     {
         return [
-            '#',
+            'Id',
             'Question',
+            'QuestionType(choice,text)',
             'Degree',
-            'Difficulty (low , mid , high)',
+            'Type(subject_class,lesson,video,all_exam,life_exam)',
+            'Difficulty (low,mid,high)',
+            'Season',
+            'Term',
         ];
     }
     /**
@@ -41,7 +49,7 @@ class QuestionExport implements FromCollection , WithHeadings ,WithColumnWidths
 
     {
 
-        return Question::get(['id','question','degree','difficulty']);
+        return Question::get(['id','question','question_type','degree','type','difficulty','season_id','term_id']);
 
     }
 
