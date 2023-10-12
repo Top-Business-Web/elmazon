@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\OpenLesson;
 use App\Models\SubjectClass;
 use App\Models\VideoOpened;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,10 +20,17 @@ class SubjectClassNewResource extends JsonResource
     public function toArray($request)
     {
 
-        $totalWatch = VideoOpened::where(['user_id' => auth('user-api')->id(),
+        $totalWatch = VideoOpened::query()
+        ->where(['user_id' => auth('user-api')->id(),
              'status' => 'watched',
             'type' => 'video'
-        ])->count();
+        ])->whereHas('video', fn(Builder $builder) =>
+
+        $builder->whereHas('lesson', fn(Builder $builder) =>
+        $builder->whereHas('subject_class', fn(Builder $builder) =>
+
+        $builder->where('id','=',$this->id)
+        )))->count();
 
 
         return [
@@ -37,7 +45,7 @@ class SubjectClassNewResource extends JsonResource
             'total_watch' =>  (double)$this->videos->count() == 0 ? 0.00 : (double)number_format(($totalWatch / $this->videos->count()) * 100,2),
             'num_of_lessons' => $this->lessons->count(),
             'num_of_videos' => $this->videos->count(),
-            'total_times' => getAllSecondsFromTimes($this->videos->pluck('video_time')->toArray()),
+            'total_times' => !empty($this->videos->pluck('video_time')->toArray()) ? getAllSecondsFromTimes($this->videos->pluck('video_time')->toArray()) : 0,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
             'exams' => OnlineExamNewResource::collection($this->exams),
