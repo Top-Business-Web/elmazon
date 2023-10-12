@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class StudentsExport implements FromCollection , WithHeadings ,WithColumnWidths
 {
@@ -62,4 +63,24 @@ class StudentsExport implements FromCollection , WithHeadings ,WithColumnWidths
             'country_id'
             ]);
     }
+
+
+//    public function map($client): array
+//    {
+//        //dd(Date::dateTimeToExcel($client->date));
+//        return [
+//            $client->name,
+//            Date::dateTimeToExcel($client->birth_date),
+//            $client->phone,
+//            $client->father_phone,
+//            $client->center,
+//            $client->user_status,
+//            $client->code,
+//            Date::dateTimeToExcel($client->date_start_code),
+//            Date::dateTimeToExcel($client->date_end_code),
+//            $client->season_id,
+//            $client->country_id
+//        ];
+//    }
+
 }
