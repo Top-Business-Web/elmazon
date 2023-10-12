@@ -19,17 +19,17 @@ class VideoPartDetailsNewResource extends JsonResource
     public function toArray($request){
 
         $user_watch_video = VideoOpened::query()
-        ->where('video_part_id','=',$this->id)
+            ->where('video_part_id','=',$this->id)
             ->where('user_id','=',Auth::guard('user-api')->id())
             ->first();
 
         $video_rate = VideoRate::query()
-        ->where('video_id','=',$this->id)
+            ->where('video_id','=',$this->id)
             ->where('user_id','=',Auth::guard('user-api')->id())
             ->first();
 
         $like_video_count = VideoRate::query()
-        ->where('video_id','=',$this->id)
+            ->where('video_id','=',$this->id)
             ->where('action','=','like')
             ->count();
 
@@ -58,7 +58,7 @@ class VideoPartDetailsNewResource extends JsonResource
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'status' => !$user_watch_video ? 'lock' :  ($user_watch_video->status == 'opened' ? 'opened': 'watched'),
             'subscribe' => 'access',
-             'progress' =>  $totalMinutesOfAllVideos ?? 0,
+            'progress' =>  $totalMinutesOfAllVideos ?? 0,
             'link' =>  $this->is_youtube == true ? $this->youtube_link :asset('videos/'. $this->link),
             'is_youtube' =>  $this->is_youtube,
             'rate' =>  $video_rate ? $video_rate->action : 'no_rate',
