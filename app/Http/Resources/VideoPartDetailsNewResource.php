@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\VideoOpened;
 use App\Models\VideoParts;
 use App\Models\VideoRate;
+use App\Models\VideoTotalView;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,6 +32,10 @@ class VideoPartDetailsNewResource extends JsonResource
         $like_video_count = VideoRate::query()
             ->where('video_id','=',$this->id)
             ->where('action','=','like')
+            ->count();
+
+        $totalViews = VideoTotalView::query()
+            ->where('video_part_id','=',$this->id)
             ->count();
 
 
@@ -63,7 +68,7 @@ class VideoPartDetailsNewResource extends JsonResource
             'link' =>  $this->is_youtube == true ? $this->youtube_link :asset('videos/'. $this->link),
             'is_youtube' =>  $this->is_youtube,
             'rate' =>  $video_rate ? $video_rate->action : 'no_rate',
-            'total_watch' =>  $user_watch_video->minutes ?? 0,
+            'total_watch' =>   $totalViews,
             'total_like' =>   $like_video_count,
             'like_active' => $this->like_active,
             'video_minutes' => $this->video_time,
