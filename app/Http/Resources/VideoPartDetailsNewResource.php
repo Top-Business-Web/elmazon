@@ -58,7 +58,7 @@ class VideoPartDetailsNewResource extends JsonResource
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'status' => !$user_watch_video ? 'lock' :  ($user_watch_video->status == 'opened' ? 'opened': 'watched'),
             'subscribe' => 'access',
-            'progress' =>   !empty($totalMinutesOfAllVideos) ? $totalMinutesOfAllVideos : 0,
+            'progress' =>   !empty($sumAllOfMinutesVideosStudentAuth) ? $totalMinutesOfAllVideos : 0,
             'link' =>  $this->is_youtube == true ? $this->youtube_link :asset('videos/'. $this->link),
             'is_youtube' =>  $this->is_youtube,
             'rate' =>  $video_rate ? $video_rate->action : 'no_rate',
