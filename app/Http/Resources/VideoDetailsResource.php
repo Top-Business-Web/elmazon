@@ -21,44 +21,82 @@ class VideoDetailsResource extends JsonResource
 
         if($request->type == 'video_part'){
 
-            $video_rate = VideoRate::query()->where('video_id','=',$this->id)
-                ->where('user_id','=',Auth::guard('user-api')->id())->first();
+            $video_rate = VideoRate::query()
+                ->where('video_id','=',$this->id)
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->first();
 
-            $like_video_count = VideoRate::query()->where('video_id','=',$this->id)
-                ->where('action','=','like')->count();
+            $like_video_count = VideoRate::query()
+                ->where('video_id','=',$this->id)
+                ->where('action','=','like')
+                ->count();
 
-            $favorite = VideoFavorite::query()->where('video_part_id','=',$this->id)
-                ->where('user_id','=',Auth::guard('user-api')->id())->first();
+            $favorite = VideoFavorite::query()
+                ->where('video_part_id','=',$this->id)
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->first();
 
-            $total_views = VideoTotalView::query()->where('video_part_id','=',$this->id)->count();
+            $total_views = VideoTotalView::query()
+                ->where('video_part_id','=',$this->id)
+                ->count();
+
+
 
         }elseif ($request->type == 'video_basic'){
 
-            $video_rate = VideoRate::query()->where('video_basic_id','=',$this->id)
-                ->where('user_id','=',Auth::guard('user-api')->id())->first();
+            $video_rate = VideoRate::query()
+                ->where('video_basic_id','=',$this->id)
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->first();
 
-            $like_video_count = VideoRate::query()->where('video_basic_id','=',$this->id)->where('action','=','like')->count();
-            $favorite = VideoFavorite::query()->where('video_basic_id','=',$this->id)
-                ->where('user_id','=',Auth::guard('user-api')->id())->first();
+            $like_video_count = VideoRate::query()
+                ->where('video_basic_id','=',$this->id)
+                ->where('action','=','like')
+                ->count();
 
-            $total_views = VideoTotalView::query()->where('video_basic_id','=',$this->id)->count();
+            $favorite = VideoFavorite::query()
+                ->where('video_basic_id','=',$this->id)
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->first();
+
+            $total_views = VideoTotalView::query()
+                ->where('video_basic_id','=',$this->id)
+                ->count();
 
         }else{
 
-            $video_rate = VideoRate::query()->where('video_resource_id','=',$this->id)
-                ->where('user_id','=',Auth::guard('user-api')->id())->first();
+            $video_rate = VideoRate::query()
+                ->where('video_resource_id','=',$this->id)
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->first();
 
-            $like_video_count = VideoRate::query()->where('video_resource_id','=',$this->id)->where('action','=','like')->count();
-            $favorite = VideoFavorite::query()->where('video_resource_id','=',$this->id)
-                ->where('user_id','=',Auth::guard('user-api')->id())->first();
+            $like_video_count = VideoRate::query()
+                ->where('video_resource_id','=',$this->id)
+                ->where('action','=','like')
+                ->count();
 
-            $total_views = VideoTotalView::query()->where('video_resource_id','=',$this->id)->count();
+
+            $favorite = VideoFavorite::query()
+                ->where('video_resource_id','=',$this->id)
+                ->where('user_id','=',Auth::guard('user-api')->id())
+                ->first();
+
+            $total_views = VideoTotalView::query()
+                ->where('video_resource_id','=',$this->id)
+                ->count();
         }
+
+
+        $user_watch_video = VideoOpened::query()
+            ->where('video_part_id','=',$this->id)
+            ->where('user_id','=',Auth::guard('user-api')->id())
+            ->first();
 
 
         return [
 
             'id'            => $this->id,
+            'status'            => in_array(request()->type,['video_basic','video_resource']) ? 'watched' : (!$user_watch_video ? 'lock' :  ($user_watch_video->status == 'opened' ? 'opened': 'watched')),
             'name'          => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'link'          =>   request()->type == 'video_basic' ||  request()->type == 'video_resource' ? request()->type == 'video_basic' ? ($this->is_youtube == true ? $this->youtube_link : asset('videos_basics/videos/'. $this->video_link)) : ($this->is_youtube == true ? $this->youtube_link : asset('videos_resources/videos/'. $this->video_link)) : ($this->is_youtube == true ? $this->youtube_link : asset('videos/'. $this->link)),
             'rate'          =>  $video_rate ? $video_rate->action : 'dislike',
