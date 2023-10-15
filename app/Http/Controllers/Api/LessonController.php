@@ -267,10 +267,6 @@ class LessonController extends Controller
                 if ($watched) {
                     return self::returnResponseDataApi(null,"تم مشاهده هذا الفيديو من قبل",201);
 
-                }elseif(count($video->videoFileUpload) == 0){
-
-                    return self::returnResponseDataApi(null,"ناسف لعدم فتح اول فيديو تابع لهذا الدرس بمتعلقاته لان الفيديو غير مسجل به متعلقات",203);
-
                 } else {
 
                     VideoOpened::create([
@@ -514,7 +510,6 @@ class LessonController extends Controller
                                 $nextFileToWatch = VideoParts::query()
                                     ->orderBy('id', 'ASC')
                                     ->where('lesson_id', '=',$video->lesson_id)
-                                    ->orderBy('id', 'ASC')
                                     ->get()
                                     ->except($videoOpenedByUser->video_part_id)
                                     ->where('id', '>', $videoOpenedByUser->video_part_id)
