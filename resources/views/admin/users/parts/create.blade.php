@@ -3,7 +3,7 @@
         @csrf
         <div class="form-group">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label for="">صورة :</label>
                         <input type="file" name="image" class="dropify" value="{{ asset('users/default/avatar.jpg') }}"
@@ -14,7 +14,7 @@
                         Extension : png, gif, jpeg,jpg,webp
                     </span>
                 </div>
-                <div class="col-md-6 mt-8">
+                <div class="col-md-12 mt-3">
                     <label for="name" class="form-control-label">اسم الطالب</label>
                     <input type="text" class="form-control" placeholder="اسم الطالب" name="name"
                            >
@@ -41,19 +41,19 @@
             </div>
             <hr>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label for="phone" class="form-control-label">رقم الهاتف</label>
                     <input type="text" class="form-control phoneInput" name="phone" placeholder="201XXXXXXXXX"
                            >
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label for="father_phone" class="form-control-label">رقم هاتف ولي الامر</label>
                     <input type="text" class="form-control" name="father_phone" placeholder="201XXXXXXXXX"
                            >
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label for="name" class="form-control-label">الصف الدراسي</label>
                     <select class="form-control SeasonSelect" name="season_id">
                         <option value="" data-name="" selected disabled>اختار الصف</option>
@@ -62,7 +62,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label for="country_id" class="form-control-label">المحافظة</label>
                     <select class="form-control" name="country_id">
                         <option value="" selected disabled>اختار المحافظة</option>
