@@ -229,6 +229,16 @@ class VideoPartController extends Controller
     public function store(StoreVideoPart $request): JsonResponse
     {
 
+        if ($backgroundImage = $request->file('background_image')) {
+
+            $destinationPath = 'videos/images';
+            $imageLink = date('YmdHis') . "." . $backgroundImage->getClientOriginalExtension();
+            $backgroundImage->move($destinationPath, $imageLink);
+            $request['background_image'] = "$imageLink";
+        }
+
+
+
         if ($video = $request->file('link')) {
 
             $destinationPath = 'videos/';
@@ -241,6 +251,7 @@ class VideoPartController extends Controller
         $videoPartCreate = VideoParts::create([
             'name_ar' => $request->name_ar,
             'name_en' => $request->name_en,
+            'background_image' =>  $imageLink,
             'month' => $request->month,
             'note' => $request->note,
             'lesson_id' => $request->lesson_id,
@@ -277,6 +288,17 @@ class VideoPartController extends Controller
         $videPartUpdate = VideoParts::query()
             ->find($id);
 
+
+        if ($backgroundImage = $request->file('background_image')) {
+
+            $destinationPath = 'videos/images';
+            $imageLink = date('YmdHis') . "." . $backgroundImage->getClientOriginalExtension();
+            $backgroundImage->move($destinationPath, $imageLink);
+            $request['background_image'] = "$imageLink";
+
+        }
+
+
         if ($video = $request->file('link')) {
 
             $destinationPath = 'videos/';
@@ -295,6 +317,7 @@ class VideoPartController extends Controller
 
             'name_ar' => $request->name_ar,
             'name_en' => $request->name_en,
+            'background_image' =>  $imageLink,
             'month' => $request->month,
             'note' => $request->note,
             'lesson_id' => $request->lesson_id,

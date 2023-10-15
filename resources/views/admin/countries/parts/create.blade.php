@@ -3,17 +3,17 @@
         @csrf
         <div class="form-group">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
                     <input type="text" class="form-control" name="name_ar">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزي</label>
                     <input type="text" class="form-control" name="name_en">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 mt-3">
                     <label for="city_id" class="form-control-label">اختر الدوله</label>
                     <Select name="city_id" class="form-control">
                         @foreach ($data['cities'] as $city)

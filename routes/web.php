@@ -56,9 +56,46 @@ Route::get('terms/season/{id}',[\App\Http\Controllers\Admin\TermController::clas
  */
 
 
-Route::get('update-exam-degree-depends', function (){
-
-    DB::table('exam_degree_depends')->update(['created_at' => Carbon::now()]);
-    return "Done update";
-
-});
+//Route::get('add-cities', function (){
+//
+////    DB::table('exam_degree_depends')->update(['created_at' => Carbon::now()]);
+////    return "Done update";
+//
+//
+//    $array = [
+//        'Alexandria' => 'الاسكندريه',
+//        'Aswan' => 'اسوان',
+//        'Asyut' => 'اسيوط',
+//        'Beheira' => 'البحيره',
+//        'Beni Suef' => 'بني سويف',
+//        'Cairo' => 'القاهره',
+//        'Dakahlia' => 'الدقهليه',
+//        'Damietta' => 'دمياط',
+//        'Faiyum' => 'الفيوم',
+//        'Gharbia' => 'الغربيه',
+//        'Giza' => 'الجيزه',
+//        'Ismailia' => 'الاسماعليه',
+//        'Kafr El Sheikh' => 'كفر الشيخ',
+//        'Luxor' => 'الاقصر',
+//        'Matruh' => 'مطروح',
+//        'Minya' => 'المنيا',
+//        'Monufia' => 'المنوفيه',
+//        'New Valley' => 'الوادي الجديد',
+//        'North Sinai' => 'شمال سيناء',
+//        'Port Sai' => 'بور سعيد',
+//        'Qalyubia' => 'القليوبيه',
+//        'Qena' => 'قنا',
+//        'Red Sea' => 'البحر الاحمر',
+//        'Sharqia' => 'الشرقيه',
+//        'Sohag' => 'سوهاج',
+//        'South Sinai' => 'جنوب سيناء',
+//        'Suez' => 'السويس',
+//    ];
+//
+//    foreach ($array as $key => $value){
+//
+//        DB::table('cities')->insert(['name_ar' => $value ,'name_en' => $key,'created_at' => Carbon::now(),'updated_at' => Carbon::now()]);
+//    }
+//
+//    return "Done insert";
+//});

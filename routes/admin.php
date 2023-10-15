@@ -41,7 +41,6 @@ use App\Http\Controllers\Admin\VideoBasicPdfController;
 use App\Http\Controllers\Admin\DiscountCouponsController;
 use App\Http\Controllers\Admin\ExamSchedulesController;
 use App\Http\Controllers\Admin\CityController;
-use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\TextExamUserController;
 
 use App\Http\Controllers\Controller;

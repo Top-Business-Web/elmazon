@@ -34,6 +34,7 @@ use App\Http\Resources\SliderResource;
 use App\Http\Resources\AllExamResource;
 use App\Http\Resources\SuggestResource;
 use App\Models\NotificationSeenStudent;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
@@ -227,10 +228,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     }
 
 
-
-
-
-    public function paper_sheet_exam(Request $request, $id)
+    public function paper_sheet_exam(Request $request,$id)
     {
 
         $rules = [
@@ -370,10 +368,20 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->where('user_id', '=', Auth::guard('user-api')->id())
                 ->first();
 
+
             if ($paperSheetExamUser) {
 
-                $paperSheetExamUser->delete();
-                return self::returnResponseDataApi(null, "تم الغاء الامتحان الورقي بنجاح", 200);
+                if(Carbon::parse($paperSheetExamUser->papelSheetExam->to)->subDays(2)->format('Y-m-d') == Carbon::now()->format('Y-m-d')){
+
+                    return self::returnResponseDataApi(null, "غير مسموح لك بحذف الامتحان الورقي", 403);
+
+                }else{
+
+                    $paperSheetExamUser->delete();
+                    return self::returnResponseDataApi(null, "تم الغاء الامتحان الورقي بنجاح", 200);
+                }
+
+
             } else {
 
                 return self::returnResponseDataApi(null, "لا يوجد اي امتحان ورقي لك لالغائه", 404);
