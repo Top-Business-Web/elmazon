@@ -9,14 +9,8 @@ use App\Models\VideoTotalView;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
-class VideoDetailsResource extends JsonResource
-{
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
-     */
+class VideoDetailsResource extends JsonResource{
+
     public function toArray($request){
 
         if($request->type == 'video_part'){
@@ -95,7 +89,8 @@ class VideoDetailsResource extends JsonResource
 
         return [
 
-            'id'            => $this->id,
+            'id'                => $this->id,
+            'total_user_watch'  => request()->type == 'video_part' ? (!$user_watch_video ? null : $user_watch_video->minutes) : null,
             'status'            => in_array(request()->type,['video_basic','video_resource']) ? 'watched' : (!$user_watch_video ? 'lock' :  ($user_watch_video->status == 'opened' ? 'opened': 'watched')),
             'name'          => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'link'          =>   request()->type == 'video_basic' ||  request()->type == 'video_resource' ? request()->type == 'video_basic' ? ($this->is_youtube == true ? $this->youtube_link : asset('videos_basics/videos/'. $this->video_link)) : ($this->is_youtube == true ? $this->youtube_link : asset('videos_resources/videos/'. $this->video_link)) : ($this->is_youtube == true ? $this->youtube_link : asset('videos/'. $this->link)),

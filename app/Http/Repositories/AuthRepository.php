@@ -480,25 +480,25 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ];
 
                 $code = collect($validator->errors())->flatten(1)[0];
-                return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+                return self::returnResponseDataApi(null, $errors_arr[$errors] ?? 500, $code);
             }
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
         $user = Auth::guard('user-api')->user();
 
         if ($image = $request->file('image')) {
-            $destinationPath = 'users/';
+            $destinationPath = 'user/';
             $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $file);
             $request['image'] = "$file";
 
-            if (file_exists(public_path('users/' . $user->image)) && $user->image != null) {
-                unlink(public_path('users/' . $user->image));
+            if (file_exists(public_path($user->image)) && $user->image != null) {
+                unlink(public_path($user->image));
             }
         }
 
         $user->update([
-            'image' => $file ?? $user->image
+            'image' => "user/".$file ?? $user->image
         ]);
         $user['token'] = $request->bearerToken();
         return self::returnResponseDataApi(new UserResource($user), "تم تعديل صوره الطالب بنجاح", 200);
