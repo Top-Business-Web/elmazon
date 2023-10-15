@@ -39,7 +39,7 @@
                     <a class="side-menu__item" href="{{ route('city.index') }}">
                         <i class="fa fa-globe side-menu__icon"></i>
                         <span class="side-menu__label">
-                        الدول
+                       المحافظات
                     </span>
                     </a>
                 </li>
@@ -116,7 +116,7 @@
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('exam_schedules.index') }}">
                     <i class="fa fa-clipboard-list side-menu__icon"></i>
-                    <span class="side-menu__label">جداول اامتحانات</span>
+                    <span class="side-menu__label">العد التنازلي</span>
                 </a>
             </li>
         @endcan
