@@ -498,7 +498,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         try {
 
             $subject_class = SubjectClass::query()
-                ->whereHas('term', fn (Builder $builder) =>
+                ->whereHas('term',fn (Builder $builder) =>
                 $builder->where('status', '=', 'active')
                     ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
