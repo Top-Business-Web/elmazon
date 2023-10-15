@@ -2,38 +2,29 @@
 
 namespace App\Http\Controllers\Admin;
 
-use DateTime;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use App\Models\Term;
 use App\Models\User;
 use App\Models\Season;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Stripe\Capability;
-use App\Models\AllExam;
+
 use App\Models\Country;
 use App\Models\Subscribe;
 use App\Traits\AdminLogs;
-use App\Models\OnlineExam;
 use App\Models\OpenLesson;
-use App\Models\VideoParts;
 use App\Traits\PhotoTrait;
 use App\Models\VideoOpened;
 use Illuminate\Http\Request;
 use App\Models\UserSubscribe;
-use App\Models\OnlineExamUser;
-use App\Models\PapelSheetExam;
 use App\Exports\StudentsExport;
 use App\Imports\StudentsImport;
 use App\Http\Requests\StoreUser;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Yajra\DataTables\DataTables;
 use App\Models\ExamDegreeDepends;
-use App\Models\PapelSheetExamUser;
 use Illuminate\Support\Facades\DB;
-use App\Exports\MotivationalExport;
-use App\Imports\MotivationalImport;
-use function Clue\StreamFilter\fun;
 use App\Http\Controllers\Controller;
 use App\Models\PapelSheetExamDegree;
 use Illuminate\Support\Facades\Hash;
@@ -199,7 +190,6 @@ class UserController extends Controller
     }
 
 
-
     public function subscrView(User $user)
     {
         $userSubscriptions = UserSubscribe::where('student_id', $user->id)->pluck('month')->toArray();
@@ -207,7 +197,6 @@ class UserController extends Controller
         $months = Subscribe::get();
         return view('admin.users.parts.subscription_renewal', compact('user', 'months', 'months_user'));
     }
-
 
 
     public function subscr_renew(Request $request, User $user): RedirectResponse
@@ -230,7 +219,6 @@ class UserController extends Controller
         toastr('تم التجديد بنجاح');
         return redirect()->route('users.index');
     }
-
 
 
     public function priceMonth(Request $request): string
@@ -293,6 +281,60 @@ class UserController extends Controller
         $paperExams = PapelSheetExamDegree::where('user_id', '=', $user->id)->get();
         $subscriptions = UserSubscribe::where('student_id', $user->id)->get();
         return view('admin.users.parts.report', compact([
+            'user',
+            'videos',
+            'exams',
+            'subscriptions',
+            'paperExams',
+            'term',
+            'lessonCount',
+            'classCount',
+            'totalTimeFormatted'
+
+        ]));
+    }
+
+    public function autoPrintReport($id)
+    {
+        $user = User::findOrFail($id);
+        $term = Term::where('season_id', $user->season_id)
+            ->where('status', '=', 'active')->first();
+        $lessonCount = OpenLesson::where('user_id', $user->id)
+            ->where('lesson_id', '!=', null)->count('lesson_id');
+
+        $classCount = OpenLesson::where('user_id', $user->id)
+            ->where('subject_class_id', '!=', null)->count('subject_class_id');
+
+        $videos = VideoOpened::where('user_id', $user->id)
+            ->where('type', 'video')
+            ->with('video')->get();
+
+        $videoMin = VideoOpened::query()
+            ->where('user_id', $user->id)
+            ->where('type', 'video')
+            ->get('minutes');
+
+        $totalTime = Carbon::parse('00:00:00');
+
+        foreach ($videoMin as $timeValue) {
+            // Parse the time value into a Carbon instance
+            $timeCarbon = Carbon::parse($timeValue->minutes);
+
+            // Add the hours, minutes, and seconds to the total time
+            $totalTime->addHours($timeCarbon->hour);
+            $totalTime->addMinutes($timeCarbon->minute);
+            $totalTime->addSeconds($timeCarbon->second);
+        }
+
+        $totalTimeFormatted = $totalTime->format('H:i:s');
+
+        $exams = ExamDegreeDepends::where('user_id', '=', $user->id)
+            ->where('exam_depends', '=', 'yes')->get();
+        $paperExams = PapelSheetExamDegree::where('user_id', '=', $user->id)->get();
+        $subscriptions = UserSubscribe::where('student_id', $user->id)->get();
+
+
+        return view('admin.users.parts.auto_report', compact([
             'user',
             'videos',
             'exams',

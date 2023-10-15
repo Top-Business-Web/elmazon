@@ -89,9 +89,14 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <div>
-                                        <h3 class="">معلومات الانجازات</h3>
-                                        <canvas id="myChart"></canvas>
+                                    <h3 class="">معلومات الانجازات</h3>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div id="chartpie" style="height: 370px; "></div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div id="chartCoulmn" style="height: 370px;"></div>
+                                        </div>
                                     </div>
                                 </div>
                                 <hr>
@@ -164,11 +169,10 @@
 
             </div> <!-- container-fluid -->
         </div>
-
+    </div>
         @include('admin.layouts_admin.myAjaxHelper')
         @endsection
         @section('ajaxCalls')
-{{--            <script type="text/javascript" src="{{ asset('assets/admin/assets/js/printThis.js') }}"></script>--}}
             <script>
                function printReport(){
                    $('#cardPrint').printThis({
@@ -180,29 +184,90 @@
                    });
                }
             </script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-            <script>
-                var xValues = ["الدروس", "الوحدات"];
-                var yValues = ['{{ $lessonCount }}','{{ $classCount }}'];
-                var barColors = ["green", "blue"];
+{{--            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>--}}
+            <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
+            <script src="https://cdn.canvasjs.com/jquery.canvasjs.min.js"></script>
+{{--            <script>--}}
+{{--                var xValues = ["الدروس", "الوحدات"];--}}
+{{--                var yValues = ['{{ $lessonCount }}','{{ $classCount }}'];--}}
+{{--                var barColors = ["green", "blue"];--}}
 
-                new Chart("myChart", {
-                    type: "bar",
-                    data: {
-                        labels: xValues,
-                        datasets: [{
-                            backgroundColor: barColors,
-                            data: yValues
-                        }]
-                    },
-                    options: {
-                        legend: {display: false},
+{{--                new Chart("myChart", {--}}
+{{--                    type: "bar",--}}
+{{--                    data: {--}}
+{{--                        labels: xValues,--}}
+{{--                        datasets: [{--}}
+{{--                            backgroundColor: barColors,--}}
+{{--                            data: yValues--}}
+{{--                        }]--}}
+{{--                    },--}}
+{{--                    options: {--}}
+{{--                        legend: {display: false},--}}
+{{--                        title: {--}}
+{{--                            display: false,--}}
+{{--                            text: "معلومات الانجازات"--}}
+{{--                        }--}}
+{{--                    }--}}
+{{--                });--}}
+{{--            </script>--}}
+
+            <script>
+                    var lessonCount = {{ $lessonCount }};
+                    var classCount = {{ $classCount }};
+                    console.log(lessonCount);
+                    var options = {
+                        animationEnabled: true,
                         title: {
-                            display: false,
-                            text: "معلومات الانجازات"
-                        }
-                    }
-                });
+                            text: "معلومات انجازات الطالب"
+                        },
+                        axisY: {
+                            title: "عدد الدروس والوحدات ",
+                            suffix: ""
+                        },
+                        axisX: {
+                            title: "الدروس والوحدات"
+                        },
+                        data: [{
+                            type: "column",
+                            yValueFormatString: "#,##0.0#",
+                            dataPoints: [
+                                { label: "الدروس", y: lessonCount },
+                                { label: "الوحدات", y: classCount },
+                            ]
+                        }]
+                    };
+                    $("#chartCoulmn").CanvasJSChart(options);
+
+            </script>
+
+            <script>
+
+                    var lessonCount = {{ $lessonCount }};
+                    var classCount = {{ $classCount }};
+                    console.log(lessonCount);
+                    var options = {
+                        animationEnabled: true,
+                        title: {
+                            text: "معلومات انجازات الطالب"
+                        },
+                        axisY: {
+                            title: "عدد الدروس والوحدات ",
+                            suffix: ""
+                        },
+                        axisX: {
+                            title: "الدروس والوحدات"
+                        },
+                        data: [{
+                            type: "pie",
+                            yValueFormatString: "#,##0.0#",
+                            dataPoints: [
+                                { label: "الدروس", y: lessonCount },
+                                { label: "الوحدات", y: classCount },
+                            ]
+                        }]
+                    };
+                    $("#chartpie").CanvasJSChart(options);
+
             </script>
 
 @endsection

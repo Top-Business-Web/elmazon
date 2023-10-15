@@ -353,3 +353,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
 
 });
+
+Route::get('autoPrintReport/{id}', [UserController::class, 'autoPrintReport'])->name('autoPrintReport');
