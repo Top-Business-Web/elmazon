@@ -76,7 +76,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                     ];
 
                     $code = collect($validator->errors())->flatten(1)[0];
-                    return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
+                    return self::returnResponseDataApi(null, $errors_arr[$errors] ?? 500, $code);
                 }
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
@@ -84,17 +84,21 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             $token = Auth::guard('user-api')->attempt(['code' => $request->code, 'password' => '123456', 'user_status' => 'active']);
 
-            //            $user_data = User::where('code', '=', $request->code)->first();
-            //            if ($user_data->login_status == 1) {
-            //                return self::returnResponseDataApi(null, "هذا الطالب مسجل دخول من جهاز اخر!", 410);
-            //
-            //            }
+            $user_data = User::query()
+            ->where('code', '=', $request->code)
+                ->first();
+
+            if ($user_data->login_status == 1) {
+                return self::returnResponseDataApi(null, "هذا الطالب مسجل دخول من جهاز اخر!", 403);
+
+            }
             if (!$token) {
                 return self::returnResponseDataApi(null, "الطالب غير مفعل برجاء التواصل مع السيكرتاريه", 408);
             }
             $user = Auth::guard('user-api')->user();
             $user['token'] = $token;
 
+            $user_data->update(['login_status' => 1]);
             return self::returnResponseDataApi(new UserResource($user), "تم تسجيل الدخول بنجاح", 200);
         } catch (\Exception $exception) {
 
