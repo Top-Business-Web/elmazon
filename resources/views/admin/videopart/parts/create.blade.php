@@ -12,6 +12,10 @@
                     <label for="name_en" class="form-control-label">الاسم باللغة الانجليزية</label>
                     <input type="text" class="form-control" name="name_en">
                 </div>
+
+                <div class="col-md-12 mt-3"><label class="labels">صوره خلفيه الفيديو</label>
+                    <input type="file" class="form-control" name="background_image">
+                </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">

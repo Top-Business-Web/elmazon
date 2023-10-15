@@ -11,12 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class VideoPartDetailsNewResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
-     */
+
     public function toArray($request){
 
         $user_watch_video = VideoOpened::query()
@@ -72,7 +67,7 @@ class VideoPartDetailsNewResource extends JsonResource
             'total_like' =>   $like_video_count,
             'like_active' => $this->like_active,
             'video_minutes' => $this->video_time,
-            'background_image' => asset('videos/images/'. $this->background_image),
+            'background_image' => $this->background_image != null ? asset('videos/images/'.$this->background_image) : asset('videos/images/default/default.png'),
             'view_active' => $this->view_active,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
