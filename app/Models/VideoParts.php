@@ -23,6 +23,7 @@ class VideoParts extends Model
         'note',
         'lesson_id',
         'link',
+        'background_image',
         'like_active',
         'youtube_link',
         'is_youtube',
