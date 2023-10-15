@@ -50,9 +50,18 @@
                                 <thead>
                                     <tr class="fw-bolder text-muted bg-light">
                                         <th class="min-w-25px">#</th>
-                                        <th class="min-w-50px">الاسم</th>
+                                        <th class="min-w-50px">اسم الطالب</th>
+                                        <th class="min-w-50px">صوره الطالب</th>
+                                        <th class="min-w-50px">تاريخ الميلاد</th>
                                         <th class="min-w-50px">الكود</th>
-                                        <th class="min-w-50px">الهاتف</th>
+                                        <th class="min-w-50px">رقم الهاتف</th>
+                                        <th class="min-w-50px">الصف الدراسي</th>
+                                        <th class="min-w-50px">المدينه</th>
+                                        <th class="min-w-50px">حاله الحساب</th>
+                                        <th class="min-w-50px">الطالب بالنسبه للسنتر</th>
+                                        <th class="min-w-50px">رقم هاتف ولي الامر</th>
+                                        <th class="min-w-50px">تاريخ بدايه الاشتراك</th>
+                                        <th class="min-w-50px">تاريخ نهايه الاشتراك</th>
                                         <th class="min-w-50px rounded-end">العمليات</th>
                                     </tr>
                                 </thead>
@@ -180,28 +189,21 @@
     @endsection
     @section('ajaxCalls')
         <script>
-            var columns = [{
-                    data: 'id',
-                    name: 'id'
-                },
-                {
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    data: 'code',
-                    name: 'code'
-                },
-                {
-                    data: 'phone',
-                    name: 'phone'
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
-                },
+            var columns = [
+                {data: 'id', name: 'id'},
+                {data: 'name', name: 'name'},
+                {data: 'image', name: 'image'},
+                {data: 'birth_date', name: 'birth_date'},
+                {data: 'code', name: 'code'},
+                {data: 'phone', name: 'phone'},
+                {data: 'season_id', name: 'season_id'},
+                {data: 'country_id', name: 'country_id'},
+                {data: 'login_status', name: 'login_status'},
+                {data: 'center', name: 'center'},
+                {data: 'father_phone', name: 'father_phone'},
+                {data: 'date_start_code', name: 'date_start_code'},
+                {data: 'date_end_code', name: 'date_end_code'},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
 
 

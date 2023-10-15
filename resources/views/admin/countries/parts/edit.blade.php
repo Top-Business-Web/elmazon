@@ -5,17 +5,17 @@
         <input type="hidden" value="{{ $country->id }}" name="id">
         <div class="form-group">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">{{ trans('admin.name_ar') }}</label>
                     <input type="text" class="form-control" value="{{ $country->name_ar }}" name="name_ar">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label">{{ trans('admin.name_en') }}</label>
                     <input type="text" class="form-control" value="{{ $country->name_en }}" name="name_en">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 mt-3">
                     <label for="city_id">مدينة</label>
                     <Select name="city_id" class="form-control">
                         <option selected disabled style="text-align: center">اختر الدوله</option>

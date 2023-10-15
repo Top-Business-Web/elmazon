@@ -28,7 +28,6 @@ use App\Imports\StudentsImport;
 use App\Http\Requests\StoreUser;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Yajra\DataTables\DataTables;
-use App\Http\Requests\UpdateUser;
 use App\Models\ExamDegreeDepends;
 use App\Models\PapelSheetExamUser;
 use Illuminate\Support\Facades\DB;
@@ -40,15 +39,12 @@ use App\Models\PapelSheetExamDegree;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\UserUpdateRequest;
-use Buglinjo\LaravelWebp\Exceptions\CwebpShellExecutionFailed;
-use Buglinjo\LaravelWebp\Exceptions\DriverIsNotSupportedException;
-use Buglinjo\LaravelWebp\Exceptions\ImageMimeNotSupportedException;
+
 
 class UserController extends Controller
 {
     use PhotoTrait, AdminLogs;
 
-    // Index Start
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -66,6 +62,71 @@ class UserController extends Controller
                        ';
                 })
 
+                ->editColumn('image', function ($users) {
+
+                    if($users->image == null){
+
+                        return '
+                    <img alt="image" onclick="window.open(this.src)" class="avatar avatar-md rounded-circle" src="' . asset('default/avatar2.jfif') . '">
+                    ';
+                    }else{
+
+                        return '
+                    <img alt="image" onclick="window.open(this.src)" class="avatar avatar-md rounded-circle" src="' . asset($users->image) . '">
+                    ';
+                    }
+
+                })
+
+                ->editColumn('season_id', function ($users) {
+                    return $users->season->name_ar;
+
+                })
+
+                ->editColumn('father_phone', function ($users) {
+                    if( $users->father_phone != null)
+                    {
+
+                        return $users->father_phone;
+                    }else{
+
+                        return '<button type="button" class="btn btn-pill btn-danger-light">لا يوجد هاتف لولي امر هذا الطالب</button>';
+
+                    }
+                })
+
+                ->editColumn('country_id', function ($users) {
+                    return $users->country->name_ar;
+
+                })
+
+                ->editColumn('login_status', function ($users) {
+
+                    if( $users->login_status == 1)
+                    {
+                       return '<button type="button" class="btn btn-pill btn-info-light">نشط</button>';
+
+                    }else{
+
+                        return '<button type="button" class="btn btn-pill btn-danger-light">غير نشط</button>';
+
+                    }
+
+                })
+
+                ->editColumn('center', function ($users) {
+
+                    if( $users->center == 'in')
+                    {
+                        return '<button type="button" class="btn btn-pill btn-info-light">الطالب داخل السنتر</button>';
+
+                    }else{
+
+                        return '<button type="button" class="btn btn-pill btn-danger-light">الطالب خارج السنتر</button>';
+
+                    }
+
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {
@@ -96,7 +157,7 @@ class UserController extends Controller
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
-        } // Create End
+        }
     }
 
 
