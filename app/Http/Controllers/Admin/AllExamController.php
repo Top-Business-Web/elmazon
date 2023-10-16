@@ -13,7 +13,6 @@ use Yajra\DataTables\Facades\DataTables;
 
 class AllExamController extends Controller
 {
-    // Index START
     use AdminLogs;
 
     public function index(request $request)
@@ -37,9 +36,7 @@ class AllExamController extends Controller
         }
     }
 
-    // End Index
 
-    // Start Create
 
     public function create()
     {
@@ -48,9 +45,7 @@ class AllExamController extends Controller
         return view('admin.all_exams.parts.create', compact('data'));
     }
 
-    // Create End
 
-    // Store Start
 
     public function store(AllExamRequest $request, AllExam $allExam)
     {
@@ -58,19 +53,19 @@ class AllExamController extends Controller
 
         if ($request->has('pdf_file_upload')) {
             $inputs['pdf_file_upload'] = saveFile('all_exams/pdf_file_uploads', $request->pdf_file_upload);
-        } // end save file
+        }
 
         if ($request->has('answer_pdf_file')) {
             $inputs['answer_pdf_file'] = saveFile('all_exams/pdf_answers', $request->answer_pdf_file);
-        } // end save file
+        }
 
         if ($request->has('answer_video_file')) {
             $inputs['answer_video_file'] = saveFile('all_exams/videos_answers', $request->answer_video_file);
-        } // end save file
+        }
 
         if ($request->has('image_result')) {
             $inputs['image_result'] = saveFile('all_exams/image_result', $request->image_result);
-        } // end save file
+        }
 
 
         if($allExam->create($inputs))
@@ -84,9 +79,6 @@ class AllExamController extends Controller
         }
     }
 
-    // Store End
-
-    // Edit Start
 
     public function edit(AllExam $allExam)
     {
@@ -95,9 +87,6 @@ class AllExamController extends Controller
         return view('admin.all_exams.parts.edit', compact('data', 'allExam'));
     }
 
-    // Edit End
-
-    // Update Start
 
     public function update(AllExamRequest $request, AllExam $allExam)
     {
@@ -108,21 +97,21 @@ class AllExamController extends Controller
                 unlink($allExam->pdf_file_upload);
             }
             $inputs['pdf_file_upload'] = saveFile('all_exams/pdf_file_uploads', $request->pdf_file_upload);
-        } // end save file
+        }
 
         if ($request->has('answer_pdf_file')) {
             if (file_exists($allExam->answer_pdf_file)) {
                 unlink($allExam->answer_pdf_file);
             }
             $inputs['answer_pdf_file'] = saveFile('all_exams/pdf_answers', $request->answer_pdf_file);
-        } // end save file
+        }
 
         if ($request->has('answer_video_file')) {
             if (file_exists($allExam->answer_video_file)) {
                 unlink($allExam->answer_video_file);
             }
             $inputs['answer_video_file'] = saveFile('all_exams/videos_answers', $request->answer_video_file);
-        } // end save file
+        }
 
         if ($request->has('image_result')) {
             if (file_exists($allExam->image_result)) {
