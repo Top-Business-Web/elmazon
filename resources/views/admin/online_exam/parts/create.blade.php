@@ -15,11 +15,11 @@
 
 
             <div class="row d-none pdfType">
-                <div class="col-md-12 mt-3">
-                    <label for="pdf_num_questions" class="form-control-label">عدد الاسئلة</label>
+                <div class="col-md-6 mt-3">
+                    <label for="pdf_num_questions" class="form-control-label">عدد اسئله الملف الورقي</label>
                     <input type="number" class="form-control" name="pdf_num_questions" style="text-align: center">
                 </div>
-                <div class="col-md-12 mt-3">
+                <div class="col-md-6 mt-3">
                     <label for="pdf_file_upload" class="form-control-label">ملف الpdf</label>
                     <input type="file" class="form-control" name="pdf_file_upload" style="text-align: center">
                 </div>
@@ -39,20 +39,20 @@
 
 
             <div class="row">
-                <div class="col-md-12 mt-3">
+                <div class="col-md-6 mt-3">
                     <label for="name_ar" class="form-control-label">الدرجة</label>
                     <input type="number" class="form-control" name="degree" style="text-align: center">
                 </div>
-                <div class="col-md-12 mt-3">
-                    <label for="date_exam" class="form-control-label">موعد الامتحان</label>
+                <div class="col-md-6 mt-3">
+                    <label for="date_exam" class="form-control-label">تاريخ اضافه الامتحان</label>
                     <input type="date" class="form-control" name="date_exam" style="text-align: center">
                 </div>
-                <div class="col-md-12 mt-3">
+                <div class="col-md-6 mt-3">
                     <label for="name_en" class="form-control-label"> وقت الامتحان</label>
                     <input type="number" class="form-control" name="quize_minute" style="text-align: center"
                            placeholder="الوقت بالدقائق">
                 </div>
-                <div class="col-md-12 mt-3">
+                <div class="col-md-6 mt-3">
                     <label for="name_en" class="form-control-label"> عدد المحاولات </label>
                     <input type="number" class="form-control" value="" name="trying_number" style="text-align: center"
                            placeholder="عدد المحاولات">
@@ -60,18 +60,18 @@
             </div>
 
             <div class="row">
-                <div class="col-md-12 mt-3">
+                <div class="col-md-6 mt-3">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
                     <input type="text" class="form-control" name="name_ar" style="text-align: center">
                 </div>
-                <div class="col-md-12 mt-3">
+                <div class="col-md-6 mt-3">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
                     <input type="text" class="form-control" name="name_en" style="text-align: center">
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-12 mt-3">
+                <div class="col-md-6 mt-3">
                     <label for="note" class="form-control-label">الصف</label>
                     <Select name="season_id" class="form-control selectSeason">
                         <option selected disabled style="text-align: center">اختر الصف</option>
@@ -81,7 +81,7 @@
                         @endforeach
                     </Select>
                 </div>
-                <div class="col-md-12 mt-3">
+                <div class="col-md-6 mt-3">
                     <label for="note" class="form-control-label">تيرم</label>
                     <Select name="term_id" class="form-control selectTerm">
                         <option selected disabled style="text-align: center">اختر تيرم</option>
@@ -137,6 +137,8 @@
                 </div>
                 <span class="badge Issue1 badge-danger"></span>
             </div>
+
+
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label class="control-label">التعليمات بالانجليزية</label>
@@ -150,6 +152,8 @@
                 </div>
                 <span class="badge Issue2 badge-danger"></span>
             </div>
+
+
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ trans('admin.close') }}</button>
