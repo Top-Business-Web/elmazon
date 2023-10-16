@@ -4,19 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePaperSheetRequest;
 use App\Models\OnlineExam;
 use App\Models\PapelSheetExam;
 use App\Models\PapelSheetExamDegree;
+use App\Models\PapelSheetExamTime;
 use App\Models\PapelSheetExamUser;
 use App\Models\Season;
 use App\Models\Term;
 use App\Traits\AdminLogs;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class PapelSheetExamController extends Controller
 {
-    // Index START
 
     use FirebaseNotification , AdminLogs;
     public function index(request $request)
@@ -47,68 +49,73 @@ class PapelSheetExamController extends Controller
         }
     }
 
-    // End Index
 
-    // User Exam Start
 
     public function usersExamPapel(Request $request)
     {
         $papelExams = PapelSheetExam::find($request->id);
-        $papel_exam_users = PapelSheetExamUser::where('papel_sheet_exam_id', $papelExams->id)->select('user_id')->groupBy('user_id')->get();
-        $answers = PapelSheetExamUser::where('papel_sheet_exam_id', $papelExams->id)
+
+        $papel_exam_users = PapelSheetExamUser::query()
+        ->where('papel_sheet_exam_id', $papelExams->id)
+            ->select('user_id')->groupBy('user_id')
+            ->get();
+
+        $answers = PapelSheetExamUser::query()
+        ->where('papel_sheet_exam_id', $papelExams->id)
             ->whereIn('user_id', $papel_exam_users->pluck('user_id'))
             ->get();
-//        return $answers;
         return view('admin.papel_sheet_exams.parts.text_exam_users', compact('papelExams', 'papel_exam_users'));
     }
 
-    // User Exam End
 
-    // Paper Exam Start
 
     public function paperExamSheet(Request $request)
     {
-        $user = PapelSheetExamUser::where('user_id', $request->id)->select('user_id')->groupBy('user_id')->get();
-        $exam = PapelSheetExamUser::where('user_id', $request->id)->first('papel_sheet_exam_id');
-        $answers = PapelSheetExamUser::where('papel_sheet_exam_id', $exam->papel_sheet_exam_id)
+        $user = PapelSheetExamUser::query()
+        ->where('user_id', $request->id)->select('user_id')
+            ->groupBy('user_id')
+            ->get();
+
+        $exam = PapelSheetExamUser::query()
+        ->where('user_id', $request->id)
+            ->first('papel_sheet_exam_id');
+
+        $answers = PapelSheetExamUser::query()
+        ->where('papel_sheet_exam_id', $exam->papel_sheet_exam_id)
             ->where('user_id', $user->pluck('user_id'))
             ->get();
-//        return $answers;
+
         return view('admin.papel_sheet_exams.parts.exam_paper_sheets', compact('answers'));
     }
 
-    // Paper Exam End
 
-    // Paper Exam Start
-
-    public function paperExamSheetStore(Request $request)
+    public function paperExamSheetStore(Request $request): JsonResponse
     {
         $examSheetId = PapelSheetExamDegree::findOrFail($request->papel_sheet_exam_id);
-        dd($examSheetId);
         $examSheetId->update(['degree' => $request->degree]);
         return response()->json(['status' => 200, 'message' => 'تم اضافه الدرجه بنجاح']);
     }
 
-    // Paper Exam End
-
-    // Start Create
 
     public function create()
     {
-        $data['seasons'] = Season::all();
-        $data['terms'] = Term::all();
-        return view('admin.papel_sheet_exams.parts.create', $data);
+        $seasons = Season::all();
+        $terms = Term::all();
+        return view('admin.papel_sheet_exams.parts.create',compact('seasons','terms'));
     }
 
-    // Create End
 
-
-    // Store Start
-
-    public function store(Request $request, PapelSheetExam $papelSheetExam)
+    public function store(StorePaperSheetRequest $request,PapelSheetExam $papelSheetExam): JsonResponse
     {
         $inputs = $request->all();
         if ($papelSheetExam->create($inputs)) {
+
+//          for ($i = 1 ; $i <= )
+            PapelSheetExamTime::create([
+                'from' => '08:00:00',
+                'to' => '09:00:00',
+                'papel_sheet_exam_id' => $papelSheetExam->id,
+            ]);
             $this->adminLog('تم اضافة امتحان ورقي');
             $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
             return response()->json(['status' => 200]);
@@ -117,21 +124,16 @@ class PapelSheetExamController extends Controller
         }
     }
 
-    // Store End
 
-    // Edit Start
     public function edit(PapelSheetExam $papelSheetExam)
     {
-        $data['seasons'] = Season::all();
-        $data['terms'] = Term::all();
-        return view('admin.papel_sheet_exams.parts.edit', compact('data', 'papelSheetExam'));
+        $seasons = Season::all();
+        $terms = Term::all();
+        return view('admin.papel_sheet_exams.parts.edit', compact('seasons','terms', 'papelSheetExam'));
     }
 
-    // Edit End
 
-    // Update Start
-
-    public function update(Request $request, PapelSheetExam $papelSheetExam)
+    public function update(Request $request, PapelSheetExam $papelSheetExam): JsonResponse
     {
         if ($papelSheetExam->update($request->all())) {
             $this->adminLog('تم تحديث امتحان ورقي');
@@ -141,17 +143,18 @@ class PapelSheetExamController extends Controller
         }
     }
 
-    // Update End
 
-    // Destroy Start
 
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
-        $papelSheetExam = PapelSheetExam::where('id', $request->id)->firstOrFail();
+        $papelSheetExam = PapelSheetExam::query()
+        ->where('id', $request->id)
+            ->firstOrFail();
+
         $papelSheetExam->delete();
         $this->adminLog('تم حذف امتحان ورقي');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Delete End
+
 }

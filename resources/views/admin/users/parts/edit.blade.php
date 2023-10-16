@@ -58,14 +58,21 @@
                 </div>
                 <div class="col-md-12 mt-3">
                     <label for="country_id" class="form-control-label">المحافظة</label>
-                    <select class="form-control" name="country_id">
-                        <option value="" disabled>اختار المحافظة</option>
+                    <select class="form-control" name="country_id" required="required">
+                        <option disabled>اختار المحافظة</option>
                         @foreach($countries as $country)
-                            <option
-                                {{ ($user->country_id == $country->id) ? 'selected' : '' }}
-                                value="{{ $country->id}}">
+                            <option value="{{ $country->id }}" {{ ($user->country_id == $country->id) ? 'selected' : '' }}>
                                 {{ $country->name_ar }}
                             </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-md-12 mt-3">
+                    <label for="country_id" class="form-control-label">حاله الحساب</label>
+                    <select class="form-control" name="country_id">
+                        @foreach($login_status as $status)
+                            <option value="{{$status}}" {{$user->login_status == $status ? 'selected' : ''}}>{{$status == 1 ? 'نشط' : 'غير نشط'}}</option>
                         @endforeach
                     </select>
                 </div>

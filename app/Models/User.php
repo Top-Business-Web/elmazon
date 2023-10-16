@@ -125,7 +125,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function exam_degree_depends_user(): HasOne
     {
-
         return $this->hasOne(ExamDegreeDepends::class, 'user_id', 'id');
     }
 
@@ -139,15 +138,11 @@ class User extends Authenticatable implements JWTSubject
     }
 
 
-
-
-
     //sum total degree of online exam
     public function online_exams_total_degrees(): BelongsToMany
     {
 
         return $this->belongsToMany(OnlineExam::class, 'exam_degree_depends', 'user_id', 'online_exam_id', 'id', 'id');
-
     }
 
 

@@ -25,7 +25,6 @@ use App\Models\User;
 class OnlineExamController extends Controller
 {
     use AdminLogs;
-    // Index START
 
     public function index(request $request)
     {

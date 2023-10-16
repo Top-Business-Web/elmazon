@@ -19,7 +19,7 @@
 
             <div class="row d-none pdfType">
                 <div class="col-md-12 mt-3">
-                    <label for="pdf_num_questions" class="form-control-label">عدد الاسئلة</label>
+                    <label for="pdf_num_questions" class="form-control-label">عدد اسئله الملف الورقي</label>
                     <input type="number" class="form-control" name="pdf_num_questions"
                            value="{{ $onlineExam->pdf_num_questions }}" style="text-align: center">
                 </div>

@@ -99,3 +99,6 @@ Route::get('terms/season/{id}',[\App\Http\Controllers\Admin\TermController::clas
 //
 //    return "Done insert";
 //});
+
+
+//       $max_size = $document->getMaxFileSize() / 1024 / 1024;  // Get size in Mb

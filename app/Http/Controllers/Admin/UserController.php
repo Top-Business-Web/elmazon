@@ -163,23 +163,33 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        $data['seasons'] = Season::get();
-        $data['countries'] = Country::get();
-        return view('admin.users.parts.edit', compact('user'))->with($data);
+        $seasons = Season::query()
+            ->select('id','name_ar')
+            ->get();
+
+        $countries = Country::query()
+            ->select('id','name_ar')
+        ->get();
+
+        $login_status = [0,1];
+
+        return view('admin.users.parts.edit', compact('user','login_status','seasons','countries'));
     }
 
-    public function update(UserUpdateRequest $request, User $user): JsonResponse
+    public function update(UserUpdateRequest $request, User $user)
     {
+        dd($request->all());
 
-        $inputs = $request->except('id');
+        $inputs = $request->except('id','code');
 
         if ($request->has('image')) {
             if (file_exists($user->image)) {
                 unlink($user->image);
             }
-            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/students', 'photo');
+            $inputs['image'] = $this->saveImage($request->image, 'user', 'photo');
         }
 
+        return $inputs;
         if ($user->update($inputs)) {
             $this->adminLog('تم تحديث طالب');
             return response()->json(['status' => 200]);
