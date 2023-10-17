@@ -8,22 +8,22 @@
                     <div id="inputFormRow">
                         <div class="input-group mb-3">
                             <input type="hidden" name="answer_number[]" class="form-control">
-                            <textarea name="answer[أ]" class="ckeditor form-control m-input" rows="1">{{ @$answers[0]['answer'] }}</textarea>
+                            <textarea id="answer1" name="answer[أ]" class="form-control m-input" rows="1">{{ @$answers[0]['answer'] }}</textarea>
                             <input type="radio" name="answer_status" {{ @$answers[0]['answer_status'] == 'correct' ? 'checked' : '' }} value="أ" class="form-control check_class">
                         </div>
                         <div class="input-group mb-3">
                             <input type="hidden" name="answer_number[1]" class="form-control">
-                            <textarea name="answer[ب]" class="ckeditor form-control m-input" rows="1">{{ @$answers[1]['answer'] }}</textarea>
+                            <textarea id="answer2" name="answer[ب]" class="form-control m-input" rows="1">{{ @$answers[1]['answer'] }}</textarea>
                             <input type="radio" name="answer_status" {{ @$answers[1]['answer_status'] == 'correct' ? 'checked' : '' }} value="ب" class="form-control check_class">
                         </div>
                         <div class="input-group mb-3">
                             <input type="hidden" name="answer_number[1]" class="form-control">
-                            <textarea name="answer[ج]" class="ckeditor form-control m-input" rows="1">{{ @$answers[2]['answer'] }}</textarea>
+                            <textarea id="answer3" name="answer[ج]" class="form-control m-input" rows="1">{{ @$answers[2]['answer'] }}</textarea>
                             <input type="radio" name="answer_status" {{ @$answers[2]['answer_status'] == 'correct' ? 'checked' : '' }} value="ج" class="form-control check_class">
                         </div>
                         <div class="input-group mb-3">
                             <input type="hidden" name="answer_number[1]" class="form-control">
-                            <textarea name="answer[د]" class="ckeditor form-control m-input" rows="1">{{ @$answers[3]['answer'] }}</textarea>
+                            <textarea id="answer4" name="answer[د]" class="form-control m-input" rows="1">{{ @$answers[3]['answer'] }}</textarea>
                             <input type="radio" name="answer_status" {{ @$answers[3]['answer_status'] == 'correct' ? 'checked' : '' }} value="د" class="form-control check_class">
                         </div>
                     </div>
@@ -36,11 +36,37 @@
         </div>
     </form>
 </div>
-<script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
+
+<script src="{{asset('uploads/js/ckeditor1.js')}}"></script>
+<script>
+    ClassicEditor.create( document.querySelector( '#answer1' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+
+    ClassicEditor.create( document.querySelector( '#answer2' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+
+    ClassicEditor.create( document.querySelector( '#answer3' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+
+
+    ClassicEditor.create( document.querySelector( '#answer4' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+</script>
+
+
+{{--<script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>--}}
 <script type="text/javascript">
-$(document).ready(function () {
-        $('.ckeditor').ckeditor();
-    });
+// $(document).ready(function () {
+//         $('.ckeditor').ckeditor();
+//     });
 
 
 // var i = 1;
@@ -57,7 +83,7 @@ $(document).ready(function () {
 //     html += '</div>';
 //     html += '<input type="radio" name="answer_status" value="' + i + '" class="form-control check_class"></span>';
 //     html += '</div>';
-    
+
 //     // var answerLength = $('.answerInput').length();
 //     var answer = $('.answerInput');
 

@@ -420,7 +420,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             if ($userRegisterExamBefore) {
 
-                $paperSheetExam = PapelSheetExam::whereHas('season', fn (Builder $builder) =>
+                $paperSheetExam = PapelSheetExam::query()
+                ->whereHas('season', fn (Builder $builder) =>
                 $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
                     ->whereHas('term', fn (Builder $builder) => $builder->where('status', '=', 'active')
                         ->where('season_id', '=', auth('user-api')->user()->season_id))
