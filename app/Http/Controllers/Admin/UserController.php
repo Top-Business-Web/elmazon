@@ -176,9 +176,9 @@ class UserController extends Controller
         return view('admin.users.parts.edit', compact('user','login_status','seasons','countries'));
     }
 
-    public function update(UserUpdateRequest $request, User $user)
+    public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
-        dd($request->all());
+
 
         $inputs = $request->except('id','code');
 
@@ -189,7 +189,6 @@ class UserController extends Controller
             $inputs['image'] = $this->saveImage($request->image, 'user', 'photo');
         }
 
-        return $inputs;
         if ($user->update($inputs)) {
             $this->adminLog('تم تحديث طالب');
             return response()->json(['status' => 200]);

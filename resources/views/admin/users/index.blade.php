@@ -207,13 +207,7 @@
             ]
 
 
-            // var ajax = {
-            //     url: "{{ route('users.index') }}",
-            //     data: function(d) {
-            //         d.type = $('#type').val()
-            //         // d.search = $('input[type="search"]').val()
-            //     }
-            // };
+
 
             showUserModal('{{ route('userUnvilable') }}')
 
