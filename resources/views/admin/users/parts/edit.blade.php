@@ -58,19 +58,20 @@
                 </div>
                 <div class="col-md-12 mt-3">
                     <label for="country_id" class="form-control-label">المحافظة</label>
-                    <select class="form-control" name="country_id" required="required">
+                    <select class="form-control" name="country_id">
                         <option disabled>اختار المحافظة</option>
                         @foreach($countries as $country)
                             <option value="{{ $country->id }}" {{ ($user->country_id == $country->id) ? 'selected' : '' }}>
                                 {{ $country->name_ar }}
                             </option>
                         @endforeach
+
                     </select>
                 </div>
 
                 <div class="col-md-12 mt-3">
-                    <label for="country_id" class="form-control-label">حاله الحساب</label>
-                    <select class="form-control" name="country_id">
+                    <label for="login_status" class="form-control-label">حاله الحساب</label>
+                    <select class="form-control" name="login_status">
                         @foreach($login_status as $status)
                             <option value="{{$status}}" {{$user->login_status == $status ? 'selected' : ''}}>{{$status == 1 ? 'نشط' : 'غير نشط'}}</option>
                         @endforeach
@@ -97,14 +98,3 @@
     </form>
 </div>
 
-<script>
-    $('.dropify').dropify()
-
-    $('.GeneCode').on('click', function () {
-        // var data = $(this).val();
-        // var phone = $('.phoneInput').val();
-        var code = Math.floor(Math.random() * 9999999999999);
-        var userCode = ''
-        $('.CodeStudent').val(code);
-    })
-</script>
