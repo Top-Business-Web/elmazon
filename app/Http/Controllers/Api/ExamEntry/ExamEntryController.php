@@ -227,12 +227,21 @@ class ExamEntryController extends Controller
                  /*
                  * start create new trying number for student
                  */
+                    if(request()->exam_type == 'full_exam'){
 
-                  $timer =  Timer::create([
-                        'online_exam_id' => $exam->id,
-                        'user_id' => Auth::guard('user-api')->id(),
-                        'timer' => request()->timer,
-                    ]);
+                        $timer = Timer::create([
+                            'all_exam_id' => $exam->id,
+                            'user_id' => Auth::guard('user-api')->id(),
+                            'timer' => request()->timer,
+                        ]);
+                    }else{
+                        $timer =  Timer::create([
+                            'online_exam_id' => $exam->id,
+                            'user_id' => Auth::guard('user-api')->id(),
+                            'timer' => request()->timer,
+                        ]);
+
+                    }
 
 
                     for ($i = 0; $i < count(request()->details); $i++) {
@@ -290,11 +299,6 @@ class ExamEntryController extends Controller
 
                     if (request()->exam_type == 'full_exam') {
 
-                        Timer::create([
-                            'all_exam_id' => $exam->id,
-                            'user_id' => Auth::guard('user-api')->id(),
-                            'timer' => request()->timer,
-                            ]);
 
                         $sumDegree = OnlineExamUser::query()
                             ->where('user_id', Auth::guard('user-api')->id())
