@@ -7,7 +7,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
-                    <label for="title_ar" class="form-control-label">العنوان بالعربية</label>
+                    <label for="title_ar" class="form-control-label">العنوان بالعربية مثال(الفصل الاول)</label>
                     <input type="text" class="form-control" value="{{ $subjectsClass->title_ar }}" name="title_ar" required>
                 </div>
                 <div class="col-md-6">
