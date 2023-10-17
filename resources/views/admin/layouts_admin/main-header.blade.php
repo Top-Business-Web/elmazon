@@ -3,8 +3,8 @@
     <div class="container-fluid">
         <div class="d-flex">
             <a class="header-brand d-md-none" href="#">
-                <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img mobile-icon" alt="logo">
-                <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img desktop-logo mobile-logo" alt="logo">
+                <img src="{{ asset('assets/admin/images/logo-1.jpg') }}" class="header-brand-img mobile-icon" alt="logo">
+                <img src="{{ asset('assets/admin/images/logo-1.jpg') }}" class="header-brand-img desktop-logo mobile-logo" alt="logo">
             </a>
             <a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-toggle="sidebar" href="#">
                 <svg xmlns="http:/www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
@@ -100,7 +100,7 @@
 {{--                    @endphp--}}
                     <a href="#" data-toggle="dropdown" class="nav-link pl-2 pr-2  leading-none d-flex">
 									<span>
-										<img src="{{ asset(auth('admin')->user()->image) ?? asset('assets/admin/images/logo-mazon.png')  }}" alt="{{ auth('admin')->user()->name }}" class="avatar  mr-xl-3 profile-user brround cover-image">
+										<img src="{{ asset(auth('admin')->user()->image) ?? asset('assets/admin/images/logo-1.jpg')  }}" alt="{{ auth('admin')->user()->name }}" class="avatar  mr-xl-3 profile-user brround cover-image">
                                     </span>
 {{--                        <div class="text-center mt-1 d-none d-xl-block">--}}
 {{--                            <h6 class="text-dark mb-0 fs-13 font-weight-semibold text-capitalize">--}}

@@ -28,7 +28,7 @@
     </main>
     <div class="welcome-container">
         <h1 class="heading-secondary"> <span class="lg">{{($setting->title) ?? 'مرحبا بعودتك '}}</span></h1>
-        <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" alt="login" style="">
+        <img src="{{ asset('assets/admin/images/logo-1.jpg') }}" alt="login" style="">
     </div>
 </div>
 

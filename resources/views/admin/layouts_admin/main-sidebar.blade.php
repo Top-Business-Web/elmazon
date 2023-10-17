@@ -2,13 +2,13 @@
 <aside class="app-sidebar">
     <div class="side-header">
         <a class="header-brand1" href="#">
-            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img desktop-logo"
+            <img src="{{ asset('assets/admin/images/logo-1.jpg') }}" class="header-brand-img desktop-logo"
                  alt="logo">
-            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img toggle-logo"
+            <img src="{{ asset('assets/admin/images/logo-1.jpg') }}" class="header-brand-img toggle-logo"
                  alt="logo">
-            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img light-logo"
+            <img src="{{ asset('assets/admin/images/logo-1.jpg') }}" class="header-brand-img light-logo"
                  alt="logo">
-            <img src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="header-brand-img light-logo1"
+            <img src="{{ asset('assets/admin/images/logo-1.jpg') }}" class="header-brand-img light-logo1"
                  alt="logo">
         </a>
         <!-- LOGO -->
@@ -143,7 +143,7 @@
             <li class="slide">
                 <a class="side-menu__item" href="{{ route('subjectsClasses.index') }}">
                     <i class="fa fa-book-reader side-menu__icon"></i>
-                    <span class="side-menu__label">الوحدات</span>
+                    <span class="side-menu__label">الفصول</span>
                 </a>
             </li>
         @endcan

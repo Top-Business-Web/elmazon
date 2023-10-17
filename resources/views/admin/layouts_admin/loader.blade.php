@@ -22,5 +22,5 @@
     }
 </style>
 <div class="Global-Loader" id="global-loader">
-    <img style="width: 250px;" src="{{ asset('assets/admin/images/logo-mazon.png') }}" class="loader-img" alt="Loader">
+    <img style="width: 250px;" src="{{ asset('assets/admin/images/logo-1.jpg') }}" class="loader-img" alt="Loader">
 </div>
