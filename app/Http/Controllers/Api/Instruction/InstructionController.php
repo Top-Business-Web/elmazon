@@ -82,23 +82,33 @@ class InstructionController extends Controller{
 
 
             } else {
-                $exam = AllExam::where('id', $id)->first();
+
+
+
+
+                $exam = AllExam::query()->where('id',$id)->first();
                 if (!$exam) {
                     return self::returnResponseDataApi(null, "الامتحان الشامل غير موجود", 404);
                 }
 
-                $theHighestDegree = ExamDegreeDepends::query()->where('all_exam_id','=',$exam->id)
+                $theHighestDegree = ExamDegreeDepends::query()
+                    ->where('all_exam_id','=',$exam->id)
                     ->where('exam_depends','=','yes')
                     ->orderBy('full_degree','desc')
                     ->latest()
                     ->first();
 
+
                 if($theHighestDegree){
                     $user =  new UserFullDegreeDetailsNewResource($theHighestDegree->user);
                     $user->degree = $theHighestDegree->full_degree;
-                    $user->per = ($theHighestDegree->full_degree / $theHighestDegree->online_exam->degree) * 100;
+                    $user->per = ($theHighestDegree->full_degree / $theHighestDegree->all_exam->degree) * 100;
                     $user->time_exam = $theHighestDegree->created_at->diffForHumans();
-                    $time = Timer::query()->where('all_exam_id','=',$exam->id)->where('user_id','=',$user->id)->latest()->first();
+                    $time = Timer::query()
+                        ->where('all_exam_id','=',$exam->id)
+                        ->where('user_id','=',$user->id)->latest()
+                        ->first();
+
                     $user->time = $time->timer;
                     $data['user'] = $user;
 

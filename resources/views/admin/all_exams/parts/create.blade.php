@@ -34,7 +34,7 @@
             </div>
             <div class="row">
                 <div class="col-md-6 mt-3">
-                    <label class="form-control-label" for="date_exam">موعد الامتحان</label>
+                    <label class="form-control-label" for="date_exam">تاريخ اضافه الامتحان</label>
                     <input type="date" class="form-control" name="date_exam">
                 </div>
                 <div class="col-md-6 mt-3">
@@ -62,9 +62,9 @@
             </div>
             <div class="row">
                 <div class="col-md-6 mt-3">
-                    <label for="note" class="form-control-label">فصل</label>
+                    <label for="note" class="form-control-label">الصف الدراسي</label>
                     <Select name="season_id" class="form-control">
-                        <option selected disabled>اختر فصل</option>
+                        <option selected disabled>اختر الصف الدراسي</option>
                         @foreach ($data['seasons'] as $season)
                             <option value="{{ $season->id }}" style="text-align: center">{{ $season->name_ar }}
                             </option>
@@ -72,7 +72,7 @@
                     </Select>
                 </div>
                 <div class="col-md-6 mt-3">
-                    <label for="note" class="form-control-label">تيرم</label>
+                    <label for="note" class="form-control-label">اختر تيرم معين</label>
                     <Select name="term_id" class="form-control">
                         <option selected disabled>اختر تيرم</option>
                     </Select>
