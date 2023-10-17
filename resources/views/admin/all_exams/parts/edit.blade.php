@@ -5,7 +5,7 @@
         <input type="hidden" value="{{ $allExam->id }}" name="id">
         <div class="form-group">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 mt-3">
                     <label for="exam_type" class="form-control-label">نوع الامتحان</label>
                     <select class="form-control" name="exam_type" id="exam_type"
                         @selected(old('exam_type',$allExam->exam_type))>
@@ -16,108 +16,101 @@
                 </div>
             </div>
             <div class="row d-none pdfType">
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="pdf_file_upload">رفع الملف (pdf)</label>
                     <input type="file" class="form-control" value="{{ $allExam->pdf_file_upload }}"
                            name="pdf_file_upload">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="pdf_num_questions">عدد الاسئلة</label>
                     <input type="number" class="form-control" value="{{ $allExam->pdf_num_questions }}"
                            name="pdf_num_questions">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="answer_pdf_file">رفع الاجابة pdf</label>
                     <input type="file" class="form-control" name="answer_pdf_file"
                            value="{{ $allExam->answer_pdf_file }}">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="answer_video_file">رفع الاجابة video</label>
                     <input type="file" class="form-control" name="answer_video_file"
                            value="{{  $allExam->answer_video_file }}">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">
-                    <label class="form-control-label" for="date_exam">موعد الامتحان</label>
+                <div class="col-md-6 mt-3">
+                    <label class="form-control-label" for="date_exam">تاريخ اضافه الامتحان</label>
                     <input type="date" class="form-control" name="date_exam" value="{{ $allExam->date_exam }}"
                            required="required">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="quize_minute">وقت الامتحان بالدقائق</label>
                     <input type="number" class="form-control" name="quize_minute" value="{{ $allExam->quize_minute }}"
                            required="required">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="trying_number">عدد المحاولات</label>
                     <input type="number" class="form-control" name="trying_number" value="{{ $allExam->trying_number }}"
                            required="required">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="degree">درجة الامتحان</label>
                     <input type="number" class="form-control" name="degree" value="{{ $allExam->degree }}"
                            required="required">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">الاسم بالعربية</label>
                     <input type="text" class="form-control" name="name_ar" required="required"
                            value="{{ $allExam->name_ar }}">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
                     <input type="text" class="form-control" name="name_en" required="required"
                            value="{{ $allExam->name_en }}">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
-                    <label for="note" class="form-control-label">الصف</label>
+                <div class="col-md-6 mt-3">
+                    <label for="note" class="form-control-label">اختر الصف الدراسي</label>
                     <Select name="season_id" required="required"
                             class="form-control" @selected(old('season_id',$allExam->season_id))>
-                        <option disabled style="text-align: center">اختر الصف</option>
+                        <option disabled>اختر الصف الدراسي</option>
                         @foreach($data['seasons'] as $season)
                             <option value="{{ $season->id }}"
                                     style="text-align: center">{{ $season->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>
-                <div class="col-md-6">
-                    <label for="note" class="form-control-label">ترم</label>
+                <div class="col-md-6 mt-3">
+                    <label for="note" class="form-control-label">اختر تيرم معين</label>
                     <Select name="term_id" required="required"
                             class="form-control">
-                        <option disabled style="text-align: center">اختر ترم</option>
+                        <option disabled>اختر التيرم</option>
                         <option class="form-control"
                                 value="{{ $allExam->term_id }}">{{ $allExam->term->name_ar }}</option>
                     </Select>
                 </div>
-                <div class="col-md-6">
-                                        <label for="note" class="form-control-label">لون الخلفية</label>
-                    {{--                    <input type="color" class="form-control" value="{{ $allExam->background_color }}" name="background_color" required>--}}
-                    <select name="background_color" id="colorSelect" class="form-control">
-                        <option value="#FE7C04">#FE7C04</option>
-                        <option value="#143A7B">#143A7B</option>
-                        <option value="#854AA4">#854AA4</option>
-                    </select>
+                <div class="col-md-12 mt-3">
+                    <label for="note" class="form-control-label">لون الخلفية</label>
+                    <input type="color" class="form-control" name="background_color"
+                           value="#D7EAF9">
+                </div>
 
-                </div>
-                <div class="col-md-6">
-                    <span class="btn btn-sm mt-4 colorInput" style="width: 100%">Preview</span>
-                </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">نصيحة</label>
                     <input type="text" name="title_result" value="{{ $allExam->title_result }}" class="form-control">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">وصف النصيحة</label>
                     <textarea name="description_result" class="form-control" rows="8">{{ $allExam->description_result }}</textarea>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">صورة النصيحة</label>
                     <input type="file" name="image_result" value="{{ $allExam->image_result }}" class="form-control">
                 </div>
