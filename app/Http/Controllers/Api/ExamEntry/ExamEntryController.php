@@ -295,7 +295,7 @@ class ExamEntryController extends Controller
                                 'status' => (isset(request()->details[$i]['answer']) || isset(request()->details[$i]['image']) || isset(request()->details[$i]['audio'])) ? 'solved' : 'leave',
                             ]);
                         }
-                    }//end foreach loop to create question and answers of users (choice and questions text)
+                    }
 
                     if (request()->exam_type == 'full_exam') {
 
