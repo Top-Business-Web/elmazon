@@ -144,7 +144,7 @@
 
     //get all questions by exam
     $(document).ready(function () {
-        $('select[name="exam"]').on('change', function () {
+        $('select[name="exam"]').on('click', function () {
 
             let season_id =   $("#season_id").val();
             let term_id =     $("#term_id").val();
