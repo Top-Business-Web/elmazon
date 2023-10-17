@@ -371,7 +371,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             if ($paperSheetExamUser) {
 
-                if(Carbon::parse($paperSheetExamUser->papelSheetExam->to)->subDays(2)->format('Y-m-d') == Carbon::now()->format('Y-m-d')){
+                if(Carbon::parse($paperSheetExamUser->papelSheetExam->to)->subDays(2)->format('Y-m-d') == Carbon::now()->format('Y-m-d') || Carbon::parse($paperSheetExamUser->papelSheetExam->to)->subDay()->format('Y-m-d') == Carbon::now()->format('Y-m-d') || Carbon::parse($paperSheetExamUser->papelSheetExam->to)->format('Y-m-d') == Carbon::now()->format('Y-m-d')){
 
                     return self::returnResponseDataApi(null, "غير مسموح لك بحذف الامتحان الورقي", 403);
 
@@ -404,7 +404,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         /*
          اذا كان يوجد امتحان ورقي متاح للطالب
         */
-        $paperSheetCheckExam = PapelSheetExam::whereHas('season', fn (Builder $builder) =>
+        $paperSheetCheckExam = PapelSheetExam::query()
+        ->whereHas('season', fn (Builder $builder) =>
         $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
             ->whereHas('term', fn (Builder $builder) => $builder->where('status', '=', 'active')
                 ->where('season_id', '=', auth('user-api')->user()->season_id))
