@@ -36,23 +36,23 @@ class QuestionController extends Controller
             return Datatables::of($questions)
                 ->addColumn('action', function ($questions) {
                     return '
-                            <button type="button" data-id="' . $questions->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                            <button type="button" data-id="' . $questions->id . '" class="btn btn-pill btn-info-light editBtn">تعديل</button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
                                     data-id="' . $questions->id . '" data-title="' . $questions->question . '">
-                                    <i class="fas fa-trash"></i>
+                                   حذف
                             </button>
                             <button type="button" ' . ($questions->question_type == 'text' ? 'hidden' : '') . ' data-id="' . $questions->id . '" class="btn btn-pill btn-success-light editBtnAnswer">الاجابة</button>
                        ';
                 })
                 ->editColumn('type', function ($questions) {
                     if ($questions->type == 'video')
-                        return 'فيديو';
+                        return 'واجب';
                     else if ($questions->type == 'lesson')
                         return 'درس';
                     else if ($questions->type == 'all_exam')
                         return 'امتحان شامل';
                     else if ($questions->type == 'subject_class')
-                        return 'وحده';
+                        return 'فصل';
                     else if ($questions->type == 'life_exam')
                         return 'امتحان لايف';
                 })
@@ -161,9 +161,7 @@ class QuestionController extends Controller
         DB::commit();
         return response()->json(['status' => 200]);
 }
-    // Add Answer End
 
-    // Edit Start
 
     public function edit(Question $question)
 

@@ -99,11 +99,11 @@ class OnlineExamQuestionController extends Controller{
     public function create()
     {
         $types = [
-           "video" => "فيديو شرح",
-           "lesson" => "درس",
            "class" => "فصل",
+            "lesson" => "درس",
+            "video" => "واجب",
+            "all_exam" => "امتحان شامل",
            "life_exam" => "امتحان لايف",
-           "all_exam" => "امتحان شامل"
 
         ];
 

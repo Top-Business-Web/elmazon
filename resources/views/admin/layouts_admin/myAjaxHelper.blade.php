@@ -262,6 +262,7 @@
                 },
                 success: function(data) {
                     if (data.status == 200) {
+                        $('#answerModal').modal('hide');
                         $('#dataTable').DataTable().ajax.reload();
                         toastr.success('تم الاضافة بنجاح');
                     } else if (data.status == 405) {

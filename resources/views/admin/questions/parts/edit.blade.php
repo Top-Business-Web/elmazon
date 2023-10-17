@@ -5,13 +5,13 @@
         <input type="hidden" value="{{ $question->id }}" name="id">
         <div class="form-group">
             <div class="row">
-                <div class="col-md-6">
-                    <label class="form-check-label" for="degree">الدرجة</label>
-                    <input class="form-control" name="degree" type="number" required="required" value="{{ $question->degree }}"/>
+                <div class="col-md-12 mt-3">
+                    <label class="form-check-label" for="degree">درجه السؤال</label>
+                    <input class="form-control" name="degree" type="number" value="{{ $question->degree }}"/>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-check-label" for="degree">درجة الصعوبة</label>
-                    <select class="form-control" name="difficulty" required="required">
+                <div class="col-md-12 mt-3">
+                    <label class="form-check-label" for="degree">درجه الصعوبه لهذا السؤال*</label>
+                    <select class="form-control" name="difficulty">
                         <option value="low" class="form-control" {{ $question->difficulty == 'low' ? 'selected' : '' }}>سهل</option>
                         <option value="mid" class="form-control" {{ $question->difficulty == 'mid' ? 'selected' : '' }}>متوسط</option>
                         <option value="high" class="form-control" {{ $question->difficulty == 'high' ? 'selected' : '' }}>صعب</option>
@@ -19,17 +19,16 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <label for="name_ar" class="form-control-label">السؤال</label>
-                    <textarea class="form-control" rows="5" name="question">{{ $question->question }}</textarea>
+                <div class="col-md-12 mt-4">
+                    <label for="name_ar" class="form-control-label">اكتب سؤالك هنا</label>
+                    <textarea id="questionTextarea" class="form-control" rows="5" name="question">{{ $question->question }}</textarea>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
-                    <label for="season" class="form-control-label">الصف</label>
-                    <Select name="season_id" class="form-control seasonChoose"
-                            required="required">
-                        <option disabled style="text-align: center">اختار الصف</option>
+                <div class="col-md-6 mt-3">
+                    <label for="season" class="form-control-label">الصف الدراسي</label>
+                    <Select name="season_id" class="form-control seasonChoose">
+                        <option disabled>اختار الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
                                     {{ $question->season_id == $season->id ? 'selected' : '' }}
@@ -37,29 +36,29 @@
                         @endforeach
                     </Select>
                 </div>
-                <div class="col-md-6">
-                    <label for="term" class="form-control-label">الترم</label>
+                <div class="col-md-6 mt-3">
+                    <label for="term" class="form-control-label">اختر تيرم للفصل الدراسي</label>
                     <Select name="term_id" class="form-control user_choose"
                             required="required">
-                        <option selected value="{{ $question->term_id }}" style="text-align: center">{{ $question->term->name_ar }}</option>
+                        <option selected value="{{ $question->term_id }}">{{ $question->term->name_ar }}</option>
                     </Select>
                 </div>
             </div>
             <div class="row d-none choseExamp">
                 <div class="col-md-6 ">
-                    <label for="type" class="form-control-label ">النوع</label>
+                    <label for="type" class="form-control-label ">اختر قسم للسؤال</label>
                     <Select name="type" id="type" class="form-control type_choose"
                             required="required">
-                        <option disabled style="text-align: center">اختار النوع</option>
+                        <option disabled style="text-align: center">اختر قسم للسؤال</option>
                         <option value="lesson"
                                 {{ $question->type == 'lesson' ? 'selected' : '' }}
                                 style="text-align: center">درس</option>
                         <option value="subject_class"
                                 {{ $question->type == 'subject_class' ? 'selected' : '' }}
-                                style="text-align: center">الوحدة</option>
+                                style="text-align: center">فصل</option>
                         <option value="video"
                                 {{ $question->type == 'video' ? 'selected' : '' }}
-                                style="text-align: center">الفيديو</option>
+                                style="text-align: center">واجب</option>
                         <option value="all_exam"
                                 {{ $question->type == 'all_exam' ? 'selected' : '' }}
                                 style="text-align: center">امتحان شامل</option>
@@ -71,12 +70,9 @@
 
             </div>
             <div class="row">
-                <div class="col-md-6">
-                    <label for="lesson" class="form-control-label">ملاحظة</label>
-                    <textarea class="form-control" rows="8" name="note">{{ $question->note }}</textarea>
-                </div>
-                <div class="col-md-6">
-                    <label for="">الصورة :</label>
+
+                <div class="col-md-12 mt-4">
+                    <label for="">اختيار صوره للسؤال في حاله عدم كتابه السؤال*</label>
                     <input type="file" name="image" class="dropify"
                            value="{{ $question->image }}"
                            data-default-file="{{ $question->image }}"/>
@@ -89,6 +85,14 @@
         </div>
     </form>
 </div>
+
+<script src="{{asset('uploads/js/ckeditor1.js')}}"></script>
+<script>
+    ClassicEditor.create( document.querySelector( '#questionTextarea' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+</script>
 <script>
 
     $('.dropify').dropify();
