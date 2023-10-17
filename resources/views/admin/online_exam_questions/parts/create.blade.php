@@ -141,7 +141,6 @@
     });
 
 
-
     //get all questions by exam
     $(document).ready(function () {
         $('select[name="exam"]').on('click', function () {

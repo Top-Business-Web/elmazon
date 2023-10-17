@@ -105,16 +105,17 @@ class PapelSheetExamController extends Controller
     }
 
 
-    public function store(StorePaperSheetRequest $request,PapelSheetExam $papelSheetExam): JsonResponse
+    public function store(StorePaperSheetRequest $request): JsonResponse
     {
         $inputs = $request->all();
-        if ($papelSheetExam->create($inputs)) {
 
-//          for ($i = 1 ; $i <= )
+        $papelSheetExam = PapelSheetExam::create($inputs);
+        if ($papelSheetExam->save()) {
+
             PapelSheetExamTime::create([
                 'from' => '08:00:00',
-                'to' => '09:00:00',
-                'papel_sheet_exam_id' => $papelSheetExam->id,
+                'to' => '12:00:00',
+                'papel_sheet_exam_id' =>  $papelSheetExam->id,
             ]);
             $this->adminLog('تم اضافة امتحان ورقي');
             $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
