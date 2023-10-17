@@ -3,7 +3,7 @@
         @csrf
         <div class="form-group">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 mt-3">
                     <label for="exam_type" class="form-control-label">نوع الامتحان</label>
                     <select class="form-control" name="exam_type" id="exam_type">
                         <option value="" disabled selected>اختر النوع</option>
@@ -13,93 +13,87 @@
                 </div>
             </div>
             <div class="row d-none pdfType">
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="pdf_file_upload">رفع الملف (pdf)</label>
                     <input type="file" class="form-control" name="pdf_file_upload">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="pdf_num_questions">عدد الاسئلة</label>
                     <input type="number" class="form-control" name="pdf_num_questions">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="answer_pdf_file">رفع الاجابة pdf</label>
                     <input type="file" class="form-control" name="answer_pdf_file">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="answer_video_file">رفع الاجابة video</label>
                     <input type="file" class="form-control" name="answer_video_file">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="date_exam">موعد الامتحان</label>
                     <input type="date" class="form-control" name="date_exam">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="quize_minute">وقت الامتحان بالدقائق</label>
                     <input type="number" class="form-control" name="quize_minute">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="trying_number">عدد المحاولات</label>
                     <input type="number" class="form-control" name="trying_number">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6 mt-3">
                     <label class="form-control-label" for="degree">درجة الامتحان</label>
                     <input type="number" class="form-control" name="degree">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">الاسم بالعربية</label>
                     <input type="text" class="form-control" name="name_ar">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
                     <input type="text" class="form-control" name="name_en">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6 mt-3">
                     <label for="note" class="form-control-label">فصل</label>
                     <Select name="season_id" class="form-control">
-                        <option selected disabled style="text-align: center">اختر فصل</option>
+                        <option selected disabled>اختر فصل</option>
                         @foreach ($data['seasons'] as $season)
                             <option value="{{ $season->id }}" style="text-align: center">{{ $season->name_ar }}
                             </option>
                         @endforeach
                     </Select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6 mt-3">
                     <label for="note" class="form-control-label">تيرم</label>
                     <Select name="term_id" class="form-control">
-                        <option selected disabled style="text-align: center">اختر تيرم</option>
+                        <option selected disabled>اختر تيرم</option>
                     </Select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">لون الخلفية</label>
-                    {{--                    <input type="color" class="form-control" value="{{ $allExam->background_color }}" name="background_color" required> --}}
-                    <select name="background_color" id="colorSelect" class="form-control">
-                        <option value="#FE7C04">#FE7C04</option>
-                        <option value="#143A7B">#143A7B</option>
-                        <option value="#854AA4">#854AA4</option>
-                    </select>
+                    <input type="color" class="form-control" name="background_color"
+                           value="#D7EAF9">
                 </div>
-                <div class="col-md-6">
-                    <span class="btn btn-sm mt-4 colorInput" style="width: 100%">Preview</span>
-                </div>
+
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">نصيحة</label>
                     <input type="text" name="title_result" class="form-control">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">وصف النصيحة</label>
                     <textarea name="description_result" class="form-control" rows="8"></textarea>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">صورة النصيحة</label>
                     <input type="file" name="image_result" class="form-control">
                 </div>
