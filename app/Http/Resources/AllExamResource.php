@@ -27,6 +27,7 @@ class AllExamResource extends JsonResource
             'id' => $this->id,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'type' => $this->exam_type,
+            'exam_type' => 'all_exam',
             'background_color' => $this->background_color,
             'exams_favorite' => !ExamsFavorite::query()->where('all_exam_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first()
             || ExamsFavorite::query()->where('all_exam_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','un_favorite')->first() ? 'un_favorite' : 'favorite',
