@@ -405,6 +405,10 @@ class LessonController extends Controller
 
                     return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم استكمال مشاهده الفيديو من قبل", 420);
 
+                }elseif ($request->minutes <  $videoOpened->minutes){
+
+                    return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "عدد الدقائق المرسله اقل من المسموع من قبل", 418);
+
                 }else{
 
                     $videoOpened->update(['minutes' => $request->minutes]);
