@@ -39,7 +39,8 @@ class LessonDetailsController extends Controller{
 
     public function allPdfByVideoId($id): JsonResponse{
 
-        $video = VideoParts::where('id','=',$id)->first();
+        $video = VideoParts::query()
+        ->where('id','=',$id)->first();
         if(!$video){
 
             return self::returnResponseDataApi(null,"هذا الفيديو غير موجود",404,404);
@@ -53,7 +54,9 @@ class LessonDetailsController extends Controller{
 
     public function allAudiosByVideoId($id): JsonResponse{
 
-        $video = VideoParts::where('id','=',$id)->first();
+        $video = VideoParts::query()
+        ->where('id','=',$id)->first();
+
         if(!$video){
 
             return self::returnResponseDataApi(null,"هذا الفيديو غير موجود",404,404);
@@ -69,11 +72,18 @@ class LessonDetailsController extends Controller{
       public function allExamsByVideoId($id): JsonResponse{
 
           $video = VideoParts::query()->where('id','=',$id)->first();
+
           if(!$video){
               return self::returnResponseDataApi(null,"هذا الفيديو غير موجود",404,404);
           }else{
 
               $allExams = OnlineExam::query()->where('video_id','=',$video->id)->first();
+
+              if(!$allExams){
+
+                  return self::returnResponseDataApi(null,"لا يوجد اي واجب تابع لهذ الفيديو",404,404);
+
+              }
 
               return self::returnResponseDataApi(new VideoPartOnlineExamsResource($allExams),"تم الحصول علي امتحان الفيديو بنجاح",200);
 
@@ -84,7 +94,7 @@ class LessonDetailsController extends Controller{
 
     public function allExamsByLessonId($id): JsonResponse{
 
-        $lesson = Lesson::where('id','=',$id)->first();
+        $lesson = Lesson::query()->where('id','=',$id)->first();
         if(!$lesson){
 
             return self::returnResponseDataApi(null,"هذا الدرس غير موجود",404,404);
