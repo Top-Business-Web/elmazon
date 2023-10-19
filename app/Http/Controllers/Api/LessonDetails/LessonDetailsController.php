@@ -62,8 +62,16 @@ class LessonDetailsController extends Controller{
             return self::returnResponseDataApi(null,"هذا الفيديو غير موجود",404,404);
         }
 
-        $allAudios = VideoFilesUploads::query()->where('video_part_id','=',$video->id)->where('file_type','=','audio')->get();
+        $allAudios = VideoFilesUploads::query()
+            ->where('video_part_id','=',$video->id)
+            ->where('file_type','=','audio')
+            ->get();
 
+        if(!$allAudios){
+
+            return self::returnResponseDataApi(null,"لا يوجد اي ملفات صوتيه تابعه لهذا الفيديو",404,404);
+
+        }
         return self::returnResponseDataApi(VideoUploadFileDetailsResource::collection($allAudios),"تم الحصول علي جميع الملفات الصوتيه بنجاح",200);
 
 
@@ -101,6 +109,12 @@ class LessonDetailsController extends Controller{
         }
 
         $allExams = OnlineExam::query()->where('lesson_id','=',$lesson->id)->get();
+
+        if(!$allExams){
+
+            return self::returnResponseDataApi(null,"لا يوجد اي امتحانات لهذا الدرس",404,404);
+
+        }
 
         return self::returnResponseDataApi(OnlineExamNewResource::collection($allExams),"تم الحصول علي جميع امتحانات الدرس بنجاح",200);
 
