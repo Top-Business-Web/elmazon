@@ -136,7 +136,7 @@ class GuideController extends Controller
     }
 
 
-    //update guide ELees
+    //update guide ELee
     public function update(Guide $guide, GuideUpdateRequest $request): JsonResponse
     {
         $inputs = $request->all();
