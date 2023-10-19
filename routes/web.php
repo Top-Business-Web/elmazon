@@ -102,3 +102,7 @@ Route::get('terms/season/{id}',[\App\Http\Controllers\Admin\TermController::clas
 
 
 //       $max_size = $document->getMaxFileSize() / 1024 / 1024;  // Get size in Mb
+Route::get('update-users-status',function (){
+
+    return DB::table('users')->update(['login_status' => 0]);
+});
