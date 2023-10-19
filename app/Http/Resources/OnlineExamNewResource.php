@@ -17,13 +17,13 @@ class OnlineExamNewResource extends JsonResource
     public function toArray($request)
     {
         return [
-
             'id' => $this->id,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'type' => $this->exam_type,
             'exam_type' => 'online',
             'background_color' => $this->background_color,
-            'exams_favorite' => !ExamsFavorite::where('online_exam_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->first()
+            'exams_favorite' => !ExamsFavorite::where('online_exam_id','=',$this->id)
+                ->where('user_id','=',Auth::guard('user-api')->id())->first()
             || ExamsFavorite::where('online_exam_id','=',$this->id)->where('user_id','=',Auth::guard('user-api')->id())->where('action','=','un_favorite')->first() ? 'un_favorite' : 'favorite',
             'pdf_exam_upload' => $this->pdf_file_upload != null ? asset('online_exams/pdf_file_uploads/'. $this->pdf_file_upload) : null,
             'answer_pdf_file' => $this->answer_pdf_file != null ? asset('online_exams/pdf_answers/'. $this->answer_pdf_file) : null,
@@ -33,7 +33,6 @@ class OnlineExamNewResource extends JsonResource
             'exam_pdf_size' => 1000,
             'answer_pdf_size' => 900,
             'answer_video_size' => 500,
-
         ];
     }
 }
