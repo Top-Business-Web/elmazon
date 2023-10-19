@@ -393,19 +393,14 @@ class LessonController extends Controller
 
                 if($request->minutes > $video->video_time){
 
-                    if($video->video_time ==  $videoOpened->minutes){
+                return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "عدد الدقائق المدخله بالطلب اكبر من عدد دقائق هذا الفيديو!", 419);
 
-                        return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم استكمال مشاهده الفيديو من قبل", 420);
 
-                    }else{
-                        return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "عدد الدقائق المدخله بالطلب اكبر من عدد دقائق هذا الفيديو!", 419);
-                    }
-
-                }elseif ($video->video_time ==  $videoOpened->minutes){
+                }elseif($video->video_time ==  $videoOpened->minutes){
 
                     return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم استكمال مشاهده الفيديو من قبل", 420);
 
-                }elseif ($request->minutes <  $videoOpened->minutes){
+                } elseif ($request->minutes <  $videoOpened->minutes){
 
                     return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "عدد الدقائق المرسله اقل من المسموع من قبل", 418);
 
@@ -413,12 +408,7 @@ class LessonController extends Controller
 
                     $videoOpened->update(['minutes' => $request->minutes]);
 
-
-
-                    /*
-                * start update next lesson ==========================================================================================================================
-                */
-
+                    //start access next lesson
 
                     $lesson = Lesson::query()
                         ->where('id', '=',$video->lesson_id)
@@ -452,8 +442,6 @@ class LessonController extends Controller
 
                     $totalMinutesOfAllLessons = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfAllVideosBelongsTiThisLesson)) * 100),2);
 
-
-
                     if ($next_lesson) {
 
                         if($totalMinutesOfAllLessons >= 65){
@@ -470,19 +458,11 @@ class LessonController extends Controller
                                 ]);
                             }
                         }
-                    }//if find next lesson
+                    }
+                    //end access next lesson
 
 
-
-                    /*
-                      * end update next lesson ==========================================================================================================================
-                      */
-
-
-
-                    /*
-                   * start update next video ==========================================================================================================================
-                   */
+                       //start access next video
 
                         $videoOpenedByUser = VideoOpened::query()
                             ->where('user_id', '=', Auth::guard('user-api')->id())
@@ -563,19 +543,12 @@ class LessonController extends Controller
                             return self::returnResponseDataApi(null, "يجب فتح الملف السابق", 415, 200);
                         }
 
+                        //end access next video
 
 
 
-                    /*
-                   * end update next video ==========================================================================================================================
-                   */
 
-
-
-                /*
-              * start update next subject_class ==========================================================================================================================
-              */
-
+                    //access next class
                     $idOfSubjectClass =  $video->lesson->subject_class_id;
 
 
@@ -672,11 +645,7 @@ class LessonController extends Controller
 
                     return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم تحديث عدد دقائق الفيديو بنجاح", 200);
 
-
-                    /*
-                    * end update next subject_class ==========================================================================================================================
-                    */
-
+                    //end access next class
                 }
 
             }
