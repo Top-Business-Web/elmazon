@@ -9,6 +9,7 @@ use App\Models\Season;
 use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use App\Models\SubjectClass;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Tymon\JWTAuth\Claims\Subject;
@@ -31,10 +32,10 @@ class GuideController extends Controller
             return Datatables::of($guides)
                 ->addColumn('action', function ($guides) {
                     return '
-                            <button type="button" data-id="' . $guides->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                            <button type="button" data-id="' . $guides->id . '" class="btn btn-pill btn-info-light editBtn">تعديل</button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
                                     data-id="' . $guides->id . '" data-title="' . $guides->title_ar . '">
-                                    <i class="fas fa-trash"></i>
+                                   حذف
                             </button>
                             <a href="' . route('indexItem', $guides->id) . '" class="btn btn-pill btn-success-light addItem">اضافة عنصر</a>
                        ';
@@ -54,9 +55,7 @@ class GuideController extends Controller
         }
         return view('admin.guides.index');
     }
-    // Index End
 
-    // Create Start
 
     public function create()
     {
@@ -65,11 +64,9 @@ class GuideController extends Controller
         return view('admin.guides.parts.create', compact('terms', 'seasons'));
     }
 
-    // Create End
 
-    // Subject Class Sort Start
 
-    public function subjectSort(Request $request)
+    public function subjectSort(Request $request): string
     {
 
         $terms = $request->id;
@@ -88,11 +85,9 @@ class GuideController extends Controller
 
     }
 
-    // Subject Class Sort End
 
-    // Subject Class Sort Start
 
-    public function lessonSort(Request $request)
+    public function lessonSort(Request $request): string
     {
 
         $subject = $request->id;
@@ -111,11 +106,9 @@ class GuideController extends Controller
 
     }
 
-    // Subject Class Sort End
 
-    // Store Start
 
-    public function store(GuideStoreRequest $request)
+    public function store(GuideStoreRequest $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -135,9 +128,6 @@ class GuideController extends Controller
         }
     }
 
-    // Store Start
-
-    //Edit start
 
     public function edit(Guide $guide)
     {
@@ -145,11 +135,9 @@ class GuideController extends Controller
         return view('admin.guides.parts.edit', compact('guide', 'seasons'));
     }
 
-    // Edit end
 
-    // Update start
-
-    public function update(Guide $guide, GuideUpdateRequest $request)
+    //update guide ELee
+    public function update(Guide $guide, GuideUpdateRequest $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -169,12 +157,9 @@ class GuideController extends Controller
         }
     }
 
-    // Update end
-
-    // Destroy Start
 
 
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         $guide = Guide::where('id', $request->id)->firstOrFail();
         $guide->delete();
@@ -182,9 +167,7 @@ class GuideController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    //  Destroy End
 
-    // IndexItem Start
     public function indexItem(Request $request, $id)
     {
         if ($request->ajax()) {
@@ -229,9 +212,7 @@ class GuideController extends Controller
             return view('admin.guides.parts.item', compact('id'));
         }
     }
-    // IndexItem End
 
-    // Create Item Start
 
     public function addItem($id)
     {
@@ -239,12 +220,9 @@ class GuideController extends Controller
         return view('admin.guides.parts.add-item', compact('subjects', 'id'));
     }
 
-    // Create Item End
 
 
-    // StoreItem Start
-
-    public function addItems(AddItemStoreRequest $request)
+    public function addItems(AddItemStoreRequest $request): JsonResponse
     {
         $inputs = $request->all();
         if($request->hasFile('file')){
@@ -263,7 +241,6 @@ class GuideController extends Controller
         }
 
 
-
         if (Guide::create($inputs)) {
             return response()->json(['status' => 200]);
         } else {
@@ -271,9 +248,6 @@ class GuideController extends Controller
         }
     }
 
-    // StoereItem End
-
-    // Edit Item Start
 
     public function editItem($id)
     {
@@ -282,11 +256,9 @@ class GuideController extends Controller
         return view('admin.guides.parts.update-item', compact('subjects', 'guide'));
     }
 
-    // Edit Item End
 
-    // UpdateItem Start
 
-    public function updateItem(Request $request, $id)
+    public function updateItem(Request $request, $id): JsonResponse
     {
         $items = Guide::find($id);
         $inputs = $request->all();
@@ -314,6 +286,6 @@ class GuideController extends Controller
         }
     }
 
-    // UpdatedItem End
+
 
 }

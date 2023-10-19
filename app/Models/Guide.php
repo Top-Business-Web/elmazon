@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Guide extends Model
 {
@@ -34,26 +35,31 @@ class Guide extends Model
      *
      * @return string
      */
-    public function childs() {
+    public function childs()
+    {
         return $this->hasMany(Guide::class,'from_id','id') ;
     }
 
-    public function term(){
+    public function term(): BelongsTo
+    {
 
         return $this->belongsTo(Term::class,'term_id','id');
     }
 
-    public function season(){
+    public function season(): BelongsTo
+    {
 
         return $this->belongsTo(Season::class,'season_id','id');
     }
 
-    public function subjectClass(){
+    public function subjectClass(): BelongsTo
+    {
 
         return $this->belongsTo(SubjectClass::class,'subject_class_id','id');
     }
 
-    public function lesson(){
+    public function lesson(): BelongsTo
+    {
 
         return $this->belongsTo(Lesson::class,'lesson_id','id');
     }

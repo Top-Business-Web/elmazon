@@ -11,7 +11,7 @@ class GuideUpdateRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,7 +21,7 @@ class GuideUpdateRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'title_ar' => 'required',
@@ -29,13 +29,13 @@ class GuideUpdateRequest extends FormRequest
             'description_ar' => 'required',
             'description_en' => 'required',
             'file' => 'sometimes',
-            'icon' => 'sometimes|mimes:png',
+            'icon' => 'sometimes|mimes:jpg,jpeg,png',
             'background_color' => 'required',
             'season_id' => 'required',
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'title_ar.required' => 'العنوان بالعربي مطلوب',
