@@ -46,7 +46,16 @@ class LessonDetailsController extends Controller{
             return self::returnResponseDataApi(null,"هذا الفيديو غير موجود",404,404);
         }
 
-        $allPdf = VideoFilesUploads::query()->where('video_part_id','=',$video->id)->where('file_type','=','pdf')->get();
+        $allPdf = VideoFilesUploads::query()
+            ->where('video_part_id','=',$video->id)
+            ->where('file_type','=','pdf')
+            ->get();
+
+        if(!$allPdf){
+
+            return self::returnResponseDataApi(null,"لا يوجد اي ملفات ورقيه تابعه لهذا الفيديو",404,404);
+
+        }
         return self::returnResponseDataApi(VideoUploadFileDetailsResource::collection($allPdf),"تم الحصول علي جميع ملخصات الشرح بنجاح",200);
 
     }
