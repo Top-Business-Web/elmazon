@@ -12,6 +12,8 @@ class VideoPartOnlineExamsResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
+
+    //grt all data of videos
     public function toArray($request){
         return [
 
