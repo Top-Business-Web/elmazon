@@ -68,14 +68,16 @@ class LessonDetailsController extends Controller{
 
       public function allExamsByVideoId($id): JsonResponse{
 
-          $video = VideoParts::where('id','=',$id)->first();
+          $video = VideoParts::query()->where('id','=',$id)->first();
           if(!$video){
               return self::returnResponseDataApi(null,"هذا الفيديو غير موجود",404,404);
+          }else{
+
+              $allExams = OnlineExam::query()->where('video_id','=',$video->id)->first();
+
+              return self::returnResponseDataApi(new VideoPartOnlineExamsResource($allExams),"تم الحصول علي امتحان الفيديو بنجاح",200);
+
           }
-
-          $allExams = OnlineExam::query()->where('video_id','=',$video->id)->first();
-
-          return self::returnResponseDataApi(new VideoPartOnlineExamsResource($allExams),"تم الحصول علي امتحان الفيديو بنجاح",200);
 
 
       }
