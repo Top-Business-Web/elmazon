@@ -161,7 +161,10 @@ class GuideController extends Controller
 
     public function destroy(Request $request): JsonResponse
     {
-        $guide = Guide::where('id', $request->id)->firstOrFail();
+        $guide = Guide::query()->where('id', $request->id)->firstOrFail();
+        if(file_exists(public_path($guide->file))){
+            unlink(public_path($guide->file));
+        }
         $guide->delete();
         $this->adminLog('تم حذف مصادر ومراجع');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
