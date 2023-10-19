@@ -382,6 +382,7 @@ class LessonController extends Controller
 
             $videoOpened = VideoOpened::query()
                 ->where('video_part_id','=',$video->id)
+                ->where('user_id', '=', Auth::guard('user-api')->id())
                 ->first();
 
 
