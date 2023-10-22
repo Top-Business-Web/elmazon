@@ -29,14 +29,13 @@
                 </div>
             </div>
 
-
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">الصف الدراسي</label>
                     <Select name="season_id" class="form-control">
                         @foreach ($seasons as $season)
                             <option
-                                value="{{ $season->id }}" {{ $papelSheetExam->seanon_id == $season->id ? 'selected' : ''}}>{{ $season->name_ar }}</option>
+                                value="{{ $season->id }}" {{ $papelSheetExam->season_id == $season->id ? 'selected' : ''}}>{{ $season->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>
