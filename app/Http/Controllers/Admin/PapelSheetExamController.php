@@ -112,11 +112,14 @@ class PapelSheetExamController extends Controller
         $papelSheetExam = PapelSheetExam::create($inputs);
         if ($papelSheetExam->save()) {
 
-            PapelSheetExamTime::create([
-                'from' => '08:00:00',
-                'to' => '12:00:00',
-                'papel_sheet_exam_id' =>  $papelSheetExam->id,
-            ]);
+            for ($t = 0; $t < count($request->times['from']); $t++) {
+                PapelSheetExamTime::create([
+                    'from' => $request->times['from'][$t],
+                    'to' => $request->times['to'][$t],
+                    'papel_sheet_exam_id' =>  $papelSheetExam->id,
+                ]);
+            }
+
             $this->adminLog('تم اضافة امتحان ورقي');
             $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->name_ar, 'term_id' => $request->term_id],$request->season_id);
             return response()->json(['status' => 200]);
@@ -128,15 +131,25 @@ class PapelSheetExamController extends Controller
 
     public function edit(PapelSheetExam $papelSheetExam)
     {
+        $times = PapelSheetExamTime::where('papel_sheet_exam_id',$papelSheetExam->id)->get();
         $seasons = Season::all();
         $terms = Term::all();
-        return view('admin.papel_sheet_exams.parts.edit', compact('seasons','terms', 'papelSheetExam'));
+        return view('admin.papel_sheet_exams.parts.edit', compact('seasons','terms', 'papelSheetExam','times'));
     }
 
 
     public function update(Request $request, PapelSheetExam $papelSheetExam): JsonResponse
     {
+
         if ($papelSheetExam->update($request->all())) {
+            PapelSheetExamTime::where('papel_sheet_exam_id',$papelSheetExam->id)->delete();
+            for ($t = 0; $t < count($request->times['from']); $t++) {
+                PapelSheetExamTime::create([
+                    'from' => $request->times['from'][$t],
+                    'to' => $request->times['to'][$t],
+                    'papel_sheet_exam_id' =>  $papelSheetExam->id,
+                ]);
+            }
             $this->adminLog('تم تحديث امتحان ورقي');
             return response()->json(['status' => 200]);
         } else {
