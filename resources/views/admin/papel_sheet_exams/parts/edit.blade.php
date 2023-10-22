@@ -1,5 +1,6 @@
 <div class="modal-body">
-    <form id="updateForm" class="updateForm" method="POST" action="{{ route('papelSheetExam.update', $papelSheetExam->id) }}">
+    <form id="updateForm" class="updateForm" method="POST"
+          action="{{ route('papelSheetExam.update', $papelSheetExam->id) }}">
         @csrf
         @method('PUT')
         <input type="hidden" value="{{ $papelSheetExam->id }}" name="id">
@@ -7,7 +8,8 @@
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label for="degree" class="form-control-label">درجه الامتحان الورقي</label>
-                    <input type="number" class="form-control" name="degree" min="0" value="{{ $papelSheetExam->degree }}">
+                    <input type="number" class="form-control" name="degree" min="0"
+                           value="{{ $papelSheetExam->degree }}">
                     </Select>
                 </div>
                 <div class="col-md-12 mt-3">
@@ -33,7 +35,8 @@
                     <label for="name_ar" class="form-control-label">الصف الدراسي</label>
                     <Select name="season_id" class="form-control">
                         @foreach ($seasons as $season)
-                            <option value="{{ $season->id }}" {{ $papelSheetExam->seanon_id == $season->id ? 'selected' : ''}}>{{ $season->name_ar }}</option>
+                            <option
+                                value="{{ $season->id }}" {{ $papelSheetExam->seanon_id == $season->id ? 'selected' : ''}}>{{ $season->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>
@@ -42,12 +45,12 @@
                     <Select name="term_id" class="form-control">
                         <option selected disabled style="text-align: center">اختار الترم</option>
                         @foreach ($terms as $term)
-                            <option value="{{ $term->id }}" {{ $papelSheetExam->term_id == $term->id ?  'selected' : ''}}>{{ $term->name_ar }}</option>
+                            <option
+                                value="{{ $term->id }}" {{ $papelSheetExam->term_id == $term->id ?  'selected' : ''}}>{{ $term->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>
             </div>
-
 
 
             <div class="row">
@@ -59,6 +62,44 @@
                     <label for="name_en" class="form-control-label">نهايه تاريخ التسجيل بالامتحان الورقي</label>
                     <input type="date" class="form-control" value="{{ $papelSheetExam->to }}" name="to">
                     </Select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 mt-3">
+                    <label for="time" class="form-control-label">اوقات الامتحان</label>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-3 divFrom">
+                            @foreach($times as $key => $time)
+                                <div class="divinputFrom">
+                                    <label for="time" class="form-control-label">من</label>
+                                    <input type="time" class="form-control" name="times[from][]"
+                                           value="{{ $time->from }}">
+                                </div>
+                            @endforeach
+
+                        </div>
+                        <div class="col-3 divTo">
+                            @foreach($times as $key => $time)
+                                <div class="divinputTo">
+                                    <label for="time" class="form-control-label">الي</label>
+                                    <input type="time" class="form-control" name="times[to][]" value="{{ $time->to }}">
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="col-3">
+                            <button style="margin-top: 28px;" type="button" class="form-control btn btn-sm btn-primary"
+                                    id="addTime">اضافة وقت اخر
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <button style="margin-top: 28px; color: white !important; " type="button"
+                                    class="form-control btn btn-sm btn-danger" id="removeTime">حذف وقت
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -94,6 +135,26 @@
         });
     });
 
+    $(document).ready(function () {
+        $('#addTime').on('click', function () {
+            var divFrom = $('.divFrom');
+            var divTo = $('.divTo');
+            var appendFrom = '<div class="divinputFrom"><label for="time" class="form-control-label addlabel">من</label><input type="time" class="form-control addinput" name="times[from][]"></div>';
+            var appendTo = '<div class="divinputTo"><label for="time" class="form-control-label addlabel">الي</label><input type="time" class="form-control addinput" name="times[to][]"></div>';
+
+            divFrom.append(appendFrom);
+            divTo.append(appendTo);
+        })
+
+        $('#removeTime').on('click', function () {
+            var divinputFrom = $('.divinputFrom');
+            var divinputTo = $('.divinputTo');
+
+            divinputTo.last().remove();
+            divinputFrom.last().remove();
+
+        })
+    })
 
 
 </script>
