@@ -347,7 +347,6 @@ class LessonController extends Controller
     }//end access first subject_class and first lesson and first video and  all files of video
 
 
-
     public function updateMinuteVideo(Request $request,$id): JsonResponse
     {
 
@@ -415,6 +414,7 @@ class LessonController extends Controller
                         ->first();
 
                     $next_lesson = Lesson::query()
+                        ->where('subject_class_id','=',$video->lesson->subject_class_id)
                         ->orderBy('id', 'ASC')->get()
                         ->except($video->lesson_id)
                         ->where('id', '>', $video->lesson_id)
