@@ -333,21 +333,6 @@
     })
 </script>
 
-<script>
-
-    {{--setTimeout(function (){--}}
-    {{--    $('#cardPrint').printThis({--}}
-    {{--        importCSS: true,            // import parent page css--}}
-    {{--        importStyle: true,          // import style tags--}}
-    {{--        printContainer: true,      // print html container--}}
-    {{--        pageTitle: "تقرير الطالب",              // add title to print page--}}
-    {{--        loadCSS: '{{ asset('assets/admin/css/custom-table.css') }}', // path to additional css file - use an array [] for multiple--}}
-    {{--    });--}}
-
-    {{--},3000)--}}
-
-</script>
-
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>

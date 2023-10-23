@@ -421,7 +421,6 @@ class LessonController extends Controller
                         ->where('id', '>', $video->lesson_id)
                         ->first();
 
-
                     //start sum total of minutes to compare between video minutes and total user watch
                     $videosIds = VideoParts::query()
                         ->where('lesson_id','=',$lesson->id)
@@ -458,6 +457,7 @@ class LessonController extends Controller
                                     'lesson_id' => $next_lesson->id,
                                 ]);
                             }
+
                         }
                     }
                     //========================== end access next lesson =========================================================

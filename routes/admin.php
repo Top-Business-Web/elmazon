@@ -75,6 +75,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::POST('delete_admin', [AdminController::class, 'delete'])->name('delete_admin');
         Route::get('/adminLog',[AdminLogController::class,'index'])->name('adminLog');
         Route::post('/adminLogDelete',[AdminLogController::class,'delete'])->name('adminLogDelete');
+        Route::post('/adminLogDeleteAll',[AdminLogController::class,'deleteAll'])->name('adminLogDeleteAll');
     });
     Route::get('my_profile', [AdminController::class, 'myProfile'])->name('myProfile');
 

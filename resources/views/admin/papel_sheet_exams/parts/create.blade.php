@@ -6,12 +6,10 @@
                 <div class="col-md-12 mt-3">
                     <label for="degree" class="form-control-label">درجه الامتحان الورقي</label>
                     <input type="number" class="form-control" name="degree" min="0">
-                    </Select>
                 </div>
                 <div class="col-md-12 mt-3">
                     <label for="date_exam" class="form-control-label">موعد الامتحان</label>
                     <input type="date" class="form-control" name="date_exam">
-                    </Select>
                 </div>
             </div>
             <div class="row">
@@ -58,18 +56,39 @@
                     <input type="date" class="form-control" name="to">
                     </Select>
                 </div>
-
             </div>
 
-
-
-{{--            <div class="row col-md-12 mt-3" id="input-container">--}}
-{{--                <input type="text" class="col-md-4 form-control input-field" placeholder="موعد البدايه">--}}
-{{--                <input type="text" class="col-md-4 form-control input-field" placeholder="موعد النهايه">--}}
-{{--                <button class="col-md-4 btn btn-primary add-button">اضافه موعد جديد</button>--}}
-{{--            </div>--}}
-
-
+            <div class="row">
+                <div class="col-md-12 mt-3">
+                    <label for="time" class="form-control-label">اوقات الامتحان</label>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-3 divFrom">
+                            <div class="divinputFrom">
+                                <label for="time" class="form-control-label">من</label>
+                                <input type="time" class="form-control" name="times[from][]">
+                            </div>
+                        </div>
+                        <div class="col-3 divTo">
+                            <div class="divinputTo">
+                                <label for="time" class="form-control-label">الي</label>
+                                <input type="time" class="form-control" name="times[to][]">
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <button style="margin-top: 28px;" type="button" class="form-control btn btn-sm btn-primary"
+                                    id="addTime">اضافة وقت اخر
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <button style="margin-top: 28px; color: white !important; " type="button"
+                                    class="form-control btn btn-sm btn-danger" id="removeTime">حذف وقت
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
@@ -103,22 +122,27 @@
         });
     });
 
+    $(document).ready(function () {
+        $('#addTime').on('click', function () {
+            var divFrom = $('.divFrom');
+            var divTo = $('.divTo');
+            var appendFrom = '<div class="divinputFrom2"><label for="time" class="form-control-label addlabel">من</label><input type="time" class="form-control addinput" name="times[from][]"></div>';
+            var appendTo = '<div class="divinputTo2"><label for="time" class="form-control-label addlabel">الي</label><input type="time" class="form-control addinput" name="times[to][]"></div>';
+
+            divFrom.append(appendFrom);
+            divTo.append(appendTo);
+        })
+
+        $('#removeTime').on('click', function () {
+            var divinputFrom = $('.divinputFrom2');
+            var divinputTo = $('.divinputTo2');
+
+            divinputTo.last().remove();
+            divinputFrom.last().remove();
+
+        })
+    })
 
 
 </script>
 
-
-{{--<script>--}}
-{{--    $(document).ready(function() {--}}
-{{--        // Add Input--}}
-{{--        $(".add-button").click(function() {--}}
-{{--            $("#input-container").append('<input type="text" class="col-md-8 form-control input-field mt-3"> <button class="col-md-4 btn btn-danger delete-button mt-3">حذف الموعد</button>');--}}
-{{--        });--}}
-
-{{--        // Delete Input--}}
-{{--        $("#input-container").on("click", ".delete-button", function() {--}}
-{{--            $(this).prev(".input-field").remove();--}}
-{{--            $(this).remove();--}}
-{{--        });--}}
-{{--    });--}}
-{{--</script>--}}
