@@ -9,5 +9,5 @@ class MotivationalSentences extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = ['title_ar','title_en','percentage_from','percentage_to'];
 }
