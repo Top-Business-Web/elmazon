@@ -373,7 +373,7 @@ class FavoriteController extends Controller
             ->leftJoin('video_basics','video_basics.id','=','video_basic_id')
             ->where('user_id','=',auth('user-api')->id())
             ->where('action','=','favorite')
-            ->select('video_favorites.id', 'video_parts.name_ar as video_part_name', 'video_resources.name_ar as video_resource_name', 'video_basics.name_ar as video_basic_name', 'video_parts.link as video_part_link', 'video_resources.video_link as video_resource_link', 'video_basics.video_link as video_basic_link', 'video_parts.video_time as video_part_time', 'video_resources.time as video_resource_time', 'video_basics.time as video_basic_time', 'video_favorites.video_part_id', 'video_favorites.video_resource_id', 'video_favorites.video_basic_id')
+            ->select('video_favorites.id', 'video_parts.name_ar as video_part_name', 'video_resources.name_ar as video_resource_name', 'video_basics.name_ar as video_basic_name', 'video_parts.link as video_part_link', 'video_resources.video_link as video_resource_link', 'video_basics.video_link as video_basic_link', 'video_parts.video_time as video_part_time', 'video_resources.time as video_resource_time', 'video_basics.time as video_basic_time', 'video_favorites.video_part_id', 'video_favorites.video_resource_id', 'video_favorites.video_basic_id','video_parts.background_image as video_part_image')
             ->get();
 
         $all_video_favorites = [];
@@ -381,7 +381,7 @@ class FavoriteController extends Controller
 
             $videoData['id'] = $video_favorite->id;
             $videoData['video_id'] = $video_favorite->video_part_name != null  ?  $video_favorite->video_part_id :  ($video_favorite->video_resource_name != null  ?  $video_favorite->video_resource_id : $video_favorite->video_basic_id);
-            $videoData['image'] = asset('default/teacher.png');
+            $videoData['image'] = $video_favorite->video_part_image != null ? asset('videos/images/'.$video_favorite->video_part_image) : asset('default/teacher.png');
             $videoData['time'] = $video_favorite->video_part_name != null  ?  $video_favorite->video_part_time :  ($video_favorite->video_resource_name != null  ?  $video_favorite->video_resource_time : $video_favorite->video_basic_time);
             $videoData['type'] = $video_favorite->video_part_name != null  ?  "video_part" :  ($video_favorite->video_resource_name != null  ?  "video_resource" : "video_basic");
             $videoData['name'] = $video_favorite->video_part_name != null  ?  $video_favorite->video_part_name :  ($video_favorite->video_resource_name != null  ?  $video_favorite->video_resource_name : $video_favorite->video_basic_name);
