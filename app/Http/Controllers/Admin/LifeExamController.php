@@ -11,6 +11,7 @@ use App\Models\Season;
 use App\Models\Term;
 use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -19,7 +20,6 @@ class LifeExamController extends Controller
     use PhotoTrait;
     use AdminLogs;
 
-    // Index Start
 
     use FirebaseNotification;
 
@@ -50,9 +50,7 @@ class LifeExamController extends Controller
         }
     }
 
-    // Index End
 
-    // Create Start
 
     public function create()
     {
@@ -61,11 +59,9 @@ class LifeExamController extends Controller
         return view('admin.life_exams.parts.create', $data);
     }
 
-    // Create End
 
-    // Store Start
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -77,7 +73,6 @@ class LifeExamController extends Controller
             $inputs['answer_video_file'] = $this->saveImage($request->answer_video_file, 'answer_video_file', 'photo');
         }
 
-//        return $inputs;
 
         if (LifeExam::create($inputs)) {
 
@@ -90,9 +85,7 @@ class LifeExamController extends Controller
         }
     }
 
-    // Store End
 
-    // Edit Start
 
     public function edit(LifeExam $lifeExam)
     {
@@ -101,11 +94,9 @@ class LifeExamController extends Controller
         return view('admin.life_exams.parts.edit', compact('lifeExam', 'data'));
     }
 
-    // Edit End
 
-    // Update Start
 
-    public function update(LifeExam $lifeExam, Request $request)
+    public function update(LifeExam $lifeExam, Request $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -125,11 +116,9 @@ class LifeExamController extends Controller
         }
     }
 
-    // Update End
 
-    // Destroy Start
 
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         $subject_class = lifeExam::where('id', $request->id)->firstOrFail();
         $subject_class->delete();
@@ -137,5 +126,4 @@ class LifeExamController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Destroy End
 }

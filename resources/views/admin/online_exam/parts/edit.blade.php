@@ -110,9 +110,9 @@
                     <Select name="examable_type" id="type" class="form-control type_choose"
                             required="required" @selected( old('examable_type',$onlineExam->type))>
                         <option disabled style="text-align: center">اختار النوع</option>
-                        <option value="App\Models\Lesson" style="text-align: center">درس</option>
-                        <option value="App\Models\class" style="text-align: center">فصل</option>
-                        <option value="App\Models\VideoParts" style="text-align: center">الفيديو</option>
+                        <option value="lesson" style="text-align: center">درس</option>
+                        <option value="class" style="text-align: center">فصل</option>
+                        <option value="video" style="text-align: center">الفيديو</option>
                     </Select>
                 </div>
                 <div class="col-md-12 mt-3">

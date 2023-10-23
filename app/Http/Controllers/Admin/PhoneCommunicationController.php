@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestPhoneCommunication;
 use App\Models\PhoneCommunication;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class PhoneCommunicationController extends Controller
 {
-    // Index Start
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -31,20 +31,15 @@ class PhoneCommunicationController extends Controller
             return view('admin.phone_communications.index');
         }
     }
-    // Index End
 
-    // Create Start
 
     public function create()
     {
         return view('admin.phone_communications.parts.create');
     }
 
-    // Create End
 
-    // Store Start
-
-    public function store(RequestPhoneCommunication $request)
+    public function store(RequestPhoneCommunication $request): JsonResponse
     {
         $inputs = $request->all();
         if(PhoneCommunication::create($inputs)){
@@ -56,40 +51,35 @@ class PhoneCommunicationController extends Controller
         }
     }
 
-    // Store End
 
-    // Edit Start
 
     public function edit(PhoneCommunication $phoneCommunication)
     {
         return view('admin.phone_communications.parts.edit', compact('phoneCommunication'));
     }
 
-    // Edit End
 
-    // Update Start
 
-    public function update(RequestPhoneCommunication $request, PhoneCommunication $phoneCommunication)
+    public function update(RequestPhoneCommunication $request, PhoneCommunication $phoneCommunication): JsonResponse
     {
         if($phoneCommunication->update($request->all())){
+
             return response()->json(['status' => 200]);
-        }
-        else
-        {
+
+        } else {
             return response()->json(['status' => 405]);
         }
     }
 
-    // Update End
-
-    // Destroy Start
 
     public function destroy(Request $request)
     {
-        $phoneCommunication = PhoneCommunication::where('id', $request->id)->firstOrFail();
+        $phoneCommunication = PhoneCommunication::query()
+            ->where('id', $request->id)
+            ->firstOrFail();
+
         $phoneCommunication->delete();
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Destroy End
 }

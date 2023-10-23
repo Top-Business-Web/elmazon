@@ -136,5 +136,5 @@ class TermController extends Controller
             ->toArray();
     }
 
-    // Destroy End
+
 }

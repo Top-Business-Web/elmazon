@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Slider;
 use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
@@ -15,7 +16,7 @@ use App\Http\Requests\SliderUpdateRequest;
 class SliderController extends Controller
 {
     use PhotoTrait , AdminLogs;
-    // Index Start
+
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -48,20 +49,15 @@ class SliderController extends Controller
             return view('admin.sliders.index');
         }
     }
-    // Index End
-
-    // Create Start
 
     public function create()
     {
         return view('admin.sliders.parts.create');
     }
 
-    // Create End
 
-    // Store Start
 
-    public function store(SliderStoreRequest $request)
+    public function store(SliderStoreRequest $request): JsonResponse
     {
         $inputs = $request->all();
         if($request->hasFile('file')){
@@ -87,20 +83,16 @@ class SliderController extends Controller
         }
     }
 
-    // Store End
 
-    // Edit Start
 
     public function edit(Slider $slider)
     {
         return view('admin.sliders.parts.edit', compact('slider'));
     }
 
-    // Edit End
 
-    // Update Start
 
-    public function update(SliderUpdateRequest $request, Slider $slider)
+    public function update(SliderUpdateRequest $request, Slider $slider): JsonResponse
     {
 
         $inputs = $request->all();
@@ -135,9 +127,6 @@ class SliderController extends Controller
         }
     }
 
-    // Update End
-
-    // Destroy Start
 
     public function destroy(Request $request)
     {
@@ -147,5 +136,5 @@ class SliderController extends Controller
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Delete End
+
 }

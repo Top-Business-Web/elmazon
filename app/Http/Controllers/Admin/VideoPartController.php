@@ -8,6 +8,8 @@ use App\Http\Requests\StoreVideoFileUploadRequest;
 use App\Http\Requests\StoreVideoPart;
 use App\Models\Comment;
 use App\Models\CommentReplay;
+use App\Models\SubjectClass;
+use App\Models\Term;
 use App\Models\VideoFilesUploads;
 use App\Models\VideoParts;
 use App\Models\Lesson;
@@ -220,8 +222,12 @@ class VideoPartController extends Controller
 
     public function create()
     {
-        $lessons = Lesson::get();
-        return view('admin.videopart.parts.create', compact('lessons'));
+
+        $seasons = DB::table('seasons')
+            ->select('id','name_ar')
+            ->get();
+
+        return view('admin.videopart.parts.create', compact('seasons'));
     }
 
 
@@ -289,6 +295,7 @@ class VideoPartController extends Controller
             ->find($id);
 
 
+        $imageLink = "";
         if ($backgroundImage = $request->file('background_image')) {
 
             $destinationPath = 'videos/images';
@@ -320,7 +327,6 @@ class VideoPartController extends Controller
             'background_image' =>  $imageLink,
             'month' => $request->month,
             'note' => $request->note,
-            'lesson_id' => $request->lesson_id,
             'link' => $request->file('link') == null ? $videPartUpdate->link : $videoPart ,
             'youtube_link' => $request->youtube_link ?? null,
             'is_youtube' => $request->youtube_link != null ? 1 : 0,
@@ -415,11 +421,35 @@ class VideoPartController extends Controller
         $video->save();
     }
 
-    public function viewActive(Request $request)
-    {
+    public function viewActive(Request $request){
         $view = $request->view_active;
         $video = VideoParts::findOrFail($request->id);
         $video->view_active = $view;
         $video->save();
     }
+
+
+    //====================================================== get data with table relation ========================================
+
+    public function getAllSubjectClassesBySeasonAndTerm(): array
+    {
+
+        return SubjectClass::query()
+            ->where('season_id','=',request()->season_id)
+            ->where('term_id','=',request()->term_id)
+            ->pluck('name_ar', 'id')
+            ->toArray();
+    }
+
+
+    public function getAllLessonsBySubjectClass(): array
+    {
+
+        return Lesson::query()
+            ->where('subject_class_id','=',request()->subject_class_id)
+            ->pluck('name_ar', 'id')
+            ->toArray();
+    }
+
+
 }
