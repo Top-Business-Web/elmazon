@@ -324,7 +324,7 @@ class VideoPartController extends Controller
 
             'name_ar' => $request->name_ar,
             'name_en' => $request->name_en,
-            'background_image' =>  $imageLink,
+            'background_image' =>  $request->file('background_image') != null ? $imageLink : $videPartUpdate->background_image,
             'month' => $request->month,
             'note' => $request->note,
             'link' => $request->file('link') == null ? $videPartUpdate->link : $videoPart ,
