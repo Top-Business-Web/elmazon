@@ -164,7 +164,9 @@ class UserController extends Controller
 
         $login_status = [0,1];
 
-        return view('admin.users.parts.edit', compact('user','login_status','seasons','countries'));
+        $user_status = ['in','out'];
+
+        return view('admin.users.parts.edit', compact('user','login_status','seasons','countries','user_status'));
     }
 
     public function update(UserUpdateRequest $request, User $user): JsonResponse

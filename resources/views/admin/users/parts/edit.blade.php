@@ -77,6 +77,15 @@
                         @endforeach
                     </select>
                 </div>
+
+                <div class="col-md-12 mt-3">
+                    <label for="login_status" class="form-control-label">حاله الطلب</label>
+                    <select class="form-control" name="center">
+                        @foreach($user_status as $center)
+                            <option value="{{$center}}" {{$user->center == $center ? 'selected' : ''}}>{{$center == 'in' ? 'داخل السنتر' : 'خارج السنتر'}}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-6 mt-3">

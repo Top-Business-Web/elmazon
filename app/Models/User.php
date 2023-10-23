@@ -36,6 +36,7 @@ class User extends Authenticatable implements JWTSubject
         'birth_date',
         'season_id',
         'group_id',
+        'center',
         'country_id',
         'phone',
         'father_phone',
