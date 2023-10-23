@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\TermController;
+use App\Http\Controllers\Admin\VideoPartController;
 use App\Http\Controllers\Api\Payment;
+use App\Models\Lesson;
+use App\Models\SubjectClass;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -24,7 +28,7 @@ Route::get('/payments/payWithFawry',[Payment::class,'payWithFawry'])->name('paym
 
 
 //get all terms by season_id
-Route::get('terms/season/{id}',[\App\Http\Controllers\Admin\TermController::class,'getAllTermsBySeason'])->middleware('auth:admin');
+Route::get('terms/season/{id}',[TermController::class,'getAllTermsBySeason'])->middleware('auth:admin');
 
 
 //Route::get('get-minutes', function (){
@@ -108,3 +112,8 @@ Route::get('terms/season/{id}',[\App\Http\Controllers\Admin\TermController::clas
 //
 //    return "Done Update";
 //});
+
+
+
+Route::get('getAllSubjectClassesBySeasonAndTerm',[VideoPartController::class,'getAllSubjectClassesBySeasonAndTerm']);
+Route::get('getAllLessonsBySubjectClass', [VideoPartController::class,'getAllLessonsBySubjectClass']);

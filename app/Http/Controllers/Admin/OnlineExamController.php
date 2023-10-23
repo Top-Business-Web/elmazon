@@ -12,6 +12,8 @@ use App\Models\SubjectClass;
 use App\Models\TextExamUser;
 use App\Models\VideoParts;
 use App\Traits\AdminLogs;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -80,14 +82,12 @@ class OnlineExamController extends Controller
 
 
 
-    public function addQuestion(Request $request)
+    public function addQuestion(Request $request): RedirectResponse
     {
-        return $request;
         $newQuestion = new OnlineExamQuestion();
         $newQuestion->question_id = $request->question_id;
         $newQuestion->save();
 
-        // Redirect to the questions page with a success message
         return redirect()->route('questions')->with('success', 'Question added successfully!');
     }
 
@@ -151,7 +151,7 @@ class OnlineExamController extends Controller
     }
 
 
-    public function exam_depends($user_id, $exam_id)
+    public function exam_depends($user_id, $exam_id): JsonResponse
     {
 
         $text_exam_user_sum_degree = TextExamUser::with(['question', 'user'])->where('online_exam_id', $exam_id)
@@ -166,16 +166,19 @@ class OnlineExamController extends Controller
     }
 
 
-    public function selectTerm(Request $request)
+    public function selectTerm(Request $request): array
     {
-        $terms = Term::where('season_id', $request->season_id)->pluck('name_ar', 'id')->toArray();
-        return $terms;
+        return Term::query()->where('season_id', $request->season_id)
+            ->pluck('name_ar', 'id')
+            ->toArray();
+
     }
 
 
     public function deleteQuestion(Request $request)
     {
-        $questions = OnlineExamQuestion::where(['question_id' => $request->question_id, 'online_exam_id' => $request->online_exam_id]);
+        $questions = OnlineExamQuestion::query()
+        ->where(['question_id' => $request->question_id, 'online_exam_id' => $request->online_exam_id]);
         $questions->delete();
     }
 
@@ -211,7 +214,7 @@ class OnlineExamController extends Controller
     }
 
 
-    public function store(OnlineExamRequest $request,OnlineExam $online_exam)
+    public function store(OnlineExamRequest $request,OnlineExam $online_exam): JsonResponse
     {
 
         $inputs = $request->all();
@@ -259,9 +262,8 @@ class OnlineExamController extends Controller
         return view('admin.online_exam.parts.edit', compact('onlineExam', 'seasons', 'terms'));
     }
 
-    // Update Start
 
-    public function update(OnlineExamRequest $request, OnlineExam $onlineExam)
+    public function update(OnlineExamRequest $request, OnlineExam $onlineExam): JsonResponse
     {
 
         $inputs = $request->all();
@@ -295,13 +297,13 @@ class OnlineExamController extends Controller
             $inputs['image_result'] = saveFile('assets/uploads/online_exams/image_result', $request->image_result);
         } // end save file
 
-        if ($request->examable_type == 'App\Models\Lesson') {
+        if ($request->examable_type == 'lesson') {
             $inputs['type'] = 'lesson';
             $inputs['lesson_id'] = $request->examable_id;
-        } elseif ($request->examable_type == 'App\Models\class') {
+        } elseif ($request->examable_type == 'class') {
             $inputs['type'] = 'class';
             $inputs['class_id'] = $request->examable_id;
-        } elseif ($request->examable_type == 'App\Models\VideoParts') {
+        } elseif ($request->examable_type == 'video') {
             $inputs['type'] = 'video';
             $inputs['video_id'] = $request->examable_id;
         } // end if
@@ -315,21 +317,17 @@ class OnlineExamController extends Controller
         }
     }
 
-    // Update End
 
-    // Destroy Start
-
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         $onlineExam = OnlineExam::where('id', $request->id)->firstOrFail();
         $onlineExam->delete();
         $this->adminLog('تم حذف امتحان اونلاين');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
-    } // Delete End
+    }
 
 
-    public
-    function addDegreeForTextExam(Request $request)
+    public function addDegreeForTextExam(Request $request): JsonResponse
     {
 
         $text_exam_user = TextExamUser::findOrFail($request->exam_id);

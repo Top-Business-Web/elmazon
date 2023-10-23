@@ -27,7 +27,7 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label for="name_ar" class="form-control-label">الصف</label>
+                    <label for="name_ar" class="form-control-label">الصف الدراسي</label>
                     <Select name="season_id" class="form-control">
                         <option disabled selected>اختر</option>
                         @foreach ($seasons as $season)
@@ -38,7 +38,7 @@
 
 
                 <div class="col-md-6">
-                    <label for="name_ar" class="form-control-label">الترم</label>
+                    <label for="name_ar" class="form-control-label">اختر تيرم</label>
                     <Select name="term_id" class="form-control">
                         <option disabled>اختر</option>
                         @foreach ($terms as $term)
@@ -48,6 +48,7 @@
                     </Select>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-6">
                     <label for="head">لون الخلفية</label>

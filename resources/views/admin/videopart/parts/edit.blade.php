@@ -21,18 +21,9 @@
                 </div>
             </div>
             <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="lesson_id" class="form-control-label">درس</label>
-                    <Select name="lesson_id" class="form-control user_choose">
-                        <option selected disabled style="text-align: center">اختار درس</option>
-                        @foreach($lessons as $lesson)
-                            <option value="{{ $lesson->id }}" style="text-align: center" {{$videosPart->lesson_id == $lesson->id ? 'selected' : ''}}>{{ $lesson->name_ar }}</option>
-                        @endforeach
-                    </Select>
-                </div>
 
 
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <label for="head">شهر</label>
                     <select name="month" class="form-control" id="signup_birth_month" >
                         <option value="" style="text-align: center">اختر شهر</option>
