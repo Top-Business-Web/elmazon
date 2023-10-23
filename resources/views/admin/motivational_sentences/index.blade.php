@@ -40,7 +40,8 @@
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">الاسم</th>
-                                <th class="min-w-50px">النسبة</th>
+                                <th class="min-w-50px">النسبه من</th>
+                                <th class="min-w-50px">النسبه الي</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -133,7 +134,8 @@
         var columns = [
             {data: 'id', name: 'id'},
             {data: 'title_ar', name: 'title_ar'},
-            {data: 'percentage', name: 'percentage'},
+            {data: 'percentage_from', name: 'percentage_from'},
+            {data: 'percentage_to', name: 'percentage_to'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('motivational.index')}}', columns);

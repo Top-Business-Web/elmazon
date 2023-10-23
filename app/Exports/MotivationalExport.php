@@ -19,7 +19,8 @@ class MotivationalExport implements FromCollection , WithHeadings ,WithColumnWid
             'A' => 10,
             'B' => 80,
             'C' => 80,
-            'D' => 10,
+            'D' => 20,
+            'E' => 20,
         ];
     }
     public function headings(): array
@@ -28,7 +29,8 @@ class MotivationalExport implements FromCollection , WithHeadings ,WithColumnWid
             '#',
             'Title ar',
             'Title en',
-            'Percentage',
+            'Percentage from',
+            'Percentage to',
         ];
     }
     /**
@@ -38,7 +40,7 @@ class MotivationalExport implements FromCollection , WithHeadings ,WithColumnWid
     public function collection(): Collection
 
     {
-        return MotivationalSentences::query()->select('id','title_ar','title_en','percentage')->get();
+        return MotivationalSentences::query()->select('id','title_ar','title_en','percentage_from','percentage_to')->get();
 
     }
 

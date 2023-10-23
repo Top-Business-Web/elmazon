@@ -4,8 +4,14 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-12">
-                    <label for="percentage" class="form-control-label">النسبةالمئوية</label>
-                    <input type="text" class="form-control" name="percentage"
+                    <label for="percentage_from" class="form-control-label">النسبه من :</label>
+                    <input type="number" class="form-control" name="percentage_from"
+                           placeholder="مثال : 100%"
+                           id="percentage">
+                </div>
+                <div class="col-md-12">
+                    <label for="percentage_to" class="form-control-label">النسبه الي :</label>
+                    <input type="number" class="form-control" name="percentage_to"
                            placeholder="مثال : 100%"
                            id="percentage">
                 </div>

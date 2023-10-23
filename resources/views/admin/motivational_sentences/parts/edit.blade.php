@@ -6,11 +6,19 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-12">
-                    <label for="percentage" class="form-control-label">النسبةالمئوية</label>
-                    <input type="text" class="form-control" name="percentage"
-                           placeholder="مثال : 100%"
-                           value="{{ $motivational->percentage }}"
-                           id="percentage">
+                    <label for="percentage_from" class="form-control-label">النسبه من :</label>
+                    <input type="text" class="form-control" name="percentage_from"
+                           placeholder="مثال : 50%"
+                           value="{{ $motivational->percentage_from }}"
+                           id="percentage_from">
+                </div>
+
+                <div class="col-md-12">
+                    <label for="percentage_to" class="form-control-label">النسبه الي :</label>
+                    <input type="text" class="form-control" name="percentage_to"
+                           placeholder="مثال : 60%"
+                           value="{{ $motivational->percentage_to }}"
+                           id="percentage_to">
                 </div>
                 <div class="col-md-12">
                     <label for="name_ar" class="form-control-label">الجملة بالعربية</label>

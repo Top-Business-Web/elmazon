@@ -52,7 +52,8 @@ class MotivationalSentencesController extends Controller
 
             'title_ar' => 'required',
             'title_en' => 'required',
-            'percentage' => 'required|unique:motivational_sentences,percentage'
+            'percentage_from' => 'required|unique:motivational_sentences,percentage_from',
+            'percentage_to' => 'required',
         ]);
 
 
@@ -79,7 +80,8 @@ class MotivationalSentencesController extends Controller
 
             'title_ar' => 'required',
             'title_en' => 'required',
-            'percentage' => 'required|unique:motivational_sentences,percentage,' . request()->id
+            'percentage_from' => 'required|unique:motivational_sentences,percentage_from,' . request()->id,
+            'percentage_to' => 'required',
         ]);
 
         if ($motivational->update($request->all())) {

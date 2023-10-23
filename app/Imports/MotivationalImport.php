@@ -24,11 +24,12 @@ class MotivationalImport implements ToCollection, WithHeadingRow
 
             MotivationalSentences::query()
                 ->updateOrCreate([
-                    'percentage' => $collection[$i]['percentage'],
+                    'percentage_from' => $collection[$i]['percentage_from'],
                 ],[
                     'title_ar'    => $collection[$i]['title_ar'],
                     'title_en'    => $collection[$i]['title_en'],
-                    'percentage' => $collection[$i]['percentage'],
+                    'percentage_from' => $collection[$i]['percentage_from'],
+                    'percentage_to' => $collection[$i]['percentage_to'],
                 ]);
         }
     }
