@@ -623,7 +623,7 @@ class LessonController extends Controller
 
                     $totalMinutesOfAllClasses =  number_format(((array_sum($listOfSecondsOfAllVideosWatched) / array_sum($listOfSecondsOfAllVideos)) * 100),2);
 
-                    return  $totalMinutesOfAllClasses;
+//                    return  $totalMinutesOfAllClasses;
 
                     if($totalMinutesOfAllClasses >= 65){
 
