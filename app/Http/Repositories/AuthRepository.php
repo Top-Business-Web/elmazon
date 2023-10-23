@@ -257,7 +257,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             ->whereHas('season', fn (Builder $builder) =>
             $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
             ->whereHas('term', fn (Builder $builder) => $builder->where('status', '=', 'active')
-                ->where('season_id', '=', auth('user-api')->user()->season_id))->where('id', '=', $id)
+                ->where('season_id', '=', auth('user-api')->user()->season_id))
+            ->where('id', '=', $id)
             ->first();
 
 
@@ -272,7 +273,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         foreach ($ids as $id) {
 
-            $sectionCheck = Section::query()->where('id', '=', $id)->first();
+            $sectionCheck = Section::query()
+                ->where('id', '=', $id)
+                ->first();
+
             $CheckCountSectionExam = PapelSheetExamUser::query()
                 ->where('section_id', '=', $sectionCheck->id)
                 ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
@@ -284,7 +288,9 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->count();
 
             $sumCapacityOfSection = Section::sum('capacity');
+
             $countExamId = PapelSheetExamUser::query()
+                ->where('papel_sheet_exam_time_id','=',$request->papel_sheet_exam_time_id)
                 ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
                 ->count();
 
@@ -295,7 +301,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                     if ($CheckCountSectionExam == $sectionCheck->capacity) {
 
                         $section = Section::query()
-                            ->orderBy('id', 'ASC')->get()->except($sectionCheck->id)
+                            ->orderBy('id', 'ASC')
+                            ->get()->except($sectionCheck->id)
                             ->where('id', '>', $sectionCheck->id);
                     } else {
                         $section = Section::query()

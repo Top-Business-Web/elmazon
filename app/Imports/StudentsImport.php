@@ -17,7 +17,7 @@ class StudentsImport implements ToCollection, WithHeadingRow,WithMapping
    public function generateUniqueCode(): string
    {
 
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $characters = rand(50000,100000000).uniqid();
         $charactersNumber = strlen($characters);
         $codeLength = 10;
 
