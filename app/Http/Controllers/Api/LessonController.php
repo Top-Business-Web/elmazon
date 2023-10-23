@@ -409,7 +409,6 @@ class LessonController extends Controller
                     $videoOpened->update(['minutes' => $request->minutes]);
 
                     //start access next lesson
-
                     $lesson = Lesson::query()
                         ->where('id', '=',$video->lesson_id)
                         ->first();
@@ -419,7 +418,6 @@ class LessonController extends Controller
                         ->except($video->lesson_id)
                         ->where('id', '>', $video->lesson_id)
                         ->first();
-
 
                     //start sum total of minutes to compare between video minutes and total user watch
                     $videosIds = VideoParts::query()
@@ -457,6 +455,7 @@ class LessonController extends Controller
                                     'lesson_id' => $next_lesson->id,
                                 ]);
                             }
+
                         }
                     }
                     //end access next lesson
