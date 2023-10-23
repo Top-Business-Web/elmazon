@@ -347,7 +347,7 @@ class LessonController extends Controller
     }//end access first subject_class and first lesson and first video and  all files of video
 
 
-    public function updateMinuteVideo(Request $request,$id): JsonResponse
+    public function updateMinuteVideo(Request $request,$id)
     {
 
         $rules = ['minutes' => 'required|date_format:H:i:s'];
@@ -559,7 +559,8 @@ class LessonController extends Controller
 
                     $next_subject_class = SubjectClass::query()
                         ->orderBy('id', 'ASC')->get()
-                        ->except( $idOfSubjectClass)->where('id', '>', $idOfSubjectClass)
+                        ->except( $idOfSubjectClass)
+                        ->where('id', '>', $idOfSubjectClass)
                         ->first();
 
 
@@ -622,6 +623,7 @@ class LessonController extends Controller
 
                     $totalMinutesOfAllClasses =  number_format(((array_sum($listOfSecondsOfAllVideosWatched) / array_sum($listOfSecondsOfAllVideos)) * 100),2);
 
+                    return  $totalMinutesOfAllClasses;
 
                     if($totalMinutesOfAllClasses >= 65){
 
