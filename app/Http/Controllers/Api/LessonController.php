@@ -407,7 +407,8 @@ class LessonController extends Controller
 
                     $videoOpened->update(['minutes' => $request->minutes]);
 
-                    //start access next lesson
+                    //========================== start access next lesson =========================================================
+
 
                     $lesson = Lesson::query()
                         ->where('id', '=',$video->lesson_id)
@@ -459,7 +460,7 @@ class LessonController extends Controller
                             }
                         }
                     }
-                    //end access next lesson
+                    //========================== end access next lesson =========================================================
 
 
 
@@ -565,7 +566,7 @@ class LessonController extends Controller
 
 
 
-                       //start access next video
+                    //========================== start access next video =========================================================
 
                         $videoOpenedByUser = VideoOpened::query()
                             ->where('user_id', '=', Auth::guard('user-api')->id())
@@ -646,11 +647,7 @@ class LessonController extends Controller
                             return self::returnResponseDataApi(null, "يجب فتح الملف السابق", 415);
                         }
 
-                        //end access next video
-
-
-
-
+                    //========================== end access next video =========================================================
 
 
                     return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم تحديث عدد دقائق الفيديو بنجاح", 200);

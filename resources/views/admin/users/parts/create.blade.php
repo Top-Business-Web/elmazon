@@ -98,7 +98,9 @@
     $('.GeneCode').on('click', function () {
         // var data = $(this).val();
         // var phone = $('.phoneInput').val();
-        var code = Math.floor(Math.random() * 9999999999999);
+        min = Math.ceil(50000);
+        max = Math.floor(100000000000);
+        var code = Math.floor(Math.random() * (max - min + 1)) + min;
         var userCode = ''
         $('.CodeStudent').val(code);
     })
