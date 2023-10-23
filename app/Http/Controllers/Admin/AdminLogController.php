@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\AdminLog;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -38,7 +39,7 @@ class AdminLogController extends Controller
                 ->escapeColumns([])
                 ->make(true);
         } else {
-            AdminLog::where('seen',0)->update(['seen' => 1]);
+            AdminLog::where('seen','=',0)->update(['seen' => 1]);
             return view('admin.admin.admin_logs');
         }
     }// End Index
@@ -47,6 +48,12 @@ class AdminLogController extends Controller
     {
         $admin = AdminLog::where('id', $request->id)->first();
         $admin->delete();
+        return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
+    } // end of delete
+
+    public function deleteAll(Schedule $schedule)
+    {
+        AdminLog::delete();
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     } // end of delete
 }
