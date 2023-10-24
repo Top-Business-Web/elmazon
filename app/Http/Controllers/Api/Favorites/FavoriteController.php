@@ -389,7 +389,6 @@ class FavoriteController extends Controller
             $all_video_favorites[] = $videoData;
         }
 
-
         return $all_video_favorites;
 
     }
