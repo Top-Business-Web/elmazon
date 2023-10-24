@@ -27,9 +27,9 @@
                             <thead>
                                 <tr class="fw-bolder text-muted bg-light">
                                     <th class="min-w-25px">#</th>
-                                    <th class="min-w-50px">الاسم</th>
-                                    <th class="min-w-50px">العنوان</th>
-                                    <th class="min-w-50px">السعة</th>
+                                    <th class="min-w-50px">اسم القاعه</th>
+                                    <th class="min-w-50px">عنوان القاعه</th>
+                                    <th class="min-w-50px">عدد الطلاب لهذه القاعه</th>
                                     <th class="min-w-50px rounded-end">العمليات</th>
                                 </tr>
                             </thead>

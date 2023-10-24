@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Traits\AdminLogs;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\Section;
@@ -12,7 +13,7 @@ use App\Http\Requests\RequestSection;
 class SectionController extends Controller
 {
     use AdminLogs;
-    // Index Start
+
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -27,29 +28,23 @@ class SectionController extends Controller
                             </button>
                        ';
                 })
-                ->editColumn('capacity', function($sections) {
-                    return '<td><button class="btn btn-primary">'. $sections->capacity .'</button></td>';
-                })
+
                 ->escapeColumns([])
                 ->make(true);
         } else {
             return view('admin.sections.index');
         }
     }
-    // Index End
 
-    // Create Start
 
     public function create()
     {
         return view('admin.sections.parts.create');
     }
 
-    // Create End
 
-    // Store Start
 
-    public function store(RequestSection $request)
+    public function store(RequestSection $request): JsonResponse
     {
         $inputs = $request->all();
         if (Section::create($inputs)) {
@@ -60,20 +55,15 @@ class SectionController extends Controller
         }
     }
 
-    // Store End
-
-    // Edit Start
 
     public function edit(Section $section)
     {
         return view('admin.sections.parts.edit', compact('section'));
     }
 
-    // Edit End
 
-    // Update Start
 
-    public function update(Request $request, Section $section)
+    public function update(Request $request, Section $section): JsonResponse
     {
         if ($section->update($request->all())) {
             $this->adminLog('تم تحديث قاعة ');
@@ -83,11 +73,8 @@ class SectionController extends Controller
         }
     }
 
-    // Update End
 
-    // Delete Start
-
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         $sections = Section::where('id', $request->id)->firstOrFail();
         $sections->delete();
@@ -95,5 +82,4 @@ class SectionController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Delete End
 }
