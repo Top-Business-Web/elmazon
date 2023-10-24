@@ -321,7 +321,6 @@ class VideoPartController extends Controller
         }
 
         $videPartUpdate->update([
-
             'name_ar' => $request->name_ar,
             'name_en' => $request->name_en,
             'background_image' =>  $request->file('background_image') != null ? $imageLink : $videPartUpdate->background_image,
@@ -331,7 +330,6 @@ class VideoPartController extends Controller
             'youtube_link' => $request->youtube_link ?? null,
             'is_youtube' => $request->youtube_link != null ? 1 : 0,
             'video_time' => $request->video_time,
-
         ]);
 
         if($videPartUpdate->save()){

@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\GuideItemsResource;
 use App\Http\Resources\GuideResource;
 use App\Models\Guide;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GuideController extends Controller
 {
@@ -27,9 +29,13 @@ class GuideController extends Controller
 
     }
 
-    public function itemsByLesson($id,$class_id){
+    public function itemsByLesson($id,$class_id): JsonResponse
+    {
 
-        $guide_items = Guide::where(['from_id'=>$id,'subject_class_id'=>$class_id])->get();
+        $guide_items = Guide::query()
+            ->where('from_id','=',$id)
+            ->where('subject_class_id','=',$class_id)
+            ->get();
 
         if($guide_items->count() > 0){
 
