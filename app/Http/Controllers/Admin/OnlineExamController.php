@@ -246,6 +246,12 @@ class OnlineExamController extends Controller
             $inputs['video_id'] = $request->examable_id;
         }
 
+        if ($inputs['answer_video_youtube'] != null) {
+            $inputs['answer_video_is_youtube'] = 1;
+        }else{
+
+            $inputs['answer_video_is_youtube'] = 0;
+        }
 
         if ($online_exam->create($inputs)) {
             $this->adminLog('تم اضافة امتحان اونلاين');
@@ -308,6 +314,12 @@ class OnlineExamController extends Controller
             $inputs['video_id'] = $request->examable_id;
         } // end if
 
+        if ($inputs['answer_video_youtube'] != null) {
+            $inputs['answer_video_is_youtube'] = 1;
+        }else{
+
+            $inputs['answer_video_is_youtube'] = 0;
+        }
 
         if ($onlineExam->update($inputs)) {
             $this->adminLog('تم تحديث امتحان اونلاين');

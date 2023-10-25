@@ -7,11 +7,10 @@
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label for="exam_type" class="form-control-label">نوع الامتحان</label>
-                    <select class="form-control" name="exam_type" id="exam_type"
-                        @selected(old('exam_type',$allExam->exam_type))>
+                    <select class="form-control" name="exam_type" id="exam_type">
                         <option value="" disabled>اختر النوع</option>
-                        <option value="all_exam" class="form-control">أونلاين</option>
-                        <option value="pdf" class="form-control">Pdf</option>
+                        <option value="all_exam" class="form-control" {{ $allExam->exam_type == 'all_exam' ? 'selected' :''}}>امتحان شامل</option>
+                        <option value="pdf" class="form-control" {{ $allExam->exam_type == 'pdf' ? 'selected' :''}}>ملف ورقي*pdf</option>
                     </select>
                 </div>
             </div>
@@ -38,6 +37,14 @@
                     <input type="file" class="form-control" name="answer_video_file"
                            value="{{  $allExam->answer_video_file }}">
                 </div>
+
+                <div class="col-md-12 mt-3">
+                    <label for="answer_video_youtube" class="form-control-label">الاجابه فيديو*يوتيوب</label>
+                    <input type="text" class="form-control" name="answer_video_youtube" value="{{$allExam->answer_video_youtube}}">
+                </div>
+
+                <input type="hidden" class="form-control" name="answer_video_is_youtube">
+
             </div>
             <div class="row">
                 <div class="col-md-6 mt-3">

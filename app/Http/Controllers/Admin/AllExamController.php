@@ -8,6 +8,7 @@ use App\Models\AllExam;
 use App\Models\Season;
 use App\Models\Term;
 use App\Traits\AdminLogs;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -47,7 +48,7 @@ class AllExamController extends Controller
 
 
 
-    public function store(AllExamRequest $request, AllExam $allExam)
+    public function store(AllExamRequest $request, AllExam $allExam): JsonResponse
     {
         $inputs = $request->all();
 
@@ -65,6 +66,14 @@ class AllExamController extends Controller
 
         if ($request->has('image_result')) {
             $inputs['image_result'] = saveFile('all_exams/image_result', $request->image_result);
+        }
+
+
+        if ($inputs['answer_video_youtube'] != null) {
+            $inputs['answer_video_is_youtube'] = 1;
+        }else{
+
+            $inputs['answer_video_is_youtube'] = 0;
         }
 
 
@@ -88,7 +97,7 @@ class AllExamController extends Controller
     }
 
 
-    public function update(AllExamRequest $request, AllExam $allExam)
+    public function update(AllExamRequest $request, AllExam $allExam): JsonResponse
     {
         $inputs = $request->all();
 
@@ -118,8 +127,14 @@ class AllExamController extends Controller
                 unlink($allExam->image_result);
             }
             $inputs['image_result'] = saveFile('all_exams/image_result', $request->image_result);
-        } // end save file
+        }
 
+        if ($inputs['answer_video_youtube'] != null) {
+            $inputs['answer_video_is_youtube'] = 1;
+        }else{
+
+            $inputs['answer_video_is_youtube'] = 0;
+        }
 
         if ($allExam->update($inputs)) {
             $this->adminLog('تم تحديث امتحان شامل');
@@ -129,11 +144,9 @@ class AllExamController extends Controller
         }
     }
 
-    // Update End
 
-    // Destroy Start
 
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         $onlineExam = AllExam::where('id', $request->id)->firstOrFail();
         $onlineExam->delete();
@@ -141,5 +154,4 @@ class AllExamController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Destroy End
 }

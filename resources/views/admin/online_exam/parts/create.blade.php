@@ -17,11 +17,11 @@
             <div class="row d-none pdfType">
                 <div class="col-md-6 mt-3">
                     <label for="pdf_num_questions" class="form-control-label">عدد اسئله الملف الورقي</label>
-                    <input type="number" class="form-control" name="pdf_num_questions" style="text-align: center">
+                    <input type="number" class="form-control" name="pdf_num_questions">
                 </div>
                 <div class="col-md-6 mt-3">
                     <label for="pdf_file_upload" class="form-control-label">ملف الpdf</label>
-                    <input type="file" class="form-control" name="pdf_file_upload" style="text-align: center">
+                    <input type="file" class="form-control" name="pdf_file_upload">
                 </div>
             </div>
 
@@ -29,32 +29,40 @@
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label for="answer_pdf_file" class="form-control-label">ملف الاجابات pdf</label>
-                    <input type="file" class="form-control" name="answer_pdf_file" style="text-align: center">
+                    <input type="file" class="form-control" name="answer_pdf_file">
                 </div>
                 <div class="col-md-12 mt-3">
                     <label for="answer_video_file" class="form-control-label">الاجابات فيديو</label>
-                    <input type="file" class="form-control" name="answer_video_file" style="text-align: center">
+                    <input type="file" class="form-control" name="answer_video_file">
                 </div>
+
+                <div class="col-md-12 mt-3">
+                    <label for="answer_video_youtube" class="form-control-label">الاجابه فيديو*يوتيوب</label>
+                    <input type="text" class="form-control" name="answer_video_youtube">
+                </div>
+
+                <input type="hidden" class="form-control" name="answer_video_is_youtube">
+
             </div>
 
 
             <div class="row">
                 <div class="col-md-6 mt-3">
                     <label for="name_ar" class="form-control-label">الدرجة</label>
-                    <input type="number" class="form-control" name="degree" style="text-align: center">
+                    <input type="number" class="form-control" name="degree">
                 </div>
                 <div class="col-md-6 mt-3">
                     <label for="date_exam" class="form-control-label">تاريخ اضافه الامتحان</label>
-                    <input type="date" class="form-control" name="date_exam" style="text-align: center">
+                    <input type="date" class="form-control" name="date_exam">
                 </div>
                 <div class="col-md-6 mt-3">
                     <label for="name_en" class="form-control-label"> وقت الامتحان</label>
-                    <input type="number" class="form-control" name="quize_minute" style="text-align: center"
+                    <input type="number" class="form-control" name="quize_minute"
                            placeholder="الوقت بالدقائق">
                 </div>
                 <div class="col-md-6 mt-3">
                     <label for="name_en" class="form-control-label"> عدد المحاولات </label>
-                    <input type="number" class="form-control" value="" name="trying_number" style="text-align: center"
+                    <input type="number" class="form-control" value="" name="trying_number"
                            placeholder="عدد المحاولات">
                 </div>
             </div>

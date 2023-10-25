@@ -463,7 +463,6 @@ class LessonController extends Controller
                     //========================== end access next lesson =========================================================
 
 
-
                     //========================== start access next class =========================================================
 
                     $idOfSubjectClass =  $video->lesson->subject_class_id;
@@ -623,7 +622,6 @@ class LessonController extends Controller
                                             ->get();//List of all pdf and audios of video part
 
                                         foreach ($videoUploadAllFiles as $videoUploadAllFile) {
-
                                             VideoOpened::create([
                                                 'user_id' => Auth::guard('user-api')->id(),
                                                 'video_upload_file_pdf_id' => $videoUploadAllFile->file_type == 'pdf' ? $videoUploadAllFile->id : null,
