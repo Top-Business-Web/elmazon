@@ -184,32 +184,9 @@
                    });
                }
             </script>
-{{--            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>--}}
             <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
             <script src="https://cdn.canvasjs.com/jquery.canvasjs.min.js"></script>
-{{--            <script>--}}
-{{--                var xValues = ["الدروس", "الوحدات"];--}}
-{{--                var yValues = ['{{ $lessonCount }}','{{ $classCount }}'];--}}
-{{--                var barColors = ["green", "blue"];--}}
 
-{{--                new Chart("myChart", {--}}
-{{--                    type: "bar",--}}
-{{--                    data: {--}}
-{{--                        labels: xValues,--}}
-{{--                        datasets: [{--}}
-{{--                            backgroundColor: barColors,--}}
-{{--                            data: yValues--}}
-{{--                        }]--}}
-{{--                    },--}}
-{{--                    options: {--}}
-{{--                        legend: {display: false},--}}
-{{--                        title: {--}}
-{{--                            display: false,--}}
-{{--                            text: "معلومات الانجازات"--}}
-{{--                        }--}}
-{{--                    }--}}
-{{--                });--}}
-{{--            </script>--}}
 
             <script>
                     var lessonCount = {{ $lessonCount }};

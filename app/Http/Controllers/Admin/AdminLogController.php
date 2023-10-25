@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\AdminLog;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -16,8 +18,24 @@ class AdminLogController extends Controller
      */
     public function index(request $request)
     {
+        $now = Carbon::now()->format('Y-m-d');
+        $startDate = $request->to;
+        $endDate = $request->from;
+        $logList = AdminLog::select('*');
+        if ($request->has('to') && $request->has('from') && $startDate !== $now && $endDate !== $now) {
+            $startDate = $request->get('from');
+            $endDate = $request->get('to');
+            $logList->whereDate('created_at', '>=', $startDate)
+                ->whereDate('created_at', '<=', $endDate);
+        } else {
+            $startDate = $now;
+            $endDate = $now;
+        }
+
         if ($request->ajax()) {
-            $logs = AdminLog::get();
+
+            $logs = $logList->get();
+
             return Datatables::of($logs)
                 ->addColumn('button', function ($logs) {
                     return '<button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
@@ -39,8 +57,8 @@ class AdminLogController extends Controller
                 ->escapeColumns([])
                 ->make(true);
         } else {
-            AdminLog::where('seen','=',0)->update(['seen' => 1]);
-            return view('admin.admin.admin_logs');
+            AdminLog::where('seen', '=', 0)->update(['seen' => 1]);
+            return view('admin.admin.admin_logs', compact('startDate', 'endDate'));
         }
     }// End Index
 
@@ -51,9 +69,12 @@ class AdminLogController extends Controller
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     } // end of delete
 
-    public function deleteAll(Schedule $schedule)
+    public function deleteAll(Request $request)
     {
-        AdminLog::delete();
+        AdminLog::query()
+            ->whereDate('created_at','>=',$request->get('from'))
+            ->whereDate('created_at','<=',$request->get('to'))
+            ->delete();
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     } // end of delete
 }

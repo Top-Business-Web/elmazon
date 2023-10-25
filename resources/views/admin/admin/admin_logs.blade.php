@@ -10,9 +10,16 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"> السجلات {{ $setting->title ?? '' }}</h3>
+                    <div class="form-group d-flex">
+                        <label class="form-label ml-2">From</label>
+                        <input class="form-control fromDate" value="{{ $startDate }}" name="from" type="date">
+                        <label class="form-label ml-2 mr-4">To</label>
+                        <input class="form-control toDate" value="{{ $endDate }}" name="to" type="date">
+                    </div>
                     <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal_all">
-                        حذف الكل <i class="fas fa-trash"></i>
+                        حذف المحدد <i class="fas fa-trash"></i>
                     </button>
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -75,7 +82,7 @@
                         <p>هل انت متأكد من حذف جميع البيانات التالية <span id="title" class="text-danger"></span>؟</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_delete_modal">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss_deleteAll_modal">
                             اغلاق
                         </button>
                         <button type="button" class="btn btn-danger" id="delete_all_btn">حذف !</button>
@@ -107,6 +114,7 @@
 @endsection
 @section('ajaxCalls')
     <script>
+
         var columns = [
             {data: 'id', name: 'id'},
             {data: 'admin_id', name: 'admin_id'},
@@ -114,7 +122,29 @@
             {data: 'role', name: 'role'},
             {data: 'button', name: 'button', orderable: false, searchable: false},
         ]
-        showData('{{ route('adminLog') }}', columns);
+
+        var ajax = {
+            url: "{{ route('adminLog') }}",
+            data: function (d) {
+                d.to = $('.toDate').val()
+                d.from = $('.fromDate').val()
+            }
+        };
+
+        $(document).on('change','.toDate',function (){
+            var table = $('#dataTable').DataTable(); // Get the DataTable instance
+            table.draw(); // Reload the data
+        })
+
+        $(document).on('change','.fromDate',function (){
+            var table = $('#dataTable').DataTable(); // Get the DataTable instance
+            table.draw(); // Reload the data
+        })
+
+
+
+
+        showData(ajax, columns);
 
         // Delete Using Ajax
         deleteScript('{{ route('adminLogDelete') }}');
@@ -141,14 +171,16 @@
                     data: {
                         '_token': "{{ csrf_token() }}",
                         'id': id,
+                        'from' : $('.fromDate').val(),
+                        'to' : $('.toDate').val(),
                     },
                     success: function(data) {
                         if (data.status === 200) {
-                            $("#dismiss_delete_modal")[0].click();
+                            $('#delete_modal_all').modal('hide');
                             $('#dataTable').DataTable().ajax.reload();
                             toastr.success(data.message)
                         } else {
-                            $("#dismiss_delete_modal")[0].click();
+                            $("#dismiss_deleteAll_modal")[0].click();
                             toastr.error(data.message)
                         }
                     }

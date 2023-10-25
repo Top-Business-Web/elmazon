@@ -7,7 +7,41 @@
 @endsection
 @section('content')
 
+
     <div class="row">
+
+        <!--  city chart -->
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+            <div class="card" style="height: 444px;">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div id="myChartPie"></div>
+                        </div>
+                        <div class="col">
+                            <div id="myChartCol"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  city chart -->
+
+        <!--  city chart -->
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h1 class="text-center font-weight-bold"> احصائيات عامة </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  city chart -->
+
+
         <!-- users Count -->
         <div class="col-lg-4 col-md-4 col-sm-12 col-xl-4">
             <div class="card">
@@ -443,9 +477,9 @@
                                 " role="progressbar"></div>
                             </div>
                         </div>
-                            <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('suggestions.index') }}">
-                                المزيد
-                            </a>
+                        <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('suggestions.index') }}">
+                            المزيد
+                        </a>
                     </div>
                 </div>
             </div>
@@ -487,32 +521,125 @@
                 </div>
             </div>
         </div>
+        <!--  suggest Count -->
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-        <canvas id="myChart" style="width:100%;max-width:800px"></canvas>
+        <!--  section Count -->
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xl-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <i style="font-size: xxx-large" class="fa fa-question-circle d-flex"></i>
+                        <div class="col">
+                            <h6 class="bold font-weight-bolder">عدد القاعات</h6>
+                            <h3 class="mb-2 number-font">{{ $section }}</h3>
+                            <div class="progress h-2">
+                                <div class="progress-bar bg-primary-gradient
+                                    @if($section >= 5 )
+                                 w-10
+                                @elseif($section > 15)
+                                    w-25
+                                @elseif($section > 45)
+                                    w-50
+                                @elseif($section > 70)
+                                    w-75
+                                @elseif($section > 90)
+                                    w-100
+                                @elseif($section > 150)
+                                    w-260
+                                @elseif($section > 200)
+                                    w-337
+                                 @endif
+                                " role="progressbar"></div>
+                            </div>
+                        </div>
+                        <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('section.index') }}">
+                            المزيد
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  section Count -->
+
+        <!--  guide Count -->
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xl-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <i style="font-size: xxx-large" class="fa fa-question-circle d-flex"></i>
+                        <div class="col">
+                            <h6 class="bold font-weight-bolder">عدد المصادر المراجع</h6>
+                            <h3 class="mb-2 number-font">{{ $guide }}</h3>
+                            <div class="progress h-2">
+                                <div class="progress-bar bg-primary-gradient
+                                    @if($guide >= 5 )
+                                 w-10
+                                @elseif($guide > 15)
+                                    w-25
+                                @elseif($guide > 45)
+                                    w-50
+                                @elseif($guide > 70)
+                                    w-75
+                                @elseif($guide > 90)
+                                    w-100
+                                @elseif($guide > 150)
+                                    w-260
+                                @elseif($guide > 200)
+                                    w-337
+                                 @endif
+                                " role="progressbar"></div>
+                            </div>
+                        </div>
+                        <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('section.index') }}">
+                            المزيد
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  guide Count -->
+
+        <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
+        <script src="https://cdn.canvasjs.com/jquery.canvasjs.min.js"></script>
         <script>
-            var xValues = @php echo json_encode(array_values($country_name)) @endphp;
-            var yValues = @php echo json_encode(array_values($country_val)) @endphp;
-            console.log(xValues);
-            var barColors = ["red", "green","yellow","black","blue"];
+            var countryData = @php echo json_encode(array_values($country_name)) @endphp;
+            var countryValData = @php echo json_encode(array_values($country_val)) @endphp;
+            var dataPoints = [];
 
-            new Chart("myChart", {
-                type: "bar",
-                data: {
-                    labels: xValues,
-                    datasets: [{
-                        backgroundColor: barColors,
-                        data: yValues
-                    }]
+            for (var i = 0; i < countryData.length; i++) {
+                dataPoints.push({
+                    label: countryData[i], // Set the label from your data
+                    y: countryValData[i] // Set the y value from your data
+                });
+            }
+            var options = {
+                animationEnabled: true,
+                title: {
+                    text: "احصائيات المحافظات"
                 },
-                options: {
-                    legend: {display: false},
-                    title: {
-                        display: true,
-                        text: "احصائيات المحافظات"
-                    }
-                }
-            });
+                data: [{
+                    type: "pie",
+                    yValueFormatString: "#,##0.0#",
+                    dataPoints: dataPoints // Assign the dataPoints array here
+                }]
+            };
+
+            $("#myChartPie").CanvasJSChart(options);
+
+
+            var options1 = {
+                animationEnabled: true,
+                title: {
+                    text: "احصائيات المحافظات"
+                },
+                data: [{
+                    type: "column",
+                    yValueFormatString: "#,##0.0#",
+                    dataPoints: dataPoints // Assign the dataPoints array here
+                }]
+            };
+
+            $("#myChartCol").CanvasJSChart(options1);
         </script>
 
     </div>
