@@ -25,6 +25,8 @@ class OnlineExam extends Model
         'pdf_num_questions',
         'answer_pdf_file',
         'answer_video_file',
+        'answer_video_youtube',
+        'answer_video_is_youtube',
         'name_ar',
         'name_en',
         'date_exam',

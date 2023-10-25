@@ -31,6 +31,14 @@
                     <label class="form-control-label" for="answer_video_file">رفع الاجابة video</label>
                     <input type="file" class="form-control" name="answer_video_file">
                 </div>
+
+                <div class="col-md-12 mt-3">
+                    <label for="answer_video_youtube" class="form-control-label">الاجابه فيديو*يوتيوب</label>
+                    <input type="text" class="form-control" name="answer_video_youtube">
+                </div>
+
+                <input type="hidden" class="form-control" name="answer_video_is_youtube">
+
             </div>
             <div class="row">
                 <div class="col-md-6 mt-3">

@@ -7,11 +7,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="name_ar" class="form-control-label">نوع الامتحان</label>
-                    <select name="exam_type" class="form-control" id="exam_type"
-                            required="required" @selected(old('exam_type', $onlineExam->exam_type))>
+                    <select name="exam_type" class="form-control" id="exam_type">
                         <option value="" disabled>اختر نوع الامتحان</option>
-                        <option value="pdf">PDF</option>
-                        <option value="online">Online</option>
+                        <option value="pdf" {{ $onlineExam->exam_type == 'pdf' ? 'selected' :''}}>PDF</option>
+                        <option value="online" {{ $onlineExam->exam_type == 'online' ? 'selected' : ''}}>Online</option>
                     </select>
                 </div>
             </div>
@@ -21,12 +20,12 @@
                 <div class="col-md-12 mt-3">
                     <label for="pdf_num_questions" class="form-control-label">عدد اسئله الملف الورقي</label>
                     <input type="number" class="form-control" name="pdf_num_questions"
-                           value="{{ $onlineExam->pdf_num_questions }}" style="text-align: center">
+                           value="{{ $onlineExam->pdf_num_questions }}">
                 </div>
                 <div class="col-md-12 mt-3">
                     <label for="pdf_file_upload" class="form-control-label">ملف الpdf</label>
                     <input type="file" class="form-control" name="pdf_file_upload"
-                           value="{{ $onlineExam->pdf_file_upload }}" style="text-align: center">
+                           value="{{ $onlineExam->pdf_file_upload }}">
                 </div>
             </div>
 
@@ -35,13 +34,21 @@
                 <div class="col-md-12 mt-3">
                     <label for="answer_pdf_file" class="form-control-label">ملف الاجابات pdf</label>
                     <input type="file" class="form-control" name="answer_pdf_file"
-                           value="{{ $onlineExam->answer_pdf_file }}" style="text-align: center">
+                           value="{{ $onlineExam->answer_pdf_file }}">
                 </div>
                 <div class="col-md-12 mt-3">
                     <label for="answer_video_file" class="form-control-label">الاجابات فيديو</label>
                     <input type="file" class="form-control" name="answer_video_file"
-                           value="{{ $onlineExam->answer_video_file }}" style="text-align: center">
+                           value="{{ $onlineExam->answer_video_file }}">
                 </div>
+
+                <div class="col-md-12 mt-3">
+                    <label for="answer_video_youtube" class="form-control-label">الاجابه فيديو*يوتيوب</label>
+                    <input type="text" class="form-control" name="answer_video_youtube"   value="{{ $onlineExam->answer_video_youtube }}">
+                </div>
+
+                <input type="hidden" class="form-control" name="answer_video_is_youtube">
+
             </div>
 
 
@@ -59,13 +66,13 @@
                 <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label"> وقت الامتحان</label>
                     <input type="number" class="form-control" name="quize_minute"
-                           value="{{ $onlineExam->quize_minute }}" style="text-align: center"
+                           value="{{ $onlineExam->quize_minute }}"
                            placeholder="الوقت بالدقائق" required>
                 </div>
                 <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label"> عدد المحاولات </label>
                     <input type="number" class="form-control" name="trying_number"
-                           value="{{ $onlineExam->trying_number }}" style="text-align: center"
+                           value="{{ $onlineExam->trying_number }}"
                            placeholder="عدد المحاولات" required>
                 </div>
             </div>

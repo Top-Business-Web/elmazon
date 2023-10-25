@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Models\Season;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-
 use App\Models\Country;
 use App\Models\Subscribe;
 use App\Traits\AdminLogs;
@@ -308,15 +307,24 @@ class UserController extends Controller
     public function autoPrintReport($id)
     {
         $user = User::findOrFail($id);
-        $term = Term::where('season_id', $user->season_id)
-            ->where('status', '=', 'active')->first();
-        $lessonCount = OpenLesson::where('user_id', $user->id)
-            ->where('lesson_id', '!=', null)->count('lesson_id');
 
-        $classCount = OpenLesson::where('user_id', $user->id)
-            ->where('subject_class_id', '!=', null)->count('subject_class_id');
+        $term = Term::query()
+        ->where('season_id', $user->season_id)
+            ->where('status', '=', 'active')
+            ->first();
 
-        $videos = VideoOpened::where('user_id', $user->id)
+        $lessonCount = OpenLesson::query()
+        ->where('user_id', $user->id)
+            ->where('lesson_id', '!=', null)
+            ->count('lesson_id');
+
+        $classCount = OpenLesson::query()
+        ->where('user_id', $user->id)
+            ->where('subject_class_id', '!=', null)
+            ->count('subject_class_id');
+
+        $videos = VideoOpened::query()
+        ->where('user_id', $user->id)
             ->where('type', 'video')
             ->with('video')->get();
 
@@ -339,10 +347,18 @@ class UserController extends Controller
 
         $totalTimeFormatted = $totalTime->format('H:i:s');
 
-        $exams = ExamDegreeDepends::where('user_id', '=', $user->id)
-            ->where('exam_depends', '=', 'yes')->get();
-        $paperExams = PapelSheetExamDegree::where('user_id', '=', $user->id)->get();
-        $subscriptions = UserSubscribe::where('student_id', $user->id)->get();
+        $exams = ExamDegreeDepends::query()
+        ->where('user_id', '=', $user->id)
+            ->where('exam_depends', '=', 'yes')
+            ->get();
+
+        $paperExams = PapelSheetExamDegree::query()
+        ->where('user_id', '=', $user->id)
+            ->get();
+
+        $subscriptions = UserSubscribe::query()
+        ->where('student_id', $user->id)
+            ->get();
 
 
         return view('admin.users.parts.auto_report', compact([
@@ -362,7 +378,10 @@ class UserController extends Controller
 
     public function destroy(Request $request)
     {
-        $user = User::where('id', $request->id)->firstOrFail();
+        $user = User::query()
+        ->where('id', $request->id)
+            ->firstOrFail();
+
         $user->delete();
         $this->adminLog('تم حذف طالب ');
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);

@@ -228,7 +228,6 @@ Route::group(['middleware' => 'lang'], function (){
     });
 
 
-
     //start live exam
     Route::group(['prefix' => 'live-exam','middleware' => 'jwt'], function (){
         Route::get('all-of-questions/{id}',[LiveExamController::class,'allOfQuestions']);
