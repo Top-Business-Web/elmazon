@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AboutMe\AboutMeController;
 use App\Http\Controllers\Api\AdsController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Comment\CommentController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\Api\StudentReport\ReportController;
 use App\Http\Controllers\Api\Report\ReportController as ReportStudentController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
 use App\Http\Controllers\Api\SubscribeController;
+use App\Http\Controllers\Api\VideoRate\VideoRateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,7 +43,7 @@ Route::group(['middleware' => 'lang'], function (){
 
 
     Route::post('add-notification',[AuthController::class,'add_notification']);
-    Route::get('teacher/about-me',[\App\Http\Controllers\Api\AboutMe\AboutMeController::class,'about_me'])->middleware('jwt');
+    Route::get('teacher/about-me',[AboutMeController::class,'about_me'])->middleware('jwt');
 
     Route::group(['prefix' => 'auth'], function (){
 
@@ -164,7 +166,7 @@ Route::group(['middleware' => 'lang'], function (){
             ->middleware('jwt');
 
         Route::get('reports/student-report',[ReportController::class,'student_report'])->middleware('jwt');
-        Route::post('user-rate-video/{id}',[App\Http\Controllers\Api\VideoRate\VideoRateController::class,'user_rate_video'])->middleware('jwt');
+        Route::post('user-rate-video/{id}',[VideoRateController::class,'user_rate_video'])->middleware('jwt');
 
         Route::get('print/{id}', [LessonController::class, 'printReport'])->name('printReport');
 
@@ -238,7 +240,6 @@ Route::group(['middleware' => 'lang'], function (){
 
         Route::get('live-exam-all',[LiveExamController::class,'allOfLiveExamsStudent'])->middleware('jwt');
         Route::get('live-exam-all/choose-live-exam',[LiveExamController::class,'choose_live_exam'])->middleware('jwt');
-        //exam heroes
         Route::get('exam-heroes/all',[ExamEntryController::class,'examHeroesAll'])->middleware('jwt');
 
 
