@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Country;
+use App\Models\Guide;
 use App\Models\Lesson;
 use App\Models\LifeExam;
 use App\Models\OnlineExam;
 use App\Models\PapelSheetExam;
 use App\Models\Question;
+use App\Models\Section;
 use App\Models\SubjectClass;
 use App\Models\Suggestion;
 use App\Models\User;
@@ -33,6 +35,8 @@ class MainController extends Controller
         $data['lesson'] = Lesson::count();
         $data['class'] = SubjectClass::count();
         $data['suggest'] = Suggestion::count();
+        $data['section'] = Section::count();
+        $data['guide'] = Guide::count();
         $data['country_val'] = User::groupBy('country_id')
             ->select('country_id', \DB::raw('count(*) as total'))
             ->with('country')
