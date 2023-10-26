@@ -359,3 +359,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 });
 
 Route::get('autoPrintReport/{id}', [UserController::class, 'autoPrintReport'])->name('autoPrintReport');
+
+
+
+Route::get('/clear', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('key:generate');
+    Artisan::call('config:clear');
+    Artisan::call('optimize:clear');
+    return response()->json(['status' => 'success','code' =>1000000000]);
+});
