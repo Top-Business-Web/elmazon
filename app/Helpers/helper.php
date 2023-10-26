@@ -124,3 +124,20 @@ if (!function_exists('getAllSecondsFromTimes')) {
     }
 
 }
+
+if (!function_exists('progress')){
+    function progress($count)
+    {
+        if ($count > 1000){
+            return 'w-100';
+        } elseif ($count > 500){
+            return 'w-75';
+        }elseif ($count > 200){
+            return 'w-50';
+        } elseif ($count > 100){
+            return 'w-25';
+        } elseif ($count > 50){
+            return 'w-10';
+        }
+    }
+}

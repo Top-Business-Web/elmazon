@@ -66,6 +66,10 @@
 <script defer src="{{asset('assets/admin')}}/iconfonts/font-awesome/js/solid.js"></script>
 <script defer src="{{asset('assets/admin')}}/iconfonts/font-awesome/js/fontawesome.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css" rel="stylesheet" />
+
+<link href="{{ asset('assets/admin/assets/plugins/select2/select2.min.css') }}" rel="stylesheet" />
+<script src="{{ asset('/assets/selectjs/js/select2.min.js') }}"></script>
+
 @yield('css')
 <style>
     .tgl {
@@ -271,3 +275,4 @@
         transform: rotateY(20deg);
     }
 </style>
+

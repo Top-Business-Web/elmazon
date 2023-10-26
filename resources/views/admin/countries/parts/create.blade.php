@@ -14,8 +14,8 @@
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="city_id" class="form-control-label">اختر الدوله</label>
-                    <Select name="city_id" class="form-control">
+                    <label for="city_id" class="form-control-label">اختر المحافظة</label>
+                    <Select name="city_id" class="form-control select2">
                         @foreach ($data['cities'] as $city)
                             <option value="{{ $city->id }}" style="text-align: center" style="text-align: center">{{ $city->name_ar }}</option>
                         @endforeach
@@ -32,4 +32,8 @@
 
 <script>
     $('.dropify').dropify()
+
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
 </script>

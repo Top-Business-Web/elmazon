@@ -16,9 +16,9 @@
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="city_id">مدينة</label>
+                    <label for="city_id">المحافظة</label>
                     <Select name="city_id" class="form-control">
-                        <option selected disabled style="text-align: center">اختر الدوله</option>
+                        <option selected disabled style="text-align: center">اختر المحافظة</option>
                         @foreach ($data['cities'] as $city)
                             <option value="{{ $city->id }}"
                                     {{ $country->city_id == $city->id ? 'selected' : '' }} style="text-align: center">
