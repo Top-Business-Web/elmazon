@@ -79,13 +79,24 @@
                 </div>
 
                 <div class="col-md-12 mt-3">
-                    <label for="login_status" class="form-control-label">حاله الطلب</label>
+                    <label for="login_status" class="form-control-label">تسجيل الطالب معنا</label>
                     <select class="form-control" name="center">
                         @foreach($user_status as $center)
                             <option value="{{$center}}" {{$user->center == $center ? 'selected' : ''}}>{{$center == 'in' ? 'داخل السنتر' : 'خارج السنتر'}}</option>
                         @endforeach
                     </select>
                 </div>
+
+                <div class="col-md-12 mt-3">
+                    <label for="login_status" class="form-control-label">حاله الطالب</label>
+                    <select class="form-control" name="user_status">
+                        @foreach($user_active as $active)
+                            <option value="{{$active}}" {{$user->user_status == $active ? 'selected' : ''}}>{{$active == 'active' ? 'الحساب مفعل' : 'الحساب غير مفعل'}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+
             </div>
             <div class="row">
                 <div class="col-md-6 mt-3">

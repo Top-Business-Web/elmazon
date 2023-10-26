@@ -117,6 +117,20 @@ class UserController extends Controller
                     }
 
                 })
+
+                ->editColumn('user_status', function ($users) {
+
+                    if( $users->user_status == 'active')
+                    {
+                        return '<button type="button" class="btn btn-pill btn-info-light">الطالب مفعل</button>';
+
+                    }else{
+
+                        return '<button type="button" class="btn btn-pill btn-danger-light">الطالب غير مفعل</button>';
+
+                    }
+
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {
@@ -165,7 +179,9 @@ class UserController extends Controller
 
         $user_status = ['in','out'];
 
-        return view('admin.users.parts.edit', compact('user','login_status','seasons','countries','user_status'));
+        $user_active = ['active','not_active'];
+
+        return view('admin.users.parts.edit', compact('user','login_status','seasons','countries','user_status','user_active'));
     }
 
     public function update(UserUpdateRequest $request, User $user): JsonResponse

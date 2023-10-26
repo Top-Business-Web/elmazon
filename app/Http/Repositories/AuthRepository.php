@@ -805,7 +805,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
                  return self::returnResponseDataApi(null, "يوجد خطاء بدخول البيانات برجاء الرجوع لمطور الباك اند", 500);
              }
-
         }
 
     }
