@@ -74,8 +74,12 @@ class VideoPartDetailsNewResource extends JsonResource
         //===================================================== end Test Subscribe =========================================================
 
         return [
+
             'id' => $this->id,
+            'video_month' => $this->month < 10 ? Carbon::now()->format('Y-')."0".$this->month:  Carbon::now()->format('Y-').$this->month,
+            'student_auth_subscribe' => $studentAuth,
             'subscribe' => in_array($this->month < 10 ? Carbon::now()->format('Y-')."0".$this->month:  Carbon::now()->format('Y-').$this->month,$list) ? 'access' : 'not_access',
+            'listOfMonthStudent' =>   $list,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'status' => !$user_watch_video ? 'lock' :  ($user_watch_video->status == 'opened' ? 'opened': 'watched'),
             'progress' =>  !empty($sumAllOfMinutesVideosStudentAuth) ? $totalMinutesOfAllVideos : "0",
@@ -90,6 +94,7 @@ class VideoPartDetailsNewResource extends JsonResource
             'view_active' => $this->view_active,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
+
         ];
     }
 }
