@@ -58,7 +58,8 @@
                                         <th class="min-w-50px">الصف الدراسي</th>
                                         <th class="min-w-50px">المدينه</th>
                                         <th class="min-w-50px">حاله الحساب</th>
-                                        <th class="min-w-50px">الطالب بالنسبه للسنتر</th>
+                                        <th class="min-w-50px">حاله الطالب</th>
+                                        <th class="min-w-50px">تسجيل الطالب معنا</th>
                                         <th class="min-w-50px">رقم هاتف ولي الامر</th>
                                         <th class="min-w-50px">تاريخ بدايه الاشتراك</th>
                                         <th class="min-w-50px">تاريخ نهايه الاشتراك</th>
@@ -199,6 +200,7 @@
                 {data: 'season_id', name: 'season_id'},
                 {data: 'country_id', name: 'country_id'},
                 {data: 'login_status', name: 'login_status'},
+                {data: 'user_status', name: 'user_status'},
                 {data: 'center', name: 'center'},
                 {data: 'father_phone', name: 'father_phone'},
                 {data: 'date_start_code', name: 'date_start_code'},
