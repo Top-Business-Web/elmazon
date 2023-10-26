@@ -2,10 +2,13 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
+use App\Models\UserSubscribe;
 use App\Models\VideoOpened;
 use App\Models\VideoParts;
 use App\Models\VideoRate;
 use App\Models\VideoTotalView;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -49,9 +52,22 @@ class VideoPartDetailsNewResource extends JsonResource
             ->toArray();//example 120 seconds
 
 
-
         $totalMinutesOfAllVideos = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfVideo)) * 100),2);
 
+
+        //===================================================== Test Subscribe =========================================================
+
+
+
+        $studentAuth = User::query()
+            ->where('id','=',Auth::guard('user-api')->id())
+            ->select('id','date_start_code','date_end_code')
+            ->first();
+
+
+
+
+        //===================================================== Test Subscribe =========================================================
 
         return [
 
