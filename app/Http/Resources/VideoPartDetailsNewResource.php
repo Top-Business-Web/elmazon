@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\DB;
 class VideoPartDetailsNewResource extends JsonResource
 {
 
-    public function toArray($request){
+    public function toArray($request): array
+    {
 
         $user_watch_video = VideoOpened::query()
             ->where('video_part_id','=',$this->id)
@@ -76,9 +77,8 @@ class VideoPartDetailsNewResource extends JsonResource
         return [
 
             'id' => $this->id,
-            'subscribe' => in_array($this->month < 10 ? Carbon::now()->format('Y-')."0".$this->month:  Carbon::now()->format('Y-').$this->month,$list) ? 'access' : 'not_access',
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
-            'status' => !$user_watch_video ? 'lock' :  ($user_watch_video->status == 'opened' ? 'opened': 'watched'),
+            'status' =>  !in_array($this->month < 10 ? Carbon::now()->format('Y-')."0".$this->month:  Carbon::now()->format('Y-').$this->month,$list) ? 'not_access' : (!$user_watch_video ? 'lock' :  ($user_watch_video->status == 'opened' ? 'opened': 'watched')),
             'progress' =>  !empty($sumAllOfMinutesVideosStudentAuth) ? $totalMinutesOfAllVideos : "0",
             'link' =>  $this->is_youtube == true ? $this->youtube_link :asset('videos/'. $this->link),
             'is_youtube' =>  $this->is_youtube,
