@@ -70,7 +70,8 @@
 {{--    @endif--}}
 {{--    $('.header-brand-img').attr("src","{{asset($setting->logo)}}")--}}
 {{--</script>--}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script src="{{ asset('/assets/selectjs/js/select2.min.js') }}"></script>
+
 <script type="text/javascript" src="{{ asset('assets/admin/assets/js/printThis.js') }}"></script>
 <script>
 

@@ -7,7 +7,9 @@
 @endsection
 @section('content')
 
+    @php
 
+    @endphp
     <div class="row">
 
         <!--  city chart -->
@@ -53,21 +55,7 @@
                             <h3 class="mb-2 number-font">{{ $users }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($users > 5 )
-                                 w-10
-                                @elseif($users > 15)
-                                    w-25
-                                @elseif($users > 45)
-                                    w-50
-                                @elseif($users > 70)
-                                    w-75
-                                @elseif($users > 90)
-                                    w-100
-                                @elseif($users > 150)
-                                    w-260
-                                @elseif($users > 200)
-                                    w-337
-                                 @endif
+                                {{ progress($users) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -90,21 +78,7 @@
                             <h3 class="mb-2 number-font">{{ $usersIn }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($usersIn > 5 )
-                                 w-10
-                                @elseif($usersIn > 15)
-                                    w-25
-                                @elseif($usersIn > 45)
-                                    w-50
-                                @elseif($usersIn > 70)
-                                    w-75
-                                @elseif($usersIn > 90)
-                                    w-100
-                                @elseif($usersIn > 150)
-                                    w-260
-                                @elseif($usersIn > 200)
-                                    w-337
-                                 @endif
+                                  {{ progress($usersIn) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -127,21 +101,7 @@
                             <h3 class="mb-2 number-font">{{ $usersOut }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($usersOut > 5 )
-                                 w-10
-                                @elseif($usersOut > 15)
-                                    w-25
-                                @elseif($usersOut > 45)
-                                    w-50
-                                @elseif($usersOut > 70)
-                                    w-75
-                                @elseif($usersOut > 90)
-                                    w-100
-                                @elseif($usersOut > 150)
-                                    w-260
-                                @elseif($usersOut > 200)
-                                    w-337
-                                 @endif
+                                {{ progress($usersOut) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -164,21 +124,7 @@
                             <h3 class="mb-2 number-font">{{ $paperExam }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($paperExam > 5 )
-                                 w-10
-                                @elseif($paperExam > 15)
-                                    w-25
-                                @elseif($paperExam > 45)
-                                    w-50
-                                @elseif($paperExam > 70)
-                                    w-75
-                                @elseif($paperExam > 90)
-                                    w-100
-                                @elseif($paperExam > 150)
-                                    w-260
-                                @elseif($paperExam > 200)
-                                    w-337
-                                 @endif
+                                   {{ progress($paperExam) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -201,21 +147,7 @@
                             <h3 class="mb-2 number-font">{{ $onlineExam }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($onlineExam > 5 )
-                                 w-10
-                                @elseif($onlineExam > 15)
-                                    w-25
-                                @elseif($onlineExam > 45)
-                                    w-50
-                                @elseif($onlineExam > 70)
-                                    w-75
-                                @elseif($onlineExam > 90)
-                                    w-100
-                                @elseif($onlineExam > 150)
-                                    w-260
-                                @elseif($onlineExam > 200)
-                                    w-337
-                                 @endif
+                                 {{ progress($onlineExam) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -238,21 +170,7 @@
                             <h3 class="mb-2 number-font">{{ $liveExam }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($liveExam > 5 )
-                                 w-10
-                                @elseif($liveExam > 15)
-                                    w-25
-                                @elseif($liveExam > 45)
-                                    w-50
-                                @elseif($liveExam > 70)
-                                    w-75
-                                @elseif($liveExam > 90)
-                                    w-100
-                                @elseif($liveExam > 150)
-                                    w-260
-                                @elseif($liveExam > 200)
-                                    w-337
-                                 @endif
+                               {{ progress($liveExam) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -275,21 +193,7 @@
                             <h3 class="mb-2 number-font">{{ $videoParts }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($videoParts >= 5 )
-                                 w-10
-                                @elseif($videoParts > 15)
-                                    w-25
-                                @elseif($videoParts > 45)
-                                    w-50
-                                @elseif($videoParts > 70)
-                                    w-75
-                                @elseif($videoParts > 90)
-                                    w-100
-                                @elseif($videoParts > 150)
-                                    w-260
-                                @elseif($videoParts > 200)
-                                    w-337
-                                 @endif
+                                 {{ progress($videoParts) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -311,21 +215,7 @@
                             <h3 class="mb-2 number-font">{{ $videoBasic }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($videoBasic >= 5 )
-                                 w-10
-                                @elseif($videoBasic > 15)
-                                    w-25
-                                @elseif($videoBasic > 45)
-                                    w-50
-                                @elseif($videoBasic > 70)
-                                    w-75
-                                @elseif($videoBasic > 90)
-                                    w-100
-                                @elseif($videoBasic > 150)
-                                    w-260
-                                @elseif($videoBasic > 200)
-                                    w-337
-                                 @endif
+                                    {{ progress($videoBasic) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -348,21 +238,7 @@
                             <h3 class="mb-2 number-font">{{ $videoResource }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($videoResource >= 5 )
-                                 w-10
-                                @elseif($videoResource > 15)
-                                    w-25
-                                @elseif($videoResource > 45)
-                                    w-50
-                                @elseif($videoResource > 70)
-                                    w-75
-                                @elseif($videoResource > 90)
-                                    w-100
-                                @elseif($videoResource > 150)
-                                    w-260
-                                @elseif($videoResource > 200)
-                                    w-337
-                                 @endif
+                                  {{ progress($videoResource) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -385,21 +261,7 @@
                             <h3 class="mb-2 number-font">{{ $lesson }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($lesson >= 5 )
-                                 w-10
-                                @elseif($lesson > 15)
-                                    w-25
-                                @elseif($lesson > 45)
-                                    w-50
-                                @elseif($lesson > 70)
-                                    w-75
-                                @elseif($lesson > 90)
-                                    w-100
-                                @elseif($lesson > 150)
-                                    w-260
-                                @elseif($lesson > 200)
-                                    w-337
-                                 @endif
+                                  {{ progress($lesson) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -422,21 +284,7 @@
                             <h3 class="mb-2 number-font">{{ $class }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($class >= 5 )
-                                 w-10
-                                @elseif($class > 15)
-                                    w-25
-                                @elseif($class > 45)
-                                    w-50
-                                @elseif($class > 70)
-                                    w-75
-                                @elseif($class > 90)
-                                    w-100
-                                @elseif($class > 150)
-                                    w-260
-                                @elseif($class > 200)
-                                    w-337
-                                 @endif
+                                  {{ progress($class) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -459,21 +307,7 @@
                             <h3 class="mb-2 number-font">{{ $suggest }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($suggest >= 5 )
-                                 w-10
-                                @elseif($suggest > 15)
-                                    w-25
-                                @elseif($suggest > 45)
-                                    w-50
-                                @elseif($suggest > 70)
-                                    w-75
-                                @elseif($suggest > 90)
-                                    w-100
-                                @elseif($suggest > 150)
-                                    w-260
-                                @elseif($suggest > 200)
-                                    w-337
-                                 @endif
+                                   {{ progress($suggest) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -496,21 +330,7 @@
                             <h3 class="mb-2 number-font">{{ $question }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($question >= 5 )
-                                 w-10
-                                @elseif($question > 15)
-                                    w-25
-                                @elseif($question > 45)
-                                    w-50
-                                @elseif($question > 70)
-                                    w-75
-                                @elseif($question > 90)
-                                    w-100
-                                @elseif($question > 150)
-                                    w-260
-                                @elseif($question > 200)
-                                    w-337
-                                 @endif
+                                 {{ progress($question) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -534,21 +354,7 @@
                             <h3 class="mb-2 number-font">{{ $section }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($section >= 5 )
-                                 w-10
-                                @elseif($section > 15)
-                                    w-25
-                                @elseif($section > 45)
-                                    w-50
-                                @elseif($section > 70)
-                                    w-75
-                                @elseif($section > 90)
-                                    w-100
-                                @elseif($section > 150)
-                                    w-260
-                                @elseif($section > 200)
-                                    w-337
-                                 @endif
+                                    {{ progress($section) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
@@ -572,25 +378,11 @@
                             <h3 class="mb-2 number-font">{{ $guide }}</h3>
                             <div class="progress h-2">
                                 <div class="progress-bar bg-primary-gradient
-                                    @if($guide >= 5 )
-                                 w-10
-                                @elseif($guide > 15)
-                                    w-25
-                                @elseif($guide > 45)
-                                    w-50
-                                @elseif($guide > 70)
-                                    w-75
-                                @elseif($guide > 90)
-                                    w-100
-                                @elseif($guide > 150)
-                                    w-260
-                                @elseif($guide > 200)
-                                    w-337
-                                 @endif
+                                   {{ progress($guide) }}
                                 " role="progressbar"></div>
                             </div>
                         </div>
-                        <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('section.index') }}">
+                        <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('guide.index') }}">
                             المزيد
                         </a>
                     </div>
@@ -599,53 +391,69 @@
         </div>
         <!--  guide Count -->
 
-        <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
-        <script src="https://cdn.canvasjs.com/jquery.canvasjs.min.js"></script>
-        <script>
-            var countryData = @php echo json_encode(array_values($country_name)) @endphp;
-            var countryValData = @php echo json_encode(array_values($country_val)) @endphp;
-            var dataPoints = [];
-
-            for (var i = 0; i < countryData.length; i++) {
-                dataPoints.push({
-                    label: countryData[i], // Set the label from your data
-                    y: countryValData[i] // Set the y value from your data
-                });
-            }
-            var options = {
-                animationEnabled: true,
-                title: {
-                    text: "احصائيات المحافظات"
-                },
-                data: [{
-                    type: "pie",
-                    yValueFormatString: "#,##0.0#",
-                    dataPoints: dataPoints // Assign the dataPoints array here
-                }]
-            };
-
-            $("#myChartPie").CanvasJSChart(options);
-
-
-            var options1 = {
-                animationEnabled: true,
-                title: {
-                    text: "احصائيات المحافظات"
-                },
-                data: [{
-                    type: "column",
-                    yValueFormatString: "#,##0.0#",
-                    dataPoints: dataPoints // Assign the dataPoints array here
-                }]
-            };
-
-            $("#myChartCol").CanvasJSChart(options1);
-        </script>
 
     </div>
 
 @endsection
 @section('js')
+
+    <script src="{{ asset('assets/canvajs/jquery.canvasjs.min.js') }}"></script>
+    <script src="{{ asset('assets/canvajs/canvasjs.min.js') }}"></script>
+
+
+    <script>
+        var country_name = @php echo json_encode(array_values($cities['country_name'])) @endphp;
+        var country_total = @php echo json_encode(array_values($cities['country_total'])) @endphp;
+        var city_total = @php echo json_encode(array_values($city_total)) @endphp;
+        var city_name = @php echo json_encode(array_keys($city_total)) @endphp;
+        console.log(city_total);
+        console.log(city_name);
+        var dataPoints = [];
+        var dataPoints1 = [];
+
+        for (var i = 0; i < country_name.length; i++) {
+            dataPoints.push({
+                label: country_name[i], // Set the label from your data
+                y: country_total[i] // Set the y value from your data
+            });
+        }
+
+        for (var i = 0; i < city_name.length; i++) {
+            dataPoints1.push({
+                label: city_name[i], // Set the label from your data
+                y: city_total[i] // Set the y value from your data
+            });
+        }
+        var options = {
+            animationEnabled: true,
+            title: {
+                text: "احصائيات المدن"
+            },
+            data: [{
+                type: "pie",
+                yValueFormatString: "#,##0.0#",
+                dataPoints: dataPoints // Assign the dataPoints array here
+            }]
+        };
+
+        $("#myChartPie").CanvasJSChart(options);
+
+
+        var options1 = {
+            animationEnabled: true,
+            title: {
+                text: "احصائيات المحافظات"
+            },
+            data: [{
+                type: "column",
+                yValueFormatString: "#,##0.0#",
+                dataPoints: dataPoints1 // Assign the dataPoints array here
+            }]
+        };
+
+        $("#myChartCol").CanvasJSChart(options1);
+
+    </script>
 
 @endsection
 

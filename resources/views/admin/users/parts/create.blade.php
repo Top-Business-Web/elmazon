@@ -63,9 +63,9 @@
                     </select>
                 </div>
                 <div class="col-md-12">
-                    <label for="country_id" class="form-control-label">المحافظة</label>
-                    <select class="form-control" name="country_id">
-                        <option value="" selected disabled>اختار المحافظة</option>
+                    <label for="country_id" class="form-control-label">المدينة</label>
+                    <select class="form-control select2" name="country_id">
+                        <option value="" selected disabled>اختار المدينة</option>
                         @foreach($countries as $country)
                             <option value="{{ $country->id}}">{{ $country->name_ar }}</option>
                         @endforeach
@@ -104,4 +104,8 @@
         var userCode = ''
         $('.CodeStudent').val(code);
     })
+
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
 </script>

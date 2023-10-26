@@ -57,9 +57,9 @@
                     </select>
                 </div>
                 <div class="col-md-12 mt-3">
-                    <label for="country_id" class="form-control-label">المحافظة</label>
-                    <select class="form-control" name="country_id">
-                        <option disabled>اختار المحافظة</option>
+                    <label for="country_id" class="form-control-label">اختار المدينة</label>
+                    <select class="form-control select2" name="country_id">
+                        <option disabled>اختار المدينة</option>
                         @foreach($countries as $country)
                             <option value="{{ $country->id }}" {{ ($user->country_id == $country->id) ? 'selected' : '' }}>
                                 {{ $country->name_ar }}
@@ -106,4 +106,9 @@
         </div>
     </form>
 </div>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
 

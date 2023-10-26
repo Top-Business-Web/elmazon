@@ -270,8 +270,8 @@
     </div>
 </div>
 @include('admin.layouts_admin.scripts')
-<script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
-<script src="https://cdn.canvasjs.com/jquery.canvasjs.min.js"></script>
+<script src="{{ asset('assets/canvajs/jquery.canvasjs.min.js') }}"></script>
+<script src="{{ asset('assets/canvajs/canvasjs.min.js') }}"></script>
 
 <script>
     $(document).ready(function (){

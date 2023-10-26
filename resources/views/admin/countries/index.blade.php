@@ -28,8 +28,8 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">الدولة</th>
-                                <th class="min-w-50px">مدينة</th>
+                                <th class="min-w-50px">المدينة</th>
+                                <th class="min-w-50px">المحافظة</th>
                                 <th class="min-w-50px rounded-end">{{ trans('admin.actions') }}</th>
                             </tr>
                             </thead>
