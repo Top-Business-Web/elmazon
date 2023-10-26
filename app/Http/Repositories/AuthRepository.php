@@ -202,7 +202,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
         }
     }
-// abdo
+
     public function communication(): JsonResponse
     {
         try {
@@ -322,7 +322,9 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                                 ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
                                 ->first();
 
-                            $timeOfPaperSheetExamUser = PapelSheetExamTime::query()->where('id', '=', $request->papel_sheet_exam_time_id)->first();
+                            $timeOfPaperSheetExamUser = PapelSheetExamTime::query()
+                                ->where('id', '=', $request->papel_sheet_exam_time_id)
+                                ->first();
 
 
                             $data['nameOfExam'] = lang() == 'ar' ? $paperSheetExam->name_ar : $paperSheetExam->name_en;
@@ -757,32 +759,55 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
     public function user_add_screenshot(): JsonResponse
     {
-        $user_screen = UserScreenShot::query()->where('user_id', '=', Auth::guard('user-api')->id());
 
-        if ($user_screen->count() == 0) {
-            $user_screen_shot = UserScreenShot::create([
-                'user_id' => Auth::guard('user-api')->id(),
-                'count_screen_shots' => 1,
-            ]);
+        $studentAddScreenBeforeInApp = UserScreenShot::query()
+            ->where('user_id', '=', Auth::guard('user-api')->id())
+            ->first();
 
-            if (isset($user_screen_shot)) {
-                return self::returnResponseDataApi(null, "تم اخذ اسكرين شوت بالتطبيق بواسطه اليوزر", 200);
-            } else {
+        $studentAuth = Auth::guard('user-api')->user();
 
-                return self::returnResponseDataApi(null, "يوجد خطاء بدخول البيانات برجاء الرجوع لمطور الباك اند", 500);
-            }
-        } elseif ($user_screen->first()->count_screen_shots < 2) {
+        //check if student add screen shoot before
+        if($studentAddScreenBeforeInApp){
 
-            $user_screen_before = UserScreenShot::query()->where('user_id', '=', Auth::guard('user-api')->id())->first();
-            $user_screen_before->update(['count_screen_shots' => $user_screen_before->count_screen_shots += 1]);
-            return self::returnResponseDataApi(null, "تم اخذ اسكرين شوت بالتطبيق بواسطه اليوزر", 200);
-        } else {
+                $studentAddScreenBeforeInApp->update(['count_screen_shots' => $studentAddScreenBeforeInApp->count_screen_shots+=1]);
 
-            $user = User::query()->where('id', '=', Auth::guard('user-api')->id())->first();
-            $user->update(['user_status' => 'not_active', 'login_status' => 0,]);
+                if($studentAddScreenBeforeInApp->save()){
 
-            return self::returnResponseDataApi(null, "تم حظر ذلك المستخدم لانه تخطي 3 مرات من اخذ الاسكرين", 201);
+                    if($studentAddScreenBeforeInApp->count_screen_shots == 3){
+
+                        $studentAuth->update(['user_status' => 'not_active', 'login_status' => 0]);
+                        auth()->guard('user-api')->logout();
+
+                        return self::returnResponseDataApi(null, "تم حظر ذلك الطالب بنجاح وجار تسجيل الخروج من التطبيق", 201);
+
+                    }else{
+
+                        return self::returnResponseDataApi(null, "تم اخذ اسكرين شوت بالتطبيق بواسطه اليوزر", 200);
+                    }
+
+                }else{
+
+                    return self::returnResponseDataApi(null, "يوجد خطاء بدخول البيانات برجاء الرجوع لمطور الباك اند", 500);
+                }
+
+        //add new screen by student
+        }else{
+
+             $studentAddScreenShoot = new UserScreenShot();
+             $studentAddScreenShoot->user_id = Auth::guard('user-api')->id();
+             $studentAddScreenShoot->count_screen_shots = 1;
+             $studentAddScreenShoot->save();
+
+             if( $studentAddScreenShoot->save()){
+                 return self::returnResponseDataApi(null, "تم اخذ اسكرين شوت بالتطبيق بواسطه اليوزر", 200);
+
+             }else{
+
+                 return self::returnResponseDataApi(null, "يوجد خطاء بدخول البيانات برجاء الرجوع لمطور الباك اند", 500);
+             }
+
         }
+
     }
 
     public function logout(Request $request): JsonResponse
@@ -861,7 +886,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $data['days'] =   $days;
             $data['hours'] = $hours;
 
-            return self::returnResponseDataApi($data, "تم الحصول علي معلومات مشاركه الاصدقاء بنجاح", 200);
+            return self::returnResponseDataApi($data, "تم الحصول علي بيانات العد التنازلي بنجاح", 200);
         } else {
             return self::returnResponseDataApi(null, "لا يوجد اي عد تنازلي للسنه الدراسيه لهذا الطالب الي الان", 201);
         }
