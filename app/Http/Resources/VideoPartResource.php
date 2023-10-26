@@ -50,7 +50,9 @@ class VideoPartResource extends JsonResource
         }
 
 
-        $user_subscribes = UserSubscribe::where('student_id','=',Auth::guard('user-api')->id())->where('year','=',Carbon::now()->format('Y'))
+        $user_subscribes = UserSubscribe::query()
+        ->where('student_id','=',Auth::guard('user-api')->id())
+            ->where('year','=',Carbon::now()->format('Y'))
             ->pluck('month')->toArray();
 
         $user_access_video = VideoParts::where('id','=',$this->id)
