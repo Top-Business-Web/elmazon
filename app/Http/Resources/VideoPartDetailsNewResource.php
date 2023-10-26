@@ -9,8 +9,10 @@ use App\Models\VideoParts;
 use App\Models\VideoRate;
 use App\Models\VideoTotalView;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class VideoPartDetailsNewResource extends JsonResource
 {
@@ -55,26 +57,27 @@ class VideoPartDetailsNewResource extends JsonResource
         $totalMinutesOfAllVideos = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfVideo)) * 100),2);
 
 
-        //===================================================== Test Subscribe =========================================================
-
-
+        //===================================================== start Test Subscribe =========================================================
 
         $studentAuth = User::query()
             ->where('id','=',Auth::guard('user-api')->id())
             ->select('id','date_start_code','date_end_code')
             ->first();
 
+        $list = [];
+        $period = CarbonPeriod::create( $studentAuth->date_start_code, '1 month',$studentAuth->date_end_code);
 
+        foreach ($period as $dt) {
+            $list[] = $dt->format("Y-m");
+        }
 
-
-        //===================================================== Test Subscribe =========================================================
+        //===================================================== end Test Subscribe =========================================================
 
         return [
-
             'id' => $this->id,
+            'subscribe' => in_array($this->month < 10 ? Carbon::now()->format('Y-')."0".$this->month:  Carbon::now()->format('Y-').$this->month,$list) ? 'access' : 'not_access',
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'status' => !$user_watch_video ? 'lock' :  ($user_watch_video->status == 'opened' ? 'opened': 'watched'),
-            'subscribe' => 'access',
             'progress' =>  !empty($sumAllOfMinutesVideosStudentAuth) ? $totalMinutesOfAllVideos : "0",
             'link' =>  $this->is_youtube == true ? $this->youtube_link :asset('videos/'. $this->link),
             'is_youtube' =>  $this->is_youtube,
@@ -87,7 +90,6 @@ class VideoPartDetailsNewResource extends JsonResource
             'view_active' => $this->view_active,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
-
         ];
     }
 }
