@@ -143,16 +143,21 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             }
 
             if ($image = $request->file('image')) {
+
                 $destinationPath = 'suggestions_uploads/images/';
                 $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
                 $image->move($destinationPath, $file);
                 $request['image'] = "$file";
+
             } elseif ($audio = $request->file('audio')) {
+
                 $audioPath = 'suggestions_uploads/audios/';
                 $audioUpload = date('YmdHis') . "." . $audio->getClientOriginalExtension();
                 $audio->move($audioPath, $audioUpload);
                 $request['audio'] = "$audioUpload";
+
             } else {
+
                 $suggestion = $request->suggestion;
             }
 
