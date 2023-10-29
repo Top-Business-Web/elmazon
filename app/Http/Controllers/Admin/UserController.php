@@ -199,13 +199,13 @@ class UserController extends Controller
             $inputs['image'] = $this->saveImage($request->image, 'user', 'photo');
         }
 
-        if($inputs['user_status'] == 'not_active'){
-
-            $token = Auth::guard('user-api')->attempt(['id' => $user->id,'password' => '123456']);
-            $user->update(['login_status' => 0]);
-            JWTAuth::setToken($token)->invalidate();
-
-        }
+//        if($inputs['user_status'] == 'not_active'){
+//
+//            $token = Auth::guard('user-api')->attempt(['id' => $user->id,'password' => '123456']);
+//            $user->update(['login_status' => 0]);
+//            JWTAuth::setToken($token)->invalidate();
+//
+//        }
 
         if ($user->update($inputs)) {
             $this->adminLog('تم تحديث طالب');
