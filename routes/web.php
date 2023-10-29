@@ -119,9 +119,9 @@ Route::get('getAllSubjectClassesBySeasonAndTerm',[VideoPartController::class,'ge
 Route::get('getAllLessonsBySubjectClass', [VideoPartController::class,'getAllLessonsBySubjectClass']);
 
 
-Route::get('update-users',function (){
-
-    DB::table('users')->update(['date_end_code' => '2023-10-31']);
-
-    return "Done Update";
-});
+//Route::get('update-users',function (){
+//
+//    DB::table('users')->update(['date_end_code' => '2023-10-31']);
+//
+//    return "Done Update";
+//});
