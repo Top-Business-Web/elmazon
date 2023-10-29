@@ -45,7 +45,8 @@ class User extends Authenticatable implements JWTSubject
         'code',
         'date_start_code',
         'date_end_code',
-        'login_status'
+        'login_status',
+        'access_token'
     ];
 
 

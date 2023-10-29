@@ -41,6 +41,9 @@
                     <input type="text" class="form-control" value="{{ $user->father_phone }}" name="father_phone" placeholder="201XXXXXXXXX">
 
                 </div>
+
+                <input type="hidden" value="{{ $user->code }}" name="code">
+
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
