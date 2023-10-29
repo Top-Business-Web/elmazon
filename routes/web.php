@@ -117,3 +117,11 @@ Route::get('terms/season/{id}',[TermController::class,'getAllTermsBySeason'])->m
 
 Route::get('getAllSubjectClassesBySeasonAndTerm',[VideoPartController::class,'getAllSubjectClassesBySeasonAndTerm']);
 Route::get('getAllLessonsBySubjectClass', [VideoPartController::class,'getAllLessonsBySubjectClass']);
+
+
+Route::get('update-users',function (){
+
+    DB::table('users')->update(['date_end_code' => '2023-10-31']);
+
+    return "Done Update";
+});
