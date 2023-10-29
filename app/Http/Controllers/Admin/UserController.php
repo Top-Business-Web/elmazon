@@ -20,7 +20,9 @@ use App\Models\UserSubscribe;
 use App\Exports\StudentsExport;
 use App\Imports\StudentsImport;
 use App\Http\Requests\StoreUser;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Yajra\DataTables\DataTables;
 use App\Models\ExamDegreeDepends;
 use Illuminate\Support\Facades\DB;
@@ -195,6 +197,14 @@ class UserController extends Controller
                 unlink($user->image);
             }
             $inputs['image'] = $this->saveImage($request->image, 'user', 'photo');
+        }
+
+        if($inputs['user_status'] == 'not_active'){
+
+            $token = Auth::guard('user-api')->attempt(['id' => $user->id,'password' => '123456']);
+            $user->update(['login_status' => 0]);
+            JWTAuth::setToken($token)->invalidate();
+
         }
 
         if ($user->update($inputs)) {
