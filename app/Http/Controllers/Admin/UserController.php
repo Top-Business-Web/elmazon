@@ -201,14 +201,14 @@ class UserController extends Controller
         }
 
 
-        if($inputs['user_status'] == 'not_active' && $user->login_status == 1){
-
-            JWTAuth::setToken($user->access_token)->invalidate();
-            $user->update(['login_status' => 0,'access_token' => null]);
-
-        }
-
         if ($user->update($inputs)) {
+
+            if($inputs['user_status'] == 'not_active' && $user->login_status == 1){
+
+                JWTAuth::setToken($user->access_token)->invalidate();
+                $user->update(['access_token' => null,'login_status' => 0]);
+
+            }
             $this->adminLog('تم تحديث طالب');
             return response()->json(['status' => 200]);
         } else {
