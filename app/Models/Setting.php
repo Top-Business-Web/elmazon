@@ -27,6 +27,10 @@ class Setting extends Model
         'share_ar',
         'share_en',
         'videos_resource_active',
+        'facebook_personal',
+        'youtube_personal',
+        'instagram_personal',
+
     ];
 
     protected $casts = [

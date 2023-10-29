@@ -110,50 +110,84 @@
                     </div>
                 </div>
                 <div class="col-md-12 mt-3">
+
+
                     <div class="p-3 py-10">
                         <div class="d-flex justify-content-between align-items-center experience"><span>قائمة السوشيال
-                                ميديا</span><span class="border px-3 p-1 add-experience"></span></div><br>
+                                ميديا للتطبيق</span><span class="border px-3 p-1 add-experience"></span></div><br>
                         <div class="col-md-12 mt-3">
                             <label class="labels">فيسبوك</label>
-                            <input type="text"class="form-control" name="facebook_link" placeholder="experience"
+                            <input type="text"class="form-control" name="facebook_link"
                                 value="{{ $settings->facebook_link }}">
                         </div> <br>
                         <div class="col-md-12 mt-3">
                             <label class="labels">مسنجر</label>
-                            <input type="text"class="form-control" name="messenger" placeholder="experience"
+                            <input type="text"class="form-control" name="messenger"
                                 value="{{ $settings->messenger }}">
                         </div> <br>
                         <div class="col-md-12 mt-3">
                             <label class="labels">واتساب</label>
-                            <input type="text"class="form-control" name="whatsapp_link" placeholder="experience"
+                            <input type="text"class="form-control" name="whatsapp_link"
                                 value="{{ $settings->whatsapp_link }}">
                         </div> <br>
                         <div class="col-md-12 mt-3">
                             <label class="labels">يوتيوب</label>
                             <input type="text" class="form-control" name="youtube_link"
-                                placeholder="additional details" value="{{ $settings->youtube_link }}">
+                                value="{{ $settings->youtube_link }}">
                         </div> <br>
                         <div class="col-md-12 mt-3">
                             <label class="labels">تويتر</label>
                             <input type="text" class="form-control" name="twitter_link"
-                                placeholder="additional details" value="{{ $settings->twitter_link }}">
+                               value="{{ $settings->twitter_link }}">
                         </div> <br>
                         <div class="col-md-12 mt-3">
                             <label class="labels">انستجرام</label>
                             <input type="text" class="form-control" name="instagram_link"
-                                placeholder="additional details" value="{{ $settings->instagram_link }}">
+                               value="{{ $settings->instagram_link }}">
                         </div> <br>
                         <div class="col-md-12 mt-3">
                             <label class="labels">الموقع</label>
                             <input type="text" class="form-control" name="website_link"
-                                placeholder="additional details" value="{{ $settings->website_link }}">
+                               value="{{ $settings->website_link }}">
                         </div>
                     </div>
+
+
+
+
+
+                    <div class="p-3 py-10">
+                        <div class="d-flex justify-content-between align-items-center experience"><span>قائمة السوشيال
+                                ميديا الشخصيه</span><span class="border px-3 p-1 add-experience"></span></div><br>
+                        <div class="col-md-12 mt-3">
+                            <label class="labels">فيسبوك</label>
+                            <input type="text" class="form-control" name="facebook_personal" placeholder="فيسبوك الملف الشخصي للاستاذ"
+                                   value="{{ $settings->facebook_personal }}">
+                        </div> <br>
+
+                        <div class="col-md-12 mt-3">
+                            <label class="labels">يوتيوب</label>
+                            <input type="text" class="form-control" name="youtube_link"
+                                   placeholder="يوتيوب الملف الشخصي للاستاذ" value="{{ $settings->youtube_personal }}">
+                        </div> <br>
+
+                        <div class="col-md-12 mt-3">
+                            <label class="labels">انستجرام</label>
+                            <input type="text" class="form-control" name="instagram_personal"
+                                   placeholder="انستجرام الملف الشخصي للاستاذ" value="{{ $settings->instagram_personal }}">
+                        </div> <br>
+
+                    </div>
+
 
                     <div class="mt-5 text-right mr-5">
                         <button type="submit" class="btn btn-primary" id="updateButton">تحديث</button>
                     </div>
                 </div>
+
+
+
+
 
 
             </div>
