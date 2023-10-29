@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="name_ar" class="form-control-label">نوع الامتحان</label>
-                    <select name="exam_type" class="form-control" id="exam_type">
+                    <select name="exam_type" class="form-control select2" id="exam_type">
                         <option value="" disabled>اختر نوع الامتحان</option>
                         <option value="pdf" {{ $onlineExam->exam_type == 'pdf' ? 'selected' :''}}>PDF</option>
                         <option value="online" {{ $onlineExam->exam_type == 'online' ? 'selected' : ''}}>Online</option>
@@ -56,12 +56,12 @@
                 <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">الدرجة</label>
                     <input type="number" class="form-control" name="degree" value="{{ $onlineExam->degree }}"
-                           style="text-align: center" required>
+                           required>
                 </div>
                 <div class="col-md-12 mt-3">
                     <label for="date_exam" class="form-control-label">موعد الامتحان</label>
                     <input type="date" class="form-control" name="date_exam" value="{{ $onlineExam->date_exam }}"
-                           style="text-align: center" required>
+                         required>
                 </div>
                 <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label"> وقت الامتحان</label>
@@ -81,12 +81,11 @@
                 <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">الاسم بالعربي</label>
                     <input type="text" class="form-control" value="{{ $onlineExam->name_ar }}" name="name_ar"
-                           style="text-align: center" required>
+                           required>
                 </div>
                 <div class="col-md-12 mt-3">
                     <label for="name_en" class="form-control-label">الاسم بالانجليزية</label>
-                    <input type="text" class="form-control" value="{{ $onlineExam->name_en }}" name="name_en"
-                           style="text-align: center" required>
+                    <input type="text" class="form-control" value="{{ $onlineExam->name_en }}" name="name_en" required>
                 </div>
             </div>
 
@@ -94,19 +93,19 @@
                 <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">الصف</label>
                     <select name="season_id"
-                            class="form-control selectSeason" @selected( old('season_id',$onlineExam->season_id))  required>
-                        <option disabled style="text-align: center">اختر الصف</option>
+                            class="form-control selectSeason select2" @selected( old('season_id',$onlineExam->season_id))  required>
+                        <option disabled >اختر الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
-                                    style="text-align: center">{{ $season->name_ar }}</option>
+                                   >{{ $season->name_ar }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-md-12 mt-3">
                     <label for="note" class="form-control-label">تيرم</label>
                     <select name="term_id"
-                            class="form-control selectTerm" @selected( old('term_id',$onlineExam->term_id)) required>
-                        <option disabled style="text-align: center">اختر تيرم</option>
+                            class="form-control selectTerm select2" @selected( old('term_id',$onlineExam->term_id)) required>
+                        <option disabled>اختر تيرم</option>
                         <option value="{{ $onlineExam->term_id }}" class="form-control">{{ $onlineExam->term->name_ar ?? '' }}</option>
                     </select>
                 </div>
@@ -114,7 +113,7 @@
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label for="type" class="form-control-label">النوع</label>
-                    <Select name="examable_type" id="type" class="form-control type_choose"
+                    <Select name="examable_type" id="type" class="form-control type_choose select2"
                             required="required" @selected( old('examable_type',$onlineExam->type))>
                         <option disabled style="text-align: center">اختار النوع</option>
                         <option value="lesson" style="text-align: center">درس</option>
@@ -128,7 +127,7 @@
                 </div>
                 <div class="col-md-12 mt-3">
                     <label for="lesson" class="form-control-label typeName">الدرس</label>
-                    <Select name="examable_id" class="form-control type_ajax_choose" required="required">
+                    <Select name="examable_id" class="form-control type_ajax_choose select2" required="required">
                         <option value="{{ $onlineExam->term_id ?? $onlineExam->class_id ?? $onlineExam->video_id }}">
                             {{ $onlineExam->lesson->name_ar ?? $onlineExam->class->name_ar ?? $onlineExam->video->name_ar ?? '' }}
                         </option>
@@ -192,6 +191,15 @@
     </form>
 </div>
 
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+
+    $('.dropify').dropify()
+
+</script>
 <script>
 
     $(document).ready(function () {

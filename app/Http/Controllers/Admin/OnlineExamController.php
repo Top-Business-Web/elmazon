@@ -36,13 +36,13 @@ class OnlineExamController extends Controller
             return DataTables::of($online_exams)
                 ->addColumn('action', function ($online_exams) {
                     return '
-                            <button type="button" data-id="' . $online_exams->id . '" class="btn btn-pill btn-info-light editBtn"><i class="fa fa-edit"></i></button>
+                            <button type="button" data-id="' . $online_exams->id . '" class="btn btn-pill btn-info-light editBtn">تعديل</button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
                                     data-id="' . $online_exams->id . '" data-title="' . $online_exams->name_ar . '">
-                                    <i class="fas fa-trash"></i>
+                                  حذف
                             </button>
-                            <a class="btn btn-pill btn-success-light questionBtn" data-id="' . $online_exams->id . '" data-target="#question_modal" href="' . route('indexQuestion', $online_exams->id) . '"><i class="fa fa-question"></i></a>
-                            <a class="btn btn-pill btn-warning-light questionBtn" data-id="' . $online_exams->id . '" data-target="#question_modal" href="' . route('usersExam', $online_exams->id) . '"><i class="fa fa-user"></i></a>
+                            <a class="btn btn-pill btn-success-light questionBtn" data-id="' . $online_exams->id . '" data-target="#question_modal" href="' . route('indexQuestion', $online_exams->id) . '">اسئله الامتحان</a>
+                            <a class="btn btn-pill btn-warning-light questionBtn" data-id="' . $online_exams->id . '" data-target="#question_modal" href="' . route('usersExam', $online_exams->id) . '">طلبه هذا الامتحان</a>
                        ';
                 })
                 ->editColumn('season_id', function ($online_exams) {
@@ -63,15 +63,18 @@ class OnlineExamController extends Controller
     {
 
         if ($request->ajax()) {
-            $online_exams_questions = OnlineExamQuestion::where('online_exam_id', $id)->get();
+            $online_exams_questions = OnlineExamQuestion::query()
+            ->where('online_exam_id','=',$id)
+                ->get();
+
+
             return DataTables::of($online_exams_questions)
-                ->addColumn('action', function ($online_exams_questions) {
-                    return '
-                            <a class="btn btn-pill btn-success-light" href="' . route('addQuestion', $online_exams_questions->id) . '">اضافة</a>
-                       ';
+
+                ->editColumn('question_id', function ($online_exams_questions) {
+                    return   strip_tags(str_replace('</p>', '', $online_exams_questions->question->question));
                 })
-                ->editColumn('question', function ($online_exams_questions) {
-                    return '<td>' . $online_exams_questions->question->question . '</td>';
+                ->addColumn('degree', function ($online_exams_questions) {
+                    return   $online_exams_questions->question->degree;
                 })
                 ->escapeColumns([])
                 ->make(true);
@@ -79,18 +82,6 @@ class OnlineExamController extends Controller
             return view('admin.online_exam.parts.questions', compact('id'));
         }
     }
-
-
-
-    public function addQuestion(Request $request): RedirectResponse
-    {
-        $newQuestion = new OnlineExamQuestion();
-        $newQuestion->question_id = $request->question_id;
-        $newQuestion->save();
-
-        return redirect()->route('questions')->with('success', 'Question added successfully!');
-    }
-
 
 
     public function create()

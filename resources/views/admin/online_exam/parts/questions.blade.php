@@ -22,7 +22,7 @@
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">السؤال</th>
-                                <th class="min-w-50px rounded-end">العمليات</th>
+                                <th class="min-w-50px">درجه السؤال</th>
                             </tr>
                             </thead>
                         </table>
@@ -81,8 +81,8 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'question', name: 'question'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
+            {data: 'question_id', name: 'question_id'},
+            {data: 'degree', name: 'degree'},
         ]
         showData('{{route('indexQuestion', $id)}}', columns);
         // Delete Using Ajax

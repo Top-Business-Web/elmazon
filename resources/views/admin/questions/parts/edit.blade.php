@@ -21,11 +21,21 @@
             <div class="row">
                 <div class="col-md-12 mt-4">
                     <label for="name_ar" class="form-control-label">اكتب سؤالك هنا</label>
-                    <textarea id="questionTextarea" class="form-control" rows="5" name="question">{{ $question->question }}</textarea>
+                    <textarea id="question" class="form-control" rows="5" name="question">{{ $question->question }}</textarea>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-12 mt-4">
+                    <label for="">ارفاق صوره معينه لرسم بياني او معادله فيزيائيه*اختياري</label>
+                    <input type="file" name="image" class="dropify"
+                           value="{{ $question->image }}"
+                           data-default-file="{{ $question->image }}"/>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 mt-3">
+                <div class="col-md-12 mt-3">
                     <label for="season" class="form-control-label">الصف الدراسي</label>
                     <Select name="season_id" class="form-control seasonChoose">
                         <option disabled>اختار الصف</option>
@@ -36,7 +46,7 @@
                         @endforeach
                     </Select>
                 </div>
-                <div class="col-md-6 mt-3">
+                <div class="col-md-12 mt-3">
                     <label for="term" class="form-control-label">اختر تيرم للفصل الدراسي</label>
                     <Select name="term_id" class="form-control user_choose"
                             required="required">
@@ -44,8 +54,10 @@
                     </Select>
                 </div>
             </div>
-            <div class="row d-none choseExamp">
-                <div class="col-md-6 ">
+
+
+            <div class="row choseExamp">
+                <div class="col-md-12 mt-3">
                     <label for="type" class="form-control-label ">اختر قسم للسؤال</label>
                     <Select name="type" id="type" class="form-control type_choose"
                             required="required">
@@ -69,15 +81,7 @@
                 </div>
 
             </div>
-            <div class="row">
 
-                <div class="col-md-12 mt-4">
-                    <label for="">اختيار صوره للسؤال في حاله عدم كتابه السؤال*</label>
-                    <input type="file" name="image" class="dropify"
-                           value="{{ $question->image }}"
-                           data-default-file="{{ $question->image }}"/>
-                </div>
-            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
@@ -88,7 +92,7 @@
 
 <script src="{{asset('uploads/js/ckeditor1.js')}}"></script>
 <script>
-    ClassicEditor.create( document.querySelector( '#questionTextarea' ) )
+    ClassicEditor.create( document.querySelector( '#question' ) )
         .catch( error => {
             console.error( error );
         } );
@@ -119,7 +123,7 @@
     });
 
     $(document).ready(function () {
-        $('select[name="season_id"]').on('change', function () {
+        $('select[name="season_id"]').on('click', function () {
             $('.choseExamp').removeClass('d-none');
         })
     })

@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label for="name_ar" class="form-control-label">نوع الامتحان</label>
-                    <select name="exam_type" class="form-control" id="exam_type">
+                    <select name="exam_type" class="form-control select2" id="exam_type">
                         <option value="" selected disabled>اختر نوع الامتحان</option>
                         <option value="pdf">PDF</option>
                         <option value="online">Online</option>
@@ -81,8 +81,8 @@
             <div class="row">
                 <div class="col-md-6 mt-3">
                     <label for="note" class="form-control-label">الصف</label>
-                    <Select name="season_id" class="form-control selectSeason">
-                        <option selected disabled style="text-align: center">اختر الصف</option>
+                    <Select name="season_id" class="form-control selectSeason select2">
+                        <option selected disabled >اختر الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
                                     style="text-align: center">{{ $season->name_ar }}</option>
@@ -91,15 +91,15 @@
                 </div>
                 <div class="col-md-6 mt-3">
                     <label for="note" class="form-control-label">تيرم</label>
-                    <Select name="term_id" class="form-control selectTerm">
-                        <option selected disabled style="text-align: center">اختر تيرم</option>
+                    <Select name="term_id" class="form-control selectTerm select2">
+                        <option selected disabled>اختر تيرم</option>
                     </Select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label for="type" class="form-control-label">النوع</label>
-                    <Select name="examable_type" id="type" class="form-control type_choose">
+                    <Select name="examable_type" id="type" class="form-control type_choose select2">
                         <option selected disabled style="text-align: center">اختار النوع</option>
                         <option value="lesson" style="text-align: center">درس</option>
                         <option value="class" style="text-align: center">فصل</option>
@@ -128,7 +128,7 @@
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label for="lesson" class="form-control-label typeName">الدرس</label>
-                    <Select name="examable_id" class="form-control type_ajax_choose">
+                    <Select name="examable_id" class="form-control type_ajax_choose select2">
                     </Select>
                 </div>
             </div>
@@ -169,7 +169,14 @@
         </div>
     </form>
 </div>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
 
+    $('.dropify').dropify()
+
+</script>
 <script>
 
     $(document).ready(function () {
