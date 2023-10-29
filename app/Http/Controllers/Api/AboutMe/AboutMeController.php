@@ -18,8 +18,6 @@ class AboutMeController extends Controller{
         $setting = Setting::query()
             ->first();
 
-        $socialMedia = SocialMedia::query()
-            ->first();
 
         $qualifications = Qualification::query()
             ->where('type','=','qualifications')
@@ -33,7 +31,7 @@ class AboutMeController extends Controller{
             ->where('type','=','skills')
             ->get();
 
-        if($setting && $socialMedia){
+        if($setting){
 
             $data['teacher_name'] = lang() == 'ar' ? $setting->teacher_name_ar : $setting->teacher_name_en;
             $data['image'] = $setting->teacher_image != null ? asset('teacher_image/'.$setting->teacher_image) : asset('teacher_image/default/avatar2.jfif');
@@ -41,9 +39,9 @@ class AboutMeController extends Controller{
             $data['qualifications'] = QualificationsResource::collection($qualifications);
             $data['experiences'] = QualificationsResource::collection($experiences);
             $data['skills'] = QualificationsResource::collection($skills);
-            $data['facebook_link'] = $socialMedia->facebook_link;
-            $data['youtube_link'] = $socialMedia->youtube_link;
-            $data['instagram_link'] = $socialMedia->instagram_link;
+            $data['facebook_link'] =   $setting->facebook_personal;
+            $data['youtube_link'] =   $setting->youtube_personal;
+            $data['instagram_link'] =   $setting->instagram_personal;
 
 
             return self::returnResponseDataApi($data,"تم الحصول علي بيانات المدرس بنجاح",200);
