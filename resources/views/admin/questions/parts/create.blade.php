@@ -27,24 +27,33 @@
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="name_ar" class="form-control-label">اكتب سؤالك هنا</label>
+                    <label for="question" class="form-control-label">اكتب سؤالك هنا</label>
 
-                    <textarea  id="questionTextarea"  class="form-control" rows="5" name="question"></textarea>
+                    <textarea  class="form-control" rows="5" name="question" id="question"></textarea>
                 </div>
 
             </div>
+
             <div class="row">
-                <div class="col-md-6 mt-3">
+
+                <div class="col-md-12 mt-4">
+
+                    <label for="">ارفاق صوره معينه لرسم بياني او معادله فيزيائيه*اختياري</label>
+                    <input type="file" name="image" class="dropify" data-default-file="" id="image">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mt-3">
                     <label for="season" class="form-control-label">الصف الدراسي</label>
                     <Select name="season_id" class="form-control seasonChoose">
                         <option selected disabled>اختار الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
-                                    style="text-align: center">{{ $season->name_ar }}</option>
+                                 >{{ $season->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>
-                <div class="col-md-6 mt-3">
+                <div class="col-md-12 mt-3">
                     <label for="term" class="form-control-label">اختر تيرم للفصل الدراسي</label>
                     <Select name="term_id" class="form-control user_choose">
                         <option selected disabled>اختر التيرم</option>
@@ -65,14 +74,7 @@
                 </div>
 
             </div>
-            <div class="row">
 
-                <div class="col-md-6 mt-4">
-
-                    <label for="">اختيار صوره للسؤال في حاله عدم كتابه السؤال*</label>
-                    <input type="file" name="image" class="dropify" data-default-file="" id="image">
-                </div>
-            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">أغلاق</button>
@@ -80,12 +82,10 @@
         </div>
     </form>
 </div>
-{{--<script src="https://cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>--}}
 
-{{--<script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>--}}
 <script src="{{asset('uploads/js/ckeditor1.js')}}"></script>
 <script>
-    ClassicEditor.create( document.querySelector( '#questionTextarea' ) )
+    ClassicEditor.create( document.querySelector( '#question' ) )
         .catch( error => {
             console.error( error );
         } );
@@ -155,15 +155,6 @@
     });
 
 // Get the textarea and image elements by their IDs
-var textarea = document.getElementById("questionTextarea");
-        var image = document.getElementById("image");
-
-        textarea.addEventListener("input", function () {
-            image.disabled = true;
-        });
-        image.addEventListener("click", function () {
-            textarea.disabled = true;
-        });
 
 
 </script>

@@ -13,6 +13,7 @@ use App\Traits\AdminLogs;
 use App\Models\VideoParts;
 use App\Traits\PhotoTrait;
 use App\Models\SubjectClass;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Exports\QuestionExport;
 use App\Imports\QuestionImport;
@@ -38,7 +39,7 @@ class QuestionController extends Controller
                     return '
                             <button type="button" data-id="' . $questions->id . '" class="btn btn-pill btn-info-light editBtn">تعديل</button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
-                                    data-id="' . $questions->id . '" data-title="' . $questions->question . '">
+                                    data-id="' . $questions->id . '" data-title="' . strip_tags(str_replace('</p>', '', $questions->question)) . '">
                                    حذف
                             </button>
                             <button type="button" ' . ($questions->question_type == 'text' ? 'hidden' : '') . ' data-id="' . $questions->id . '" class="btn btn-pill btn-success-light editBtnAnswer">الاجابة</button>
@@ -97,16 +98,17 @@ class QuestionController extends Controller
     }
 
 
-    public function store(QuestionStoreRequest $request): \Illuminate\Http\JsonResponse
+    public function store(QuestionStoreRequest $request)
     {
         $inputs = $request->all();
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('assets/uploads/questions', 'public');
+        if ($backgroundImage = $request->file('image')) {
 
-            $inputs['image'] = $imagePath;
-            $inputs['question'] = null;
-            $inputs['file_type'] = 'image';
+            $destinationPath = 'assets/uploads/questions';
+            $imageLink = date('YmdHis') . time().rand(1,200000)."." . $backgroundImage->getClientOriginalExtension();
+            $backgroundImage->move($destinationPath, $imageLink);
+            $inputs['image'] = "assets/uploads/questions/".$imageLink;
+
         }
 
         $question = Question::create($inputs);
@@ -172,19 +174,22 @@ class QuestionController extends Controller
     }
 
 
-    public function update(QuestionUpdateRequest $request, Question $question): \Illuminate\Http\JsonResponse
+    public function update(QuestionUpdateRequest $request, Question $question): JsonResponse
     {
 
         $inputs = $request->all();
 
-        if ($request->has('image')) {
-            if (file_exists($question->image)) {
-                unlink($question->image);
-            }
-            $imagePath = $request->file('image')->store('assets/uploads/questions', 'public');
-            $inputs['image'] = $imagePath;
-            $inputs['question'] = null;
-            $inputs['file_type'] = 'image';
+        if ($backgroundImage = $request->file('image')) {
+
+            $destinationPath = 'assets/uploads/questions';
+            $imageLink = date('YmdHis') . time().rand(1,200000)."." . $backgroundImage->getClientOriginalExtension();
+            $backgroundImage->move($destinationPath, $imageLink);
+
+            $inputs['image'] = "assets/uploads/questions/".$imageLink;
+
+        }else{
+
+            $inputs['image'] = $question->image;
         }
 
 

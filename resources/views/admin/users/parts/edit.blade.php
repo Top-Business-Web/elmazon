@@ -48,7 +48,7 @@
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label for="name" class="form-control-label">الصف الدراسي</label>
-                    <select class="form-control SeasonSelect" name="season_id">
+                    <select class="form-control SeasonSelect select2" name="season_id">
                         <option value="" data-name="" disabled>اختار الصف</option>
                         @foreach($seasons as $season)
                             <option
@@ -74,7 +74,7 @@
 
                 <div class="col-md-12 mt-3">
                     <label for="login_status" class="form-control-label">حاله الحساب</label>
-                    <select class="form-control" name="login_status">
+                    <select class="form-control select2" name="login_status">
                         @foreach($login_status as $status)
                             <option value="{{$status}}" {{$user->login_status == $status ? 'selected' : ''}}>{{$status == 1 ? 'نشط' : 'غير نشط'}}</option>
                         @endforeach
@@ -83,7 +83,7 @@
 
                 <div class="col-md-12 mt-3">
                     <label for="login_status" class="form-control-label">تسجيل الطالب معنا</label>
-                    <select class="form-control" name="center">
+                    <select class="form-control select2" name="center">
                         @foreach($user_status as $center)
                             <option value="{{$center}}" {{$user->center == $center ? 'selected' : ''}}>{{$center == 'in' ? 'داخل السنتر' : 'خارج السنتر'}}</option>
                         @endforeach
@@ -92,7 +92,7 @@
 
                 <div class="col-md-12 mt-3">
                     <label for="login_status" class="form-control-label">حاله الطالب</label>
-                    <select class="form-control" name="user_status">
+                    <select class="form-control select2" name="user_status">
                         @foreach($user_active as $active)
                             <option value="{{$active}}" {{$user->user_status == $active ? 'selected' : ''}}>{{$active == 'active' ? 'الحساب مفعل' : 'الحساب غير مفعل'}}</option>
                         @endforeach
@@ -124,5 +124,8 @@
     $(document).ready(function() {
         $('.select2').select2();
     });
+
+    $('.dropify').dropify()
+
 </script>
 

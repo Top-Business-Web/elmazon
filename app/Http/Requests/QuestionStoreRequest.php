@@ -24,7 +24,7 @@ class QuestionStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'question' => 'nullable',
+            'question' => 'required',
             'difficulty' => 'required',
             'image' => 'nullable',
             'degree' => 'required|numeric',
@@ -37,6 +37,7 @@ class QuestionStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'question.required' => 'السؤال مطلوب',
             'difficulty.required' => 'مستوى الصعوبة مطلوب',
             'degree.required' => 'الدرجة مطلوبة',
             'note.required' => 'الملاحظة مطلوبة',

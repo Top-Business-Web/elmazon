@@ -208,7 +208,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::get('examble_type_exam', [OnlineExamController::class, 'examble_type'])->name('examble_type_exam');
         Route::get('indexQuestion/{id}', [OnlineExamController::class, 'indexQuestion'])->name('indexQuestion');
         Route::get('usersExam/{id}', [OnlineExamController::class, 'usersExam'])->name('usersExam');
-        Route::get('addQuestion/{id}', [OnlineExamController::class, 'addQuestion'])->name('addQuestion');
         Route::post('deleteQuestion', [OnlineExamController::class, 'deleteQuestion'])->name('deleteQuestion');
         Route::get('paper-exam/{user_id}/{exam_id}', [OnlineExamController::class, 'paperExam'])->name('paperExam'); ///????????
         Route::post('exam-depends/{user_id}/{exam_id}', [OnlineExamController::class, 'exam_depends'])->name('exam-depends'); ///????????

@@ -55,7 +55,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="name" class="form-control-label">الصف الدراسي</label>
-                    <select class="form-control SeasonSelect" name="season_id">
+                    <select class="form-control SeasonSelect select2" name="season_id">
                         <option value="" data-name="" selected disabled>اختار الصف</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id}}">{{ $season->name_ar }}</option>
@@ -93,7 +93,16 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+
     $('.dropify').dropify()
+
+</script>
+
+
+<script>
 
     $('.GeneCode').on('click', function () {
         // var data = $(this).val();
