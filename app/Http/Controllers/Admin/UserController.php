@@ -190,7 +190,8 @@ class UserController extends Controller
     {
 
 
-        $inputs = $request->except('id','code');
+//        return $request->all();
+        $inputs = $request->except('id');
 
         if ($request->has('image')) {
             if (file_exists($user->image)) {
@@ -199,13 +200,13 @@ class UserController extends Controller
             $inputs['image'] = $this->saveImage($request->image, 'user', 'photo');
         }
 
-//        if($inputs['user_status'] == 'not_active'){
-//
-//            $token = Auth::guard('user-api')->attempt(['id' => $user->id,'password' => '123456']);
-//            $user->update(['login_status' => 0]);
-//            JWTAuth::setToken($token)->invalidate();
-//
-//        }
+
+        if($inputs['user_status'] == 'not_active' && $user->login_status == 1){
+
+            JWTAuth::setToken($user->access_token)->invalidate();
+            $user->update(['login_status' => 0,'access_token' => null]);
+
+        }
 
         if ($user->update($inputs)) {
             $this->adminLog('تم تحديث طالب');

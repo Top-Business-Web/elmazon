@@ -89,6 +89,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             ->where('code', '=', $request->code)
                 ->first();
 
+
             if ($user_data->login_status == 1) {
                 return self::returnResponseDataApi(null, "هذا الطالب مسجل دخول من جهاز اخر!", 403);
 
@@ -99,7 +100,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $user = Auth::guard('user-api')->user();
             $user['token'] = $token;
 
+            $user_data->update(['access_token' => $token]);
+
             $user_data->update(['login_status' => 1]);
+
 
 
             return self::returnResponseDataApi(new UserResource($user), "تم تسجيل الدخول بنجاح", 200);
