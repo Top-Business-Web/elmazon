@@ -39,8 +39,25 @@ class UserController extends Controller
 
     public function index(request $request)
     {
+        $status = $request->input('status');
+        $active = $request->input('active');
+        $usersList = User::select('*');
+
+
+
+        if ($request->has('status')) {
+            if ($request->status !== 'all') {
+                $usersList->where('center', '=', $status);
+            }
+        }
+        if ($request->has('active')) {
+            if ($request->active !== 'all') {
+                $usersList->where('user_status', '=', $active);
+            }  
+        }
         if ($request->ajax()) {
-            $users = User::select('*');
+
+            $users = $usersList->get();
             return Datatables::of($users)
                 ->addColumn('action', function ($users) {
                     return '
@@ -56,82 +73,65 @@ class UserController extends Controller
 
                 ->editColumn('image', function ($users) {
 
-                    if($users->image == null){
+                    if ($users->image == null) {
 
                         return '
                     <img alt="image" onclick="window.open(this.src)" class="avatar avatar-md rounded-circle" src="' . asset('default/avatar2.jfif') . '">
                     ';
-                    }else{
+                    } else {
 
                         return '
                     <img alt="image" onclick="window.open(this.src)" class="avatar avatar-md rounded-circle" src="' . asset($users->image) . '">
                     ';
                     }
-
                 })
 
                 ->editColumn('season_id', function ($users) {
                     return $users->season->name_ar;
-
                 })
 
                 ->editColumn('father_phone', function ($users) {
-                    if( $users->father_phone != null)
-                    {
+                    if ($users->father_phone != null) {
 
                         return $users->father_phone;
-                    }else{
+                    } else {
 
                         return '<button type="button" class="btn btn-pill btn-danger-light">لا يوجد هاتف لولي امر هذا الطالب</button>';
-
                     }
                 })
 
                 ->editColumn('country_id', function ($users) {
                     return $users->country->name_ar;
-
                 })
 
                 ->editColumn('login_status', function ($users) {
 
-                    if( $users->login_status == 1)
-                    {
-                       return '<button type="button" class="btn btn-pill btn-info-light">نشط</button>';
-
-                    }else{
+                    if ($users->login_status == 1) {
+                        return '<button type="button" class="btn btn-pill btn-info-light">نشط</button>';
+                    } else {
 
                         return '<button type="button" class="btn btn-pill btn-danger-light">غير نشط</button>';
-
                     }
-
                 })
 
                 ->editColumn('center', function ($users) {
 
-                    if( $users->center == 'in')
-                    {
+                    if ($users->center == 'in') {
                         return '<button type="button" class="btn btn-pill btn-info-light">الطالب داخل السنتر</button>';
-
-                    }else{
+                    } else {
 
                         return '<button type="button" class="btn btn-pill btn-danger-light">الطالب خارج السنتر</button>';
-
                     }
-
                 })
 
                 ->editColumn('user_status', function ($users) {
 
-                    if( $users->user_status == 'active')
-                    {
+                    if ($users->user_status == 'active') {
                         return '<button type="button" class="btn btn-pill btn-info-light">الطالب مفعل</button>';
-
-                    }else{
+                    } else {
 
                         return '<button type="button" class="btn btn-pill btn-danger-light">الطالب غير مفعل</button>';
-
                     }
-
                 })
 
                 ->editColumn('user_status_note', function ($users) {
@@ -184,25 +184,28 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $seasons = Season::query()
-            ->select('id','name_ar')
+            ->select('id', 'name_ar')
             ->get();
 
         $countries = Country::query()
-            ->select('id','name_ar')
-        ->get();
+            ->select('id', 'name_ar')
+            ->get();
 
-        $login_status = [0,1];
+        $login_status = [0, 1];
 
-        $user_status = ['in','out'];
+        $user_status = ['in', 'out'];
 
-        $user_active = ['active','not_active'];
+        $user_active = ['active', 'not_active'];
 
-        return view('admin.users.parts.edit', compact('user','login_status','seasons','countries','user_status','user_active'));
+        return view('admin.users.parts.edit', compact('user', 'login_status', 'seasons', 'countries', 'user_status', 'user_active'));
     }
 
     public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
+<<<<<<< HEAD
 
+=======
+>>>>>>> c69fc8db1da8421e1a07186eb10dcb6ab82ff1e7
         $inputs = $request->except('id');
 
         if ($request->has('image')) {
@@ -215,11 +218,10 @@ class UserController extends Controller
 
         if ($user->update($inputs)) {
 
-            if($inputs['user_status'] == 'not_active' && $user->login_status == 1){
+            if ($inputs['user_status'] == 'not_active' && $user->login_status == 1) {
 
                 JWTAuth::setToken($user->access_token)->invalidate();
-                $user->update(['access_token' => null,'login_status' => 0]);
-
+                $user->update(['access_token' => null, 'login_status' => 0]);
             }
             $this->adminLog('تم تحديث طالب');
             return response()->json(['status' => 200]);
@@ -348,22 +350,22 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $term = Term::query()
-        ->where('season_id', $user->season_id)
+            ->where('season_id', $user->season_id)
             ->where('status', '=', 'active')
             ->first();
 
         $lessonCount = OpenLesson::query()
-        ->where('user_id', $user->id)
+            ->where('user_id', $user->id)
             ->where('lesson_id', '!=', null)
             ->count('lesson_id');
 
         $classCount = OpenLesson::query()
-        ->where('user_id', $user->id)
+            ->where('user_id', $user->id)
             ->where('subject_class_id', '!=', null)
             ->count('subject_class_id');
 
         $videos = VideoOpened::query()
-        ->where('user_id', $user->id)
+            ->where('user_id', $user->id)
             ->where('type', 'video')
             ->with('video')->get();
 
@@ -387,16 +389,16 @@ class UserController extends Controller
         $totalTimeFormatted = $totalTime->format('H:i:s');
 
         $exams = ExamDegreeDepends::query()
-        ->where('user_id', '=', $user->id)
+            ->where('user_id', '=', $user->id)
             ->where('exam_depends', '=', 'yes')
             ->get();
 
         $paperExams = PapelSheetExamDegree::query()
-        ->where('user_id', '=', $user->id)
+            ->where('user_id', '=', $user->id)
             ->get();
 
         $subscriptions = UserSubscribe::query()
-        ->where('student_id', $user->id)
+            ->where('student_id', $user->id)
             ->get();
 
 
@@ -418,7 +420,7 @@ class UserController extends Controller
     public function destroy(Request $request)
     {
         $user = User::query()
-        ->where('id', $request->id)
+            ->where('id', $request->id)
             ->firstOrFail();
 
         $user->delete();
@@ -430,7 +432,6 @@ class UserController extends Controller
     public function studentsExport(): BinaryFileResponse
     {
         return Excel::download(new StudentsExport(), 'Students.xlsx');
-
     }
 
     public function studentsImport(Request $request): JsonResponse
@@ -443,5 +444,4 @@ class UserController extends Controller
             return response()->json(['status' => 500]);
         }
     }
-
 }

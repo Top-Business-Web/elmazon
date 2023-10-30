@@ -19,9 +19,9 @@ class UserUpdateRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => 'required',
-            'email' => "nullable",
+            'email' => 'nullable',
             'password' => 'nullable',
             'season_id' => 'required',
             'birth_date' => 'required',
@@ -32,6 +32,14 @@ class UserUpdateRequest extends FormRequest
             'date_start_code' => 'required|date|before:date_end_code',
             'date_end_code' => 'required|date|after:date_start_code',
         ];
+
+        if ($this->input('user_status') === 'not_active') {
+            $rules['note'] = 'required';
+        } else {
+            $rules['note'] = 'nullable';
+        }
+
+        return $rules;
     }
 
     public function messages(): array
