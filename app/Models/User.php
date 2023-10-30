@@ -43,6 +43,7 @@ class User extends Authenticatable implements JWTSubject
         'image',
         'user_status',
         'code',
+        'note',
         'date_start_code',
         'date_end_code',
         'login_status',

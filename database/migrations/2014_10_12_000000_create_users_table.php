@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->date('date_start_code')->comment('تاريخ بدايه الاشتراك');
             $table->date('date_end_code')->comment('تاريخ نهايه الاشتراك');
             $table->string('email')->nullable();
+            $table->text('note')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->enum('center',['in','out'])->default('in');

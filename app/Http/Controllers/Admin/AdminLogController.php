@@ -46,6 +46,9 @@ class AdminLogController extends Controller
                 ->editColumn('admin_id', function ($logs) {
                     return $logs->admin->name;
                 })
+                ->editColumn('created_at', function ($logs) {
+                    return Carbon::parse($logs->created_at)->format('Y-m-d H:i');
+                })
                 ->addColumn('role', function ($logs) {
                     $adminRole = $logs->admin->roles->pluck('name', 'name')->first();
                     if ($adminRole == 'سوبر ادمن') {
