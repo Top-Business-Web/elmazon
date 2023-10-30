@@ -42,6 +42,7 @@ class User extends Authenticatable implements JWTSubject
         'father_phone',
         'image',
         'user_status',
+        'user_status_note',
         'code',
         'date_start_code',
         'date_end_code',

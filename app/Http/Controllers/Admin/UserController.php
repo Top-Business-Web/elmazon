@@ -133,6 +133,20 @@ class UserController extends Controller
                     }
 
                 })
+
+                ->editColumn('user_status_note', function ($users) {
+
+                    if($users->user_status_note != null)
+                    {
+                        return $users->user_status_note;
+
+                    }else{
+
+                        return '<button type="button" class="btn btn-pill btn-danger-light">لا يوجد ملاحظات عن هذا الطالب</button>';
+
+                    }
+
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {
@@ -189,8 +203,6 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
 
-
-//        return $request->all();
         $inputs = $request->except('id');
 
         if ($request->has('image')) {

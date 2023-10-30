@@ -121,7 +121,12 @@ Route::get('getAllLessonsBySubjectClass', [VideoPartController::class,'getAllLes
 
 //Route::get('update-users',function (){
 //
-//    DB::table('users')->update(['date_end_code' => '2023-10-31']);
+////    DB::table('users')->update(['date_end_code' => '2023-10-31']);
 //
-//    return "Done Update";
+//    echo phpinfo();
+//
 //});
+
+/*
+<b>Warning</b>: Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in <b>Unknown</b> on line <b>0</b><br />
+ */
