@@ -133,6 +133,20 @@ class UserController extends Controller
                         return '<button type="button" class="btn btn-pill btn-danger-light">الطالب غير مفعل</button>';
                     }
                 })
+
+                ->editColumn('user_status_note', function ($users) {
+
+                    if($users->user_status_note != null)
+                    {
+                        return $users->user_status_note;
+
+                    }else{
+
+                        return '<button type="button" class="btn btn-pill btn-danger-light">لا يوجد ملاحظات عن هذا الطالب</button>';
+
+                    }
+
+                })
                 ->escapeColumns([])
                 ->make(true);
         } else {
@@ -188,6 +202,10 @@ class UserController extends Controller
 
     public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
+<<<<<<< HEAD
+
+=======
+>>>>>>> c69fc8db1da8421e1a07186eb10dcb6ab82ff1e7
         $inputs = $request->except('id');
 
         if ($request->has('image')) {

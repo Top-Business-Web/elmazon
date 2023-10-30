@@ -167,7 +167,7 @@
 
                         <div class="col-md-12 mt-3">
                             <label class="labels">يوتيوب</label>
-                            <input type="text" class="form-control" name="youtube_link"
+                            <input type="text" class="form-control" name="youtube_personal"
                                    placeholder="يوتيوب الملف الشخصي للاستاذ" value="{{ $settings->youtube_personal }}">
                         </div> <br>
 

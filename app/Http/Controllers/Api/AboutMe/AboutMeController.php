@@ -18,7 +18,6 @@ class AboutMeController extends Controller{
         $setting = Setting::query()
             ->first();
 
-
         $qualifications = Qualification::query()
             ->where('type','=','qualifications')
             ->get();
@@ -51,8 +50,6 @@ class AboutMeController extends Controller{
             return self::returnResponseDataApi(null,"لا يوجد بيانات بنظام اعدادات التطبيق",201);
 
         }
-
-
 
     }
 

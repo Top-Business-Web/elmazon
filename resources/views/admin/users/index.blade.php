@@ -12,43 +12,34 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <select id="statusStudent" class="form-control statusStudent">
-                                <option selected value="all">الكل</option>
-                                <option value="in">داخل السنتر</option>
-                                <option value="out">خارج السنتر</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <select id="studentActive" class="form-control studentActive">
-                                <option selected value="all">الكل</option>
-                                <option value="active">مفعل</option>
-                                <option value="not_active">غير مفعل</option>
-                            </select>
-                        </div>
-                    </div>
+                    {{-- <div class="">
+                        <label><strong>فلتر :</strong></label>
+                        <select id='type' class="form-control" style="width: 200px">
+                            <option value="all">كل الطلاب</option>
+                            <option value="unavailable">الطلاب الغائبين</option>
+                        </select>
+                    </div> --}}
                     <div class="">
                         <button class="btn btn-secondary btn-icon text-white addBtn">
-                            <span>
-                                <i class="fe fe-plus"></i>
-                            </span> اضافة طالب
+                                <span>
+                                    <i class="fe fe-plus"></i>
+                                </span> اضافة طالب
                         </button>
                         <button class="btn btn-danger btn-icon text-white userUnvilable">
-                            <span>
-                                <i class="fe fe-user"></i>
-                            </span> الطلاب الغائبين
+                                <span>
+                                    <i class="fe fe-user"></i>
+                                </span> الطلاب الغائبين
                         </button>
                         <button class="btn btn-success btn-icon text-white exportExel">
-                            <span>
-                                <i class="fa fa-file-pdf"></i>
-                            </span> تصدير ملف اكسيل
+									<span>
+										<i class="fa fa-file-pdf"></i>
+									</span> تصدير ملف اكسيل
                         </button>
-                        <button class="btn btn-info btn-icon text-white importExel" data-toggle="modal"
-                            data-target="#importExel">
-                            <span>
-                                <i class="fa fa-file-pdf"></i>
-                            </span> استيراد ملف اكسيل
+                        <button class="btn btn-info btn-icon text-white importExel"
+                                data-toggle="modal" data-target="#importExel">
+									<span>
+										<i class="fa fa-file-pdf"></i>
+									</span> استيراد ملف اكسيل
                         </button>
                     </div>
                 </div>
@@ -57,23 +48,24 @@
                         <!--begin::Table-->
                         <table class="table table-striped table-bordered text-nowrap w-100" id="dataTable">
                             <thead>
-                                <tr class="fw-bolder text-muted bg-light">
-                                    <th class="min-w-25px">#</th>
-                                    <th class="min-w-50px">اسم الطالب</th>
-                                    <th class="min-w-50px">صوره الطالب</th>
-                                    <th class="min-w-50px">تاريخ الميلاد</th>
-                                    <th class="min-w-50px">الكود</th>
-                                    <th class="min-w-50px">رقم الهاتف</th>
-                                    <th class="min-w-50px">الصف الدراسي</th>
-                                    <th class="min-w-50px">المدينه</th>
-                                    <th class="min-w-50px">حاله الحساب</th>
-                                    <th class="min-w-50px">حاله الطالب</th>
-                                    <th class="min-w-50px">تسجيل الطالب معنا</th>
-                                    <th class="min-w-50px">رقم هاتف ولي الامر</th>
-                                    <th class="min-w-50px">تاريخ بدايه الاشتراك</th>
-                                    <th class="min-w-50px">تاريخ نهايه الاشتراك</th>
-                                    <th class="min-w-50px rounded-end">العمليات</th>
-                                </tr>
+                            <tr class="fw-bolder text-muted bg-light">
+                                <th class="min-w-25px">#</th>
+                                <th class="min-w-50px">اسم الطالب</th>
+                                <th class="min-w-50px">صوره الطالب</th>
+                                <th class="min-w-50px">تاريخ الميلاد</th>
+                                <th class="min-w-50px">الكود</th>
+                                <th class="min-w-50px">رقم الهاتف</th>
+                                <th class="min-w-50px">الصف الدراسي</th>
+                                <th class="min-w-50px">المدينه</th>
+                                <th class="min-w-50px">حاله الحساب</th>
+                                <th class="min-w-50px">حاله الطالب</th>
+                                <th class="min-w-50px">تسجيل الطالب معنا</th>
+                                <th class="min-w-50px">رقم هاتف ولي الامر</th>
+                                <th class="min-w-50px">تاريخ بدايه الاشتراك</th>
+                                <th class="min-w-50px">تاريخ نهايه الاشتراك</th>
+                                <th class="min-w-50px">ملاحظات</th>
+                                <th class="min-w-50px rounded-end">العمليات</th>
+                            </tr>
                             </thead>
                         </table>
                     </div>
@@ -83,7 +75,7 @@
 
         <!--Delete MODAL -->
         <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
+             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -108,7 +100,8 @@
         <!-- MODAL CLOSED -->
 
         <!-- Create Or Edit Modal -->
-        <div class="modal fade" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="editOrCreate" data-backdrop="static" tabindex="-1" role="dialog"
+             aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content ">
                     <div class="modal-header">
@@ -127,7 +120,7 @@
 
         <!-- Show User Unvilable -->
         <div class="modal fade" id="showUserUnvilable" data-backdrop="static" tabindex="-1" role="dialog"
-            aria-hidden="true">
+             aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content ">
                     <div class="modal-header">
@@ -145,8 +138,7 @@
         <!-- Show User Unvilable -->
 
         <!-- Renew Subscribe -->
-        <div class="modal fade" id="renew" data-backdrop="static" tabindex="-1" role="dialog"
-            aria-hidden="true">
+        <div class="modal fade" id="renew" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content ">
                     <div class="modal-header">
@@ -167,7 +159,7 @@
 
     <!-- Import Modal -->
     <div class="modal fade" id="importExel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -199,74 +191,31 @@
 @endsection
 @section('ajaxCalls')
     <script>
-        var columns = [{
-                data: 'id',
-                name: 'id'
-            },
-            {
-                data: 'name',
-                name: 'name'
-            },
-            {
-                data: 'image',
-                name: 'image'
-            },
-            {
-                data: 'birth_date',
-                name: 'birth_date'
-            },
-            {
-                data: 'code',
-                name: 'code'
-            },
-            {
-                data: 'phone',
-                name: 'phone'
-            },
-            {
-                data: 'season_id',
-                name: 'season_id'
-            },
-            {
-                data: 'country_id',
-                name: 'country_id'
-            },
-            {
-                data: 'login_status',
-                name: 'login_status'
-            },
-            {
-                data: 'user_status',
-                name: 'user_status'
-            },
-            {
-                data: 'center',
-                name: 'center'
-            },
-            {
-                data: 'father_phone',
-                name: 'father_phone'
-            },
-            {
-                data: 'date_start_code',
-                name: 'date_start_code'
-            },
-            {
-                data: 'date_end_code',
-                name: 'date_end_code'
-            },
-            {
-                data: 'action',
-                name: 'action',
-                orderable: false,
-                searchable: false
-            },
+        var columns = [
+            {data: 'id', name: 'id'},
+            {data: 'name', name: 'name'},
+            {data: 'image', name: 'image'},
+            {data: 'birth_date', name: 'birth_date'},
+            {data: 'code', name: 'code'},
+            {data: 'phone', name: 'phone'},
+            {data: 'season_id', name: 'season_id'},
+            {data: 'country_id', name: 'country_id'},
+            {data: 'login_status', name: 'login_status'},
+            {data: 'user_status', name: 'user_status'},
+            {data: 'center', name: 'center'},
+            {data: 'father_phone', name: 'father_phone'},
+            {data: 'date_start_code', name: 'date_start_code'},
+            {data: 'date_end_code', name: 'date_end_code'},
+            {data: 'user_status_note', name: 'user_status_note'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
 
 
 
 
         showUserModal('{{ route('userUnvilable') }}')
+
+        showData('{{ route('users.index') }}', columns);
 
         // Delete Using Ajax
         destroyScript('{{ route('users.destroy', ':id') }}');
@@ -280,35 +229,17 @@
 
         showEdit1('{{ route('subscrView', ':id') }}')
 
-        var ajax = {
-            url: "{{ route('users.index') }}",
-            data: function(d) {
-                d.status = $('.statusStudent').val();
-                d.active = $('.studentActive').val();
-            }
-        };
-
-        showData(ajax, columns);
-
-        $(document).on('change', '.statusStudent', function() {
-            var table = $('#dataTable').DataTable();
-            table.draw();
-        });
-        $(document).on('change', '.studentActive', function() {
-            var table = $('#dataTable').DataTable();
-            table.draw();
-        });
 
 
-        $(document).ready(function() {
-            $('.exportExel').on('click', function() {
-                window.location.href = '{{ route('studentsExport') }}'
+        $(document).ready(function () {
+            $('.exportExel').on('click', function () {
+                window.location.href = '{{ route('studentsExport')}}'
             })
         })
 
         $('.dropify').dropify();
 
-        $(document).on("submit", "#importExelForm", function(event) {
+        $(document).on("submit", "#importExelForm", function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
 
@@ -318,23 +249,23 @@
                 url: '{{ route('studentsImport') }}',
                 type: 'POST',
                 data: formData,
-                success: function(data) {
+                success: function (data) {
                     if (data.status === 200) {
                         toastr.success('تم استيراد الملف بنجاح')
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.reload();
                         }, 2000)
 
                     } else if (data.status === 500) {
                         toastr.error('فشل في استيراد الملف')
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.reload();
                         }, 2000)
                     }
                 },
-                error: function(data) {
+                error: function (data) {
                     toastr.error('فشل في استيراد الملف')
-                    setTimeout(function() {
+                    setTimeout(function () {
                         // window.location.reload();
                     }, 2000)
                 },
