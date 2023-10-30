@@ -106,10 +106,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-12 mt-3" id="textareaDiv" style="display: none;">
-                    <label for="additional_info" class="form-control-label">السبب</label>
-                    <textarea class="form-control" name="note" id="additional_info">{{ @$user->note }}</textarea>
-                </div>
+
 
                 <div class="col-md-12 mt-3">
                     <label for="name" class="form-control-label">اكتب ملاحظه في حاله الغاء التفعيل لطالب معين*</label>
@@ -144,7 +141,7 @@
 
     $('.dropify').dropify()
 
-    // this function when use 
+    // this function when use
     $(document).ready(function() {
         $('#user_status').on('change', function() {
             var selectedOption = $(this).val();
