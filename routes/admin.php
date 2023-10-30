@@ -95,7 +95,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         Route::get('userUnvilable', [UserController::class, 'userUnvilable'])->name('userUnvilable');
         Route::get('studentsExport', [UserController::class, 'studentsExport'])->name('studentsExport');
         Route::post('studentsImport', [UserController::class, 'studentsImport'])->name('studentsImport');
-
     });
 
     #### Season ####

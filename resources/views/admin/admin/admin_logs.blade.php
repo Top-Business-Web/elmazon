@@ -31,6 +31,7 @@
                                 <th class="min-w-50px">اسم الادمن</th>
                                 <th class="min-w-125px">العملية</th>
                                 <th class="min-w-125px">الدور</th>
+                                <th class="min-w-125px">تاريخ</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -120,6 +121,7 @@
             {data: 'admin_id', name: 'admin_id'},
             {data: 'action', name: 'action'},
             {data: 'role', name: 'role'},
+            {data: 'created_at', name: 'created_at'},
             {data: 'button', name: 'button', orderable: false, searchable: false},
         ]
 
