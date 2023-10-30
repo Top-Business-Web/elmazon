@@ -53,7 +53,7 @@ class UserController extends Controller
         if ($request->has('active')) {
             if ($request->active !== 'all') {
                 $usersList->where('user_status', '=', $active);
-            }  
+            }
         }
         if ($request->ajax()) {
 
@@ -202,10 +202,7 @@ class UserController extends Controller
 
     public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
-<<<<<<< HEAD
 
-=======
->>>>>>> c69fc8db1da8421e1a07186eb10dcb6ab82ff1e7
         $inputs = $request->except('id');
 
         if ($request->has('image')) {
