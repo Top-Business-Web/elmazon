@@ -206,7 +206,6 @@ class LiveExamController extends Controller
                 $data['num_of_leave_questions'] = $numOfLeaveQuestions;
                 $data['exam_questions'] = new LiveExamDetailsResource($liveExam);
 
-
                 DB::commit();
 
                 return self::returnResponseDataApi($data, "تم اداء الامتحان بنجاح", 200);
@@ -215,7 +214,7 @@ class LiveExamController extends Controller
 
                 DB::rollback();
 
-                return self::returnResponseDataApi(null, "يوجدخطاء ما في السيرفر وحركه تسجيل بيانات الامتحان الالايف لم تسجل في سجل قاعده البيانات", 500,500);
+                return self::returnResponseDataApi(null, "يوجد خطاء ما في السيرفر وحركه تسجيل بيانات الامتحان الالايف لم تسجل في سجل قاعده البيانات", 500,500);
 
             }
         }

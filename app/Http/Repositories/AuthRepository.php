@@ -570,34 +570,35 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ]);
             }
 
-//            $life_exam = LifeExam::query()
-//                ->whereHas('term', fn (Builder $builder) =>
-//                $builder->where('status', '=', 'active')
-//                    ->where('season_id', '=', auth('user-api')->user()->season_id))
-//                ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
-//                ->where('date_exam', '=', Carbon::now()->format('Y-m-d'))
-//                ->first();
-//
-//
-//            if ($life_exam) {
-//                $now = Carbon::now();
-//                $start = Carbon::createFromTimeString($life_exam->time_start);
-//                $end = Carbon::createFromTimeString($life_exam->time_end);
-//
-//                $degree_depends = ExamDegreeDepends::query()
-//                    ->where('user_id', '=', Auth::guard('user-api')->id())
-//                    ->where('life_exam_id', '=', $life_exam->id);
-//
-//                if ($now->isBetween($start, $end)) {
-//                    $id = $life_exam->id;
-//                } elseif ($degree_depends->exists()) {
-//                    $id = null;
-//                } else {
-//                    $id = null;
-//                }
-//            } else {
-//                $id = null;
-//            }
+            $life_exam = LifeExam::query()
+                ->whereHas('term', fn (Builder $builder) =>
+                $builder->where('status', '=', 'active')
+                    ->where('season_id', '=', auth('user-api')->user()->season_id))
+                ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+                ->where('date_exam', '=', Carbon::now()->format('Y-m-d'))
+                ->first();
+
+
+            if ($life_exam) {
+
+                $now = Carbon::now();
+                $start = Carbon::createFromTimeString($life_exam->time_start);
+                $end = Carbon::createFromTimeString($life_exam->time_end);
+
+                $liveExamDegreeDepends = ExamDegreeDepends::query()
+                    ->where('user_id', '=', Auth::guard('user-api')->id())
+                    ->where('life_exam_id', '=', $life_exam->id)
+                    ->first();
+
+                if ($now->isBetween($start, $end) || !$liveExamDegreeDepends) {
+                    $liveExamId = $life_exam->id;
+                }  else {
+                    $liveExamId = null;
+                }
+
+            } else {
+                $liveExamId = null;
+            }
 
             $classes = SubjectClass::query()
                 ->whereHas('term', fn (Builder $builder) =>
@@ -622,7 +623,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             $user->update(['access_token' => request()->bearerToken()]);
 
-            $data['life_exam'] = null;
+            $data['life_exam'] = $liveExamId;
             $data['sliders'] = SliderResource::collection($sliders);
             $data['videos_basics'] = VideoBasicResource::collection(VideoBasic::get());
             $data['classes'] = SubjectClassNewResource::collection($classes);
