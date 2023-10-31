@@ -28,14 +28,13 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">الاسم</th>
-                                <th class="min-w-50px">موعد الامتحان</th>
-                                <th class="min-w-50px">وقت البدء</th>
-                                <th class="min-w-50px">وقت الانتهاء</th>
-                                <th class="min-w-50px">وقت الامتحان</th>
-                                <th class="min-w-50px">محاولات</th>
-                                <th class="min-w-50px">الدرجة</th>
-                                <th class="min-w-50px">الصف</th>
+                                <th class="min-w-50px">اسم الامتحان الالايف</th>
+                                <th class="min-w-50px">تاريخ اداء الامتحان للطلبه*</th>
+                                <th class="min-w-50px">توقيت البدء للامتحان</th>
+                                <th class="min-w-50px">توقيت انتهاء الامتحان</th>
+                                <th class="min-w-50px">عدد الدقائق المتاحه لهذا الامتحان*</th>
+                                <th class="min-w-50px">الدرجه الكليه للامتحان</th>
+                                <th class="min-w-50px">الصف الدراسي</th>
                                 <th class="min-w-50px">الترم</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
@@ -78,7 +77,7 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="example-Modal3">امتحان</h5>
+                        <h5 class="modal-title" id="example-Modal3">الامتحان الالايف</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -102,7 +101,6 @@
             {data: 'time_start', name: 'time_start'},
             {data: 'time_end', name: 'time_end'},
             {data: 'quiz_minute', name: 'quiz_minute'},
-            {data: 'trying', name: 'trying'},
             {data: 'degree', name: 'degree'},
             {data: 'season_id', name: 'season_id'},
             {data: 'term_id', name: 'term_id'},

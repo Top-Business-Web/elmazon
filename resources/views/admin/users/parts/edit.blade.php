@@ -107,11 +107,9 @@
                     </select>
                 </div>
 
-
                 <div class="col-md-12 mt-3">
                     <label for="name" class="form-control-label">اكتب ملاحظه في حاله الغاء التفعيل لطالب معين*</label>
-                    <input type="text" class="form-control"  name="user_status_note"
-                           value="{{ $user->user_status_note }}">
+                    <input type="text" class="form-control"  name="user_status_note" value="{{ $user->user_status_note }}">
 
                 </div>
             </div>

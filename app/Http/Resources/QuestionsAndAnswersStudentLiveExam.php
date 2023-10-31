@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\OnlineExamUser;
 use App\Models\TextExamUser;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,27 +19,24 @@ class QuestionsAndAnswersStudentLiveExam extends JsonResource
     public function toArray($request)
     {
 
-        $answerStudent = OnlineExamUser::where('user_id','=',Auth::guard('user-api')->id())
+        $answerStudent = OnlineExamUser::query()
+        ->where('user_id','=',Auth::guard('user-api')->id())
             ->where('question_id','=',$this->id)
-            ->whereHas('question', function ($q){
-                $q->where('question_type','=','choice');
-            })
+            ->whereHas('question', fn (Builder $builder) =>
+                $builder->where('question_type','=','choice'))
             ->first();
 
 
         return [
 
             'id' => $this->id,
-            'question' => $this->file_type == 'text' ? $this->question : asset('/question_images/'.$this->image),
-            'answer_user' => $answerStudent->answer_id,
-            'answer_user_type' => 'id',
             'question_type' => $this->question_type,
-            'file_type' => $this->file_type,
-            'degree' => $this->degree,
-            'note' => $this->note ?? 'note',
+            'question' => strip_tags(str_replace('</p>', '', $this->question)),
+            'image' => asset($this->image),
+            'answer_user_type' => 'id',
+            'answer_user' => $answerStudent->answer_id,
+            'question_degree' => $this->degree,
             'answers' =>  QuestionAnswersNewResource::collection($this->answers),
-            'created_at' => $this->created_at->format('Y-m-d'),
-            'updated_at' => $this->created_at->format('Y-m-d'),
 
         ];
     }

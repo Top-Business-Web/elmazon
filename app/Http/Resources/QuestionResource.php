@@ -22,10 +22,8 @@ class QuestionResource extends JsonResource
             'question_type' => $this->question_type,
             'file_type' => $this->file_type,
             'degree' => $this->degree,
-            'note' => $this->note ?? 'note',
             'answers' =>  $this->question_type == 'choice' ? AnswerResource::collection($this->answers) : [],
-            'created_at' => $this->created_at->format('Y-m-d'),
-            'updated_at' => $this->created_at->format('Y-m-d'),
+
 
         ];
     }
