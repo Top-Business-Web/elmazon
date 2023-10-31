@@ -616,8 +616,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->latest()
                 ->get();
 
-
-
             $user = User::query()
                 ->where('id','=',auth('user-api')->id())
                 ->first();
