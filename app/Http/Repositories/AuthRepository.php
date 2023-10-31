@@ -616,6 +616,14 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->latest()
                 ->get();
 
+
+
+            $user = User::query()
+                ->where('id','=',auth('user-api')->id())
+                ->first();
+
+            $user->update(['access_token' => request()->bearerToken()]);
+
             $data['life_exam'] = null;
             $data['sliders'] = SliderResource::collection($sliders);
             $data['videos_basics'] = VideoBasicResource::collection(VideoBasic::get());
