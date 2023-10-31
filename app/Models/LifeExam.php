@@ -17,13 +17,11 @@ class LifeExam extends Model
     protected $fillable = [
        'name_ar',
        'name_en',
-       'answer_pdf_file',
        'answer_video_file',
        'date_exam',
        'time_start',
        'time_end',
         'quiz_minute',
-        'trying',
         'degree',
         'season_id',
         'term_id',

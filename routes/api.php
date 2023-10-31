@@ -238,9 +238,11 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('result/{id}',[LiveExamController::class,'resultOfLiveExam']);
     });
 
-        Route::get('live-exam-all',[LiveExamController::class,'allOfLiveExamsStudent'])->middleware('jwt');
-        Route::get('live-exam-all/choose-live-exam',[LiveExamController::class,'choose_live_exam'])->middleware('jwt');
-        Route::get('exam-heroes/all',[ExamEntryController::class,'examHeroesAll'])->middleware('jwt');
+    Route::middleware('jwt')->group(function (){
+        Route::get('live-exam-all',[LiveExamController::class,'allOfLiveExamsStudent']);
+        Route::get('live-exam-all/choose-live-exam',[LiveExamController::class,'choose_live_exam']);
+        Route::get('exam-heroes/all',[ExamEntryController::class,'examHeroesAll']);
+    });
 
 
 });

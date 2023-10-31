@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestLifeExam;
+use App\Http\Requests\StoreLiveExam;
 use App\Http\Requests\StoreSubjectClasses;
 use App\Models\LifeExam;
 use App\Models\Season;
@@ -61,13 +62,9 @@ class LifeExamController extends Controller
 
 
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreLiveExam $request): JsonResponse
     {
         $inputs = $request->all();
-
-        if($request->hasFile('answer_pdf_file')){
-            $inputs['answer_pdf_file'] = $this->saveImage($request->answer_pdf_file, 'answer_pdf_file', 'photo');
-        }
 
         if($request->hasFile('answer_video_file')){
             $inputs['answer_video_file'] = $this->saveImage($request->answer_video_file, 'answer_video_file', 'photo');
@@ -96,13 +93,10 @@ class LifeExamController extends Controller
 
 
 
-    public function update(LifeExam $lifeExam, Request $request): JsonResponse
+    public function update(LifeExam $lifeExam,StoreLiveExam $request): JsonResponse
     {
         $inputs = $request->all();
 
-        if($request->hasFile('answer_pdf_file')){
-            $inputs['answer_pdf_file'] = $this->saveImage($request->answer_pdf_file, 'answer_pdf_file', 'photo');
-        }
 
         if($request->hasFile('answer_video_file')){
             $inputs['answer_video_file'] = $this->saveImage($request->answer_video_file, 'answer_video_file', 'photo');

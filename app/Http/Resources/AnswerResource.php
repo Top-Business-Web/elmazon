@@ -20,8 +20,7 @@ class AnswerResource extends JsonResource
             'answer' =>  strip_tags(str_replace('</p>', '',$this->answer)),
             'answer_number' => $this->answer_number,
             'answer_status' => $this->answer_status,
-            'created_at' => $this->created_at->format('Y-m-d'),
-            'updated_at' => $this->created_at->format('Y-m-d'),
+
         ];
     }
 }
