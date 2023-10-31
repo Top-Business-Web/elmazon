@@ -695,7 +695,7 @@ class ExamEntryController extends Controller
             $authStudent = Auth::guard('user-api')->user();
             $authData['id'] = $authStudent->id;
             $authData['name'] = $authStudent->name;
-            $authData['country'] = lang() == 'ar'? $authStudent->country->name_ar : $authStudent->country->name_en;
+            $authData['country'] = lang() == 'ar'? $authStudent->country->city->name_ar : $authStudent->country->city->name_en;
             $authData['ordered'] = (array_search($authStudent->id,$heroesDaysIds)) + 1;
             $authData['student_total_degrees'] = (int)$examsDepends->exam_degree_depends_sum_full_degree;
             $authData['exams_total_degree'] = (int)$examsDepends->online_exams_sum_degree + $examsDepends->all_exams_sum_degree;
@@ -741,7 +741,7 @@ class ExamEntryController extends Controller
             $authStudent = Auth::guard('user-api')->user();
             $authData['id'] = $authStudent->id;
             $authData['name'] = $authStudent->name;
-            $authData['country'] = lang() == 'ar'?$authStudent->country->name_ar : $authStudent->country->name_en;
+            $authData['country'] = lang() == 'ar'?$authStudent->country->city->name_ar : $authStudent->country->city->name_en;
             $authData['ordered'] = (array_search($authStudent->id,$heroesWeekIds)) + 1;
             $authData['student_total_degrees'] = (int)$examsDepends->exam_degree_depends_sum_full_degree;
             $authData['exams_total_degree'] = (int)$examsDepends->online_exams_sum_degree + $examsDepends->all_exams_sum_degree;
@@ -787,7 +787,7 @@ class ExamEntryController extends Controller
             $authStudent = Auth::guard('user-api')->user();
             $authData['id'] = $authStudent->id;
             $authData['name'] = $authStudent->name;
-            $authData['country'] = lang() == 'ar'?$authStudent->country->name_ar : $authStudent->country->name_en;
+            $authData['country'] = lang() == 'ar'?$authStudent->country->city->name_ar : $authStudent->country->city->name_en;
             $authData['ordered'] = (array_search($authStudent->id,$heroesCurrentMonthIds)) + 1;
             $authData['student_total_degrees'] = (int)$examsDepends->exam_degree_depends_sum_full_degree;
             $authData['exams_total_degree'] = (int)$examsDepends->online_exams_sum_degree + $examsDepends->all_exams_sum_degree;
@@ -834,7 +834,7 @@ class ExamEntryController extends Controller
             $authStudent = Auth::guard('user-api')->user();
             $authData['id'] = $authStudent->id;
             $authData['name'] = $authStudent->name;
-            $authData['country'] = lang() == 'ar'?$authStudent->country->name_ar : $authStudent->country->name_en;
+            $authData['country'] = lang() == 'ar'?$authStudent->country->city->name_ar : $authStudent->country->city->name_en;
             $authData['ordered'] = (array_search($authStudent->id,$heroesLastMonthIds)) + 1;
             $authData['student_total_degrees'] = (int)$examsDepends->exam_degree_depends_sum_full_degree;
             $authData['exams_total_degree'] = (int)$examsDepends->online_exams_sum_degree + $examsDepends->all_exams_sum_degree;
@@ -883,7 +883,7 @@ class ExamEntryController extends Controller
 
                 $studentsData['id'] = $student->id;
                 $studentsData['name'] = $student->name;
-                $studentsData['country'] = lang() == 'ar'?$student->country->name_ar : $student->country->name_en;
+                $studentsData['country'] = lang() == 'ar'?$student->country->city->name_ar : $student->country->city->name_en;
                 $studentsData['ordered'] = (array_search($student->id,$listOfStudentsIds)) + 1;
                 $studentsData['student_total_degrees'] = (int)$student->exam_degree_depends_sum_full_degree;
                 $studentsData['exams_total_degree'] = (int)$student->online_exams_sum_degree + $student->all_exams_sum_degree;
@@ -933,7 +933,7 @@ class ExamEntryController extends Controller
 
                $studentsData['id'] = $student->id;
                $studentsData['name'] = $student->name;
-               $studentsData['country'] = lang() == 'ar'?$student->country->name_ar : $student->country->name_en;
+               $studentsData['country'] = lang() == 'ar'?$student->country->city->name_ar : $student->country->city->name_en;
                $studentsData['ordered'] = (array_search($student->id,$listOfStudentsIds)) + 1;
                $studentsData['student_total_degrees'] = (int)$student->exam_degree_depends_sum_full_degree;
                $studentsData['exams_total_degree'] = (int)$student->online_exams_sum_degree + $student->all_exams_sum_degree;
@@ -981,7 +981,7 @@ class ExamEntryController extends Controller
 
                 $studentsData['id'] = $student->id;
                 $studentsData['name'] = $student->name;
-                $studentsData['country'] = lang() == 'ar'?$student->country->name_ar : $student->country->name_en;
+                $studentsData['country'] = lang() == 'ar'?$student->country->city->name_ar : $student->country->city->name_en;
                 $studentsData['ordered'] = (array_search($student->id,$listOfStudentsIds)) + 1;
                 $studentsData['student_total_degrees'] = (int)$student->exam_degree_depends_sum_full_degree;
                 $studentsData['exams_total_degree'] = (int)$student->online_exams_sum_degree + $student->all_exams_sum_degree;
@@ -1029,7 +1029,7 @@ class ExamEntryController extends Controller
 
                 $studentsData['id'] = $student->id;
                 $studentsData['name'] = $student->name;
-                $studentsData['country'] = lang() == 'ar'?$student->country->name_ar : $student->country->name_en;
+                $studentsData['country'] = lang() == 'ar'?$student->country->city->name_ar : $student->country->city->name_en;
                 $studentsData['ordered'] = (array_search($student->id,$listOfStudentsIds)) + 1;
                 $studentsData['student_total_degrees'] = (int)$student->exam_degree_depends_sum_full_degree;
                 $studentsData['exams_total_degree'] = (int)$student->online_exams_sum_degree + $student->all_exams_sum_degree;
