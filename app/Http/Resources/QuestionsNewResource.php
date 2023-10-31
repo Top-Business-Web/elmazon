@@ -61,6 +61,7 @@ class QuestionsNewResource extends JsonResource
              'id' => $this->id,
             'question_type' => $this->question_type,
             'question' => strip_tags(str_replace('</p>', '', $this->question)),
+            'image' => asset($this->image),
             'answer_user_type' => ($this->question_type == 'choice' ? 'id' : $textExamUser->answer_type),
             'answer_user' => $answerStudentForThisQuestion,
             'question_degree' => $this->degree,
