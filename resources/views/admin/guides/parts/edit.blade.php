@@ -44,7 +44,7 @@
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label for="head">لون خلفيه المرجع</label>
-                    <input type="color" class="form-control select2" name="background_color"
+                    <input type="color" class="form-control" name="background_color"
                            value="{{ $guide->background_color }}">
                 </div>
             </div>
