@@ -6,47 +6,56 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="section_name_ar" class="form-control-label">العنوان بالعربية</label>
+                    <label for="section_name_ar" class="form-control-label">عنوان او اسم المرجع باللغه العربيه</label>
                     <input type="text" class="form-control" value="{{ $guide->title_ar }}" name="title_ar">
                 </div>
                 <div class="col-md-12 mt-3">
-                    <label for="section_name_en" class="form-control-label">العنوان بالانجليزية</label>
+                    <label for="section_name_en" class="form-control-label">عنوان او اسم المرجع باللغه الانجليزيه</label>
                     <input type="text" class="form-control" value="{{ $guide->title_en }}" name="title_en">
                 </div>
-            </div>
-            <div class="row">
+
                 <div class="col-md-12 mt-3">
-                    <label for="name_ar" class="form-control-label">الصف</label>
-                    <Select name="season_id" id="season_id" class="form-control season_id">
-                        <option selected disabled style="text-align: center">اختار الصف</option>
-                        @foreach($seasons as $season)
-                            <option value="{{ $season->id }}" {{ $guide->season_id == $season->id ? 'selected' : '' }}
-                                    style="text-align: center">{{ $season->name_ar }}</option>
-                        @endforeach
-                    </Select>
-                </div>
-                <div class="col-md-12 mt-3">
-                    <label for="">الترم</label>
-                    <select name="term_id" id="term_id" class="form-control term_id">
-                        <option value="{{ $guide->term_id }}" style="text-align: center" >{{ $guide->term->name_ar }}</option>
+                    <label for="head">شهر</label>
+                    <select name="month" class="form-control select2" id="signup_birth_month">
+                        <option value="" style="text-align: center">اختر شهر</option>
+                        @for ($i = 1; $i <= 12; $i++){
+                        <option  value="{{$i}}" {{ $guide->month == $i ? 'selected' : ''}}> {{date( 'F', strtotime( "$i/12/10" ) )}}</option>
+                        @endfor
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="head">لون الخلفية</label>
-                    <input type="color" class="form-control" name="background_color"
+                    <label for="name_ar" class="form-control-label">الصف الدراسي</label>
+                    <Select name="season_id" id="season_id" class="form-control season_id select2">
+                        <option selected disabled>اختار الصف</option>
+                        @foreach($seasons as $season)
+                            <option value="{{ $season->id }}" {{ $guide->season_id == $season->id ? 'selected' : '' }}>{{ $season->name_ar }}</option>
+                        @endforeach
+                    </Select>
+                </div>
+                <div class="col-md-12 mt-3">
+                    <label for="">التيرم</label>
+                    <select name="term_id" id="term_id" class="form-control term_id select2">
+                        <option value="{{ $guide->term_id }}" >{{ $guide->term->name_ar }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mt-3">
+                    <label for="head">لون خلفيه المرجع</label>
+                    <input type="color" class="form-control select2" name="background_color"
                            value="{{ $guide->background_color }}">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="section_name_ar" class="form-control-label">الوصف بالعربية</label>
+                    <label for="section_name_ar" class="form-control-label">سجل ملاحظاتك عن هذا المرجع باللغه العربيه*غير مطلوب</label>
                     <textarea class="form-control" name="description_ar" rows="8"
                               >{{ $guide->description_ar }}</textarea>
                 </div>
                 <div class="col-md-12 mt-3">
-                    <label for="section_name_en" class="form-control-label">الوصف بالانجليزية</label>
+                    <label for="section_name_en" class="form-control-label">سجل ملاحظاتك عن هذا المرجع باللغه الانجليزيه*غير مطلوب</label>
                     <textarea class="form-control" name="description_en" rows="8"
                               >{{ $guide->description_en }}</textarea>
                 </div>
@@ -72,7 +81,14 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+
     $('.dropify').dropify()
+
+</script>
+<script>
 
     $(document).ready(function () {
         $('.season_id').on('change', function () {

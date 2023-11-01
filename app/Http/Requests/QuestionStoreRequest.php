@@ -40,7 +40,6 @@ class QuestionStoreRequest extends FormRequest
             'question.required' => 'السؤال مطلوب',
             'difficulty.required' => 'مستوى الصعوبة مطلوب',
             'degree.required' => 'الدرجة مطلوبة',
-            'note.required' => 'الملاحظة مطلوبة',
             'question_type.required' => 'نوع السؤال مطلوب',
             'season_id.required' => 'الفصل مطلوب',
             'term_id.required' => 'الترم مطلوب',

@@ -98,7 +98,7 @@ class QuestionController extends Controller
     }
 
 
-    public function store(QuestionStoreRequest $request)
+    public function store(QuestionStoreRequest $request): JsonResponse
     {
         $inputs = $request->all();
 

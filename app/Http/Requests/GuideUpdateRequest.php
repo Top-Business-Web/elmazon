@@ -40,8 +40,8 @@ class GuideUpdateRequest extends FormRequest
         return [
             'title_ar.required' => 'العنوان بالعربي مطلوب',
             'title_en.required' => 'العنوان بالانجليزي مطلوب',
-            'description_ar.required' => 'الوصف بالعربي مطلوب',
-            'description_en.required' => 'الوصف بالانجليزي مطلوب',
+            'description_ar.required' => 'سجل ملاحظاتك عن هذا المرجع باللغه العربيه',
+            'description_en.required' => 'سجل ملاحظاتك عن هذا المرجع باللغه الانجليزيه',
             'file.required' => 'الملف مطلوب',
             'icon.required' => 'الايقونة مطلوبة',
             'background_color.required' => 'لون الخلفية مطلوب',
