@@ -1,48 +1,48 @@
 <div class="modal-body">
     <form id="updateForm" class="updateForm" method="POST" action="{{ route('updateItem', $guide->id) }}">
         @csrf
+
         <div class="form-group">
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="section_name_ar" class="form-control-label">العنوان بالعربية</label>
+                    <label for="section_name_ar" class="form-control-label">عنوان العنصر باللغه العربيه</label>
                     <input type="text" class="form-control" value="{{ $guide->title_ar }}" name="title_ar">
                 </div>
                 <div class="col-md-12 mt-3">
-                    <label for="section_name_en" class="form-control-label">العنوان بالانجليزية</label>
-                    <input type="text" class="form-control" value="{{ $guide->title_ar }}" name="title_en">
+                    <label for="section_name_en" class="form-control-label">عنوان العنصر باللغه الانجليزيه</label>
+                    <input type="text" class="form-control" value="{{ $guide->title_en }}" name="title_en">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="name_ar" class="form-control-label">الوحدة</label>
-                    <Select name="subject_class_id" id="subject_id" class="form-control subject_id">
-                        <option selected disabled style="text-align: center">اختار الوحدة</option>
+                    <label for="name_ar" class="form-control-label">جميع الفصول</label>
+                    <select name="subject_class_id" id="subject_id" class="form-control subject_id select2">
+                        <option selected disabled >اختر فصل معين</option>
                         @foreach($subjects as $subject)
-                            <option value="{{ $subject->id }}" {{ $guide->subject_class_id == $subject->id ? 'selected' : '' }}
-                                    style="text-align: center">{{ $subject->name_ar }}</option>
+                            <option value="{{ $subject->id }}" {{ $guide->subject_class_id == $subject->id ? 'selected' : '' }}>{{ $subject->name_ar }}</option>
                         @endforeach
-                    </Select>
+                    </select>
                 </div>
                 <div class="col-md-12 mt-3">
-                    <label for="">الدرس</label>
-                    <select name="lesson_id" id="lesson_id" class="form-control lesson_id">
-                        <option value="" style="text-align: center">{{ $guide->lesson_id }}</option>
+                    <label for="">جميع الدروس</label>
+                    <select name="lesson_id" id="lesson_id" class="form-control lesson_id select2">
+                        <option value="{{ $guide->lesson_id }}">{{ $guide->lesson->name_ar ?? '' }}</option>
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="name_ar" class="form-control-label">النوع</label>
-                    <Select name="file_type" id="file_type" class="form-control file_type">
-                        <option selected disabled style="text-align: center">اختار النوع</option>
-                        <option style="text-align: center" value="video" {{ $guide->file_type == 'video' ? 'selected' : '' }}>فيديو</option>
-                        <option style="text-align: center" value="pdf" {{ $guide->file_type == 'pdf' ? 'selected' : '' }}>ملف ورقي</option>
+                    <label for="name_ar" class="form-control-label">نوع الملف المرفق</label>
+                    <Select name="file_type" id="file_type" class="form-control file_type select2">
+                        <option selected disabled >اختار النوع</option>
+                        <option  value="pdf" {{ $guide->file_type == 'pdf' ? 'selected' : '' }}>ملف ورقي</option>
+                        <option  value="video" {{ $guide->file_type == 'video' ? 'selected' : '' }}>فيديو</option>
                     </Select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="file" class="form-control-label">ملف المراجعة</label>
+                    <label for="file" class="form-control-label">ارفق الملف الورقي او الفيديو لهذا العنصر*</label>
                    <input type="file" name="file" class="form-control" />
                 </div>
                 <div class="col-md-12 mt-3">
@@ -61,9 +61,16 @@
         </div>
     </form>
 </div>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+
+    $('.dropify').dropify()
+
+</script>
 
 <script>
-    $('.dropify').dropify()
 
     $(document).ready(function () {
         $('.subject_id').on('change', function () {

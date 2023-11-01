@@ -28,10 +28,12 @@
                                 <tr class="fw-bolder text-muted bg-light">
                                     <th class="min-w-25px">#</th>
                                     <th class="min-w-25px">لون الخلفية</th>
-                                    <th class="min-w-50px">العنوان</th>
+                                    <th class="min-w-25px">محتوي الشهر(مثال شهر 1)</th>
+                                    <th class="min-w-50px">عنوان المرجع</th>
+                                    <th class="min-w-50px">الصف الدراسي</th>
                                     <th class="min-w-50px">التيرم</th>
-                                    <th class="min-w-50px">الصف</th>
-                                    <th class="min-w-50px">الوصف</th>
+                                    <th class="min-w-50px">الملف الورقي للكتاب</th>
+                                    <th class="min-w-50px">ملاحظات</th>
                                     <th class="min-w-50px rounded-end">العمليات</th>
                                 </tr>
                             </thead>
@@ -89,36 +91,16 @@
 @endsection
 @section('ajaxCalls')
     <script>
-        var columns = [{
-                data: 'id',
-                name: 'id'
-            },
-            {
-                data: 'background_color',
-                name: 'background_color'
-            },
-            {
-                data: 'title_ar',
-                name: 'title_ar'
-            },
-            {
-                data: 'term_id',
-                name: 'term_id'
-            },
-            {
-                data: 'season_id',
-                name: 'season_id'
-            },
-            {
-                data: 'description_ar',
-                name: 'description_en'
-            },
-            {
-                data: 'action',
-                name: 'action',
-                orderable: false,
-                searchable: false
-            },
+        var columns = [
+            {data: 'id', name: 'id'},
+            {data: 'background_color', name: 'background_color'},
+            {data: 'month', name: 'month'},
+            {data: 'title_ar', name: 'title_ar'},
+            {data: 'season_id', name: 'season_id'},
+            {data: 'term_id', name: 'term_id'},
+            {data: 'description_ar', name: 'description_ar'},
+            {data: 'file', name: 'file'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{ route('guide.index') }}', columns);
         // Delete Using Ajax

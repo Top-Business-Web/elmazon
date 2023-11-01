@@ -9,6 +9,7 @@ use App\Models\Season;
 use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
 use App\Models\SubjectClass;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -42,13 +43,20 @@ class GuideController extends Controller
                 })
                 ->editColumn('background_color', function ($guides) {
                     return '<input type="color" class="form-control" name="color"
-                           value="'. $guides->color .'" disabled>';
+                           value="'. $guides->background_color .'" disabled>';
                 })
                 ->editColumn('term_id', function ($guides) {
-                    return '<td>' . $guides->term->name_ar . '</td>';
+                    return  $guides->term->name_ar;
                 })
                 ->editColumn('season_id', function ($guides) {
-                    return '<td>' . $guides->season->name_ar . '</td>';
+                    return $guides->season->name_ar;
+                })
+                ->editColumn('file', function ($items) {
+
+                    return '<a href="' . asset($items->file) . '">
+                                رابط الملف الورقي للكتاب
+                            </a>';
+
                 })
                 ->escapeColumns([])
                 ->make(true);
@@ -91,9 +99,12 @@ class GuideController extends Controller
     {
 
         $subject = $request->id;
-        $lessons = Lesson::where('subject_class_id', $subject)->get();
+        $lessons = Lesson::query()
+        ->where('subject_class_id', $subject)
+            ->select('id','name_ar')
+            ->get();
 
-        $output = '<option value="" style="text-align: center">اختر الوحدة</option>';
+        $output = '<option value="" style="text-align: center">اختر الدرس</option>';
 
         foreach ($lessons as $lesson) {
             $output .= '<option value="' . $lesson->id . '" style="text-align: center">' . $lesson->name_ar . ' </option>';
@@ -101,7 +112,7 @@ class GuideController extends Controller
         if ($lessons->count() > 0) {
             return $output;
         } else {
-            return '<option value="" style="text-align: center">لا يوجد وحدات</option>';
+            return '<option value="" style="text-align: center">لا يوجد دروس تابعه لهذا الفصل</option>';
         }
 
     }
@@ -186,28 +197,44 @@ class GuideController extends Controller
                        ';
                 })
                 ->editColumn('subject_class_id', function ($items) {
-                    return '<td>' . @$items->subjectClass->title_ar . '</td>';
+                    return '<td>' . @$items->subjectClass->name_ar . '</td>';
                 })
                 ->editColumn('lesson_id', function ($items) {
-                    return '<td>' . @$items->lesson->title_ar . '</td>';
+                    return '<td>' . @$items->lesson->name_ar . '</td>';
                 })
+
                 ->editColumn('file', function ($items) {
-                    if ($items->file)
-                        return '<a href="' . asset('assets/uploads/guides/answers/'.$items->file) . '">
-                                لينك ملف المراجعة
+
+                        return '<a href="' . asset($items->file) . '">
+                                رابط ملف المراجعه
                             </a>';
+
                 })
                 ->editColumn('answer_video_file', function ($items) {
-                    if ($items->answer_video_file)
-                        return '<a href="' . asset('assets/uploads/guides/answers/'.$items->answer_video_file) . '">
-                                لينك الفيديو
+                    if ($items->answer_video_file){
+
+                        return '<a href="' . asset($items->answer_video_file) . '">
+                                رابط فيديو الاجابه
                             </a>';
+                    }else{
+
+                        return '<button type="button" class="btn btn-pill btn-danger-light">لا يوجد فيديو</button>';
+
+                    }
+
                 })
                 ->editColumn('answer_pdf_file', function ($items) {
-                    if ($items->answer_pdf_file)
-                        return '<a href="' . asset('assets/uploads/guides/answers/'.$items->answer_pdf_file) . '">
-                                لينك الملف الورقي
+                    if ($items->answer_pdf_file){
+
+                        return '<a href="' . asset($items->answer_pdf_file) . '">
+                               رابط ملف الاجابه الورقي
                             </a>';
+                    }else{
+
+                        return '<button type="button" class="btn btn-pill btn-danger-light">لا يوجد ملف اجابه ورقي</button>';
+
+                    }
+
                 })
                 ->escapeColumns([])
                 ->make(true);
@@ -219,7 +246,20 @@ class GuideController extends Controller
 
     public function addItem($id)
     {
-        $subjects = SubjectClass::all();
+
+        $guide = Guide::query()
+            ->where('id','=',$id)
+            ->first();
+
+
+        $subjects = SubjectClass::query()
+            ->whereHas('term',fn (Builder $builder) =>
+            $builder->where('status', '=', 'active')
+                ->where('season_id', '=', $guide->season_id))
+            ->where('season_id', '=', $guide->season_id)
+            ->select('id','name_ar')
+            ->get();
+
         return view('admin.guides.parts.add-item', compact('subjects', 'id'));
     }
 
@@ -239,9 +279,7 @@ class GuideController extends Controller
         if($request->hasFile('answer_video_file')){
             $inputs['answer_video_file'] = $this->saveImage($request->answer_video_file, 'assets/uploads/guides/answers', 'answer_video_file');
         }
-        if($request->hasFile('icon')){
-            $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guides/file', 'icon');
-        }
+
 
 
         if (Guide::create($inputs)) {
@@ -254,8 +292,20 @@ class GuideController extends Controller
 
     public function editItem($id)
     {
-        $guide = Guide::find($id);
-        $subjects = SubjectClass::all();
+        $guide = Guide::with(['subjectClass','lesson'])->find($id);
+
+        $checkParentGuide = Guide::query()
+            ->where('id','=',$guide->from_id)
+            ->first();
+
+        $subjects = SubjectClass::query()
+            ->whereHas('term',fn (Builder $builder) =>
+            $builder->where('status', '=', 'active')
+                ->where('season_id', '=', $checkParentGuide->season_id))
+            ->where('season_id', '=', $checkParentGuide->season_id)
+            ->select('id','name_ar')
+            ->get();
+
         return view('admin.guides.parts.update-item', compact('subjects', 'guide'));
     }
 
@@ -277,9 +327,7 @@ class GuideController extends Controller
         if($request->hasFile('answer_video_file')){
             $inputs['answer_video_file'] = $this->saveImage($request->answer_video_file, 'assets/uploads/guides/answers', 'file');
         }
-        if($request->hasFile('icon')){
-            $inputs['icon'] = $this->saveImage($request->icon, 'assets/uploads/guides/file', 'file');
-        }
+
 
 
         if ($items->update($inputs)) {

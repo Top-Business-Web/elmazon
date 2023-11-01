@@ -13,6 +13,7 @@ class Guide extends Model
     protected $fillable = [
         'title_ar',
         'title_en',
+        'month',
         'description_ar',
         'description_en',
         'from_id',

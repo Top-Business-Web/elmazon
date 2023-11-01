@@ -5,45 +5,44 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="section_name_ar" class="form-control-label">العنوان بالعربية</label>
+                    <label for="section_name_ar" class="form-control-label">عنوان العنصر باللغه العربيه</label>
                     <input type="text" class="form-control" name="title_ar">
                 </div>
                 <div class="col-md-12 mt-3">
-                    <label for="section_name_en" class="form-control-label">العنوان بالانجليزية</label>
+                    <label for="section_name_en" class="form-control-label">عنوان العنصر باللغه الانجليزيه</label>
                     <input type="text" class="form-control" name="title_en">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="name_ar" class="form-control-label">الوحدة</label>
-                    <Select name="subject_class_id" id="subject_id" class="form-control subject_id">
-                        <option selected disabled style="text-align: center">اختار الوحدة</option>
+                    <label for="name_ar" class="form-control-label">جميع الفصول</label>
+                    <Select name="subject_class_id" id="subject_id" class="form-control subject_id select2">
+                        <option selected disabled >اختر فصل معين</option>
                         @foreach($subjects as $subject)
-                            <option value="{{ $subject->id }}"
-                                    style="text-align: center">{{ $subject->name_ar }}</option>
+                            <option value="{{ $subject->id }}">{{ $subject->name_ar }}</option>
                         @endforeach
                     </Select>
                 </div>
                 <div class="col-md-12 mt-3">
-                    <label for="">الدرس</label>
-                    <select name="lesson_id" id="lesson_id" class="form-control lesson_id">
-                        <option value="" style="text-align: center">الكل</option>
+                    <label for="">جميع الدروس</label>
+                    <select name="lesson_id" id="lesson_id" class="form-control lesson_id select2">
+                        <option value="" >اختر درس</option>
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="name_ar" class="form-control-label">النوع</label>
-                    <Select name="file_type" id="file_type" class="form-control file_type">
-                        <option selected disabled style="text-align: center">اختار النوع</option>
-                        <option style="text-align: center" value="video">فيديو</option>
-                        <option style="text-align: center" value="pdf">ملف ورقي</option>
+                    <label for="name_ar" class="form-control-label">نوع الملف المرفق</label>
+                    <Select name="file_type" id="file_type" class="form-control file_type select2">
+                        <option selected disabled>اختار النوع</option>
+                        <option value="pdf">ملف ورقي</option>
+                        <option value="video">فيديو</option>
                     </Select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="file" class="form-control-label">ملف المراجعة</label>
+                    <label for="file" class="form-control-label">ارفق الملف الورقي او الفيديو لهذا العنصر*</label>
                    <input type="file" name="file" class="form-control"/>
                 </div>
                 <div class="col-md-12 mt-3">
@@ -63,8 +62,16 @@
     </form>
 </div>
 
+
 <script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+
     $('.dropify').dropify()
+
+</script>
+<script>
 
     $(document).ready(function () {
         $('.subject_id').on('change', function () {
