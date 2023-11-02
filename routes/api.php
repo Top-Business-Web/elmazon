@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\OnBoardingController;
 use App\Http\Controllers\Api\Payment;
 use App\Http\Controllers\Api\ExamEntry\ExamEntryController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\PayMob\CheckoutController;
 use App\Http\Controllers\Api\StudentReport\ReportController;
 use App\Http\Controllers\Api\Report\ReportController as ReportStudentController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
@@ -252,12 +253,25 @@ Route::group(['middleware' => 'lang'], function (){
 
         Route::get('all-months',[PaymentController::class,'allMonths']);
         Route::post('add-payment-by-student',[PaymentController::class,'addPaymentByStudent']);
+        Route::post('check-money-paid-with-discount',[PaymentController::class,'checkMoneyPaidWithDiscount']);
+
+    });
+
+
+    Route::post('/processed',[CheckoutController::class,'index']);
+
+    Route::get('/callback', function (Request $request){
+
+        return $request->all();
 
     });
 
 });
 
-//        Route::post('/payments/pay',[Payment::class,'pay']);
-//        Route::get('/payments/pay_callback',[Payment::class,'pay_callback']);
-//        Route::get('/checkout',[Payment::class,'checkout']);
-        //add data
+/*
+    Card number : 4987654321098769
+    Cardholder Name : Test Account
+    Expiry Month : 12
+    Expiry year : 25
+    CVV : 123
+ */

@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '5a1e56cbc2b6993211bc38d6b603e7af0c593776',
+    'reference' => '03dc22b129c5bac23e6db695492f3d9c8818baeb',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -481,7 +481,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '5a1e56cbc2b6993211bc38d6b603e7af0c593776',
+      'reference' => '03dc22b129c5bac23e6db695492f3d9c8818baeb',
     ),
     'laravel/sail' => 
     array (
@@ -1119,6 +1119,15 @@
       array (
         0 => '4.7.4',
       ),
+    ),
+    'samir-hussein/paymob' => 
+    array (
+      'pretty_version' => '2.0',
+      'version' => '2.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '5e7b59aba9fa810076925da9a17e02373ae494a4',
     ),
     'sebastian/cli-parser' => 
     array (

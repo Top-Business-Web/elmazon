@@ -174,6 +174,9 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
 
+        //in providers
+        PayMob\PayMobServiceProvider::class,
+
 
     ],
 
@@ -232,6 +235,8 @@ return [
         'Webp' => Buglinjo\LaravelWebp\Facades\Webp::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        //in aliases
+        'PayMob' => PayMob\Facades\PayMob::class,
 
     ],
 

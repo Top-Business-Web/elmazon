@@ -6349,6 +6349,47 @@
             "install-path": "../ramsey/uuid"
         },
         {
+            "name": "samir-hussein/paymob",
+            "version": "2.0",
+            "version_normalized": "2.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/samir-hussein/paymob.git",
+                "reference": "5e7b59aba9fa810076925da9a17e02373ae494a4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/samir-hussein/paymob/zipball/5e7b59aba9fa810076925da9a17e02373ae494a4",
+                "reference": "5e7b59aba9fa810076925da9a17e02373ae494a4",
+                "shasum": ""
+            },
+            "time": "2023-01-24T23:40:17+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "PayMob\\": "paymob/laravel",
+                    "Paymob\\": "paymob"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Samir Ebrahim Hussein",
+                    "email": "samirhussein274@gmail.com"
+                }
+            ],
+            "description": "paymob payment gateway",
+            "support": {
+                "issues": "https://github.com/samir-hussein/paymob/issues",
+                "source": "https://github.com/samir-hussein/paymob/tree/2.0"
+            },
+            "install-path": "../samir-hussein/paymob"
+        },
+        {
             "name": "sebastian/cli-parser",
             "version": "1.0.1",
             "version_normalized": "1.0.1.0",
