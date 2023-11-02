@@ -122,8 +122,10 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
             'PhpParser\\' => 10,
             'PhpOption\\' => 10,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
+            'Paymob\\' => 7,
             'PayPalHttp\\' => 11,
             'PayPalCheckoutSdk\\' => 18,
+            'PayMob\\' => 7,
         ),
         'O' => 
         array (
@@ -432,6 +434,10 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         array (
             0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
         ),
+        'Paymob\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/samir-hussein/paymob/paymob',
+        ),
         'PayPalHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/paypal/paypalhttp/lib/PayPalHttp',
@@ -439,6 +445,10 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'PayPalCheckoutSdk\\' => 
         array (
             0 => __DIR__ . '/..' . '/paypal/paypal-checkout-sdk/lib/PayPalCheckoutSdk',
+        ),
+        'PayMob\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/samir-hussein/paymob/paymob/laravel',
         ),
         'Opis\\Closure\\' => 
         array (
@@ -682,6 +692,7 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'AMFReader' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio-video.flv.php',
         'AMFStream' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio-video.flv.php',
         'AVCSequenceParameterSetReader' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio-video.flv.php',
+        'App\\Console\\Commands\\LogCron' => __DIR__ . '/../..' . '/app/Console/Commands/LogCron.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Exports\\MotivationalExport' => __DIR__ . '/../..' . '/app/Exports/MotivationalExport.php',
@@ -750,7 +761,9 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'App\\Http\\Controllers\\Api\\MonthlyPlan\\MonthlyPlanController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/MonthlyPlan/MonthlyPlanController.php',
         'App\\Http\\Controllers\\Api\\Notes\\NoteController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Notes/NoteController.php',
         'App\\Http\\Controllers\\Api\\OnBoardingController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/OnBoardingController.php',
+        'App\\Http\\Controllers\\Api\\PayMob\\PayMobController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/PayMob/PayMobController.php',
         'App\\Http\\Controllers\\Api\\Payment' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Payment.php',
+        'App\\Http\\Controllers\\Api\\PaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/PaymentController.php',
         'App\\Http\\Controllers\\Api\\Report\\ReportController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Report/ReportController.php',
         'App\\Http\\Controllers\\Api\\StudentReport\\ReportController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/StudentReport/ReportController.php',
         'App\\Http\\Controllers\\Api\\SubjectClass\\SubjectClassController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/SubjectClass/SubjectClassController.php',
@@ -819,6 +832,7 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'App\\Http\\Requests\\StoreAdminRequest' => __DIR__ . '/../..' . '/app/Http/Requests/StoreAdminRequest.php',
         'App\\Http\\Requests\\StoreCountry' => __DIR__ . '/../..' . '/app/Http/Requests/StoreCountry.php',
         'App\\Http\\Requests\\StoreLesson' => __DIR__ . '/../..' . '/app/Http/Requests/StoreLesson.php',
+        'App\\Http\\Requests\\StoreLiveExam' => __DIR__ . '/../..' . '/app/Http/Requests/StoreLiveExam.php',
         'App\\Http\\Requests\\StoreNotification' => __DIR__ . '/../..' . '/app/Http/Requests/StoreNotification.php',
         'App\\Http\\Requests\\StorePaperSheetRequest' => __DIR__ . '/../..' . '/app/Http/Requests/StorePaperSheetRequest.php',
         'App\\Http\\Requests\\StoreSeason' => __DIR__ . '/../..' . '/app/Http/Requests/StoreSeason.php',
@@ -844,6 +858,7 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'App\\Http\\Resources\\AllExamNewResource' => __DIR__ . '/../..' . '/app/Http/Resources/AllExamNewResource.php',
         'App\\Http\\Resources\\AllExamResource' => __DIR__ . '/../..' . '/app/Http/Resources/AllExamResource.php',
         'App\\Http\\Resources\\AllExamsDegreeResource' => __DIR__ . '/../..' . '/app/Http/Resources/AllExamsDegreeResource.php',
+        'App\\Http\\Resources\\AllMonthsResource' => __DIR__ . '/../..' . '/app/Http/Resources/AllMonthsResource.php',
         'App\\Http\\Resources\\AnswerResource' => __DIR__ . '/../..' . '/app/Http/Resources/AnswerResource.php',
         'App\\Http\\Resources\\ChooseLiveExamResource' => __DIR__ . '/../..' . '/app/Http/Resources/ChooseLiveExamResource.php',
         'App\\Http\\Resources\\CityResource' => __DIR__ . '/../..' . '/app/Http/Resources/CityResource.php',
@@ -5023,6 +5038,9 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'PHPUnit\\Util\\Xml\\SuccessfulSchemaDetectionResult' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml/SuccessfulSchemaDetectionResult.php',
         'PHPUnit\\Util\\Xml\\ValidationResult' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml/ValidationResult.php',
         'PHPUnit\\Util\\Xml\\Validator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml/Validator.php',
+        'PayMob\\Facades\\PayMob' => __DIR__ . '/..' . '/samir-hussein/paymob/paymob/laravel/Facades/PayMob.php',
+        'PayMob\\PayMob' => __DIR__ . '/..' . '/samir-hussein/paymob/paymob/laravel/PayMob.php',
+        'PayMob\\PayMobServiceProvider' => __DIR__ . '/..' . '/samir-hussein/paymob/paymob/laravel/PayMobServiceProvider.php',
         'PayPalCheckoutSdk\\Core\\AccessToken' => __DIR__ . '/..' . '/paypal/paypal-checkout-sdk/lib/PayPalCheckoutSdk/Core/AccessToken.php',
         'PayPalCheckoutSdk\\Core\\AccessTokenRequest' => __DIR__ . '/..' . '/paypal/paypal-checkout-sdk/lib/PayPalCheckoutSdk/Core/AccessTokenRequest.php',
         'PayPalCheckoutSdk\\Core\\AuthorizationInjector' => __DIR__ . '/..' . '/paypal/paypal-checkout-sdk/lib/PayPalCheckoutSdk/Core/AuthorizationInjector.php',
@@ -5063,6 +5081,7 @@ class ComposerStaticInit44935ac6a533c63c3b188bccddf2191f
         'PayPalHttp\\Serializer\\Json' => __DIR__ . '/..' . '/paypal/paypalhttp/lib/PayPalHttp/Serializer/Json.php',
         'PayPalHttp\\Serializer\\Multipart' => __DIR__ . '/..' . '/paypal/paypalhttp/lib/PayPalHttp/Serializer/Multipart.php',
         'PayPalHttp\\Serializer\\Text' => __DIR__ . '/..' . '/paypal/paypalhttp/lib/PayPalHttp/Serializer/Text.php',
+        'Paymob\\PayMob' => __DIR__ . '/..' . '/samir-hussein/paymob/paymob/PayMob.php',
         'PharIo\\Manifest\\Application' => __DIR__ . '/..' . '/phar-io/manifest/src/values/Application.php',
         'PharIo\\Manifest\\ApplicationName' => __DIR__ . '/..' . '/phar-io/manifest/src/values/ApplicationName.php',
         'PharIo\\Manifest\\Author' => __DIR__ . '/..' . '/phar-io/manifest/src/values/Author.php',
