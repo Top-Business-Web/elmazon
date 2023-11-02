@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\PayMob;
 use App\Models\Payment;
+use Illuminate\Http\JsonResponse;
 use PayMob\Facades\PayMob;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -9,12 +10,11 @@ use App\Http\Controllers\Controller;
 class PayMobController extends Controller{
 
 
-    public static function pay(float $total_price,int $order_id)
+    public static function pay(float $total_price,int $order_id): JsonResponse
     {
 
         $auth = PayMob::AuthenticationRequest();
 
-//        return $auth;
         $order = PayMob::OrderRegistrationAPI([
             'auth_token' => $auth->token,
             'amount_cents' => $total_price * 100, //put your price
@@ -24,7 +24,6 @@ class PayMobController extends Controller{
             'items' => [] // all items information or leave it empty
         ]);
 
-//        return $order;
 
         $PaymentKey = PayMob::PaymentKeyRequest([
             'auth_token' => $auth->token,
@@ -47,6 +46,7 @@ class PayMobController extends Controller{
                 "state" => "Utah"
             ]
         ]);
+
 
 
         return self::returnResponseDataApi(null,"https://accept.paymob.com/api/acceptance/iframes/798586?payment_token=$PaymentKey->token",200);
