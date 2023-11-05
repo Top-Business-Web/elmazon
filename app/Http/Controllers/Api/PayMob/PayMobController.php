@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 class PayMobController extends Controller{
 
 
-    public static function pay(float $total_price,int $order_id): JsonResponse
+    public static function pay(float $total_price,int $order_id)
     {
 
         $auth = PayMob::AuthenticationRequest();
@@ -50,7 +50,7 @@ class PayMobController extends Controller{
 
 
         return response()->json([
-            'data' => "https://accept.paymob.com/api/acceptance/iframes/798586?payment_token=$PaymentKey->token",
+            'data' => "https://accept.paymob.com/api/acceptance/iframes/758783?payment_token=$PaymentKey->token",
             'message' => "تم الوصول الي لينك الدفع الالكتروني برجاء التوجهه الي عمليه الدفع لاتمام الدفع المبلغ",
             'code' => 200,
 
