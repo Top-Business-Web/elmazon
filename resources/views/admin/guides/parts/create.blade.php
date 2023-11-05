@@ -12,15 +12,6 @@
                     <input type="text" class="form-control" name="title_en">
                 </div>
 
-                <div class="col-md-12 mt-3">
-                    <label for="head">شهر</label>
-                    <select name="month" class="form-control select2">
-                        <option value="">اختر شهر</option>
-                        <?php for ($i = 1; $i <= 12; $i++){
-                            echo '<option  value="' . $i . '">' . date( 'F', strtotime( "$i/12/10" ) ) . '</option>';
-                        }?>
-                    </select>
-                </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">

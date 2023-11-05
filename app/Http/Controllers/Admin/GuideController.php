@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\UpdateItemRequest;
 use App\Models\Term;
 use App\Models\Guide;
 use App\Models\Lesson;
@@ -311,7 +312,7 @@ class GuideController extends Controller
 
 
 
-    public function updateItem(Request $request, $id): JsonResponse
+    public function updateItem(UpdateItemRequest $request, $id): JsonResponse
     {
         $items = Guide::find($id);
         $inputs = $request->all();
@@ -327,8 +328,6 @@ class GuideController extends Controller
         if($request->hasFile('answer_video_file')){
             $inputs['answer_video_file'] = $this->saveImage($request->answer_video_file, 'assets/uploads/guides/answers', 'file');
         }
-
-
 
         if ($items->update($inputs)) {
             return response()->json(['status' => 200]);
