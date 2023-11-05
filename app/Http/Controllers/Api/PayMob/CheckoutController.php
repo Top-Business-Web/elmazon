@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CheckoutController extends Controller
 {
-    public function index(): JsonResponse
+    public function index()
     {
 
         $rules = [
