@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 class PayMobController extends Controller{
 
 
-    public static function pay(float $total_price,int $order_id)
+    public static function pay(float $total_price,int $order_id): JsonResponse
     {
 
         $auth = PayMob::AuthenticationRequest();
@@ -62,9 +62,7 @@ class PayMobController extends Controller{
 
     public function checkout_processed(Request $request){
 
-        DB::beginTransaction();
 
-        try {
             $request_hmac = $request->hmac;
             $calc_hmac = PayMob::calcHMAC($request);
 
@@ -87,16 +85,6 @@ class PayMobController extends Controller{
                     ]);
                 }
             }
-
-            DB::commit();
-
-        }catch (\Exception $exception){
-
-            DB::rollback();
-
-            return self::returnResponseDataApi(null, "يوجد خطاء ما بالشبكه او السيرفر فشلت عمليه الدفع الالكتروني برجاء اعاده المحاوله مره اخري", 500,500);
-
-        }
     }
 
 

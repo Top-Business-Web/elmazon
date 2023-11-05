@@ -263,9 +263,9 @@ Route::group(['middleware' => 'lang'], function (){
     /*
      * PayMob integration
      */
-    Route::post('/processed',[CheckoutController::class,'index']);
+    Route::post('/processed',[CheckoutController::class,'index'])->middleware('jwt');
     Route::post('/checkout/processed',[PayMobController::class,'checkout_processed']);
-    Route::get('/callback',[PayMobController::class,'responseStatus']);
+    Route::get('/checkout/response',[PayMobController::class,'responseStatus']);
 
 });
 
