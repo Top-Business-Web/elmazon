@@ -32,6 +32,7 @@ class GuideStoreRequest extends FormRequest
             'icon' => 'required|mimes:jpg,jpeg,png',
             'background_color' => 'required',
             'season_id' => 'required',
+            'term_id' => 'required',
         ];
     }
 

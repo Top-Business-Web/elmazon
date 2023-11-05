@@ -32,6 +32,7 @@ class GuideUpdateRequest extends FormRequest
             'icon' => 'sometimes|mimes:jpg,jpeg,png',
             'background_color' => 'required',
             'season_id' => 'required',
+            'term_id' => 'required',
         ];
     }
 
