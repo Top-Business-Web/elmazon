@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\PayMob;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllMonthsResource;
@@ -13,7 +13,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller{
 
@@ -63,18 +62,12 @@ class PaymentController extends Controller{
                    ->first();
 
                $data[$arrayValues[$i]] = [
-                   'id' =>$arrayKeys[$i],
+                   'id' => $arrayKeys[$i],
                    'name' => $nameOfMonths[$i],
                    'price' => $price ? ($price->free == "yes" ? 0 : (auth('user-api')->user()->center == 'in' ? $price->price_in_center : $price->price_out_center)) : 0,
                    'free_status' => $price ? ($price->free == "yes" ? "free" : "not_free") : "unavailable",
                    'content' => $result,
                ];
-//             if (!$result->isEmpty()) {
-//                 $data[$value] = $result;
-//
-//              } else {
-//                   unset($data[$value]);
-//             }
 
            }
 
@@ -85,6 +78,7 @@ class PaymentController extends Controller{
     public function checkMoneyPaidWithDiscount(Request $request): JsonResponse
     {
 
+        //جلب جميع اشتراكات الشهور للطالب بالسنه الحاليه
         $userSubscribes = UserSubscribe::query()
             ->where('student_id', auth('user-api')->id())
             ->where('year', Carbon::now()->format('Y'))
@@ -107,6 +101,8 @@ class PaymentController extends Controller{
                 ->where('discount_coupon_id','=', $checkCoupon->id)
                 ->count();
 
+
+            //جمع مبالغ الشهور اللي الطالب بعتها
             $totalPrice = [];
             foreach ($request->data as $item) {
 
@@ -125,12 +121,15 @@ class PaymentController extends Controller{
             }
 
 
+            //تفقد حاله كود الخصم هل انتهي ام اكتمل عدد مستخدمين هذا الكود
             $couponStatus = ($checkCoupon->is_enabled == 0 || Carbon::now()->format('Y-m-d') > $checkCoupon->valid_to) ? "unavailable" :
                 (DiscountCouponStudent::query()
             ->where('discount_coupon_id', $checkCoupon->id)->count() == $checkCoupon->total_usage
                     ? "total_used_completed"
                     : "available");
 
+
+            //تفقد حاله المبلغ المدفوع اذا كان نوع الخصم بال % او مبلغ
             $totalAfterDiscount = ($couponStatus === "available")
                 ? ($checkCoupon->discount_type == 'per'
                     ? (array_sum($totalPrice) - ((array_sum($totalPrice) * $checkCoupon->discount_amount) / 100))
@@ -165,6 +164,7 @@ class PaymentController extends Controller{
 
         } else {
 
+            //تفقد المبلغ المدفوع في حاله عدم ادخال اي كود مجاني
             $totalPrice = [];
             foreach ($request->data as $item) {
 
@@ -198,6 +198,7 @@ class PaymentController extends Controller{
 
 
 
+    //Response json total after discount
     public static function sendResponseTotalAfterDiscount($total,$status,$totalAfterDiscount,$message,$code): JsonResponse
     {
 

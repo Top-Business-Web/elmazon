@@ -82,7 +82,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
 
-
             $token = Auth::guard('user-api')->attempt(['code' => $request->code, 'password' => '123456', 'user_status' => 'active']);
 
             $user_data = User::query()

@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\Api\AboutMe\AboutMeController;
 use App\Http\Controllers\Api\AdsController;
+use App\Http\Controllers\Api\AllExamsUsersDegreeController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Comment\CommentController;
 use App\Http\Controllers\Api\Degree\DegreeController;
 use App\Http\Controllers\Api\DegreeOfExamsDetails\DegreeExamsDetailsController;
+use App\Http\Controllers\Api\ExamEntry\ExamEntryController;
 use App\Http\Controllers\Api\ExamYourselfTest\TestYourselfExamsController;
 use App\Http\Controllers\Api\Favorites\FavoriteController;
 use App\Http\Controllers\Api\FullExams\FullExamController;
@@ -16,16 +18,14 @@ use App\Http\Controllers\Api\LessonDetails\LessonDetailsController;
 use App\Http\Controllers\Api\LifeExam\LifeExamController;
 use App\Http\Controllers\Api\LiveExam\LiveExamController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
-use App\Http\Controllers\Api\AllExamsUsersDegreeController;
 use App\Http\Controllers\Api\Notes\NoteController;
 use App\Http\Controllers\Api\OnBoardingController;
 use App\Http\Controllers\Api\Payment;
-use App\Http\Controllers\Api\ExamEntry\ExamEntryController;
-use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PayMob\CheckoutController;
+use App\Http\Controllers\Api\PayMob\PaymentController;
 use App\Http\Controllers\Api\PayMob\PayMobController;
-use App\Http\Controllers\Api\StudentReport\ReportController;
 use App\Http\Controllers\Api\Report\ReportController as ReportStudentController;
+use App\Http\Controllers\Api\StudentReport\ReportController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
 use App\Http\Controllers\Api\SubscribeController;
 use App\Http\Controllers\Api\VideoRate\VideoRateController;
@@ -249,7 +249,9 @@ Route::group(['middleware' => 'lang'], function (){
 
 
 
-    //start payment
+    /*
+     * Content of months and check money paid with coupon to discount
+     */
     Route::group(['prefix' => 'payments','middleware' => 'jwt'], function (){
 
         Route::get('all-months',[PaymentController::class,'allMonths']);
@@ -258,15 +260,12 @@ Route::group(['middleware' => 'lang'], function (){
 
     });
 
-
+    /*
+     * PayMob integration
+     */
     Route::post('/processed',[CheckoutController::class,'index']);
     Route::post('/checkout/processed',[PayMobController::class,'checkout_processed']);
-
-    Route::get('/callback', function (Request $request){
-
-        return $request->all();
-
-    });
+    Route::get('/callback',[PayMobController::class,'responseStatus']);
 
 });
 
