@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\PayMob;
 use App\Models\Payment;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use PayMob\Facades\PayMob;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -29,7 +30,7 @@ class PayMobController extends Controller{
             'auth_token' => $auth->token,
             'amount_cents' => $total_price * 100, //put your price
             'currency' => 'EGP',
-            'order_id' => $order->id,
+//            'order_id' => $order->id,
             "billing_data" => [ // put your client information
                 "apartment" => "803",
                 "email" => "claudette09@exa.com",
@@ -48,35 +49,68 @@ class PayMobController extends Controller{
         ]);
 
 
+        return response()->json([
+            'data' => "https://accept.paymob.com/api/acceptance/iframes/798586?payment_token=$PaymentKey->token",
+            'message' => "تم الوصول الي لينك الدفع الالكتروني برجاء التوجهه الي عمليه الدفع لاتمام الدفع المبلغ",
+            'code' => 200,
 
-        return self::returnResponseDataApi(null,"https://accept.paymob.com/api/acceptance/iframes/798586?payment_token=$PaymentKey->token",200);
+        ],200);
+
 
     }
 
 
     public function checkout_processed(Request $request){
 
-        $request_hmac = $request->hmac;
-        $calc_hmac = PayMob::calcHMAC($request);
+        DB::beginTransaction();
 
-        if ($request_hmac == $calc_hmac) {
-            $order_id = $request->obj['order']['merchant_order_id'];
-            $amount_cents = $request->obj['amount_cents'];
-            $transaction_id = $request->obj['id'];
+        try {
+            $request_hmac = $request->hmac;
+            $calc_hmac = PayMob::calcHMAC($request);
 
-            $order = Payment::find($order_id);
+            if ($request_hmac == $calc_hmac) {
+                $order_id = $request->obj['order']['merchant_order_id'];
+                $amount_cents = $request->obj['amount_cents'];
+                $transaction_id = $request->obj['id'];
 
-            if ($request->obj['success'] && ($order->total_price * 100) == $amount_cents) {
-                $order->update([
-                    'transaction_status' => 'finished',
-                    'transaction_id' => $transaction_id
-                ]);
-            } else {
-                $order->update([
-                    'transaction_status' => "failed",
-                    'transaction_id' => $transaction_id
-                ]);
+                $order = Payment::find($order_id);
+
+                if ($request->obj['success'] && ($order->total_price * 100) == $amount_cents) {
+                    $order->update([
+                        'transaction_status' => 'finished',
+                        'transaction_id' => $transaction_id
+                    ]);
+                } else {
+                    $order->update([
+                        'transaction_status' => "failed",
+                        'transaction_id' => $transaction_id
+                    ]);
+                }
             }
+
+            DB::commit();
+
+        }catch (\Exception $exception){
+
+            DB::rollback();
+
+            return self::returnResponseDataApi(null, "يوجد خطاء ما بالشبكه او السيرفر فشلت عمليه الدفع الالكتروني برجاء اعاده المحاوله مره اخري", 500,500);
+
+        }
+    }
+
+
+    public function responseStatus(Request $request): JsonResponse
+    {
+
+        if($request->status === true){
+
+            return self::returnResponseDataApi(null, "نجحت عمليه الدفع الالكتروني برجاء التوجهه الي الصفحه الرئيسيه من التطبيق", 200);
+
+        }else{
+
+            return self::returnResponseDataApi(null, "فشلت عمليه الدفع الالكتروني برجاء التوجهه الي الصفحه الرئيسيه من التطبيق", 420);
+
         }
     }
 
