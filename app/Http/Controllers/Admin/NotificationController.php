@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\NotificationStoreRequest;
 use App\Http\Requests\StoreNotification;
 use App\Models\Notification;
 use App\Models\Season;
@@ -69,7 +70,7 @@ class NotificationController extends Controller
 
     // Store Start
 
-    public function store(Request $request)
+    public function store(NotificationStoreRequest $request)
     {
         $inputs = $request->all();
         $inputs['image'] = '';
@@ -77,7 +78,7 @@ class NotificationController extends Controller
             $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/notification');
         }
 
-        $user = User::where('code', $request->user_id)->first();
+        $user = User::where('id', $request->user_id)->first();
 
         if ($request->has('user_id')) {
             $inputs['user_id'] = $user->id;
