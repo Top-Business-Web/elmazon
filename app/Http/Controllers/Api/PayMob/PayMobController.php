@@ -30,7 +30,7 @@ class PayMobController extends Controller{
             'auth_token' => $auth->token,
             'amount_cents' => $total_price * 100, //put your price
             'currency' => 'EGP',
-//            'order_id' => $order->id,
+            'order_id' => $order->id,
             "billing_data" => [ // put your client information
                 "apartment" => "803",
                 "email" => "claudette09@exa.com",
