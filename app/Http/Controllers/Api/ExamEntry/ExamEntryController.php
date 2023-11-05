@@ -222,10 +222,6 @@ class ExamEntryController extends Controller
 
             if (!$depends) {
 
-                DB::beginTransaction();
-
-                try {
-
                 if ($count_trying < $trying) {
 
 
@@ -453,13 +449,6 @@ class ExamEntryController extends Controller
                     return self::returnResponseDataApi(null, "لقد انتهيت من جميع محاولاتك لهذا الامتحان ولا يوجد لديك محاولات اخري", 415);
                 }
 
-            }catch (\Exception $exception){
-
-                DB::rollback();
-
-                return self::returnResponseDataApi(null, "يوجدخطاء ما في السيرفر وحركه تسجيل بيانات الامتحان  لم تسجل في سجل قاعده البيانات", 500,500);
-
-            }
 
 
             } else {
