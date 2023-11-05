@@ -23,11 +23,16 @@ class SubscribeController extends Controller
                 $start_year = date('Y');
                 $end_year = date('Y') + 1;
             }
-            $months = UserSubscribe::where('student_id',$user->id)->where(
-                function($query) use($start_year,$end_year){
+            $months = UserSubscribe::query()
+            ->where('student_id',$user->id)
+                ->where(function($query) use($start_year,$end_year){
                     return  $query->where('year',$start_year)->orWhere('year',$end_year);
                 }
-            )->pluck('month')->toArray();
+            )->pluck('month')
+                ->toArray();
+
+
+
             $subscribes = Subscribe::where('season_id','=',auth()->guard('user-api')->user()->season_id)
                     ->where(
                         function($query) use($start_year,$end_year){
