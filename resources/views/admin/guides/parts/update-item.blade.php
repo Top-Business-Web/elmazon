@@ -12,6 +12,16 @@
                     <label for="section_name_en" class="form-control-label">عنوان العنصر باللغه الانجليزيه</label>
                     <input type="text" class="form-control" value="{{ $guide->title_en }}" name="title_en">
                 </div>
+
+                <div class="col-md-12 mt-3">
+                    <label for="head">شهر</label>
+                    <select name="month" class="form-control select2" id="signup_birth_month">
+                        <option value="">اختر شهر</option>
+                        @for ($i = 1; $i <= 12; $i++){
+                        <option  value="{{$i}}" {{ $guide->month == $i ? 'selected' : ''}}> {{date( 'F', strtotime( "$i/12/10" ) )}}</option>
+                        @endfor
+                    </select>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">

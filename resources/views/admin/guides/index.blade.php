@@ -28,7 +28,6 @@
                                 <tr class="fw-bolder text-muted bg-light">
                                     <th class="min-w-25px">#</th>
                                     <th class="min-w-25px">لون الخلفية</th>
-                                    <th class="min-w-25px">محتوي الشهر(مثال شهر 1)</th>
                                     <th class="min-w-50px">عنوان المرجع</th>
                                     <th class="min-w-50px">الصف الدراسي</th>
                                     <th class="min-w-50px">التيرم</th>
@@ -94,7 +93,6 @@
         var columns = [
             {data: 'id', name: 'id'},
             {data: 'background_color', name: 'background_color'},
-            {data: 'month', name: 'month'},
             {data: 'title_ar', name: 'title_ar'},
             {data: 'season_id', name: 'season_id'},
             {data: 'term_id', name: 'term_id'},

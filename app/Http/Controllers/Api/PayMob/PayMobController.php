@@ -98,7 +98,6 @@ class PayMobController extends Controller{
         }else{
 
             return self::returnResponseDataApi(null, "فشلت عمليه الدفع الالكتروني برجاء التوجهه الي الصفحه الرئيسيه من التطبيق", 420);
-
         }
     }
 

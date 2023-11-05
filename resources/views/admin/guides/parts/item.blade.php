@@ -30,6 +30,7 @@
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
                                 <th class="min-w-50px">عنوان العنصر</th>
+                                <th class="min-w-25px">محتوي الشهر(مثال شهر 1)</th>
                                 <th class="min-w-50px">الفصل</th>
                                 <th class="min-w-50px">الدرس</th>
                                 <th class="min-w-50px">  رابط ملف المراجعه</th>
@@ -96,6 +97,7 @@
         var columns = [
             {data: 'id', name: 'id'},
             {data: 'title_ar', name: 'title_ar'},
+            {data: 'month', name: 'month'},
             {data: 'subject_class_id', name: 'subject_class_id'},
             {data: 'lesson_id', name: 'lesson_id'},
             {data: 'file', name: 'file'},
