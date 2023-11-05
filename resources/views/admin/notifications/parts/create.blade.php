@@ -5,18 +5,18 @@
             <div class="row">
                 <div class="col-md-12">
                         <label for="name_ar" class="form-control-label">لمن الرسالة</label>
-                    <Select name="user_id" class="form-control notificationType" required>
+                    <Select name="user_id" class="form-control notificationType">
                         <option style="text-align: center" value="all">كل الطلاب</option>
                         <option style="text-align: center" value="user">اختر طالب</option>
                     </Select>
                 </div>
                 <div class="col-md-12 titleDiv">
                     <label for="name_ar" class="form-control-label">العنوان</label>
-                    <input type="text" class="form-control" name="title" required>
+                    <input type="text" class="form-control" name="title">
                 </div>
                 <div class="col-md-6 userSelect d-none">
                     <label for="name_ar" class="form-control-label">طالب</label>
-                    <input list="users" type="number" name="user_id" class="form-control student_code" placeholder="اكتب كود الطالب" required>
+                    <input list="users" type="number" name="user_id" class="form-control student_code" placeholder="اكتب كود الطالب">
                     <span id="status_code" style="background-color: #5cb85c"></span>
                     <datalist id="users">
                         @foreach($users as $user)
@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="season_id" class="form-control-label">الصف</label>
-                    <Select name="season_id" class="form-control" required>
+                    <Select name="season_id" class="form-control select2">
                         <option selected style="text-align: center">الكل</option>
                         @foreach($seasons as $season)
                             <option value="{{ $season->id }}"
@@ -40,7 +40,7 @@
 
                 <div class="col-md-6">
                     <label for="term_id" class="form-control-label">الترم</label>
-                    <Select name="term_id" class="form-control" required>
+                    <Select name="term_id" class="form-control">
 
                     </Select>
                 </div>
@@ -49,7 +49,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="name_en" class="form-control-label">الرسالة</label>
-                    <textarea class="form-control" name="body" required rows="10"></textarea>
+                    <textarea class="form-control" name="body" rows="10"></textarea>
                 </div>
             </div>
         </div>
@@ -67,6 +67,9 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
     $(document).ready(function () {
         $('select[name="season_id"]').on('change', function () {
             var season_id = $(this).val();
