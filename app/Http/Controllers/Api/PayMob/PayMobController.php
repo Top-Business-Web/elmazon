@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\PayMob;
 use App\Models\Payment;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use PayMob\Facades\PayMob;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

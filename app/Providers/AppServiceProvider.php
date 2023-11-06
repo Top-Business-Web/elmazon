@@ -28,8 +28,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength('191');
-//        View::share('logs',AdminLog::where('seen',0)->latest('created_at')->take(4)->get());
-//        View::share('setting',Setting::first());
-//        View::share('logsCount',AdminLog::where('seen',0)->get()->count());
+        View::share('logs',AdminLog::where('seen',0)->latest('created_at')->take(4)->get());
+        View::share('setting',Setting::first());
+        View::share('logsCount',AdminLog::where('seen',0)->get()->count());
     }
 }
