@@ -13,14 +13,17 @@ class CreateAnswersTable extends Migration
      */
     public function up()
     {
+        /*
+         اجابات الاسئله الاختياريه
+         */
         Schema::create('answers', function (Blueprint $table) {
 
             $table->bigIncrements('id');
-            $table->text('answer');
-            $table->string('answer_number')->nullable();
-            $table->enum('answer_status',['correct','un_correct'])->default('correct')->comment('Answer status');
+            $table->text('answer')->comment('الاجابه');
+            $table->string('answer_number')->comment('ترقيم الاجابه')->nullable();
+            $table->enum('answer_status',['correct','un_correct'])->default('correct')->comment('حاله الاجابه-صحيحه-غير صحيحه');
             $table->text('note')->nullable();
-            $table->unsignedBigInteger('question_id');
+            $table->unsignedBigInteger('question_id')->comment('رمز السؤال التابع لهذه الاجابه');
             $table->timestamps();
             $table->foreign('question_id')->references('id')->on('questions')->cascadeOnUpdate()->cascadeOnDelete();
 

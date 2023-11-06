@@ -13,14 +13,18 @@ class CreateExamSchedulesTable extends Migration
      */
     public function up()
     {
+
+        /*
+         جدول العد التنازلي للامتحان لجميع الصفوف الدراسيه
+         */
         Schema::create('exam_schedules', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->longText('image')->nullable();
-            $table->string('title_ar');
-            $table->string('title_en');
-            $table->text('description_ar');
-            $table->text('description_en');
-            $table->timestamp('date_time');
+            $table->longText('image')->comment('صوره العد التنازلي للامتحان')->nullable();
+            $table->string('title_ar')->comment('عنوان العد التنازلي-مثال-نصيحه هامه');
+            $table->string('title_en')->comment('عنوان العد التنازلي-مثال-Important advice');
+            $table->text('description_ar')->comment('وصف العد التنازلي باللغه العربيه');
+            $table->text('description_en')->comment('وصف العد التنازلي باللغه الانجليزيه');
+            $table->timestamp('date_time')->comment('موعد وتاريخ الامتحان');
             $table->unsignedBigInteger('term_id');
             $table->unsignedBigInteger('season_id');
             $table->foreign('term_id')->references('id')->on('terms')->cascadeOnUpdate()->cascadeOnDelete();

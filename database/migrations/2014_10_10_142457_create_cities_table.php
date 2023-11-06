@@ -13,6 +13,9 @@ class CreateCitiesTable extends Migration
      */
     public function up(){
 
+        /*
+         المحافظات
+         */
         Schema::create('cities', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name_ar');

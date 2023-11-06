@@ -13,6 +13,9 @@ class CreateNotesTable extends Migration
      */
     public function up()
     {
+        /*
+         جدول ملاحظات الطالب
+         */
         Schema::create('notes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title')->nullable();

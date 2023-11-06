@@ -13,11 +13,18 @@ class CreateSuggestionsTable extends Migration
      */
     public function up()
     {
+
+        /*
+         جدول الاقتراحات للطالب
+         */
         Schema::create('suggestions', function (Blueprint $table) {
 
             $table->bigIncrements('id');
             $table->string('suggestion')->nullable();
+            $table->longText('image')->nullable();
+            $table->text('audio')->nullable();
             $table->unsignedBigInteger('user_id');
+            $table->enum('type',['text','audio','file']);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
 

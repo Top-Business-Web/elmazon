@@ -13,17 +13,21 @@ class CreateQuestionsTable extends Migration
      */
     public function up()
     {
+        /*
+         بنك الاسئله في المنصه
+         */
         Schema::create('questions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->longText('question')->nullable();
-            $table->enum('type',['video','lesson','all_exam','subject_class','life_exam']);
-            $table->longText('image')->nullable();
-            $table->enum('file_type',['image','text']);
-            $table->enum('question_type',['choice','text']);
-            $table->integer('degree');
+            $table->longText('question')->comment('نص السؤال');
+            $table->enum('difficulty',['low','mid','high'])->comment('مستوي الصعوبه-سهل-متوسط-صعب');
+            $table->enum('type',['video','lesson','all_exam','subject_class','life_exam'])->comment('السؤال لانهي قسم-فصول-دروس-فيديوهات-امتحان شامل-امتحان لايف');
+            $table->longText('image')->comment('صوره مرفقه مع السؤال مثال رسومات')->nullable();
+            $table->enum('file_type',['image','text','together'])->comment('السؤال-صوره-نص-كلاهما');
+            $table->enum('question_type',['choice','text'])->comment('نوع السؤال-اختياري-مقالي');
+            $table->integer('degree')->comment('درجه السؤال');
             $table->text('note')->nullable();
             $table->unsignedBigInteger('season_id');
-            $table->unsignedBigInteger('term_id')->nullable();
+            $table->unsignedBigInteger('term_id');
             $table->morphs('examable');
             $table->timestamps();
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();

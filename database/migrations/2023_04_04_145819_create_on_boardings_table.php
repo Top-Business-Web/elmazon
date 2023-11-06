@@ -13,6 +13,10 @@ class CreateOnBoardingsTable extends Migration
      */
     public function up()
     {
+
+        /*
+         جدول صور ال on_boarding للتطبيق
+         */
         Schema::create('on_boardings', function (Blueprint $table) {
             $table->id();
             $table->string('title_ar');

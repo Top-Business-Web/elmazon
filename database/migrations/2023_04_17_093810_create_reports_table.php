@@ -13,9 +13,14 @@ class CreateReportsTable extends Migration
      */
     public function up()
     {
+
+        /*
+         جدول البلاغات للطلبه علي الفيديوهات (فيديوهات الشرح,فيديوهات الاساسيات,فيديوهات المراجعه)
+         */
         Schema::create('reports', function (Blueprint $table) {
+
             $table->bigIncrements('id');
-            $table->longText('report');
+            $table->longText('report')->comment('بلاغ الطالب علي الفيديو');
             $table->unsignedBigInteger('user_id');
             $table->enum('type',['video_resource','video_basic','video_part'])->comment('فيديو شرح اساسيات او فيديو مراجعه او فيديو شرح');
             $table->unsignedBigInteger('video_part_id')->nullable();

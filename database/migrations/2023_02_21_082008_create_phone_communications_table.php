@@ -13,10 +13,14 @@ class CreatePhoneCommunicationsTable extends Migration
      */
     public function up()
     {
+
+        /*
+         هواتف السنتر
+         */
         Schema::create('phone_communications', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('phone');
-            $table->string('note')->nullable();
+            $table->string('phone')->comment('رقم الهاتف');
+            $table->string('note')->comment('ملاحظات')->nullable();
             $table->timestamps();
         });
     }

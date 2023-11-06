@@ -14,13 +14,18 @@ class CreateVideoBasicsTable extends Migration
     public function up()
     {
 
-        //رفع فيديوهات اساسيات الفيزياء لكل المراحل
+        /*
+          فيديوهات الاساسيات لكل المراحل
+          */
         Schema::create('video_basics', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name_ar');
-            $table->string('name_en');
-            $table->integer('time')->comment('زمن الفيديو');
+            $table->string('name_ar')->comment('عنوان الفيديو باللغه العربيه');
+            $table->string('name_en')->comment('عنوان الفيديو باللغه الانجليزيه');
+            $table->string('background_color')->default('#48B8E0');
+            $table->time('time')->comment('زمن الفيديو');
             $table->longText('video_link');
+            $table->longText('youtube_link');
+            $table->boolean('is_youtube')->default(0);
             $table->tinyInteger('like_active')->default(0);
             $table->tinyInteger('view_active')->default(0);
             $table->timestamps();

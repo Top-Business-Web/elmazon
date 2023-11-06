@@ -13,6 +13,9 @@ class CreateUserScreenShotsTable extends Migration
      */
     public function up()
     {
+        /*
+         اضافه لقطات الشاشه للطالب
+         */
         Schema::create('user_screen_shots', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');

@@ -13,6 +13,9 @@ class CreateDiscountCouponsTable extends Migration
      */
     public function up()
     {
+        /*
+         كوبونات الخصم للطلبه
+         */
         Schema::create('discount_coupons', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('coupon');

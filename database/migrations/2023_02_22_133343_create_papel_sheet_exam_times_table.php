@@ -13,13 +13,15 @@ class CreatePapelSheetExamTimesTable extends Migration
      */
     public function up()
     {
+        /*
+         مواعيد الامتحان الورقي (تضاف عند اضافه امتحان ورقي جديد)
+         */
         Schema::create('papel_sheet_exam_times', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->time('from');
-            $table->time('to');
-            $table->unsignedBigInteger('papel_sheet_exam_id');
+            $table->time('from')->comment('موعد بدايه الامتحان الورقي بالقاعات');
+            $table->time('to')->comment('موعد نهايه الامتحان الورقي بالقاعات');
+            $table->unsignedBigInteger('papel_sheet_exam_id')->comment('رمز الامتحان الورقي');
             $table->timestamps();
-
             $table->foreign('papel_sheet_exam_id')->references('id')->on('papel_sheet_exams')->cascadeOnUpdate()->cascadeOnDelete();
 
         });

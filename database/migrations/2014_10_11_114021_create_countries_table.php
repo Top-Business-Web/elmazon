@@ -13,11 +13,14 @@ class CreateCountriesTable extends Migration
      */
     public function up()
     {
+        /*
+        المدن
+       */
         Schema::create('countries', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name_ar')->comment('اسم المحافظه بالعربي');
-            $table->string('name_en')->comment('اسم المحافظه بالانجليزي');
-            $table->unsignedBigInteger('city_id');
+            $table->string('name_ar')->comment('اسم المدينه بالعربي');
+            $table->string('name_en')->comment('اسم المدينه بالانجليزي');
+            $table->unsignedBigInteger('city_id')->comment('رمز المحافظه');
             $table->timestamps();
             $table->foreign('city_id')->references('id')->on('cities')->cascadeOnUpdate()->cascadeOnDelete();
         });

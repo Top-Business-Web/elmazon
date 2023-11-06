@@ -15,11 +15,11 @@ class CreateOnlineExamQuestionsTable extends Migration
     {
         Schema::create('online_exam_questions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('online_exam_id')->nullable();
-            $table->unsignedBigInteger('all_exam_id')->nullable();
-            $table->unsignedBigInteger('life_exam_id')->nullable();
+            $table->unsignedBigInteger('online_exam_id')->comment('رمز الامتحان الاونلاين')->nullable();
+            $table->unsignedBigInteger('all_exam_id')->comment('رمز الامتحان الشامل')->nullable();
+            $table->unsignedBigInteger('life_exam_id')->comment('رمز الامتحان الالايف')->nullable();
 
-            $table->unsignedBigInteger('question_id');
+            $table->unsignedBigInteger('question_id')->comment('رمز السؤال لهذا الامتحان');
             $table->timestamps();
             $table->foreign('all_exam_id')->references('id')->on('all_exams')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('online_exam_id')->references('id')->on('online_exams')->cascadeOnUpdate()->cascadeOnDelete();

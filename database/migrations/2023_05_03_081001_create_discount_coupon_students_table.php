@@ -13,6 +13,9 @@ class CreateDiscountCouponStudentsTable extends Migration
      */
     public function up()
     {
+        /*
+        مستخدمين كوبونات الخصم
+        */
         Schema::create('discount_coupon_students', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('discount_coupon_id');

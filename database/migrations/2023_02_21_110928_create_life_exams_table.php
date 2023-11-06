@@ -13,18 +13,23 @@ class CreateLifeExamsTable extends Migration
      */
     public function up()
     {
+
+        /*
+         الامتحانات الالايف
+         */
+
         Schema::create('life_exams', function (Blueprint $table) {
+
             $table->bigIncrements('id');
-            $table->string('name_ar');
-            $table->string('name_en');
-            $table->date('date_exam');
-            $table->time('time_start');
-            $table->time('time_end');
-            $table->integer('quiz_minute');
-            $table->integer('trying')->default(1);
-            $table->integer('degree');
-            $table->unsignedBigInteger('season_id');
-            $table->unsignedBigInteger('term_id')->nullable();
+            $table->string('name_ar')->comment('اسم الامتحان الالايف باللغه العربيه');
+            $table->string('name_en')->comment('اسم الامتحان الالايف باللغه الانجليزيه');
+            $table->date('date_exam')->comment('تاريخ اداء الامتحان');
+            $table->time('time_start')->comment('موعد بدايه الامتحان الالايف');
+            $table->time('time_end')->comment('موعد نهايه الامتحان الالايف');
+            $table->integer('quiz_minute')->comment('عدد دقائق الامتحان');
+            $table->integer('degree')->comment('درجه هذا الامتحان');
+            $table->unsignedBigInteger('season_id')->comment('الفصل الدراسي');
+            $table->unsignedBigInteger('term_id')->comment('التيرم');
             $table->text('note')->nullable();
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('term_id')->references('id')->on('terms')->cascadeOnUpdate()->cascadeOnDelete();
