@@ -13,7 +13,12 @@ class CreateVideoTotalViewsTable extends Migration
      */
     public function up()
     {
+
+        /*
+         جميع مشاهدات فيديوهات الشرح والمراجعه والاساسيات
+         */
         Schema::create('video_total_views', function (Blueprint $table) {
+
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('video_part_id')->nullable();

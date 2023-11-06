@@ -128,7 +128,7 @@ class ExamEntryController extends Controller
         }
     }
 
-    public function online_exam_by_user(Request $request, $id): JsonResponse{
+    public function online_exam_by_user(Request $request,$id): JsonResponse{
 
         try {
 

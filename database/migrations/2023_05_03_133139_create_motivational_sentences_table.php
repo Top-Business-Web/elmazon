@@ -13,11 +13,15 @@ class CreateMotivationalSentencesTable extends Migration
      */
     public function up()
     {
+        /*
+         جدول الجمل التحفيزيه
+         */
         Schema::create('motivational_sentences', function (Blueprint $table) {
             $table->id();
             $table->text('title_ar');
             $table->text('title_en');
-            $table->string('percentage');
+            $table->tinyInteger('percentage_from');
+            $table->tinyInteger('percentage_to');
             $table->timestamps();
         });
     }

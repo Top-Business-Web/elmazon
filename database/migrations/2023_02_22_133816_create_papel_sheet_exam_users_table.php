@@ -13,12 +13,17 @@ class CreatePapelSheetExamUsersTable extends Migration
      */
     public function up()
     {
+
+        /*
+         تسجيل الطلبه بالامتحان الورقي وتوزيعهم مباشر علي القاعات
+         */
         Schema::create('papel_sheet_exam_users', function (Blueprint $table) {
+
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('section_id');
-            $table->unsignedBigInteger('papel_sheet_exam_id');
-            $table->unsignedBigInteger('papel_sheet_exam_time_id');
+            $table->unsignedBigInteger('user_id')->comment('رمز الطالب');
+            $table->unsignedBigInteger('section_id')->comment('رمز القاعه');
+            $table->unsignedBigInteger('papel_sheet_exam_id')->comment('رمز الامتحان الورقي');
+            $table->unsignedBigInteger('papel_sheet_exam_time_id')->comment('رمز موعد الامتحان الورقي');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('section_id')->references('id')->on('sections')->cascadeOnUpdate()->cascadeOnDelete();

@@ -13,6 +13,10 @@ class CreateAdminLogsTable extends Migration
      */
     public function up()
     {
+
+        /*
+         جدول حركات الموظفين بلوحه التحكم
+         */
         Schema::create('admin_logs', function (Blueprint $table) {
             $table->id();
             $table->string('admin_id');

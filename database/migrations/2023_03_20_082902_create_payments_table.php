@@ -13,15 +13,19 @@ class CreatePaymentsTable extends Migration
      */
     public function up()
     {
+        /*
+         حركات الدفع الالكتروني
+         */
         Schema::create('payments', function (Blueprint $table) {
+
             $table->id();
-            $table->string('payment_id');
-            $table->string('payer_email')->nullable();
-            $table->string('currency')->nullable();
-            $table->string('user_id');
-            $table->string('status');
-            $table->double('amount');
+            $table->unsignedBigInteger('user_id');
+            $table->string('transaction_id');
+            $table->enum('transaction_status',['pending','failed','finished'])->default('pending');
+            $table->double('total_price');
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+
         });
     }
 

@@ -13,6 +13,10 @@ class CreateSeasonsTable extends Migration
      */
     public function up()
     {
+
+        /*
+         الفصول الدراسيه مثال اولي ثانوي
+         */
         Schema::create('seasons', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name_ar');

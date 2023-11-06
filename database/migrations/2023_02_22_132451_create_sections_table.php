@@ -13,12 +13,16 @@ class CreateSectionsTable extends Migration
      */
     public function up()
     {
+
+        /*
+         قاعات الامتحانات الورقيه
+         */
         Schema::create('sections', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('section_name_ar');
-            $table->string('section_name_en');
-            $table->longText('address');
-            $table->integer('capacity');
+            $table->string('section_name_ar')->comment('اسم القاعه باللغه العربيه');
+            $table->string('section_name_en')->comment('اسم القاعه باللغه الانجليزيه');
+            $table->longText('address')->comment('عنوان القاعه');
+            $table->integer('capacity')->comment('سعه القاعه');
             $table->timestamps();
         });
     }

@@ -13,6 +13,9 @@ class CreateSubscribesTable extends Migration
      */
     public function up()
     {
+        /*
+         جدول اشتراكات الشهور للفصول الدراسيه
+         */
         Schema::create('subscribes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->double('price_in_center',10,2);

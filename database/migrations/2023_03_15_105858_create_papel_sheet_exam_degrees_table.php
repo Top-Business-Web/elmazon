@@ -13,7 +13,12 @@ class CreatePapelSheetExamDegreesTable extends Migration
      */
     public function up()
     {
+
+        /*
+         جدول درجات الامتحان الورقي
+         */
         Schema::create('papel_sheet_exam_degrees', function (Blueprint $table) {
+
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('papel_sheet_exam_id');

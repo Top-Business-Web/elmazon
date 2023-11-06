@@ -13,12 +13,19 @@ class CreateUserSubscribesTable extends Migration
      */
     public function up()
     {
+
+        /*
+         جدول اشتراكات الطلاب
+         */
         Schema::create('user_subscribes', function (Blueprint $table) {
             $table->id();
             $table->double('price',10,2);
             $table->integer('month');
+            $table->string('year');
             $table->unsignedBigInteger('student_id')->nullable();
             $table->timestamps();
+            $table->foreign('student_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+
         });
     }
 

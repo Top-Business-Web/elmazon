@@ -13,6 +13,11 @@ class CreateVideoFavoritesTable extends Migration
      */
     public function up()
     {
+
+        /*
+         جدول اضافه الفيديوهات للمفضله
+          فيديوهات الشرح وفيديوهات الاساسيات وفيديوهات المراجعه
+         */
         Schema::create('video_favorites', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');

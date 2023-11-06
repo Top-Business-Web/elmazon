@@ -241,9 +241,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::resource('onBoarding', OnBoardingController::class)
         ->middleware('permission:الشاشات الافتتاحيه');
 
-    #### Pdf ####
-    Route::resource('pdf', PdfFileUploadController::class)
-        ->middleware('permission:ملفات ورقية');
+
 
     #### Section ####
     Route::resource('section', SectionController::class)

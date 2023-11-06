@@ -13,15 +13,18 @@ class CreatePapelSheetExamsTable extends Migration
      */
     public function up()
     {
+        /*
+         الامتحانات الورقيه للطلبه بالقاعات
+         */
         Schema::create('papel_sheet_exams', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name_ar');
-            $table->string('name_en');
-            $table->integer('degree');
-            $table->date('from');
-            $table->date('to');
-            $table->date('date_exam');
-            $table->longText('description')->nullable();
+            $table->string('name_ar')->comment('اسم الامتحان باللغه العربيه');
+            $table->string('name_en')->comment('اسم الامتحان باللغه الانجليزيه');
+            $table->integer('degree')->comment('درجه هذا الامتحان');
+            $table->date('from')->comment('بدايه اتاحيه التسجيل في الامتحان الورقي');
+            $table->date('to')->comment('تاريه نهايه الاتاحيه في التسجيل في الامتحان الورقي');
+            $table->date('date_exam')->comment('موعد الامتحان في القاعات');
+            $table->longText('description')->comment('وصف الامتحان-غير مطلوب')->nullable();
             $table->unsignedBigInteger('season_id');
             $table->unsignedBigInteger('term_id');
             $table->timestamps();

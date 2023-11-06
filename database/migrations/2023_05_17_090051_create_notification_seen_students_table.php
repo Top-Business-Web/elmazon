@@ -13,6 +13,9 @@ class CreateNotificationSeenStudentsTable extends Migration
      */
     public function up()
     {
+        /*
+         جدول تحديث الاشعارات
+         */
         Schema::create('notification_seen_students', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('student_id');

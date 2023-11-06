@@ -13,13 +13,16 @@ class CreateQualificationsTable extends Migration
      */
     public function up()
     {
+        /*
+         جدول مؤهلات المدرس
+         */
         Schema::create('qualifications', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('title_ar');
-            $table->text('title_en');
-            $table->text('description_ar');
-            $table->text('description_en');
-            $table->string('year')->nullable();
+            $table->text('title_ar')->comment('العنوان باللغه العربيه');
+            $table->text('title_en')->comment('العنوان باللغه الانجليزيه');
+            $table->text('description_ar')->comment('وصف المهاره او الخبره او المؤهل باللغه العربيه');
+            $table->text('description_en')->comment('وصف المهاره او الخبره او المؤهل باللغه الانجليزيه');
+            $table->string('year')->comment('سنه الحصول علي هذه الخبره او المؤهل')->nullable();
             $table->enum('type',['qualifications','experience','skills']);
             $table->timestamps();
         });

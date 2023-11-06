@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTestYourselfExamsTable extends Migration
+class CreateOpenLessonsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,20 @@ class CreateTestYourselfExamsTable extends Migration
      */
     public function up()
     {
-        Schema::create('test_yourself_exams', function (Blueprint $table) {
+
+        /*
+         جدول فتح الفصول والدروس للطالب
+         */
+        Schema::create('open_lessons', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->enum('questions_type',array('low','mid','high'));
-            $table->integer('total_degree');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('lesson_id')->nullable();
-            $table->unsignedBigInteger('subject_class_id')->nullable();
-            $table->integer('total_time');
-            $table->integer('num_of_questions');
-            $table->timestamps();
+            $table->unsignedBigInteger('user_id')->comment('اسم الطالب');
+            $table->unsignedBigInteger('lesson_id')->comment('اسم الدرس')->nullable();
+            $table->unsignedBigInteger('subject_class_id')->comment('اسم الفصل')->nullable();
+            $table->enum('status',['opened']);
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('lesson_id')->references('id')->on('lessons')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('subject_class_id')->references('id')->on('subject_classes')->cascadeOnUpdate()->cascadeOnDelete();
-
+            $table->timestamps();
         });
     }
 
@@ -37,6 +37,6 @@ class CreateTestYourselfExamsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('test_yourself_exams');
+        Schema::dropIfExists('open_lessons');
     }
 }

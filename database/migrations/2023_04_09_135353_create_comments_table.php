@@ -13,6 +13,9 @@ class CreateCommentsTable extends Migration
      */
     public function up()
     {
+        /*
+         تعليقات الطلبه علي جميع الفيديوهات
+         */
         Schema::create('comments', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->longText('comment')->nullable();
@@ -20,10 +23,14 @@ class CreateCommentsTable extends Migration
             $table->longText('image')->nullable();
             $table->enum('type',['text','audio','file']);
             $table->unsignedBigInteger('video_part_id')->nullable();
+            $table->unsignedBigInteger('video_basic_id')->nullable();
+            $table->unsignedBigInteger('video_resource_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
-            $table->foreign('video_part_id')->references('id')->on('video_parts')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('video_basic_id')->references('id')->on('video_basics')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('video_resource_id')->references('id')->on('video_resources')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('video_part_id')->references('id')->on('video_parts')->cascadeOnUpdate()->cascadeOnDelete();
 
         });
     }

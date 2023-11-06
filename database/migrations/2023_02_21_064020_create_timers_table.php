@@ -13,12 +13,15 @@ class CreateTimersTable extends Migration
      */
     public function up()
     {
+        /*
+         جدول المحاولات للطلبه
+         */
         Schema::create('timers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('online_exam_id')->nullable();
-            $table->unsignedBigInteger('all_exam_id')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->string("timer");
+            $table->unsignedBigInteger('online_exam_id')->comment('رمز الامتحان الاونلاين')->nullable();
+            $table->unsignedBigInteger('all_exam_id')->comment('رمز الامتحان الشامل')->nullable();
+            $table->unsignedBigInteger('user_id')->comment('رمز الطالب');
+            $table->string("timer")->comment('عدد دقائق هذه المحاوله');
             $table->foreign('online_exam_id')->references('id')->on('online_exams')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('all_exam_id')->references('id')->on('all_exams')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
