@@ -347,7 +347,7 @@ class LessonController extends Controller
     }//end access first subject_class and first lesson and first video and  all files of video
 
 
-    public function updateMinuteVideo(Request $request,$id)
+    public function updateMinuteVideo(Request $request,$id): JsonResponse
     {
 
         $rules = ['minutes' => 'required|date_format:H:i:s'];
@@ -561,8 +561,6 @@ class LessonController extends Controller
 
 
                     //========================== end access next class =========================================================
-
-
 
 
                     //========================== start access next video =========================================================
