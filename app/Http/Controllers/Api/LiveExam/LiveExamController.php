@@ -438,8 +438,6 @@ class LiveExamController extends Controller
             }
 
             return $data;
-
-
     }
 
 
