@@ -11,6 +11,7 @@ use App\Models\Season;
 use App\Models\Term;
 use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\User;
@@ -19,7 +20,6 @@ class NotificationController extends Controller
 {
     use FirebaseNotification, PhotoTrait, AdminLogs;
 
-    // Index Start
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -39,7 +39,6 @@ class NotificationController extends Controller
         return view('admin.notifications.index');
     }
 
-    // Search User Start
 
     public function searchUser(Request $request)
     {
@@ -54,23 +53,16 @@ class NotificationController extends Controller
     }
 
 
-    // Search User End
-
-    // Create Start
-
     public function create()
     {
         $data['terms'] = Term::get();
         $data['seasons'] = Season::get();
-        $data['users'] = User::get();
+        $data['users'] = User::query()->select('id','name','code')->get();
         return view('admin.notifications.parts.create', $data);
     }
 
-    // Create End
 
-    // Store Start
-
-    public function store(NotificationStoreRequest $request)
+    public function store(NotificationStoreRequest $request): JsonResponse
     {
         $inputs = $request->all();
         $inputs['image'] = '';
@@ -78,12 +70,13 @@ class NotificationController extends Controller
             $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/notification');
         }
 
-        $user = User::where('id', $request->user_id)->first();
+        $user = User::query()
+        ->where('id','=',$request->user_id)
+            ->first();
 
-        if ($request->has('user_id')) {
-            $inputs['user_id'] = $user->id;
-        }
-        else
+        if ($request->has('user_select')) {
+            $inputs['user_select'] = $user->id;
+        } else
         {
             $error = 'ليس هناك مستخدم بهذا الكود';
             toastr($error, 'info');
@@ -99,10 +92,6 @@ class NotificationController extends Controller
         }
     }
 
-    // Store End
-
-    // Edit Start
-
     public function edit(Notification $notification)
     {
         $data['terms'] = Term::get();
@@ -112,11 +101,8 @@ class NotificationController extends Controller
         return view('admin.notifications.parts.edit', $data);
     }
 
-    // Edit End
 
-    // Update Start
-
-    public function update(Notification $notification, Request $request)
+    public function update(Notification $notification, Request $request): JsonResponse
     {
         $inputs = $request->all();
         if ($request->has('image')) {
@@ -131,17 +117,16 @@ class NotificationController extends Controller
         }
     }
 
-    // Update End
 
-    // Delete Start
-
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
-        $notifications = Notification::where('id', $request->id)->firstOrFail();
+        $notifications = Notification::query()
+        ->where('id', $request->id)
+            ->firstOrFail();
+
         $notifications->delete();
         $this->adminLog('تم حذف اشعار');
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Delete End
 }

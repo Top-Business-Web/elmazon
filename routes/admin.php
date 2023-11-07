@@ -17,7 +17,6 @@ use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\AudioController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\VideoPartController;
-use App\Http\Controllers\Admin\PdfFileUploadController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\MonthlyPlanController;
