@@ -197,7 +197,6 @@ class PaymentController extends Controller{
     }
 
 
-
     //Response json total after discount
     public static function sendResponseTotalAfterDiscount($total,$status,$totalAfterDiscount,$message,$code): JsonResponse
     {

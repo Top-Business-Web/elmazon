@@ -103,8 +103,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             $user_data->update(['login_status' => 1]);
 
-
-
             return self::returnResponseDataApi(new UserResource($user), "تم تسجيل الدخول بنجاح", 200);
         } catch (\Exception $exception) {
 

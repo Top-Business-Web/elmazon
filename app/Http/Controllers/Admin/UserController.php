@@ -420,6 +420,12 @@ class UserController extends Controller
             ->where('id', $request->id)
             ->firstOrFail();
 
+        //delete token of this student when delete him
+        if($user->access_token){
+
+            JWTAuth::setToken($user->access_token)->invalidate();
+        }
+
         $user->delete();
         $this->adminLog('تم حذف طالب ');
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
