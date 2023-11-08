@@ -161,8 +161,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     });
 
     #### Notification ####
-    Route::resource('notifications', NotificationController::class)->middleware('permission:الاشعارات');
-    Route::get('/searchUser', [NotificationController::class, 'searchUser'])->name('searchUser');
+    Route::resource('notifications', NotificationController::class)->except(['edit','update'])->middleware('permission:الاشعارات');
 
     ##### Video Parts #####
     Route::group(['middleware' => 'permission:اقسام الفيديوهات'], function () {

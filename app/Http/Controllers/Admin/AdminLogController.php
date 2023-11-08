@@ -63,14 +63,14 @@ class AdminLogController extends Controller
             AdminLog::where('seen', '=', 0)->update(['seen' => 1]);
             return view('admin.admin.admin_logs', compact('startDate', 'endDate'));
         }
-    }// End Index
+    }
 
     public function delete(Request $request)
     {
         $admin = AdminLog::where('id', $request->id)->first();
         $admin->delete();
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
-    } // end of delete
+    }
 
     public function deleteAll(Request $request)
     {
@@ -79,5 +79,5 @@ class AdminLogController extends Controller
             ->whereDate('created_at','<=',$request->get('to'))
             ->delete();
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
-    } // end of delete
+    }
 }

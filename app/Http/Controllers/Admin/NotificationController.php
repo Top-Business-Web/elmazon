@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\NotificationStoreRequest;
 use App\Http\Requests\StoreNotification;
+use App\Models\Lesson;
 use App\Models\Notification;
 use App\Models\Season;
 use App\Models\Term;
@@ -33,6 +34,38 @@ class NotificationController extends Controller
                             </button>
                        ';
                 })
+                ->editColumn('image', function ($notifications) {
+
+                    if ($notifications->image == null) {
+
+                        return '
+                    <img alt="image" onclick="window.open(this.src)" class="avatar avatar-md rounded-circle" src="' . asset('assets/uploads/notification/default/default.jpg') . '">
+                    ';
+                    } else {
+
+                        return '
+                    <img alt="image" onclick="window.open(this.src)" class="avatar avatar-md rounded-circle" src="' . asset($notifications->image) . '">
+                    ';
+                    }
+                })
+
+                ->editColumn('user_type', function ($notifications) {
+
+                    if ($notifications->user_type == "student") {
+
+                        return '<button type="button" class="btn btn-pill btn-danger-light">اشعار لطالب</button>';
+
+                    }elseif ($notifications->user_type == "group_of_students"){
+
+                        return '<button type="button" class="btn btn-pill btn-danger-light">اشعار لمجموعه طلبه</button>';
+
+
+                    } else {
+
+                        return '<button type="button" class="btn btn-pill btn-danger-light">اشعار لجميع الطلبه</button>';
+
+                    }
+                })
                 ->escapeColumns([])
                 ->make(true);
         }
@@ -40,16 +73,13 @@ class NotificationController extends Controller
     }
 
 
-    public function searchUser(Request $request)
+    public function getAllStudentsBySeasonId(): array
     {
-        $code = $request->input('code');
-        $user = User::where('code', $code)->first();
 
-        if ($user) {
-            return response('هذا الطالب موجود');
-        } else {
-            return response('هذا الطالب غير موجود');
-        }
+        return User::query()
+            ->where('season_id','=',request()->season_id)
+            ->pluck('code', 'id')
+            ->toArray();
     }
 
 
@@ -57,7 +87,6 @@ class NotificationController extends Controller
     {
         $data['terms'] = Term::get();
         $data['seasons'] = Season::get();
-        $data['users'] = User::query()->select('id','name','code')->get();
         return view('admin.notifications.parts.create', $data);
     }
 
@@ -65,57 +94,49 @@ class NotificationController extends Controller
     public function store(NotificationStoreRequest $request): JsonResponse
     {
         $inputs = $request->all();
-        $inputs['image'] = '';
+        $inputs['image'] = null;
         if ($request->has('image')) {
             $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/notification');
         }
 
-        $user = User::query()
-        ->where('id','=',$request->user_id)
-            ->first();
+        $notification = [
+            'title' => $inputs['title'],
+            'body' => $inputs['body'],
+            'user_type' => $inputs['type'],
+            'image' => $inputs['image'],
+        ];
 
-        if ($request->has('user_select')) {
-            $inputs['user_select'] = $user->id;
-        } else
-        {
-            $error = 'ليس هناك مستخدم بهذا الكود';
-            toastr($error, 'info');
+
+        if($request->type == 'group_of_students'){
+
+            $notification['group_ids'] = json_encode($inputs['group_ids']);
+            $this->sendFirebaseNotification(['title' => $inputs['title'], 'body' => $inputs['body']],$inputs['season_id'], null, $inputs['group_ids'], true);
+            $message = "تم ارسال اشعار لطلبه محددين من قبل المدرس";
+
+        }elseif ($request->type == 'student'){
+            $notification['user_id'] = $inputs['user_id'];
+            $this->sendFirebaseNotification(['title' => $inputs['title'], 'body' => $inputs['body']],null, $inputs['user_id'], null, true);
+            $message = "تم ارسال اشعار لطالب معين";
+
+        }else{
+
+            $notification['season_id'] = $inputs['season_id'];
+            $this->sendFirebaseNotification(['title' => $inputs['title'], 'body' => $inputs['body']],$inputs['season_id'],null, null , true);
+            $message = "تم ارسال اشعار لجميع الطلبه";
+
         }
 
-        $this->sendFirebaseNotification(['title' => $request->title, 'body' => $request->body, 'term_id' => $inputs['term_id']], $inputs['season_id'], $user->id, $inputs['image']);
+        $notificationStore = Notification::create($notification);
 
-        if (Notification::create($inputs)) {
-            $this->adminLog('تم اضافة اشعار');
+
+        if ($notificationStore->save()) {
+            $this->adminLog($message);
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
         }
     }
 
-    public function edit(Notification $notification)
-    {
-        $data['terms'] = Term::get();
-        $data['seasons'] = Season::get();
-        $data['users'] = User::get();
-        $data['notification'] = $notification;
-        return view('admin.notifications.parts.edit', $data);
-    }
-
-
-    public function update(Notification $notification, Request $request): JsonResponse
-    {
-        $inputs = $request->all();
-        if ($request->has('image')) {
-            $inputs['image'] = $this->saveImage($request->image, 'assets/uploads/notification');
-        }
-
-        if ($notification->update($inputs)) {
-            $this->adminLog('تم تحديث اشعار');
-            return response()->json(['status' => 200]);
-        } else {
-            return response()->json(['status' => 405]);
-        }
-    }
 
 
     public function destroy(Request $request): JsonResponse

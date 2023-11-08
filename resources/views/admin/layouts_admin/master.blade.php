@@ -9,6 +9,13 @@
 
     <style>
 
+        .hide-select{
+
+            display: none;
+        }
+        .select2{
+            width: 100% !important;
+        }
         .styled-table {
             border-collapse: collapse;
             margin: 25px 0;

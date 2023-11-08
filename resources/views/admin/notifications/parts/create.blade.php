@@ -1,59 +1,58 @@
 <div class="modal-body">
     <form id="addForm" class="addForm" method="POST" action="{{ route('notifications.store') }}">
         @csrf
+
+        <div class="row">
+            <div class="col-md-12 mt-3">
+                <label for="title" class="form-control-label">عنوان الرساله</label>
+                <input type="text" class="form-control" name="title" value="اشعار جديد">
+            </div>
+
+            <div class="col-md-12 mt-3">
+                <label for="body" class="form-control-label">الرسالة</label>
+                <textarea class="form-control" name="body" rows="10"></textarea>
+            </div>
+
+            <div class="col-md-12 mt-3">
+                <label for="season_id" class="form-control-label">الصفوف الدراسيه</label>
+                <Select name="season_id" class="form-control select2">
+                    <option selected>جميع الصفوف الدراسيه</option>
+                    @foreach($seasons as $season)
+                        <option value="{{ $season->id }}">{{ $season->name_ar }}</option>
+                    @endforeach
+                </Select>
+            </div>
+
+        </div>
+
             <div class="row">
                 <div class="col-md-12">
+                <div class="mt-3">
+                    <label for="type" class="form-control-label">تريد ارسال هذا الاشعار لمن*</label>
+                    <select id="selectUserType" name="type" class="form-control select2">
+                        <option  value="all_students">كل طلبه هذا الصف</option>
+                        <option  value="group_of_students">مجموعه طلبه</option>
+                        <option  value="student">طالب معين</option>
+                    </select>
+                </div>
 
-                    <div class="mt-3">
-                        <label for="type" class="form-control-label">تريد ارسال هذا الاشعار لمن*</label>
-                        <select name="type" class="form-control select2">
-                            <option value="users">كل طلبه هذا الصف</option>
-                            <option value="student">طالب معين</option>
-                        </select>
-                    </div>
+                <div id="student" class="mt-3 student-select hide-select">
+                    <label for="user_id" class="form-control-label">اختر طالب معين*(في حاله اختيار طالب معين)</label>
+                    <select name="user_id" class="form-control select2">
 
-                    <div class="mt-3">
-                        <label for="user_id" class="form-control-label">اختر طالب معين*</label>
-                        <select name="user_id" class="form-control select2">
-                            @foreach($users as $user)
-                            <option  value="{{$user->id}}">{{$user->code}}</option>
-                            @endforeach
-
-                        </select>
-                    </div>
+                    </select>
+                </div>
 
 
-
-                    <div class="titleDiv mt-3">
-                        <label for="title" class="form-control-label">عنوان الرساله</label>
-                        <input type="text" class="form-control" name="title">
-                    </div>
-
-                    <div class="mt-3">
-                        <label for="body" class="form-control-label">الرسالة</label>
-                        <textarea class="form-control" name="body" rows="10"></textarea>
-                    </div>
+                <div id="group_of_students" class="mt-3 group-select hide-select">
+                    <label for="group_ids" class="form-control-label">اختر مجموعه طلبه*(في حاله اختيار مجموعه من الطلبه)</label>
+                    <select name="group_ids[]" class="form-control select2" multiple>
+                    </select>
                 </div>
 
 
             </div>
-            <div class="row">
-                <div class="col-md-12 mt-3">
-                    <label for="season_id" class="form-control-label">الصف الدراسي</label>
-                    <Select name="season_id" class="form-control select2">
-                        <option selected>الكل</option>
-                        @foreach($seasons as $season)
-                            <option value="{{ $season->id }}">{{ $season->name_ar }}</option>
-                        @endforeach
-                    </Select>
-                </div>
 
-                <div class="col-md-12 mt-3">
-                    <label for="term_id" class="form-control-label">اختر التيرم</label>
-                    <select name="term_id" class="form-control select2">
-
-                    </select>
-                </div>
 
             </div>
 
@@ -69,23 +68,42 @@
         </div>
     </form>
 </div>
+<script>
+    $(document).ready(function(){
+
+        $('.select2').select2();
+
+        $('#selectUserType').on('change', function(){
+            $('.hide-select').hide();
+            $("#" + $(this).val()).fadeIn();
+        }).change();
+    });
+</script>
+
 
 <script>
     $(document).ready(function() {
         $('.select2').select2();
     });
+
+    $('.dropify').dropify()
     $(document).ready(function () {
         $('select[name="season_id"]').on('change', function () {
             var season_id = $(this).val();
             if (season_id) {
                 $.ajax({
-                    url: "{{ URL::to('terms/season/') }}/" + season_id,
+                    url: "{{ route('getAllStudentsBySeasonId') }}",
                     type: "GET",
                     dataType: "json",
+                    data: {
+                        "season_id": season_id
+                    },
                     success: function (data) {
-                        $('select[name="term_id"]').empty();
+                        $('select[name="user_id"]').empty();
+                        $('select[name="group_ids[]"]').empty();
                         $.each(data, function (key, value) {
-                            $('select[name="term_id"]').append('<option value="' + key + '">' + value + '</option>');
+                            $('select[name="user_id"]').append('<option value="' + key + '">' + value + '</option>');
+                            $('select[name="group_ids[]"]').append('<option value="' + key + '">' + value + '</option>');
                         });
                     },
                 });
@@ -95,40 +113,11 @@
         });
     });
 
-</script>
-
-
-<script>
-    $('.dropify').dropify();
-
-    $('.type').on('change', function(){
-        // alert($(this).val());
-        if($(this).val() == 'student'){
-            $('.userSelect').removeClass('d-none')
-        } else {
-            $('.userSelect').addClass('d-none')
-        }
-    })
-
-    {{--$('.student_code').keyup(function(){--}}
-    {{--    var code =  $(this).val();--}}
-    {{--    if (code) {--}}
-    {{--        $.ajax({--}}
-    {{--            url: "{{ route('searchUser') }}",--}}
-    {{--            type: "GET",--}}
-    {{--            data: {--}}
-    {{--                code: code--}}
-    {{--            },--}}
-    {{--            success: function (data) {--}}
-    {{--                $('#status_code').text(data);--}}
-    {{--            },--}}
-    {{--        });--}}
-    {{--    } else {--}}
-    {{--        console.log('Code is empty');--}}
-    {{--    }--}}
-    {{--});--}}
 
 
 
 </script>
+
+
+
 

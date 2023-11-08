@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\VideoPartController;
 use App\Http\Controllers\Api\Payment;
@@ -23,9 +24,14 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('terms/season/{id}',[TermController::class,'getAllTermsBySeason'])->middleware('auth:admin');
-Route::get('getAllSubjectClassesBySeasonAndTerm',[VideoPartController::class,'getAllSubjectClassesBySeasonAndTerm']);
-Route::get('getAllLessonsBySubjectClass', [VideoPartController::class,'getAllLessonsBySubjectClass']);
+Route::middleware('auth:admin')->group(function (){
+    Route::get('terms/season/{id}',[TermController::class,'getAllTermsBySeason']);
+    Route::get('getAllSubjectClassesBySeasonAndTerm',[VideoPartController::class,'getAllSubjectClassesBySeasonAndTerm']);
+    Route::get('getAllLessonsBySubjectClass', [VideoPartController::class,'getAllLessonsBySubjectClass']);
+    Route::get('getAllLessonsBySubjectClass', [VideoPartController::class,'getAllLessonsBySubjectClass']);
+    Route::get('getAllStudentsBySeasonId', [NotificationController::class,'getAllStudentsBySeasonId'])->name('getAllStudentsBySeasonId');
+
+});
 
 
 

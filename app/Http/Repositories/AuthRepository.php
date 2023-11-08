@@ -192,15 +192,15 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         try {
 
+            $userId = auth()->guard('user-api')->id();
+
             $allNotification = Notification::query()
-                ->whereHas('term', fn (Builder $builder)
-                => $builder->where('status', '=', 'active')
-                    ->where('season_id', '=', auth('user-api')->user()->season_id))
-                ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
-                ->where(fn (Builder $builder) => $builder->whereNull('user_id')
-                    ->orWhere('user_id', '=', auth()->guard('user-api')->id()))
+                ->whereJsonContains('group_ids',"$userId")
+                ->orWhere('season_id','=', auth()->guard('user-api')->user()->season_id)
+                ->orWhere('user_id','=', auth()->guard('user-api')->id())
                 ->latest()
                 ->get();
+
 
             return self::returnResponseDataApi(NotificationResource::collection($allNotification), "تم ارسال اشعارات المستخدم بنجاح", 200);
         } catch (\Exception $exception) {
@@ -352,7 +352,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
                                 if ($createPaperSheet->save()) {
                                     $time_exam = PapelSheetExamTime::query()->where('id', '=', $request->papel_sheet_exam_time_id)->first();
-                                    $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $time_exam->from . 'وموعد الامتحان  ' . $section->section_name_ar . 'واسم القاعه  ' . $section->address . 'ومكان الامتحان  ' . $paperSheetExam->date_exam . 'تاريخ الامتحان', 'term_id' => $paperSheetExam->term_id], $paperSheetExam->season_id, Auth::guard('user-api')->id());
+                                    $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $time_exam->from . 'وموعد الامتحان  ' . $section->section_name_ar . 'واسم القاعه  ' . $section->address . 'ومكان الامتحان  ' . $paperSheetExam->date_exam . 'تاريخ الامتحان'], $paperSheetExam->season_id, Auth::guard('user-api')->id());
 
                                     $data['nameOfExam'] = lang() == 'ar' ? $paperSheetExam->name_ar : $paperSheetExam->name_en;
                                     $data['dateExam'] = $paperSheetExam->date_exam;
