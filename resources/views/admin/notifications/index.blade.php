@@ -30,8 +30,10 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
-                                <th class="min-w-50px">العنوان</th>
-                                <th class="min-w-50px">رسالة</th>
+                                <th class="min-w-50px">عنوان الاشعار</th>
+                                <th class="min-w-50px">محتوي الرساله</th>
+                                <th class="min-w-50px">صوره مرفقه مع الاشعار</th>
+                                <th class="min-w-50px">الاشعار لمن</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
                             </thead>
@@ -94,6 +96,8 @@
             {data: 'id', name: 'id'},
             {data: 'title', name: 'title'},
             {data: 'body', name: 'body'},
+            {data: 'image', name: 'image'},
+            {data: 'user_type', name: 'user_type'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
         showData('{{route('notifications.index')}}', columns);
@@ -102,9 +106,7 @@
         // Add Using Ajax
         showAddModal('{{route('notifications.create')}}');
         addScript();
-        // Add Using Ajax
-        showEditModal('{{route('notifications.edit',':id')}}');
-        editScript();
+
     </script>
 @endsection
 

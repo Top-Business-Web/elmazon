@@ -11,17 +11,7 @@ class Notification extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'body',
-        'season_id',
-        'term_id',
-        'type',
-        'video_id',
-        'exam_id',
-        'image',
-        'user_id',
-    ];
+    protected $guarded = [];
 
     public function term(): BelongsTo
     {

@@ -35,12 +35,10 @@ class CreateNotificationsTable extends Migration
             $table->unsignedBigInteger('video_id')->nullable();
             $table->enum('exam_type',['subject_class','lesson','video','full_exam','life_exam','paper_sheet_exam'])->nullable()->comment('نوع الامتحان - امتحان فصل-درس-فيديو-شامل-لايف-امتحان ورقي');
             $table->unsignedBigInteger('exam_id')->nullable();
-            $table->unsignedBigInteger('season_id');
-            $table->unsignedBigInteger('term_id');
+            $table->unsignedBigInteger('season_id')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreign('term_id')->references('id')->on('terms')->cascadeOnUpdate()->cascadeOnDelete();
 
 
         });

@@ -12,37 +12,53 @@ trait FirebaseNotification{
     private $serverKey = 'AAAAvcvsG5E:APA91bHXIApfxcgUYwNQohgWbydXAOTcjSr5dWzQpT5HnID-v0GN3HuxahdId2DG4saeoNHu7tSFdL3h9AOwH_p8HOst0IQNPKkbCMycBgI7ZkaB5XWpQdN3bmOAFItqdTNVMh8EJgKH';
 
 
-    public function sendFirebaseNotification($data,$season_id,$user_id = null,$file=null){
+    public function sendFirebaseNotification($data,$season_id = null,$student_id = null,$group_ids = [],$statusStoreNotification = false){
 
         $url = 'https://fcm.googleapis.com/fcm/send';
 
-        if($user_id != null){
-            $userIds = User::where('id','=',$user_id)->pluck('id')->toArray();
-            $tokens = PhoneToken::whereIn('user_id',$userIds)->pluck('token')->toArray();
+
+        if($student_id != null){
+
+        /*
+         في حاله لو الارسال مرسل لطالب معين
+         */
+        $userIds = User::query()
+            ->where('id','=',$student_id)
+            ->pluck('id')
+            ->toArray();
+
+        }elseif ($season_id != null && $group_ids !=  null){
+
+        /*
+         في حاله لو الارسال مرسل لطلبه محددين من قبل المدرس
+         */
+            $userIds = User::query()
+                ->whereIn('id',$group_ids)
+                ->pluck('id')
+                ->toArray();
 
         }else{
-            $usersIds = User::where('season_id','=',$season_id)->pluck('id')->toArray();
-            $tokens = PhoneToken::whereIn('user_id',$usersIds)->pluck('token')->toArray();
+            /*
+             في حاله لو الارسال مرسل لجميع طلبه هذا الصف الدراسي
+             */
+            $userIds = User::query()
+                ->where('season_id','=',$season_id)
+                ->pluck('id')
+                ->toArray();
+
         }
 
+        $tokens = PhoneToken::query()
+            ->whereIn('user_id',$userIds)->pluck('token')
+            ->toArray();
 
-//        $image = $data['image'];
-//
-//        if($image != null){
-//            $destinationPath = 'notifications_images/';
-//            $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
-//            $image->move($destinationPath, $file);
-//        }
-
-        //start notification store
-        Notification::create([
-            'title' => $data['title'],
-            'body' => $data['body'],
-            'term_id' => $data['term_id'],
-            'season_id' => $season_id,
-             'user_id' => $user_id ?? null,
-           'image' => $file ?? null,
-        ]);
+      if(!$statusStoreNotification){
+          Notification::create([
+              'title' => $data['title'],
+              'body' => $data['body'],
+              'user_id' => $student_id,
+          ]);
+      }
 
         $fields = array(
             'registration_ids' => $tokens,

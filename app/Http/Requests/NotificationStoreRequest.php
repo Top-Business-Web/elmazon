@@ -11,7 +11,7 @@ class NotificationStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,25 +21,23 @@ class NotificationStoreRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'title' => 'required',
             'body' => 'required',
             'season_id' => 'required',
-            'term_id' => 'required',
             'image' => 'nullable|image',
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
-            'title.required' => 'العنوان مطلوب',
-            'body.required' => 'نص الاشعار',
-            'season_id.required' => 'فصل مطلوب',
-            'term_id.required' => 'الترم مطلوب',
-            'image.image' => 'يجب ان تكون صورة',
+            'title.required' => 'عنوان الاشعار مطلوب',
+            'body.required' => 'محتوي الرساله الذي تريد ارساله للطلبه مطلوب',
+            'season_id.required' => 'يرجي اختيار الفصل الدراسي للمرحله الذي تريد لها ارسال الاشعار',
+            'image.image' => 'الصوره المرفقه مع الاشعار يجب ان تكون صوره',
         ];
     }
 }
