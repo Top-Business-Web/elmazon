@@ -114,15 +114,25 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 mt-3">
-                    <label for="date_start_code" class="form-control-label">تاريخ بداية الاشتراك</label>
-                    <input type="date" class="form-control" value="{{ $user->date_start_code }}"
-                        name="date_start_code" placeholder="تاريخ بداية الاشتراك">
-                </div>
-                <div class="col-md-6 mt-3">
-                    <label for="date_end_code" class="form-control-label">تاريخ نهاية الاشتراك</label>
-                    <input type="date" class="form-control" value="{{ $user->date_end_code }}"
-                        name="date_end_code" placeholder="تاريخ نهاية الاشتراك">
+{{--                <div class="col-md-6 mt-3">--}}
+{{--                    <label for="date_start_code" class="form-control-label">تاريخ بداية الاشتراك</label>--}}
+{{--                    <input type="date" class="form-control" value="{{ $user->date_start_code }}"--}}
+{{--                        name="date_start_code" placeholder="تاريخ بداية الاشتراك">--}}
+{{--                </div>--}}
+{{--                <div class="col-md-6 mt-3">--}}
+{{--                    <label for="date_end_code" class="form-control-label">تاريخ نهاية الاشتراك</label>--}}
+{{--                    <input type="date" class="form-control" value="{{ $user->date_end_code }}"--}}
+{{--                        name="date_end_code" placeholder="تاريخ نهاية الاشتراك">--}}
+{{--                </div>--}}
+
+
+                <div class="col-md-12 mt-3">
+                    <label for="name" class="form-control-label">شهور الاشتراك</label>
+                    <select class="form-control select2" name="subscription_months_groups[]" id="subscription_months_groups[]" multiple>
+                        @foreach($groupOfMonths as $key=>$value)
+                            <option value="{{ $key < 10 ? "0".$key : $key}}" {{in_array($key,json_decode($user->subscription_months_groups)) ? 'selected' : ''}}>{{ $value }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
         </div>

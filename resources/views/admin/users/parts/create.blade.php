@@ -73,31 +73,15 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
-                    <label for="date_start_code" class="form-control-label">تاريخ بداية الاشتراك</label>
-                    <input type="date" class="form-control" name="date_start_code" placeholder="تاريخ بداية الاشتراك">
-                </div>
-                <div class="col-md-6">
-                    <label for="date_end_code" class="form-control-label">تاريخ نهاية الاشتراك</label>
-                    <input type="date" class="form-control" name="date_end_code" placeholder="تاريخ نهاية الاشتراك">
-                </div>
+{{--                <div class="col-md-6">--}}
+{{--                    <label for="date_start_code" class="form-control-label">تاريخ بداية الاشتراك</label>--}}
+{{--                    <input type="date" class="form-control" name="date_start_code" placeholder="تاريخ بداية الاشتراك">--}}
+{{--                </div>--}}
+{{--                <div class="col-md-6">--}}
+{{--                    <label for="date_end_code" class="form-control-label">تاريخ نهاية الاشتراك</label>--}}
+{{--                    <input type="date" class="form-control" name="date_end_code" placeholder="تاريخ نهاية الاشتراك">--}}
+{{--                </div>--}}
 
-                @php
-                $groupOfMonths = array(
-                    1 => 'January',
-                    2 => 'February',
-                    3 =>'March',
-                    4 =>'April',
-                    5 =>'May',
-                    6 => 'June',
-                    7 =>'July',
-                    8 =>'August',
-                    9 => 'September',
-                    10 =>'October',
-                    11 => 'November',
-                    12 => 'December',
-                );
-                @endphp
                 <div class="col-md-12 mt-3">
                     <label for="name" class="form-control-label">شهور الاشتراك</label>
                     <select class="form-control select2" name="subscription_months_groups[]" id="subscription_months_groups[]" multiple>

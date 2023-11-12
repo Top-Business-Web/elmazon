@@ -21,8 +21,8 @@ class StoreUser extends FormRequest
             'father_phone' => 'nullable',
             'image' => 'nullable|image',
             'code' => 'required|unique:users,code,'.$this->id,
-            'date_start_code' => 'required|date|before:date_end_code',
-            'date_end_code' => 'required|date|after:date_start_code',
+//            'date_start_code' => 'required|date|before:date_end_code',
+//            'date_end_code' => 'required|date|after:date_start_code',
         ];
     }
 
@@ -39,8 +39,8 @@ class StoreUser extends FormRequest
             'date_end_code.required' => 'تاريخ نهاية الاشتراك مطلوب',
             'phone.unique' => 'هذا الرقم موجود من قبل',
             'code.unique' => 'هذا الكود موجود من قبل حاول مره اخري',
-            'date_start_code.before' => 'ادخل تاريخ صحيح قبل تاربخ الانتهاء',
-            'date_start_code.after' => 'ادخل تاريخ صحيح بعد تاربخ البداية',
+//            'date_start_code.before' => 'ادخل تاريخ صحيح قبل تاربخ الانتهاء',
+//            'date_start_code.after' => 'ادخل تاريخ صحيح بعد تاربخ البداية',
         ];
     }
 }

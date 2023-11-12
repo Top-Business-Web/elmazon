@@ -76,6 +76,20 @@ Route::get('update-group-months', function (){
 });
 
 
+Route::get('check-group-months', function (){
+
+    //list of months
+
+    $user = User::query()
+       ->where('id','=',24)
+        ->first();
+
+
+    return $user->subscription_months_groups;
+
+});
+
+
 /*
  * Explode (String to Array)
  * Implode (Array to string)
