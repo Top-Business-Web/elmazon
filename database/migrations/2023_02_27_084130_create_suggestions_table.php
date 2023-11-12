@@ -18,7 +18,6 @@ class CreateSuggestionsTable extends Migration
          جدول الاقتراحات للطالب
          */
         Schema::create('suggestions', function (Blueprint $table) {
-
             $table->bigIncrements('id');
             $table->string('suggestion')->nullable();
             $table->longText('image')->nullable();

@@ -162,11 +162,14 @@ class UserController extends Controller
     }
 
 
-    public function store(StoreUser $request): JsonResponse
+    public function store(StoreUser $request)
     {
+
+//        return $request->all();
         $inputs = $request->all();
         $inputs['user_status'] = 'active';
         $inputs['password'] = Hash::make('123456');
+        $inputs['subscription_months_groups'] = json_encode($request->subscription_months_groups);
 
         if ($request->has('image')) {
             $inputs['image'] = $this->saveImage($request->image, 'user', 'photo');
