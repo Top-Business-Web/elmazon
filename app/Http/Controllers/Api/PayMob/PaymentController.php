@@ -19,7 +19,7 @@ class PaymentController extends Controller{
 
     public function allMonths(): JsonResponse{
 
-        $listOfMonth = [
+        $listOfMonth = array(
             1 => 'January',
             2 => 'February',
             3 =>'March',
@@ -32,7 +32,7 @@ class PaymentController extends Controller{
             10 =>'October',
             11 => 'November',
             12 => 'December',
-        ];
+        );
 
         $arrayKeys = array_keys($listOfMonth);
         $arrayValues = array_values($listOfMonth);

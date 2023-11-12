@@ -40,7 +40,6 @@ class CreateNotificationsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('season_id')->references('id')->on('seasons')->cascadeOnUpdate()->cascadeOnDelete();
 
-
         });
     }
 

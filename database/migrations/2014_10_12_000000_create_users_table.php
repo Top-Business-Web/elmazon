@@ -29,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->string('code')->comment('كود الطالب')->unique();
             $table->date('date_start_code')->comment('تاريخ بدايه الاشتراك');
             $table->date('date_end_code')->comment('تاريخ نهايه الاشتراك');
+            $table->json('subscription_months_groups')->comment('شهور الاشتراك');
             $table->longText('access_token')->comment('توكن الدخول من خلال الاجهزه اللوحيه');
             $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
