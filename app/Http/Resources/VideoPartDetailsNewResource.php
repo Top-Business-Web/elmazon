@@ -20,37 +20,40 @@ class VideoPartDetailsNewResource extends JsonResource
     public function toArray($request): array
     {
 
+        $user = Auth::guard('user-api')->user();
+        $videoId = $this->id;
+
         $user_watch_video = VideoOpened::query()
-            ->where('video_part_id','=',$this->id)
-            ->where('user_id','=',Auth::guard('user-api')->id())
+            ->where('video_part_id','=',$videoId)
+            ->where('user_id','=',$user->id)
             ->first();
 
         $video_rate = VideoRate::query()
-            ->where('video_id','=',$this->id)
-            ->where('user_id','=',Auth::guard('user-api')->id())
+            ->where('video_id','=',$videoId)
+            ->where('user_id','=',$user->id)
             ->first();
 
         $like_video_count = VideoRate::query()
-            ->where('video_id','=',$this->id)
+            ->where('video_id','=',$videoId)
             ->where('action','=','like')
             ->count();
 
         $totalViews = VideoTotalView::query()
-            ->where('video_part_id','=',$this->id)
+            ->where('video_part_id','=',$videoId)
             ->count();
 
 
 
         $sumMinutesOfVideo = VideoParts::query()
-            ->where('id','=',$this->id)
+            ->where('id','=',$videoId)
             ->pluck('video_time')
             ->toArray();// example 130 seconds
 
 
         $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
             ->where('minutes','!=',null)
-            ->where('video_part_id','=',$this->id)
-            ->where('user_id', '=', Auth::guard('user-api')->id())
+            ->where('video_part_id','=',$videoId)
+            ->where('user_id', '=', $user->id)
             ->pluck('minutes')
             ->toArray();//example 120 seconds
 
@@ -58,27 +61,32 @@ class VideoPartDetailsNewResource extends JsonResource
         $totalMinutesOfAllVideos = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfVideo)) * 100),2);
 
 
-        //===================================================== start Test Subscribe =========================================================
 
         $studentAuth = User::query()
-            ->where('id','=',Auth::guard('user-api')->id())
-            ->select('id','date_start_code','date_end_code')
+            ->where('id','=',$user->id)
+            ->select('id','subscription_months_groups')
             ->first();
 
-        $list = [];
-        $period = CarbonPeriod::create( $studentAuth->date_start_code, '1 month',$studentAuth->date_end_code);
 
-        foreach ($period as $dt) {
-            $list[] = $dt->format("Y-m");
+
+        $status = "not_access";
+
+        if($studentAuth->subscription_months_groups != null){
+
+            // Retrieve the student's subscription data
+            $subscription_months_groups = json_decode($studentAuth->subscription_months_groups);
+
+            // Determine video status based on the user's subscription and watched status
+            $status = ($subscription_months_groups && in_array($this->month,$subscription_months_groups)) ?
+                (!$user_watch_video ? 'lock' : ($user_watch_video->status)) : 'not_access';
         }
 
-        //===================================================== end Test Subscribe =========================================================
 
         return [
 
             'id' => $this->id,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
-            'status' =>  !in_array($this->month < 10 ? Carbon::now()->format('Y-')."0".$this->month:  Carbon::now()->format('Y-').$this->month,$list) ? 'not_access' : (!$user_watch_video ? 'lock' :  ($user_watch_video->status == 'opened' ? 'opened': 'watched')),
+            'status' => $status,
             'progress' =>  !empty($sumAllOfMinutesVideosStudentAuth) ? $totalMinutesOfAllVideos : "0",
             'link' =>  $this->is_youtube == true ? $this->youtube_link :asset('videos/'. $this->link),
             'is_youtube' =>  $this->is_youtube,
