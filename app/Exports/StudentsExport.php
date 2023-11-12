@@ -22,8 +22,7 @@ class StudentsExport implements FromCollection , WithHeadings ,WithColumnWidths
             'E' => 20,
             'F' => 20,
             'G' => 20,
-            'H' => 20,
-            'I' => 20,
+            'H' => 50,
             'J' => 20,
             'K' => 10,
 
@@ -40,8 +39,7 @@ class StudentsExport implements FromCollection , WithHeadings ,WithColumnWidths
             'center',
             'user_status',
             'code',
-            'date_start_code',
-            'date_end_code',
+            'subscription_months_groups',
             'season_id',
             'country_id'
         ];
@@ -57,8 +55,7 @@ class StudentsExport implements FromCollection , WithHeadings ,WithColumnWidths
             'center',
             'user_status',
             'code',
-            'date_start_code',
-            'date_end_code',
+            'subscription_months_groups',
             'season_id',
             'country_id'
             ]);

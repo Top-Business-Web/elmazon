@@ -11,7 +11,8 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
-class StudentsImport implements ToCollection, WithHeadingRow,WithMapping
+//class StudentsImport implements ToCollection, WithHeadingRow,WithMapping
+class StudentsImport implements ToCollection, WithHeadingRow
 {
 
    public function generateUniqueCode(): string
@@ -51,25 +52,24 @@ class StudentsImport implements ToCollection, WithHeadingRow,WithMapping
                 'center' => $collection[$i]['center'],
                 'user_status' => $collection[$i]['user_status'],
                 'code' => $collection[$i]['code'] ?? $this->generateUniqueCode(),
-                'date_start_code' => Carbon::parse($collection[$i]['date_start_code'])->format('Y-m-d'),
-                'date_end_code' => Carbon::parse($collection[$i]['date_end_code'])->format('Y-m-d'),
+                'subscription_months_groups' => $collection[$i]['subscription_months_groups'],
                 'season_id' => $collection[$i]['season_id'],
                 'country_id' => $collection[$i]['country_id'],
             ]);
         }
     }
 
-
-    public function map($row): array
-    {
-
-        if(gettype($row['birth_date']) == 'integer'){
-
-            $row['birth_date'] = Date::excelToDateTimeObject($row['birth_date'])->format('Y-m-d');
-            $row['date_start_code'] = Date::excelToDateTimeObject($row['date_start_code'])->format('Y-m-d');
-            $row['date_end_code'] = Date::excelToDateTimeObject($row['date_end_code'])->format('Y-m-d');
-        }
-
-        return $row;
-    }
+//
+//    public function map($row): array
+//    {
+//
+//        if(gettype($row['birth_date']) == 'integer'){
+//
+//            $row['birth_date'] = Date::excelToDateTimeObject($row['birth_date'])->format('Y-m-d');
+//            $row['date_start_code'] = Date::excelToDateTimeObject($row['date_start_code'])->format('Y-m-d');
+//            $row['date_end_code'] = Date::excelToDateTimeObject($row['date_end_code'])->format('Y-m-d');
+//        }
+//
+//        return $row;
+//    }
 }
