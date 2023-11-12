@@ -158,14 +158,27 @@ class UserController extends Controller
     {
         $data['seasons'] = Season::get();
         $data['countries'] = Country::get();
+        $data['groupOfMonths'] = array(
+            1 => 'January',
+            2 => 'February',
+            3 =>'March',
+            4 =>'April',
+            5 =>'May',
+            6 => 'June',
+            7 =>'July',
+            8 =>'August',
+            9 => 'September',
+            10 =>'October',
+            11 => 'November',
+            12 => 'December',
+        );
         return view('admin.users.parts.create')->with($data);
     }
 
 
-    public function store(StoreUser $request)
+    public function store(StoreUser $request): JsonResponse
     {
 
-//        return $request->all();
         $inputs = $request->all();
         $inputs['user_status'] = 'active';
         $inputs['password'] = Hash::make('123456');
@@ -174,8 +187,8 @@ class UserController extends Controller
         if ($request->has('image')) {
             $inputs['image'] = $this->saveImage($request->image, 'user', 'photo');
         }
-
-        if (User::create($inputs)) {
+        $newUser = User::create($inputs);
+        if ($newUser) {
             $this->adminLog('تم اضافة طالب جديد');
             return response()->json(['status' => 200]);
         } else {
@@ -186,27 +199,45 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        $seasons = Season::query()
+        $data['seasons'] = Season::query()
             ->select('id', 'name_ar')
             ->get();
 
-        $countries = Country::query()
+        $data['countries'] = Country::query()
             ->select('id', 'name_ar')
             ->get();
 
-        $login_status = [0, 1];
+        $data['groupOfMonths'] = array(
+            1 => 'January',
+            2 => 'February',
+            3 =>'March',
+            4 =>'April',
+            5 =>'May',
+            6 => 'June',
+            7 =>'July',
+            8 =>'August',
+            9 => 'September',
+            10 =>'October',
+            11 => 'November',
+            12 => 'December',
+        );
 
-        $user_status = ['in', 'out'];
+        $data['login_status'] = [0, 1];
 
-        $user_active = ['active', 'not_active'];
+        $data['user_status'] = ['in', 'out'];
 
-        return view('admin.users.parts.edit', compact('user', 'login_status', 'seasons', 'countries', 'user_status', 'user_active'));
+        $data['user_active'] = ['active', 'not_active'];
+
+
+        return view('admin.users.parts.edit',compact('user'))->with($data);
     }
 
     public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
 
         $inputs = $request->except('id');
+        $inputs['subscription_months_groups'] = json_encode($request->subscription_months_groups);
+
 
         if ($request->has('image')) {
             if (file_exists($user->image)) {

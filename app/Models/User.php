@@ -52,6 +52,7 @@ class User extends Authenticatable implements JWTSubject
     ];
 
 
+
     public function season(): BelongsTo
     {
 
@@ -94,6 +95,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'subscription_months_groups' => 'json',
     ];
 
     public function getJWTIdentifier()
@@ -105,6 +107,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
 
     public function subscriptions(): HasMany
     {

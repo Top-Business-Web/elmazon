@@ -29,8 +29,8 @@ class UserUpdateRequest extends FormRequest
             'phone' => 'required|unique:users,phone,' . $this->id,
             'father_phone' => 'nullable',
             'image' => 'nullable|image',
-            'date_start_code' => 'required|date|before:date_end_code',
-            'date_end_code' => 'required|date|after:date_start_code',
+//            'date_start_code' => 'required|date|before:date_end_code',
+//            'date_end_code' => 'required|date|after:date_start_code',
         ];
         return $rules;
     }
@@ -47,8 +47,8 @@ class UserUpdateRequest extends FormRequest
             'date_start_code.required' => 'تاريخ بداية الاشتراك مطلوب',
             'date_end_code.required' => 'تاريخ نهاية الاشتراك مطلوب',
             'phone.unique' => 'هذا الرقم موجود من قبل',
-            'date_start_code.before' => 'ادخل تاريخ صحيح قبل تاربخ الانتهاء',
-            'date_start_code.after' => 'ادخل تاريخ صحيح بعد تاربخ البداية',
+//            'date_start_code.before' => 'ادخل تاريخ صحيح قبل تاربخ الانتهاء',
+//            'date_start_code.after' => 'ادخل تاريخ صحيح بعد تاربخ البداية',
         ];
     }
 }
