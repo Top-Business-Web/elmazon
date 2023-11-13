@@ -19,31 +19,27 @@ class PaymentController extends Controller{
 
     public function allMonths(): JsonResponse{
 
-        $listOfMonth = array(
-            1 => 'January',
-            2 => 'February',
-            3 =>'March',
-            4 =>'April',
-            5 =>'May',
-            6 => 'June',
-            7 =>'July',
-            8 =>'August',
-            9 => 'September',
-            10 =>'October',
-            11 => 'November',
-            12 => 'December',
+        $months = array(
+            1 => 'شهر يناير',
+            2 => 'شهر فبراير',
+            3 =>'شهر مارس',
+            4 =>'شهر ابريل',
+            5 =>'شهر مايو',
+            6 => 'شهر يونيو',
+            7 =>'شهر يوليو',
+            8 =>'شهر اغسطس',
+            9 => 'شهر سبتمبر',
+            10 =>'شهر اكتوبر',
+            11 => 'شهر نوفمبر',
+            12 => 'شهر ديسمبر',
         );
 
-        $arrayKeys = array_keys($listOfMonth);
-        $arrayValues = array_values($listOfMonth);
+      
+           $listOfMonths = [];
 
-        $nameOfMonths = ['شهر يناير', 'شهر فبراير','شهر مارس','شهر ابريل','شهر مايو', 'شهر يونيو','شهر يوليو','شهر اغسطس', 'شهر سبتمبر', 'شهر اكتوبر', 'شهر نوفمبر', 'شهر ديسمبر',];
+           foreach($months as $key=>$month) {
 
-           $data = [];
-
-           for($i = 0 ; $i < count($arrayKeys); $i++) {
-
-           $result  = AllMonthsResource::collection(VideoParts::query()
+           $result  = VideoParts::query()
                ->whereHas('lesson', fn(Builder $builder) =>
                $builder
                    ->whereHas('subject_class', fn(Builder $builder)=>
@@ -52,26 +48,31 @@ class PaymentController extends Controller{
                        $builder
                            ->where('status', '=', 'active')
                            ->where('season_id', '=', auth('user-api')->user()->season_id))
-                   ))->where('month','=',$arrayKeys[$i])->get());
+                   ))->where('month','=',$key)
+                   ->get();
 
+                $collectionOfData =  AllMonthsResource::collection($result);
+
+                ################################ سعر محتوي كل شهر للصف الدراسي التابع له الطالب والتيرم المفعل #####
                $price = Subscribe::query()
                    ->whereHas('term',fn (Builder $builder) =>
                    $builder->where('status', '=', 'active')
                        ->where('season_id', '=', auth('user-api')->user()->season_id)
-                   )->where('month','=',$arrayKeys[$i])
+                   )->where('month','=',$key)
                    ->first();
 
-               $data[$arrayValues[$i]] = [
-                   'id' => $arrayKeys[$i],
-                   'name' => $nameOfMonths[$i],
-                   'price' => $price ? ($price->free == "yes" ? 0 : (auth('user-api')->user()->center == 'in' ? $price->price_in_center : $price->price_out_center)) : 0,
-                   'free_status' => $price ? ($price->free == "yes" ? "free" : "not_free") : "unavailable",
-                   'content' => $result,
-               ];
+            ################################ الحصول علي جميع بيانات الشهور بالاسعار الخاصه بالصف الدراسي والتيرم لهذا الطالب ###############################
+               $listOfMonths[] = [
+                'id' => $key,
+                'name' => $month,
+                'price' => $price ? ($price->free == "yes" ? 0 : (auth('user-api')->user()->center == 'in' ? $price->price_in_center : $price->price_out_center)) : 0,
+                'free_status' => $price ? ($price->free == "yes" ? "free" : "not_free") : "unavailable",
+                'content' => $collectionOfData,
+            ];
 
            }
 
-        return self::returnResponseDataApi($data,"تم الحصول علي جميع محتوي الشرح انت الان جاهز لاختيار شهور معينه للاشتراك علي منصتنا",200);
+        return self::returnResponseDataApi($listOfMonths,"تم الحصول علي جميع محتوي الشرح انت الان جاهز لاختيار شهور معينه للاشتراك علي منصتنا",200);
     }
 
 
