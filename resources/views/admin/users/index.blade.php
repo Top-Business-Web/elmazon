@@ -61,8 +61,6 @@
                                 <th class="min-w-50px">حاله الطالب</th>
                                 <th class="min-w-50px">تسجيل الطالب معنا</th>
                                 <th class="min-w-50px">رقم هاتف ولي الامر</th>
-                                <th class="min-w-50px">تاريخ بدايه الاشتراك</th>
-                                <th class="min-w-50px">تاريخ نهايه الاشتراك</th>
                                 <th class="min-w-50px">ملاحظات</th>
                                 <th class="min-w-50px rounded-end">العمليات</th>
                             </tr>
@@ -204,8 +202,6 @@
             {data: 'user_status', name: 'user_status'},
             {data: 'center', name: 'center'},
             {data: 'father_phone', name: 'father_phone'},
-            {data: 'date_start_code', name: 'date_start_code'},
-            {data: 'date_end_code', name: 'date_end_code'},
             {data: 'user_status_note', name: 'user_status_note'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
