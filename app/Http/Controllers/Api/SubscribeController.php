@@ -27,8 +27,7 @@ class SubscribeController extends Controller
             ->where('student_id',$user->id)
                 ->where(function($query) use($start_year,$end_year){
                     return  $query->where('year',$start_year)->orWhere('year',$end_year);
-                }
-            )->pluck('month')
+                })->pluck('month')
                 ->toArray();
 
 

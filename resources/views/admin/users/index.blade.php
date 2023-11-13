@@ -206,9 +206,6 @@
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
 
-
-
-
         showUserModal('{{ route('userUnvilable') }}')
 
         showData('{{ route('users.index') }}', columns);

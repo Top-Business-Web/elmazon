@@ -38,56 +38,56 @@ Route::middleware('auth:admin')->group(function (){
 });
 
 
-Route::get('explode', function (){
+// Route::get('explode', function (){
 
-    //list of months
-    $string = "1,2,3,4,5,6,7,8,9";
+//     //list of months
+//     $string = "1,2,3,4,5,6,7,8,9";
 
-    $explode =  explode(",",$string);
+//     $explode =  explode(",",$string);
 
-    return in_array(7,$explode);
-});
-
-
-Route::get('update-group-months', function (){
-
-    //list of months
-
-    $users = User::query()
-    ->select('id','date_start_code','date_end_code','subscription_months_groups')
-    ->get();
-
-    foreach ($users as $user){
-
-        $list = [];
-
-        $period = CarbonPeriod::create( $user->date_start_code, '1 month',$user->date_end_code);
-
-        foreach ($period as $dt) {
-            $list[] = $dt->format("m");
-        }
-
-        $user->update(['subscription_months_groups' => json_encode($list)]);
-
-    }
-
-    return "All Users Done Updated";
-
-});
+//     return in_array(7,$explode);
+// });
 
 
-Route::get('check-group-months', function (){
+// Route::get('update-group-months', function (){
 
-    //list of months
+//     //list of months
 
-    $user = User::query()
-       ->where('id','=',24)
-        ->first();
+//     $users = User::query()
+//     ->select('id','date_start_code','date_end_code','subscription_months_groups')
+//     ->get();
+
+//     foreach ($users as $user){
+
+//         $list = [];
+
+//         $period = CarbonPeriod::create( $user->date_start_code, '1 month',$user->date_end_code);
+
+//         foreach ($period as $dt) {
+//             $list[] = $dt->format("m");
+//         }
+
+//         $user->update(['subscription_months_groups' => json_encode($list)]);
+
+//     }
+
+//     return "All Users Done Updated";
+
+// });
 
 
-    return $user->subscription_months_groups;
+// Route::get('check-group-months', function (){
 
-});
+//     //list of months
+
+//     $user = User::query()
+//        ->where('id','=',24)
+//         ->first();
+
+
+//     return $user->subscription_months_groups;
+
+// });
 
 
 /*

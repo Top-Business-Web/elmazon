@@ -10,11 +10,12 @@ use App\Http\Controllers\Controller;
 class PayMobController extends Controller{
 
 
+    
     public static function pay(float $total_price,int $order_id): JsonResponse
     {
 
         $auth = PayMob::AuthenticationRequest();
-
+        
         $order = PayMob::OrderRegistrationAPI([
             'auth_token' => $auth->token,
             'amount_cents' => $total_price * 100, //put your price
