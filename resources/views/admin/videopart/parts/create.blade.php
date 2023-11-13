@@ -23,6 +23,7 @@
                     <label for="name_ar" class="form-control-label">الصف الدراسي</label>
                     <Select name="season_id" id="season_id" class="form-control">
                         <option disabled selected>اختر</option>
+                    
                         @foreach ($seasons as $season)
                             <option value="{{ $season->id }}" style="text-align: center">{{ $season->name_ar }}</option>
                         @endforeach
