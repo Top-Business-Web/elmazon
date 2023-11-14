@@ -48,12 +48,7 @@ class PayMobController extends Controller{
         ]);
 
 
-        return response()->json([
-            'data' => "https://accept.paymob.com/api/acceptance/iframes/758783?payment_token=$PaymentKey->token",
-            'message' => "تم الوصول الي لينك الدفع الالكتروني برجاء التوجهه الي عمليه الدفع لاتمام الدفع المبلغ",
-            'code' => 200,
-
-        ],200);
+        return response()->json(['data' => "https://accept.paymob.com/api/acceptance/iframes/758783?payment_token=$PaymentKey->token",'message' => "تم الوصول الي لينك الدفع الالكتروني برجاء التوجهه الي عمليه الدفع لاتمام الدفع المبلغ",'code' => 200],200);
 
 
     }
