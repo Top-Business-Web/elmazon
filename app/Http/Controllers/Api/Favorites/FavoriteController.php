@@ -231,123 +231,56 @@ class FavoriteController extends Controller
 
             } else {
 
-                if ($request->video_basic_id != null) {
+       
 
-                    $userVideoFavorite = VideoFavorite::query()->where([
-                        'user_id' => Auth::guard('user-api')->id(),
-                        'video_basic_id' => $request->video_basic_id
-                    ])
-                        ->exists();
+        $type = $request->favorite_type;
 
-                    if ($userVideoFavorite) {
-
-                        $favorite_add = VideoFavorite::query()
-                            ->where('user_id', '=', Auth::guard('user-api')->id())
-                            ->where('video_basic_id', '=', $request->video_basic_id)
-                            ->first();
-
-                        $favorite_add->update([
-                            'video_basic_id' => $request->video_basic_id,
-                            'action' => $request->action
-                        ]);
-
-                        return self::returnResponseDataApi(null, $request->action == 'favorite' ? "تم اضافه اضافه فيديو الاساسيات للمفضله" : "تم حذف اضافه فيديو الاساسيات من المفضله", 200);
-
-                    } else {
-
-                        VideoFavorite::create([
-
-                            'user_id' => Auth::guard('user-api')->id(),
-                            'favorite_type' => $request->favorite_type,
-                            'video_basic_id' => $request->video_basic_id,
-                            'action' => $request->action
-                        ]);
-
-                        return self::returnResponseDataApi(null, "تم اضافه فيديو الاساسيات للمفضله", 200);
-
-                    }
-
-                }//end one if step
-
-                elseif ($request->video_resource_id != null) {
-
-                    $userVideoFavorite = VideoFavorite::query()->where([
-                        'user_id' => Auth::guard('user-api')->id(),
-                        'video_resource_id' => $request->video_resource_id
-                    ])
-                        ->exists();
-
-                    if ($userVideoFavorite) {
-
-                        $favorite_add = VideoFavorite::query()
-                            ->where('user_id', '=', Auth::guard('user-api')->id())
-                            ->where('video_resource_id', '=', $request->video_resource_id)
-                            ->first();
-
-                        $favorite_add->update([
-                            'video_resource_id' => $request->video_resource_id,
-                            'action' => $request->action
-                        ]);
-
-                        return self::returnResponseDataApi(null, $request->action == 'favorite' ? "تم اضافه  فيديو المراجعه النهائيه للمفضله" : "تم حذف فيديو المراجعه النهائيه من المفضله", 200);
-
-                    } else {
-
-                        VideoFavorite::create([
-
-                            'user_id' => Auth::guard('user-api')->id(),
-                            'favorite_type' => $request->favorite_type,
-                            'video_resource_id' => $request->video_resource_id,
-                            'action' => $request->action
-                        ]);
-
-                        return self::returnResponseDataApi(null, "تم اضافه فيديو المراجعه النهائيه للمفضله", 200);
-
-                    }
-
-                }//end one else if step
-
-                else {
-
-                    $userVideoFavorite = VideoFavorite::query()->where([
-                        'user_id' => Auth::guard('user-api')->id(),
-                        'video_part_id' => $request->video_part_id
-                    ])
-                        ->exists();
-
-                    if ($userVideoFavorite) {
-
-                        $favorite_add = VideoFavorite::query()
-                            ->where('user_id', '=', Auth::guard('user-api')->id())
-                            ->where('video_part_id', '=', $request->video_part_id)
-                            ->first();
-
-                        $favorite_add->update([
-                            'video_part_id' => $request->video_part_id,
-                            'action' => $request->action
-                        ]);
-
-                        return self::returnResponseDataApi(null, $request->action == 'favorite' ? "تم اضافه  فيديو الشرح للمفضله" : "تم حذف فيديو الشرح من المفضله", 200);
-
-                    } else {
-
-                        VideoFavorite::create([
-                            'user_id' => Auth::guard('user-api')->id(),
-                            'favorite_type' => $request->favorite_type,
-                            'video_part_id' => $request->video_part_id,
-                            'action' => $request->action
-                        ]);
-
-                        return self::returnResponseDataApi(null, "تم اضافه فيديو الشرح للمفضله", 200);
-
-                    }
-
-                }
-            }
-        } catch (\Exception $exception) {
-
-            return self::returnResponseDataApi(null, $exception->getMessage(), 500);
+        switch ($type) {
+            case 'video_basic':
+                $videoIdKey = 'video_basic_id';
+                $messagePrefix = 'فيديو الاساسيات';
+                break;
+            case 'video_resource':
+                $videoIdKey = 'video_resource_id';
+                $messagePrefix = 'فيديو المراجعة النهائية';
+                break;
+            case 'video_part':
+                $videoIdKey = 'video_part_id';
+                $messagePrefix = 'فيديو الشرح';
+                break;
+            default:
+                // Handle the default case or return an error message.
         }
+        
+        // Rest of the code remains the same, using $videoIdKey, and $messagePrefix.
+
+        $videoFavorite = VideoFavorite::query()
+                        ->where('user_id', '=', Auth::guard('user-api')->id())
+                        ->where($videoIdKey, '=', $request->$videoIdKey)
+                        ->first();
+
+                if ($videoFavorite) {
+                    $videoFavorite->update([$videoIdKey => $request->$videoIdKey, 'action' => $request->action]);
+                    $message = $request->action == "favorite" ? "تم اضافة $messagePrefix للمفضلة" : "تم حذف من $messagePrefix المفضله";
+                    
+                } else {
+
+                    VideoFavorite::create([
+                        'user_id' => Auth::guard('user-api')->id(),
+                        'favorite_type' => $type,
+                         $videoIdKey => $request->$videoIdKey,
+                        'action' => $request->action
+                    ]);
+                    $message = "تم اضافة $messagePrefix للمفضلة";
+               }
+
+               return self::returnResponseDataApi(null, $message, 200);
+        }  
+        
+    } catch (\Exception $exception) {
+
+        return self::returnResponseDataApi(null, $exception->getMessage(), 500);
+    }
 
     }
 
