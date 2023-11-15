@@ -85,7 +85,7 @@ class PayMobController extends Controller{
                     ################################ start update months in user model ##########################################################################
 
                     $userSubscribes = UserSubscribe::query()
-                        ->where('student_id','=', $order->user_id)
+                        ->where('student_id','=',$order->user_id)
                         ->whereDate('created_at','=',date('Y-m-d'))
                         ->get();
 
@@ -96,7 +96,7 @@ class PayMobController extends Controller{
                         $array[] = $userSubscribe->month < 10 ? "0".$userSubscribe->month : $userSubscribe->month;
                     }
 
-                    $studentAuth = User::find(auth('user-api')->id());
+                    $studentAuth = User::find($order->user_id);
                     $studentAuth->subscription_months_groups = json_encode($array);
                     $studentAuth->save();
 
