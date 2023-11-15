@@ -76,6 +76,14 @@ class PayMobController extends Controller{
                     ]);
                 } else {
 
+                    $order->update([
+                        'transaction_status' => "failed",
+                        'transaction_id' => $transaction_id
+                    ]);
+
+
+                    ################################ start update months in user model ##########################################################################
+
                     $userSubscribes = UserSubscribe::query()
                         ->where('student_id','=',auth('user-api')->id())
                         ->whereDate('created_at','=',date('Y-m-d'))
@@ -92,10 +100,9 @@ class PayMobController extends Controller{
                     $studentAuth->subscription_months_groups = json_encode($array);
                     $studentAuth->save();
 
-                    $order->update([
-                        'transaction_status' => "failed",
-                        'transaction_id' => $transaction_id
-                    ]);
+
+                    ################################ end months in user model ##########################################################################
+
                 }
             }
     }
