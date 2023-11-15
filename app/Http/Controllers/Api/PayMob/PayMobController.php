@@ -9,12 +9,12 @@ use App\Http\Controllers\Controller;
 
 class PayMobController extends Controller{
 
-    
-    public static function pay(float $total_price,int $order_id): JsonResponse
+
+    public static function pay(float $total_price,int $order_id)
     {
 
         $auth = PayMob::AuthenticationRequest();
-        
+
         $order = PayMob::OrderRegistrationAPI([
             'auth_token' => $auth->token,
             'amount_cents' => $total_price * 100, //put your price
@@ -47,8 +47,7 @@ class PayMobController extends Controller{
             ]
         ]);
 
-
-        return response()->json(['data' => "https://accept.paymob.com/api/acceptance/iframes/758783?payment_token=$PaymentKey->token",'message' => "تم الوصول الي لينك الدفع الالكتروني برجاء التوجهه الي عمليه الدفع لاتمام الدفع المبلغ",'code' => 200],200);
+          return $PaymentKey->token;
 
 
     }
@@ -61,6 +60,7 @@ class PayMobController extends Controller{
             $calc_hmac = PayMob::calcHMAC($request);
 
             if ($request_hmac == $calc_hmac) {
+
                 $order_id = $request->obj['order']['merchant_order_id'];
                 $amount_cents = $request->obj['amount_cents'];
                 $transaction_id = $request->obj['id'];
