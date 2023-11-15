@@ -85,7 +85,7 @@ class PayMobController extends Controller{
                     ################################ start update months in user model ##########################################################################
 
                     $userSubscribes = UserSubscribe::query()
-                        ->where('student_id','=',auth('user-api')->id())
+                        ->where('student_id','=', $order->user_id)
                         ->whereDate('created_at','=',date('Y-m-d'))
                         ->get();
 
