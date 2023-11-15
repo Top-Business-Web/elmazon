@@ -25,7 +25,7 @@ class LiveExamFavoriteResource extends JsonResource
             || ExamsFavorite::where('life_exam_id','=',$this->id)
                 ->where('user_id','=',Auth::guard('user-api')->id())
                 ->where('action','=','un_favorite')->first() ? 'un_favorite' : 'favorite',
-            'answer_video_file' => $this->answer_video_file != null ? asset('live_exam_file_uploads/videos/'. $this->answer_video_file) : null,
+            'answer_video_file' => $this->answer_video_file != null ? asset($this->answer_video_file) : null,
 
         ];
     }
