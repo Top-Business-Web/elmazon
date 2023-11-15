@@ -39,7 +39,10 @@ class CheckoutController extends Controller
             'user_id' => Auth::guard('user-api')->id(),
         ]);
 
-        return PayMobController::pay($order->total_price,$order->id);
+        $payMobToken = PayMobController::pay($order->total_price,$order->id);
+
+        return response()->json(['data' => "https://accept.paymob.com/api/acceptance/iframes/758783?payment_token=$payMobToken",'message' => "تم الوصول الي لينك الدفع الالكتروني برجاء التوجهه الي عمليه الدفع لاتمام الدفع المبلغ",'code' => 200]);
+
 
     }
 }
