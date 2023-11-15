@@ -29,7 +29,6 @@ class UserUpdateRequest extends FormRequest
             'phone' => 'required|unique:users,phone,' . $this->id,
             'father_phone' => 'nullable',
             'image' => 'nullable|image',
-            'subscription_months_groups' => 'required',
 
         ];
         return $rules;
@@ -47,7 +46,6 @@ class UserUpdateRequest extends FormRequest
             'date_start_code.required' => 'تاريخ بداية الاشتراك مطلوب',
             'date_end_code.required' => 'تاريخ نهاية الاشتراك مطلوب',
             'phone.unique' => 'هذا الرقم موجود من قبل',
-            'subscription_months_groups.required' => 'حدد شهور الاشتراك لهذا الطالب',
         ];
     }
 }

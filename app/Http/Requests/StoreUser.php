@@ -20,7 +20,6 @@ class StoreUser extends FormRequest
             'phone' => 'required|unique:users,phone,'.$this->id,
             'father_phone' => 'nullable',
             'image' => 'nullable|image',
-            'subscription_months_groups' => 'required',
             'code' => 'required|unique:users,code,'.$this->id,
         ];
     }
@@ -38,7 +37,7 @@ class StoreUser extends FormRequest
             'date_end_code.required' => 'تاريخ نهاية الاشتراك مطلوب',
             'phone.unique' => 'هذا الرقم موجود من قبل',
             'code.unique' => 'هذا الكود موجود من قبل حاول مره اخري',
-            'subscription_months_groups.required' => 'حدد شهور الاشتراك لهذا الطالب',
+
 
         ];
     }

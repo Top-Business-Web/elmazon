@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\PayMob;
 use App\Models\Payment;
+use App\Models\User;
+use App\Models\UserSubscribe;
 use Illuminate\Http\JsonResponse;
 use PayMob\Facades\PayMob;
 use Illuminate\Http\Request;
@@ -73,6 +75,23 @@ class PayMobController extends Controller{
                         'transaction_id' => $transaction_id
                     ]);
                 } else {
+
+                    $userSubscribes = UserSubscribe::query()
+                        ->where('user_id','=',auth('user-api')->id())
+                        ->whereDate('created_at','=',date('Y-m-d'))
+                        ->get();
+
+                    $array = [];
+
+                    foreach ($userSubscribes as $userSubscribe){
+
+                        $array[] = $userSubscribe->month < 10 ? "0".$userSubscribe->month : $userSubscribe->month;
+                    }
+
+                    $studentAuth = User::find(auth('user-api')->id());
+                    $studentAuth->subscription_months_groups = json_encode($array);
+                    $studentAuth->save();
+
                     $order->update([
                         'transaction_status' => "failed",
                         'transaction_id' => $transaction_id
