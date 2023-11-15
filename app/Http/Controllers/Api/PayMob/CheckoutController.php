@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Api\PayMob;
 
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
+use App\Models\User;
+use App\Models\UserSubscribe;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CheckoutController extends Controller
 {
-    public function index(): JsonResponse
+    public function index()
     {
 
         $rules = [
@@ -38,6 +40,8 @@ class CheckoutController extends Controller
             'total_price' => request()->total_after_discount,
             'user_id' => Auth::guard('user-api')->id(),
         ]);
+
+
 
         $payMobToken = PayMobController::pay($order->total_price,$order->id);
 
