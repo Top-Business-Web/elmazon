@@ -70,17 +70,11 @@ class PayMobController extends Controller{
                 $order = Payment::find($order_id);
 
                 if ($request->obj['success'] && ($order->total_price * 100) == $amount_cents) {
+
                     $order->update([
                         'transaction_status' => 'finished',
                         'transaction_id' => $transaction_id
                     ]);
-                } else {
-
-                    $order->update([
-                        'transaction_status' => "failed",
-                        'transaction_id' => $transaction_id
-                    ]);
-
 
                     ################################ start update months in user model ##########################################################################
 
@@ -102,6 +96,13 @@ class PayMobController extends Controller{
 
 
                     ################################ end months in user model ##########################################################################
+                } else {
+
+                    $order->update([
+                        'transaction_status' => "failed",
+                        'transaction_id' => $transaction_id
+                    ]);
+
 
                 }
             }
