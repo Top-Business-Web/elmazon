@@ -93,7 +93,7 @@ class PayMobController extends Controller{
 
                     foreach ($userSubscribes as $userSubscribe){
 
-                        $array[] = $userSubscribe->month < 10 ? "0".$userSubscribe->month : $userSubscribe->month;
+                        $array[] = $userSubscribe->month < 10 ? "0".$userSubscribe->month : "$userSubscribe->month";
                     }
 
                     $studentAuth = User::find($order->user_id);
