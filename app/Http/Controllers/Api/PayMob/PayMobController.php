@@ -77,7 +77,7 @@ class PayMobController extends Controller{
                 } else {
 
                     $userSubscribes = UserSubscribe::query()
-                        ->where('user_id','=',auth('user-api')->id())
+                        ->where('student_id','=',auth('user-api')->id())
                         ->whereDate('created_at','=',date('Y-m-d'))
                         ->get();
 
