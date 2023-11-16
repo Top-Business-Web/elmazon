@@ -568,6 +568,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             }
 
             $life_exam = LifeExam::query()
+                ->select('id','name_ar','name_en','date_exam','time_start','time_end','degree','season_id','term_id','quiz_minute')
                 ->whereHas('term', fn (Builder $builder) =>
                 $builder->where('status', '=', 'active')
                     ->where('season_id', '=', auth('user-api')->user()->season_id))
@@ -621,6 +622,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $user->update(['access_token' => request()->bearerToken()]);
 
             $data['life_exam'] = $liveExamId;
+            $data['live_model'] =  $life_exam;
             $data['sliders'] = SliderResource::collection($sliders);
             $data['videos_basics'] = VideoBasicResource::collection(VideoBasic::get());
             $data['classes'] = SubjectClassNewResource::collection($classes);
