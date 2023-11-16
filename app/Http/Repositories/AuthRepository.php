@@ -599,20 +599,33 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                     ->first();
 
 
+                //جلب الامتحان الالايف قبل ميعاد الامتحان كمؤشر للطالب
                 if(Carbon::now()->format('Y-m-d') < $liveExam->date_exam){
 
                     $data['life_exam'] = null;
                     $data['live_model'] = $liveExam;
 
-                }elseif (Carbon::now()->format('Y-m-d') ==  $liveExam->date_exam && $nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel)){
+                //لو الامتحان متاح يبعت الداتا لل Api
+                }elseif ($nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel)){
 
 
                     $data['life_exam'] = $liveExam->id;
                     $data['live_model'] = $liveExam;
 
-
+                //لو الطالب امتحن هذا الامتحان
                 }elseif ($liveExamDegree){
 
+                    $data['life_exam'] = null;
+                    $data['live_model'] = null;
+
+                //لو توقيت الامتحان مش مناسب مع التوقيت الحالي او التوقيت فات
+                }elseif (!$nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel) && date('Y-m-d') == $liveExam->date_exam){
+
+                    $data['life_exam'] = null;
+                    $data['live_model'] = $liveExam;
+
+
+                }else{
                     $data['life_exam'] = null;
                     $data['live_model'] = null;
                 }
