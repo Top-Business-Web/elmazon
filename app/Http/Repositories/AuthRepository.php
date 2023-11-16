@@ -605,20 +605,19 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                     $data['life_exam'] = null;
                     $data['live_model'] = $liveExam;
 
-                //لو الامتحان متاح يبعت الداتا لل Api
-                }elseif ($nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel)){
-
-
-                    $data['life_exam'] = $liveExam->id;
-                    $data['live_model'] = $liveExam;
-
                 //لو الطالب امتحن هذا الامتحان
                 }elseif ($liveExamDegree){
 
                     $data['life_exam'] = null;
                     $data['live_model'] = null;
 
-                //لو توقيت الامتحان مش مناسب مع التوقيت الحالي او التوقيت فات
+                }elseif ($nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel)){
+
+
+                    $data['life_exam'] = $liveExam->id;
+                    $data['live_model'] = $liveExam;
+
+
                 }elseif (!$nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel) && date('Y-m-d') == $liveExam->date_exam){
 
                     $data['life_exam'] = null;
