@@ -567,36 +567,57 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ]);
             }
 
-            $life_exam = LifeExam::query()
-                ->select('id','name_ar','name_en','date_exam','time_start','time_end','degree','season_id','term_id','quiz_minute')
+            $liveExam = LifeExam::query()
+                ->select(
+                    'id',
+                    'name_ar',
+                    'name_en',
+                    'date_exam',
+                    'time_start',
+                    'time_end',
+                    'degree',
+                    'season_id',
+                    'term_id',
+                    'quiz_minute'
+                )
                 ->whereHas('term', fn (Builder $builder) =>
                 $builder->where('status', '=', 'active')
                     ->where('season_id', '=', auth('user-api')->user()->season_id))
                 ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
-                ->where('date_exam', '=', Carbon::now()->format('Y-m-d'))
+                ->latest()
                 ->first();
 
+            if($liveExam){
 
-            if ($life_exam) {
+                $nowLiveExamModel = Carbon::now();
+                $startLiveExamModel = Carbon::createFromTimeString($liveExam->time_start);
+                $endLiveExamModel = Carbon::createFromTimeString($liveExam->time_end);
 
-                $now = Carbon::now();
-                $start = Carbon::createFromTimeString($life_exam->time_start);
-                $end = Carbon::createFromTimeString($life_exam->time_end);
-
-                $liveExamDegreeDepends = ExamDegreeDepends::query()
+                $liveExamDegree = ExamDegreeDepends::query()
                     ->where('user_id', '=', Auth::guard('user-api')->id())
-                    ->where('life_exam_id', '=', $life_exam->id)
+                    ->where('life_exam_id', '=', $liveExam->id)
                     ->first();
 
-                if ($now->isBetween($start, $end) || !$liveExamDegreeDepends) {
-                    $liveExamId = $life_exam->id;
-                }  else {
-                    $liveExamId = null;
-                }
 
-            } else {
-                $liveExamId = null;
+                if(Carbon::now()->format('Y-m-d') < $liveExam->date_exam){
+
+                    $data['life_exam'] = null;
+                    $data['live_model'] = $liveExam;
+
+                }elseif (Carbon::now()->format('Y-m-d') ==  $liveExam->date_exam && $nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel)){
+
+
+                    $data['life_exam'] = $liveExam->id;
+                    $data['live_model'] = $liveExam;
+
+
+                }elseif ($liveExamDegree){
+
+                    $data['life_exam'] = null;
+                    $data['live_model'] = null;
+                }
             }
+
 
             $classes = SubjectClass::query()
                 ->whereHas('term', fn (Builder $builder) =>
@@ -621,14 +642,13 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             $user->update(['access_token' => request()->bearerToken()]);
 
-            $data['life_exam'] = $liveExamId;
-            $data['live_model'] =  $liveExamId != null ?  $life_exam : null;
             $data['sliders'] = SliderResource::collection($sliders);
             $data['videos_basics'] = VideoBasicResource::collection(VideoBasic::get());
             $data['classes'] = SubjectClassNewResource::collection($classes);
             $data['videos_resources'] = VideoResourceResource::collection($videos_resources);
 
             return self::returnResponseDataApiWithMultipleIndexes($data, "تم ارسال جميع بيانات الصفحه الرئيسيه", 200);
+
         } catch (\Exception $exception) {
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
