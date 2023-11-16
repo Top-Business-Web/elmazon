@@ -622,7 +622,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $user->update(['access_token' => request()->bearerToken()]);
 
             $data['life_exam'] = $liveExamId;
-            $data['live_model'] =  $life_exam;
+            $data['live_model'] =  $liveExamId != null ?  $life_exam : null;
             $data['sliders'] = SliderResource::collection($sliders);
             $data['videos_basics'] = VideoBasicResource::collection(VideoBasic::get());
             $data['classes'] = SubjectClassNewResource::collection($classes);
