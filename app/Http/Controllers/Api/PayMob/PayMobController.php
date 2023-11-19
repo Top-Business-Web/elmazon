@@ -18,6 +18,7 @@ class PayMobController extends Controller{
 
         $auth = PayMob::AuthenticationRequest();
 
+
         $order = PayMob::OrderRegistrationAPI([
             'auth_token' => $auth->token,
             'amount_cents' => $total_price * 100, //put your price
@@ -28,7 +29,7 @@ class PayMobController extends Controller{
         ]);
 
 
-
+//        return $order;
 
         $PaymentKey = PayMob::PaymentKeyRequest([
             'auth_token' => $auth->token,
