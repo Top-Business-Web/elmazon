@@ -72,12 +72,14 @@ Route::group(['middleware' => 'lang'], function (){
         Route::get('home-page/start-your-journey/findExamByClassById/{id}',[AuthController::class,'findExamByClassById']);
         Route::get('home-page/videos-resources',[AuthController::class,'videosResources']);
         Route::get('all-subscribes',[SubscribeController::class,'all']);
-        Route::post('/payments/pay',[Payment::class,'pay']);
-        Route::post('/payments/go_pay',[Payment::class,'go_pay']);
-        Route::post('/payments/paymob____',[Payment::class,'pay_']);
         Route::post('user-add-screenshot',[AuthController::class,'user_add_screenshot']);
         Route::get('invite-your-friends',[AuthController::class,'inviteYourFriends']);
         Route::get('exam-countdown',[AuthController::class,'examCountdown']);
+
+
+//        Route::post('/payments/pay',[Payment::class,'pay']);
+//        Route::post('/payments/go_pay',[Payment::class,'go_pay']);
+//        Route::post('/payments/paymob____',[Payment::class,'pay_']);
     });
   });
 
@@ -265,6 +267,7 @@ Route::group(['middleware' => 'lang'], function (){
     Route::post('/processed',[CheckoutController::class,'index'])->middleware('jwt');
     Route::post('/checkout/processed',[PayMobController::class,'checkout_processed']);
     Route::get('/checkout/response',[PayMobController::class,'responseStatus']);
+    Route::get('checkout',[PayMobController::class,'checkout']);
 
 });
 
@@ -277,10 +280,28 @@ Route::group(['middleware' => 'lang'], function (){
  */
 
 /*
- PayMob_Username="01061994948"
-PayMob_Password="eslamemo457@gmail.com_UPER"
-PayMob_Integration_Id="4325358"
-PayMob_HMAC="9C02EF4DE4DD4EDC29CACC6D8D988CBE"
+     PayMob_Username="01061994948"
+     PayMob_Password="eslamemo457@gmail.com_UPER"
+     PayMob_Integration_Id="4325358"
+     PayMob_HMAC="9C02EF4DE4DD4EDC29CACC6D8D988CBE"
+
+
+ ###########################################################
+
+    Frame : 402378
+    PayMob_Username="01062933188"
+    PayMob_Password="eslamemo457@gmail.com_UPER"
+    PayMob_Integration_Id="2238564"
+    PayMob_HMAC="3B2AAFBF4CDCDBE3DC5F2CC3B6F529CC"
+
+ ###########################################################
+    ElmazON Paymob configration
+
+    Frame : 758783
+    PayMob_Username="01004495595"
+    PayMob_Password="Hv6%#-760"
+    PayMob_Integration_Id="3796395"
+    PayMob_HMAC="4A977298DCE964E63A87F2A8AD8C3526"
+
  */
 
- 

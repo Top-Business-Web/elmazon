@@ -5,6 +5,7 @@ use App\Models\Payment;
 use App\Models\User;
 use App\Models\UserSubscribe;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use PayMob\Facades\PayMob;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -27,11 +28,13 @@ class PayMobController extends Controller{
         ]);
 
 
+
+
         $PaymentKey = PayMob::PaymentKeyRequest([
             'auth_token' => $auth->token,
             'amount_cents' => $total_price * 100, //put your price
             'currency' => 'EGP',
-            'order_id' => $order->id,
+//            'order_id' => $order->id,
             "billing_data" => [ // put your client information
                 "apartment" => "803",
                 "email" => "claudette09@exa.com",
@@ -55,6 +58,7 @@ class PayMobController extends Controller{
     }
 
 
+    ###################### Update Transaction When Payment Success #########################
     public function checkout_processed(Request $request){
 
 
@@ -76,11 +80,10 @@ class PayMobController extends Controller{
                         'transaction_id' => $transaction_id
                     ]);
 
-                    ################################ start update months in user model ##########################################################################
 
                     $userSubscribes = UserSubscribe::query()
                         ->where('student_id','=',$order->user_id)
-                        ->whereDate('created_at','=',date('Y-m-d'))
+                        ->whereYear('created_at','=',date('Y'))
                         ->get();
 
                     $array = [];
@@ -95,7 +98,6 @@ class PayMobController extends Controller{
                     $studentAuth->save();
 
 
-                    ################################ end months in user model ##########################################################################
                 } else {
 
                     $order->update([
@@ -108,18 +110,23 @@ class PayMobController extends Controller{
             }
     }
 
+    ############################# Check Response After Payment (Success,Failed) ########################################
 
-    public function responseStatus(Request $request): JsonResponse
+    public function responseStatus(Request $request): RedirectResponse
     {
-
-        if($request->status === true){
-
-            return self::returnResponseDataApi(null, "نجحت عمليه الدفع الالكتروني برجاء التوجهه الي الصفحه الرئيسيه من التطبيق", 200);
-
-        }else{
-
-            return self::returnResponseDataApi(null, "فشلت عمليه الدفع الالكتروني برجاء التوجهه الي الصفحه الرئيسيه من التطبيق", 420);
-        }
+        return redirect()->to('api/checkout?status='.$request['success'].'&id='.$request['id']);
     }
 
+
+    public function checkout(Request $request): string
+    {
+        if($request['status']){
+
+            return "Finished";
+        }else{
+
+            return "Failed";
+
+        }
+    }
 }

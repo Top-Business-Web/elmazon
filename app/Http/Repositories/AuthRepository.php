@@ -569,17 +569,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             $liveExam = LifeExam::query()
                 ->select(
-                    'id',
-                    'name_ar',
-                    'name_en',
-                    'date_exam',
-                    'time_start',
-                    'time_end',
-                    'degree',
-                    'season_id',
-                    'term_id',
-                    'quiz_minute'
-                )
+                    'id', 'name_ar', 'name_en', 'date_exam', 'time_start', 'time_end', 'degree', 'season_id', 'term_id', 'quiz_minute')
                 ->whereHas('term', fn (Builder $builder) =>
                 $builder->where('status', '=', 'active')
                     ->where('season_id', '=', auth('user-api')->user()->season_id))
@@ -611,6 +601,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                     $data['life_exam'] = null;
                     $data['live_model'] = null;
 
+               //لو الامتحان الطالب ممتحنوش ومتاح ما بين الموعدين
                 }elseif ($nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel)){
 
 
@@ -618,6 +609,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                     $data['live_model'] = $liveExam;
 
 
+                //لو الوقت مش متاح يوم الامتحان والطالب لسه ممتحنشي
                 }elseif (!$nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel) && date('Y-m-d') == $liveExam->date_exam){
 
                     $data['life_exam'] = null;
@@ -654,10 +646,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             $user->update(['access_token' => request()->bearerToken()]);
 
-            $data['sliders'] = SliderResource::collection($sliders);
-            $data['videos_basics'] = VideoBasicResource::collection(VideoBasic::get());
-            $data['classes'] = SubjectClassNewResource::collection($classes);
-            $data['videos_resources'] = VideoResourceResource::collection($videos_resources);
+            $data['sliders']          =    SliderResource::collection($sliders);
+            $data['videos_basics']    =    VideoBasicResource::collection(VideoBasic::get());
+            $data['classes']          =    SubjectClassNewResource::collection($classes);
+            $data['videos_resources'] =    VideoResourceResource::collection($videos_resources);
 
             return self::returnResponseDataApiWithMultipleIndexes($data, "تم ارسال جميع بيانات الصفحه الرئيسيه", 200);
 
