@@ -24,7 +24,7 @@ class PayMobController extends Controller{
             'amount_cents' => $total_price * 100, //put your price
             'currency' => 'EGP',
             'delivery_needed' => false, // another option true
-            'merchant_order_id' =>  bin2hex(random_bytes(8)),
+            'merchant_order_id' =>  $order_id,
             'items' => [] // all items information or leave it empty
         ]);
 
