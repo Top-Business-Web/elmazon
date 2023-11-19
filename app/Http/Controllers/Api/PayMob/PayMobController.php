@@ -34,7 +34,7 @@ class PayMobController extends Controller{
             'auth_token' => $auth->token,
             'amount_cents' => $total_price * 100, //put your price
             'currency' => 'EGP',
-//            'order_id' => $order->id,
+            'order_id' => $order->id,
             "billing_data" => [ // put your client information
                 "apartment" => "803",
                 "email" => "claudette09@exa.com",
@@ -81,21 +81,21 @@ class PayMobController extends Controller{
                     ]);
 
 
-//                    $userSubscribes = UserSubscribe::query()
-//                        ->where('student_id','=',$order->user_id)
-//                        ->whereYear('created_at','=',date('Y'))
-//                        ->get();
-//
-//                    $array = [];
-//
-//                    foreach ($userSubscribes as $userSubscribe){
-//
-//                        $array[] = $userSubscribe->month < 10 ? "0".$userSubscribe->month : "$userSubscribe->month";
-//                    }
-//
-//                    $studentAuth = User::find($order->user_id);
-//                    $studentAuth->subscription_months_groups = json_encode($array);
-//                    $studentAuth->save();
+                    $userSubscribes = UserSubscribe::query()
+                        ->where('student_id','=',$order->user_id)
+                        ->whereYear('created_at','=',date('Y'))
+                        ->get();
+
+                    $array = [];
+
+                    foreach ($userSubscribes as $userSubscribe){
+
+                        $array[] = $userSubscribe->month < 10 ? "0".$userSubscribe->month : "$userSubscribe->month";
+                    }
+
+                    $studentAuth = User::find($order->user_id);
+                    $studentAuth->subscription_months_groups = json_encode($array);
+                    $studentAuth->save();
 
 
                 } else {
