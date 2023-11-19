@@ -25,7 +25,7 @@ class PayMobController extends Controller{
             'currency' => 'EGP',
             'delivery_needed' => false, // another option true
             'merchant_order_id' =>  $order_id,
-            'items' => [] // all items information or leave it empty
+            'items' => [] // create all items information or leave it empty
         ]);
 
 
