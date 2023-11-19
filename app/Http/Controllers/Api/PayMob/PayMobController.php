@@ -120,7 +120,7 @@ class PayMobController extends Controller{
 
     public function checkout(Request $request): string
     {
-        if($request['status']){
+        if($request['status'] === true){
 
             return "Finished";
         }else{

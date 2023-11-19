@@ -280,11 +280,13 @@ Route::group(['middleware' => 'lang'], function (){
  */
 
 /*
+ *
+ * #####################################################
+ *   Elhemsi
      PayMob_Username="01061994948"
      PayMob_Password="eslamemo457@gmail.com_UPER"
      PayMob_Integration_Id="4325358"
      PayMob_HMAC="9C02EF4DE4DD4EDC29CACC6D8D988CBE"
-
 
  ###########################################################
 
@@ -303,5 +305,13 @@ Route::group(['middleware' => 'lang'], function (){
     PayMob_Integration_Id="3796395"
     PayMob_HMAC="4A977298DCE964E63A87F2A8AD8C3526"
 
+
+    ##############################################################
+
+    Frame : 803000
+    PayMob_Username="01025157437"
+    PayMob_Password="ESLAM_#mohamed01062933188"
+    PayMob_Integration_Id="4353402"
+    PayMob_HMAC="1016F4486CEC89B90ED6AC4001DAEDA8"
  */
 
