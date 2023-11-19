@@ -81,21 +81,21 @@ class PayMobController extends Controller{
                     ]);
 
 
-                    $userSubscribes = UserSubscribe::query()
-                        ->where('student_id','=',$order->user_id)
-                        ->whereYear('created_at','=',date('Y'))
-                        ->get();
-
-                    $array = [];
-
-                    foreach ($userSubscribes as $userSubscribe){
-
-                        $array[] = $userSubscribe->month < 10 ? "0".$userSubscribe->month : "$userSubscribe->month";
-                    }
-
-                    $studentAuth = User::find($order->user_id);
-                    $studentAuth->subscription_months_groups = json_encode($array);
-                    $studentAuth->save();
+//                    $userSubscribes = UserSubscribe::query()
+//                        ->where('student_id','=',$order->user_id)
+//                        ->whereYear('created_at','=',date('Y'))
+//                        ->get();
+//
+//                    $array = [];
+//
+//                    foreach ($userSubscribes as $userSubscribe){
+//
+//                        $array[] = $userSubscribe->month < 10 ? "0".$userSubscribe->month : "$userSubscribe->month";
+//                    }
+//
+//                    $studentAuth = User::find($order->user_id);
+//                    $studentAuth->subscription_months_groups = json_encode($array);
+//                    $studentAuth->save();
 
 
                 } else {
@@ -114,6 +114,7 @@ class PayMobController extends Controller{
 
     public function responseStatus(Request $request): RedirectResponse
     {
+
         return redirect()->to('api/checkout?status='.$request['success'].'&id='.$request['id']);
     }
 
