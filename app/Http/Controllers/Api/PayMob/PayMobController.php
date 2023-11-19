@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\UserSubscribe;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use PayMob\Facades\PayMob;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,7 +13,7 @@ use App\Http\Controllers\Controller;
 class PayMobController extends Controller{
 
 
-    public static function pay(float $total_price)
+    public static function pay(float $total_price,int $order_id)
     {
 
         $auth = PayMob::AuthenticationRequest();
@@ -28,6 +27,7 @@ class PayMobController extends Controller{
             'merchant_order_id' =>  bin2hex(random_bytes(8)),
             'items' => [] // all items information or leave it empty
         ]);
+
 
 
         $PaymentKey = PayMob::PaymentKeyRequest([
@@ -52,14 +52,8 @@ class PayMobController extends Controller{
             ]
         ]);
 
-        Payment::create([
-            'total_price' => $total_price,
-            'order_id' => $order->id,
-            'user_id' => Auth::guard('user-api')->id(),
-        ]);
-
-
           return $PaymentKey->token;
+
 
     }
 
@@ -77,7 +71,7 @@ class PayMobController extends Controller{
                 $amount_cents = $request->obj['amount_cents'];
                 $transaction_id = $request->obj['id'];
 
-                $order = Payment::query()->where('order_id','=',$order_id)->first();
+                $order = Payment::find($order_id);
 
                 if ($request->obj['success'] && ($order->total_price * 100) == $amount_cents) {
 
