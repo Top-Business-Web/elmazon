@@ -73,7 +73,7 @@ class PayMobController extends Controller{
 
                 $order = Payment::find($order_id);
 
-                if ($request->obj['success'] && ($order->total_price * 100) == $amount_cents) {
+                if ($request->obj['success'] == true && ($order->total_price * 100) == $amount_cents) {
 
                     $order->update([
                         'transaction_status' => 'finished',
