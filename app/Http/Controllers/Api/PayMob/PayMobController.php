@@ -10,10 +10,11 @@ use PayMob\Facades\PayMob;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class PayMobController extends Controller{
+class PayMobController extends Controller
+{
 
 
-    public static function pay(float $total_price,int $order_id)
+    public static function pay(float $total_price, int $order_id)
     {
 
         $auth = PayMob::AuthenticationRequest();
@@ -23,7 +24,7 @@ class PayMobController extends Controller{
             'amount_cents' => $total_price * 100, //put your price
             'currency' => 'EGP',
             'delivery_needed' => false, // another option true
-            'merchant_order_id' =>  $order_id,
+            'merchant_order_id' => $order_id,
             'items' => [] // create all items information or leave it empty
         ]);
 
@@ -49,59 +50,60 @@ class PayMobController extends Controller{
             ]
         ]);
 
-          return $PaymentKey->token;
+        return $PaymentKey->token;
 
 
     }
 
     ###################### Update Transaction When Payment Success #########################
-    public function checkout_processed(Request $request){
+    public function checkout_processed(Request $request)
+    {
 
 
-            $request_hmac = $request->hmac;
-            $calc_hmac = PayMob::calcHMAC($request);
+        $request_hmac = $request->hmac;
+        $calc_hmac = PayMob::calcHMAC($request);
 
-            if ($request_hmac == $calc_hmac) {
+        if ($request_hmac == $calc_hmac) {
 
-                $order_id = $request->obj['order']['merchant_order_id'];
-                $amount_cents = $request->obj['amount_cents'];
-                $transaction_id = $request->obj['id'];
+            $order_id = $request->obj['order']['merchant_order_id'];
+            $amount_cents = $request->obj['amount_cents'];
+            $transaction_id = $request->obj['id'];
 
-                $order = Payment::find($order_id);
+            $order = Payment::find($order_id);
 
-                if ($request->obj['success'] == true && ($order->total_price * 100) == $amount_cents) {
+            if ($request->obj['success'] == true && ($order->total_price * 100) == $amount_cents) {
 
-                    $order->update([
-                        'transaction_status' => 'finished',
-                        'transaction_id' => $transaction_id
-                    ]);
-
-
-                    $userSubscribes = UserSubscribe::query()
-                        ->where('student_id','=',$order->user_id)
-                        ->whereYear('created_at','=',date('Y'))
-                        ->get();
-
-                    $array = [];
-
-                    foreach ($userSubscribes as $userSubscribe){
-
-                        $array[] = $userSubscribe->month < 10 ? "0".$userSubscribe->month : "$userSubscribe->month";
-                    }
-
-                    $studentAuth = User::find($order->user_id);
-                    $studentAuth->subscription_months_groups = json_encode($array);
-                    $studentAuth->save();
-
-                } else {
-                    $order->update([
-                        'transaction_status' => "failed",
-                        'transaction_id' => $transaction_id
-                    ]);
+                $order->update([
+                    'transaction_status' => 'finished',
+                    'transaction_id' => $transaction_id
+                ]);
 
 
+                $userSubscribes = UserSubscribe::query()
+                    ->where('student_id', '=', $order->user_id)
+                    ->whereYear('created_at', '=', date('Y'))
+                    ->get();
+
+                $array = [];
+
+                foreach ($userSubscribes as $userSubscribe) {
+
+                    $array[] = $userSubscribe->month < 10 ? "0" . $userSubscribe->month : "$userSubscribe->month";
                 }
+
+                $studentAuth = User::find($order->user_id);
+                $studentAuth->subscription_months_groups = json_encode($array);
+                $studentAuth->save();
+
+            } else {
+                $order->update([
+                    'transaction_status' => "failed",
+                    'transaction_id' => $transaction_id
+                ]);
+
+
             }
+        }
     }
 
     ############################# Check Response After Payment (Success,Failed) ########################################
@@ -109,12 +111,25 @@ class PayMobController extends Controller{
     public function responseStatus(Request $request): RedirectResponse
     {
 
-        return redirect()->to('api/checkout?status='.$request['success'].'&id='.$request['id']);
+        return redirect()->to('api/checkout?status=' . $request['success'] . '&id=' . $request['id']);
     }
 
 
     public function checkout(Request $request)
     {
+        if ($request->status) {
 
+            return view('congratulations.success');
+
+        } else {
+
+            return view('congratulations.failed');
+
+        }
     }
+
 }
+
+
+
+
