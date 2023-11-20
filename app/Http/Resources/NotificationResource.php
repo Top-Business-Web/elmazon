@@ -32,7 +32,7 @@ class NotificationResource extends JsonResource{
             'exam_type' => $this->exam_type,
             'exam_id' => $this->exam_id,
             'seen' => $notification_seen ? 'seen' : 'not_seen',
-            'image' => $this->image != null ? asset($this->image) : 'No image',
+            'image' => $this->image != null ? asset($this->image) : null,
             'time_of_notification' => $this->created_at->diffForHumans(),
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->created_at->format('Y-m-d'),
