@@ -803,8 +803,16 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
+        $notification = [
+            'title' => "اشعار جديد",
+            'body' => $request->body,
+            'user_type' => "student",
+            'user_id' => $request->user_id,
+        ];
 
-        $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body],null,$request->user_id,null);
+        Notification::create($notification);
+
+        $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body],null,$request->user_id,null,true);
 
         return self::returnResponseDataApi(null, "تم ارسال اشعار جديد", 200);
     }
