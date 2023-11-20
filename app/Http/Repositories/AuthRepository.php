@@ -569,7 +569,17 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             $liveExam = LifeExam::query()
                 ->select(
-                    'id', 'name_ar', 'name_en', 'date_exam', 'time_start', 'time_end', 'degree', 'season_id', 'term_id', 'quiz_minute')
+                    'id',
+                    'name_ar',
+                    'name_en',
+                    'date_exam',
+                    'time_start',
+                    'time_end',
+                    'degree',
+                    'season_id',
+                    'term_id',
+                    'quiz_minute'
+                )
                 ->whereHas('term', fn (Builder $builder) =>
                 $builder->where('status', '=', 'active')
                     ->where('season_id', '=', auth('user-api')->user()->season_id))
@@ -617,6 +627,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
 
                 }else{
+
                     $data['life_exam'] = null;
                     $data['live_model'] = null;
                 }
@@ -646,10 +657,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             $user->update(['access_token' => request()->bearerToken()]);
 
-            $data['sliders']          =    SliderResource::collection($sliders);
-            $data['videos_basics']    =    VideoBasicResource::collection(VideoBasic::get());
-            $data['classes']          =    SubjectClassNewResource::collection($classes);
-            $data['videos_resources'] =    VideoResourceResource::collection($videos_resources);
+            $data['sliders'] = SliderResource::collection($sliders);
+            $data['videos_basics'] = VideoBasicResource::collection(VideoBasic::get());
+            $data['classes'] = SubjectClassNewResource::collection($classes);
+            $data['videos_resources'] = VideoResourceResource::collection($videos_resources);
 
             return self::returnResponseDataApiWithMultipleIndexes($data, "تم ارسال جميع بيانات الصفحه الرئيسيه", 200);
 
@@ -770,6 +781,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         $rules = [
             'body' => 'required|string',
+            'user_id' => 'required|exists:users,id',
         ];
         $validator = Validator::make($request->all(), $rules, [
             'body.string' => 407,
@@ -791,7 +803,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
-        $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body, 'term_id' => 1], 1);
+
+        $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body],null,$request->user_id,[]);
 
         return self::returnResponseDataApi(null, "تم ارسال اشعار جديد", 200);
     }
