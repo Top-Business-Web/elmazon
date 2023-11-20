@@ -18,7 +18,6 @@ class PayMobController extends Controller{
 
         $auth = PayMob::AuthenticationRequest();
 
-
         $order = PayMob::OrderRegistrationAPI([
             'auth_token' => $auth->token,
             'amount_cents' => $total_price * 100, //put your price
@@ -27,8 +26,6 @@ class PayMobController extends Controller{
             'merchant_order_id' =>  $order_id,
             'items' => [] // create all items information or leave it empty
         ]);
-
-
 
         $PaymentKey = PayMob::PaymentKeyRequest([
             'auth_token' => $auth->token,
@@ -56,7 +53,6 @@ class PayMobController extends Controller{
 
 
     }
-
 
     ###################### Update Transaction When Payment Success #########################
     public function checkout_processed(Request $request){
@@ -97,9 +93,7 @@ class PayMobController extends Controller{
                     $studentAuth->subscription_months_groups = json_encode($array);
                     $studentAuth->save();
 
-
                 } else {
-
                     $order->update([
                         'transaction_status' => "failed",
                         'transaction_id' => $transaction_id

@@ -9,7 +9,7 @@ use App\Models\User;
 trait FirebaseNotification{
 
     //firebase server key
-    private $serverKey = 'AAAAvcvsG5E:APA91bHXIApfxcgUYwNQohgWbydXAOTcjSr5dWzQpT5HnID-v0GN3HuxahdId2DG4saeoNHu7tSFdL3h9AOwH_p8HOst0IQNPKkbCMycBgI7ZkaB5XWpQdN3bmOAFItqdTNVMh8EJgKH';
+    private $serverKey = 'AAAAmQB5gtM:APA91bHcgetfarwsYS2rCkzZ-5ZVZgEvBbT4TsdwkkuuAxluFgwePgyhhPQrYPO9SsMRdMuzEbrLchZuzK44RakbBSwgZbBe0ghlBAxC5Z_TTtlqGmLY-_yud2KbMUk9hrcEDrvq4qfC';
 
 
     public function sendFirebaseNotification($data,$season_id = null,$student_id = null,$group_ids = [],$statusStoreNotification = false){
