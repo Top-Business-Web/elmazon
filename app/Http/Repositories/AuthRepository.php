@@ -804,7 +804,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         }
 
 
-        $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body],null,$request->user_id,[]);
+        $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body],null,$request->user_id,null);
 
         return self::returnResponseDataApi(null, "تم ارسال اشعار جديد", 200);
     }
