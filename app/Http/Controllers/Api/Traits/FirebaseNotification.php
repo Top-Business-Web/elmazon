@@ -64,6 +64,11 @@ trait FirebaseNotification{
         $fields = array(
             'registration_ids' => $tokens,
             'data' => $data,
+            "notification" => [
+                "title" => $data['title'],
+                "body" => $data['body'],
+
+            ]
         );
         $fields = json_encode($fields);
 

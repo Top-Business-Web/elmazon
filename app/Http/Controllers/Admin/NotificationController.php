@@ -115,7 +115,7 @@ class NotificationController extends Controller
 
         }elseif ($request->type == 'student'){
             $notification['user_id'] = $inputs['user_id'];
-            $this->sendFirebaseNotification(['title' => $inputs['title'], 'body' => $inputs['body']],null, $inputs['user_id'], null, true);
+             $this->sendFirebaseNotification(['title' => $inputs['title'], 'body' => $inputs['body']],null, $inputs['user_id'], null, true);
             $message = "تم ارسال اشعار لطالب معين";
 
         }else{
@@ -131,6 +131,7 @@ class NotificationController extends Controller
 
         if ($notificationStore->save()) {
             $this->adminLog($message);
+
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 405]);
