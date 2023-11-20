@@ -568,18 +568,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             }
 
             $liveExam = LifeExam::query()
-                ->select(
-                    'id',
-                    'name_ar',
-                    'name_en',
-                    'date_exam',
-                    'time_start',
-                    'time_end',
-                    'degree',
-                    'season_id',
-                    'term_id',
-                    'quiz_minute'
-                )
+                ->select('id', 'name_ar', 'name_en', 'date_exam', 'time_start', 'time_end', 'degree', 'season_id', 'term_id', 'quiz_minute')
                 ->whereHas('term', fn (Builder $builder) =>
                 $builder->where('status', '=', 'active')
                     ->where('season_id', '=', auth('user-api')->user()->season_id))
@@ -657,6 +646,26 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             $user->update(['access_token' => request()->bearerToken()]);
 
+
+
+
+            ########################### Start Count notification for user not seen #########################################
+            $userId = auth()->guard('user-api')->id();
+
+
+            $notificationNotSeenCount = Notification::query()
+                ->whereDoesntHave('notification_seen_student')
+                ->whereDate('created_at','=',date('Y-m-d'))
+                ->where(function ($q) use($userId){
+                    $q->whereJsonContains('group_ids',"$userId")
+                        ->orWhere('season_id','=', auth()->guard('user-api')->user()->season_id)
+                        ->orWhere('user_id','=', auth()->guard('user-api')->id());
+                })
+                ->count();
+
+            ########################### end Count notification for user not seen #########################################
+
+            $data['notification_count'] = $notificationNotSeenCount;
             $data['sliders'] = SliderResource::collection($sliders);
             $data['videos_basics'] = VideoBasicResource::collection(VideoBasic::get());
             $data['classes'] = SubjectClassNewResource::collection($classes);
