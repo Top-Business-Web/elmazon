@@ -50,6 +50,7 @@ use App\Http\Interfaces\AuthRepositoryInterface;
 use App\Http\Resources\PapelSheetExamTimeUserResource;
 use App\Http\Controllers\Api\Traits\FirebaseNotification;
 use Illuminate\Http\Response;
+use function Clue\StreamFilter\fun;
 
 
 class AuthRepository extends ResponseApi implements AuthRepositoryInterface
@@ -192,12 +193,17 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         try {
 
+
             $userId = auth()->guard('user-api')->id();
+            $userSeasonId = auth()->guard('user-api')->user()->season_id;
 
             $allNotification = Notification::query()
-                ->whereJsonContains('group_ids',"$userId")
-                ->orWhere('season_id','=', auth()->guard('user-api')->user()->season_id)
-                ->orWhere('user_id','=', auth()->guard('user-api')->id())
+                ->whereDate('created_at','=',date('Y-m-d'))
+                ->where(function ($q) use ($userId, $userSeasonId) {
+                    $q->where('season_id', '=', $userSeasonId)
+                        ->orWhereJsonContains('group_ids', "$userId")
+                        ->orWhere('user_id', '=', $userId);
+                })
                 ->latest()
                 ->get();
 
@@ -651,21 +657,30 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             ########################### Start Count notification for user not seen #########################################
             $userId = auth()->guard('user-api')->id();
+            $userSeasonId = auth()->guard('user-api')->user()->season_id;
 
-
-            $notificationNotSeenCount = Notification::query()
-                ->whereDoesntHave('notification_seen_student')
+            $notifications = Notification::query()
                 ->whereDate('created_at','=',date('Y-m-d'))
-                ->where(function ($q) use($userId){
-                    $q->whereJsonContains('group_ids',"$userId")
-                        ->orWhere('season_id','=', auth()->guard('user-api')->user()->season_id)
-                        ->orWhere('user_id','=', auth()->guard('user-api')->id());
-                })
+                ->where(function ($q) use ($userId, $userSeasonId) {
+                    $q->where('season_id', '=', $userSeasonId)
+                        ->orWhereJsonContains('group_ids', "$userId")
+                        ->orWhere('user_id', '=', $userId);
+                });
+
+                $count =   $notifications->count();
+
+                $listOfNotifications = $notifications
+                    ->pluck('id')
+                ->toArray();
+
+            $notificationsSeen = NotificationSeenStudent::query()
+                ->where('student_id','=', $userId)
+                ->whereIn('notification_id',$listOfNotifications)
                 ->count();
 
             ########################### end Count notification for user not seen #########################################
 
-            $data['notification_count'] = $notificationNotSeenCount;
+            $data['notification_count'] =   ($count - $notificationsSeen);
             $data['sliders'] = SliderResource::collection($sliders);
             $data['videos_basics'] = VideoBasicResource::collection(VideoBasic::get());
             $data['classes'] = SubjectClassNewResource::collection($classes);

@@ -34,10 +34,10 @@ class PaymentController extends Controller{
             12 => 'شهر ديسمبر',
         );
 
-      
+
            $listOfMonths = [];
 
-           foreach($months as $key=>$month) {
+           foreach($months as $key => $month) {
 
            $result  = VideoParts::query()
                ->whereHas('lesson', fn(Builder $builder) =>
@@ -53,6 +53,12 @@ class PaymentController extends Controller{
 
                 $collectionOfData =  AllMonthsResource::collection($result);
 
+               $userSubscribes = UserSubscribe::query()
+                   ->where('student_id', auth('user-api')->id())
+                   ->where('year', Carbon::now()->format('Y'))
+                   ->pluck('month')
+                   ->toArray();
+
                 ################################ سعر محتوي كل شهر للصف الدراسي التابع له الطالب والتيرم المفعل #####
                $price = Subscribe::query()
                    ->whereHas('term',fn (Builder $builder) =>
@@ -62,13 +68,16 @@ class PaymentController extends Controller{
                    ->first();
 
             ################################ الحصول علي جميع بيانات الشهور بالاسعار الخاصه بالصف الدراسي والتيرم لهذا الطالب ###############################
-               $listOfMonths[] = [
-                'id' => $key,
-                'name' => $month,
-                'price' => $price ? ($price->free == "yes" ? 0 : (auth('user-api')->user()->center == 'in' ? $price->price_in_center : $price->price_out_center)) : 0,
-                'free_status' => $price ? ($price->free == "yes" ? "free" : "not_free") : "unavailable",
-                'content' => $collectionOfData,
-            ];
+               if(!in_array($key,$userSubscribes)){
+                   $listOfMonths[] = [
+                       'id' => $key,
+                       'name' => $month,
+                       'price' => $price ? ($price->free == "yes" ? 0 : (auth('user-api')->user()->center == 'in' ? $price->price_in_center : $price->price_out_center)) : 0,
+                       'free_status' => $price ? ($price->free == "yes" ? "free" : "not_free") : "unavailable",
+                       'content' => $collectionOfData,
+                   ];
+               }
+
 
            }
 
