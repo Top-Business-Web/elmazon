@@ -13,7 +13,6 @@ use App\Http\Controllers\Controller;
 class PayMobController extends Controller
 {
 
-
     public static function pay(float $total_price, int $order_id)
     {
 
