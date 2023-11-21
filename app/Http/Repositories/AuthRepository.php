@@ -534,45 +534,50 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         try {
 
-            $subject_class = SubjectClass::query()
+            $userApi = auth()->guard('user-api');
+            $userId = $userApi->id();
+            $userSeasonId = $userApi->user()->season_id;
+
+            // Retrieve Subject Class
+            $subjectClass = SubjectClass::query()
                 ->whereHas('term',fn (Builder $builder) =>
                 $builder->where('status', '=', 'active')
-                    ->where('season_id', '=', auth('user-api')->user()->season_id))
-                ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
+                    ->where('season_id', '=', $userSeasonId))
+                ->where('season_id', '=', $userId)
                 ->first();
 
-            $first_lesson = Lesson::query()
-                ->where('subject_class_id', '=', $subject_class->id)
-                ->first();
-
-            if (!$subject_class) {
+            // Check if Subject Class exists
+            if (!$subjectClass) {
                 return self::returnResponseDataApi(null, "لا يوجد فصول برجاء ادخال عدد من الفصول لفتح اول فصل من القائمه", 404, 404);
             }
 
-            if (!$first_lesson) {
+            // Retrieve the first lesson
+            $firstLesson = Lesson::query()
+                ->where('subject_class_id', '=', $subjectClass->id)
+                ->first();
+
+            // Check if the first lesson exists
+            if (!$firstLesson) {
                 return self::returnResponseDataApi(null, "لا يوجد قائمه دروس لفتح اول درس", 404, 404);
             }
 
-            $subject_class_opened = OpenLesson::query()
-            ->where('user_id', '=', Auth::guard('user-api')->id())
-                ->where('subject_class_id', '=', $subject_class->id);
+            // Check if Subject Class and Lesson are not already opened
+            $subjectClassOpened = OpenLesson::query()
+                ->where('user_id', '=', $userApi->id())
+                ->where('subject_class_id', '=', $subjectClass->id);
 
-            $lesson_opened = OpenLesson::query()
-                ->where('user_id', '=', Auth::guard('user-api')->id())
-                ->where('lesson_id', '=', $first_lesson->id);
+            $lessonOpened = OpenLesson::query()
+                ->where('user_id', '=', $userApi->id())
+                ->where('lesson_id', '=', $firstLesson->id);
 
-            if (!$subject_class_opened->exists() && !$lesson_opened->exists()) {
-                OpenLesson::create([
-                    'user_id' => Auth::guard('user-api')->id(),
-                    'subject_class_id' => $subject_class->id,
-                ]);
-
-                OpenLesson::create([
-                    'user_id' => Auth::guard('user-api')->id(),
-                    'lesson_id' => $first_lesson->id,
-                ]);
+            if (!$subjectClassOpened->exists() && !$lessonOpened->exists()) {
+                OpenLesson::create(['user_id' => $userApi->id(), 'subject_class_id' => $subjectClass->id]);
+                OpenLesson::create(['user_id' => $userApi->id(), 'lesson_id' => $firstLesson->id]);
             }
 
+            // Continue with the rest of your code...
+
+            #################################################### Start Opened Fist Subject Class and First lesson ##############
             $liveExam = LifeExam::query()
                 ->select('id', 'name_ar', 'name_en', 'date_exam', 'time_start', 'time_end', 'degree', 'season_id', 'term_id', 'quiz_minute')
                 ->whereHas('term', fn (Builder $builder) =>
@@ -653,11 +658,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $user->update(['access_token' => request()->bearerToken()]);
 
 
-
-
             ########################### Start Count notification for user not seen #########################################
-            $userId = auth()->guard('user-api')->id();
-            $userSeasonId = auth()->guard('user-api')->user()->season_id;
 
             $notifications = Notification::query()
                 ->whereDate('created_at','=',date('Y-m-d'))
