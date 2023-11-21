@@ -773,7 +773,9 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
-        $phoneToken = PhoneToken::create([
+        $phoneToken = PhoneToken::updateOrCreate(
+            ['user_id' => auth()->guard('user-api')->id()],
+            [
             'user_id' => auth()->guard('user-api')->id(),
             'token' => $request->token,
             'phone_type' => $request->phone_type
