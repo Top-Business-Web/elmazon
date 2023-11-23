@@ -608,7 +608,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                     $data['live_model'] = null;
 
                //لو الامتحان الطالب ممتحنوش ومتاح ما بين الموعدين
-                }elseif ($nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel)){
+                }elseif (date('Y-m-d') == $liveExam->date_exam && $nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel)){
 
 
                     $data['life_exam'] = $liveExam->id;
