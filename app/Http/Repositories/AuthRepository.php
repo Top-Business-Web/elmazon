@@ -946,14 +946,9 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function examCountdown(): JsonResponse
     {
 
-        $examSchedule = ExamSchedule::query()
-            ->whereHas('term', fn (Builder $builder) =>
-            $builder->where('status', '=', 'active')
-                ->where('season_id', '=', auth('user-api')->user()->season_id))
-            ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
-            ->first();
+        $examSchedule = ExamSchedule::queryGetExamCountDown();
 
-        if ($examSchedule) {
+        if ($examSchedule && date('Y-m-d') < Carbon::parse($examSchedule->date_time)->format('Y-m-d')) {
 
             $timeFirst  = strtotime(now());
             $timeSecond = strtotime($examSchedule->date_time);

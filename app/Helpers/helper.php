@@ -1,7 +1,10 @@
 <?php
 //check current language
 use App\Models\AdminLog;
+use App\Models\ExamSchedule;
 use Carbon\CarbonPeriod;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 
@@ -13,6 +16,17 @@ if (!function_exists('lang')) {
 
     }
 }
+
+
+if (!function_exists('getSeasonIdOfStudent')) {
+
+    function getSeasonIdOfStudent()
+    {
+        return auth('user-api')->user()->season_id;
+
+    }
+}
+
 
 
 if (!function_exists('month_with_zero')) {

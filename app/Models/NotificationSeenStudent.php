@@ -22,4 +22,6 @@ class NotificationSeenStudent extends Model
 
         return $this->belongsTo(Notification::class,'notification_id','id');
     }
+
+
 }

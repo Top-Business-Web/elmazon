@@ -53,5 +53,5 @@ interface AuthRepositoryInterface{
     public function examCountdown(): JsonResponse;
 
     public function notificationUpdateStatus($id): JsonResponse;
-    
+
 }
