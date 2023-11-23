@@ -27,6 +27,15 @@ if (!function_exists('getSeasonIdOfStudent')) {
     }
 }
 
+if (!function_exists('studentAuth')) {
+
+    function studentAuth(): ?\Illuminate\Contracts\Auth\Authenticatable
+    {
+        return auth('user-api')->user();
+
+    }
+}
+
 
 
 if (!function_exists('month_with_zero')) {

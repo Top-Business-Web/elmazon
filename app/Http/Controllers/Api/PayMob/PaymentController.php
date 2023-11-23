@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 class PaymentController extends Controller{
 
 
-    public function allMonths(): JsonResponse{
+    public function allMonths(){
 
         $months = array(
             1 => 'شهر يناير',
@@ -36,6 +36,8 @@ class PaymentController extends Controller{
 
 
            $listOfMonths = [];
+
+           $subscriptionMonthsGroups =  studentAuth()->subscription_months_groups;
 
            foreach($months as $key => $month) {
 
@@ -68,15 +70,15 @@ class PaymentController extends Controller{
                    ->first();
 
             ################################ الحصول علي جميع بيانات الشهور بالاسعار الخاصه بالصف الدراسي والتيرم لهذا الطالب ###############################
-               $listOfMonths[] = [
-                   'id' => $key,
-                   'name' => $month,
-                   'price' => $price ? ($price->free == "yes" ? 0 : (auth('user-api')->user()->center == 'in' ? $price->price_in_center : $price->price_out_center)) : 0,
-                   'free_status' => $price ? ($price->free == "yes" ? "free" : "not_free") : "unavailable",
-                   'content' => $collectionOfData,
-               ];
-
-
+               if(!in_array($key,$userSubscribes) && in_array($key, json_decode($subscriptionMonthsGroups))){
+                   $listOfMonths[] = [
+                       'id' => $key,
+                       'name' => $month,
+                       'price' => $price ? ($price->free == "yes" ? 0 : (auth('user-api')->user()->center == 'in' ? $price->price_in_center : $price->price_out_center)) : 0,
+                       'free_status' => $price ? ($price->free == "yes" ? "free" : "not_free") : "unavailable",
+                       'content' => $collectionOfData,
+                   ];
+               }
 
            }
 

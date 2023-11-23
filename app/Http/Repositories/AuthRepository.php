@@ -538,44 +538,45 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $userId = $userApi->id();
             $userSeasonId = $userApi->user()->season_id;
 
-            // Retrieve Subject Class
-            $subjectClass = SubjectClass::query()
+            $subject_class = SubjectClass::query()
                 ->whereHas('term',fn (Builder $builder) =>
                 $builder->where('status', '=', 'active')
-                    ->where('season_id', '=', $userSeasonId))
-                ->where('season_id', '=', $userId)
+                    ->where('season_id', '=', auth('user-api')->user()->season_id))
+                ->where('season_id', '=', auth()->guard('user-api')->user()->season_id)
                 ->first();
 
-            // Check if Subject Class exists
-            if (!$subjectClass) {
+            $first_lesson = Lesson::query()
+                ->where('subject_class_id', '=', $subject_class->id)
+                ->first();
+
+            if (!$subject_class) {
                 return self::returnResponseDataApi(null, "لا يوجد فصول برجاء ادخال عدد من الفصول لفتح اول فصل من القائمه", 404, 404);
             }
 
-            // Retrieve the first lesson
-            $firstLesson = Lesson::query()
-                ->where('subject_class_id', '=', $subjectClass->id)
-                ->first();
-
-            // Check if the first lesson exists
-            if (!$firstLesson) {
+            if (!$first_lesson) {
                 return self::returnResponseDataApi(null, "لا يوجد قائمه دروس لفتح اول درس", 404, 404);
             }
 
-            // Check if Subject Class and Lesson are not already opened
-            $subjectClassOpened = OpenLesson::query()
-                ->where('user_id', '=', $userApi->id())
-                ->where('subject_class_id', '=', $subjectClass->id);
+            $subject_class_opened = OpenLesson::query()
+                ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('subject_class_id', '=', $subject_class->id);
 
-            $lessonOpened = OpenLesson::query()
-                ->where('user_id', '=', $userApi->id())
-                ->where('lesson_id', '=', $firstLesson->id);
+            $lesson_opened = OpenLesson::query()
+                ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('lesson_id', '=', $first_lesson->id);
 
-            if (!$subjectClassOpened->exists() && !$lessonOpened->exists()) {
-                OpenLesson::create(['user_id' => $userApi->id(), 'subject_class_id' => $subjectClass->id]);
-                OpenLesson::create(['user_id' => $userApi->id(), 'lesson_id' => $firstLesson->id]);
+            if (!$subject_class_opened->exists() && !$lesson_opened->exists()) {
+                OpenLesson::create([
+                    'user_id' => Auth::guard('user-api')->id(),
+                    'subject_class_id' => $subject_class->id,
+                ]);
+
+                OpenLesson::create([
+                    'user_id' => Auth::guard('user-api')->id(),
+                    'lesson_id' => $first_lesson->id,
+                ]);
             }
 
-            // Continue with the rest of your code...
 
             #################################################### Start Opened Fist Subject Class and First lesson ##############
             $liveExam = LifeExam::query()
