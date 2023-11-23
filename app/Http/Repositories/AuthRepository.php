@@ -983,7 +983,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->where('id', '=', $id)->first();
 
             if (!$notification) {
-
                 return self::returnResponseDataApi(null, "هذا الاشعار غير موجود", 404, 404);
             }
 
