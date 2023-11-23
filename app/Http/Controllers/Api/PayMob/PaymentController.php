@@ -55,11 +55,6 @@ class PaymentController extends Controller{
 
                 $collectionOfData =  AllMonthsResource::collection($result);
 
-               $userSubscribes = UserSubscribe::query()
-                   ->where('student_id', auth('user-api')->id())
-                   ->where('year', Carbon::now()->format('Y'))
-                   ->pluck('month')
-                   ->toArray();
 
                 ################################ سعر محتوي كل شهر للصف الدراسي التابع له الطالب والتيرم المفعل #####
                $price = Subscribe::query()
@@ -70,7 +65,7 @@ class PaymentController extends Controller{
                    ->first();
 
             ################################ الحصول علي جميع بيانات الشهور بالاسعار الخاصه بالصف الدراسي والتيرم لهذا الطالب ###############################
-               if(!in_array($key,$userSubscribes) && in_array($key, json_decode($subscriptionMonthsGroups))){
+               if(!in_array($key, json_decode($subscriptionMonthsGroups))){
                    $listOfMonths[] = [
                        'id' => $key,
                        'name' => $month,
