@@ -80,7 +80,6 @@ class PayMobController extends Controller
 
                 $userSubscribes = UserSubscribe::query()
                     ->where('student_id', '=', $order->user_id)
-                    ->whereYear('created_at', '=', date('Y'))
                     ->get();
 
                 $array = [];
