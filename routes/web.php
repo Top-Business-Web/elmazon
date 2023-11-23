@@ -55,6 +55,8 @@ Route::middleware('auth:admin')->group(function (){
 
      $users = User::query()
      ->select('id','date_start_code','date_end_code','subscription_months_groups')
+         ->where('date_start_code','=',null)
+         ->where('date_end_code','=',null)
      ->get();
 
      foreach ($users as $user){
