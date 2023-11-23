@@ -65,14 +65,21 @@ class PaymentController extends Controller{
                    ->first();
 
             ################################ الحصول علي جميع بيانات الشهور بالاسعار الخاصه بالصف الدراسي والتيرم لهذا الطالب ###############################
-               if(!in_array($key, json_decode($subscriptionMonthsGroups))){
-                   $listOfMonths[] = [
-                       'id' => $key,
-                       'name' => $month,
-                       'price' => $price ? ($price->free == "yes" ? 0 : (auth('user-api')->user()->center == 'in' ? $price->price_in_center : $price->price_out_center)) : 0,
-                       'free_status' => $price ? ($price->free == "yes" ? "free" : "not_free") : "unavailable",
-                       'content' => $collectionOfData,
-                   ];
+
+               $response = [
+                   'id' => $key,
+                   'name' => $month,
+                   'price' => $price ? ($price->free == "yes" ? 0 : (auth('user-api')->user()->center == 'in' ? $price->price_in_center : $price->price_out_center)) : 0,
+                   'free_status' => $price ? ($price->free == "yes" ? "free" : "not_free") : "unavailable",
+                   'content' => $collectionOfData,
+               ];
+
+               if(!is_null($subscriptionMonthsGroups)){
+                   if(!in_array($key, json_decode($subscriptionMonthsGroups))){
+                       $listOfMonths[] = $response;
+                   }
+               }else{
+                   $listOfMonths[] = $response;
                }
 
            }
