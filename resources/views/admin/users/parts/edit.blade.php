@@ -130,7 +130,7 @@
                     <label for="name" class="form-control-label">شهور الاشتراك</label>
                     <select class="form-control select2" name="subscription_months_groups[]" id="subscription_months_groups[]" multiple>
                         @foreach($groupOfMonths as $key=>$value)
-                            <option value="{{ $key < 10 ? "0".$key : $key}}" {{in_array($key,json_decode($user->subscription_months_groups)) ? 'selected' : ''}}>{{ $value }}</option>
+                            <option value="{{ $key < 10 ? "0".$key : $key}}" {{$user->subscription_months_groups != null ? in_array($key,json_decode($user->subscription_months_groups)) ? 'selected' : '' : ''}}>{{ $value }}</option>
                         @endforeach
                     </select>
                 </div>
