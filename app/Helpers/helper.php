@@ -18,6 +18,19 @@ if (!function_exists('lang')) {
 }
 
 
+
+
+############################## Start Helpers Authentication ###########################################
+if (!function_exists('studentAuth')) {
+
+    function studentAuth(): ?\Illuminate\Contracts\Auth\Authenticatable
+    {
+        return auth('user-api')->user();
+
+    }
+}
+
+
 if (!function_exists('getSeasonIdOfStudent')) {
 
     function getSeasonIdOfStudent()
@@ -27,14 +40,18 @@ if (!function_exists('getSeasonIdOfStudent')) {
     }
 }
 
-if (!function_exists('studentAuth')) {
+if (!function_exists('userId')) {
 
-    function studentAuth(): ?\Illuminate\Contracts\Auth\Authenticatable
+    function userId()
     {
-        return auth('user-api')->user();
+        return auth('user-api')->id();
 
     }
 }
+
+
+
+############################## End Helpers Authentication ###########################################
 
 
 
