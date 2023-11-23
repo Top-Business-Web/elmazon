@@ -184,6 +184,8 @@ class UserController extends Controller
         $inputs['password'] = Hash::make('123456');
         $inputs['subscription_months_groups'] = json_encode($request->subscription_months_groups);
 
+
+//        return  $inputs;
         if ($request->has('image')) {
             $inputs['image'] = $this->saveImage($request->image, 'user', 'photo');
         }
