@@ -12,13 +12,15 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"></h3>
-                    {{-- <div class="">
+                     <div class="">
                         <label><strong>فلتر :</strong></label>
-                        <select id='type' class="form-control" style="width: 200px">
-                            <option value="all">كل الطلاب</option>
-                            <option value="unavailable">الطلاب الغائبين</option>
+                        <select class="form-control seasonSelect" style="width: 200px" name="season">
+                        <option disabled selected>اختر</option>
+                        @foreach($seasons as $season)
+                                <option value="{{$season->id}}">{{$season->name_ar}}</option>
+                            @endforeach
                         </select>
-                    </div> --}}
+                    </div>
                     <div class="">
                         <button class="btn btn-secondary btn-icon text-white addBtn">
                                 <span>
@@ -197,18 +199,32 @@
             {data: 'code', name: 'code'},
             {data: 'phone', name: 'phone'},
             {data: 'season_id', name: 'season_id'},
-            {data: 'country_id', name: 'country_id'},
-            {data: 'login_status', name: 'login_status'},
-            {data: 'user_status', name: 'user_status'},
-            {data: 'center', name: 'center'},
+            {data: 'country_id', name: 'country_id',orderable: true, searchable: true},
+            {data: 'login_status',custom: 'login_status', orderable: true, searchable: true},
+            {data: 'user_status', name: 'user_status', orderable: true, searchable: true},
+            {data: 'center', name: 'center',orderable: true, searchable: true},
             {data: 'father_phone', name: 'father_phone'},
             {data: 'user_status_note', name: 'user_status_note'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
 
-        showUserModal('{{ route('userUnvilable') }}')
+        const ajax = {
+            url: "{{ route('users.index') }}",
+            data: function (d) {
+                d.season = $('select[name="season"]').val();
+            }
+        };
 
-        showData('{{ route('users.index') }}', columns);
+        $(document).on('change', 'select[name="season"]', function () {
+            const table = $('#dataTable').DataTable();
+
+            table.draw(); // Use ajax.reload() to reload the DataTable data
+        });
+
+
+        showData(ajax,columns);
+
+        showUserModal('{{ route('userUnvilable') }}')
 
         // Delete Using Ajax
         destroyScript('{{ route('users.destroy', ':id') }}');

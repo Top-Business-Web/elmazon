@@ -165,6 +165,8 @@
                     modal.find('.modal-body #title').text(title);
                 });
             });
+
+
             $(document).on('click', '#delete_all_btn', function(event) {
                 var id = $("#delete_id").val();
                 $.ajax({
