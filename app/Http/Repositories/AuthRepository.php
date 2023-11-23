@@ -920,7 +920,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
 
-            PhoneToken::query()->where('token', '=', $request->token)->where('user_id', '=', auth('user-api')->id())->delete();
+            PhoneToken::query()->where('token', '=', $request->token)
+                ->where('user_id', '=',userId())
+                ->delete();
+
             auth()->guard('user-api')->logout();
             return self::returnResponseDataApi(null, "تم تسجيل الخروج بنجاح", 200);
         } catch (\Exception $exception) {
