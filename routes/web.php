@@ -49,33 +49,33 @@ Route::middleware('auth:admin')->group(function (){
 // });
 
 
- Route::get('update-group-months', function (){
-
-     //list of months
-
-     $users = User::query()
-     ->select('id','date_start_code','date_end_code','subscription_months_groups')
-         ->where('date_start_code','=',null)
-         ->where('date_end_code','=',null)
-     ->get();
-
-     foreach ($users as $user){
-
-         $list = [];
-
-         $period = CarbonPeriod::create( $user->date_start_code, '1 month',$user->date_end_code);
-
-         foreach ($period as $dt) {
-             $list[] = $dt->format("m");
-         }
-
-         $user->update(['subscription_months_groups' => json_encode($list)]);
-
-     }
-
-     return "All Users Done Updated";
-
- });
+// Route::get('update-group-months', function (){
+//
+//     //list of months
+//
+//     $users = User::query()
+//     ->select('id','date_start_code','date_end_code','subscription_months_groups')
+//         ->where('date_start_code','=',null)
+//         ->where('date_end_code','=',null)
+//     ->get();
+//
+//     foreach ($users as $user){
+//
+//         $list = [];
+//
+//         $period = CarbonPeriod::create( $user->date_start_code, '1 month',$user->date_end_code);
+//
+//         foreach ($period as $dt) {
+//             $list[] = $dt->format("m");
+//         }
+//
+//         $user->update(['subscription_months_groups' => json_encode($list)]);
+//
+//     }
+//
+//     return "All Users Done Updated";
+//
+// });
 
 
 // Route::get('check-group-months', function (){
