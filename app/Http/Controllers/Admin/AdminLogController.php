@@ -22,6 +22,8 @@ class AdminLogController extends Controller
         $startDate = $request->to;
         $endDate = $request->from;
         $logList = AdminLog::select('*');
+
+
         if ($request->has('to') && $request->has('from') && $startDate !== $now && $endDate !== $now) {
             $startDate = $request->get('from');
             $endDate = $request->get('to');

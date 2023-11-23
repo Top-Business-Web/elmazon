@@ -39,25 +39,17 @@ class UserController extends Controller
 
     public function index(request $request)
     {
-        $status = $request->input('status');
-        $active = $request->input('active');
-        $usersList = User::select('*');
 
 
-
-        if ($request->has('status')) {
-            if ($request->status !== 'all') {
-                $usersList->where('center', '=', $status);
-            }
-        }
-        if ($request->has('active')) {
-            if ($request->active !== 'all') {
-                $usersList->where('user_status', '=', $active);
-            }
-        }
         if ($request->ajax()) {
 
-            $users = $usersList->get();
+            $users = User::query()
+                ->select('*')
+                ->when($request->season,function ($q) use($request){
+                    $q->where('season_id',$request->season);
+                })
+                ->get();
+
             return Datatables::of($users)
                 ->addColumn('action', function ($users) {
                     return '
@@ -107,7 +99,7 @@ class UserController extends Controller
                 ->editColumn('login_status', function ($users) {
 
                     if ($users->login_status == 1) {
-                        return '<button type="button" class="btn btn-pill btn-info-light">نشط</button>';
+                        return '<button type="button" class="btn btn-pill btn-info-light">داخل التطبيق</button>';
                     } else {
 
                         return '<button type="button" class="btn btn-pill btn-danger-light">غير نشط</button>';
@@ -117,20 +109,20 @@ class UserController extends Controller
                 ->editColumn('center', function ($users) {
 
                     if ($users->center == 'in') {
-                        return '<button type="button" class="btn btn-pill btn-info-light">الطالب داخل السنتر</button>';
+                        return '<button type="button" class="btn btn-pill btn-info-light">داخل</button>';
                     } else {
 
-                        return '<button type="button" class="btn btn-pill btn-danger-light">الطالب خارج السنتر</button>';
+                        return '<button type="button" class="btn btn-pill btn-danger-light">خارج</button>';
                     }
                 })
 
                 ->editColumn('user_status', function ($users) {
 
                     if ($users->user_status == 'active') {
-                        return '<button type="button" class="btn btn-pill btn-info-light">الطالب مفعل</button>';
+                        return '<button type="button" class="btn btn-pill btn-info-light">مفعل</button>';
                     } else {
 
-                        return '<button type="button" class="btn btn-pill btn-danger-light">الطالب غير مفعل</button>';
+                        return '<button type="button" class="btn btn-pill btn-danger-light">محظور</button>';
                     }
                 })
 
@@ -141,16 +133,19 @@ class UserController extends Controller
                         return $users->user_status_note;
 
                     }else{
-
                         return '<button type="button" class="btn btn-pill btn-danger-light">لا يوجد ملاحظات عن هذا الطالب</button>';
-
                     }
 
                 })
                 ->escapeColumns([])
                 ->make(true);
         } else {
-            return view('admin.users.index');
+
+            $seasons = Season::query()
+                ->select('id','name_ar')
+                ->get();
+
+            return view('admin.users.index',compact('seasons'));
         }
     }
 
