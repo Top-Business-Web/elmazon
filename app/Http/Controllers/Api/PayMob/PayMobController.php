@@ -58,7 +58,6 @@ class PayMobController extends Controller
     public function checkout_processed(Request $request)
     {
 
-
         $request_hmac = $request->hmac;
         $calc_hmac = PayMob::calcHMAC($request);
 
