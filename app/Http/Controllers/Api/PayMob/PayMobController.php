@@ -77,7 +77,6 @@ class PayMobController extends Controller
                     'transaction_id' => $transaction_id
                 ]);
 
-
                 $userSubscribes = UserSubscribe::query()
                     ->where('student_id', '=', $order->user_id)
                     ->get();
