@@ -689,7 +689,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->whereIn('notification_id',$listOfNotifications)
                 ->count();
 
-            ########################### end Count notification for user not seen #########################################
             $data['notification_count'] =     ($count - $notificationsSeen);
             $data['sliders']            =     SliderResource::collection($sliders);
             $data['videos_basics']      =     VideoBasicResource::collection($videos_basics);
