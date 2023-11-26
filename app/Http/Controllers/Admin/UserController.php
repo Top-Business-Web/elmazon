@@ -40,7 +40,6 @@ class UserController extends Controller
     public function index(request $request)
     {
 
-
         if ($request->ajax()) {
 
             $users = User::query()

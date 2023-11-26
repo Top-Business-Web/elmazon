@@ -536,6 +536,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     public function home_page(): JsonResponse
     {
 
+
         try {
 
             $userId = userId();
@@ -616,7 +617,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
 
                 //لو الوقت مش متاح يوم الامتحان والطالب لسه ممتحنشي
-                }elseif (!$nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel) && date('Y-m-d') == $liveExam->date_exam){
+                }elseif (!$nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel) && date('Y-m-d') == $liveExam->date_exam && $startLiveExamModel->gt(Carbon::now())){
 
                     $data['life_exam'] = null;
                     $data['live_model'] = $liveExam;
@@ -676,7 +677,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->count();
 
             ########################### end Count notification for user not seen #########################################
-
             $data['notification_count'] =   ($count - $notificationsSeen);
             $data['sliders'] = SliderResource::collection($sliders);
             $data['videos_basics'] = VideoBasicResource::collection(VideoBasic::get());
