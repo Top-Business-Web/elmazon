@@ -535,46 +535,47 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
     public function home_page(): JsonResponse
     {
-
-
         try {
 
             $userId = userId();
 
-            $subject_class = SubjectClass::query()
-                ->whereHas('term',fn (Builder $builder) =>
-                $builder->where('status', '=', 'active')
-                    ->where('season_id', '=', getSeasonIdOfStudent()))
+            ############ فتح اول فصل للطالب التابع للمرحله الدراسيه للطالب ########
+            $subjectClass = SubjectClass::query()
+                ->whereHas('term', function (Builder $builder) {
+                    $builder->where('status', '=', 'active')
+                        ->where('season_id', '=', getSeasonIdOfStudent());
+                })
                 ->where('season_id', '=', getSeasonIdOfStudent())
                 ->first();
 
-            $first_lesson = Lesson::query()
-                ->where('subject_class_id', '=', $subject_class->id)
-                ->first();
-
-            if (!$subject_class) {
+            if (!$subjectClass) {
                 return self::returnResponseDataApi(null, "لا يوجد فصول برجاء ادخال عدد من الفصول لفتح اول فصل من القائمه", 404, 404);
             }
 
-            if (!$first_lesson) {
+            $firstLesson = Lesson::query()
+                ->where('subject_class_id', '=', $subjectClass->id)
+                ->first();
+
+            if (!$firstLesson) {
                 return self::returnResponseDataApi(null, "لا يوجد قائمه دروس لفتح اول درس", 404, 404);
             }
 
-            $subject_class_opened = OpenLesson::query()
-                ->where('user_id', '=', Auth::guard('user-api')->id())
-                ->where('subject_class_id', '=', $subject_class->id);
 
-            $lesson_opened = OpenLesson::query()
-                ->where('user_id', '=', Auth::guard('user-api')->id())
-                ->where('lesson_id', '=', $first_lesson->id);
+            ################ فتح اول درس تابع لهذا الفصل #############
+            $subjectClassOpened = OpenLesson::query()
+                ->where('user_id', '=', userId())
+                ->where('subject_class_id', '=', $subjectClass->id);
 
-            if (!$subject_class_opened->exists() && !$lesson_opened->exists()) {
-                OpenLesson::create(['user_id' => Auth::guard('user-api')->id(), 'subject_class_id' => $subject_class->id,]);
-                OpenLesson::create(['user_id' => Auth::guard('user-api')->id(), 'lesson_id' => $first_lesson->id,]);
+            $lessonOpened = OpenLesson::query()
+                ->where('user_id', '=', userId())
+                ->where('lesson_id', '=', $firstLesson->id);
+
+            if (!$subjectClassOpened->exists() && !$lessonOpened->exists()) {
+                OpenLesson::create(['user_id' => userId(), 'subject_class_id' => $subjectClass->id]);
+                OpenLesson::create(['user_id' => userId(), 'lesson_id' => $firstLesson->id]);
             }
 
-
-            #################################################### Start Opened Fist Subject Class and First lesson ##############
+            ################# ابعتلي اخر امتحان لايف تبع المرحله الدراسيه للطالب ############
             $liveExam = LifeExam::query()
                 ->select('id', 'name_ar', 'name_en', 'date_exam', 'time_start', 'time_end', 'degree', 'season_id', 'term_id', 'quiz_minute')
                 ->whereHas('term', fn (Builder $builder) =>
@@ -596,19 +597,19 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                     ->first();
 
 
-                //جلب الامتحان الالايف قبل ميعاد الامتحان كمؤشر للطالب
+                ########### جلب الامتحان الالايف قبل ميعاد الامتحان كمؤشر للطالب############
                 if(Carbon::now()->format('Y-m-d') < $liveExam->date_exam){
 
                     $data['life_exam'] = null;
                     $data['live_model'] = $liveExam;
 
-                //لو الطالب امتحن هذا الامتحان
+                ######## لو الطالب امتحن هذا الامتحان #######
                 }elseif ($liveExamDegree){
 
                     $data['life_exam'] = null;
                     $data['live_model'] = null;
 
-               //لو الامتحان الطالب ممتحنوش ومتاح ما بين الموعدين
+                 #### لو الامتحان الطالب ممتحنوش ومتاح ما بين الموعدين ##############
                 }elseif (date('Y-m-d') == $liveExam->date_exam && $nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel)){
 
 
@@ -616,7 +617,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                     $data['live_model'] = $liveExam;
 
 
-                //لو الوقت مش متاح يوم الامتحان والطالب لسه ممتحنشي
+                ####### لو الامتحان لسه مبدائشي ويكون موعد نهايه الامتحان اقل من التوقيت الحالي ##############
                 }elseif (!$nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel) && date('Y-m-d') == $liveExam->date_exam && $startLiveExamModel->gt(Carbon::now())){
 
                     $data['life_exam'] = null;
@@ -628,9 +629,14 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                     $data['life_exam'] = null;
                     $data['live_model'] = null;
                 }
+            }else{
+
+                $data['life_exam'] = null;
+                $data['live_model'] = null;
             }
 
 
+            ############### فصول المرحله الدراسيه للطالب ########
             $classes = SubjectClass::query()
                 ->whereHas('term', fn (Builder $builder) =>
                 $builder->where('status', '=', 'active')
@@ -638,8 +644,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->where('season_id', '=', getSeasonIdOfStudent())
                 ->get();
 
+
             $sliders = Slider::query()->get();
 
+            ############### فيديوهات المراجعه النهائيه للطالب وتظهر في حاله التفعيل  ########
             $videos_resources = VideoResource::query()
                 ->whereHas('term', fn (Builder $builder) =>
                 $builder->where('status', '=', 'active')
@@ -648,6 +656,12 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->latest()
                 ->get();
 
+
+            ### فيديوهات الاساسيات لجميع المراحل الدراسيه #############
+            $videos_basics = VideoBasic::query()
+            ->latest()
+            ->get();
+
             $user = User::query()
                 ->where('id','=',userId())
                 ->first();
@@ -655,8 +669,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $user->update(['access_token' => request()->bearerToken()]);
 
 
-            ########################### Start Count notification for user not seen #########################################
-
+            ########################### عدد الاشعارات اليوميه للطلب #########################################
             $notifications = Notification::query()
                 ->whereDate('created_at','=',date('Y-m-d'))
                 ->where(function ($q) use ($userId) {
@@ -677,11 +690,11 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->count();
 
             ########################### end Count notification for user not seen #########################################
-            $data['notification_count'] =   ($count - $notificationsSeen);
-            $data['sliders'] = SliderResource::collection($sliders);
-            $data['videos_basics'] = VideoBasicResource::collection(VideoBasic::get());
-            $data['classes'] = SubjectClassNewResource::collection($classes);
-            $data['videos_resources'] = VideoResourceResource::collection($videos_resources);
+            $data['notification_count'] =     ($count - $notificationsSeen);
+            $data['sliders']            =     SliderResource::collection($sliders);
+            $data['videos_basics']      =     VideoBasicResource::collection($videos_basics);
+            $data['classes']            =     SubjectClassNewResource::collection($classes);
+            $data['videos_resources']   =     VideoResourceResource::collection($videos_resources);
 
             return self::returnResponseDataApiWithMultipleIndexes($data, "تم ارسال جميع بيانات الصفحه الرئيسيه", 200);
 
