@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\City;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use App\Models\Term;
@@ -151,7 +152,6 @@ class UserController extends Controller
     public function create()
     {
         $data['seasons'] = Season::get();
-        $data['countries'] = Country::get();
         $data['groupOfMonths'] = array(
             1 => 'January',
             2 => 'February',
@@ -166,6 +166,7 @@ class UserController extends Controller
             11 => 'November',
             12 => 'December',
         );
+        $data['cities'] = City::select('id','name_ar')->get();
         return view('admin.users.parts.create')->with($data);
     }
 
@@ -476,5 +477,15 @@ class UserController extends Controller
         } else {
             return response()->json(['status' => 500]);
         }
+    }
+
+
+    public function getAllCountriesOfCity(Request $request): array
+    {
+        return Country::query()
+            ->where('city_id', $request->city_id)
+            ->pluck('name_ar', 'id')
+            ->toArray();
+
     }
 }
