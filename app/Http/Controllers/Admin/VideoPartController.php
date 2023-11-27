@@ -18,6 +18,7 @@ use App\Models\Report;
 use App\Models\VideoTotalView;
 use App\Traits\AdminLogs;
 use App\Traits\PhotoTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -268,8 +269,15 @@ class VideoPartController extends Controller
 
         ]);
 
+        $subjectClass = VideoParts::query()
+            ->where('id',$videoPartCreate->id)
+            ->with(['lesson.subject_class'])
+            ->first();
+
         if($videoPartCreate->save()){
 
+            //($data,$season_id,$exam_type,$exam_id)
+            $this->sendFirebaseNotificationWhenAddedVideo(['title' => "اشعار جديد","body" => "تم اضافه فيديو شرح جديد "],$subjectClass->lesson->subject_class->season_id,"video_part",$videoPartCreate->id);
             $this->adminLog('تم اضافة فيديو');
             return response()->json(['status' => 200]);
 
