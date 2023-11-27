@@ -94,7 +94,6 @@ class PaymentController extends Controller{
         ############### جلب جميع اشتراكات الشهور للطالب بالسنه الحاليه ###############
         $userSubscribes = UserSubscribe::query()
             ->where('student_id', auth('user-api')->id())
-            ->where('year', Carbon::now()->format('Y'))
             ->pluck('month')
             ->toArray();
 
