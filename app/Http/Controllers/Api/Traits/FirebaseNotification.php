@@ -95,6 +95,7 @@ trait FirebaseNotification{
 
 
 
+    ############################# ارسال اشعار للطلبه عند اضافه فيديو شرح او فيديو اساسيات او فيديو مراجعه ################
     public function sendFirebaseNotificationWhenAddedVideo($data,$season_id,$video_type,$video_id){
 
         $url = 'https://fcm.googleapis.com/fcm/send';
@@ -152,6 +153,8 @@ trait FirebaseNotification{
         return $result;
     }
 
+
+    ############################# ارسال اشعار للطلبه عند اضافه امتحان فصول او امتحان دروس او واجب او امتحان شامل او امتحان لايف او امتحان ورقي ################
 
     public function sendFirebaseNotificationWhenAddedExam($data,$season_id,$exam_type,$exam_id){
 
