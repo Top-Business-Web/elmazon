@@ -176,7 +176,7 @@ class UserController extends Controller
         $inputs = $request->all();
         $inputs['user_status'] = 'active';
         $inputs['password'] = Hash::make('123456');
-        $inputs['subscription_months_groups'] = json_encode($request->subscription_months_groups);
+        $inputs['subscription_months_groups'] = json_encode($request->subscription_months_groups) ?? NULL;
 
 
 //        return  $inputs;
