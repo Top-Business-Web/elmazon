@@ -160,7 +160,8 @@ class OnlineExamController extends Controller
 
     public function selectTerm(Request $request): array
     {
-        return Term::query()->where('season_id', $request->season_id)
+        return Term::query()
+            ->where('season_id', $request->season_id)
             ->pluck('name_ar', 'id')
             ->toArray();
 
