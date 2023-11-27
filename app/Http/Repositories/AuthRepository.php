@@ -698,7 +698,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $data['sliders']            =     SliderResource::collection($sliders);
             $data['videos_basics']      =     VideoBasicResource::collection($videos_basics);
             $data['classes']            =     SubjectClassNewResource::collection($classes);
-            $data['videos_resources']   =     VideoResourceResource::collection($videos_resources);
+            $data['videos_resources']   =     $setting->videos_resource_active == "active" ? VideoResourceResource::collection($videos_resources) : [];
 
             return self::returnResponseDataApiWithMultipleIndexes($data, "تم ارسال جميع بيانات الصفحه الرئيسيه", 200);
 
