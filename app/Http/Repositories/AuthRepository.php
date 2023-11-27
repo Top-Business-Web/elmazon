@@ -662,6 +662,9 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             ->latest()
             ->get();
 
+            ####### اعدادات اللغه في التطبيق ########
+            $setting = Setting::query()->first();
+
             $user = User::query()
                 ->where('id','=',userId())
                 ->first();
@@ -690,6 +693,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->count();
 
             $data['notification_count'] =     ($count - $notificationsSeen);
+            $data['language_active']    =     $setting ? $setting->lang == 'active' ? "active" :"not_active" : null;
             $data['sliders']            =     SliderResource::collection($sliders);
             $data['videos_basics']      =     VideoBasicResource::collection($videos_basics);
             $data['classes']            =     SubjectClassNewResource::collection($classes);
