@@ -693,6 +693,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->count();
 
             $data['notification_count'] =     ($count - $notificationsSeen);
+            $data['center_status']    =        studentAuth()->center;
             $data['language_active']    =     $setting ? $setting->lang == 'active' ? "active" :"not_active" : null;
             $data['sliders']            =     SliderResource::collection($sliders);
             $data['videos_basics']      =     VideoBasicResource::collection($videos_basics);
