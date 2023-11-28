@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 class PayMobController extends Controller
 {
 
+    ##################### تسجيل عمليه الدفع الالكتروني #########
     public static function pay(float $total_price, int $order_id)
     {
 
@@ -54,7 +55,7 @@ class PayMobController extends Controller
 
     }
 
-    ###################### Update Transaction When Payment Success #########################
+    ################## الرد في حاله نجاح عمليه الدفع الالكتروني او فشل عمليه الدفع #########
     public function checkout_processed(Request $request)
     {
 
@@ -102,11 +103,9 @@ class PayMobController extends Controller
         }
     }
 
-    ############################# Check Response After Payment (Success,Failed) ########################################
-
+    ############################# التوجهه بعد عمليه الدفع الالكتروني ################
     public function responseStatus(Request $request): RedirectResponse
     {
-
         return redirect()->to('api/checkout?status=' . $request['success'] . '&id=' . $request['id']);
     }
 
