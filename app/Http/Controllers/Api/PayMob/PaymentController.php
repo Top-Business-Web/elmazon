@@ -20,7 +20,7 @@ class PaymentController extends Controller{
     public function allMonths(): JsonResponse
     {
 
-        $months = array(
+        $months = [
             1 => 'شهر يناير',
             2 => 'شهر فبراير',
             3 =>'شهر مارس',
@@ -33,7 +33,7 @@ class PaymentController extends Controller{
             10 =>'شهر اكتوبر',
             11 => 'شهر نوفمبر',
             12 => 'شهر ديسمبر',
-        );
+        ];
 
 
            $listOfMonths = [];
@@ -65,7 +65,7 @@ class PaymentController extends Controller{
                    )->where('month','=',$key)
                    ->first();
 
-        ################################ الحصول علي جميع بيانات الشهور بالاسعار الخاصه بالصف الدراسي والتيرم لهذا الطالب ###############################
+              ################################ الحصول علي جميع بيانات الشهور بالاسعار الخاصه بالصف الدراسي والتيرم لهذا الطالب ###############################
                $response = [
                    'id' => $key,
                    'name' => $month,
