@@ -274,6 +274,8 @@ Route::group(['middleware' => 'lang'], function (){
 
 
 
+});//end routes
+
 /*
  *
  *
