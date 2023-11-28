@@ -808,9 +808,9 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         }
 
         $phoneToken = PhoneToken::updateOrCreate(
-            ['user_id' => auth()->guard('user-api')->id()],
+            ['user_id' => userId()],
             [
-            'user_id' => auth()->guard('user-api')->id(),
+            'user_id' => userId(),
             'token' => $request->token,
             'phone_type' => $request->phone_type
         ]);
@@ -899,7 +899,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         }else{
 
              $studentAddScreenShoot = new UserScreenShot();
-             $studentAddScreenShoot->user_id = Auth::guard('user-api')->id();
+             $studentAddScreenShoot->user_id = userId();
              $studentAddScreenShoot->count_screen_shots = 1;
              $studentAddScreenShoot->save();
 
@@ -1008,7 +1008,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             }
 
             $notificationSeenBefore = NotificationSeenStudent::query()
-                ->where('student_id', '=', Auth::guard('user-api')->id())
+                ->where('student_id', '=', userId())
                 ->where('notification_id', '=', $notification->id)
                 ->first();
 

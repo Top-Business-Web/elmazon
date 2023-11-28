@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\ExamEntry;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllExamHeroesNewResource;
 use App\Http\Resources\OnlineExamQuestionResource;
+use App\Http\Resources\StudentHeroResource;
 use App\Models\AllExam;
 use App\Models\Answer;
 use App\Models\ExamDegreeDepends;
@@ -56,8 +57,9 @@ class ExamEntryController extends Controller
             if ($request->exam_type == 'video') {
 
                 $onlineExam = OnlineExam::query()
-                    ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
-                        ->where('season_id', '=', auth('user-api')->user()->season_id))
+                    ->whereHas('term', fn(Builder $builder) =>
+                    $builder->where('status', '=', 'active')
+                        ->where('season_id', '=',getSeasonIdOfStudent()))
                     ->where('id', '=', $id)
                     ->where('type', '=', 'video')
                     ->first();
@@ -75,7 +77,7 @@ class ExamEntryController extends Controller
                 $onlineExam = OnlineExam::query()
                     ->whereHas('term', fn(Builder $builder) =>
                 $builder->where('status', '=', 'active')
-                    ->where('season_id', '=', auth('user-api')->user()->season_id))
+                    ->where('season_id', '=',getSeasonIdOfStudent()))
                     ->where('id', '=', $id)
                     ->where('type', '=', 'class')
                     ->first();
@@ -91,7 +93,7 @@ class ExamEntryController extends Controller
 
                 $onlineExam = OnlineExam::whereHas('term', fn(Builder $builder) =>
                 $builder->where('status', '=', 'active')
-                    ->where('season_id', '=', auth('user-api')->user()->season_id))
+                    ->where('season_id', '=',getSeasonIdOfStudent()))
                     ->where('id', '=', $id)
                     ->where('type', '=', 'lesson')
                     ->first();
@@ -108,7 +110,7 @@ class ExamEntryController extends Controller
 
                     $full_exam = AllExam::whereHas('term', fn(Builder $builder) => $builder
                         ->where('status', '=', 'active')
-                        ->where('season_id', '=', auth('user-api')->user()->season_id))
+                        ->where('season_id', '=',getSeasonIdOfStudent()))
                         ->where('id', '=', $id)
                         ->first();
 
@@ -172,12 +174,12 @@ class ExamEntryController extends Controller
 
                 $count_trying = Timer::query()
                     ->where('online_exam_id', $exam->id)
-                    ->where('user_id', Auth::guard('user-api')->id())
+                    ->where('user_id',userId())
                     ->count();
 
                 $depends = ExamDegreeDepends::query()
                     ->where('online_exam_id', $exam->id)
-                    ->where('user_id', Auth::guard('user-api')->id())
+                    ->where('user_id',userId())
                     ->where('exam_depends', 'yes')
                     ->first();
 
@@ -197,7 +199,7 @@ class ExamEntryController extends Controller
                 */
                 $count_trying = Timer::query()
                     ->where('all_exam_id', '=', $exam->id)
-                    ->where('user_id', '=', Auth::guard('user-api')->id())
+                    ->where('user_id', '=',userId())
                     ->count();
 
                 /*
@@ -207,7 +209,7 @@ class ExamEntryController extends Controller
                 */
                 $depends = ExamDegreeDepends::query()
                     ->where('all_exam_id', '=', $exam->id)
-                    ->where('user_id', '=', Auth::guard('user-api')->id())
+                    ->where('user_id', '=',userId())
                     ->where('exam_depends', '=', 'yes')
                     ->first();
             }
@@ -231,7 +233,7 @@ class ExamEntryController extends Controller
                   */
 
                     $timerData = [
-                        'user_id' => Auth::guard('user-api')->id(),
+                        'user_id' => userId(),
                         'timer' => request()->timer,
                     ];
 
@@ -258,7 +260,7 @@ class ExamEntryController extends Controller
 
                             $onlineExamUser = [
                                 'timer_id' => $timer->id,
-                                'user_id' => Auth::id(),
+                                'user_id' => userId(),
                                 'question_id' => $detail['question'],
                                 'answer_id' => $detail['answer'],
                                 'online_exam_id' => $examType == 'full_exam' ? null : $exam->id,
@@ -293,7 +295,7 @@ class ExamEntryController extends Controller
 
                             $textExamUser = [
                                 'timer_id' => $timer->id,
-                                'user_id' => auth()->id(),
+                                'user_id' => userId(),
                                 'question_id' => $detail['question'],
                                 'online_exam_id' => $exam->id,
                                 'answer' => $detail['answer'] ?? null,
@@ -317,7 +319,7 @@ class ExamEntryController extends Controller
                     if ($examType == 'full_exam') {
 
                         $sumDegree = OnlineExamUser::query()
-                            ->where('user_id', Auth::guard('user-api')->id())
+                            ->where('user_id',userId())
                             ->where('all_exam_id', '=', $exam->id)
                             ->where('timer_id', '=', $timer->id)
                             ->sum('degree');
@@ -330,7 +332,7 @@ class ExamEntryController extends Controller
                          */
                         $examDegreeDependsData = [
                             'timer_id' => $timer->id,
-                            'user_id' => auth('user-api')->id(),
+                            'user_id' => userId(),
                             'all_exam_id' => $exam->id,
                             'full_degree' => $sumDegree,
                         ];
@@ -343,35 +345,35 @@ class ExamEntryController extends Controller
                       |--------------------------------------------------------------------------
                       */
                         $numOfCorrectQuestions = OnlineExamUser::query()
-                            ->where('user_id', Auth::guard('user-api')->id())
+                            ->where('user_id',userId())
                             ->where('all_exam_id', '=', $exam->id)
                             ->where('timer_id', '=', $timer->id)
                             ->where('status', '=', 'solved')
                             ->count();
 
                         $numOfUnCorrectQtQuestions = OnlineExamUser::query()
-                            ->where('user_id', Auth::guard('user-api')->id())
+                            ->where('user_id',userId())
                             ->where('all_exam_id', '=', $exam->id)
                             ->where('timer_id', '=', $timer->id)
                             ->where('status', '=', 'un_correct')
                             ->count();
 
                         $numOfLeaveQuestions = OnlineExamUser::query()
-                            ->where('user_id', Auth::guard('user-api')->id())
+                            ->where('user_id',userId())
                             ->where('all_exam_id', '=', $exam->id)
                             ->where('timer_id', '=', $timer->id)
                             ->where('status', '=', 'leave')
                             ->count();
 
                         $totalTime = Timer::query()
-                            ->where('user_id', Auth::guard('user-api')->id())
+                            ->where('user_id',userId())
                             ->where('all_exam_id', '=', $exam->id)
                             ->latest()
                             ->first();
 
                         $total_trying = Timer::query()
                             ->where('all_exam_id', '=', $exam->id)
-                            ->where('user_id', '=', Auth::guard('user-api')->id())
+                            ->where('user_id', '=',userId())
                             ->count();
 
                         $data['degree'] = $sumDegree . "/" . $exam->degree;
@@ -396,14 +398,14 @@ class ExamEntryController extends Controller
 
 
                         $sumDegree = OnlineExamUser::query()
-                            ->where('user_id', Auth::guard('user-api')->id())
+                            ->where('user_id',userId())
                             ->where('timer_id', '=', $timer->id)
                             ->where('online_exam_id', '=', $exam->id)
                             ->sum('degree');
 
                         $examDegreeDependsData = [
                             'timer_id' => $timer->id,
-                            'user_id' => auth('user-api')->id(),
+                            'user_id' => userId(),
                             'online_exam_id' => $exam->id,
                             'full_degree' => $sumDegree,
                         ];
@@ -417,33 +419,33 @@ class ExamEntryController extends Controller
                        */
 
                         $numOfCorrectQuestions = OnlineExamUser::query()
-                            ->where('user_id', Auth::guard('user-api')->id())
+                            ->where('user_id', userId())
                             ->where('timer_id', '=', $timer->id)
                             ->where('online_exam_id', '=', $exam->id)
                             ->where('status', '=', 'solved')->count();
 
                         $numOfUnCorrectQtQuestions = OnlineExamUser::query()
-                            ->where('user_id', Auth::guard('user-api')->id())
+                            ->where('user_id', userId())
                             ->where('timer_id', '=', $timer->id)
                             ->where('online_exam_id', '=', $exam->id)
                             ->where('status', '=', 'un_correct')->count();
 
 
                         $numOfLeaveQuestions = OnlineExamUser::query()
-                            ->where('user_id', Auth::guard('user-api')->id())
+                            ->where('user_id', userId())
                             ->where('online_exam_id', '=', $exam->id)
                             ->where('timer_id', '=', $timer->id)
                             ->where('status', '=', 'leave')->count();
 
                         $totalTime = Timer::query()
-                            ->where('user_id', Auth::guard('user-api')->id())
+                            ->where('user_id', userId())
                             ->where('online_exam_id', '=', $exam->id)
                             ->latest()
                             ->first();
 
                         $total_trying = Timer::query()
                             ->where('online_exam_id', '=', $exam->id)
-                            ->where('user_id', '=', Auth::guard('user-api')->id())
+                            ->where('user_id', '=',userId())
                             ->count();
 
                         $data['degree'] = $sumDegree . "/" . $exam->degree;
@@ -511,8 +513,12 @@ class ExamEntryController extends Controller
             return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
         }
 
-        if ($request->type == 'video' || $request->type == 'subject_class' || $request->type == 'lesson') {
-            $exam = OnlineExam::where('id', $id)->where('type', '=', $request->type)->first();
+        if (in_array($request->type,['video','subject_class','lesson'])) {
+
+            $exam = OnlineExam::query()
+            ->where('id', $id)
+                ->where('type', '=', $request->type)
+                ->first();
             if (!$exam) {
                 return self::returnResponseDataApi(null, "الامتحان غير موجود", 404);
             }
@@ -537,7 +543,7 @@ class ExamEntryController extends Controller
 
                 Timer::create([
                     'all_exam_id' => $exam->id,
-                    'user_id' => Auth::guard('user-api')->id(),
+                    'user_id' => userId(),
                     'timer' => $request->timer,
                 ]);
                 return self::returnResponseDataApi(null, "تم اضافه محاوله جديده للامتحان الشامل", 200);
@@ -547,7 +553,7 @@ class ExamEntryController extends Controller
 
     }
 
-    public function degreesDependsWithStudent(Request $request,$id): JsonResponse{
+    public function degreesDependsWithStudent(Request $request,$id){
 
         try {
             $rules = [
@@ -571,66 +577,53 @@ class ExamEntryController extends Controller
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
 
-            if(in_array(request()->exam_type,['video','subject_class','lesson'])){
+        $examType = request()->exam_type;
 
-                $exam = OnlineExam::query()
-                    ->where('id','=',$id)
-                    ->first();
+        if (in_array($examType, ['video', 'subject_class', 'lesson'])) {
+        $exam = OnlineExam::find($id);
 
+        if (!$exam) {
+        return self::returnResponseDataApi(null, "هذا الامتحان غير موجود", 404, 404);
+        }
 
-                if(!$exam){
-                    return self::returnResponseDataApi(null,"هذا الامتحان غير موجود",404,404);
-                } else{
+        $examDegreeDepends = ExamDegreeDepends::query()
+            ->where('online_exam_id', $exam->id)
+        ->where('user_id', userId())
+        ->orderBy('full_degree', 'DESC')
+        ->first();
 
-                    $exam_degree_depends = ExamDegreeDepends::query()
-                        ->where('online_exam_id','=',$exam->id)
-                        ->where('user_id', Auth::guard('user-api')->id())
-                        ->orderBy('full_degree','DESC')
-                        ->first();
+        if (!$examDegreeDepends) {
+        return self::returnResponseDataApi(null, "يرجى إدخال هذا الامتحان أولاً لاعتماد أعلى درجة", 404, 404);
+        }
 
+        $examDegreeDepends->update(['exam_depends' => 'yes']);
+        return self::returnResponseDataApi(null, "تم اعتماد درجة الاونلاين بنجاح", 200);
 
-                   if(!$exam_degree_depends){
-                        return self::returnResponseDataApi(null,"يرجي ادخال هذا الامتحان اولا لاعتماد اعلي درجه",404,404);
+        } else {
 
-                    }else{
+        if ($examType == 'full_exam') {
 
-                        $exam_degree_depends->update(['exam_depends' => 'yes']);
-                        return self::returnResponseDataApi(null,"تم اعتماد درجه الاونلاين بنجاح",200);
-                    }
+        $exam = AllExam::find($id);
 
-                }//end else condition
+        if (!$exam) {
+        return self::returnResponseDataApi(null, "الامتحان الشامل غير موجود", 404, 404);
+        }
 
+        $examDegreeDepends = ExamDegreeDepends::query()
+            ->where('all_exam_id', $exam->id)
+        ->where('user_id',userId())
+        ->orderBy('full_degree', 'DESC')
+        ->first();
 
-            }else{
+        if (!$examDegreeDepends) {
+        return self::returnResponseDataApi(null, "يرجى إدخال الامتحان الشامل أولاً لاعتماد أعلى درجة", 404, 404);
+    }
 
-                if(request()->exam_type == 'full_exam')
+        $examDegreeDepends->update(['exam_depends' => 'yes']);
+        return self::returnResponseDataApi(null, "تم اعتماد درجة الامتحان الشامل بنجاح", 200);
 
-                $exam = AllExam::query()
-                       ->where('id','=',$id)
-                     ->first();
-
-                if(!$exam){
-                    return self::returnResponseDataApi(null,"الامتحان الشامل غير موجود",404,404);
-                }else{
-
-                    $exam_degree_depends = ExamDegreeDepends::query()
-                        ->where('all_exam_id','=',$exam->id)
-                        ->where('user_id', Auth::guard('user-api')->id())
-                        ->orderBy('full_degree','DESC')
-                        ->first();
-
-                    if(!$exam_degree_depends){
-                        return self::returnResponseDataApi(null,"يرجي ادخال الامتحان الشامل اولا لاعتماد اعلي درجه",404,404);
-
-                    }else{
-
-                        $exam_degree_depends->update(['exam_depends' => 'yes']);
-                        return self::returnResponseDataApi(null,"تم اعتماد درجه الامتحان الشامل بنجاح",200);
-                    }
-
-                }
-
-            }
+        }
+    }
 
         }catch (\Exception $exception) {
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
@@ -645,22 +638,24 @@ class ExamEntryController extends Controller
         try {
 
             $userCountExam = ExamDegreeDepends::query()
-                ->where('user_id','=', auth()->guard('user-api')->id())
+                ->where('user_id','=',userId())
                 ->where('exam_depends','=', 'yes')
                 ->count();
 
             if($userCountExam > 0) {
 
-                $data['day'] = $this->day();
-                $data['week'] = $this->week();
-                $data['current_month'] = $this->currentMonth();
-                $data['last_month'] = $this->lastMonth();
-                $data['day_heroes'] = $this->dayHeroesAll();
-                $data['week_heroes'] = $this->weekHeroesAll();
-                $data['current_month_heroes'] = $this->currentMonthHeroesAll();
-                $data['last_month_heroes'] = $this->lastMonthHeroesAll();
+                $response = [
+                'day' => $this->day(),
+                'week' => $this->week(),
+                'current_month' => $this->currentMonth(),
+                'last_month' => $this->lastMonth(),
+                'day_heroes' => $this->dayHeroesAll(),
+                'week_heroes' => $this->weekHeroesAll(),
+                'current_month_heroes' => $this->currentMonthHeroesAll(),
+                'last_month_heroes' => $this->lastMonthHeroesAll(),
+                ];
 
-                return self::returnResponseDataApi($data, "تم الحصول علي ابطال الامتحانات  بنجاح", 200);
+                return self::returnResponseDataApi($response, "تم الحصول علي ابطال الامتحانات  بنجاح", 200);
 
 
             }else{
@@ -676,186 +671,135 @@ class ExamEntryController extends Controller
      }
 
 
-    final public function day(): ?array
+    final public function day(): ?StudentHeroResource
     {
 
-        $examsDepends = User::query()
-            ->where('id','=',auth('user-api')->id())
-        ->with(['exam_degree_depends' => fn(HasMany $q) =>
-        $q->where('exam_depends', '=', 'yes')
-        ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
-
-        $builder->where('exam_depends', '=', 'yes')
-            ->whereDay('created_at', '=', Carbon::now()->format('d'))
-            ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-        )->whereHas('season', fn(Builder $builder) =>
-        $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-
-        ->withSum(
-            ['exam_degree_depends' => function ($query) {
-                $query->where('exam_depends', '=', 'yes');
-            }], 'full_degree')
-            ->withSum(['onlineExams'], 'degree')
-            ->withSum(['allExams'], 'degree')
-        ->first();
-
-
-        $heroesDaysIds = collect($this->dayHeroesAll())->pluck('id')->toArray();
-
-        if(!is_null($examsDepends)){
-
-            $authStudent = Auth::guard('user-api')->user();
-            $authData['id'] = $authStudent->id;
-            $authData['name'] = $authStudent->name;
-            $authData['country'] = lang() == 'ar'? $authStudent->country->city->name_ar : $authStudent->country->city->name_en;
-            $authData['ordered'] = (array_search($authStudent->id,$heroesDaysIds)) + 1;
-            $authData['student_total_degrees'] = (int)$examsDepends->exam_degree_depends_sum_full_degree;
-            $authData['exams_total_degree'] = (int)$examsDepends->online_exams_sum_degree + $examsDepends->all_exams_sum_degree;
-            $authData['image'] = $authStudent->image != null ? asset('/users/'.$authStudent->image) : asset('/default/avatar2.jfif');
-
-            return $authData;
-
-        }else{
-
-           return null;
-        }
-
-    }
-
-
-    final public function week():  ?array
-    {
-
-        $examsDepends = User::query()
-            ->where('id','=',auth('user-api')->id())
-        ->with(['exam_degree_depends' => fn(HasMany $q) =>
-        $q->where('exam_depends', '=', 'yes')
-        ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
-
-        $builder->where('exam_depends', '=', 'yes')
-            ->whereBetween('created_at', [Carbon::now()->startOfWeek(),Carbon::now()->endOfWeek()])
-            ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-        )->whereHas('season', fn(Builder $builder) =>
-        $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-
-            ->withSum(
-                ['exam_degree_depends' => function ($query) {
-                    $query->where('exam_depends', '=', 'yes');
-                }], 'full_degree')
-            ->withSum(['onlineExams'], 'degree')
-            ->withSum(['allExams'], 'degree')
+        DB::select(DB::raw('SET @rank = 0'));
+        $result = DB::table('exam_degree_depends')
+            ->where('user_id','=',userId())
+            ->where('exam_depends','=','yes')
+            ->leftJoin('online_exams','online_exams.id','=','exam_degree_depends.online_exam_id')
+            ->leftJoin('all_exams','all_exams.id','=','exam_degree_depends.all_exam_id')
+            ->join('users','users.id','=','exam_degree_depends.user_id')
+            ->join('countries','countries.id','=','users.country_id')
+            ->select(
+                'users.id',
+                'users.name as name',
+                'users.image as image',
+                'countries.name_ar as country',
+                DB::raw('SUM(exam_degree_depends.full_degree) as student_total_degrees'),
+                DB::raw('SUM(online_exams.degree) as degree_online_exam'),
+                DB::raw('SUM(all_exams.degree) as degree_all_exam'),
+                DB::raw('@rank := @rank + 1 as ordered')
+            )
+            ->whereDay('exam_degree_depends.created_at', '=', Carbon::now()->format('d'))
+            ->groupBy('user_id')
             ->first();
 
-        $heroesWeekIds = collect($this->weekHeroesAll())->pluck('id')->toArray();
-
-        if(!is_null($examsDepends)){
-
-            $authStudent = Auth::guard('user-api')->user();
-            $authData['id'] = $authStudent->id;
-            $authData['name'] = $authStudent->name;
-            $authData['country'] = lang() == 'ar'?$authStudent->country->city->name_ar : $authStudent->country->city->name_en;
-            $authData['ordered'] = (array_search($authStudent->id,$heroesWeekIds)) + 1;
-            $authData['student_total_degrees'] = (int)$examsDepends->exam_degree_depends_sum_full_degree;
-            $authData['exams_total_degree'] = (int)$examsDepends->online_exams_sum_degree + $examsDepends->all_exams_sum_degree;
-            $authData['image'] = $authStudent->image != null ? asset('/users/'.$authStudent->image) : asset('/default/avatar2.jfif');
-
-            return $authData;
-
+        if(!empty($result)){
+            return new StudentHeroResource($result);
         }else{
-
             return null;
-
         }
 
     }
 
-    final public function currentMonth():  ?array
+
+    final public function week(): ?StudentHeroResource
     {
 
-        $examsDepends = User::query()
-            ->where('id','=',auth('user-api')->id())
-            ->with(['exam_degree_depends' => fn(HasMany $q) =>
-        $q->where('exam_depends', '=', 'yes')
-        ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
-
-        $builder->where('exam_depends', '=', 'yes')
-            ->whereMonth('created_at', Carbon::now()->format('m'))
-            ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-        )->whereHas('season', fn(Builder $builder) =>
-        $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-
-            ->withSum(
-                ['exam_degree_depends' => function ($query) {
-                    $query->where('exam_depends', '=', 'yes');
-                }], 'full_degree')
-            ->withSum(['onlineExams'], 'degree')
-            ->withSum(['allExams'], 'degree')
+        DB::select(DB::raw('SET @rank = 0'));
+        $result = DB::table('exam_degree_depends')
+            ->where('user_id','=',userId())
+            ->where('exam_depends','=','yes')
+            ->leftJoin('online_exams','online_exams.id','=','exam_degree_depends.online_exam_id')
+            ->leftJoin('all_exams','all_exams.id','=','exam_degree_depends.all_exam_id')
+            ->join('users','users.id','=','exam_degree_depends.user_id')
+            ->join('countries','countries.id','=','users.country_id')
+            ->select(
+                'users.id',
+                'users.name as name',
+                'users.image as image',
+                'countries.name_ar as country',
+                DB::raw('SUM(exam_degree_depends.full_degree) as student_total_degrees'),
+                DB::raw('SUM(online_exams.degree) as degree_online_exam'),
+                DB::raw('SUM(all_exams.degree) as degree_all_exam'),
+                DB::raw('@rank := @rank + 1 as ordered')
+            )
+            ->whereBetween('exam_degree_depends.created_at', [Carbon::now()->startOfWeek(),Carbon::now()->endOfWeek()])
+            ->groupBy('user_id')
             ->first();
 
-        $heroesCurrentMonthIds = collect($this->currentMonthHeroesAll())->pluck('id')->toArray();
-
-        if(!is_null($examsDepends)){
-
-            $authStudent = Auth::guard('user-api')->user();
-            $authData['id'] = $authStudent->id;
-            $authData['name'] = $authStudent->name;
-            $authData['country'] = lang() == 'ar'?$authStudent->country->city->name_ar : $authStudent->country->city->name_en;
-            $authData['ordered'] = (array_search($authStudent->id,$heroesCurrentMonthIds)) + 1;
-            $authData['student_total_degrees'] = (int)$examsDepends->exam_degree_depends_sum_full_degree;
-            $authData['exams_total_degree'] = (int)$examsDepends->online_exams_sum_degree + $examsDepends->all_exams_sum_degree;
-            $authData['image'] = $authStudent->image != null ? asset('/users/'.$authStudent->image) : asset('/default/avatar2.jfif');
-
-            return $authData;
-
+        if(!empty($result)){
+            return new StudentHeroResource($result);
         }else{
-
             return null;
+        }
 
+    }
+
+    final public function currentMonth(): ?StudentHeroResource
+    {
+
+        DB::select(DB::raw('SET @rank = 0'));
+        $result = DB::table('exam_degree_depends')
+            ->where('user_id','=',userId())
+            ->where('exam_depends','=','yes')
+            ->leftJoin('online_exams','online_exams.id','=','exam_degree_depends.online_exam_id')
+            ->leftJoin('all_exams','all_exams.id','=','exam_degree_depends.all_exam_id')
+            ->join('users','users.id','=','exam_degree_depends.user_id')
+            ->join('countries','countries.id','=','users.country_id')
+            ->select(
+                'users.id',
+                'users.name as name',
+                'users.image as image',
+                'countries.name_ar as country',
+                DB::raw('SUM(exam_degree_depends.full_degree) as student_total_degrees'),
+                DB::raw('SUM(online_exams.degree) as degree_online_exam'),
+                DB::raw('SUM(all_exams.degree) as degree_all_exam'),
+                DB::raw('@rank := @rank + 1 as ordered')
+            )
+            ->whereMonth('exam_degree_depends.created_at', Carbon::now()->format('m'))
+            ->groupBy('user_id')
+            ->first();
+
+        if(!empty($result)){
+            return new StudentHeroResource($result);
+        }else{
+            return null;
         }
 
     }
 
 
-    final public function lastMonth():  ?array
+    final public function lastMonth(): ?StudentHeroResource
     {
 
-        $examsDepends = User::query()
-            ->where('id','=',auth('user-api')->id())
-            ->with(['exam_degree_depends' => fn(HasMany $q) =>
-        $q->where('exam_depends', '=', 'yes')
-        ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
-
-        $builder->where('exam_depends', '=', 'yes')
-            ->whereMonth('created_at', Carbon::now()->subMonth()->format('m'))
-            ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-        )->whereHas('season', fn(Builder $builder) =>
-        $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-
-            ->withSum(
-                ['exam_degree_depends' => function ($query) {
-                    $query->where('exam_depends', '=', 'yes');
-                }], 'full_degree')
-            ->withSum(['onlineExams'], 'degree')
-            ->withSum(['allExams'], 'degree')
+        DB::select(DB::raw('SET @rank = 0'));
+        $result = DB::table('exam_degree_depends')
+            ->where('user_id','=',userId())
+            ->where('exam_depends','=','yes')
+            ->leftJoin('online_exams','online_exams.id','=','exam_degree_depends.online_exam_id')
+            ->leftJoin('all_exams','all_exams.id','=','exam_degree_depends.all_exam_id')
+            ->join('users','users.id','=','exam_degree_depends.user_id')
+            ->join('countries','countries.id','=','users.country_id')
+            ->select(
+                'users.id',
+                'users.name as name',
+                'users.image as image',
+                'countries.name_ar as country',
+                DB::raw('SUM(exam_degree_depends.full_degree) as student_total_degrees'),
+                DB::raw('SUM(online_exams.degree) as degree_online_exam'),
+                DB::raw('SUM(all_exams.degree) as degree_all_exam'),
+                DB::raw('@rank := @rank + 1 as ordered')
+            )
+            ->whereMonth('exam_degree_depends.created_at', Carbon::now()->subMonth()->format('m'))
+            ->groupBy('user_id')
             ->first();
 
-        $heroesLastMonthIds = collect($this->lastMonthHeroesAll())->pluck('id')->toArray();
-
-        if(!is_null($examsDepends)){
-
-            $authStudent = Auth::guard('user-api')->user();
-            $authData['id'] = $authStudent->id;
-            $authData['name'] = $authStudent->name;
-            $authData['country'] = lang() == 'ar'?$authStudent->country->city->name_ar : $authStudent->country->city->name_en;
-            $authData['ordered'] = (array_search($authStudent->id,$heroesLastMonthIds)) + 1;
-            $authData['student_total_degrees'] = (int)$examsDepends->exam_degree_depends_sum_full_degree;
-            $authData['exams_total_degree'] = (int)$examsDepends->online_exams_sum_degree + $examsDepends->all_exams_sum_degree;
-            $authData['image'] = $authStudent->image != null ? asset('/users/'.$authStudent->image) : asset('/default/avatar2.jfif');
-
-            return $authData;
-
+        if(!empty($result)){
+            return new StudentHeroResource($result);
         }else{
-
             return null;
         }
 
@@ -863,198 +807,143 @@ class ExamEntryController extends Controller
 
 
 
-    final public function dayHeroesAll(): array
+    final public function dayHeroesAll()
     {
 
-        $students = User::with(['exam_degree_depends' => fn(HasMany $q) =>
-        $q->where('exam_depends', '=', 'yes')
-        ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
-
-        $builder->where('exam_depends', '=', 'yes')
-            ->whereDay('created_at', '=', Carbon::now()->format('d'))
-            ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-        )->whereHas('season', fn(Builder $builder) =>
-        $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-
-            ->withSum(
-                ['exam_degree_depends' => function ($query) {
-                    $query->where('exam_depends', '=', 'yes');
-                }], 'full_degree')
-            ->withSum(['onlineExams'], 'degree')
-            ->withSum(['allExams'], 'degree')
-            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
+        DB::select(DB::raw('SET @rank = 0'));
+        $result = DB::table('exam_degree_depends')
+            ->where('exam_depends','=','yes')
+            ->leftJoin('online_exams','online_exams.id','=','exam_degree_depends.online_exam_id')
+            ->leftJoin('all_exams','all_exams.id','=','exam_degree_depends.all_exam_id')
+            ->join('users','users.id','=','exam_degree_depends.user_id')
+            ->join('countries','countries.id','=','users.country_id')
+            ->select(
+                'users.id',
+                'users.name as name',
+                'users.image as image',
+                'countries.name_ar as country',
+                DB::raw('SUM(exam_degree_depends.full_degree) as student_total_degrees'),
+                DB::raw('SUM(online_exams.degree) as degree_online_exam'),
+                DB::raw('SUM(all_exams.degree) as degree_all_exam'),
+                DB::raw('@rank := @rank + 1 as ordered')
+            )
+            ->whereDay('exam_degree_depends.created_at', '=', Carbon::now()->format('d'))
+            ->groupBy('user_id')
+            ->orderByDesc('student_total_degrees')
             ->get();
 
-
-        $listOfStudentsIds = $students->pluck('id')->toArray();
-
-        if(!is_null($students)){
-
-            $data = [];
-            foreach ($students as $student){
-
-                $studentsData['id'] = $student->id;
-                $studentsData['name'] = $student->name;
-                $studentsData['country'] = lang() == 'ar'?$student->country->city->name_ar : $student->country->city->name_en;
-                $studentsData['ordered'] = (array_search($student->id,$listOfStudentsIds)) + 1;
-                $studentsData['student_total_degrees'] = (int)$student->exam_degree_depends_sum_full_degree;
-                $studentsData['exams_total_degree'] = (int)$student->online_exams_sum_degree + $student->all_exams_sum_degree;
-                $studentsData['image'] = $student->image != null ? asset('/users/'.$student->image) : asset('/default/avatar2.jfif');
-                $data[] = $studentsData;
-            }
-
-            return $data;
-
+        if(!empty($result)){
+            return StudentHeroResource::collection($result);
         }else{
-
             return [];
         }
 
+
+
     }
 
 
 
-   final public function weekHeroesAll(): array
+   final public function weekHeroesAll()
    {
 
-       $students = User::with(['exam_degree_depends' => fn(HasMany $q) =>
-       $q->where('exam_depends', '=', 'yes')
-       ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
-
-       $builder->where('exam_depends', '=', 'yes')
-           ->whereBetween('created_at', [Carbon::now()->startOfWeek(),Carbon::now()->endOfWeek()])
-           ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-       )->whereHas('season', fn(Builder $builder) =>
-       $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-
-           ->withSum(
-               ['exam_degree_depends' => function ($query) {
-                   $query->where('exam_depends', '=', 'yes');
-               }], 'full_degree')
-           ->withSum(['onlineExams'], 'degree')
-           ->withSum(['allExams'], 'degree')
-           ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
+       DB::select(DB::raw('SET @rank = 0'));
+       $result = DB::table('exam_degree_depends')
+           ->where('exam_depends','=','yes')
+           ->leftJoin('online_exams','online_exams.id','=','exam_degree_depends.online_exam_id')
+           ->leftJoin('all_exams','all_exams.id','=','exam_degree_depends.all_exam_id')
+           ->join('users','users.id','=','exam_degree_depends.user_id')
+           ->join('countries','countries.id','=','users.country_id')
+           ->select(
+               'users.id',
+               'users.name as name',
+               'users.image as image',
+               'countries.name_ar as country',
+               DB::raw('SUM(exam_degree_depends.full_degree) as student_total_degrees'),
+               DB::raw('SUM(online_exams.degree) as degree_online_exam'),
+               DB::raw('SUM(all_exams.degree) as degree_all_exam'),
+               DB::raw('@rank := @rank + 1 as ordered')
+           )
+           ->whereBetween('exam_degree_depends.created_at', [Carbon::now()->startOfWeek(),Carbon::now()->endOfWeek()])
+           ->groupBy('user_id')
+           ->orderByDesc('student_total_degrees')
            ->get();
 
-       $listOfStudentsIds = $students->pluck('id')->toArray();
-
-       if(!is_null($students)){
-
-           $data = [];
-           foreach ($students as $student){
-
-               $studentsData['id'] = $student->id;
-               $studentsData['name'] = $student->name;
-               $studentsData['country'] = lang() == 'ar'?$student->country->city->name_ar : $student->country->city->name_en;
-               $studentsData['ordered'] = (array_search($student->id,$listOfStudentsIds)) + 1;
-               $studentsData['student_total_degrees'] = (int)$student->exam_degree_depends_sum_full_degree;
-               $studentsData['exams_total_degree'] = (int)$student->online_exams_sum_degree + $student->all_exams_sum_degree;
-               $studentsData['image'] = $student->image != null ? asset('/users/'.$student->image) : asset('/default/avatar2.jfif');
-               $data[] = $studentsData;
-           }
-
-           return $data;
-
+       if(!empty($result)){
+           return StudentHeroResource::collection($result);
        }else{
-
            return [];
        }
+
+
     }
 
 
-    final public function currentMonthHeroesAll(): array
+    final public function currentMonthHeroesAll()
     {
 
-        $students = User::with(['exam_degree_depends' => fn(HasMany $q) =>
-        $q->where('exam_depends', '=', 'yes')
-        ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
-
-        $builder->where('exam_depends', '=', 'yes')
-            ->whereMonth('created_at', Carbon::now()->format('m'))
-            ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-        )->whereHas('season', fn(Builder $builder) =>
-        $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-
-            ->withSum(
-                ['exam_degree_depends' => function ($query) {
-                    $query->where('exam_depends', '=', 'yes');
-                }], 'full_degree')
-            ->withSum(['onlineExams'], 'degree')
-            ->withSum(['allExams'], 'degree')
-            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
+        DB::select(DB::raw('SET @rank = 0'));
+        $result = DB::table('exam_degree_depends')
+            ->where('exam_depends','=','yes')
+            ->leftJoin('online_exams','online_exams.id','=','exam_degree_depends.online_exam_id')
+            ->leftJoin('all_exams','all_exams.id','=','exam_degree_depends.all_exam_id')
+            ->join('users','users.id','=','exam_degree_depends.user_id')
+            ->join('countries','countries.id','=','users.country_id')
+            ->select(
+                'users.id',
+                'users.name as name',
+                'users.image as image',
+                'countries.name_ar as country',
+                DB::raw('SUM(exam_degree_depends.full_degree) as student_total_degrees'),
+                DB::raw('SUM(online_exams.degree) as degree_online_exam'),
+                DB::raw('SUM(all_exams.degree) as degree_all_exam'),
+                DB::raw('@rank := @rank + 1 as ordered')
+            )
+            ->whereMonth('exam_degree_depends.created_at', Carbon::now()->format('m'))
+            ->groupBy('user_id')
+            ->orderByDesc('student_total_degrees')
             ->get();
 
-        $listOfStudentsIds = $students->pluck('id')->toArray();
-
-        if(!is_null($students)){
-
-            $data = [];
-            foreach ($students as $student){
-
-                $studentsData['id'] = $student->id;
-                $studentsData['name'] = $student->name;
-                $studentsData['country'] = lang() == 'ar'?$student->country->city->name_ar : $student->country->city->name_en;
-                $studentsData['ordered'] = (array_search($student->id,$listOfStudentsIds)) + 1;
-                $studentsData['student_total_degrees'] = (int)$student->exam_degree_depends_sum_full_degree;
-                $studentsData['exams_total_degree'] = (int)$student->online_exams_sum_degree + $student->all_exams_sum_degree;
-                $studentsData['image'] = $student->image != null ? asset('/users/'.$student->image) : asset('/default/avatar2.jfif');
-                $data[] = $studentsData;
-            }
-
-            return $data;
-
+        if(!empty($result)){
+            return StudentHeroResource::collection($result);
         }else{
-
             return [];
         }
+
     }
 
 
-    final public function lastMonthHeroesAll(): array
+    public function lastMonthHeroesAll()
     {
 
-        $students = User::with(['exam_degree_depends' => fn(HasMany $q) =>
-        $q->where('exam_depends', '=', 'yes')
-        ])->whereHas('exam_degree_depends', fn(Builder $builder) =>
-
-        $builder->where('exam_depends', '=', 'yes')
-            ->whereMonth('created_at', Carbon::now()->subMonth()->format('m'))
-            ->whereYear('created_at', '=', Carbon::now()->format('Y'))
-        )->whereHas('season', fn(Builder $builder) =>
-        $builder->where('season_id', '=', auth()->guard('user-api')->user()->season_id))
-
-            ->withSum(
-                ['exam_degree_depends' => function ($query) {
-                    $query->where('exam_depends', '=', 'yes');
-                }], 'full_degree')
-            ->withSum(['onlineExams'], 'degree')
-            ->withSum(['allExams'], 'degree')
-            ->orderBy('exam_degree_depends_sum_full_degree', 'desc')
+        DB::select(DB::raw('SET @rank = 0'));
+        $result = DB::table('exam_degree_depends')
+            ->where('exam_depends','=','yes')
+            ->leftJoin('online_exams','online_exams.id','=','exam_degree_depends.online_exam_id')
+            ->leftJoin('all_exams','all_exams.id','=','exam_degree_depends.all_exam_id')
+            ->join('users','users.id','=','exam_degree_depends.user_id')
+            ->join('countries','countries.id','=','users.country_id')
+            ->select(
+                'users.id',
+                'users.name as name',
+                'users.image as image',
+                'countries.name_ar as country',
+                DB::raw('SUM(exam_degree_depends.full_degree) as student_total_degrees'),
+                DB::raw('SUM(online_exams.degree) as degree_online_exam'),
+                DB::raw('SUM(all_exams.degree) as degree_all_exam'),
+                DB::raw('@rank := @rank + 1 as ordered')
+            )
+            ->whereMonth('exam_degree_depends.created_at', Carbon::now()->subMonth()->format('m'))
+            ->groupBy('user_id')
+            ->orderByDesc('student_total_degrees')
             ->get();
 
-        $listOfStudentsIds = $students->pluck('id')->toArray();
-
-        if(!is_null($students)){
-
-            $data = [];
-            foreach ($students as $student){
-
-                $studentsData['id'] = $student->id;
-                $studentsData['name'] = $student->name;
-                $studentsData['country'] = lang() == 'ar'?$student->country->city->name_ar : $student->country->city->name_en;
-                $studentsData['ordered'] = (array_search($student->id,$listOfStudentsIds)) + 1;
-                $studentsData['student_total_degrees'] = (int)$student->exam_degree_depends_sum_full_degree;
-                $studentsData['exams_total_degree'] = (int)$student->online_exams_sum_degree + $student->all_exams_sum_degree;
-                $studentsData['image'] = $student->image != null ? asset('/users/'.$student->image) : asset('/default/avatar2.jfif');
-                $data[] = $studentsData;
-            }
-
-            return $data;
-
+        if(!empty($result)){
+            return StudentHeroResource::collection($result);
         }else{
-
             return [];
         }
+
     }
 
 
