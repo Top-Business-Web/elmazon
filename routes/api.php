@@ -47,7 +47,6 @@ Route::group(['middleware' => 'lang'], function (){
 
     Route::post('add-notification',[AuthController::class,'add_notification']);
     Route::get('teacher/about-me',[AboutMeController::class,'about_me'])->middleware('jwt');
-
     Route::group(['prefix' => 'auth'], function (){
 
     Route::post('login',[AuthController::class,'login']);
