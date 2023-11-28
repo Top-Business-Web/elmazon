@@ -109,7 +109,6 @@ Route::group(['middleware' => 'lang'], function (){
     });
 
         Route::post('video-update-time/{id}',[LessonController::class,'updateMinuteVideo'])->middleware('jwt');
-
         Route::group(['prefix' => 'plans','middleware' => ['jwt']], function (){
             Route::get('all',[MonthlyPlanController::class,'all_plans']);
 
@@ -143,7 +142,7 @@ Route::group(['middleware' => 'lang'], function (){
 
         Route::group(['prefix' => 'degrees','middleware' => ['jwt']], function (){
             Route::get('all-exams-degrees',[DegreeController::class,'degrees']);
-    //        Route::get('depends/exam/{id}',[DegreeController::class,'degrees_depends']);
+    //      Route::get('depends/exam/{id}',[DegreeController::class,'degrees_depends']);
 
             });
 
@@ -192,7 +191,6 @@ Route::group(['middleware' => 'lang'], function (){
 
 
     Route::get('instruction/exam/{id}',[InstructionController::class,'instructionExamDetails']);
-
 
     //start lesson details
     Route::group(['prefix' => 'lesson','middleware' => 'jwt'], function (){
@@ -254,7 +252,6 @@ Route::group(['middleware' => 'lang'], function (){
      * Content of months and check money paid with coupon to discount
      */
     Route::group(['prefix' => 'payments','middleware' => 'jwt'], function (){
-
         Route::get('all-months',[PaymentController::class,'allMonths']);
         Route::post('add-payment-by-student',[PaymentController::class,'addPaymentByStudent']);
         Route::post('check-money-paid-with-discount',[PaymentController::class,'checkMoneyPaidWithDiscount']);
