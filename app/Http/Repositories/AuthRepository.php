@@ -100,11 +100,15 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $user = Auth::guard('user-api')->user();
             $user['token'] = $token;
 
+
             $user_data->update(['access_token' => $token]);
 
-            $user_data->update(['login_status' => 1]);
+            if($user_data->code != 40907030) {
+                $user_data->update(['login_status' => 1]);
 
+            }
             return self::returnResponseDataApi(new UserResource($user), "تم تسجيل الدخول بنجاح", 200);
+
         } catch (\Exception $exception) {
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
