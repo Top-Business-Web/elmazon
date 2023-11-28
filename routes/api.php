@@ -29,7 +29,13 @@ use App\Http\Controllers\Api\StudentReport\ReportController;
 use App\Http\Controllers\Api\SubjectClass\SubjectClassController;
 use App\Http\Controllers\Api\SubscribeController;
 use App\Http\Controllers\Api\VideoRate\VideoRateController;
+use App\Http\Resources\StudentHeroResource;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -265,7 +271,10 @@ Route::group(['middleware' => 'lang'], function (){
     Route::get('checkout/response',[PayMobController::class,'responseStatus']);
     Route::get('checkout',[PayMobController::class,'checkout']);
 
-});
+
+
+
+});//end routes
 
 /*
  *
