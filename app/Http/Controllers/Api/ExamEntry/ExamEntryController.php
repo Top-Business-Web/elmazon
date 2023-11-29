@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Validator;
 class ExamEntryController extends Controller
 {
 
-    public function all_questions_by_online_exam(Request $request,$id)
+    public function all_questions_by_online_exam(Request $request,$id): JsonResponse
     {
 
         try {
@@ -53,77 +53,55 @@ class ExamEntryController extends Controller
                 return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
             }
 
+            $examType = $request->exam_type;
 
-            if ($request->exam_type == 'video') {
-
-                $onlineExam = OnlineExam::query()
-                    ->whereHas('term', fn(Builder $builder) =>
-                    $builder->where('status', '=', 'active')
-                        ->where('season_id', '=',getSeasonIdOfStudent()))
-                    ->where('id', '=', $id)
-                    ->where('type', '=', 'video')
-                    ->first();
-
-                if (!$onlineExam) {
-
-                    return self::returnResponseDataApi(null, "الامتحان غير موجود", 404);
-                }else{
-                    return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam), "تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان", 200);
-
-                }
-
-            } elseif ($request->exam_type == 'subject_class') {
-
-                $onlineExam = OnlineExam::query()
-                    ->whereHas('term', fn(Builder $builder) =>
-                $builder->where('status', '=', 'active')
-                    ->where('season_id', '=',getSeasonIdOfStudent()))
-                    ->where('id', '=', $id)
-                    ->where('type', '=', 'class')
-                    ->first();
-
-                if (!$onlineExam) {
-                    return self::returnResponseDataApi(null, "الامتحان غير موجود", 404);
-                }else{
-                    return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam), "تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان", 200);
-
-                }
-
-            } elseif ($request->exam_type == 'lesson') {
-
-                $onlineExam = OnlineExam::whereHas('term', fn(Builder $builder) =>
-                $builder->where('status', '=', 'active')
-                    ->where('season_id', '=',getSeasonIdOfStudent()))
-                    ->where('id', '=', $id)
-                    ->where('type', '=', 'lesson')
-                    ->first();
-
-                if (!$onlineExam) {
-                    return self::returnResponseDataApi(null, "الامتحان غير موجود", 404);
-                }else{
-                    return self::returnResponseDataApi(new OnlineExamQuestionResource($onlineExam), "تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان", 200);
-
-                }
-
-            } else {
-                if ($request->exam_type == 'full_exam') {
-
-                    $full_exam = AllExam::whereHas('term', fn(Builder $builder) => $builder
-                        ->where('status', '=', 'active')
-                        ->where('season_id', '=',getSeasonIdOfStudent()))
-                        ->where('id', '=', $id)
+            switch ($examType) {
+                case 'video':
+                case 'subject_class':
+                case 'lesson':
+                    $full_exam = null;
+                    $onlineExamType = ($examType == 'video') ? 'video' :
+                        (($examType == 'subject_class') ?
+                            'class' : 'lesson');
+                    $onlineExam = OnlineExam::query()
+                        ->where('id', $id)
+                        ->where('type', $onlineExamType)
                         ->first();
+                    break;
 
-                    if (!$full_exam) {
-                        return self::returnResponseDataApi(null, "الامتحان الشامل غير موجود", 404);
-                    }else{
-                        return self::returnResponseDataApi(new OnlineExamQuestionResource($full_exam), "تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان", 200);
+                case 'full_exam':
+                    $full_exam = AllExam::query()
+                        ->where('id', $id)
+                        ->first();
+                    $onlineExam = null;
+                    break;
 
-                    }
-                }
-
+                default:
+                    return self::returnResponseDataApi(null, "Invalid exam type", 422);
             }
 
+            if (!$onlineExam && !$full_exam) {
+                return self::returnResponseDataApi(null, "الامتحان غير موجود", 404);
+            }
+
+            $examDegreeDepends = ExamDegreeDepends::query()
+            ->where('user_id', userId())
+                ->where(function ($query) use ($id,$examType) {
+                    $query->where(function ($q) use ($id,$examType) {
+                        $column = ($examType == 'full_exam') ? 'all_exam_id' : 'online_exam_id';
+                        $q->where($column, $id)
+                            ->where('exam_depends', '=', 'yes');
+                    });
+                })
+                ->first();
+
+            if ($examDegreeDepends) {
+                return self::returnResponseDataApi(null, "تم اعتماد هذا الامتحان من قبل", 201, 201);
+            } else {
+                $resource = ($examType == 'full_exam') ? new OnlineExamQuestionResource($full_exam) : new OnlineExamQuestionResource($onlineExam);
+
+                return self::returnResponseDataApi($resource, "تم ارسال جميع الاسئله بالاجابات التابعه لهذا الامتحان", 200);
+            }
         } catch (\Exception $exception) {
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
