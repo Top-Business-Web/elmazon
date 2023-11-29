@@ -255,7 +255,7 @@ class ExamEntryController extends Controller
 
 
                         } else {
-                           
+
 
                             ############### في حاله نوع السؤال مقالي والاجابه (نص او صوره او ملف صوتي) #######
                             $image = $detail['image'] ?? null;
@@ -380,7 +380,7 @@ class ExamEntryController extends Controller
 
                         ExamDegreeDepends::create($examDegreeDependsData);
 
-                       
+
                         ###############تفصاصيل درجات الامتحان الاونلاين (فيديو-درس-فصل) - عدد الاسئله الصحيحه - عدد الاسئله الخطاء - عدد الاسئله التي لم يتم حلها - اجمالي الوقت المستخدم - عدد المحاولات التي تمت لهذا الطالب لهذا الامتحان ###########
                         $numOfCorrectQuestions = OnlineExamUser::query()
                             ->where('user_id', userId())
@@ -617,7 +617,6 @@ class ExamEntryController extends Controller
                 ];
 
                 return self::returnResponseDataApi($response, "تم الحصول علي ابطال الامتحانات  بنجاح", 200);
-
 
             }else{
 
