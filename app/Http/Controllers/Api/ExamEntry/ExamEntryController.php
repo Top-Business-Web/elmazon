@@ -192,21 +192,13 @@ class ExamEntryController extends Controller
 
                 $examNotFoundMessage = "الامتحان الشامل غير موجود";
 
-                /*
-                |--------------------------------------------------------------------------
-                 تفقد عدد المحاولات لهذا الامتحان
-                |--------------------------------------------------------------------------
-                */
+                ################ تفقد عدد المحاولات لهذا الامتحان ##############
                 $count_trying = Timer::query()
                     ->where('all_exam_id', '=', $exam->id)
                     ->where('user_id', '=',userId())
                     ->count();
 
-                /*
-                |--------------------------------------------------------------------------
-                 تفقد في حاله هل تم اعتماد هذا الامتحان ام لا
-                |--------------------------------------------------------------------------
-                */
+                ################ تفقد في حاله هل تم اعتماد هذا الامتحان ام لا #########
                 $depends = ExamDegreeDepends::query()
                     ->where('all_exam_id', '=', $exam->id)
                     ->where('user_id', '=',userId())
@@ -226,12 +218,7 @@ class ExamEntryController extends Controller
 
                 if ($count_trying < $trying) {
 
-                  /*
-                  |--------------------------------------------------------------------------
-                   تسجيل محاوله للطالب بجدول المحاولات والمحاوله يجب ان تكون اما تبع امتحان اونلاين من نوع (فصل,درس,فيديو شرح) او امتحان شامل
-                  |--------------------------------------------------------------------------
-                  */
-
+                    ###########################  تسجيل محاوله للطالب بجدول المحاولات والمحاوله يجب ان تكون اما تبع امتحان اونلاين من نوع (فصل,درس,فيديو شرح) او امتحان شامل#########
                     $timerData = [
                         'user_id' => userId(),
                         'timer' => request()->timer,
@@ -251,11 +238,7 @@ class ExamEntryController extends Controller
                         $question = Question::find($detail['question']);
                         $answer = Answer::find($detail['answer']);
 
-                        /*
-                         |--------------------------------------------------------------------------
-                          في حاله نوع السؤال اختياري
-                         |--------------------------------------------------------------------------
-                         */
+                        ######### في حاله نوع السؤال اختياري #################################
                         if ($question->question_type == 'choice') {
 
                             $onlineExamUser = [
@@ -272,12 +255,9 @@ class ExamEntryController extends Controller
 
 
                         } else {
-                            /*
-                           |--------------------------------------------------------------------------
-                           في حاله نوع السؤال مقالي والاجابه (نص او صوره او ملف صوتي)
-                           |--------------------------------------------------------------------------
-                           */
+                           
 
+                            ############### في حاله نوع السؤال مقالي والاجابه (نص او صوره او ملف صوتي) #######
                             $image = $detail['image'] ?? null;
                             $audio = $detail['audio'] ?? null;
 
@@ -311,11 +291,7 @@ class ExamEntryController extends Controller
                     }
 
 
-                    /*
-                     |--------------------------------------------------------------------------
-                      ارجاع بيانات الامتحان في حاله نوع الامتحان شامل
-                     |--------------------------------------------------------------------------
-                     */
+                    ################ ارجاع بيانات الامتحان في حاله نوع الامتحان شامل ##################
                     if ($examType == 'full_exam') {
 
                         $sumDegree = OnlineExamUser::query()
@@ -325,11 +301,7 @@ class ExamEntryController extends Controller
                             ->sum('degree');
 
 
-                        /*
-                         |--------------------------------------------------------------------------
-                          تسجيل جميع المحاولات للطالب بجميع درجات كل محاوله لاعتماد اعلي درجه بهذا الامتحان
-                         |--------------------------------------------------------------------------
-                         */
+                        #################### تسجيل جميع المحاولات للطالب بجميع درجات كل محاوله لاعتماد اعلي درجه بهذا الامتحان ########
                         $examDegreeDependsData = [
                             'timer_id' => $timer->id,
                             'user_id' => userId(),
@@ -339,11 +311,7 @@ class ExamEntryController extends Controller
 
                         ExamDegreeDepends::create($examDegreeDependsData);
 
-                        /*
-                      |--------------------------------------------------------------------------
-                       تفصاصيل درجات الامتحان الشامل - عدد الاسئله الصحيحه - عدد الاسئله الخطاء - عدد الاسئله التي لم يتم حلها - اجمالي الوقت المستخدم - عدد المحاولات التي تمت لهذا الطالب لهذا الامتحان
-                      |--------------------------------------------------------------------------
-                      */
+                        #################### تفصاصيل درجات الامتحان الشامل - عدد الاسئله الصحيحه - عدد الاسئله الخطاء - عدد الاسئله التي لم يتم حلها - اجمالي الوقت المستخدم - عدد المحاولات التي تمت لهذا الطالب لهذا الامتحان #######
                         $numOfCorrectQuestions = OnlineExamUser::query()
                             ->where('user_id',userId())
                             ->where('all_exam_id', '=', $exam->id)
@@ -412,12 +380,8 @@ class ExamEntryController extends Controller
 
                         ExamDegreeDepends::create($examDegreeDependsData);
 
-                        /*
-                       |--------------------------------------------------------------------------
-                        تفصاصيل درجات الامتحان الاونلاين (فيديو-درس-فصل) - عدد الاسئله الصحيحه - عدد الاسئله الخطاء - عدد الاسئله التي لم يتم حلها - اجمالي الوقت المستخدم - عدد المحاولات التي تمت لهذا الطالب لهذا الامتحان
-                       |--------------------------------------------------------------------------
-                       */
-
+                       
+                        ###############تفصاصيل درجات الامتحان الاونلاين (فيديو-درس-فصل) - عدد الاسئله الصحيحه - عدد الاسئله الخطاء - عدد الاسئله التي لم يتم حلها - اجمالي الوقت المستخدم - عدد المحاولات التي تمت لهذا الطالب لهذا الامتحان ###########
                         $numOfCorrectQuestions = OnlineExamUser::query()
                             ->where('user_id', userId())
                             ->where('timer_id', '=', $timer->id)
@@ -464,11 +428,9 @@ class ExamEntryController extends Controller
                         $data['description_result'] = $exam->description_result;
                         $data['image_result'] = $exam->image_result == null ? asset('online_exam_result_images/default/default.png') : asset('online_exam_result_images/images/' . $exam->image_result);
 
-                    }//end else
-
+                    }
 
                     return self::returnResponseDataApiWithMultipleIndexes($data, "تم اداء الامتحان بنجاح وارسال تفاصيل نتيجه الطالب", 200);
-
 
                 } else {
                     return self::returnResponseDataApi(null, "لقد انتهيت من جميع محاولاتك لهذا الامتحان ولا يوجد لديك محاولات اخري", 415);
@@ -488,7 +450,6 @@ class ExamEntryController extends Controller
     }
 
 
-    //access end time for exam
     public function access_end_time_for_exam(Request $request, $id)
     {
 
@@ -671,7 +632,7 @@ class ExamEntryController extends Controller
      }
 
 
-    final public function day(): ?StudentHeroResource
+    public function day(): ?StudentHeroResource
     {
 
         DB::select(DB::raw('SET @rank = 0'));
@@ -705,7 +666,7 @@ class ExamEntryController extends Controller
     }
 
 
-    final public function week(): ?StudentHeroResource
+    public function week(): ?StudentHeroResource
     {
 
         DB::select(DB::raw('SET @rank = 0'));
@@ -738,7 +699,7 @@ class ExamEntryController extends Controller
 
     }
 
-    final public function currentMonth(): ?StudentHeroResource
+    public function currentMonth(): ?StudentHeroResource
     {
 
         DB::select(DB::raw('SET @rank = 0'));
@@ -772,7 +733,7 @@ class ExamEntryController extends Controller
     }
 
 
-    final public function lastMonth(): ?StudentHeroResource
+    public function lastMonth(): ?StudentHeroResource
     {
 
         DB::select(DB::raw('SET @rank = 0'));
@@ -807,7 +768,7 @@ class ExamEntryController extends Controller
 
 
 
-    final public function dayHeroesAll()
+    public function dayHeroesAll()
     {
 
         DB::select(DB::raw('SET @rank = 0'));
@@ -844,7 +805,7 @@ class ExamEntryController extends Controller
 
 
 
-   final public function weekHeroesAll()
+   public function weekHeroesAll()
    {
 
        DB::select(DB::raw('SET @rank = 0'));
@@ -879,7 +840,7 @@ class ExamEntryController extends Controller
     }
 
 
-    final public function currentMonthHeroesAll()
+    public function currentMonthHeroesAll()
     {
 
         DB::select(DB::raw('SET @rank = 0'));

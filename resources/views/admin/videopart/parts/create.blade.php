@@ -158,8 +158,7 @@
 
             let season_id = $("#season_id").val();
             let term_id = $("#term_id").val();
-
-
+            
             if (term_id) {
                 $.ajax({
                     url: "{{ URL::to('getAllSubjectClassesBySeasonAndTerm') }}",
