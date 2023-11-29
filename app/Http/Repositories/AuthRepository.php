@@ -100,15 +100,15 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $user = Auth::guard('user-api')->user();
             $user['token'] = $token;
 
-
             $user_data->update(['access_token' => $token]);
 
+            $user_data->update(['login_status' => 1]);
             if($user_data->code != 40907030) {
                 $user_data->update(['login_status' => 1]);
 
             }
-            return self::returnResponseDataApi(new UserResource($user), "تم تسجيل الدخول بنجاح", 200);
 
+            return self::returnResponseDataApi(new UserResource($user), "تم تسجيل الدخول بنجاح", 200);
         } catch (\Exception $exception) {
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
@@ -676,7 +676,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $user->update(['access_token' => request()->bearerToken()]);
 
 
-            ########################### عدد الاشعارات اليوميه للطلب #########################################
+            ########################### عدد الاشعارات اليوميه للطالب #########################################
             $notifications = Notification::query()
                 ->whereDate('created_at','=',date('Y-m-d'))
                 ->where(function ($q) use ($userId) {
@@ -697,7 +697,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->count();
 
             $data['notification_count'] =     ($count - $notificationsSeen);
-            $data['center_status']    =        studentAuth()->center;
+            $data['center_status']      =        studentAuth()->center;
             $data['language_active']    =     $setting ? $setting->lang == 'active' ? "active" :"not_active" : null;
             $data['sliders']            =     SliderResource::collection($sliders);
             $data['videos_basics']      =     VideoBasicResource::collection($videos_basics);
@@ -866,7 +866,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     {
 
         $studentAddScreenBeforeInApp = UserScreenShot::query()
-            ->where('user_id', '=', Auth::guard('user-api')->id())
+            ->where('user_id', '=',userId())
             ->first();
 
         $studentAuth = Auth::guard('user-api')->user();
@@ -1001,21 +1001,22 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         try {
 
             $notification = Notification::query()
-                ->where('id', '=', $id)->first();
+                ->where('id', '=', $id)
+                ->first();
 
             if (!$notification) {
                 return self::returnResponseDataApi(null, "هذا الاشعار غير موجود", 404, 404);
             }
 
             $notificationSeenBefore = NotificationSeenStudent::query()
-                ->where('student_id', '=', userId())
+                ->where('student_id', '=', Auth::guard('user-api')->id())
                 ->where('notification_id', '=', $notification->id)
                 ->first();
 
             if (!$notificationSeenBefore) {
 
                 $notificationSeen = NotificationSeenStudent::create([
-                    'student_id' => Auth::guard('user-api')->id(),
+                    'student_id' => userId(),
                     'notification_id' => $notification->id,
                 ]);
 
