@@ -37,7 +37,6 @@ class VideoUploadFileDetailsResource extends JsonResource
     }
 
 
-    //
     private function checkStatus(): string{
 
         return VideoOpened::query()
