@@ -25,12 +25,7 @@ class VideoUploadFileDetailsResource extends JsonResource
             'name'  => lang() == 'ar' ? $this->name_ar : $this->name_en,
             'type' => $this->file_type,
             'background_color' => $this->background_color,
-            'status' => $this->file_type == 'pdf' ? (!VideoOpened::where('video_upload_file_pdf_id','=',$this->id)
-                ->where('user_id','=',Auth::guard('user-api')->id())
-                ->first() ? 'lock' :  'opened') :
-                (!VideoOpened::where('video_upload_file_audio_id','=',$this->id)
-                ->where('user_id','=',Auth::guard('user-api')->id())
-                ->first() ? 'lock' :  'opened'),
+            'status' => $this->checkStatus(),
             'subscribe' => 'access',
             'size' => 1000,
             'link' =>  $this->file_type == 'pdf' ? asset('video_files/pdf/'. $this->file_link) : asset('video_files/audios/'. $this->file_link),
@@ -40,4 +35,17 @@ class VideoUploadFileDetailsResource extends JsonResource
 
         ];
     }
+
+
+    //
+    private function checkStatus(): string{
+
+        return VideoOpened::query()
+        ->where('user_id','=',userId())
+        ->where('video_part_id','=',request()->id)
+        ->where('status','=','opened')->first() ? 'opened' : 'lock';
+ 
+     }
+
+    
 }
