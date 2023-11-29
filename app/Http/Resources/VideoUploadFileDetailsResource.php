@@ -27,7 +27,7 @@ class VideoUploadFileDetailsResource extends JsonResource
             'background_color' => $this->background_color,
             'status' => $this->checkStatus(),
             'subscribe' => 'access',
-            'size' => 1000,
+            'size' => 10,
             'link' =>  $this->file_type == 'pdf' ? asset('video_files/pdf/'. $this->file_link) : asset('video_files/audios/'. $this->file_link),
             'image_of_subject_class' => $this->video_part->lesson->subject_class->image == null ? asset('classes/default/def.jpg') : asset('classes/' . $this->video_part->lesson->subject_class->image),
             'created_at' => $this->created_at->format('Y-m-d'),
@@ -43,8 +43,8 @@ class VideoUploadFileDetailsResource extends JsonResource
         ->where('user_id','=',userId())
         ->where('video_part_id','=',request()->id)
         ->where('status','=','opened')->first() ? 'opened' : 'lock';
- 
+
      }
 
-    
+
 }

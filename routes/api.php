@@ -20,7 +20,6 @@ use App\Http\Controllers\Api\LiveExam\LiveExamController;
 use App\Http\Controllers\Api\MonthlyPlan\MonthlyPlanController;
 use App\Http\Controllers\Api\Notes\NoteController;
 use App\Http\Controllers\Api\OnBoardingController;
-use App\Http\Controllers\Api\Payment;
 use App\Http\Controllers\Api\PayMob\CheckoutController;
 use App\Http\Controllers\Api\PayMob\PaymentController;
 use App\Http\Controllers\Api\PayMob\PayMobController;
