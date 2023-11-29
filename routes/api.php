@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\AllExamsUsersDegreeController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Comment\CommentController;
 use App\Http\Controllers\Api\Degree\DegreeController;
-use App\Http\Controllers\Api\DegreeOfExamsDetails\DegreeExamsDetailsControlle-r;
+use App\Http\Controllers\Api\DegreeOfExamsDetails\DegreeExamsDetailsController;
 use App\Http\Controllers\Api\ExamEntry\ExamEntryController;
 use App\Http\Controllers\Api\ExamYourselfTest\TestYourselfExamsController;
 use App\Http\Controllers\Api\Favorites\FavoriteController;
