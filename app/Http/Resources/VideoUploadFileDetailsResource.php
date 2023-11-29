@@ -42,7 +42,10 @@ class VideoUploadFileDetailsResource extends JsonResource
         return VideoOpened::query()
         ->where('user_id','=',userId())
         ->where('video_part_id','=',request()->id)
-        ->where('status','=','opened')->first() ? 'opened' : 'lock';
+        ->where(function ($q){
+            $q->where('status','=','opened')
+                ->orWhere('status','=','watched');
+        })->first() ? 'opened' : 'lock';
 
      }
 
