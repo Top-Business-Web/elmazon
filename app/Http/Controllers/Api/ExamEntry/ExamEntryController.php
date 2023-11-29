@@ -26,34 +26,12 @@ use Illuminate\Support\Facades\Validator;
 class ExamEntryController extends Controller
 {
 
-    public function all_questions_by_online_exam(Request $request,$id): JsonResponse
+    public function all_questions_by_online_exam($id): JsonResponse
     {
 
         try {
 
-            $rules = [
-                'exam_type' => 'required|in:video,subject_class,lesson,full_exam',
-            ];
-            $validator = Validator::make($request->all(), $rules, [
-                'exam_type.in' => 407,
-            ]);
-
-            if ($validator->fails()) {
-
-                $errors = collect($validator->errors())->flatten(1)[0];
-                if (is_numeric($errors)) {
-
-                    $errors_arr = [
-                        407 => 'Failed,The exam type must be an video or lesson or subject_class or full_exam.',
-                    ];
-
-                    $code = collect($validator->errors())->flatten(1)[0];
-                    return self::returnResponseDataApi(null, isset($errors_arr[$errors]) ? $errors_arr[$errors] : 500, $code);
-                }
-                return self::returnResponseDataApi(null, $validator->errors()->first(), 422);
-            }
-
-            $examType = $request->exam_type;
+            $examType = request()->exam_type;
 
             switch ($examType) {
                 case 'video':
@@ -77,7 +55,7 @@ class ExamEntryController extends Controller
                     break;
 
                 default:
-                    return self::returnResponseDataApi(null, "Invalid exam type", 422);
+                    return self::returnResponseDataApi(null, "Invalid exam type", 422,422);
             }
 
             if (!$onlineExam && !$full_exam) {
