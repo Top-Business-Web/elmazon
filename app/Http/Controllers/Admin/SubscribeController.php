@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestSubscribe;
 use App\Models\Season;
 use App\Traits\AdminLogs;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\Subscribe;
@@ -14,7 +15,6 @@ use App\Models\Term;
 class SubscribeController extends Controller
 {
     use AdminLogs;
-    // Index START
     public function index(request $request)
     {
         if ($request->ajax()) {
@@ -57,22 +57,15 @@ class SubscribeController extends Controller
         }
     }
 
-    // End Index
-
-    // Create START
 
     public function create()
     {
-        $data['terms'] = Term::all();
-        $data['seasons'] = Season::all();
-        return view('admin.subscribes.parts.create', compact('data'));
+        $seasons = Season::all();
+        return view('admin.subscribes.parts.create', compact('seasons'));
     }
 
-    // Create END
 
-    // Store START
-
-    public function store(RequestSubscribe $request)
+    public function store(RequestSubscribe $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -93,22 +86,15 @@ class SubscribeController extends Controller
         }
     }
 
-    // Store END
-
-    // Edit Start
 
     public function edit(Subscribe $subscribe)
     {
-        $data['seasons'] = Season::get();
-        $data['terms'] = Term::get();
-        return view('admin.subscribes.parts.edit', compact('data', 'subscribe'));
+        $seasons = Season::get();
+        $terms = Term::get();
+        return view('admin.subscribes.parts.edit', compact('seasons','terms', 'subscribe'));
     }
 
-    // Edit End
-
-    // Update Start
-
-    public function update(Subscribe $subscribe, RequestSubscribe $request)
+    public function update(Subscribe $subscribe, RequestSubscribe $request): JsonResponse
     {
         $inputs = $request->all();
 
@@ -129,11 +115,9 @@ class SubscribeController extends Controller
         }
     }
 
-    // Update End
 
-    // Destroy Start
 
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         $subject_class = Subscribe::where('id', $request->id)->firstOrFail();
         $subject_class->delete();
@@ -141,5 +125,5 @@ class SubscribeController extends Controller
         return response()->json(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
 
-    // Destroy End
+
 }
