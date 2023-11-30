@@ -19,9 +19,7 @@ trait FirebaseNotification{
 
         if($student_id != null){
 
-        /*
-         في حاله لو الارسال مرسل لطالب معين
-         */
+        ############# في حاله لو الارسال مرسل لطالب معين #################
         $userIds = User::query()
             ->where('id','=',$student_id)
             ->pluck('id')
@@ -29,18 +27,15 @@ trait FirebaseNotification{
 
         }elseif ($season_id != null && $group_ids !=  null){
 
-        /*
-         في حاله لو الارسال مرسل لطلبه محددين من قبل المدرس
-         */
-            $userIds = User::query()
-                ->whereIn('id',$group_ids)
-                ->pluck('id')
-                ->toArray();
+       ################## في حاله لو الارسال مرسل لطلبه محددين من قبل المدرس ############
+        $userIds = User::query()
+            ->whereIn('id',$group_ids)
+            ->pluck('id')
+            ->toArray();
 
         }else{
-            /*
-             في حاله لو الارسال مرسل لجميع طلبه هذا الصف الدراسي
-             */
+          
+            ########### في حاله لو الارسال مرسل لجميع طلبه هذا الصف الدراسي #################
             $userIds = User::query()
                 ->where('season_id','=',$season_id)
                 ->pluck('id')
