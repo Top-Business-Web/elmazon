@@ -290,8 +290,19 @@ class VideoPartController extends Controller
 
     public function edit(VideoParts $videosPart)
     {
-        $lessons = Lesson::get();
-        return view('admin.videopart.parts.edit', compact('videosPart', 'lessons'));
+
+        $seasons = DB::table('seasons')
+        ->select('id','name_ar')
+        ->get();
+
+        $terms = DB::table('terms')
+            ->select('id','name_ar')
+            ->get();
+
+
+        $lesson = Lesson::with(['subject_class'])->find($videosPart->lesson_id);
+
+        return view('admin.videopart.parts.edit', compact('videosPart','terms','seasons','lesson'));
     }
 
 
@@ -338,6 +349,7 @@ class VideoPartController extends Controller
             'youtube_link' => $request->youtube_link ?? null,
             'is_youtube' => $request->youtube_link != null ? 1 : 0,
             'video_time' => $request->video_time,
+            'lesson_id' => $request->lesson_id,
         ]);
 
         if($videPartUpdate->save()){
