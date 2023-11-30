@@ -188,7 +188,6 @@ class ExamEntryController extends Controller
 
                     $timer = Timer::create($timerData);
 
-
                     foreach (request()->details as $detail) {
 
                         $question = Question::find($detail['question']);

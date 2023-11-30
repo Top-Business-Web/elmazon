@@ -28,8 +28,8 @@
                             <thead>
                             <tr class="fw-bolder text-muted bg-light">
                                 <th class="min-w-25px">#</th>
+                                <th class="min-w-50px">الصف الدراسي</th>
                                 <th class="min-w-50px">الترم</th>
-                                <th class="min-w-50px">الصف</th>
                                 <th class="min-w-50px">السعر داخل السنتر</th>
                                 <th class="min-w-50px">السعر خارج السنتر</th>
                                 <th class="min-w-50px">الشهر</th>
@@ -94,8 +94,8 @@
     <script>
         var columns = [
             {data: 'id', name: 'id'},
-            {data: 'term_id', name: 'term_id'},
             {data: 'season_id', name: 'season_id'},
+            {data: 'term_id', name: 'term_id'},
             {data: 'price_in_center', name: 'price_in_center'},
             {data: 'price_out_center', name: 'price_out_center'},
             {data: 'month', name: 'month'},

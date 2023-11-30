@@ -1014,7 +1014,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->first();
 
             if (!$notificationSeenBefore) {
-
                 $notificationSeen = NotificationSeenStudent::create([
                     'student_id' => userId(),
                     'notification_id' => $notification->id,
