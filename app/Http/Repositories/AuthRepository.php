@@ -68,7 +68,6 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $validator = Validator::make($request->all(), $rules, [
                 'code.exists' => 407,
             ]);
-
             if ($validator->fails()) {
                 $errors = collect($validator->errors())->flatten(1)[0];
                 if (is_numeric($errors)) {
@@ -86,13 +85,12 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $token = Auth::guard('user-api')->attempt(['code' => $request->code, 'password' => '123456', 'user_status' => 'active']);
 
             $user_data = User::query()
-            ->where('code', '=', $request->code)
+                ->where('code', '=', $request->code)
                 ->first();
 
 
             if ($user_data->login_status == 1) {
                 return self::returnResponseDataApi(null, "هذا الطالب مسجل دخول من جهاز اخر!", 403);
-
             }
             if (!$token) {
                 return self::returnResponseDataApi(null, "الطالب غير مفعل برجاء التواصل مع السيكرتاريه", 408);
@@ -103,9 +101,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $user_data->update(['access_token' => $token]);
 
             $user_data->update(['login_status' => 1]);
-            if($user_data->code != 40907030) {
+            if ($user_data->code != 40907030) {
                 $user_data->update(['login_status' => 1]);
-
             }
 
             return self::returnResponseDataApi(new UserResource($user), "تم تسجيل الدخول بنجاح", 200);
@@ -154,14 +151,12 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 $file = date('YmdHis') . "." . $image->getClientOriginalExtension();
                 $image->move($destinationPath, $file);
                 $request['image'] = "$file";
-
             } elseif ($audio = $request->file('audio')) {
 
                 $audioPath = 'suggestions_uploads/audios/';
                 $audioUpload = date('YmdHis') . "." . $audio->getClientOriginalExtension();
                 $audio->move($audioPath, $audioUpload);
                 $request['audio'] = "$audioUpload";
-
             } else {
 
                 $suggestion = $request->suggestion;
@@ -198,12 +193,12 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         try {
 
 
-            $userId =userId();
+            $userId = userId();
 
             $allNotification = Notification::query()
-                ->whereDate('created_at','=',date('Y-m-d'))
+                ->whereDate('created_at', '=', date('Y-m-d'))
                 ->where(function ($q) use ($userId) {
-                    $q->where('season_id', '=',getSeasonIdOfStudent())
+                    $q->where('season_id', '=', getSeasonIdOfStudent())
                         ->orWhereJsonContains('group_ids', "$userId")
                         ->orWhere('user_id', '=', userId());
                 })
@@ -245,7 +240,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     }
 
 
-    public function paper_sheet_exam(Request $request,$id)
+    public function paper_sheet_exam(Request $request, $id)
     {
 
         $rules = [
@@ -272,7 +267,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         $paperSheetExam = PapelSheetExam::query()
             ->whereHas('season', fn (Builder $builder) =>
-            $builder->where('season_id', '=',getSeasonIdOfStudent()))
+            $builder->where('season_id', '=', getSeasonIdOfStudent()))
             ->whereHas('term', fn (Builder $builder) =>
             $builder->where('status', '=', 'active')
                 ->where('season_id', '=', getSeasonIdOfStudent()))
@@ -302,13 +297,13 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             $userRegisterExamBefore = PapelSheetExamUser::query()
                 ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
-                ->where('user_id', '=',userId())
+                ->where('user_id', '=', userId())
                 ->count();
 
             $sumCapacityOfSection = Section::sum('capacity');
 
             $countExamId = PapelSheetExamUser::query()
-                ->where('papel_sheet_exam_time_id','=',$request->papel_sheet_exam_time_id)
+                ->where('papel_sheet_exam_time_id', '=', $request->papel_sheet_exam_time_id)
                 ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
                 ->count();
 
@@ -334,7 +329,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                         if ($userRegisterExamBefore > 0) {
 
                             $paperSheetExamUserRegisterWithStudentBefore = PapelSheetExamUser::query()
-                                ->where('user_id', '=',userId())
+                                ->where('user_id', '=', userId())
                                 ->where('papel_sheet_exam_id', '=', $paperSheetExam->id)
                                 ->first();
 
@@ -398,17 +393,14 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             if ($paperSheetExamUser) {
 
-                if(Carbon::parse($paperSheetExamUser->papelSheetExam->to)->subDays(2)->format('Y-m-d') == Carbon::now()->format('Y-m-d') || Carbon::parse($paperSheetExamUser->papelSheetExam->to)->subDay()->format('Y-m-d') == Carbon::now()->format('Y-m-d') || Carbon::parse($paperSheetExamUser->papelSheetExam->to)->format('Y-m-d') == Carbon::now()->format('Y-m-d')){
+                if (Carbon::parse($paperSheetExamUser->papelSheetExam->to)->subDays(2)->format('Y-m-d') == Carbon::now()->format('Y-m-d') || Carbon::parse($paperSheetExamUser->papelSheetExam->to)->subDay()->format('Y-m-d') == Carbon::now()->format('Y-m-d') || Carbon::parse($paperSheetExamUser->papelSheetExam->to)->format('Y-m-d') == Carbon::now()->format('Y-m-d')) {
 
                     return self::returnResponseDataApi(null, "غير مسموح لك بحذف الامتحان الورقي", 403);
-
-                }else{
+                } else {
 
                     $paperSheetExamUser->delete();
                     return self::returnResponseDataApi(null, "تم الغاء الامتحان الورقي بنجاح", 200);
                 }
-
-
             } else {
 
                 return self::returnResponseDataApi(null, "لا يوجد اي امتحان ورقي لك لالغائه", 404);
@@ -424,7 +416,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     {
 
         $userRegisterExamBefore = PapelSheetExamUser::query()
-            ->where('user_id', '=',userId())
+            ->where('user_id', '=', userId())
             ->latest()
             ->first();
 
@@ -432,11 +424,11 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
          اذا كان يوجد امتحان ورقي متاح للطالب
         */
         $paperSheetCheckExam = PapelSheetExam::query()
-        ->whereHas('season', fn (Builder $builder) =>
-        $builder->where('season_id', '=',getSeasonIdOfStudent()))
+            ->whereHas('season', fn (Builder $builder) =>
+            $builder->where('season_id', '=', getSeasonIdOfStudent()))
             ->whereHas('term', fn (Builder $builder) =>
             $builder->where('status', '=', 'active')
-                ->where('season_id', '=',getSeasonIdOfStudent()))
+                ->where('season_id', '=', getSeasonIdOfStudent()))
             ->whereDate('to', '>=', Carbon::now()->format('Y-m-d'))
             ->first();
 
@@ -449,11 +441,11 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             if ($userRegisterExamBefore) {
 
                 $paperSheetExam = PapelSheetExam::query()
-                ->whereHas('season', fn (Builder $builder) =>
-                $builder->where('season_id', '=',getSeasonIdOfStudent()))
+                    ->whereHas('season', fn (Builder $builder) =>
+                    $builder->where('season_id', '=', getSeasonIdOfStudent()))
                     ->whereHas('term', fn (Builder $builder) =>
                     $builder->where('status', '=', 'active')
-                        ->where('season_id', '=',getSeasonIdOfStudent()))
+                        ->where('season_id', '=', getSeasonIdOfStudent()))
                     ->where('id', '=', $userRegisterExamBefore->papel_sheet_exam_id)
                     ->first();
 
@@ -475,8 +467,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     {
 
         $paperSheetExam = PapelSheetExam::query()
-        ->whereHas('season', fn (Builder $builder) =>
-        $builder->where('season_id', '=',getSeasonIdOfStudent()))
+            ->whereHas('season', fn (Builder $builder) =>
+            $builder->where('season_id', '=', getSeasonIdOfStudent()))
             ->whereHas('term', fn (Builder $builder) =>
             $builder->where('status', '=', 'active')
                 ->where('season_id', '=', getSeasonIdOfStudent()))
@@ -531,7 +523,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         }
 
         $user->update([
-            'image' => "user/".$file ?? $user->image
+            'image' => "user/" . $file ?? $user->image
         ]);
         $user['token'] = $request->bearerToken();
         return self::returnResponseDataApi(new UserResource($user), "تم تعديل صوره الطالب بنجاح", 200);
@@ -585,11 +577,11 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
                 ->whereHas('term', fn (Builder $builder) =>
                 $builder->where('status', '=', 'active')
                     ->where('season_id', '=', getSeasonIdOfStudent()))
-                ->where('season_id', '=',getSeasonIdOfStudent())
+                ->where('season_id', '=', getSeasonIdOfStudent())
                 ->latest()
                 ->first();
 
-            if($liveExam){
+            if ($liveExam) {
 
                 $nowLiveExamModel = Carbon::now();
                 $startLiveExamModel = Carbon::createFromTimeString($liveExam->time_start);
@@ -602,38 +594,36 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
 
                 ########### جلب الامتحان الالايف قبل ميعاد الامتحان كمؤشر للطالب############
-                if(Carbon::now()->format('Y-m-d') < $liveExam->date_exam){
+                if (Carbon::now()->format('Y-m-d') < $liveExam->date_exam) {
 
                     $data['life_exam'] = null;
                     $data['live_model'] = $liveExam;
 
-                ######## لو الطالب امتحن هذا الامتحان #######
-                }elseif ($liveExamDegree){
+                    ######## لو الطالب امتحن هذا الامتحان #######
+                } elseif ($liveExamDegree) {
 
                     $data['life_exam'] = null;
                     $data['live_model'] = null;
 
-                 #### لو الامتحان الطالب ممتحنوش ومتاح ما بين الموعدين ##############
-                }elseif (date('Y-m-d') == $liveExam->date_exam && $nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel)){
+                    #### لو الامتحان الطالب ممتحنوش ومتاح ما بين الموعدين ##############
+                } elseif (date('Y-m-d') == $liveExam->date_exam && $nowLiveExamModel->isBetween($startLiveExamModel, $endLiveExamModel)) {
 
 
                     $data['life_exam'] = $liveExam->id;
                     $data['live_model'] = $liveExam;
 
 
-                ####### لو الامتحان لسه مبدائشي ويكون موعد نهايه الامتحان اقل من التوقيت الحالي ##############
-                }elseif (!$nowLiveExamModel->isBetween($startLiveExamModel,$endLiveExamModel) && date('Y-m-d') == $liveExam->date_exam && $startLiveExamModel->gt(Carbon::now())){
+                    ####### لو الامتحان لسه مبدائشي ويكون موعد نهايه الامتحان اقل من التوقيت الحالي ##############
+                } elseif (!$nowLiveExamModel->isBetween($startLiveExamModel, $endLiveExamModel) && date('Y-m-d') == $liveExam->date_exam && $startLiveExamModel->gt(Carbon::now())) {
 
                     $data['life_exam'] = null;
                     $data['live_model'] = $liveExam;
-
-
-                }else{
+                } else {
 
                     $data['life_exam'] = null;
                     $data['live_model'] = null;
                 }
-            }else{
+            } else {
 
                 $data['life_exam'] = null;
                 $data['live_model'] = null;
@@ -655,22 +645,22 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             $videos_resources = VideoResource::query()
                 ->whereHas('term', fn (Builder $builder) =>
                 $builder->where('status', '=', 'active')
-                    ->where('season_id', '=',getSeasonIdOfStudent()))
-                ->where('season_id', '=',getSeasonIdOfStudent())
+                    ->where('season_id', '=', getSeasonIdOfStudent()))
+                ->where('season_id','=', getSeasonIdOfStudent())
                 ->latest()
                 ->get();
 
 
             ### فيديوهات الاساسيات لجميع المراحل الدراسيه #############
             $videos_basics = VideoBasic::query()
-            ->latest()
-            ->get();
+                ->latest()
+                ->get();
 
             ####### اعدادات اللغه في التطبيق ########
             $setting = Setting::query()->first();
 
             $user = User::query()
-                ->where('id','=',userId())
+                ->where('id', '=', userId())
                 ->first();
 
             $user->update(['access_token' => request()->bearerToken()]);
@@ -678,34 +668,33 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
             ########################### عدد الاشعارات اليوميه للطالب #########################################
             $notifications = Notification::query()
-                ->whereDate('created_at','=',date('Y-m-d'))
+                ->whereDate('created_at', '=', date('Y-m-d'))
                 ->where(function ($q) use ($userId) {
-                    $q->where('season_id', '=',getSeasonIdOfStudent())
+                    $q->where('season_id', '=', getSeasonIdOfStudent())
                         ->orWhereJsonContains('group_ids', "$userId")
                         ->orWhere('user_id', '=', userId());
                 });
 
-                $count =   $notifications->count();
+            $count =   $notifications->count();
 
-                $listOfNotifications = $notifications
-                    ->pluck('id')
+            $listOfNotifications = $notifications
+                ->pluck('id')
                 ->toArray();
 
             $notificationsSeen = NotificationSeenStudent::query()
-                ->where('student_id','=', userId())
-                ->whereIn('notification_id',$listOfNotifications)
+                ->where('student_id', '=', userId())
+                ->whereIn('notification_id', $listOfNotifications)
                 ->count();
 
             $data['notification_count'] =     ($count - $notificationsSeen);
             $data['center_status']      =        studentAuth()->center;
-            $data['language_active']    =     $setting ? $setting->lang == 'active' ? "active" :"not_active" : null;
+            $data['language_active']    =     $setting ? $setting->lang == 'active' ? "active" : "not_active" : null;
             $data['sliders']            =     SliderResource::collection($sliders);
             $data['videos_basics']      =     VideoBasicResource::collection($videos_basics);
             $data['classes']            =     SubjectClassNewResource::collection($classes);
             $data['videos_resources']   =     $setting->videos_resource_active == "active" ? VideoResourceResource::collection($videos_resources) : [];
 
             return self::returnResponseDataApiWithMultipleIndexes($data, "تم ارسال جميع بيانات الصفحه الرئيسيه", 200);
-
         } catch (\Exception $exception) {
 
             return self::returnResponseDataApi(null, $exception->getMessage(), 500);
@@ -717,10 +706,10 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     {
 
         $classes = SubjectClass::query()
-        ->whereHas('term', fn (Builder $builder) =>
-        $builder->where('status', '=', 'active')
-            ->where('season_id', '=', getSeasonIdOfStudent()))
-            ->where('season_id', '=',getSeasonIdOfStudent())
+            ->whereHas('term', fn (Builder $builder) =>
+            $builder->where('status', '=', 'active')
+                ->where('season_id', '=', getSeasonIdOfStudent()))
+            ->where('season_id', '=', getSeasonIdOfStudent())
             ->get();
 
 
@@ -734,7 +723,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         $allExams = AllExam::query()
             ->whereHas('term', fn (Builder $builder) =>
             $builder->where('status', '=', 'active')
-                ->where('season_id', '=',getSeasonIdOfStudent()))
+                ->where('season_id', '=', getSeasonIdOfStudent()))
             ->where('season_id', '=', getSeasonIdOfStudent())
             ->get();
 
@@ -748,8 +737,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         $classes = SubjectClass::query()
             ->whereHas('term', fn (Builder $builder) =>
             $builder->where('status', '=', 'active')
-                ->where('season_id', '=',getSeasonIdOfStudent()))
-            ->where('season_id', '=',getSeasonIdOfStudent())
+                ->where('season_id', '=', getSeasonIdOfStudent()))
+            ->where('season_id', '=', getSeasonIdOfStudent())
             ->get();
 
         return self::returnResponseDataApi(SubjectClassNewResource::collection($classes), "تم الحصول علي بيانات ابدء رحلتك بنجاح", 200);
@@ -761,8 +750,8 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         $resources = VideoResource::query()
             ->whereHas('term', fn (Builder $builder) =>
             $builder->where('status', '=', 'active')
-                ->where('season_id', '=',getSeasonIdOfStudent()))
-            ->where('season_id', '=',getSeasonIdOfStudent())
+                ->where('season_id', '=', getSeasonIdOfStudent()))
+            ->where('season_id', '=', getSeasonIdOfStudent())
             ->get();
 
         return self::returnResponseDataApi(VideoResourceResource::collection($resources), "تم الحصول علي بيانات المراجعه النهائيه بنجاح", 200);
@@ -810,10 +799,11 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
         $phoneToken = PhoneToken::updateOrCreate(
             ['user_id' => userId()],
             [
-            'user_id' => userId(),
-            'token' => $request->token,
-            'phone_type' => $request->phone_type
-        ]);
+                'user_id' => userId(),
+                'token' => $request->token,
+                'phone_type' => $request->phone_type
+            ]
+        );
 
         $phoneToken->user->token = $request->bearerToken();
         if (isset($phoneToken)) {
@@ -857,7 +847,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
         Notification::create($notification);
 
-        $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body],null,$request->user_id,null,true);
+        $this->sendFirebaseNotification(['title' => 'اشعار جديد', 'body' => $request->body], null, $request->user_id, null, true);
 
         return self::returnResponseDataApi(null, "تم ارسال اشعار جديد", 200);
     }
@@ -866,52 +856,48 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
     {
 
         $studentAddScreenBeforeInApp = UserScreenShot::query()
-            ->where('user_id', '=',userId())
+            ->where('user_id', '=', userId())
             ->first();
 
         $studentAuth = Auth::guard('user-api')->user();
 
         //check if student add screen shoot before
-        if($studentAddScreenBeforeInApp){
+        if ($studentAddScreenBeforeInApp) {
 
-                $studentAddScreenBeforeInApp->update(['count_screen_shots' => $studentAddScreenBeforeInApp->count_screen_shots+=1]);
+            $studentAddScreenBeforeInApp->update(['count_screen_shots' => $studentAddScreenBeforeInApp->count_screen_shots += 1]);
 
-                if($studentAddScreenBeforeInApp->save()){
+            if ($studentAddScreenBeforeInApp->save()) {
 
-                    if($studentAddScreenBeforeInApp->count_screen_shots == 3){
+                if ($studentAddScreenBeforeInApp->count_screen_shots == 3) {
 
-                        $studentAuth->update(['user_status' => 'not_active', 'login_status' => 0]);
-                        auth()->guard('user-api')->logout();
+                    $studentAuth->update(['user_status' => 'not_active', 'login_status' => 0]);
+                    auth()->guard('user-api')->logout();
 
-                        return self::returnResponseDataApi(null, "تم حظر ذلك الطالب بنجاح وجار تسجيل الخروج من التطبيق", 201);
+                    return self::returnResponseDataApi(null, "تم حظر ذلك الطالب بنجاح وجار تسجيل الخروج من التطبيق", 201);
+                } else {
 
-                    }else{
-
-                        return self::returnResponseDataApi(null, "تم اخذ اسكرين شوت بالتطبيق بواسطه اليوزر", 200);
-                    }
-
-                }else{
-
-                    return self::returnResponseDataApi(null, "يوجد خطاء بدخول البيانات برجاء الرجوع لمطور الباك اند", 500);
+                    return self::returnResponseDataApi(null, "تم اخذ اسكرين شوت بالتطبيق بواسطه اليوزر", 200);
                 }
+            } else {
 
-        //add new screen by student
-        }else{
+                return self::returnResponseDataApi(null, "يوجد خطاء بدخول البيانات برجاء الرجوع لمطور الباك اند", 500);
+            }
 
-             $studentAddScreenShoot = new UserScreenShot();
-             $studentAddScreenShoot->user_id = userId();
-             $studentAddScreenShoot->count_screen_shots = 1;
-             $studentAddScreenShoot->save();
+            //add new screen by student
+        } else {
 
-             if( $studentAddScreenShoot->save()){
-                 return self::returnResponseDataApi(null, "تم اخذ اسكرين شوت بالتطبيق بواسطه اليوزر", 200);
+            $studentAddScreenShoot = new UserScreenShot();
+            $studentAddScreenShoot->user_id = userId();
+            $studentAddScreenShoot->count_screen_shots = 1;
+            $studentAddScreenShoot->save();
 
-             }else{
+            if ($studentAddScreenShoot->save()) {
+                return self::returnResponseDataApi(null, "تم اخذ اسكرين شوت بالتطبيق بواسطه اليوزر", 200);
+            } else {
 
-                 return self::returnResponseDataApi(null, "يوجد خطاء بدخول البيانات برجاء الرجوع لمطور الباك اند", 500);
-             }
+                return self::returnResponseDataApi(null, "يوجد خطاء بدخول البيانات برجاء الرجوع لمطور الباك اند", 500);
+            }
         }
-
     }
 
     public function logout(Request $request): JsonResponse
@@ -942,7 +928,7 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
             }
 
             PhoneToken::query()->where('token', '=', $request->token)
-                ->where('user_id', '=',userId())
+                ->where('user_id', '=', userId())
                 ->delete();
 
             auth()->guard('user-api')->logout();
