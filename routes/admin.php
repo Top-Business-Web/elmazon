@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\AllExamController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\SubscribeController;
 use App\Http\Controllers\Admin\AdsController;
+use App\Http\Controllers\Admin\AdvancedController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\LifeExamController;
 use App\Http\Controllers\Admin\PapelSheetExamController;
@@ -56,8 +57,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/',function (){
-   return redirect()->route('adminHome');
+Route::get('/', function () {
+    return redirect()->route('adminHome');
 });
 
 Route::group(['prefix' => 'admin'], function () {
@@ -72,9 +73,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::group(['middleware' => 'permission:الادمن'], function () {
         Route::resource('admins', AdminController::class);
         Route::POST('delete_admin', [AdminController::class, 'delete'])->name('delete_admin');
-        Route::get('/adminLog',[AdminLogController::class,'index'])->name('adminLog');
-        Route::post('/adminLogDelete',[AdminLogController::class,'delete'])->name('adminLogDelete');
-        Route::post('/adminLogDeleteAll',[AdminLogController::class,'deleteAll'])->name('adminLogDeleteAll');
+        Route::get('/adminLog', [AdminLogController::class, 'index'])->name('adminLog');
+        Route::post('/adminLogDelete', [AdminLogController::class, 'delete'])->name('adminLogDelete');
+        Route::post('/adminLogDeleteAll', [AdminLogController::class, 'deleteAll'])->name('adminLogDeleteAll');
     });
     Route::get('my_profile', [AdminController::class, 'myProfile'])->name('myProfile');
 
@@ -162,7 +163,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     });
 
     #### Notification ####
-    Route::resource('notifications', NotificationController::class)->except(['edit','update'])->middleware('permission:الاشعارات');
+    Route::resource('notifications', NotificationController::class)->except(['edit', 'update'])->middleware('permission:الاشعارات');
 
     ##### Video Parts #####
     Route::group(['middleware' => 'permission:اقسام الفيديوهات'], function () {
@@ -330,7 +331,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
 
     #### About Mes ####
     Route::resource('qualification', QualificationController::class);
-    Route::post('qualificationDelete', [QualificationController::class,'delete'])->name('qualificationDelete');
+    Route::post('qualificationDelete', [QualificationController::class, 'delete'])->name('qualificationDelete');
 
     #### Discount Coupons ####
     Route::resource('discount_coupons', DiscountCouponsController::class)->middleware('permission:الكوبونات');
@@ -348,9 +349,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     });
 
 
+
+    #### advanced options #####
+    Route::get('advancedIndex', [AdvancedController::class, 'index'])->name('advancedIndex');
+    Route::post('advancedDo', [AdvancedController::class, 'do'])->name('advancedDo');
+
+
     #### Auth ####
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
-
 });
 
 Route::get('autoPrintReport/{id}', [UserController::class, 'autoPrintReport'])->name('autoPrintReport');
@@ -361,5 +367,5 @@ Route::get('/clear', function () {
     Artisan::call('cache:clear');
     Artisan::call('config:clear');
     Artisan::call('optimize:clear');
-    return response()->json(['status' => 'success','code' =>1000000000]);
+    return response()->json(['status' => 'success', 'code' => 1000000000]);
 });

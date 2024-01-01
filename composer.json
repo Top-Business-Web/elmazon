@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-json": "*",
         "buglinjo/laravel-webp": "^2.3",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -16,13 +17,13 @@
         "maatwebsite/excel": "3.1.48",
         "nafezly/payments": "^2.4",
         "omnipay/omnipay": "^3.2",
+        "php-flasher/flasher-toastr-laravel": "^1.15",
         "samir-hussein/paymob": "^2.0",
         "spatie/laravel-permission": "^5.10",
         "stripe/stripe-php": "10",
         "tymon/jwt-auth": "^1.0",
         "yajra/laravel-datatables-oracle": "*",
-        "yoeunes/toastr": "^2.3",
-      "ext-json": "*"
+        "yoeunes/toastr": "^2.3"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
