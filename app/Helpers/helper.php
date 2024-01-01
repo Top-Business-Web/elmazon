@@ -67,18 +67,19 @@ if (!function_exists('month_with_zero')) {
 if (!function_exists('file_size')) {
     function file_size($filePath)
     {
-        $ch = curl_init($filePath);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, TRUE);
-        curl_setopt($ch, CURLOPT_NOBODY, TRUE);
-        $data = curl_exec($ch);
-        $fileSize = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
-        $httpResponseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-        if ($httpResponseCode == 200) {
-            return (int)round($fileSize / 1024);
-        }
-        return 0;
+        // $ch = curl_init($filePath);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        // curl_setopt($ch, CURLOPT_HEADER, TRUE);
+        // curl_setopt($ch, CURLOPT_NOBODY, TRUE);
+        // $data = curl_exec($ch);
+        // $fileSize = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+        // $httpResponseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        // curl_close($ch);
+        // if ($httpResponseCode == 200) {
+        //     return (int)round($fileSize / 1024);
+        // }
+        // return 0;
+        return Storage::size($filePath);
     }
 }
 
