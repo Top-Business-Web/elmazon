@@ -79,7 +79,7 @@ if (!function_exists('file_size')) {
         //     return (int)round($fileSize / 1024);
         // }
         // return 0;
-        return Storage::size($filePath);
+        return Storage::size(asset('video_files/pdf/'. $this->file_link);
     }
 }
 
