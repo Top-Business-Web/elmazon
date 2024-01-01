@@ -277,7 +277,7 @@ class VideoPartController extends Controller
         if($videoPartCreate->save()){
 
             //($data,$season_id,$exam_type,$exam_id)
-            $this->sendFirebaseNotificationWhenAddedVideo(['title' => "اشعار جديد","body" => "تم اضافه فيديو شرح جديد "],$subjectClass->lesson->subject_class->season_id,"video_part",$videoPartCreate->id);
+            $this->sendFirebaseNotificationWhenAddedVideo(['title' => "فيديو جديد","body" => $request->name_ar],$subjectClass->lesson->subject_class->season_id,"video_part",$videoPartCreate->id);
             $this->adminLog('تم اضافة فيديو');
             return response()->json(['status' => 200]);
 
