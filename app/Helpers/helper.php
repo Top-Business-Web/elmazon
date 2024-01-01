@@ -65,8 +65,15 @@ if (!function_exists('month_with_zero')) {
 }
 
 if (!function_exists('file_size')) {
-    function file_size($filePath)
+    /**
+     * @param $filePath
+     * @return string
+     */
+    function file_size($filePath): string
     {
+//        $getID3 = new \getID3;
+//        $file = $getID3->analyze($filePath);
+//        return number_format($file['filesize'] / 1024);
         $ch = curl_init($filePath);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, TRUE);
