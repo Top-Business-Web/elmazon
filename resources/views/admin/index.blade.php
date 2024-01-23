@@ -82,7 +82,7 @@
                                 " role="progressbar"></div>
                             </div>
                         </div>
-                        <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('users.index') }}">
+                        <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('users.index',['center'=>'in']) }}">
                             المزيد
                         </a>
                     </div>
@@ -105,7 +105,7 @@
                                 " role="progressbar"></div>
                             </div>
                         </div>
-                        <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('users.index') }}">
+                        <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('users.index',['center'=>'out']) }}">
                             المزيد
                         </a>
                     </div>
@@ -219,7 +219,7 @@
                                 " role="progressbar"></div>
                             </div>
                         </div>
-                        <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('videosParts.index') }}">
+                        <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('videoBasic.index') }}">
                             المزيد
                         </a>
                     </div>
@@ -242,7 +242,7 @@
                                 " role="progressbar"></div>
                             </div>
                         </div>
-                        <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('videosParts.index') }}">
+                        <a class="btn btn-sm btn-primary-light h-6 d-flex" href="{{ route('videoResource.index') }}">
                             المزيد
                         </a>
                     </div>

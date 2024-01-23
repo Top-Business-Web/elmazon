@@ -212,6 +212,7 @@
             url: "{{ route('users.index') }}",
             data: function (d) {
                 d.season = $('select[name="season"]').val();
+                d.center = "{{$center}}";
             }
         };
 
