@@ -49,12 +49,6 @@
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    <label for="section_name_ar" class="form-control-label">ارفق المرجع*</label>
-                    <input type="file" name="file" class="form-control" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 mt-3">
                     <label for="section_name_ar" class="form-control-label">ايقونه المرجع*</label>
                     <input type="file" name="icon" class="dropify" />
                 </div>
@@ -66,6 +60,13 @@
         </div>
     </form>
 </div>
+
+
+<script>
+    Dropzone.discover();
+</script>
+
+
 <script>
     $(document).ready(function() {
         $('.select2').select2();

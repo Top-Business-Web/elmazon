@@ -106,8 +106,27 @@
         // Add Using Ajax
         showAddModal('{{ route('guide.create') }}');
         addScript();
-        // Add Using Ajax
+
+        function showUploadModal(routeOfEdit) {
+            $(document).on('click', '.uploadBtn', function() {
+                var id = $(this).data('id')
+                var url = routeOfEdit;
+                url = url.replace(':id', id)
+                $('#modal-body').html(loader)
+                $('#editOrCreate').modal('show')
+
+                setTimeout(function() {
+                    $('#modal-body').load(url)
+                }, 500)
+            })
+        }
+
+        // Edit Using Ajax
+        showUploadModal('{{ route('guide.uploadFile', ':id') }}');
+
         showEditModal('{{ route('guide.edit', ':id') }}');
         editScript();
+
+
     </script>
 @endsection
