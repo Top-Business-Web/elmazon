@@ -35,6 +35,7 @@ class GuideController extends Controller
                 ->addColumn('action', function ($guides) {
                     return '
                             <button type="button" data-id="' . $guides->id . '" class="btn btn-pill btn-info-light editBtn">تعديل</button>
+                            <button type="button" data-id="' . $guides->id . '" class="btn btn-pill btn-info-light uploadBtn">اضافة ملف</button>
                             <button class="btn btn-pill btn-danger-light" data-toggle="modal" data-target="#delete_modal"
                                     data-id="' . $guides->id . '" data-title="' . $guides->title_ar . '">
                                    حذف
@@ -145,6 +146,27 @@ class GuideController extends Controller
     {
         $seasons = Season::all();
         return view('admin.guides.parts.edit', compact('guide', 'seasons'));
+    }
+
+    public function uploadFile(Guide $guide)
+    {
+        $seasons = Season::all();
+        return view('admin.guides.parts.upload-file', compact('guide', 'seasons'));
+    }
+
+    public function guidUploadFile(Guide $guide,Request $request)
+    {
+        $inputs = $request->all();
+        if($request->hasFile('file')){
+            $inputs['file'] = $this->saveImage($request->file, 'assets/uploads/guides/file', 'photo');
+        }
+
+        if ($guide->update($inputs)) {
+            $this->adminLog('تم تحديث مصادر ومراجع');
+            return response()->json(['status' => 200]);
+        } else {
+            return response()->json(['status' => 405]);
+        }
     }
 
 

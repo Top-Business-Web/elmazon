@@ -35,20 +35,22 @@ use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\UserUpdateRequest;
 
-
 class UserController extends Controller
 {
     use PhotoTrait, AdminLogs;
-
-    public function index(request $request)
+    public function index(Request $request)
     {
+        $center = $request->center ?? null;
 
         if ($request->ajax()) {
 
             $users = User::query()
                 ->select('*')
-                ->when($request->season,function ($q) use($request){
-                    $q->where('season_id',$request->season);
+                ->when($request->season, function ($q) use ($request) {
+                    $q->where('season_id', $request->season);
+                })
+                ->when($request->center,function ($q) use ($request) {
+                    $q->where('center', $request->center);
                 })
                 ->get();
 
@@ -64,7 +66,6 @@ class UserController extends Controller
                             <a href="' . route('printReport', $users->id) . '" data-id="' . $users->id . '" class="btn btn-pill btn-info-light reportPrint"> تقرير الطالب <i class="fa fa-file-excel"></i></a>
                        ';
                 })
-
                 ->editColumn('image', function ($users) {
 
                     if ($users->image == null) {
@@ -79,11 +80,9 @@ class UserController extends Controller
                     ';
                     }
                 })
-
                 ->editColumn('season_id', function ($users) {
                     return $users->season->name_ar;
                 })
-
                 ->editColumn('father_phone', function ($users) {
                     if ($users->father_phone != null) {
 
@@ -93,11 +92,9 @@ class UserController extends Controller
                         return '<button type="button" class="btn btn-pill btn-danger-light">لا يوجد هاتف لولي امر هذا الطالب</button>';
                     }
                 })
-
                 ->editColumn('country_id', function ($users) {
                     return $users->country->name_ar;
                 })
-
                 ->editColumn('login_status', function ($users) {
 
                     if ($users->login_status == 1) {
@@ -107,7 +104,6 @@ class UserController extends Controller
                         return '<button type="button" class="btn btn-pill btn-danger-light">غير نشط</button>';
                     }
                 })
-
                 ->editColumn('center', function ($users) {
 
                     if ($users->center == 'in') {
@@ -117,7 +113,6 @@ class UserController extends Controller
                         return '<button type="button" class="btn btn-pill btn-danger-light">خارج</button>';
                     }
                 })
-
                 ->editColumn('user_status', function ($users) {
 
                     if ($users->user_status == 'active') {
@@ -127,14 +122,12 @@ class UserController extends Controller
                         return '<button type="button" class="btn btn-pill btn-danger-light">محظور</button>';
                     }
                 })
-
                 ->editColumn('user_status_note', function ($users) {
 
-                    if($users->user_status_note != null)
-                    {
+                    if ($users->user_status_note != null) {
                         return $users->user_status_note;
 
-                    }else{
+                    } else {
                         return '<button type="button" class="btn btn-pill btn-danger-light">لا يوجد ملاحظات عن هذا الطالب</button>';
                     }
 
@@ -144,10 +137,10 @@ class UserController extends Controller
         } else {
 
             $seasons = Season::query()
-                ->select('id','name_ar')
+                ->select('id', 'name_ar')
                 ->get();
 
-            return view('admin.users.index',compact('seasons'));
+            return view('admin.users.index', compact('seasons','center'));
         }
     }
 
@@ -157,21 +150,20 @@ class UserController extends Controller
         $data['groupOfMonths'] = array(
             1 => 'January',
             2 => 'February',
-            3 =>'March',
-            4 =>'April',
-            5 =>'May',
+            3 => 'March',
+            4 => 'April',
+            5 => 'May',
             6 => 'June',
-            7 =>'July',
-            8 =>'August',
+            7 => 'July',
+            8 => 'August',
             9 => 'September',
-            10 =>'October',
+            10 => 'October',
             11 => 'November',
             12 => 'December',
         );
-        $data['cities'] = City::select('id','name_ar')->get();
+        $data['cities'] = City::select('id', 'name_ar')->get();
         return view('admin.users.parts.create')->with($data);
     }
-
 
     public function store(StoreUser $request): JsonResponse
     {
@@ -195,7 +187,6 @@ class UserController extends Controller
         }
     }
 
-
     public function edit(User $user)
     {
         $data['seasons'] = Season::query()
@@ -209,14 +200,14 @@ class UserController extends Controller
         $data['groupOfMonths'] = array(
             1 => 'January',
             2 => 'February',
-            3 =>'March',
-            4 =>'April',
-            5 =>'May',
+            3 => 'March',
+            4 => 'April',
+            5 => 'May',
             6 => 'June',
-            7 =>'July',
-            8 =>'August',
+            7 => 'July',
+            8 => 'August',
             9 => 'September',
-            10 =>'October',
+            10 => 'October',
             11 => 'November',
             12 => 'December',
         );
@@ -228,7 +219,7 @@ class UserController extends Controller
         $data['user_active'] = ['active', 'not_active'];
 
 
-        return view('admin.users.parts.edit',compact('user'))->with($data);
+        return view('admin.users.parts.edit', compact('user'))->with($data);
     }
 
     public function update(UserUpdateRequest $request, User $user): JsonResponse
@@ -256,50 +247,50 @@ class UserController extends Controller
             $this->adminLog('تم تحديث طالب');
 
 
-            $months  = json_decode($user->subscription_months_groups,true);
+            $months = json_decode($user->subscription_months_groups, true);
             $subscriptions = Subscribe::query()
-                ->whereHas('term', function (Builder $builder) use ($user){
+                ->whereHas('term', function (Builder $builder) use ($user) {
                     $builder->where('status', '=', 'active')
-                        ->where('season_id', '=',$user->season_id);
+                        ->where('season_id', '=', $user->season_id);
                 })
-                ->where('season_id', '=',$user->season_id);
+                ->where('season_id', '=', $user->season_id);
 
-            if($user->subscription_months_groups != null && $subscriptions->count() > 0){
+            if ($user->subscription_months_groups != null && $subscriptions->count() > 0) {
 
-                if($user->center == 'in'){
+                if ($user->center == 'in') {
 
                     $allMonths = $subscriptions
                         ->pluck('month')
                         ->toArray();
 
                     $data = $subscriptions
-                        ->pluck('price_in_center','month')
+                        ->pluck('price_in_center', 'month')
                         ->toArray();
-                }else{
+                } else {
                     $allMonths = $subscriptions
                         ->pluck('month')
                         ->toArray();
 
                     $data = $subscriptions
-                        ->pluck('price_out_center','month')
+                        ->pluck('price_out_center', 'month')
                         ->toArray();
                 }
 
                 $totalPricePaid = [];
-                foreach ($months as $month){
-                    if(in_array($month,$allMonths)){//1 [1,2,3,4,5]
+                foreach ($months as $month) {
+                    if (in_array($month, $allMonths)) {//1 [1,2,3,4,5]
                         UserSubscribe::query()
                             ->updateOrCreate([
                                 'student_id' => $user->id,
                                 'month' => $month
-                            ],[
+                            ], [
                                 'student_id' => $user->id,
                                 'month' => $month,
                                 'year' => date('Y'),
-                                'price' => $data[$month < 10 ? str_replace("0","",$month) : $month]
+                                'price' => $data[$month < 10 ? str_replace("0", "", $month) : $month]
                             ]);
 
-                        $totalPricePaid[] =  $data[$month < 10 ? str_replace("0","",$month) : $month];
+                        $totalPricePaid[] = $data[$month < 10 ? str_replace("0", "", $month) : $month];
                     }
                 }
 
@@ -307,7 +298,7 @@ class UserController extends Controller
                     ->updateOrCreate([
                         'user_id' => $user->id,
                         'payment_type' => 'cash'
-                    ],[
+                    ], [
                         'user_id' => $user->id,
                         'transaction_status' => 'finished',
                         'payment_type' => 'cash',
@@ -323,7 +314,6 @@ class UserController extends Controller
         }
     }
 
-
     public function userUnvilable()
     {
         $unavailableUsers = UserSubscribe::where('updated_at', '<=', Carbon::now()->subMonth())
@@ -333,7 +323,6 @@ class UserController extends Controller
         return view('admin.users.parts.user_unvilable', compact('unavailableUsers'));
     }
 
-
     public function subscrView(User $user)
     {
         $userSubscriptions = UserSubscribe::where('student_id', $user->id)->pluck('month')->toArray();
@@ -341,7 +330,6 @@ class UserController extends Controller
         $months = Subscribe::get();
         return view('admin.users.parts.subscription_renewal', compact('user', 'months', 'months_user'));
     }
-
 
     public function subscr_renew(Request $request, User $user): RedirectResponse
     {
@@ -364,7 +352,6 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-
     public function priceMonth(Request $request): string
     {
         $user = User::find($request->id);
@@ -385,8 +372,8 @@ class UserController extends Controller
         return $output;
     }
 
-
-    public function printReport($id){
+    public function printReport($id)
+    {
 
         $user = User::findOrFail($id);
 
@@ -425,7 +412,7 @@ class UserController extends Controller
             ->where('exam_depends', '=', 'yes')->get();
         $paperExams = PapelSheetExamDegree::where('user_id', '=', $user->id)->get();
         $subscriptions = UserSubscribe::query()
-        ->where('student_id', $user->id)
+            ->where('student_id', $user->id)
             ->get();
         return view('admin.users.parts.report', compact([
             'user',
@@ -512,7 +499,6 @@ class UserController extends Controller
         ]));
     }
 
-
     public function destroy(Request $request)
     {
         $user = User::query()
@@ -520,7 +506,7 @@ class UserController extends Controller
             ->firstOrFail();
 
         //delete token of this student when delete him
-        if($user->access_token){
+        if ($user->access_token) {
 
             JWTAuth::setToken($user->access_token)->invalidate();
         }
@@ -529,7 +515,6 @@ class UserController extends Controller
         $this->adminLog('تم حذف طالب ');
         return response(['message' => 'تم الحذف بنجاح', 'status' => 200], 200);
     }
-
 
     public function studentsExport(): BinaryFileResponse
     {
@@ -546,7 +531,6 @@ class UserController extends Controller
             return response()->json(['status' => 500]);
         }
     }
-
 
     public function getAllCountriesOfCity(Request $request): array
     {

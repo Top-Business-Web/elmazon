@@ -5,6 +5,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
 
+    <link href="{{ asset('dropzone/dropzone.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{ asset('dropzone/dropzone-min.js') }}"></script>
+
     @include('admin.layouts_admin.head')
 
     <style>
