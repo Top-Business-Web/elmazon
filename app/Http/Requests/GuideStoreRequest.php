@@ -28,7 +28,7 @@ class GuideStoreRequest extends FormRequest
             'title_en' => 'required',
             'description_ar' => 'required',
             'description_en' => 'required',
-            'file' => 'required',
+            'file' => 'nullable',
             'icon' => 'required|mimes:jpg,jpeg,png',
             'background_color' => 'required',
             'season_id' => 'required',
