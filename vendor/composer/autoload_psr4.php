@@ -81,6 +81,7 @@ return array(
     'Laravel\\SerializableClosure\\' => array($vendorDir . '/laravel/serializable-closure/src'),
     'Laravel\\Sanctum\\' => array($vendorDir . '/laravel/sanctum/src'),
     'Laravel\\Sail\\' => array($vendorDir . '/laravel/sail/src'),
+    'Intervention\\Image\\' => array($vendorDir . '/intervention/imagecache/src/Intervention/Image', $vendorDir . '/intervention/image/src/Intervention/Image'),
     'Illuminate\\Support\\' => array($vendorDir . '/laravel/framework/src/Illuminate/Macroable', $vendorDir . '/laravel/framework/src/Illuminate/Collections'),
     'Illuminate\\' => array($vendorDir . '/laravel/framework/src/Illuminate'),
     'Http\\Promise\\' => array($vendorDir . '/php-http/promise/src'),
@@ -120,4 +121,5 @@ return array(
     'Brick\\Math\\' => array($vendorDir . '/brick/math/src'),
     'Asm89\\Stack\\' => array($vendorDir . '/asm89/stack-cors/src'),
     'App\\' => array($baseDir . '/app'),
+    'Alexusmai\\LaravelFileManager\\' => array($vendorDir . '/alexusmai/laravel-file-manager/src'),
 );

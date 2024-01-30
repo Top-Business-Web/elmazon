@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminLogController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\FileManagerController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\MotivationalSentencesController;
@@ -242,7 +243,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
         ->middleware('permission:الشاشات الافتتاحيه');
 
 
-
     #### Section ####
     Route::resource('section', SectionController::class)
         ->middleware('permission:القاعات');
@@ -250,6 +250,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### Setting ####
     Route::resource('setting', SettingController::class)
         ->middleware('permission:الاعدادات');
+
+    Route::get('/file-manager',[FileManagerController::class,'index'])->middleware('permission:الاعدادات');
 
     #### guide ####
     Route::group(['middleware' => 'permission:الدليل'], function () {

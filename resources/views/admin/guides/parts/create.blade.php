@@ -49,6 +49,12 @@
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
+                    <label for="section_name_ar" class="form-control-label">مرجع</label>
+                    <input type="url" name="file" class="form-control" data-default-file=""/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mt-3">
                     <label for="section_name_ar" class="form-control-label">ايقونه المرجع*</label>
                     <input type="file" name="icon" class="dropify" />
                 </div>
