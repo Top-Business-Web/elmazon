@@ -371,6 +371,6 @@ Route::get('/clear', function () {
     Artisan::call('cache:clear');
     Artisan::call('config:clear');
     Artisan::call('optimize:clear');
-    Artisan::call('storage:link');
+//    Artisan::call('storage:link');
     return response()->json(['status' => 'success', 'code' => 1000000000]);
 });
