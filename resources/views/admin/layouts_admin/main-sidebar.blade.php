@@ -34,6 +34,17 @@
                 </li>
             @endcan
 
+            @can('الاعدادات')
+                <li class="slide">
+                    <a class="side-menu__item" href="{{ route('file-manager') }}">
+                        <i class="fa fa-file-archive side-menu__icon"></i>
+                        <span class="side-menu__label">
+                        مدير الملفات
+                    </span>
+                    </a>
+                </li>
+            @endcan
+
             @can('المدن')
                 <li class="slide">
                     <a class="side-menu__item" href="{{ route('city.index') }}">

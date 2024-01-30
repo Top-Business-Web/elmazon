@@ -251,7 +251,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::resource('setting', SettingController::class)
         ->middleware('permission:الاعدادات');
 
-    Route::get('/file-manager',[FileManagerController::class,'index'])->middleware('permission:الاعدادات');
+    Route::get('/file-manager',[FileManagerController::class,'index'])->name('file-manager')->middleware('permission:الاعدادات');
 
     #### guide ####
     Route::group(['middleware' => 'permission:الدليل'], function () {
