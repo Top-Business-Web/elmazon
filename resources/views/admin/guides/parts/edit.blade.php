@@ -52,12 +52,12 @@
                               >{{ $guide->description_en }}</textarea>
                 </div>
             </div>
-{{--            <div class="row">--}}
-{{--                <div class="col-md-12 mt-3">--}}
-{{--                    <label for="section_name_ar" class="form-control-label">مرجع</label>--}}
-{{--                    <input type="file" name="file" class="form-control" data-default-file="{{ asset($guide->file) }}"/>--}}
-{{--                </div>--}}
-{{--            </div>--}}
+            <div class="row">
+                <div class="col-md-12 mt-3">
+                    <label for="section_name_ar" class="form-control-label">مرجع</label>
+                    <input type="url" name="file" class="form-control" data-default-file="{{ asset($guide->file) }}"/>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label for="section_name_ar" class="form-control-label">ايقونة</label>
