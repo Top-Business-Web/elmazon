@@ -256,6 +256,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     #### guide ####
     Route::group(['middleware' => 'permission:الدليل'], function () {
         Route::resource('guide', GuideController::class);
+        Route::post('guide/delete', [GuideController::class,'guideDelete'])->name('guide_delete');
         Route::get('guide/uploadFile/{guide}', [GuideController::class,'uploadFile'])->name('guide.uploadFile');
         Route::post('guidUploadFile/{guide}', [GuideController::class,'guidUploadFile'])->name('guide.guidUploadFile');
         Route::get('item', [GuideController::class, 'item'])->name('item');
