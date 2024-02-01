@@ -102,7 +102,7 @@
         ]
         showData('{{ route('guide.index') }}', columns);
         // Delete Using Ajax
-        destroyScript('{{ route('guide.destroy', ':id') }}');
+        destroyScript('{{ route('guide_delete') }}');
         // Add Using Ajax
         showAddModal('{{ route('guide.create') }}');
         addScript();
