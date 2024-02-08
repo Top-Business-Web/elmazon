@@ -328,6 +328,8 @@ class VideoPartController extends Controller
         }
 
 
+        $videoPart = '';
+
         if ($video = $request->file('link')) {
 
             $destinationPath = 'videos/';
