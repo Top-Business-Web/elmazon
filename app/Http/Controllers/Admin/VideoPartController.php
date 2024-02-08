@@ -23,13 +23,14 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Omnipay\Common\Item;
 use Yajra\DataTables\DataTables;
 
 
 class VideoPartController extends Controller
 {
-    use FirebaseNotification , PhotoTrait , AdminLogs;
+    use FirebaseNotification, PhotoTrait, AdminLogs;
 
 
     public function index(request $request)
@@ -59,23 +60,23 @@ class VideoPartController extends Controller
                         ->count('action');
 
                     return $like . ' <i class="fa fa-thumbs-up ml-2 mr-2 text-success"></i>
-                                    <input class="tgl tgl-ios like_active" data-id="'. $videoParts->id .'" name="like_active" id="like-' . $videoParts->id . '" type="checkbox" '. ($videoParts->like_active == 1 ? 'checked' : 'unchecked') .'/>
+                                    <input class="tgl tgl-ios like_active" data-id="' . $videoParts->id . '" name="like_active" id="like-' . $videoParts->id . '" type="checkbox" ' . ($videoParts->like_active == 1 ? 'checked' : 'unchecked') . '/>
                                     <label class="tgl-btn" dir="ltr" for="like-' . $videoParts->id . '"></label>';
                 })
                 ->addColumn('view', function ($videoParts) {
                     $view = VideoTotalView::where('video_part_id', $videoParts->id)->count('count');
                     return $view . ' <i class="fa fa-eye"></i>
-                                    <input class="tgl tgl-ios viewActive" data-id="'. $videoParts->id .'" '. ($videoParts->view_active == 1 ? 'checked' : 'unchecked') .' name="view_active" id="view-' . $videoParts->id . '" type="checkbox"/>
+                                    <input class="tgl tgl-ios viewActive" data-id="' . $videoParts->id . '" ' . ($videoParts->view_active == 1 ? 'checked' : 'unchecked') . ' name="view_active" id="view-' . $videoParts->id . '" type="checkbox"/>
                                     <label class="tgl-btn" dir="ltr" for="view-' . $videoParts->id . '"></label>';
                 })
                 ->editColumn('link', function ($videoParts) {
 
-                    if($videoParts->is_youtube == true){
+                    if ($videoParts->is_youtube == true) {
 
                         return '<a target="_blank" href="' . $videoParts->youtube_link . '">
                                 <span class="badge badge-secondary">لينك الفيديو</span>
                             </a>';
-                    }else{
+                    } else {
 
                         return '<a target="_blank" href="' . asset('videos/' . $videoParts->link) . '">
                                 <span class="badge badge-secondary">لينك الفيديو</span>
@@ -177,7 +178,6 @@ class VideoPartController extends Controller
     }
 
 
-
     public function indexCommentVideoReply(Request $request, $id)
     {
         if ($request->ajax()) {
@@ -225,12 +225,11 @@ class VideoPartController extends Controller
     {
 
         $seasons = DB::table('seasons')
-            ->select('id','name_ar')
+            ->select('id', 'name_ar')
             ->get();
 
         return view('admin.videopart.parts.create', compact('seasons'));
     }
-
 
 
     public function store(StoreVideoPart $request): JsonResponse
@@ -245,20 +244,24 @@ class VideoPartController extends Controller
         }
 
 
-
         if ($video = $request->file('link')) {
 
             $destinationPath = 'videos/';
-            $videoPart= date('YmdHis') . "." . $video->getClientOriginalExtension();
+            $videoPart = date('YmdHis') . "." . $video->getClientOriginalExtension();
             $video->move($destinationPath, $videoPart);
             $request['link'] = "$videoPart";
+        }
+
+        if ($video = $request->has('link_server')) {
+            $videoPart = $request->link_server;
+            $request['link'] = $videoPart;
         }
 
 
         $videoPartCreate = VideoParts::create([
             'name_ar' => $request->name_ar,
             'name_en' => $request->name_en,
-            'background_image' =>  $imageLink,
+            'background_image' => $imageLink,
             'month' => $request->month,
             'note' => $request->note,
             'lesson_id' => $request->lesson_id,
@@ -270,18 +273,18 @@ class VideoPartController extends Controller
         ]);
 
         $subjectClass = VideoParts::query()
-            ->where('id',$videoPartCreate->id)
+            ->where('id', $videoPartCreate->id)
             ->with(['lesson.subject_class'])
             ->first();
 
-        if($videoPartCreate->save()){
+        if ($videoPartCreate->save()) {
 
             //($data,$season_id,$exam_type,$exam_id)
-            $this->sendFirebaseNotificationWhenAddedVideo(['title' => "فيديو جديد","body" => $request->name_ar],$subjectClass->lesson->subject_class->season_id,"video_part",$videoPartCreate->id);
+            $this->sendFirebaseNotificationWhenAddedVideo(['title' => "فيديو جديد", "body" => $request->name_ar], $subjectClass->lesson->subject_class->season_id, "video_part", $videoPartCreate->id);
             $this->adminLog('تم اضافة فيديو');
             return response()->json(['status' => 200]);
 
-        }else{
+        } else {
             return response()->json(['status' => 405, 'message' => 'Failed to save the record']);
         }
 
@@ -292,27 +295,27 @@ class VideoPartController extends Controller
     {
 
         $seasons = DB::table('seasons')
-        ->select('id','name_ar')
-        ->get();
+            ->select('id', 'name_ar')
+            ->get();
 
         $terms = DB::table('terms')
-            ->select('id','name_ar')
+            ->select('id', 'name_ar')
             ->get();
 
 
+        $isInternalUrl = Str::startsWith($videosPart->link, url('/'));
+
         $lesson = Lesson::with(['subject_class'])->find($videosPart->lesson_id);
 
-        return view('admin.videopart.parts.edit', compact('videosPart','terms','seasons','lesson'));
+        return view('admin.videopart.parts.edit', compact('videosPart', 'terms', 'seasons', 'lesson'));
     }
 
 
-
-    public function update(StoreVideoPart $request,$id): JsonResponse
+    public function update(StoreVideoPart $request, $id): JsonResponse
     {
 
         $videPartUpdate = VideoParts::query()
             ->find($id);
-
 
         $imageLink = "";
         if ($backgroundImage = $request->file('background_image')) {
@@ -328,43 +331,49 @@ class VideoPartController extends Controller
         if ($video = $request->file('link')) {
 
             $destinationPath = 'videos/';
-            $videoPart= date('YmdHis') . "." . $video->getClientOriginalExtension();
+            $videoPart = date('YmdHis') . "." . $video->getClientOriginalExtension();
             $video->move($destinationPath, $videoPart);
             $request['link'] = "$videoPart";
 
 
-            if(file_exists(public_path('videos/'.$videPartUpdate->link))){
+            if (file_exists(public_path('videos/' . $videPartUpdate->link))) {
 
-                unlink(public_path('videos/'.$videPartUpdate->link));
+                unlink(public_path('videos/' . $videPartUpdate->link));
             }
+        }
+
+        if ($video = $request->has('link_server')) {
+            $videoPart = $request->link_server;
+            $request['link'] = $videoPart;
         }
 
         $videPartUpdate->update([
             'name_ar' => $request->name_ar,
             'name_en' => $request->name_en,
-            'background_image' =>  $request->file('background_image') != null ? $imageLink : $videPartUpdate->background_image,
+            'background_image' => $request->file('background_image') != null ? $imageLink : $videPartUpdate->background_image,
             'month' => $request->month,
             'note' => $request->note,
-            'link' => $request->file('link') == null ? $videPartUpdate->link : $videoPart ,
+            'link' => $request->has('link_server') ? $videoPart : ($request->file('link') ? $videPartUpdate->link : $videoPart),
             'youtube_link' => $request->youtube_link ?? null,
             'is_youtube' => $request->youtube_link != null ? 1 : 0,
             'video_time' => $request->video_time,
             'lesson_id' => $request->lesson_id,
         ]);
 
-        if($videPartUpdate->save()){
+
+        if ($videPartUpdate->save()) {
 
             $this->adminLog('تم تعديل بيانات الفيديو');
             return response()->json(['status' => 200]);
 
-        }else{
+        } else {
             return response()->json(['status' => 405, 'message' => 'Failed to update']);
         }
     }
 
 
-
-    public function destroy(Request $request): JsonResponse{
+    public function destroy(Request $request): JsonResponse
+    {
 
         $videoParts = VideoParts::where('id', $request->id)->firstOrFail();
         $videoParts->delete();
@@ -439,7 +448,8 @@ class VideoPartController extends Controller
         $video->save();
     }
 
-    public function viewActive(Request $request){
+    public function viewActive(Request $request)
+    {
         $view = $request->view_active;
         $video = VideoParts::findOrFail($request->id);
         $video->view_active = $view;
@@ -453,8 +463,8 @@ class VideoPartController extends Controller
     {
 
         return SubjectClass::query()
-            ->where('season_id','=',request()->season_id)
-            ->where('term_id','=',request()->term_id)
+            ->where('season_id', '=', request()->season_id)
+            ->where('term_id', '=', request()->term_id)
             ->pluck('name_ar', 'id')
             ->toArray();
     }
@@ -464,7 +474,7 @@ class VideoPartController extends Controller
     {
 
         return Lesson::query()
-            ->where('subject_class_id','=',request()->subject_class_id)
+            ->where('subject_class_id', '=', request()->subject_class_id)
             ->pluck('name_ar', 'id')
             ->toArray();
     }

@@ -1,8 +1,9 @@
 <div class="modal-body">
-    <form id="addForm" class="addForm" method="POST" action="{{ route('videosParts.store') }}" enctype="multipart/form-data">
+    <form id="addForm" class="addForm" method="POST" action="{{ route('videosParts.store') }}"
+          enctype="multipart/form-data">
         @csrf
         <div class="form-group">
-            <input type="hidden" name="ordered" value="" />
+            <input type="hidden" name="ordered" value=""/>
             <div class="row mb-3">
                 <div class="col-md-12">
                     <label for="name_ar" class="form-control-label">الاسم باللغة العربية</label>
@@ -30,10 +31,9 @@
                     </Select>
                 </div>
 
-
                 <div class="col-md-6 mt-3">
                     <label for="name_ar" class="form-control-label">اختر تيرم</label>
-                    <Select name="term_id"  id="term_id" class="form-control">
+                    <Select name="term_id" id="term_id" class="form-control">
                         <option disabled>اختر تيرم معين</option>
 
                     </Select>
@@ -42,7 +42,7 @@
 
                 <div class="col-md-6 mt-3">
                     <label for="name_ar" class="form-control-label">اختر فصل معين</label>
-                    <select name="subject_class_id"  id="subject_class_id" class="form-control">
+                    <select name="subject_class_id" id="subject_class_id" class="form-control">
                         <option disabled>اختر فصل معين</option>
 
                     </select>
@@ -50,7 +50,7 @@
 
                 <div class="col-md-6 mt-3">
                     <label for="name_ar" class="form-control-label">اختر درس معين</label>
-                    <select name="lesson_id"  id="lesson_id" class="form-control">
+                    <select name="lesson_id" id="lesson_id" class="form-control">
                         <option disabled>اختر درس معين</option>
 
                     </select>
@@ -64,27 +64,43 @@
 
                 <div class="col-md-12 mt-3">
                     <label for="head">شهر</label>
-                    <select name="month" class="form-control" id="signup_birth_month" >
+                    <select name="month" class="form-control" id="signup_birth_month">
                         <option value="">اختر شهر</option>
-                        <?php for ($i = 1; $i <= 12; $i++){
-                            echo '<option style="text-align: center" value="' . $i . '">' . date( 'F', strtotime( "$i/12/10" ) ) . '</option>';
-                        }?>
+                        <?php for ($i = 1; $i <= 12; $i++) {
+                            echo '<option style="text-align: center" value="' . $i . '">' . date('F', strtotime("$i/12/10")) . '</option>';
+                        } ?>
                     </select>
                 </div>
             </div>
 
             <div class="row mb-3">
 
+                <div class="col-md-12">
+                    <label for="video_link" class="form-control-label">نوع ارفاق الملف</label>
+                    <select class="form-control" name="link_type" id="uploadFileType" required>
+                        <option class="form-control" value="" disabled selected>اختر النوع</option>
+                        <option class="form-control" value="linkUp">من الكمبيوتر</option>
+                        <option class="form-control" value="linkUrl">لينك من السيرفر</option>
+                        <option class="form-control" value="youtube_link">لينك من اليوتيوب</option>
+                    </select>
+                </div>
 
-                <div class="col-md-12 video_link">
+                <div class="col-md-12 video_link d-none linkUp">
                     <label for="video_link" class="form-control-label">ارفاق ملف *</label>
                     <input type="file" name="link" class="form-control"
                            data-default-file=""/>
                 </div>
 
-                <div class="col-md-12 video_link mt-3">
-                    <label for="video_link" class="form-control-label">مسار فيديو مثال (Youtube)*</label>
-                    <input type="text" name="youtube_link" class="form-control"/>
+                <div class="col-md-12 video_link_server d-none linkUrl">
+                    <label for="video_link" class="form-control-label">مسار فيديو من سيرفر المأذون *</label>
+                    <input type="url" name="link_server" class="form-control"
+                           data-default-file="" placeholder="EX : {{ url('/') }}"/>
+                    <small class="text-danger">قم بعمل copy للمسار من مدير الملفات *</small>
+                </div>
+
+                <div class="col-md-12 video_link mt-3 d-none linkYouTube">
+                    <label for="video_link" class="form-control-label">مسار فيديو مثال (Youtube) *</label>
+                    <input type="url" placeholder="EX : https://youtube.com/" name="youtube_link" class="form-control"/>
                 </div>
 
                 <div class="col-md-12 video_date mt-3">
@@ -108,23 +124,44 @@
 </div>
 <script>
 
+    $(document).ready(function () {
+        let linkUp = $('.linkUp');
+        let linkUrl = $('.linkUrl');
+        let linkYouTube = $('.linkYouTube');
+        $('select[name="link_type"]').on('change', function () {
+            let selected = $(this).val();
+            if (selected === 'linkUp') {
+                linkUp.removeClass('d-none').find('input').prop('disabled', false);
+                linkUrl.addClass('d-none').find('input').prop('disabled', true);
+                linkYouTube.addClass('d-none').find('input').prop('disabled', true);
+            }
+            if (selected === 'linkUrl') {
+                linkUrl.removeClass('d-none').find('input').prop('disabled', false);
+                linkUp.addClass('d-none').find('input').prop('disabled', true);
+                linkYouTube.addClass('d-none').find('input').prop('disabled', true);
+            }
+            if (selected === 'youtube_link') {
+                linkYouTube.removeClass('d-none').find('input').prop('disabled', false);
+                linkUp.addClass('d-none').find('input').prop('disabled', true);
+                linkUrl.addClass('d-none').find('input').prop('disabled', true);
+            }
+        });
+    });
 
 
-    $(document).ready(function() {
-        $('#type').on('change', function() {
+    $(document).ready(function () {
+        $('#type').on('change', function () {
             var element = document.getElementById("type");
             var value = $(element).find('option:selected').val();
-            if(value !='video'){
+            if (value != 'video') {
                 $('.video_date').prop('hidden', true);
-            }
-            else{
+            } else {
                 $('.video_date').prop('hidden', false);
             }
         })
     })
 
 </script>
-
 
 
 <script>
@@ -152,7 +189,6 @@
     });
 
 
-
     $(document).ready(function () {
         $('select[name="term_id"]').on('click', function () {
 
@@ -164,8 +200,8 @@
                     url: "{{ URL::to('getAllSubjectClassesBySeasonAndTerm') }}",
                     type: "GET",
                     data: {
-                        "season_id" : season_id,
-                        "term_id" : term_id,
+                        "season_id": season_id,
+                        "term_id": term_id,
                     },
                     dataType: "json",
                     success: function (data) {
@@ -182,7 +218,6 @@
     });
 
 
-
     $(document).ready(function () {
         $('select[name="subject_class_id"]').on('click', function () {
 
@@ -193,7 +228,7 @@
                     url: "{{ URL::to('getAllLessonsBySubjectClass') }}",
                     type: "GET",
                     data: {
-                        "subject_class_id" : subject_class_id,
+                        "subject_class_id": subject_class_id,
                     },
                     dataType: "json",
                     success: function (data) {
