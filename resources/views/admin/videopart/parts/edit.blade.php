@@ -81,16 +81,18 @@
                 </div>
             </div>
 
+            @php
+                $isInternalUrl = \Illuminate\Support\Str::startsWith($videosPart->link, url('/'));
+            @endphp
+
             <div class="row mb-3">
-
-
                 <div class="col-md-12">
                     <label for="video_link" class="form-control-label">نوع ارفاق الملف</label>
                     <select class="form-control" name="link_type" id="uploadFileType" required>
                         <option class="form-control" value="" disabled selected>اختر النوع</option>
-                        <option class="form-control" value="linkUp">من الكمبيوتر</option>
-                        <option class="form-control" value="linkUrl">لينك من السيرفر</option>
-                        <option class="form-control" value="youtube_link">لينك من اليوتيوب</option>
+                        <option class="form-control"  value="linkUp" {{ (!$isInternalUrl && $videosPart->youtube_link == null ) ? 'selected' : '' }} >من الكمبيوتر</option>
+                        <option class="form-control" {{ $isInternalUrl ? 'selected' : '' }} value="linkUrl">لينك من السيرفر</option>
+                        <option class="form-control" {{  $videosPart->youtube_link ? 'selected' : '' }} value="youtube_link">لينك من اليوتيوب</option>
                     </select>
                 </div>
 
@@ -137,8 +139,8 @@
     $('.dropify').dropify()
 
 </script>
-<!-- fix -->
 
+{{--eldpaour 8-2-2024--}}
 <script>
     $(document).ready(function () {
         let linkUp = $('.linkUp');
@@ -163,8 +165,49 @@
             }
         });
     });
-</script>
 
+    $(document).ready(function () {
+        let linkUp = $('.linkUp');
+        let linkUrl = $('.linkUrl');
+        let linkYouTube = $('.linkYouTube');
+
+        // Initially hide all link sections and disable their input fields
+        linkUp.addClass('d-none').find('input').prop('disabled', true);
+        linkUrl.addClass('d-none').find('input').prop('disabled', true);
+        linkYouTube.addClass('d-none').find('input').prop('disabled', true);
+
+        // Show the appropriate link section based on the initial value of the select element
+        let selected = $('select[name="link_type"]').val();
+        if (selected === 'linkUp') {
+            linkUp.removeClass('d-none').find('input').prop('disabled', false);
+        } else if (selected === 'linkUrl') {
+            linkUrl.removeClass('d-none').find('input').prop('disabled', false);
+        } else if (selected === 'youtube_link') {
+            linkYouTube.removeClass('d-none').find('input').prop('disabled', false);
+        }
+
+        // Event listener for select element change
+        $('select[name="link_type"]').on('change', function () {
+            let selected = $(this).val();
+            // Hide all link sections and disable their input fields
+            linkUp.addClass('d-none').find('input').prop('disabled', true);
+            linkUrl.addClass('d-none').find('input').prop('disabled', true);
+            linkYouTube.addClass('d-none').find('input').prop('disabled', true);
+
+            // Show the appropriate link section and enable its input fields based on the selected value
+            if (selected === 'linkUp') {
+                linkUp.removeClass('d-none').find('input').prop('disabled', false);
+            } else if (selected === 'linkUrl') {
+                linkUrl.removeClass('d-none').find('input').prop('disabled', false);
+            } else if (selected === 'youtube_link') {
+                linkYouTube.removeClass('d-none').find('input').prop('disabled', false);
+            }
+        });
+    });
+
+
+</script>
+{{--eldpaour 8-2-2024--}}
 <script>
     $('.dropify').dropify()
 
