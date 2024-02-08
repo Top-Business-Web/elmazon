@@ -13,6 +13,7 @@ use Carbon\CarbonPeriod;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class VideoPartDetailsNewResource extends JsonResource
 {
@@ -81,6 +82,7 @@ class VideoPartDetailsNewResource extends JsonResource
                 (!$user_watch_video ? 'lock' : ($user_watch_video->status)) : 'not_access';
         }
 
+        $isUrl = Str::startsWith($this->link, url('/'));
 
         return [
 
@@ -88,7 +90,7 @@ class VideoPartDetailsNewResource extends JsonResource
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
             'status' => $status,
             'progress' =>  !empty($sumAllOfMinutesVideosStudentAuth) ? $totalMinutesOfAllVideos : "0",
-            'link' =>  $this->is_youtube == true ? $this->youtube_link :asset('videos/'. $this->link),
+            'link' => $isUrl ? $this->link : ($this->is_youtube == true ? $this->youtube_link : asset('videos/'. $this->link)),
             'is_youtube' =>  $this->is_youtube,
             'rate' =>  $video_rate ? $video_rate->action : 'no_rate',
             'total_watch' =>   $totalViews,
