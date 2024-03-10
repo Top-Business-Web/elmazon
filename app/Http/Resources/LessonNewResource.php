@@ -18,7 +18,9 @@ class LessonNewResource extends JsonResource
      */
     public function toArray($request)
     {
-        $videos = VideoParts::where('lesson_id','=',$this->id)->pluck('id')->toArray();
+        $videos = VideoParts::where('lesson_id','=',$this->id)
+            ->whereIn('month',json_decode(Auth::guard('user-api')->user()->subscription_months_groups))
+            ->pluck('id')->toArray();
 
         $totalWatch = VideoOpened::where([
             'user_id' => auth('user-api')->id(),
@@ -26,17 +28,21 @@ class LessonNewResource extends JsonResource
         ])->whereIn('video_part_id',$videos)->count();
 
 
-        $videos_count = VideoParts::where('lesson_id','=',$this->id)->count();
+        $videos_count = VideoParts::where('lesson_id','=',$this->id)
+            ->whereIn('month',json_decode(Auth::guard('user-api')->user()->subscription_months_groups))
+            ->count();
 
 
         //start sum total of minutes to compare between video minutes and total user watch
         $videosIds = VideoParts::query()
             ->where('lesson_id','=',$this->id)
+            ->whereIn('month',json_decode(Auth::guard('user-api')->user()->subscription_months_groups))
             ->pluck('id')
             ->toArray();//example [1,2,3,4,5]
 
         $sumMinutesOfAllVideosBelongsTiThisLesson = VideoParts::query()
             ->where('lesson_id','=',$this->id)
+            ->whereIn('month',json_decode(Auth::guard('user-api')->user()->subscription_months_groups))
             ->pluck('video_time')
             ->toArray();// example 130 seconds
 

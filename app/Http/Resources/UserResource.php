@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Term;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,6 +17,12 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        $months = [];
+        foreach (json_decode($this->subscription_months_groups) as $key => $month) {
+            $months[] = Carbon::create()->month($month)->monthName;
+        }
+
         return [
             'id' => $this->id,
             'report' => route('autoPrintReport',$this->id),
@@ -29,6 +36,7 @@ class UserResource extends JsonResource
             'user_status' => $this->user_status,
             'center' => lang() == 'ar' ? ($this->center == 'in' ? 'سنتر' : 'خارج السنتر') : ($this->center == 'in' ? 'center' : 'out center'),
             'code' => $this->code,
+            'subscription_month' => $months,
             'date_start_code' => $this->date_start_code,
             'date_end_code' => $this->date_end_code,
             'city' => new CityResource($this->country->city),

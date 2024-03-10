@@ -49,7 +49,7 @@ class UserController extends Controller
                 ->when($request->season, function ($q) use ($request) {
                     $q->where('season_id', $request->season);
                 })
-                ->when($request->center,function ($q) use ($request) {
+                ->when($request->center, function ($q) use ($request) {
                     $q->where('center', $request->center);
                 })
                 ->get();
@@ -126,11 +126,9 @@ class UserController extends Controller
 
                     if ($users->user_status_note != null) {
                         return $users->user_status_note;
-
                     } else {
                         return '<button type="button" class="btn btn-pill btn-danger-light">لا يوجد ملاحظات عن هذا الطالب</button>';
                     }
-
                 })
                 ->escapeColumns([])
                 ->make(true);
@@ -140,7 +138,7 @@ class UserController extends Controller
                 ->select('id', 'name_ar')
                 ->get();
 
-            return view('admin.users.index', compact('seasons','center'));
+            return view('admin.users.index', compact('seasons', 'center'));
         }
     }
 
@@ -174,7 +172,7 @@ class UserController extends Controller
         $inputs['subscription_months_groups'] = json_encode($request->subscription_months_groups) ?? NULL;
 
 
-//        return  $inputs;
+        //        return  $inputs;
         if ($request->has('image')) {
             $inputs['image'] = $this->saveImage($request->image, 'user', 'photo');
         }
@@ -278,7 +276,7 @@ class UserController extends Controller
 
                 $totalPricePaid = [];
                 foreach ($months as $month) {
-                    if (in_array($month, $allMonths)) {//1 [1,2,3,4,5]
+                    if (in_array($month, $allMonths)) { //1 [1,2,3,4,5]
                         UserSubscribe::query()
                             ->updateOrCreate([
                                 'student_id' => $user->id,
@@ -304,7 +302,6 @@ class UserController extends Controller
                         'payment_type' => 'cash',
                         'total_price' => array_sum($totalPricePaid)
                     ]);
-
             }
 
 
@@ -327,29 +324,42 @@ class UserController extends Controller
     {
         $userSubscriptions = UserSubscribe::where('student_id', $user->id)->pluck('month')->toArray();
         $months_user = Subscribe::whereIn('month', $userSubscriptions)->get();
-        $months = Subscribe::get();
+        $months = Subscribe::query()
+            ->where('season_id', $user->season_id)
+            ->get();
         return view('admin.users.parts.subscription_renewal', compact('user', 'months', 'months_user'));
     }
 
     public function subscr_renew(Request $request, User $user): RedirectResponse
     {
-
         $user = User::findOrFail($request->id);
 
         $inputs = $request->all();
-        $year = $inputs['year'];
+        if (isset($inputs['year'])) {
+            $year = $inputs['year'];
+        } else {
+            $year = Carbon::now()->format('Y');
+        }
 
-        foreach ($inputs['month'] as $value) {
-            $month = Subscribe::find($value);
-            UserSubscribe::create([
+        $arr_months = Subscribe::query()
+            ->whereIn('id', $inputs['month'])
+            ->get();
+
+        foreach ($arr_months as $value) {
+            UserSubscribe::query()->updateOrCreate([
                 'student_id' => $user->id,
-                'month' => $value,
-                'price' => ($user->center == 'in') ? $month->price_in_center : $month->price_out_center,
+                'month' => $value->month,
+            ], [
+                'student_id' => $user->id,
+                'month' => $value->month,
+                'price' => ($user->center == 'in') ? $value->price_in_center : $value->price_out_center,
                 'year' => $year
             ]);
         }
+        $user->subscription_months_groups = json_encode($arr_months->pluck('month')->toArray());
+        $user->save();
         toastr('تم التجديد بنجاح');
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->send();
     }
 
     public function priceMonth(Request $request): string
@@ -538,6 +548,5 @@ class UserController extends Controller
             ->where('city_id', $request->city_id)
             ->pluck('name_ar', 'id')
             ->toArray();
-
     }
 }
