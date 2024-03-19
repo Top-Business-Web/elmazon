@@ -726,13 +726,21 @@ class AuthRepository extends ResponseApi implements AuthRepositoryInterface
 
     public function startYourJourney(Request $request): JsonResponse
     {
+        ############### فصول المرحله الدراسيه للطالب ########
+        $user = studentAuth();
+        $lessons_opened = VideoParts::whereIn('month', json_decode($user->subscription_months_groups))
+            ->whereHas('lesson.subject_class', fn(Builder $builder) => $builder->where('season_id', $user->season_id))
+            ->pluck('lesson_id')->unique()->toArray();
 
-
+        $lessons_opened = array_values($lessons_opened);
         $classes = SubjectClass::query()
             ->whereHas('term', fn(Builder $builder) => $builder->where('status', '=', 'active')
                 ->where('season_id', '=', getSeasonIdOfStudent()))
             ->where('season_id', '=', getSeasonIdOfStudent())
+            ->whereHas('lessons',fn(Builder $builder)
+            => $builder->whereIn('id',$lessons_opened))
             ->get();
+
 
         return self::returnResponseDataApi(SubjectClassNewResource::collection($classes), "تم الحصول علي بيانات ابدء رحلتك بنجاح", 200);
     }
