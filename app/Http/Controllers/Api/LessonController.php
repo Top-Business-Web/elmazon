@@ -204,8 +204,6 @@ class LessonController extends Controller
 
     public function accessFirstVideo(Request $request, $id): JsonResponse
     {
-
-        $this->accessFirstVideoCustom();
         $rules = [
             'type' => 'required|in:lesson,subject_class',
         ];
