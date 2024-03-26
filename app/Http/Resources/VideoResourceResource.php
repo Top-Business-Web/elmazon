@@ -20,7 +20,7 @@ class VideoResourceResource extends JsonResource
 
             'id' => $this->id,
             'name'  => lang() == 'ar' ?$this->name_ar : $this->name_en,
-             'type' => $this->type,
+            'type' => $this->type,
             'background_color' => $this->background_color,
             'image' => asset('videos_resources/images/'.$this->image),
             'time' => $this->time ?? 0,
