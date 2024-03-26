@@ -22,6 +22,7 @@ use App\Models\VideoResource;
 use App\Models\VideoOpened;
 use App\Models\VideoTotalView;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +36,7 @@ class LessonController extends Controller
     {
 
         $lesson = Lesson::query()
-        ->where('id', '=', $id)
+            ->where('id', '=', $id)
             ->first();
 
         if (!$lesson) {
@@ -44,7 +45,7 @@ class LessonController extends Controller
         }
 
         $videos = VideoParts::query()
-        ->where('lesson_id', '=', $id)
+            ->where('lesson_id', '=', $id)
             ->orderBy('ordered', 'ASC')
             ->get();
 
@@ -61,10 +62,10 @@ class LessonController extends Controller
 
         if ($type == 'video_part') {
 
-        $userWatchVideoBefore = VideoTotalView::query()
-            ->where('user_id', '=', Auth::guard('user-api')->id())
-            ->where('video_part_id', '=', $video->id)
-            ->first();
+            $userWatchVideoBefore = VideoTotalView::query()
+                ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('video_part_id', '=', $video->id)
+                ->first();
 
         } elseif ($type == 'video_basic') {
 
@@ -96,7 +97,7 @@ class LessonController extends Controller
         if ($request->type == 'video_part') {
 
             $video = VideoParts::query()
-            ->where('id', '=', $id)
+                ->where('id', '=', $id)
                 ->first();
 
             if (!$video) {
@@ -110,7 +111,7 @@ class LessonController extends Controller
         } elseif ($request->type == 'video_basic') {
 
             $video = VideoBasic::query()
-            ->where('id', '=', $id)
+                ->where('id', '=', $id)
                 ->first();
 
             if (!$video) {
@@ -146,7 +147,7 @@ class LessonController extends Controller
         if (request()->type == 'video_part') {
 
             $video = VideoParts::query()
-            ->where('id', '=', $id)
+                ->where('id', '=', $id)
                 ->first();
 
             if (!$video) {
@@ -154,7 +155,7 @@ class LessonController extends Controller
             }
 
             $comments = Comment::query()
-            ->where('video_part_id', '=', $video->id)
+                ->where('video_part_id', '=', $video->id)
                 ->latest()
                 ->paginate(4);
 
@@ -163,7 +164,7 @@ class LessonController extends Controller
         } elseif (request()->type == 'video_basic') {
 
             $video = VideoBasic::query()
-            ->where('id', '=', $id)
+                ->where('id', '=', $id)
                 ->first();
 
             if (!$video) {
@@ -171,7 +172,7 @@ class LessonController extends Controller
             }
 
             $comments = Comment::query()
-            ->where('video_basic_id', '=', $video->id)
+                ->where('video_basic_id', '=', $video->id)
                 ->latest()
                 ->paginate(4);
 
@@ -185,7 +186,7 @@ class LessonController extends Controller
             }
 
             $comments = Comment::query()
-            ->where('video_resource_id', '=', $video->id)
+                ->where('video_resource_id', '=', $video->id)
                 ->latest()
                 ->paginate(4);
 
@@ -203,7 +204,6 @@ class LessonController extends Controller
 
     public function accessFirstVideo(Request $request, $id): JsonResponse
     {
-
         $rules = [
             'type' => 'required|in:lesson,subject_class',
         ];
@@ -231,11 +231,11 @@ class LessonController extends Controller
         if ($request->type == 'lesson') {
 
             $lesson = Lesson::query()
-            ->where('id', '=', $id)
+                ->where('id', '=', $id)
                 ->first();
 
             $video = VideoParts::query()
-            ->where('lesson_id', '=',$id)
+                ->where('lesson_id', '=', $id)
                 ->orderBy('id', 'ASC')
                 ->first();
 
@@ -253,9 +253,9 @@ class LessonController extends Controller
                 ->where('lesson_id', '=', $lesson->id)
                 ->exists();
 
-            if($checkLessonIfOpenedOrClosed){
+            if ($checkLessonIfOpenedOrClosed) {
                 $videoUploadAllFiles = VideoFilesUploads::query()
-                    ->where('video_part_id','=',$video->id)
+                    ->where('video_part_id', '=', $video->id)
                     ->get();//List of all pdf and audios of video part
 
 
@@ -265,7 +265,7 @@ class LessonController extends Controller
                     ->exists();
 
                 if ($watched) {
-                    return self::returnResponseDataApi(null,"تم مشاهده هذا الفيديو من قبل",201);
+                    return self::returnResponseDataApi(null, "تم مشاهده هذا الفيديو من قبل", 201);
 
                 } else {
 
@@ -286,24 +286,24 @@ class LessonController extends Controller
                         ]);
                     }
 
-                    return self::returnResponseDataApi(null,"تم فتح اول فيديو بمتعلقاته التابع لهذا الدرس الان",200);
+                    return self::returnResponseDataApi(null, "تم فتح اول فيديو بمتعلقاته التابع لهذا الدرس الان", 200);
 
                 }//end access first video
 
-            }else{
+            } else {
 
-                return self::returnResponseDataApi(null,"هذا الدرس مغلق الي الان ناسف لعدم فتح اول فيديو بمتعلقاته في هذا الدرس",423);
+                return self::returnResponseDataApi(null, "هذا الدرس مغلق الي الان ناسف لعدم فتح اول فيديو بمتعلقاته في هذا الدرس", 423);
             }
 
 
         } else {
 
             $subject_class = SubjectClass::query()
-                ->where('id','=',$id)
-            ->first();
+                ->where('id', '=', $id)
+                ->first();
 
             $first_lesson = Lesson::query()
-            ->where('subject_class_id', '=', $subject_class->id)
+                ->where('subject_class_id', '=', $subject_class->id)
                 ->first();
 
             if (!$subject_class) {
@@ -315,7 +315,7 @@ class LessonController extends Controller
             }
 
             $subject_class_opened = OpenLesson::query()
-            ->where('user_id', '=', Auth::guard('user-api')->id())
+                ->where('user_id', '=', Auth::guard('user-api')->id())
                 ->where('subject_class_id', '=', $subject_class->id);
 
             $lesson_opened = OpenLesson::query()
@@ -323,7 +323,7 @@ class LessonController extends Controller
                 ->where('lesson_id', '=', $first_lesson->id);
 
 
-            if(!$subject_class_opened->exists()){
+            if (!$subject_class_opened->exists()) {
 
                 OpenLesson::create([
                     'user_id' => Auth::guard('user-api')->id(),
@@ -332,7 +332,7 @@ class LessonController extends Controller
             }
 
 
-            if(!$lesson_opened->exists()){
+            if (!$lesson_opened->exists()) {
                 OpenLesson::create([
                     'user_id' => Auth::guard('user-api')->id(),
                     'lesson_id' => $first_lesson->id,
@@ -340,18 +340,16 @@ class LessonController extends Controller
 
             }
 
-            return self::returnResponseDataApi(null,"تم فتح الفصل واول درس لهذا الفصل بنجاح",200);
+            return self::returnResponseDataApi(null, "تم فتح الفصل واول درس لهذا الفصل بنجاح", 200);
 
         }
 
     }//end access first subject_class and first lesson and first video and  all files of video
 
 
-    public function updateMinuteVideo(Request $request,$id): JsonResponse
+    public function updateMinuteVideo(Request $request, $id): JsonResponse
     {
-
         $rules = ['minutes' => 'required|date_format:H:i:s'];
-
 
         $validator = Validator::make($request->all(), $rules, ['minutes.gte' => 406]);
 
@@ -372,38 +370,38 @@ class LessonController extends Controller
         }
 
         $video = VideoParts::query()
-            ->where('id','=',$id)->first();
+            ->where('id', '=', $id)->first();
 
-        if(!$video){
+        if (!$video) {
 
-            return self::returnResponseDataApi(null, "فيديو الشرح غير موجود", 404,404);
-        }else{
+            return self::returnResponseDataApi(null, "فيديو الشرح غير موجود", 404, 404);
+        } else {
 
             $videoOpened = VideoOpened::query()
-                ->where('video_part_id','=',$video->id)
+                ->where('video_part_id', '=', $video->id)
                 ->where('user_id', '=', Auth::guard('user-api')->id())
                 ->first();
 
 
-            if(!$videoOpened){
-                return self::returnResponseDataApi(null, "يجب فتح هذا الفيديو اولا لتحديث المشاهده للطالب", 403,403);
+            if (!$videoOpened) {
+                return self::returnResponseDataApi(null, "يجب فتح هذا الفيديو اولا لتحديث المشاهده للطالب", 403, 403);
 
-            }else{
+            } else {
 
-                if($request->minutes > $video->video_time){
+                if ($request->minutes > $video->video_time) {
 
-                return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "عدد الدقائق المدخله بالطلب اكبر من عدد دقائق هذا الفيديو!", 419);
+                    return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "عدد الدقائق المدخله بالطلب اكبر من عدد دقائق هذا الفيديو!", 419);
 
 
-                }elseif($video->video_time ==  $videoOpened->minutes){
+                } elseif ($video->video_time == $videoOpened->minutes) {
 
                     return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم استكمال مشاهده الفيديو من قبل", 420);
 
-                } elseif ($request->minutes <  $videoOpened->minutes){
+                } elseif ($request->minutes < $videoOpened->minutes) {
 
                     return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "عدد الدقائق المرسله اقل من المسموع من قبل", 418);
 
-                }else{
+                } else {
 
                     $videoOpened->update(['minutes' => $request->minutes]);
 
@@ -411,11 +409,13 @@ class LessonController extends Controller
 
 
                     $lesson = Lesson::query()
-                        ->where('id', '=',$video->lesson_id)
+                        ->whereHas('videos', fn(\Illuminate\Database\Eloquent\Builder $builder) => $builder->whereIn('month', json_decode(Auth::guard('user-api')->user()->subscription_months_groups)))
+                        ->where('id', '=', $video->lesson_id)
                         ->first();
 
                     $next_lesson = Lesson::query()
-                        ->where('subject_class_id','=',$video->lesson->subject_class_id)
+                        ->whereHas('videos', fn(\Illuminate\Database\Eloquent\Builder $builder) => $builder->whereIn('month', json_decode(Auth::guard('user-api')->user()->subscription_months_groups)))
+                        ->where('subject_class_id', '=', $video->lesson->subject_class_id)
                         ->orderBy('id', 'ASC')->get()
                         ->except($video->lesson_id)
                         ->where('id', '>', $video->lesson_id)
@@ -423,28 +423,30 @@ class LessonController extends Controller
 
                     //start sum total of minutes to compare between video minutes and total user watch
                     $videosIds = VideoParts::query()
-                        ->where('lesson_id','=',$lesson->id)
+                        ->whereIn('month', json_decode(Auth::guard('user-api')->user()->subscription_months_groups))
+                        ->where('lesson_id', '=', $lesson->id)
                         ->pluck('id')
                         ->toArray();//example [1,2,3,4,5]
 
                     $sumMinutesOfAllVideosBelongsTiThisLesson = VideoParts::query()
-                        ->where('lesson_id','=',$lesson->id)
+                        ->whereIn('month', json_decode(Auth::guard('user-api')->user()->subscription_months_groups))
+                        ->where('lesson_id', '=', $lesson->id)
                         ->pluck('video_time')
                         ->toArray();// example 130 seconds
 
                     $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
-                        ->where('minutes','!=',null)
-                        ->whereIn('video_part_id',$videosIds)
+                        ->where('minutes', '!=', null)
+                        ->whereIn('video_part_id', $videosIds)
                         ->where('user_id', '=', Auth::guard('user-api')->id())
                         ->pluck('minutes')
                         ->toArray();//example 120 seconds
 
 
-                    $totalMinutesOfAllLessons = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfAllVideosBelongsTiThisLesson)) * 100),2);
+                    $totalMinutesOfAllLessons = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfAllVideosBelongsTiThisLesson)) * 100), 2);
 
                     if ($next_lesson) {
 
-                        if($totalMinutesOfAllLessons >= 65){
+                        if ($totalMinutesOfAllLessons >= 65) {
 
                             $next_lesson_open = OpenLesson::query()
                                 ->where('user_id', '=', Auth::guard('user-api')->id())
@@ -465,7 +467,7 @@ class LessonController extends Controller
 
                     //========================== start access next class =========================================================
 
-                    $idOfSubjectClass =  $video->lesson->subject_class_id;
+                    $idOfSubjectClass = $video->lesson->subject_class_id;
 
 
                     $subject_class = SubjectClass::query()
@@ -475,53 +477,58 @@ class LessonController extends Controller
 
                     $next_subject_class = SubjectClass::query()
                         ->orderBy('id', 'ASC')->get()
-                        ->except( $idOfSubjectClass)
+                        ->except($idOfSubjectClass)
                         ->where('id', '>', $idOfSubjectClass)
                         ->first();
 
 
                     $Ids = Lesson::query()
+                        ->whereHas('videos', fn(\Illuminate\Database\Eloquent\Builder $builder) => $builder->whereIn('month', json_decode(Auth::guard('user-api')->user()->subscription_months_groups)))
                         ->where('subject_class_id', '=', $subject_class->id)
                         ->pluck('id')
                         ->toArray();// ids of lessons belongs to subject class * example [1,2,3,4,5,6]
 
 
                     $allOfLessons = Lesson::query()
-                        ->whereIn('id',$Ids)->get();
+                        ->whereIn('id', $Ids)
+                        ->whereHas('videos', fn(\Illuminate\Database\Eloquent\Builder $builder) => $builder->whereIn('month', json_decode(Auth::guard('user-api')->user()->subscription_months_groups)))
+                        ->get();
 
                     $totalOfMinutesVideos = [];
                     $totalOfMinutesUserWatched = [];
 
 
-                    foreach ($allOfLessons as $lesson){
+                    foreach ($allOfLessons as $lesson) {
 
                         $videosIds = VideoParts::query()
-                            ->where('lesson_id','=',$lesson->id)
+                            ->where('lesson_id', '=', $lesson->id)
+                            ->whereIn('month', json_decode(Auth::guard('user-api')->user()->subscription_months_groups))
                             ->pluck('id')
                             ->toArray();//example [1,2,3,4,5]
 
                         $sumMinutesOfAllVideosBelongsTiThisLesson = VideoParts::query()
-                            ->where('lesson_id','=',$lesson->id)
+                            ->where('lesson_id', '=', $lesson->id)
+                            ->whereIn('month', json_decode(Auth::guard('user-api')->user()->subscription_months_groups))
                             ->pluck('video_time')
                             ->toArray();// example 20 minutes
 
 
                         $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
-                            ->where('minutes','!=',null)
-                            ->whereIn('video_part_id',$videosIds)
+                            ->where('minutes', '!=', null)
+                            ->whereIn('video_part_id', $videosIds)
                             ->where('user_id', '=', Auth::guard('user-api')->id())
                             ->pluck('minutes')
                             ->toArray();//example 20 minutes
 
 
-                        $totalOfMinutesVideos[] =  $sumMinutesOfAllVideosBelongsTiThisLesson;
+                        $totalOfMinutesVideos[] = $sumMinutesOfAllVideosBelongsTiThisLesson;
                         $totalOfMinutesUserWatched[] = $sumAllOfMinutesVideosStudentAuth;
 
                     }
 
 
                     $listOfSecondsOfAllVideos = [];
-                    for ($i = 0 ; $i < count($totalOfMinutesVideos);$i++){
+                    for ($i = 0; $i < count($totalOfMinutesVideos); $i++) {
 
                         $listOfSecondsOfAllVideos[] = getAllSecondsFromTimes($totalOfMinutesVideos[$i]);
 
@@ -530,15 +537,15 @@ class LessonController extends Controller
 
                     //filter array can not empty of seconds
                     $listOfSecondsOfAllVideosWatched = [];
-                    for ($i = 0 ; $i <  sizeof(array_filter($totalOfMinutesUserWatched));$i++){
+                    for ($i = 0; $i < sizeof(array_filter($totalOfMinutesUserWatched)); $i++) {
 
                         $listOfSecondsOfAllVideosWatched[] = getAllSecondsFromTimes($totalOfMinutesUserWatched[$i]);
 
                     }
 
-                    $totalMinutesOfAllClasses =  number_format(((array_sum($listOfSecondsOfAllVideosWatched) / array_sum($listOfSecondsOfAllVideos)) * 100),2);
+                    $totalMinutesOfAllClasses = number_format(((array_sum($listOfSecondsOfAllVideosWatched) / array_sum($listOfSecondsOfAllVideos)) * 100), 2);
 
-                    if($totalMinutesOfAllClasses >= 65){
+                    if ($totalMinutesOfAllClasses >= 65) {
 
                         if ($next_subject_class) {
 
@@ -559,89 +566,88 @@ class LessonController extends Controller
                     }
 
 
-
                     //========================== end access next class =========================================================
 
 
                     //========================== start access next video =========================================================
 
-                        $videoOpenedByUser = VideoOpened::query()
+                    $videoOpenedByUser = VideoOpened::query()
+                        ->where('user_id', '=', Auth::guard('user-api')->id())
+                        ->where('video_part_id', '=', $video->id)
+                        ->first();
+
+                    if ($videoOpenedByUser) {
+
+                        $sumMinutesOfVideo = VideoParts::query()
+                            ->where('id', '=', $id)
+                            ->whereIn('month', json_decode(Auth::guard('user-api')->user()->subscription_months_groups))
+                            ->pluck('video_time')
+                            ->toArray();// example 130 seconds
+
+
+                        $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
+                            ->where('video_part_id', '=', $id)
                             ->where('user_id', '=', Auth::guard('user-api')->id())
-                            ->where('video_part_id', '=', $video->id)
-                            ->first();
-
-                        if ($videoOpenedByUser) {
-
-                            $sumMinutesOfVideo = VideoParts::query()
-                                ->where('id','=',$id)
-                                ->pluck('video_time')
-                                ->toArray();// example 130 seconds
+                            ->pluck('minutes')
+                            ->toArray();//example 120 seconds
 
 
-                            $sumAllOfMinutesVideosStudentAuth = VideoOpened::query()
-                                ->where('video_part_id','=',$id)
-                                ->where('user_id', '=', Auth::guard('user-api')->id())
-                                ->pluck('minutes')
-                                ->toArray();//example 120 seconds
+                        $totalMinutesOfAllVideos = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfVideo)) * 100), 2);
 
 
+                        if ($totalMinutesOfAllVideos >= 65) {
 
-                            $totalMinutesOfAllVideos = number_format(((getAllSecondsFromTimes($sumAllOfMinutesVideosStudentAuth) / getAllSecondsFromTimes($sumMinutesOfVideo)) * 100),2);
+                            $videoOpenedByUser->update(['status' => 'watched']);
 
+                            $nextFileToWatch = VideoParts::query()
+                                ->orderBy('id', 'ASC')
+                                ->whereIn('month', json_decode(Auth::guard('user-api')->user()->subscription_months_groups))
+                                ->where('lesson_id', '=', $video->lesson_id)
+                                ->get()
+                                ->except($videoOpenedByUser->video_part_id)
+                                ->where('id', '>', $videoOpenedByUser->video_part_id)
+                                ->first();
 
-                            if($totalMinutesOfAllVideos >= 65){
+                            if ($nextFileToWatch) {
 
-                                $videoOpenedByUser->update(['status' => 'watched']);
-
-                                $nextFileToWatch = VideoParts::query()
-                                    ->orderBy('id', 'ASC')
-                                    ->where('lesson_id', '=',$video->lesson_id)
-                                    ->get()
-                                    ->except($videoOpenedByUser->video_part_id)
-                                    ->where('id', '>', $videoOpenedByUser->video_part_id)
+                                $watched = VideoOpened::query()
+                                    ->where('user_id', '=', Auth::guard('user-api')->id())
+                                    ->where('video_part_id', '=', $nextFileToWatch->id)
                                     ->first();
 
+                                if (!$watched) {
+                                    VideoOpened::create([
+                                        'user_id' => Auth::guard('user-api')->id(),
+                                        'video_part_id' => $nextFileToWatch->id,
+                                    ]);
 
-                                if ($nextFileToWatch) {
-
-                                    $watched = VideoOpened::query()
-                                        ->where('user_id', '=', Auth::guard('user-api')->id())
+                                    $videoUploadAllFiles = VideoFilesUploads::query()
                                         ->where('video_part_id', '=', $nextFileToWatch->id)
-                                        ->first();
+                                        ->get();//List of all pdf and audios of video part
 
-                                    if (!$watched) {
+                                    foreach ($videoUploadAllFiles as $videoUploadAllFile) {
                                         VideoOpened::create([
                                             'user_id' => Auth::guard('user-api')->id(),
-                                            'video_part_id' => $nextFileToWatch->id,
+                                            'video_upload_file_pdf_id' => $videoUploadAllFile->file_type == 'pdf' ? $videoUploadAllFile->id : null,
+                                            'video_upload_file_audio_id' => $videoUploadAllFile->file_type == 'audio' ? $videoUploadAllFile->id : null,
+                                            'type' => $videoUploadAllFile->file_type == 'pdf' ? 'pdf' : 'audio',
+                                            'status' => 'watched',
                                         ]);
+                                    }
+                                }//end if
 
-                                        $videoUploadAllFiles = VideoFilesUploads::query()
-                                            ->where('video_part_id','=',$nextFileToWatch->id)
-                                            ->get();//List of all pdf and audios of video part
+                            } else {
 
-                                        foreach ($videoUploadAllFiles as $videoUploadAllFile) {
-                                            VideoOpened::create([
-                                                'user_id' => Auth::guard('user-api')->id(),
-                                                'video_upload_file_pdf_id' => $videoUploadAllFile->file_type == 'pdf' ? $videoUploadAllFile->id : null,
-                                                'video_upload_file_audio_id' => $videoUploadAllFile->file_type == 'audio' ? $videoUploadAllFile->id : null,
-                                                'type' => $videoUploadAllFile->file_type == 'pdf' ? 'pdf' : 'audio',
-                                                'status' => 'watched',
-                                            ]);
-                                        }
-                                    }//end if
-
-                                } else {
-
-                                    return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم تحديث وقت هذا الفيديو وتم الوصول للملف الاخير للدرس التابع له الفيديو", 418);
-
-                                }
+                                return self::returnResponseDataApi(new VideoOpenedWithStudentNewResource($video), "تم تحديث وقت هذا الفيديو وتم الوصول للملف الاخير للدرس التابع له الفيديو", 418);
 
                             }
 
-                        } else {
-
-                            return self::returnResponseDataApi(null, "يجب فتح الملف السابق", 415);
                         }
+
+                    } else {
+
+                        return self::returnResponseDataApi(null, "يجب فتح الملف السابق", 415);
+                    }
 
                     //========================== end access next video =========================================================
 
@@ -658,5 +664,92 @@ class LessonController extends Controller
     }//end function
 
 
+    public function accessFirstVideoCustom(): JsonResponse
+    {
+        $user = Auth::guard('user-api')->user();
+        $userSubscribe = json_decode($user->subscription_months_groups);
+
+
+        $videos = VideoParts::query()
+            ->whereIn('month', $userSubscribe)
+            ->whereHas('lesson.subject_class', fn(\Illuminate\Database\Eloquent\Builder $builder) => $builder->where('season_id', $user->season_id))
+            ->orderBy('id', 'ASC')
+            ->get();
+
+        $lesson_ids = array_values($videos->pluck('lesson_id')->unique()->toArray());
+
+        $subjectClass = Lesson::query()
+            ->whereIn('id', $lesson_ids)
+            ->whereHas('videos', fn(\Illuminate\Database\Eloquent\Builder $builder) => $builder->whereIn('month', $userSubscribe))
+            ->pluck('subject_class_id')->unique()->toArray();
+
+        $subjectClassIds = array_values($subjectClass);
+
+
+        $opened_videos = [];
+        $opened_lessons = [];
+        $opened_classes = [];
+
+        if (count($subjectClassIds) > 0) {
+            foreach ($subjectClassIds as $classId) {
+                $first_lesson = Lesson::query()
+                    ->where('subject_class_id', $classId)
+                    ->whereHas('videos', fn(\Illuminate\Database\Eloquent\Builder $builder) => $builder->whereIn('month', $userSubscribe))
+                    ->orderBy('id', 'ASC')
+                    ->first();
+
+                $opened_lessons [] = OpenLesson::updateOrCreate([
+                    'user_id' => $user->id,
+                    'lesson_id' => $first_lesson->id,
+                ], [
+                    'user_id' => $user->id,
+                    'lesson_id' => $first_lesson->id,
+                    'status' => 'opened'
+                ]);
+            }
+        }
+
+        if (count($subjectClassIds) > 0) {
+            for ($l = 0; $l < count($subjectClassIds); $l++) {
+                $opened_classes [] = OpenLesson::updateOrCreate([
+                    'user_id' => $user->id,
+                    'subject_class_id' => $subjectClassIds[$l],
+                ], [
+                    'user_id' => $user->id,
+                    'subject_class_id' => $subjectClassIds[$l],
+                    'status' => 'opened'
+                ]);
+            }
+        }
+
+
+        foreach ($lesson_ids as $video_lesson_id) {
+            $first_videos = VideoParts::query()
+                ->where('lesson_id', $video_lesson_id)
+                ->whereIn('month', $userSubscribe)
+                ->whereHas('lesson.subject_class', fn(\Illuminate\Database\Eloquent\Builder $builder) => $builder->where('season_id', $user->season_id))
+                ->orderBy('id', 'ASC')
+                ->first();
+
+            $opened_videos [] = VideoOpened::updateOrCreate([
+                'user_id' => $user->id,
+                'video_part_id' => $first_videos->id,
+            ], [
+                'user_id' => $user->id,
+                'video_part_id' => $first_videos->id,
+                'status' => 'opened',
+                'type' => 'video'
+            ]);
+
+        }
+
+        $data = [
+            'VideoOpened' => $opened_videos,
+            'OpenLesson' => $opened_lessons,
+            'OpenedClasses' => $opened_classes,
+        ];
+
+        return self::returnResponseDataApi($data, 200, 200);
+    }
 
 }

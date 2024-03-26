@@ -26,14 +26,17 @@ class LessonDetailsController extends Controller
 
     public function allVideoByLessonId($id): JsonResponse
     {
-
+        $user = Auth::guard('user-api')->user();
         $lesson = Lesson::query()->where('id', '=', $id)->first();
         if (!$lesson) {
 
             return self::returnResponseDataApi(null, "هذا الدرس غير موجود", 404, 404);
         }
 
-        $videos = VideoParts::query()->where('lesson_id', '=', $lesson->id)->get();
+        $videos = VideoParts::query()
+            ->whereIn('month',\GuzzleHttp\json_decode($user->subscription_months_groups))
+            ->where('lesson_id', '=', $lesson->id)
+            ->get();
 
         return self::returnResponseDataApi(VideoPartDetailsNewResource::collection($videos), "تم الحصول علي جميع فيديوهات الشرح بنجاح", 200);
     }

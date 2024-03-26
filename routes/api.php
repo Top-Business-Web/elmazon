@@ -95,6 +95,7 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('video/add-comment',[CommentController::class,'videoAddComment']);
         Route::post('comment/add-replay/{id}',[CommentController::class,'commentAddReplay']);
         Route::post('{id?}',[LessonController::class,'accessFirstVideo']);
+        Route::get('accessFirstVideoCustom',[LessonController::class,'accessFirstVideoCustom']); // end
 
     });
 

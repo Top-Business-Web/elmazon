@@ -24,7 +24,7 @@ class VideoResourceResource extends JsonResource
             'background_color' => $this->background_color,
             'image' => asset('videos_resources/images/'.$this->image),
             'time' => $this->time ?? 0,
-            'path_file' => $this->is_youtube == true ? $this->youtube_link : ($this->video_link != null ? asset('videos_resources/videos/'. $this->video_link) : asset('videos_resources/all_pdf_uploads/'.$this->pdf_file)),
+            'path_file' => $this->is_youtube == true ? $this->youtube_link : ($this->video_link != null ? asset('videos_resources/videos/'. $this->video_link) : asset('videos_resources/pdf/'.$this->pdf_file)),
             'is_youtube' => $this->is_youtube,
             'size' => 1000,
             'created_at' => $this->created_at->format('Y-m-d'),
